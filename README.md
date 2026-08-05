@@ -1,0 +1,2452 @@
+# *docdg 1.0*
+
+**docdg** is a Rust document class built around a French-only prose
+tag language (no anglicisms). Users write a single `.docdg` file where every
+command reads as a natural French sentence; the Rust engine compiles it
+directly to HTML and PDF, with professional typographic quality. It covers
+layout frames and grids, tables, images, a math mini-language, function
+plotting, plane and solid geometry, and statistics/probability diagrams.
+
+**Author / Maintainer:** Gérard Dubard — gerarddubard@gmail.com
+**License:** GNU General Public License, version 3 or later
+**Repository:** https://github.com/gdubard/docdg
+
+---
+
+**Des fiches d'exercices prêtes à imprimer, sans écrire de code.**
+
+> *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
+
+[![Version](https://img.shields.io/badge/version-1.0-2980b9?style=flat-square)](https://github.com/gdubard/docdg)
+[![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
+[![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
+[![License](https://img.shields.io/badge/license-GPL_v3+-8e44ad?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
+
+---
+
+
+## Avant de commencer : installation
+
+**docdg est une application autonome** — aucune distribution TeX, aucun éditeur spécialisé n'est requis. Une seule chose à télécharger et à lancer.
+
+**Télécharger docdg.** Récupérer le binaire correspondant à votre système sur la page des versions du dépôt :
+
+```
+https://github.com/gdubard/docdg/releases
+```
+
+Sous Windows, l'installeur configure le `PATH` automatiquement. Sous macOS/Linux, rendre le binaire exécutable (`chmod +x docdg`) et le placer dans un dossier du `PATH`.
+
+**Installer Python (facultatif, pour les calculs formels).** Le calcul formel et numérique avancé reposent sur **Python 3 avec SymPy et SciPy**. docdg les appelle automatiquement dès qu'il les détecte — aucune option à activer. Récupérer l'installeur sur **[python.org](https://www.python.org/downloads/)** (sous Windows, cocher **« Add Python to PATH »**), puis dans un terminal :
+
+```
+python3 -m pip install sympy scipy
+```
+
+Sous Windows : `py -m pip install sympy scipy`. docdg essaie dans l'ordre `python3`, `python` puis `py`, et garde la première qui répond.
+
+Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne — seuls les calculs automatiques (variations, dérivées, zéros, primitives, lois de probabilité) demandent le moteur externe.
+
+## **📚 Sommaire détaillé**
+
+1. [Qu'est-ce que docdg ?](#quest-ce-que-docdg)
+2. [Fonctionnalités clés](#fonctionnalités-clés)
+3. [Pourquoi docdg ?](#pourquoi-docdg)
+4. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
+5. [Premiers documents](#premiers-documents)
+6. [La syntaxe](#la-syntaxe)
+7. [Les objets](#les-objets) — cadres, tableaux, images, listes, grilles, sections
+8. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
+9. [Les styles et la mise en forme](#les-styles-et-la-mise-en-forme)
+10. [Les graphiques de fonctions](#les-graphiques-de-fonctions)
+11. [Les mathématiques](#les-mathématiques)
+12. [La géométrie](#la-géométrie)
+13. [Les statistiques](#les-statistiques) — diagrammes, arbres de probabilités, droite graduée
+14. [Le collège, rédigé](#le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
+15. [Le lycée, couvert](#le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
+16. [Le supérieur (CPGE)](#le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
+17. [Les exemples, en quatre niveaux](#les-exemples-en-quatre-niveaux)
+18. [Les documents complexes](#les-documents-complexes)
+19. [Référence complète](#référence-complète) — couleurs et options de classe
+20. [Bonnes pratiques](#bonnes-pratiques)
+21. [Feuille de route](#feuille-de-route) — ce que prépare la prochaine version
+
+*Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
+
+> 🌱 **docdg 1.0 couvre le programme de mathématiques de l'école au supérieur.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes) et le cœur de celui des classes préparatoires s'écrivent chacun en une phrase. Le projet reste actif — le prochain chantier est la physique-chimie. Voir le chapitre [Feuille de route](#feuille-de-route) pour le détail.
+
+---
+
+## **📖 Qu'est-ce que docdg ?**
+
+**docdg est un langage de composition documentaire.**  
+Il permet de **créer simplement des documents de grande qualité** grâce à un **moteur de composition Rust** qui produit directement du HTML et du PDF.
+
+**docdg prend en charge toute la composition** : vous décrivez le document en français, il produit le PDF — sans intermédiaire, sans passer par un autre système.
+
+### **🎯 L'objectif double de docdg**
+
+- ✅ **Produire rapidement de beaux documents** ;
+- ✅ **Comprendre progressivement la composition documentaire**.
+
+### **👥 À qui s'adresse docdg ?**
+
+docdg s'adresse **à tous** : Collégiens, Lycéens, Étudiants, Enseignants, Chercheurs, Ingénieurs, Auteurs de documentation, et plus généralement à toute personne souhaitant produire des documents scientifiques, techniques ou pédagogiques.
+
+### **📖 Comment lire ce manuel**
+
+Ce manuel suit une **progression logique** :
+
+1. Les premiers chapitres posent les fondations (le premier document, la syntaxe, les quatre familles de commandes).
+2. Les chapitres suivants explorent chaque domaine (styles, tableaux, images, dessins, mathématiques, géométrie, statistiques).
+3. Les derniers chapitres forment un **appareil de référence** : la liste complète des commandes, des annexes de tableaux, un index alphabétique et un index thématique.
+
+**Chaque construction est présentée de la même façon :**
+
+1. **L'écriture docdg** (ce que **vous écrivez**) ;
+2. **Le HTML et PDF généré** (ce que docdg **produit pour vous**) ;
+3. **Une explication** de ce que fait ce code.
+
+> 💡 **Vous pouvez lire ce manuel dans l'ordre**, ou **sauter directement au chapitre qui vous intéresse** et revenir aux fondations en cas de besoin.
+
+### **📜 Une convention de lecture**
+
+Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg génère le HTML et le PDF pour vous, en coulisse.
+
+---
+
+## **✨ Fonctionnalités clés**
+
+
+| **Fonctionnalité**                  | **Description**                                                                                                           | **Exemples**                                       |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **🏷️ Une seule syntaxe de balise** | `<attributs>{contenu}` couvre texte, tableaux, images, maths, cadres, listes et mises en page pleine page                 | `<Affiche un cadre avec une bordure bleue>{Texte}`, `<Dresse un tableau [mc]>{...}` |
+| **🎨 147 couleurs**                 | La palette CSS/svgnames complète en **français** | `rouge`, `bleu foncé` |
+| **📐 Un mini-langage mathématique** | Fractions, racines, sommes, produits, intégrales, dérivées, trigonométrie, matrices et systèmes, **le tout dans `$...$`** | `$somme(k=1;n) k^2$`, `$intégrale(x=a;b) f(x)$`    |
+| **📦 Cadres et grilles**            | Panneaux `<Affiche un cadre>` colorés et mises en page à zones nommées **façon CSS Grid**                                            | `<Affiche une grille avec les zones:[...]>`, `<Affiche un cadre avec des coins arrondis de 5 mm>`       |
+| **📊 Des tableaux sans douleur**    | Placement de cellule en **deux lettres**, fusions, en-têtes, bordures, **aucun `&` à compter**                            | `<Dresse un tableau [mc, mg] bordures entête>`                |
+| **♻️ Alias et macros**              | Factorisez un style **une fois**, nommez-le partout ; **une seule retouche restyle tout le document**                     | `soit titre = <gras 18pt>`, `soit exercice{n} = ...` |
+| **🔁 Structures de contrôle**       | Boucles, conditionnelles et interpolation **`#{...}`** dans le corps du document                                          | `pour n de 1 à 5`, `si note >= 10`                 |
+
+
+---
+
+## **🎯 Pourquoi docdg ?**
+
+De nombreux utilisateurs rédigent aujourd'hui leurs documents à l'aide de **traitements de texte**, de logiciels de présentation ou de publication assistée par ordinateur. Ces outils permettent **d'obtenir rapidement un résultat**. **En revanche**, lorsque les documents deviennent **plus longs ou plus complexes**, leur mise en page demande **beaucoup de manipulation manuelle** (réglages de marges, alignements, numérotations...).
+
+### **💡 docdg adopte une approche radicalement différente**
+
+> **L'utilisateur ne construit pas son document en déplaçant des objets ou en ajustant visuellement la mise en page.** **Il décrit simplement le document qu'il souhaite obtenir.** **La composition est ensuite entièrement prise en charge par docdg.**
+
+### **✅ Les avantages de cette approche**
+
+
+| **Avantage**                                     | **Bénéfice concret**                              |
+| ------------------------------------------------ | ------------------------------------------------- |
+| ✅ **Mise en page homogène**                      | Cohérence parfaite sur tout le document           |
+| ✅ **Numérotation automatique**                   | Sections, figures, tableaux numérotés sans effort |
+| ✅ **Références croisées fiables**                | Liens internes toujours synchronisés              |
+| ✅ **Table des matières générée automatiquement** | Mise à jour instantanée                           |
+| ✅ **Typographie de qualité professionnelle**     | Rendu PDF soigné pour tous vos documents          |
+| ✅ **Maintenance facilitée**                      | Même pour des documents volumineux                |
+
+
+---
+
+## **🛠️ Ce dont vous avez besoin**
+
+### **Installation**
+
+docdg est un exécutable autonome — aucune dépendance externe obligatoire.
+
+**Téléchargement :** récupérez le binaire pour votre système sur la page des versions :
+
+```
+https://github.com/gdubard/docdg/releases
+```
+
+Sous Windows, l'installeur configure le `PATH`. Sous macOS/Linux :
+
+```bash
+chmod +x docdg
+sudo mv docdg /usr/local/bin/
+```
+
+Vérifiez l'installation :
+
+```bash
+docdg --version
+```
+
+### **💻 Éditeurs recommandés**
+
+| **Éditeur**   | **Plateformes**       | **Pourquoi ?**                                                        |
+| ------------- | --------------------- | --------------------------------------------------------------------- |
+| **docdg**     | Windows, macOS, Linux | ✅ Interface intégrée, prévisualisation en direct, export PDF en un clic |
+| VS Code       | Toutes                | Éditeur de texte polyvalent, extension de coloration disponible         |
+| Tout éditeur  | Toutes                | Un fichier `.docdg` est du texte brut — n'importe quel éditeur convient |
+
+---
+
+## **🚀 Premiers documents**
+
+### **📄 Le document minimal**
+
+**docdg**
+
+```docdg
+Bonjour le monde !
+```
+
+> C'est vraiment tout. Enregistrez ce texte dans un fichier `.docdg`, ouvrez-le avec docdg — le PDF est prêt.
+### **⚙️ Les options de page**
+
+Les paramètres de mise en page s'écrivent dans un bloc `page { }` en tête du fichier — entièrement facultatif, des valeurs par défaut raisonnables s'appliquent sans lui.
+
+**docdg**
+
+```docdg
+page {
+  // ===== Marges externes (le « margin » anglais) =====
+  marges: 20;  // 20 mm sur les quatre côtés
+
+  // ===== Espacements internes (le « padding » anglais) =====
+  espacements: 2;  // 2 mm entre le contenu et le bord des cadres
+
+  // ===== Polices =====
+  police: Latin Modern Roman;  // Police du texte (MAJUSCULES)
+  math: Latin Modern Math;  // Police mathématique (MAJUSCULES)
+
+  // ===== Taille et espacement =====
+  taille: 11;  // Corps de base (pt)
+  interligne: 1,2;  // Coefficient d'interligne
+  tabulation: 8;  // Largeur tabulation (mm)
+  hauteur: 8;  // Hauteur saut de ligne (mm)
+  décalage: 100;  // Décalage exposants/indices (%)
+
+  // ===== Calculs =====
+  précision: 3;  // Décimales pour arrondi (-1 = pas d'arrondi)
+
+}
+```
+
+> **💡 Virgule décimale.** Dans un bloc `page { }`, la virgule est la virgule décimale (`interligne: 1,2`). Les valeurs à quatre composantes utilisent le point-virgule (`marges: 25;20;25;20`). Partout dans le corps du document, la virgule reste la virgule décimale ; docdg la distingue d'une énumération par l'absence d'espace après elle.
+
+**Tableau récapitulatif :**
+
+
+| **Option**   | **Type**           | **Défaut**           | **Description**                |
+| ------------ | ------------------ | -------------------- | ------------------------------ |
+| `marges`     | nombre ou 4 valeurs | `20`                | Marges externes (mm) — `20` ou `{25;20;25;20}` (haut;droite;bas;gauche) |
+| `espacements`| nombre ou 4 valeurs | `2`                 | Espacements internes des cadres, tableaux et zones (mm) — `2` ou `{4;2;4;2}` |
+| `police`     | texte (MAJUSCULES) | `Latin Modern Roman` | Police du texte (si disponible sur le système) |
+| `math`       | texte (MAJUSCULES) | `Latin Modern Math`  | Police mathématique (si disponible)            |
+| `taille`     | nombre             | `11`                 | Taille de base (pt)            |
+| `interligne` | nombre             | `1,0`                | Coefficient d'interligne       |
+| `tabulation` | nombre             | `8`                  | Largeur tabulation (mm)        |
+| `hauteur`    | nombre             | `8`                  | Hauteur saut de ligne (mm)     |
+| `décalage`   | nombre             | `100`                | Décalage exposants/indices (%) |
+| `précision`  | nombre             | `-1`                 | Décimales pour arrondi         |
+
+### **📝 Écrire plusieurs paragraphes**
+
+Un simple passage à la ligne sépare deux paragraphes.
+
+**docdg**
+
+```docdg
+Premier paragraphe.
+Deuxième paragraphe.
+```
+
+### **🏷️ Le titre du document**
+
+**docdg**
+
+```docdg
+soit titre = <rouge gras 18pt centre>
+
+<titre>Ma feuille d'exercices
+```
+---
+
+## **📝 La syntaxe**
+
+> **La règle d'or, une fois pour toutes.** Une action s'écrit **`<Action>`complément** : le verbe seul dans la balise, le complément à l'extérieur, en français complet — articles compris et nom de l'objet rappelé.
+>
+> ```docdg
+> <Résous>l'équation 3x + 5 = 17
+> <Trace>la fonction f
+> <Calcule>l'aire du disque de rayon 3
+> ```
+>
+> Quand l'action porte sur un contenu de plusieurs lignes, celui-ci suit entre accolades : `<Action>complément {` … `}`. Les attributs se disent avec leurs articles (« avec **des** bordures », « **un** écart de 3 mm »), et un objet déclaré se rappelle par sa catégorie (« le système S », « la fonction f » — jamais le nom seul). Les options éventuelles d'une action restent dans la balise, après le verbe. Et parce que l'objectif est d'écrire moins : **la rédaction pas à pas est le comportement, pas une option**. `<Résous>le système s` déroule le pivot, `<Calcule>1/2 + 1/3` détaille la mise au même dénominateur — il n'y a rien à demander. L'ancienne écriture `<Action complément>` reste comprise, mais toute la documentation et tous les exemples suivent la règle ci-dessus : une seule forme à apprendre, une seule forme à relire.
+
+
+La syntaxe de docdg repose sur **quatre familles de commandes** :
+
+
+| **Famille**    | **Rôle**             | **Exemples**                      |
+| -------------- | -------------------- | --------------------------------- |
+| **Actions**    | Opérations           | `<Trace>`, `<Soit>`, `<Affiche>`, `<Dresse>`  |
+| **Objets**     | Éléments du document | `un cadre`, `un tableau`, `une image`      |
+| **Propriétés** | Personnalisation     | `rouge`, `gras`, `14pt`, `centre` |
+| **Valeurs**    | Paramètres           | `oui`, `non`, `30`, `bleu foncé`  |
+
+**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Affiche un cadre avec ...>{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (une matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>la matrice M{...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise commence par un **verbe d'action à l'impératif présent** — jamais par l'objet nu (règle n°12). Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresse un tableau ...>`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
+
+### **📌 Les règles de base**
+
+1. **Les balises** sont entre **chevrons** et commencent par un **verbe** : `<Affiche un cadre>`, `<Dresse un tableau>`, `<Insère une image avec une largeur de 30 mm, dans le dossier {IMAGES}>{photo.png}`  (règle n°12)
+2. **Le contenu** est entre **accolades** : `<Affiche un cadre>{Du texte ici}`
+3. **Les noms composés** utilisent des **espaces** : `<table des matières>`
+4. **Les propriétés** s'écrivent **en français** : `<bleu foncé centre 14pt>{Titre}`
+5. **Les couleurs** : `rouge`, `bleu foncé` (français)
+6. **Les polices** : en **MAJUSCULES** : `<ARIAL>`
+7. **Échappement** : doublez les caractères spéciaux pour les afficher littéralement : `<<` → `<`, `>>` → `>`, `{{` → `{`, `}}` → `}`, `##` → `#`, `$$` → `$`.
+8. **Les séparateurs** : le point-virgule `;` sépare **les nombres, et rien d'autre** — coordonnées (`A(2;3)`), bornes d'intervalles (`[-5 ; 5]`), séries de données (`{12 ; 15 ; 9}`), arguments numériques (`arrondi(5/3; 2)`). La virgule `,` sépare les fragments de prose (règle n°10) et reste la virgule décimale à l'intérieur d'un nombre (`3,5`). La barre `|` sépare les paires `clé: valeur` des données nommées (`{Marche: 5 | Bus: 3}`) et les colonnes des rangées saisies. Trois séparateurs, trois usages, aucune exception.
+
+9. **Majuscule de phrase** : **Seules** les actions dont l'écriture se lit comme une phrase française (`<Soit>`, `<Trace>`, etc.) commencent par une majuscule. Les **mots-clés techniques** (`soit`, `pour`, `si`, `fonction`) restent en minuscules.
+10. **Article + prose** : toute action-phrase (`<Soit>`, `<Trace>`) désigne ses objets avec un article et décrit leurs attributs en prose. En détail :
+
+   - **L'article porte l'intention.** `<Soit>` introduit du nouveau : article **indéfini** (`un point A(2;7)`). Au pluriel, l'article **factorise** : `<Soit>les points A(-1,5;3), B(2;5) et C(0;-4,3)` — une seule phrase pour trois points. Un **nombre** peut tenir lieu d'article pluriel (`<Soit>3 points A(1;2), B(-1;2) et C(-1;-2)`) : docdg vérifie alors que le compte annoncé correspond au nombre de points décrits. Enfin, la **distribution respective** — l'idiome des énoncés du secondaire et du supérieur (« de coordonnées respectives », « d'unités respectives ») — sépare les noms des valeurs et les apparie dans l'ordre : `<Soit>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)`. `<Trace>` prend l'article **défini** pour un objet déjà posé (`le point A`) et l'**indéfini** quand il crée la figure au moment du tracé (`un triangle ABC équilatéral, de côté 5 cm`). Les deux formes produisent le même tracé. L'article se met devant chaque nom — objets compris : `<un cadre avec une bordure rouge...>`, `<une grille...>`.
+   - **Les qualificatifs** restent accolés au nom sans « de » : `équilatéral`, `rectangle en A`.
+   - **Les propriétés à antonyme court** se disent en prose : `avec les marques` / `sans marques`, `avec les valeurs` / `sans valeurs`. `avec` prend l'article, `sans` ne le prend pas — comme en français (`avec du sucre` / `sans sucre`). `avec` sert aussi à introduire un groupe d'attributs : `<un tableau [...] avec des bordures et entête>`, `avec un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}`.
+   - **La couleur** se dit avec `en` : `en bleu`, `en rouge foncé`.
+   - **L'épaisseur du trait** se dit `de trait N mm` (`de trait 0,5 mm`) — c'est une mesure : son unité est obligatoire, comme toutes les unités de longueur.
+
+11. **Les attributs d'un objet s'ouvrent par « avec »**, se séparent par une virgule, et les deux derniers se relient par « et ». C'est la seule forme admise ; écrire les attributs sans `avec` est refusé avec un message qui rappelle la règle. Chaque attribut porte de préférence son **nom précédé d'un article** — plus proche du langage naturel que l'adjectif seul :
+
+    ```docdg
+    <Affiche un cadre avec un fond vert menthe, une bordure bleu canard,
+        des coins arrondis de 3 mm et un titre {Théorème}>{ ... }
+    ```
+
+    L'adjectif `bordé de` n'existe plus : la couleur de bordure se dit `une bordure bleu canard`, comme le fond se dit `un fond vert menthe` — le nom précédé de son article (`une bordure`, `un fond`) se lit mieux que l'adjectif, et docdg ne garde qu'une forme canonique par concept. Les qualificatifs qui font corps avec l'objet restent des adjectifs (`un triangle rectangle`, `un triangle équilatéral`). Un objet **sans** attribut s'écrit nu (`<Affiche un cadre>{...}`), et un placement seul entre crochets (`<Dresse un tableau [mc, mg]>{...}`) ne demande pas de `avec`.
+   - **Le connecteur est obligatoire** entre deux attributs de prose : une virgule entre fragments, ou `et` au sein d'un fragment — `en rouge et de trait 0,5 mm`, jamais la juxtaposition nue. Seule la charnière vers un réglage `clé:valeur` s'accroche sans connecteur.
+   - **Les unités de longueur** (`cm`, `mm`) sont **obligatoires** : `de côté 5,3 cm`, jamais `de côté 5,3`. Une longueur sans unité est une erreur, dite en français. *Seule exception :* dans un repère, les longueurs se comptent en **graduations** et s'écrivent sans unité.
+   - **Le clé:valeur** ne garde que les réglages purement techniques sans tournure française courante. Chaque fois qu'un nom français existe, la prose gagne : `avec 200 échantillons` plutôt qu'un réglage abstrait, `un pas de $pi/6$` plutôt qu'un `step:`.
+
+12. **Une balise commence toujours par un verbe d'action à l'impératif présent** — `<Dresse un tableau ...>`, `<Affiche un cadre ...>`, `<Insère une image ...>`, `<Construis un arbre ...>`, `<Trace ...>`, `<Soit>` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Affiche un cadre>` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Trois familles seulement échappent au verbe, parce qu'elles ne posent aucun objet dans le document : les **styles** (`<gras rouge 14pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Affiche un cadre avec ...>`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Affiche`, `Dresse`, `Construis` et `Insère` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
+
+
+### **🔹 Structure d'une balise**
+
+```docdg
+<OBJET PROPRIÉTÉS>{
+  CONTENU
+}
+```
+
+**Exemple :**
+
+```docdg
+<un cadre avec une bordure rouge, un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}>{
+  <gras 14pt>{Exercice important !}
+}
+```
+
+---
+
+## **📦 Les objets**
+
+### **1️⃣ `<Affiche un cadre>` — Mettre en valeur du contenu**
+
+**Syntaxe :** `<Affiche un cadre PROSE>{CONTENU}`
+
+**Propriétés complètes :**
+
+
+| **Propriété**            | **S'écrit**                          | **Défaut**       | **Description**                          |
+| ------------------------ | ------------------------------------- | ------------------ | ----------------------------------------- |
+| Couleur de la bordure     | `une bordure <couleur>`              | `gris`              | Couleur de la bordure                     |
+| Couleur du texte / fond   | `texte <couleur>`, `fond <couleur>`  | `texte noir, fond blanc` | Couleur du texte et du fond du cadre |
+| Coins arrondis            | `coins arrondis de <N>mm`            | pas d'arrondi       | Rayon des coins                           |
+| Largeur                   | `large de <N>mm` / `large de N%`     | auto                | Largeur du cadre                          |
+| Épaisseur de la bordure   | `bordure épaisse de <N>mm`           | `0,4mm`             | Épaisseur du trait                        |
+| Marge intérieure          | `marge de <N>mm`                     | `3mm`               | Marge intérieure                          |
+| Titre                     | `avec un titre {...}`                        | pas de titre        | Titre affiché en haut du cadre            |
+| Couleur du titre          | `titre en <couleur texte> sur fond <couleur fond>` | -      | Couleur du texte et du fond du titre      |
+| Coupure entre pages       | `avec coupure de page` / `sans coupure de page` | sans     | Autorise le cadre à être coupé entre deux pages |
+
+
+`texte <couleur>` et `fond <couleur>` sont deux fragments indépendants de la même prose, séparés par une virgule (règle n°8) : on peut n'écrire que l'un des deux, l'autre garde sa valeur par défaut. Même principe pour `titre en ... sur fond ...`.
+
+**Un cadre recto/verso.** Une ligne ne contenant que `---` coupe le cadre en deux parties, l'énoncé au-dessus, la solution en dessous — pratique pour une fiche de révision ou une carte question/réponse :
+
+```docdg
+<Affiche>un cadre avec une bordure bleu marine et un titre {Question}{
+  Quelle est la dérivée de $x \mapsto x^2$ ?
+  ---
+  $2x$
+}
+```
+
+**Exemples :**
+
+```docdg
+% Cadre simple
+<Affiche>un cadre avec une bordure bleue, un fond bleu Alice et des coins arrondis de 4 mm{
+  <gras 14pt centre>{Exercice 1}
+  Résoudre $x^2 - 5x + 6 = 0$.
+}
+
+% Cadre avec titre
+<Affiche un cadre avec une bordure rouge foncé, un fond blanc, des coins arrondis de 6 mm,
+  un titre {Théorème de Pythagore} et un titre en blanc sur fond rouge foncé>{
+  Dans un triangle rectangle...
+}
+```
+
+### **2️⃣ `<Dresse un tableau>` — Tableaux simplifiés**
+
+**Trois règles suffisent :**
+
+1. **Hors des crochets, tout est entête** — la rangée du haut comme la colonne de gauche. Rien à déclarer.
+2. **Entre crochets, tout est donnée** : `[a ; b ; c]` est une rangée, les cellules séparées par un point-virgule.
+3. **Les fusions se déduisent de la forme** : une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit ; une entête suivie de plusieurs rangées descend sur autant de lignes.
+
+```docdg
+<Dresse>un tableau [mc, mg, md] avec des bordures{
+	Jour	Matière	Note
+	[Lundi ; Maths ; 15]
+	[Mardi ; EPS ; 16]
+}
+```
+
+La première rangée est hors crochets : c'est l'entête, en gras, sans que le mot `entête` figure nulle part.
+
+**Entêtes verticales et fusions.** Une entête suivie d'un deux-points porte les rangées qui la suivent. Écrite seule sur sa ligne, elle ouvre un groupe que l'indentation dessine :
+
+```docdg
+<Dresse>un tableau [mc, mg, md] avec des bordures{
+	Jour	Matière	Note
+	Lundi :
+		[Maths ; 15]
+		[Français ; 12]
+	Mardi :
+		[EPS ; 16]
+}
+```
+
+« Lundi » couvre deux rangées parce qu'il en porte deux. Le deux-points est consommé, jamais imprimé. La forme **aplatie** donne exactement le même tableau quand la place le permet :
+
+```docdg
+	Lundi :	[Maths ; 15] [Français ; 12]
+```
+
+**Entêtes emboîtées.** Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil, si bien que la source a la forme du tableau :
+
+```docdg
+<Dresse>un tableau [mc, mc, mg, md] avec des bordures{
+	Semaine	Jour	Matière	Note
+	S1 :	Lundi :	[Maths ; 15]
+					[Français ; 12]
+			Mardi :	[EPS ; 16]
+	S2 :	Lundi :	[Maths ; 18]
+}
+```
+
+« S1 » couvre trois rangées, « Lundi » deux : chacun couvre ce qu'il porte. La forme en plan, où chaque entête s'écrit seule sur sa ligne et s'indente sous la précédente, donne le même tableau et reste acceptée.
+
+**Fusion horizontale.** Une rangée à qui il manque des cellules étend la dernière jusqu'au bord droit — un titre seul couvre toute la largeur :
+
+```docdg
+<Dresse>un tableau [mc, mg, md] avec des bordures{
+	Bulletin du premier trimestre
+	Jour	Matière	Note
+	Lundi :	[Maths ; 15]
+	Moyenne :	[13,7]
+}
+```
+
+**Codes de placement (2 lettres, avec alias en toutes lettres) :**
+
+- Vertical : `h` (haut), `m` (milieu), `b` (bas)
+- Horizontal : `g` (gauche), `c` (centre), `d` (droite)
+
+| Code | Alias complet |
+| ---- | -------------- |
+| `hg` | `haut gauche`  |
+| `hc` | `haut centre`  |
+| `hd` | `haut droite`  |
+| `mg` | `milieu gauche` |
+| `mc` | `milieu centre` |
+| `md` | `milieu droite` |
+| `bg` | `bas gauche`   |
+| `bc` | `bas centre`   |
+| `bd` | `bas droite`   |
+
+La forme en toutes lettres n'est jamais moins correcte que le code à deux lettres — c'est un raccourci, pas une syntaxe distincte :
+
+```docdg
+<Dresse>un tableau [milieu centre, milieu gauche, milieu centre] bordures{
+	Jour	Matière	Note
+	[Lundi ; Mathématiques ; 15]
+}
+```
+
+Le nombre de colonnes est celui de la rangée la plus large. S'il dépasse le nombre de codes annoncés, le dernier code vaut pour les colonnes suivantes ; une rangée plus large que le tableau reste une erreur signalée.
+
+**Options :**
+
+| **Option**              | **S'écrit**                          | **Défaut**    | **Description**                              |
+| ----------------------- | -------------------------------------- | ------------- | ---------------------------------------------- |
+| `[codes]`               | `[mc, mc, ...]`                       | `[mc, mc, ...]` | Placement des colonnes                          |
+| Bordures                 | `bordures` (flag, sans valeur)        | absentes      | Affiche toutes les bordures                     |
+| Couleur de la bordure    | `une bordure <couleur>`               | `gris`        | Couleur des bordures                            |
+| Couleur des cellules     | `texte <couleur>`, `fond <couleur>`   | -             | Couleur du texte et du fond des cellules        |
+| Couleur de l'entête      | `entête en <couleur texte> sur fond <couleur fond>` | -   | Couleur de toutes les cellules d'entête         |
+| Écart entre cellules     | `écart de <N>mm`                      | `0mm`         | Espacement entre cellules                       |
+
+Même convention que pour `<Affiche un cadre>` : `texte <couleur>` / `fond <couleur>`, chaque partie facultative. Les couleurs d'entête habillent toutes les cellules d'entête, la rangée du haut comme la colonne de gauche.
+
+**Exemple complet :**
+
+```docdg
+<Dresse un tableau [mc, mg, mc] avec des bordures, un écart de 3 mm,
+  une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine>{
+	Jour	Matière	Note
+	Lundi :	[Mathématiques ; 15]
+	Mardi :	[Français ; 12]
+}
+```
+
+Pour écrire des crochets littéraux dans une cellule, les protéger par des dollars : `$[AB]$`.
+
+> **Documents écrits pour la version 1.0.** Un tableau qui ne contient aucun crochet conserve exactement l'ancienne sémantique : les tabulations séparent les cellules, `entête` met la première rangée en gras, `<2 colonnes mc>` et `<2 lignes mc>` déclarent les fusions, un point seul marque une cellule absorbée. Aucun document existant ne bouge. La grammaire des crochets est la seule enseignée à partir de la 1.0.
+
+### **3️⃣ Dénombrement, arithmétique, complexes**
+
+```docdg
+<Dénombre>les combinaisons de 3 parmi 10
+<Dénombre>les arrangements de 3 parmi 10
+<Dénombre>les permutations de 5
+<Dresse>le triangle de Pascal jusqu'à la ligne 5
+```
+
+Le calcul est posé avant d'être fait : la formule s'affiche, puis le résultat.
+
+```docdg
+<Dresse>la décomposition en facteurs premiers de 360
+<Applique>l'algorithme d'Euclide à 84 et 60
+```
+
+La décomposition donne aussi le nombre de diviseurs ; Euclide déroule ses divisions, conclut sur le PGCD et le PPCM, et fournit une relation de Bézout.
+
+```docdg
+<Écris>le complexe z = 1 + i sous ses trois formes
+```
+
+Formes algébrique, trigonométrique et exponentielle, avec module exact (`√2` reste `√2`) et argument en fraction de π quand il tombe juste.
+
+### **3️⃣ `<Dresse la table de Cayley du groupe ...>`**
+
+```docdg
+<Dresse>la table de Cayley du groupe Z/4Z
+<Dresse>la table de Cayley du groupe (Z/8Z)*
+```
+
+Addition modulo *n* pour `Z/nZ`, multiplication des inversibles pour `(Z/nZ)*` : la table est calculée, pas saisie.
+
+### **3️⃣ Lycée : vecteurs, lois, suites**
+
+```docdg
+<Écris>le vecteur u de coordonnées (3 ; -2)
+```
+
+Notation colonne, deux ou trois coordonnées, fractions acceptées. Le nom est facultatif.
+
+```docdg
+<Dresse>la loi de probabilité de X{
+	valeurs : [1 ; 2 ; 3]
+	probabilités : [1/6 ; 1/3 ; 1/2]
+}
+```
+
+Le tableau se dresse tout seul. La somme des probabilités est vérifiée : une loi qui ne totalise pas 1 est refusée, avec le total fautif dans le message.
+
+```docdg
+<Définis>la suite u par récurrence{
+	u(0) = 1 ; u(n+1) = 2u(n) + 1
+}
+
+<Calcule>les 6 premiers termes de u
+```
+
+La définition s'affiche en notation indicielle, puis les termes se calculent à la demande.
+
+### **3️⃣ `<Étudie le second degré>` — Trinômes**
+
+Le trinôme se donne tel qu'il s'écrit, un par ligne. L'étude sort complète : discriminant, racines, forme factorisée, forme canonique.
+
+```docdg
+<Étudie>le second degré{
+	2x^2 - 3x + 1
+	x^2 - 4x + 4
+	x^2 + x + 1
+}
+```
+
+Les fractions restent exactes tant que le discriminant est un carré parfait ; sinon le radical est conservé et une valeur approchée l'accompagne. La variable se précise si besoin : `<Étudie le second degré en t>`.
+
+### **3️⃣ `<Pose l'opération>` — Opérations posées**
+
+Un nombre, un signe, un nombre : chaque chiffre prend sa case, le trait se pose tout seul, la ligne du résultat reste vide pour l'élève.
+
+```docdg
+<Pose>l'opération{
+	347 + 58
+	4732 - 1589
+}
+```
+
+Une opération par ligne. Les signes acceptés sont `+`, `-` et `×` (ou `*`, ou `x`). Les décimaux s'alignent sur la virgule et se complètent par des zéros, comme au tableau.
+
+| **Option** | **S'écrit** | **Défaut** | **Description** |
+| --- | --- | --- | --- |
+| Résultat | `avec le résultat` | absent | Remplit la ligne du résultat ; pour la multiplication, affiche les produits partiels décalés |
+
+```docdg
+<Pose>une opération avec le résultat{
+	47 × 23
+	12,5 + 3,75
+}
+```
+
+La soustraction refuse de descendre sous zéro et la multiplication se pose sur des entiers : dans les deux cas le message le dit en français.
+
+### **3️⃣ `<Insère une image>` — Insertion d'images**
+
+**Syntaxe :** `<Insère une image avec ATTRIBUTS, dans le dossier {DOSSIER}>{FICHIER}` — les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. **Le dossier est obligatoire, sur chaque image, sans exception** : docdg ne cherche jamais dans un dossier par défaut (ni le dossier courant, ni un dossier `IMG` implicite) — omettre `dans le dossier {...}` est refusé avec un message qui le rappelle. Le chemin est relatif au fichier `.docdg` :
+
+- `avec une largeur de 30 mm` — 30 mm de large, hauteur proportionnelle ;
+- `avec une hauteur de 20 mm` — 20 mm de haut, largeur proportionnelle ;
+- `avec une largeur de 40 mm et une hauteur de 25 mm` — l'image tient dans 40 × 25 mm, proportions gardées ;
+- `avec un côté de 30 mm` — l'image tient dans un carré de 30 mm ;
+- `avec une largeur de 50 %` — la moitié de la largeur de la ligne.
+
+**Autres attributs :**
+
+| **Attribut** | **S'écrit**              | **Description**       | **Obligatoire** |
+| ------------ | ------------------------ | ---------------------- | ---------------- |
+| Dossier      | `dans le dossier {...}`  | Chemin vers l'image    | oui, toujours     |
+| Légende      | `la légende {...}`       | Légende sous l'image   | non               |
+
+**Exemples :**
+
+```docdg
+<Insère>une image avec une largeur de 50 mm, dans le dossier {IMAGES}{diagramme.png}
+<Insère>une image avec une largeur de 80 mm, une hauteur de 60 mm et la légende {Figure 1}, dans le dossier {IMAGES}{photo.png}
+<Insère>une image avec un côté de 30 mm, dans le dossier {IMAGES/GEOMETRIE}{cercle.png}
+```
+
+### **4️⃣ `<Dresse une liste ADJECTIF>` — Listes variées**
+
+**Styles disponibles :**
+
+
+| **S'écrit**             | **Résultat**  |
+| ------------------------ | ------------- |
+| `liste sans puce`        | Texte brut    |
+| `liste à puces`          | •             |
+| `liste à puces vides`    | ∘             |
+| `liste à puces carrées`  | ▪             |
+| `liste numérotée`        | 1., 2., 3.    |
+| `liste alphabétique`     | a., b., c.    |
+| `liste alphabétique majuscule` | A., B., C. |
+| `liste en chiffres romains` | i., ii., iii. |
+| `liste en chiffres romains majuscules` | I., II., III. |
+| `liste à cocher`         | □             |
+
+
+**Exemples :**
+
+```docdg
+<Dresse>une liste à puces{
+pommes
+poires
+<gras>{cerises}
+}
+
+<Dresse>une liste numérotée Rouge 14pt{
+Premier point
+Deuxième point
+}
+```
+
+### **5️⃣ `<Affiche une grille>` — Mise en page avancée**
+
+**Syntaxe :**
+
+```docdg
+<Affiche>une grille avec les zones:[DISPOSITION], les colonnes: ..., les lignes: ... et OPTIONS{
+  [NOM PROPRIÉTÉS]{CONTENU}
+}
+```
+
+**Propriétés :**
+
+
+| **Propriété**            | **S'écrit**                          | **Défaut** | **Description**                                                  |
+| ------------------------- | --------------------------------------| ---------- | ------------------------------------------------------------------|
+| Zones                      | `zones:[DISPOSITION]` ou bloc visuel  | -          | Disposition des zones (technique — voir plus bas)                  |
+| Colonnes                   | `colonnes: ...`                      | `max`      | Largeur de chaque colonne, séparées par des virgules : `min`, `max`, ou valeur fixe (`3cm`) |
+| Lignes                     | `lignes: ...`                        | `max`      | Hauteur de chaque ligne, séparées par des virgules : `min`, `max`, ou valeur fixe (`15cm`) |
+| Bordures                   | `bordures` (flag, sans valeur)       | absentes   | Affiche une bordure autour de chaque zone                          |
+| Couleur de la bordure      | `une bordure <couleur>`              | `gris`     | Couleur des bordures (par défaut, surchargeable par zone)          |
+| Couleur du contenu         | `texte <couleur>`, `fond <couleur>`  | `texte noir, fond blanc` | Couleur du contenu (par défaut, surchargeable par zone) |
+| Écart                      | `écart de <N>mm`                     | `0mm`      | Espacement entre zones                                              |
+| Largeur totale             | `large de <N>mm`                     | auto       | Largeur totale                                                     |
+| Hauteur totale             | `haut de <N>mm`                      | auto       | Hauteur totale                                                     |
+
+
+`zones:`, `colonnes:` et `lignes:` décrivent le plan de la grille (un peu comme des coordonnées) : ce sont des données de structure, pas des réglages de style, elles restent donc en clé:valeur. `colonnes:` et `lignes:` mélangent des mots-clés (`min`, `max`) et des longueurs (`3cm`) — ce n'est pas une liste purement numérique, donc la règle n°8 impose la **virgule** comme séparateur, et les crochets ne sont pas nécessaires : `colonnes: 3cm, auto`, `lignes: min, 15cm, min`. Les crochets `[...]` restent réservés à `zones:`, seule donnée réellement bidimensionnelle de la grille.
+
+Chaque zone s'écrit `[nom en mc avec attributs]` : le **placement** s'introduit par `en` (`en mc`, `en j` pour justifié, ou en toutes lettres : `en haut, à gauche`), puis les **attributs** par `avec`, séparés par des virgules, `et` avant le dernier — la même convention que `<Affiche un cadre>` et `<Dresse un tableau>` (règle n°11). Une zone peut ainsi surcharger `une bordure <couleur>` et ajouter `un texte <couleur>, un fond <couleur>`.
+
+**Exemple simple :**
+
+```docdg
+<Affiche>une grille avec les zones:["titre titre logo", "info info logo", "corps corps corps"], des bordures et un écart de 5 mm{
+  [titre en mc avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 2mm]{
+    <bleu marine gras 20pt centre>Devoir de Maths
+  }
+  [logo en mc]{
+    <Insère>une image avec une largeur de 40 mm, dans le dossier {IMAGES}{logo.png}
+  }
+  [info]{
+    Nom: _______ Prénom: _______
+  }
+  [corps en j]{
+    <section>Exercice 1
+    Résoudre $x^2 = 4$.
+  }
+}
+```
+
+**Exemple avec largeurs et hauteurs fixées (`min` / `max` / valeur fixe), et `zones:` en bloc visuel :**
+
+Pour une disposition à plat, `zones:` accepte un **bloc indenté**, sans guillemets ni virgules ni crochets : chaque ligne du bloc est une ligne de la grille, chaque mot séparé par des espaces est une zone — la disposition se lit à l'œil, exactement comme un plan tracé à la main.
+
+```docdg
+<Affiche une grille
+        zones:
+          haut haut
+          nav  corps
+          bas  bas
+        colonnes: 3cm, max
+        lignes: min, 15cm, min
+        haut de 20cm, écart de 5mm>{
+
+  [haut]{
+    % Contenu du header (prendra sa hauteur minimale : min)
+  }
+
+  [nav]{
+    % Menu / Navigation (largeur fixe : 3cm)
+  }
+
+  [corps]{
+    % Zone principale (prend tout l'espace restant : max)
+  }
+
+  [bas]{
+    % Pied de page
+  }
+}
+```
+
+La forme équivalente en tableau de chaînes reste valable, utile quand la grille est écrite en une seule ligne plutôt qu'en bloc :
+
+```docdg
+<Affiche>une grille avec les zones:["haut haut", "nav corps", "bas bas"], les colonnes: 3cm, max et les lignes: min, 15cm, min{ ... }
+```
+
+### **6️⃣ Sections — Structuration du document**
+
+**Syntaxe :**
+
+```docdg
+<section>Titre principal
+<sous-section>Sous-titre
+<sous-sous-section>Sous-sous-titre
+```
+
+**Table des matières :** `<table des matières>`
+
+**Styles de numérotation :** `num`, `roman`, `ROMAN`, `alpha`, `ALPHA`
+
+**Exemple :**
+
+```docdg
+soit partie = <bleu marine gras section ROMAIN>
+soit chapitre = <bleu gras sous-section decimal>
+
+<partie>Algèbre
+<chapitre>Équations
+```
+
+---
+
+## **✏️ Les actions**
+
+### **`<Soit>` — Poser des hypothèses de départ**
+
+**Rôle :** `<Soit>` déclare un ou plusieurs éléments ou hypothèses d'un coup (points, valeurs, fonctions, champs, systèmes...) *et les affiche* dans le document sous la forme d'un énoncé « Soit ... ». `soit` en minuscule, lui, assigne silencieusement, sans rien afficher (voir « Alias et macros »). C'est le même verbe sous deux formes — la casse suit la règle n°9.
+
+**Syntaxe (plusieurs éléments) :**
+
+```docdg
+<Soit>{
+	un point A(2;-1,5)
+	un point B(-4,1;3,4)
+}
+```
+
+**Syntaxe (un seul élément) :** comme pour `<Trace>`, le contenu suit directement le chevron fermant sans accolades — celles-ci ne servent qu'à regrouper plusieurs lignes.
+
+```docdg
+<Soit>un point A(2;-1,5)
+```
+
+**Affiche :**
+
+```
+Soit un point A(2;-1,5)
+```
+
+La forme en bloc, elle, affiche un énoncé par ligne :
+
+```
+Soit
+	un point A(2;-1,5)
+	un point B(-4,1;3,4)
+```
+
+Les points ainsi déclarés peuvent ensuite être repris par `<Trace>` (voir plus bas) sans qu'il soit nécessaire de redonner leurs coordonnées.
+
+**La factorisation plurielle, sous quatre formes équivalentes.** Une seule phrase déclare plusieurs points ; l'article pluriel (`les`, `des`) ou un **nombre** ouvre la liste, et les coordonnées se donnent soit accolées à chaque nom, soit regroupées en fin de phrase par la **distribution respective** — la tournure des énoncés de collège, de lycée et du supérieur (« de coordonnées respectives », « de rayons respectifs », « de probabilités respectives ») :
+
+```docdg
+<Soit>les points A(1;2), B(-1;2) et C(-1;-2)
+<Soit>3 points A(1;2), B(-1;2) et C(-1;-2)
+<Soit>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
+<Soit>3 points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
+```
+
+Les quatre phrases posent exactement les trois mêmes points. Deux garde-fous, dits en français : le **compte** annoncé par le nombre doit correspondre au nombre de points décrits, et la distribution respective exige **autant de couples de coordonnées que de noms**, appariés dans l'ordre. La factorisation vaut aussi pour les **fonctions** — une seule phrase les pose toutes :
+
+```docdg
+<Soit>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
+```
+
+et chacune est enregistrée comme si elle avait été posée seule (tableaux de variations, dérivées, zéros, tracé : tout suit). Les coefficients décimaux s'écrivent à la française (`-4,9t^2 + 20t`) : la virgule décimale, encadrée de chiffres, n'est jamais confondue avec la virgule qui sépare les fonctions. Elle vaut de même pour les **phrases calculantes** — `<Calcule la dérivée de f, g et h>` vaut trois calculs, un par fonction, et de même pour la dérivée seconde, la primitive, les zéros... — et pour le **tracé** : `<Représente graphiquement les fonctions f, g et h pour x dans [-2 ; 2] et y dans [-3 ; 3]>` dessine les trois courbes dans le même repère, chacune avec sa couleur et sa légende. La distribution respective sert aussi au repère (`avec des unités respectives de 2 cm et 0,5 cm`, voir `<Trace>`) ; son extension aux autres objets (sphères, événements) suivra au fil des versions.
+
+> **Règle de l'article :** indéfini à la déclaration (`<Soit>` : `un point A`), défini à toute reprise ultérieure (`<Trace>` ou une autre action : `le point A`).
+
+**Le champ de vecteurs.** Pour les classes préparatoires, `<Soit>` sait déclarer un champ :
+
+```docdg
+<Soit>un champ de vecteurs F de RR^3 dans RR^3 défini par F(x, y, z) = (x^2, yz, sin(z))
+```
+
+qui s'affiche « Soit un champ de vecteurs F : ℝ³ → ℝ³ défini par F(x, y, z) = (x², yz, sin(z)) ». Les doubles lettres `RR`, `NN`, `ZZ`, `QQ`, `CC` produisent les ensembles en gras de tableau, comme partout dans les zones mathématiques. La déclaration est **purement notationnelle** en version 1.0 : un champ vectoriel n'a ni courbe ni tableau de variations associables, il n'est donc pas enregistré comme les fonctions scalaires le sont.
+
+
+### **`<Trace>` — Dessiner tout type de figure**
+
+**Une seule action pour :** figures géométriques, courbes de fonctions, repères, cercles trigonométriques, solides 3D.
+
+#### **🔺 Figures géométriques planes**
+
+**Formes disponibles :**
+
+
+| **Forme** | **Syntaxe**         | **Propriétés clés**                              |
+| --------- | ------------------- | ------------------------------------------------ |
+| Triangle  | `le triangle ABC équilatéral`, `le triangle ABC rectangle en A, de côté AB 3 et de côté AC 4` | qualificatif accolé, attributs en `de...` |
+| Carré     | `le carré ABCD, de côté 4 cm`        | `de côté N`                                         |
+| Rectangle | `le rectangle ABCD, de côté AB 3 et de côté BC 5`    | `de côté AB N`, `de côté BC N`                      |
+| Losange   | `le losange ABCD, de côté 4 cm et d'angle 60`      | `de côté N`, `d'angle N`                            |
+| Cercle    | `le cercle O, de rayon 3 cm`  | `de centre A`, `de rayon N`, `de diamètre N`          |
+| Disque    | `le disque O, de rayon 3 cm, rempli`  | `de centre A`, `de rayon N`, `de diamètre N`, `rempli` (flag) |
+| Polygone  | `le polygone ABCD, de centre O et de rayon 3 cm` | `de centre A`, `de rayon N`                                         |
+
+
+**Propriétés communes :**  
+en prose — unité accolée au nombre (`5 cm`), couleur avec `en` (`en bleu`), épaisseur avec `de trait N` (`de trait 0,5 mm`), `avec les marques`, `sans labels` ;  
+en clé:valeur (le seul réglage technique restant à ce niveau) — `rotation:N`
+
+**Convention pour les longueurs :** toute propriété de longueur (`côté`, `rayon`, `diamètre`, `AB`, etc.) accepte soit un nombre suivi de son unité **obligatoire** (`5 cm`, `30 mm`), soit le nom d'un segment déjà défini entre deux points existants (ex. `de rayon AB`). Une longueur numérique sans unité n'est acceptée qu'à l'intérieur d'un repère, où elle se lit en graduations (règle n°10).
+
+**Exemples :**
+
+```docdg
+<Trace>le triangle ABC équilatéral, de côté 5 cm, avec les marques
+<Trace>le carré ABCD, de côté 4 cm, avec les marques
+<Trace>le triangle ABC rectangle en A, de côté AB 3 mm et de côté AC 4 mm, avec les marques
+```
+
+**Le cercle en détail :**
+
+```docdg
+<Trace>le cercle O, de rayon 3 cm                 % rayon en cm
+<Trace>le cercle O, de rayon AB                  % rayon = longueur du segment AB
+<Trace>le cercle O, de diamètre 6 cm             % via le diamètre plutôt que le rayon
+<Trace>le cercle, de centre O et de rayon 4 cm   % centre nommé, sans coordonnées
+<Trace>le cercle, de centre (2;3) et de rayon 4 cm  % centre positionné explicitement
+<Trace>le disque O, de rayon 3 cm, rempli
+```
+
+Mêmes options pour `disque` (`de centre A`, `de rayon N` ou `de diamètre N`, `rempli`) et pour `polygone` (`de centre A`, `de rayon N` pour un polygone régulier inscrit).
+
+#### **📊 Repère orthonormé**
+
+**Syntaxe :** `un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5]`. Le repère est **orthonormé** par défaut : une graduation vaut la même longueur sur les deux axes (1 cm si rien n'est précisé), et l'adjectif `orthonormé` peut se dire explicitement.
+
+**L'unité se règle en prose**, et son unité de longueur (cm ou mm) est obligatoire, comme pour toute mesure (règle n°10) :
+
+- `avec une unité de 1,5 cm` — la même unité sur les deux axes, le repère reste orthonormé ;
+- `avec des unités respectives de 2 cm et 0,5 cm` — la première pour l'axe des abscisses, la seconde pour celui des ordonnées (**distribution respective**, règle n°10) : le repère est alors **orthogonal**, et se dit tel.
+
+**Exemples :**
+
+```docdg
+<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5]
+<Trace>dans un repère orthonormé où l'abscisse appartient à [-4 ; 4] et l'ordonnée à [-3 ; 3], avec une unité de 1,5 cm
+<Trace>dans un repère orthogonal où l'abscisse appartient à [-3 ; 3] et l'ordonnée à [-3 ; 3], avec des unités respectives de 2 cm et 0,5 cm
+```
+
+Déclarer un repère `orthonormé` avec deux unités distinctes est une contradiction : docdg la refuse et rappelle la forme `orthogonal`. *(L'ancien réglage `unité:N` en clé:valeur, comme les réglages d'affichage `avec le quadrillage`, `avec les axes` et `avec les noms`, n'existent plus : l'unité est une grandeur qui se dit en prose, et les axes gradués sont constitutifs du repère.)*
+
+#### **🎡 Cercle trigonométrique**
+
+**Syntaxe :** `le cercle trigonométrique, de rayon 4 cm`, suivi du réglage d'affichage `avec les valeurs` / `sans valeurs`, et des réglages techniques `pas:N`, `plage:A;B` en clé:valeur.
+
+**Exemple :**
+
+```docdg
+<Trace>le cercle trigonométrique, de rayon 4 cm, avec les valeurs
+<Trace>le cercle trigonométrique, de rayon 3,2 cm, avec les valeurs et un pas de $pi/6$
+```
+
+#### **🎲 Solides en 3D**
+
+**Formes :** `le cube`, `le pavé`, `la pyramide`, `le cylindre`, `le cône`, `la sphère`
+
+**Attributs constitutifs (en prose « de... ») :** `d'arête N`, `de côté N;N;N`, `de base N`, `de hauteur N`, `de rayon N`, `de diamètre N`, `d'angle N`, `de coefficient N`
+
+Même convention que pour les figures planes : `arête`, `rayon`, `diamètre`, `hauteur` acceptent une valeur en cm ou le nom d'un segment déjà défini.
+
+> ✅ **Arêtes cachées calculées automatiquement !**
+
+**Exemple :**
+
+```docdg
+<Trace>{
+    le solide cube ABCDEFGH, d'arête 3 cm
+    le solide pyramide SABCD, de base 3 cm et de hauteur 4 cm
+    le solide cylindre, de rayon 1,5 cm et de hauteur 3 cm
+    le solide sphère, de centre (0;0;0) et de rayon 2 cm
+    le solide cône, de rayon 2 cm et de hauteur 5 cm
+}
+```
+
+#### **📍 Points, droites, demi-droites et segments**
+
+Pour tracer un élément isolé, sans ouvrir un repère complet :
+
+```docdg
+<Trace>le point A                    % A doit avoir été défini au préalable (ex. via <Soit>)
+<Trace>le point A(2;-1,5)            % définit A et le trace
+<Trace>la droite (AB)
+<Trace>la demi-droite [AB)
+<Trace>la demi-droite (AB]
+<Trace>le segment de droite [AB]
+```
+
+**Convention pour les droites :** `[` / `]` = point inclus, `(` / `)` = point exclu — la même convention que pour la [droite graduée](#📏-droite-graduée).
+
+La même prose (`la droite (AB)`, `la demi-droite [AB)`, `le segment de droite [AB]`) fonctionne aussi bien **dans un repère**, dès que les points portent des coordonnées connues (posés par `<Soit>`, ou placés dans le même bloc) : la droite et la demi-droite s'arrêtent alors au bord du repère plutôt qu'à une longueur fixe, et le segment relie exactement les deux points. C'est la même phrase, seul le contexte — avec ou sans repère ouvert — décide de l'échelle.
+
+**Construction avec longueur imposée.** Le geste de base au collège — tracer un segment ou une demi-droite d'une longueur donnée — s'écrit avec la clause `tel que` (ou `telle que`), suivie de la longueur avec son unité :
+
+```docdg
+<Trace>le segment de droite [AB] tel que AB = 4 cm
+<Trace>le segment [CD] tel que CD = 28 mm
+<Trace>la demi-droite (AB] telle que AB = 3,5 cm
+```
+
+Le segment est dessiné à l'échelle (1 cm = 1 cm sur le papier), ses extrémités nommées et pointées, la longueur inscrite au-dessus. L'unité (`cm` ou `mm`) est **obligatoire** : `tel que AB = 5` seul est refusé, avec un message qui le rappelle. Sans clause `tel que`, le segment garde une longueur d'affichage par défaut.
+
+#### **📐 Mode analytique**
+
+Pour construire une figure complète dans une partie (ou un cadre) — plusieurs points, droites, courbes, vecteurs liés entre eux — **avec ou sans repère**, on ouvre un bloc `<Trace>{...}` : tout ce qui se trouve entre les accolades sera dessiné dans le même canevas. Si la première phrase du bloc est **le repère lui-même** — `un repère où l'abscisse appartient à [a ; b] et l'ordonnée à [c ; d]` — ses bornes fixent le canevas, et tout ce qui suit s'y inscrit ; sans cette phrase, la figure se construit librement, hors de tout repère. Le repère se dit `orthonormé` explicitement si l'on veut le préciser (c'est le défaut) ; le repère `orthogonal` prend des unités distinctes sur les deux axes : `un repère orthogonal où ..., avec des unités respectives de 2 cm et 0,5 cm` (abscisses puis ordonnées).
+
+**Syntaxe :**
+
+```docdg
+<Trace>{
+    un repère où l'abscisse appartient à [xmin ; xmax] et l'ordonnée à [ymin ; ymax]
+    le point A(x;y)
+    la droite y = mx + b
+    la droite passant par A et B
+    le vecteur u(x;y)
+    le cercle C, de centre (x;y) et de rayon r
+    la tangente au cercle C, au point T
+    la région y > x+1
+}
+```
+
+**Médiatrice, bissectrice et angle.** Trois constructions de collège s'écrivent dans le repère, en prose ordinaire, à condition que les points concernés y soient posés :
+
+```docdg
+<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5]{
+    un point A(-3;1)
+    un point B(3;-1)
+    un point C(2;4)
+    la médiatrice de [AB], en bleu
+    la bissectrice de l'angle ABC, avec les marques
+    l'angle BAC, en vert
+}
+```
+
+- **La médiatrice** se dit `la médiatrice de [AB]` — le segment entre crochets, notation française, cohérente avec la droite `(AB)`. Elle se trace comme droite complète, coupée aux bords du repère. `avec les marques` ajoute le codage d'égalité sur les deux moitiés du segment et le petit carré de l'angle droit au milieu.
+- **La bissectrice** se dit `la bissectrice de l'angle ABC` — le **sommet est la lettre centrale** (ici `B`), convention géométrique française. Elle se trace comme demi-droite issue du sommet, prolongée jusqu'au bord du repère. `avec les marques` ajoute les deux arcs égaux de part et d'autre.
+- **L'angle** seul, `l'angle BAC`, trace la marque d'arc au sommet (lettre centrale) — utile pour désigner un angle sur une figure sans le bissecter. Ne pas confondre avec l'*attribut* `d'angle N` (une mesure, en degrés) du losange ou du parallélogramme.
+
+> Les points posés par un `<Soit>` antérieur — au singulier (`un point A(2;7)`) comme au pluriel factorisé (`les points A(-3;1), B(3;-1) et C(2;4)`) — **persistent** : tout bloc `<Trace>` qui les nomme les reçoit automatiquement. La médiatrice et la bissectrice sur figure métrique (hors repère, `le triangle ABC...`) restent prévues pour une version ultérieure.
+
+**L'angle sous toutes ses formes.** Au-delà de `l'angle BAC` (trois points, sommet central), le repère accepte :
+
+```docdg
+<Trace>dans un repère où l'abscisse appartient à [-2 ; 2] et l'ordonnée à [-2 ; 2]{
+    un point O(0;0)
+    un point A(1;0)
+    un point B(0;1)
+    un point C(1;1)
+    l'angle AOB, en bleu et de mesure 90°
+    l'angle orienté (OA;OB), en vert
+    l'angle entre OA et OC, en rouge
+    le vecteur u(1;0)
+    le vecteur v(0;1)
+    l'angle entre le vecteur u et le vecteur v, en orange et de mesure 90°
+}
+```
+
+- **`de mesure 90°`** pose la mesure en étiquette, sur la direction médiane de l'arc, un peu au-delà. La valeur est reprise telle quelle (`90°`, `pi/3`, `60°`...) — docdg ne vérifie pas qu'elle est exacte : c'est une annotation, pas un calcul.
+- **`l'angle orienté (OA;OB)`** — deux demi-droites de même origine, notation française du couple — trace l'arc **fléché** de la première vers la seconde. Les deux origines doivent coïncider, sinon l'erreur le dit.
+- **`l'angle entre OA et OC`** est la forme non orientée de la même construction.
+- **`le vecteur u(1;0)`** pose un vecteur libre, tracé depuis l'origine ; **`l'angle entre le vecteur u et le vecteur v`** marque l'arc entre leurs directions, au point de départ du premier. Les deux vecteurs doivent avoir été tracés dans le même bloc.
+
+> **Périmètre de la version 1.0 — et feuille de route.** Le moteur de figures est un moteur **plan**. L'angle dièdre entre deux plans, le plan défini par trois points de l'espace, l'angle entre une droite et un plan — toutes les constructions qui exigent une vraie troisième dimension — sont notés pour une version ultérieure dotée d'un moteur 3D (les solides actuels sont des projections câblées, pas un espace calculé). De même, `la droite d, passant par A et B` comme objet *nommé* réutilisable attend le mécanisme d'alias de figures (`soit d = ...`), prévu avec la persistance des points entre blocs.
+
+> **Un seul verbe, une seule prose.** Le mode analytique n'introduit aucune syntaxe nouvelle : c'est un `<Trace le repère, ...>` ordinaire (règle n°10, article défini, bornes en prose `où l'abscisse appartient à [a ; b] et l'ordonnée à [c ; d]`) dont le contenu entre accolades énumère les objets à inscrire dans ce repère, chacun à son tour avec sa propre prose. Une ébauche antérieure du langage ouvrait ce mode par un réglage `axes:{...}` en clé:valeur ; mais les bornes décrivent *ce que montre* la figure, au même titre qu'un rayon ou un côté — elles sont donc en prose, et le mot `axes:` n'existe pas. On n'écrit jamais `<Trace, où l'abscisse ...>` (virgule après un verbe sans objet, incorrecte en français) : le repère est toujours nommé (`le repère`), exactement comme on nomme `le cercle` ou `la fonction`. Le même repère se dit aussi bien `<Représente graphiquement le repère, ...>` dès que son contenu relève de l'analyse (courbes de fonctions) plutôt que de la géométrie plane — voir l'encadré ci-dessous.
+
+**Le repère est un objet : il accueille des courbes de fonctions.** Une fonction posée par `<Soit>` se trace *dans* un repère qui contient aussi des points, des droites ou des vecteurs — la courbe est un habitant du repère parmi les autres :
+
+```docdg
+<Soit>les fonctions f(x) = x^2 - 2 et g(x) = -x^2 + 3
+
+<Représente>graphiquement un repère où l'abscisse appartient à [-3 ; 3] et l'ordonnée à [-4 ; 4]{
+    les courbes des fonctions f et g
+    la droite d'équation y = x
+    le point A(-2 ; 3,5)
+}
+```
+
+Chaque courbe reçoit sa couleur et son nom en étiquette. Trois proses équivalentes pour la courbe : `la fonction f`, `la courbe de la fonction f`, et au pluriel factorisé `les courbes des fonctions f et g` (ou `les fonctions f et g`). La droite se dit par son équation, `la droite d'équation y = ...`, avec n'importe quelle expression au second membre. La fenêtre et les unités viennent du repère englobant — la courbe n'en redit rien.
+
+**La forme académique du repère.** Les énoncés du secondaire et du supérieur nomment le repère et détaillent chaque axe ; docdg les lit tels quels :
+
+```docdg
+<Représente>graphiquement dans un repère orthogonal (O, i, j) pour x appartient à [-3 ; 3] et y à [-9 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées{
+    les courbes des fonctions f et g
+    la droite d'équation y = x
+    le point A(-2 ; 3,5)
+}
+```
+
+- **`<Représente graphiquement ...>`** est le verbe de l'**analyse** : fonction, courbe, diagramme en escalier d'une suite, statistique (voir plus loin) — la représentation d'un concept abstrait, avec ou sans repère explicite. `<Trace>` reste le verbe de la **géométrie**, plane ou dans l'espace : triangle, cercle, droite, polygone, médiatrice, bissectrice, solide — le tracé concret d'une figure, **même posée dans un repère** (un point, une droite ou une médiatrice entre coordonnées se trace, elle ne se représente pas graphiquement). Les deux verbes peuvent ouvrir le même mode analytique et les mêmes blocs ; seul le contenu — fonction ou figure — décide lequel s'emploie. Une figure mixte (une droite tracée à côté d'une courbe, par exemple) se range du côté de son objet principal.
+
+| Domaine | Verbe | Exemples |
+| --- | --- | --- |
+| Analyse | `<Représente graphiquement>` | fonctions, courbes, diagrammes en escalier, statistiques |
+| Géométrie plane | `<Trace>` | triangles, cercles, droites, polygones, médiatrices |
+| Géométrie dans l'espace | `<Trace>` | cubes, pyramides, sphères |
+| Probabilités | `<Construis>` | arbres de probabilités |
+| Algèbre linéaire | `<Affiche>` | matrices, tableaux |
+
+- **`dans un repère ...`** : le `dans` de la tournure académique se lit naturellement après le verbe.
+- **`(O, i, j)`** nomme le repère — la notation est acceptée et consommée ; elle n'ajoute rien au tracé en version 1.0 (l'origine s'appelle toujours O).
+- **`pour x appartient à [a ; b] et y à [c ; d]`** est l'équivalent de `où l'abscisse appartient à ... et l'ordonnée à ...` — les deux tournures se valent.
+- **`avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées`** est la forme longue, chaque axe nommé en toutes lettres, de `avec des unités respectives de 1,5 cm et 0,5 cm` — l'ordre des axes peut être inversé, les valeurs se remettent d'elles-mêmes dans le bon ordre.
+
+---
+
+## **🎨 Les styles et la mise en forme**
+
+### **🎨 Styles en ligne**
+
+
+| **Style**           | **Abréviation** | **Résultat**      |
+| ------------------- | --------------- | ----------------- |
+| `gras`              | `g`             | **gras**          |
+| `italique`          | `i`             | *italique*        |
+| `souligné`          | `s`             | ++souligné++      |
+| `barré`             | —               | ~~barré~~         |
+| `sans empattements` | `sans`          | sans empattements |
+| `petites capitales` | `capitales`     | Petites Capitales |
+
+
+**Combinaison :** `<gras italique rouge>{texte}` ou `<g i s>{texte}`
+
+### **🎨 Couleurs et tailles**
+
+**Couleurs :** `rouge`, `bleu foncé`, `vert forêt` — les 147 noms français listés dans la [référence des couleurs](#-référence-des-couleurs-147-disponibles).
+
+**Filet de sécurité — teinte absente de la palette française :** les 147 noms français couvrent l'intégralité de la palette CSS/svgnames usuelle ; il ne devrait donc en pratique jamais être nécessaire d'en sortir. Si toutefois une teinte précise venait à manquer, les 147 noms français couvrent l'immense majorité des besoins. Aucun exemple de ce guide n'utilise de nom anglais — docdg se lit et s'écrit intégralement en français.
+
+**Tailles :** `12pt`, `14pt`
+
+**Polices :** `<ARIAL>`, `<TIMES NEW ROMAN 12pt>`
+
+### **📏 Alignements**
+
+**Horizontal :** `gauche`, `centre`, `droite`, `justifie`
+
+**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#2️⃣-tableau--tableaux-simplifiés))
+
+### **📄 Tabulations et sauts**
+
+
+| **Balise**        | **Description**              |
+| ----------------- | ---------------------------- |
+| `<tabulation>`    | Indentation de 1 tabulation  |
+| `<Ntabulations>`  | Indentation de N tabulations |
+| `<ligne>`         | Saut d'une ligne             |
+| `<Nlignes>`       | Saut de N lignes             |
+| `<page suivante>` | Saut de page                 |
+
+
+### **📌 Exposants et indices**
+
+```docdg
+x<exposant>{2}      % x² (décalage par défaut de la classe)
+y<indice>{1}        % y₁
+H<indice>{2}O       % H₂O
+x<exposant 4mm>{2}  % x² avec exposant relevé de 4 mm (mesure explicite)
+```
+
+> **Nombre collé ou séparé ?** Deux familles, deux conventions, une seule logique. Quand le nombre **compte des objets** (une multiplicité), il est **collé** au mot : `<4 colonnes>`, `<2 lignes>`, `<3 tabulations>` (voir « Fusion de cellules » et « Tabulations et sauts »). Quand le nombre est une **mesure** avec une unité (mm), il est **séparé** et porte son unité : `<exposant 4mm>`. Sans nombre, `<exposant>` et `<indice>` prennent le décalage par défaut fixé par l'option de classe `décalage` — c'est la forme courante, le nombre n'étant utile que pour un ajustement ponctuel.
+
+### **📎 `<note>` — Notes de bas de page**
+
+Une note de bas de page s'insère au fil du texte avec la balise `<note>` suivie de son contenu entre accolades. L'appel de note (le petit numéro en exposant) se place exactement là où figure la balise ; le texte de la note descend automatiquement en bas de la page, numéroté en continu :
+
+```docdg
+Selon Bourdieu<note>{BOURDIEU Pierre, La distinction : critique sociale
+du jugement, Paris, Éditions de Minuit, 1979}, les habitus structurent
+les pratiques.
+```
+
+Trois points d'usage, hérités de la typographie française :
+
+- **Placement de la balise :** collée au mot qu'elle annote, *avant* la ponctuation (`...Bourdieu<note>{...},` et non `...Bourdieu,<note>{...}`) — c'est la convention française de l'appel de note.
+- **Contenu :** tout ce que le corps du texte accepte est admis dans la note — styles (`<italique>`), mathématiques (`$...$`), calculs (`#{...}`). Une référence bibliographique s'écrit naturellement : NOM Prénom, *Titre*, Ville, Éditeur, année.
+- **Longueur :** une note tient sur son accolade, même répartie sur plusieurs lignes du fichier source (l'accolade fermante marque la fin, comme partout ailleurs — règle n°2).
+
+> **Pourquoi `<note>` et pas « note de bas de page » en toutes lettres ?** Le mot seul suffit : il n'existe qu'une sorte de note dans un document scolaire, et la brièveté compte pour une balise appelée au fil de la phrase. La marge (`marginpar`) et les notes de fin de document, plus rares, ne sont pas retenues dans docdg 1.0.
+
+### **🔖 Alias et macros avec `soit`**
+
+> **⚠️ Distinction importante :**
+> - `soit` (minuscule) : **Mot-clé technique** pour les assignations (invisible dans le PDF).
+>   Exemple : `soit x = 5`
+> - `<Soit>` (majuscule) : **Action-phrase** qui affiche un énoncé dans le PDF.
+>   Exemple : `<Soit>un point A`
+>
+> Cette distinction suit la **règle n°9** : seules les actions-phrases (qui s’écrivent comme des phrases françaises) commencent par une majuscule.
+
+**Mauvaise et bonne pratiques**
+```docdg
+-- ❌ MAUVAIS : "Soit" en majuscule pour une assignation
+Soit titre = <gras 18pt centre>  % → Erreur : ce n'est pas une action-phrase !
+
+-- ✅ BON : majuscule uniquement pour l'action
+soit titre = <gras 18pt centre>
+<Soit>un point A(2;3)  % → Correct : action-phrase
+```
+
+**Définir un style :**
+
+```docdg
+soit titre = <bleu marine gras 18pt centre>
+soit important = <gras souligné rouge>
+```
+
+**Variables numériques :**
+
+```docdg
+soit pi = 3,14159
+soit rayon = 5
+soit aire = #{pi * rayon^2}
+L'aire vaut #aire cm².
+```
+
+**Macros avec paramètres :**
+
+```docdg
+soit bonjour{nom} = Bonjour #nom !
+soit carre{x} = #{x^2}
+
+<bonjour{Jean}>    % → Bonjour Jean !
+<carre{5}>        % → 25
+```
+
+**Exemple complet**
+```docdg
+-- Assignation silencieuse (mot-clé technique)
+soit titre = <gras 18pt centre>
+soit pi = 3,14159
+soit bonjour{nom} = Bonjour #nom !
+
+-- Action-phrase (affiche dans le PDF)
+<Soit>un point A(2;3)
+<Trace>le cercle, de centre A et de rayon 5 cm
+```
+
+### **🔁 Structures de contrôle**
+
+**Boucles `pour` :**
+
+```docdg
+pour n de 1 à 5 {
+  <gras>Exercice #n
+}
+```
+
+**Les deux bornes sont incluses** : `pour n de 1 à 5` parcourt 1, 2, 3, 4 **et** 5 (cinq passages), exactement comme on le lirait à voix haute. Contrairement à la plupart des langages de programmation (où une borne « à N » exclut souvent N), docdg ne demande pas à un professeur de compter « il faut mettre 6 pour aller jusqu'à 5 » — la phrase française fait foi.
+
+```docdg
+pour f dans [chat.png, chien.png] {
+  <Insère>une image avec une largeur de 20 mm, dans le dossier {IMAGES}{#f}
+}
+```
+
+**Le pas** se règle en prose, comme tout réglage : `avec un pas de p`. Les bornes et le pas acceptent les **décimaux**, virgule française comprise :
+
+```docdg
+pour i de 0,5 à 2,5 avec un pas de 0,5 {
+  Valeur : #i
+}
+```
+
+**Boucles `tant que` :** la condition est vérifiée **avant** chaque passage ; le mot `faire` devant l'accolade est facultatif mais recommandé — il se lit mieux.
+
+```docdg
+soit n = 0
+tant que n < 3 faire {
+  Passage numéro #n
+  soit n = n + 1
+}
+```
+
+**Boucles `faire ... tant que` :** le corps s'exécute **au moins une fois**, la condition est vérifiée **après** chaque passage.
+
+```docdg
+soit n = 0
+faire {
+  Passage numéro #n
+  soit n = n + 1
+} tant que n < 3
+```
+
+> **Compteurs et portées.** `soit n = 0` posé **avant** la boucle déclare le compteur ; le `soit n = n + 1` **dans** la boucle retrouve ce nom déjà visible et le **réaffecte** — c'est ce qui fait avancer la boucle. Un nom posé pour la première fois *à l'intérieur* d'un bloc, lui, reste local au bloc (règle des portées, plus bas) : ce qu'on pose en tête sert partout, ce qu'on pose dans un tiroir reste dans le tiroir.
+
+**Conditions `si` :**
+
+```docdg
+soit note = 15
+
+si note >= 10 {
+  <vert gras>Admis !
+} sinon {
+  <rouge gras>Échoué.
+}
+```
+
+Les opérateurs symboliques (`>=`, `<=`, `==`, `!=`) ont chacun un synonyme en toutes lettres, interchangeable au choix :
+
+| Symbole | Synonyme       | Symbole | Synonyme     |
+| ------- | -------------- | ------- | ------------ |
+| `>=`    | `au moins`     | `<=`    | `au plus`    |
+| `==`    | `égal à`       | `!=`    | `différent de` |
+
+```docdg
+si note au moins 10 {          % strictement équivalent à : si note >= 10
+  <vert gras>Admis !
+}
+```
+
+Les conditions se **combinent** avec les connecteurs du français, `et` et `ou`, et s'enchaînent avec `sinon si` :
+
+```docdg
+soit note = 12
+soit rattrapage = 8
+
+si note >= 10 et rattrapage >= 10 {
+  <vert gras>Admis sans réserve.
+} sinon si note >= 10 ou rattrapage >= 12 {
+  <orange gras>Admis de justesse.
+} sinon {
+  <rouge gras>Échoué.
+}
+```
+
+### **➗ Calculs dans le texte : `#{...}`**
+
+**Fonctions disponibles :**
+
+- Algébriques : `abs`, `racine`, `defaut`, `signe`, `min`, `max`
+- Exponentielles : `exp`, `ln`, `log`, `log2`, `logb(x;base)`
+- Trigonométriques : `sin`, `cos`, `tan`, `cot`, `sinus en degrés`, `cosinus en degrés`, `tangente en degrés`
+- Inverses : `arcsin`, `arccos`, `arctan`
+- Hyperboliques : `sinh`, `cosh`, `tanh`, `coth`
+- Arrondi : `arrondi(x;d)`, `defaut(x:pas)`, `exces(x:pas)`
+- Constantes : `pi`, `e`
+
+**Exemples :**
+
+```docdg
+Le carré de 5 vaut #{5^2}.
+La racine de 16 vaut #{racine(16)}.
+La valeur de π est environ #{arrondi(pi;4)}.
+```
+
+---
+
+## **📊 Les graphiques de fonctions**
+
+### **Déclaration d'une fonction**
+
+Déclarer une fonction, c'est **poser un objet nouveau** — exactement ce que fait `<Soit>` pour un point. On emploie donc la même action, avec l'article indéfini (règle n°10) :
+
+```docdg
+<Soit>une fonction f(x) = x^2 - 2
+<Soit>une fonction g(t) = sin(t) + cos(t)
+```
+
+> **Pourquoi `<Soit>` et non un objet `<fonction>` ?** Une fonction est une **hypothèse de départ** au même titre qu'un point : elle se *pose*, elle ne se *dessine* pas (c'est `<Représente graphiquement>` qui la dessinera ensuite). La formule scolaire canonique est d'ailleurs « **Soit** f la fonction définie par… ». Unifier toute déclaration sous le verbe `<Soit>` (points, valeurs, fonctions) évite d'avoir à retenir un objet spécial `<fonction>` : un seul verbe pour tout ce qu'on pose, un seul verbe de graphage (`<Représente graphiquement>`) pour tout ce qu'on représente dans un repère.
+
+Comme pour un point, plusieurs déclarations se regroupent entre accolades :
+
+```docdg
+<Soit>{
+    une fonction f(x) = x^2 - 2
+    une fonction g(t) = sin(t) + cos(t)
+}
+```
+
+### **Tracé de la courbe**
+
+```docdg
+<Représente>graphiquement la fonction f
+<Représente>graphiquement la fonction f pour x appartient à [-5 ; 5] et y à [-10 ; 10]
+<Représente>graphiquement la fonction f, en rouge et de trait 0,5 mm
+```
+
+**Bornes d'affichage :** `pour x appartient à [A ; B] et y à [C ; D]`, en prose — même convention que le repère (voir règle n°10). Les variantes `pour x dans [A ; B]` et `sur [A ; B]` (abscisse seule) sont acceptées.
+
+**En prose :** couleur (`en rouge`), épaisseur (`de trait 0,5 mm`), bornes d'affichage (`pour x appartient à [A ; B] et y à [C ; D]`), finesse (`avec 200 échantillons`).
+
+**Plusieurs courbes dans le même repère** (factorisation plurielle, règle n°10) : `<Représente graphiquement les fonctions f, g et h pour x dans [-2 ; 2] et y dans [-3 ; 3]>` — article pluriel (`les`, `des`) ou nombre (`3 fonctions f, g et h`, le compte est vérifié). Chaque courbe reçoit sa couleur et son entrée de légende ; les fonctions doivent avoir été posées par `<Soit>` auparavant.
+
+**En prose également :** finesse (`avec 200 échantillons`), aire sous la courbe (`avec l'aire entre A et B`), aire entre deux courbes (`avec l'aire jusqu'à g`), et le tracé en escalier d'une suite récurrente : `avec le diagramme en escalier depuis U0 sur N termes` (N vaut 8 si omis).
+
+### **Analyse et algèbre du supérieur**
+
+Chaque construction se pose en une phrase, sur une fonction ou une matrice déjà introduite par `<Soit>` ; le calcul est formel (SymPy), le rendu suit les notations du supérieur.
+
+```docdg
+<Soit>une fonction f(x) = sin(x)/x
+
+<Calcule>la limite de f en 0                              % lim f(x) = 1, x -> 0
+<Calcule>la limite de f en +infini                        % ... et -infini
+<Calcule>la limite de f en 0 à droite                     % ... ou à gauche
+
+<Calcule>le développement limité de f en 0 à l'ordre 4    % avec le o(x^4) français
+
+<Calcule>les racines cinquièmes de l'unité     % S = {1, e^(2ipi/5), ...}
+<Calcule>les racines cubiques de 8i            % racines n-ièmes complexes
+
+<Factorise>x^2 - 5x + 6                        % (x - 2)(x - 3)
+<Simplifie>(x^2 - 1)/(x - 1)                   % x + 1
+<Résous>l'équation x^2 = 2x + 1                % S = {1 - rac(2), 1 + rac(2)}
+
+<Soit la matrice M>{
+    2 ; 1
+    1 ; 1
+}
+<Calcule>le déterminant de M                              % det(M) = 1 (exact)
+<Calcule>l'inverse de M                                  % M^(-1), fractions exactes
+```
+
+Le développement limité s'écrit avec le petit o de l'usage français (`+ o(x^n)`), les solutions d'équations sortent en radicaux exacts, le déterminant et l'inverse en fractions. Une matrice non inversible ou une fonction non posée sont dites en français.
+
+### **Poser et résoudre un système**
+
+Le système se pose par `<Soit>`, qui l'affiche et le mémorise, puis se résout par `<Résous>` — en **calcul exact** : coefficients entiers, décimaux ou fractions `p/q`, solutions rendues en fractions irréductibles. Le solveur dit aussi, en français, quand le système n'a aucune solution ou en admet une infinité.
+
+```docdg
+<Soit le système s>{
+    a + b + c = 2
+    4a + 2b + c = 3
+    9a + 3b + c = 6
+}
+
+<Résous>s              % La solution du système est (1, -2, 3).
+
+<Résous>s, pas à pas    % ... déroulé au pivot de Gauss, étape par étape.
+```
+
+> **Les deux moteurs de calcul.** docdg calcule à deux niveaux, sans option à régler : le **moteur interne** — arithmétique exacte et Gauss-Jordan embarqués en Rust pur, rien à installer, `<Résous>` et `#{...}` fonctionnent partout — et **SymPy**, sollicité automatiquement par les constructions de calcul formel (dérivées, zéros exacts, variations automatiques, [sympy.org](https://www.sympy.org)). SymPy nécessite Python 3 installé (`python3 -m pip install sympy`) ; docdg le détecte et l'appelle automatiquement — aucune option à activer, aucune ligne de commande à modifier. docdg trouve la commande Python tout seul (`python3`, `python` puis `py`). Chaque requête passe par un fichier temporaire (jamais par la ligne de commande : pas d'injection), est mise en cache (l'expression répétée est gratuite), et remonte ses erreurs en français — rien n'est avalé.
+
+### **Tableau de variations**
+
+Si Python et SymPy sont installés, le tableau de variations **se calcule tout seul** — dérivée, zéros réels, signes et valeurs exactes. La fonction doit avoir été posée par `<Soit>` auparavant : le tableau retrouve sa définition et l'affiche en tête.
+
+```docdg
+<Soit>une fonction q(x) = -x^4 + 2x^2 + 1
+
+<Dresse>le tableau de variations de q
+```
+
+C'est la seule forme : on nomme la fonction, docdg fait le reste. `<Étudie les variations de q>` en est le synonyme conjugué.
+
+Les compagnons du calcul formel s'écrivent tous par une **action** — un verbe à l'impératif, jamais un nom seul : `<Calcule la dérivée de q>` (et `<Calcule la dérivée seconde de q>`) affiche la dérivée simplifiée ; `<Détermine les zéros de q>` l'ensemble exact des solutions de q(x) = 0, radicaux compris ; `<Calcule la primitive de q>` une primitive (avec sa constante). Les verbes interchangeables sont `Calcule`, `Détermine`, `Donne`, `Cherche`, `Trouve`, `Établis`, `Évalue`. Ces phrases se **factorisent** au pluriel (règle n°10) : `<Calcule la dérivée de f, g et h>` affiche les trois dérivées, une par ligne — l'argument doit être une pure liste de noms, virgules entre eux, « et » avant le dernier. Le tracé de la même fonction se fait par une phrase en langage naturel :
+
+```docdg
+<Représente>graphiquement la fonction q pour x appartient à [-2 ; 2] et y à [-3 ; 3], avec 200 échantillons
+```
+
+### **Tableau de signes**
+
+```docdg
+<Soit>une fonction f(x) = (x+2)(x-3)
+<Dresse>le tableau de signes de f
+```
+
+---
+
+## **🔢 Les mathématiques**
+
+> **Le cœur de docdg** : Un mini-langage mathématique puissant.
+
+**Syntaxe :** `$EXPRESSION MATHÉMATIQUE$`
+
+### **Fractions et racines**
+
+```docdg
+$1/2 + 1/3$        % Fractions enchaînées
+$racine(2)$        % Racine carrée
+$racine[3](8)$     % Racine cubique
+$|x - 2|$          % Valeur absolue, entre barres
+$E(x)$             % Partie entière (ent(x) et floor(x) tolérés)
+```
+
+La valeur absolue s'écrit entre barres partout — dans une formule, dans une fonction posée (`<Soit>une fonction k(x) = |x - 2|`) comme dans une équation à résoudre (`<Résous>l'équation |x - 2| = 3`). La partie entière s'écrit `E(x)` — la notation la plus simple — et se rend $E(x)$ (`ent` et `floor` restent compris) ; toutes deux s'évaluent, se tracent et se prêtent aux limites à gauche et à droite (`<Calcule>la limite de pe en 2 à gauche`).
+
+**Le tracé d'une courbe est complet d'office** — même doctrine que la rédaction : dans un repère, `la courbe de la fonction f` embarque ce que dit le tableau de variations. Les tangentes horizontales se tracent aux extremums (avec le point marqué), les asymptotes verticales, horizontales et obliques viennent en tirets, et les fonctions en escalier dessinent leurs marches sans faux traits verticaux, avec le point plein au bord atteint et le cercle ouvert au bord exclu, comme au tableau. Il n'y a rien à demander.
+
+### **Puissances et indices**
+
+```docdg
+$x^2$              % x²
+$x^(a+b)$          % x^(a+b) - parenthèses importantes !
+$u_n$               % uₙ
+$u_(n-1)$           % uₙ₋₁
+```
+
+### **Ensembles de nombres**
+
+Chaque ensemble s'écrit soit avec l'abréviation à double lettre (usage mathématique courant), soit en toutes lettres — les deux formes sont équivalentes :
+
+```docdg
+$NN$ ou $naturels$      % ℕ
+$ZZ$ ou $entiers$       % ℤ
+$DD$ ou $décimaux$      % 𝔻
+$QQ$ ou $rationnels$    % ℚ
+$RR$ ou $réels$         % ℝ
+$CC$ ou $complexes$     % ℂ
+$PP$ ou $probabilité$   % ℙ
+$KK$ ou $corps$         % 𝕂
+$HH$ ou $quaternions$   % ℍ
+```
+
+### **Quantificateurs et logique**
+
+```docdg
+$pour tout x dans RR$           % ∀x ∈ ℝ
+$il existe x$                   % ∃x
+$il n'existe pas de x$          % ∄x
+$x appartient à NN$             % x ∈ ℕ
+$x n'appartient pas à NN$       % x ∉ ℕ
+$(P et Q) ou négation de P$     % (P ∧ Q) ∨ ¬P
+```
+
+Dans une zone mathématique, `et` et `ou` sont les connecteurs logiques (∧, ∨) ; `négation de` donne ¬. Le mot `non` sert au **complémentaire** d'un ensemble ou d'un événement : `non(A)` s'affiche $\overline{A}$.
+
+### **Opérations sur les ensembles**
+
+Chaque opération se dit en toutes lettres, en français :
+
+```docdg
+$A inclus dans B$               % A ⊂ B
+$A inclus dans ou égal à B$     % A ⊆ B
+$A union B$                     % A ∪ B
+$A inter B$                     % A ∩ B
+$A privé de B$                  % A \ B
+$vide$                          % ∅
+$non(A union B) = non(A) inter non(B)$   % loi de De Morgan
+$parties de(A)$                 % 𝒫(A)
+$cardinal(A)$                   % card(A)
+$a congru à b modulo n$         % a ≡ b [n]
+```
+
+Les grands opérateurs indexés se disent `réunion de` et `intersection de` :
+
+```docdg
+$réunion de(i=1;n) A_i$         % ⋃ de i=1 à n
+$intersection de(i=1;n) A_i$    % ⋂ de i=1 à n
+```
+
+### **Probabilités : conditionnement et complémentaire**
+
+```docdg
+$PP(A sachant B)$               % P(A | B)
+$PP(non(B))$                    % P(B̄)
+$répartition de(X; x)$          % F_X(x)
+$densité de(X; t)$              % f_X(t)
+```
+
+### **Algèbre linéaire**
+
+Les opérateurs suivent les usages du supérieur ; les majuscules sont celles de la tradition (Vect, Tr, Ker...) :
+
+```docdg
+$engendré par(u, v)$            % Vect(u, v)
+$trace(A)$                      % Tr(A)
+$déterminant(A)$                % det(A)
+$^t{A}$                         % transposée
+$A^{-1}$                        % inverse
+$comatrice(A)$                  % Com(A)
+$spectre(A)$                    % Sp(A)
+$A^*$                           % adjoint
+$noyau(A)$                      % Ker(A)
+$image(A)$                      % Im(A)
+$rang(A)$                       % rg(A)
+```
+
+### **Fonctions mathématiques**
+
+```docdg
+$sin(x)^2 + cos(x)^2 = 1$
+$arcsin(1/2) = pi/6$
+$sinus en degrés(30) = 0,5$          % Sinus en degrés
+$exp(1) = e$
+$ln(e) = 1$
+$abs(-5) = 5$
+$norme(vecteur(AB))$
+```
+
+### **Sommes et produits**
+
+```docdg
+$somme(k=1;n) k^2$       % ∑ₖ=₁ⁿ k²
+```
+
+**Les opérateurs différentiels, en toutes lettres.** Le gradient, la divergence, le rotationnel et le laplacien s'écrivent comme ils se disent — et sortent dans les notations françaises (`grad`, `div`, `rot`, `Δ`) :
+
+```docdg
+$gradient(f)$                    % grad f
+$divergence(F)$                  % div F
+$rotationnel(F)$                 % rot F
+$laplacien f$                    % Δf   (préfixe, sans parenthèses obligatoires)
+$partielle f / partielle x$      % ∂f/∂x
+$nabla f$                        % ∇f, pour qui préfère la notation nabla
+```
+
+Le laplacien suit la convention du symbole préfixe : `laplacien f` se lit comme `nabla f`, les parenthèses éventuelles appartiennent à l'opérande. La dérivée partielle s'obtient par la fraction : le mot `partielle` (ou `partiel`) devant chaque membre — le moteur compose alors la fraction aux ∂ droits. Les notations alternatives que vous citeriez dans un énoncé (« noté ∇f ou grad f ») s'écrivent naturellement : `$nabla f$ ou $gradient(f)$`.
+
+```docdg
+$produit(k=1;n) k$      % ∏ₖ=₁ⁿ k
+```
+
+### **Limites et intégrales**
+
+```docdg
+$lim(x->0) sin(x)/x = 1$          % limₓ→₀
+$intégrale(x=a;b) f(x)$         % ∫ₐᵇ f(x) dx
+$intégrale(x) f(x)$              % ∫ f(x) dx (primitive)
+$intégrale contour(C) f(z)$             % ∮_C
+$intégrale valeur principale(x=a;b) f(x)$             % Valeur principale
+$intégrale moyenne(x=a;b) f(x)$             % ⨍ₐᵇ (moyenne)
+```
+
+**Intégrales multiples :**
+
+```docdg
+$intégrale(x=a;b ; y=c;d) f(x;y)$    % ∬ₐᵇᶜᵈ f(x,y) dy dx
+$intégrale(x=a;b ; y=c;d ; z=e;g) f$ % ∭ₐᵇᶜᵈᵉᵍ f dz dy dx
+$intégrale surface(S)$                     % ∯_S (surface)
+$intégrale volume(V)$                      % ∭_V (volume)
+```
+
+### **Dérivées**
+
+```docdg
+$dy/dx$                          % dy/dx
+$(d^2 y)/(dx^2)$                 % d²y/dx²
+$partielle f / partielle x$          % ∂f/∂x
+$(partielle u)/(partielle t) = (partielle^2 u)/(partielle x^2)$  % Équation chaleur
+```
+
+### **Matrices et systèmes**
+
+**Formule compacte, en ligne :**
+
+```docdg
+$matrice(1 2 ; 3 4)$      % Matrice avec parenthèses
+$matrice crochets(1 2 ; 3 4)$ % Matrice avec crochets
+$det(1 2 ; 3 4)$          % Déterminant
+```
+
+**Bloc, sur plusieurs lignes — parenthèses ou crochets comme délimiteur :**
+
+```docdg
+<Affiche>la matrice(
+	1	2	3
+	-x	0	x^2
+)
+
+<Affiche>la matrice[
+	1	0
+	0	1
+]
+```
+
+Parenthèses ou crochets s'écrivent une fois, à l'ouverture, et referment le bloc eux-mêmes — ce que l'on tape est ce que l'on voit au rendu. Le verbe seul, suivi de l'objet en toutes lettres (`<Affiche>la matrice(`, refermé par `)` seul — la même convention qui referme `<Trace>le cercle...`), sépare nettement la consigne de l'objet qu'elle concerne ; verbe et objet dans un seul chevron (`<Affiche la matrice(`, refermé par `)>`) reste équivalent pour qui préfère tout tenir entre les chevrons.
+
+La même forme scindée s'applique aux objets **nommés**, gardés pour un calcul ultérieur — la matrice ou le système reçoit alors son nom avant l'ouverture, et les accolades neutres restent le délimiteur (les rangées contiennent déjà des parenthèses ou des crochets, dans une équation ou un coefficient) :
+
+```docdg
+<Soit>la matrice M {
+	2	1
+	1	1
+}
+
+<Soit>le système s {
+	2x + 3y = 7
+	x - y = 1
+}
+```
+
+équivalent à `<Soit la matrice M>{...}` et `<Soit le système s>{...}`.
+
+Pour qui préfère les accolades neutres, la forme équivalente reste disponible :
+
+```docdg
+<matrice>{
+	1	2	3
+	-x	0	x^2
+}
+
+<système>{
+	2x	+ 3y	= 7
+	x	- y	= 1
+}
+```
+
+Comme tous les objets, `<matrice>` et `<système>` s'écrivent entre chevrons et en minuscules, accents compris (voir règle n°8). Dans ces blocs, la **tabulation** sépare les colonnes et le **saut de ligne** sépare les lignes ; avec parenthèses ou crochets, c'est le **point-virgule** qui sépare les colonnes (voir plus haut). Pour `<système>`, découper la ligne en plusieurs colonnes permet d'aligner sur plusieurs points à la fois (ici le signe `+` et le signe `=`), pas seulement sur le `=`.
+
+### **Opérateurs avancés**
+
+```docdg
+$grad(f)$        % ∇f (gradient)
+$div(F)$         % ∇·F (divergence)
+$rot(F)$         % ∇×F (rotationnel)
+$laplacien(f)$         % Δf (laplacien)
+$dérivée directionnelle(f ; u)$ % ∇ᵤf (dérivée directionnelle)
+```
+
+### **Probabilités et statistiques**
+
+```docdg
+$C(n ; k)$        % Coefficient binomial ⁽ⁿₖ⁾
+$A(n ; k)$        % Arrangement Aₙᵏ
+$factorielle(n)$ % Factorielle n!
+$n!$             % Factorielle (alternative)
+$PP(A)$          % ℙ(A) Probabilité
+$PP(A sachant B)$ % ℙ(A∣B) Probabilité conditionnelle
+$EE(X)$ ou $espérance(X)$          % 𝔼(X) Espérance
+$variance(X)$         % Var(X) Variance
+$écart type(X)$   % σ(X) Écart-type
+$covariance(X ; Y)$      % Cov(X,Y) Covariance
+$normal(mu ; sigma)$     % 𝒩(μ,σ²) Loi normale
+$poisson(lambda)$       % 𝒫(λ) Loi de Poisson
+$binomiale(n ; p)$        % ℬ(n,p) Loi binomiale
+$fonction de répartition(X ; x)$           % F_X(x) Fonction de répartition
+$densité(X ; x)$          % f_X(x) Densité
+```
+
+---
+
+## **📐 La géométrie**
+
+Toute la géométrie — plane, dans l'espace, avec ou sans repère — se trace avec l'action [**`<Trace>`**](#les-actions) : figures planes, cercle trigonométrique, solides en 3D, points/droites/segments/médiatrices, y compris posés dans un repère. L'analyse se représente graphiquement avec [**`<Représente graphiquement>`**](#les-actions) : courbes de fonctions, diagrammes en escalier, statistiques, et le mode analytique dès que son contenu relève de l'analyse. Voir le chapitre **Les actions** pour le détail de chaque cas.
+
+---
+
+## **📊 Les statistiques**
+
+### **📈 Diagrammes statistiques**
+
+**Syntaxe :** `<Représente graphiquement une statistique TYPE données:DONNÉES>` — le type se met directement, sans préfixe `type:` (comme `<Dresse une liste à puces>` ou les figures de `<Trace>`). `données:` reste en clé:valeur : ce sont de vraies données structurées, pas un réglage de style.
+
+
+| **Type**             | **Description**      | **Format données**          | **Exemple**                    |
+| -------------------- | -------------------- | --------------------------- | ------------------------------ |
+| `barres`             | Diagramme en bâtons  | \`clé:valeur                | clé:valeur\`                   |
+| `histogramme`        | Histogramme          | `bornes:{...} effectifs:{...}` | `bornes:{0;5;10} effectifs:{3;7}` |
+| `camembert`          | Diagramme circulaire | \`clé:valeur                | clé:valeur\`                   |
+| `boite a moustaches` | Boîte à moustaches   | `valeur1 ; valeur2 ; ...`     | `données:{12 ; 15 ; 9 ; 21}`            |
+| `nuage`              | Nuage de points      | `(x1;y1) (x2;y2) ...`       | `données:{(1;2) (2;3)}`           |
+
+
+**Option :** `avec ajustement` (trace la droite de régression pour les nuages)
+
+**Exemples :**
+
+```docdg
+<Représente>graphiquement une statistique barres données:{1: 4 | 2: 7 | 3: 2}
+<Représente>graphiquement une statistique camembert données:{Pommes: 5 | Poires: 3 | Bananes: 2}
+<Représente>graphiquement une statistique histogramme bornes:{0 ; 5 ; 10 ; 20} effectifs:{3 ; 7 ; 2}
+<Représente>graphiquement une statistique nuage données:{(1 ; 2,1) (2 ; 2,6) (3 ; 3,4)}, avec ajustement
+<Représente>graphiquement une statistique boite a moustaches données:{12 ; 15 ; 9 ; 21 ; 14 ; 15 ; 18 ; 11 ; 16}
+```
+
+**Avec variables :**
+
+```docdg
+soit notes = {
+    Mathematiques = 15,5;
+    Francais = 12,0;
+    Histoire = 14,0
+}
+<Représente>graphiquement une statistique barres données:notes
+<Représente>graphiquement une statistique camembert données:notes
+```
+
+### **🌳 Arbres de probabilités**
+
+**Syntaxe :**
+
+```docdg
+<Construis>un arbre PROSE{
+    ÉTIQUETTE PROBABILITÉ {
+        SOUS-ÉTIQUETTE PROBABILITÉ
+        ...
+    }
+    ...
+}
+```
+
+**Options :**
+
+- `avec les produits` — Affiche P(A ∩ B) au bout de chaque feuille
+- `horizontal` (flag, sans valeur) — Affiche l'arbre horizontalement
+
+**Exemples :**
+
+```docdg
+<Construis>un arbre{
+    A 0,3 {
+        B 0,6
+        !B 0,4
+    }
+    !A 0,7 {
+        B 0,1
+        !B 0,9
+    }
+}
+
+<Construis>un arbre horizontal, avec les produits{
+    A 0,3 {
+        B 0,6
+    }
+    !A 0,7
+}
+```
+
+**Règles :**
+
+- `!` devant une étiquette = événement contraire
+- Si une branche unique, le complément est ajouté automatiquement
+- Les probabilités peuvent être des nombres ou des symboles
+
+### **📏 Droite graduée**
+
+**Syntaxe résolue (inéquation) :**
+
+```docdg
+<Représente>graphiquement la droite graduée x:{-5 ; 5}{
+    abs(x - 1/2) >= 5/2
+}
+```
+
+**Syntaxe déclarée (ensemble donné) :**
+
+```docdg
+<Représente>graphiquement la droite graduée x:{-5 ; 5} intervalle:{[-2 ; 3) union (4 ; inf)} points:{-4}
+```
+
+**Symboles :** `[`/`]` = inclus, `(`/`)` = exclu, `union`, `inf`, `-inf`
+
+---
+
+## **🏫 Le collège, rédigé**
+
+> Les rédactions les plus tapées de France, chacune en une phrase — calcul exact, justification comprise, tracé quand il le faut.
+
+### **Le trio roi : Pythagore, Thalès, trigonométrie**
+
+```docdg
+<Calcule>AC dans le triangle ABC rectangle en B, avec AB = 3 et BC = 4
+<Vérifie>si le triangle ABC est rectangle, avec AB = 3, BC = 4 et AC = 5
+<Calcule>AC par le théorème de Thalès, avec AM = 3, AB = 6 et AN = 4
+<Vérifie>si les droites (MN) et (BC) sont parallèles, avec AM = 3, AB = 6, AN = 4 et AC = 8
+<Calcule>BC dans le triangle ABC rectangle en B, avec l'angle A = 30 degrés et AC = 8
+<Calcule>l'angle A dans le triangle ABC rectangle en B, avec AB = 3 et AC = 6
+```
+
+La rédaction produite est la rédaction canonique : théorème énoncé, carrés détaillés, racine exacte (ou approchée), réciproque ou contraposée selon le cas. La trigonométrie choisit seule le bon rapport (cos, sin ou tan) selon les côtés donnés, le nomme (opposé/hypoténuse…), garde les valeurs exactes des angles remarquables et retrouve un angle « à la calculatrice, touche cos⁻¹ ». Thalès travaille dans la configuration universelle du triangle $ABC$, $M$ sur $[AB]$, $N$ sur $[AC]$.
+
+### **Statistiques d'une série**
+
+```docdg
+<Calcule>la moyenne de la série 12 ; 15 ; 9 ; 14
+<Calcule>la variance de la série 12 ; 15 ; 9 ; 14
+<Calcule>l'écart type de la série 12 ; 15 ; 9 ; 14
+<Calcule>la covariance des séries 1 ; 2 ; 3 et 2 ; 4 ; 7
+<Calcule>la moyenne de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calcule>la médiane de la série 9 ; 15 ; 12 ; 14
+<Calcule>l'étendue de la série 12 ; 15 ; 9 ; 14
+<Calcule>les quartiles de la série 2 ; 4 ; 5 ; 7 ; 8 ; 10 ; 12 ; 15
+```
+
+Série rangée, cas pair et impair distingués pour la médiane, rangs $\lceil n/4 \rceil$ affichés pour les quartiles.
+
+### **Proportionnalité, pourcentages, échelles, vitesses**
+
+```docdg
+<Calcule>la quatrième proportionnelle de 3, 5 et 12
+<Vérifie>si le tableau est de proportionnalité{
+	2 ; 3 ; 5
+	6 ; 9 ; 15
+}
+<Complète>le tableau de proportionnalité{
+	2 ; 3 ; ?
+	6 ; ? ; 15
+}
+<Calcule>30 % de 250
+<Applique>une augmentation de 5 % à 240
+<Applique>une diminution de 12 % à 60
+<Calcule>le taux d'évolution de 250 à 280
+<Calcule>l'échelle d'un plan où 2 cm représentent 50 m
+<Calcule>la vitesse moyenne pour 150 km en 2 h 30 min
+<Calcule>la distance parcourue à 80 km/h pendant 1 h 45 min
+<Calcule>la durée du trajet de 210 km à 60 km/h
+```
+
+Produit en croix rédigé, coefficient multiplicateur pour les évolutions, durées converties dans les deux sens (« 3,5 h = 3 h 30 min »).
+
+### **Mesures et conversions**
+
+```docdg
+<Calcule>le périmètre du cercle de rayon 5
+<Calcule>l'aire du triangle de base 6 et de hauteur 4
+<Calcule>le volume de la boule de rayon 3
+<Convertis>3,5 km en m
+<Convertis>2500 cm^2 en m^2
+<Convertis>3 L en cm^3
+```
+
+Dix figures (du carré à la boule), formule affichée, $\pi$ gardé exact ($36\pi \approx 113{,}1$). Les conversions se font par décalage décimal exact et commenté, sur les longueurs, masses, contenances, aires (avec are et hectare) et volumes (le litre dialogue avec le décimètre cube).
+
+### **Nombres et programmes de calcul**
+
+```docdg
+<Calcule>1/2 + 1/3
+<Simplifie>la fraction 84/60
+<Écris>le nombre 45 600 en notation scientifique
+<Vérifie>si 456 est divisible par 3
+<Effectue>la division euclidienne de 47 par 5
+<Calcule>le PGCD de 84 et 60
+<Applique>le programme de calcul à 5{
+	choisir un nombre
+	ajouter 3
+	multiplier par 2
+	soustraire 4
+}
+<Exprime>le programme de calcul en fonction de x{
+	choisir un nombre
+	ajouter 3
+	multiplier par 2
+	soustraire 4
+}
+<Calcule>l'image de 3 par f
+```
+
+Mise au même dénominateur, inverse pour la division, simplification par le PGCD, critères de divisibilité justifiés (somme des chiffres, chiffre des unités).
+
+### **Transformations du plan**
+
+```docdg
+<Soit>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+
+<Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
+<Construis>l'image du triangle ABC par la symétrie centrale de centre O
+<Construis>l'image du triangle ABC par la translation de vecteur u
+<Construis>l'image du triangle ABC par la rotation de centre O et d'angle 90 degrés
+<Construis>l'image du triangle ABC par l'homothétie de centre O et de rapport 2
+```
+
+Cinq transformations sur point, segment, triangle, quadrilatère ou polygone. Chaque action donne les coordonnées des images, puis le tracé sur quadrillage : figure d'origine en bleu, image en rouge avec les labels primes, lignes de construction en pointillé, axe en tirets, centre marqué d'une croix. L'axe accepte aussi `l'axe des ordonnées` et `(PQ)` ; la translation, `qui transforme A en B` ; la rotation, `dans le sens des aiguilles d'une montre`.
+
+---
+
+## **🎓 Le lycée, couvert**
+
+> De la seconde aux maths expertes : chaque chapitre a sa phrase, en registre de la classe.
+
+```docdg
+<Soit>une fonction f(x) = x^3 - 3x^2 + 2
+
+<Étudie>la convexité de f
+<Détermine>les asymptotes de f
+<Résous>l'équation trigonométrique cos(x) = 1/2
+```
+
+La convexité donne $f''$, son tableau de signes en intervalles, les points d'inflexion ; les asymptotes horizontales, obliques et verticales sont énoncées avec leurs équations ; les équations trigonométriques résolues sur $\mathbb{R}$ par les valeurs remarquables.
+
+```docdg
+<Soit>les vecteurs u et v de coordonnées respectives (3 ; -2) et (4 ; 6)
+<Soit>le plan P d'équation 2x + y - z = 3
+
+<Calcule>le produit scalaire de u et v
+<Calcule>la norme de u
+<Calcule>l'angle entre u et v
+<Étudie>la colinéarité de u et v
+<Donne>un vecteur normal de P
+<Calcule>la distance du point (1 ; 2 ; 0) au plan P
+```
+
+Produit scalaire détaillé (orthogonalité signalée quand il est nul), normes exactes en $k\sqrt{m}$, angles remarquables exacts, colinéarité par déterminant (plan) ou produit vectoriel (espace).
+
+```docdg
+<Construis>le graphe G{
+	A -> B
+	B -> C
+	C -> A
+}
+<Dresse>la matrice d'adjacence de G
+<Dénombre>les chemins de longueur 3 de A à B dans G
+
+<Calcule>la puissance 3 de M
+<Calcule>l'état stable de M
+<Résous>l'équation diophantienne 12x + 20y = 8
+<Calcule>les racines cinquièmes de l'unité
+<Calcule>l'intervalle de fluctuation pour n = 100 et p = 0,3
+<Applique>l'inégalité de Bienaymé-Tchebychev pour une espérance de 5, une variance de 2 et un écart de 3
+```
+
+Les graphes se donnent une arête par ligne (`--` non orienté, `->` orienté) et se tracent seuls ; les chaînes de Markov trouvent leur état stable (l'unique $\pi$ tel que $\pi = \pi M$, matrice stochastique vérifiée) ; les diophantiennes passent par Bézout jusqu'à la solution générale — ou démontrent l'absence de solution.
+
+---
+
+## **🎓 Le supérieur (CPGE)**
+
+> Le registre des classes préparatoires s'écrit tel quel. Les résultats sont exacts ; les impossibilités renvoient honnêtement au raisonnement à rédiger.
+
+```docdg
+<Calcule>l'intégrale de f entre 0 et 1
+<Détermine>la nature de l'intégrale de g entre 1 et +infini
+<Calcule>un équivalent de s en 0
+<Détermine>la nature de la série de terme général 1/n^2
+```
+
+Intégrales en forme close, impropres avec nature et valeur, équivalents en un point ou en $\pm\infty$ (notation $\sim$), séries avec convergence prouvée et somme quand elle existe ($\pi^2/6$…).
+
+```docdg
+<Calcule>le rang de M
+<Détermine>le noyau de M
+<Détermine>l'image de M
+<Calcule>le polynôme caractéristique de M
+<Calcule>le polynôme minimal de M
+<Trigonalise>M
+<Orthonormalise>la famille u et v
+<Calcule>le projeté orthogonal de a sur b
+```
+
+$\operatorname{Ker}$ et $\operatorname{Im}$ en $\operatorname{Vect}(\dots)$, $\chi_M$ factorisé, $\pi_M$ vérifié par annulation, trigonalisation $M = PTP^{-1}$ (avec signalement quand $T$ est en fait diagonale), Gram-Schmidt exact en dimension quelconque.
+
+```docdg
+<Effectue>la division euclidienne de X^3 + 2X - 1 par X^2 + 1
+<Calcule>le PGCD de X^3 - 1 et X^2 - 1
+<Factorise>X^4 - 1 dans R[X]
+<Factorise>X^4 - 1 dans C[X]
+```
+
+Les polynômes formels parlent la langue du chapitre : quotient et reste, PGCD unitaire, irréductibles du corps choisi. Les mêmes phrases acceptent les entiers ($47 = 5 \times 9 + 2$).
+
+```docdg
+<Soit>une fonction psi(x, y) = x^3 - 3x + y^2
+
+<Calcule>le gradient de psi
+<Calcule>la matrice hessienne de psi
+<Calcule>la dérivée partielle de psi par rapport à y
+<Détermine>les points critiques de psi
+```
+
+Les fonctions de plusieurs variables se posent naturellement ; les points critiques viennent avec leur nature par la hessienne (minimum, maximum, point col).
+
+```docdg
+<Calcule>la série de Fourier de f sur [-pi ; pi] à l'ordre 4
+<Calcule>la transformée de Laplace de f
+<Calcule>la transformée de Laplace inverse de F
+<Calcule>le wronskien de f et g
+```
+
+Le pont vers la physique : séries de Fourier tronquées à l'ordre voulu, transformées de Laplace en variable $p$ (convention des physiciens) avec la définition intégrale affichée, wronskien avec conclusion rigoureuse (non nul $\Rightarrow$ famille libre ; nul : « ce qui, en général, ne suffit pas à conclure »).
+
+---
+
+## **🗂️ Les exemples, en quatre niveaux**
+
+Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolaire, porté par le suffixe du nom de fichier :
+
+| Suffixe | Niveau | Fichiers |
+|---|---|---|
+| **1** | la langue et la mise en forme | `basic1`, `basic2` |
+| **2** | collège | `algebre2`, `analyse2`, `geometrie2`, `statistiques-probabilites2` |
+| **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `statistiques-probabilites3` |
+| **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
+
+S'y ajoutent `physique-chimie3`, `physique-chimie4` et `factorisation` (une étude complète). Chaque fichier compile seul et sert de catalogue vivant : toute action documentée ici y figure au moins une fois.
+
+---
+
+## **📄 Les documents complexes**
+
+### **Exemple complet : Fiche d'exercices**
+
+```docdg
+page {
+  marges: 20;
+  taille: 12;
+  précision: 2;
+}
+
+% ===== Styles réutilisables =====
+soit titre = <bleu marine b 18pt c>
+soit sous-titre = <bleu marine b 14pt>
+soit exercice = <bleu marine b subsection>
+soit cadre-ex = <cadre avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 4mm>
+soit important = <gras rouge souligné>
+soit indication = <italique bleu>
+
+% ===== En-tête =====
+<Affiche>une grille avec les zones:["titre titre logo", "info info logo"] et un écart de 5 mm{
+  [titre en mc]{
+    <titre>Fiche d'Exercices - Équations et Fonctions
+  }
+  [logo en mc]{
+    <Insère>une image avec une largeur de 40 mm, dans le dossier {IMAGES}{logo.png}
+  }
+  [info]{
+    Nom: _______________ Prénom: _______________
+    <ligne>
+    Classe: _______ Date: ___________
+  }
+}
+
+% ===== Table des matières =====
+<table des matières>
+
+% ===== Exercices =====
+<exercice>Exercice 1 : Équations du second degré
+
+<Affiche>un cadre-ex{
+  Résoudre :
+  <Dresse>une liste numérotée{
+    $x^2 - 5x + 6 = 0$
+    $2x^2 - 8x = 0$
+    $x^2 - 7 = 0$
+  }
+  <indication>Indice :</indication> Utilisez $x = (-b +- racine(b^2 - 4ac))/(2a)$.
+}
+
+<exercice>Exercice 2 : Géométrie
+
+<Affiche>un cadre-ex{
+  <Trace>le triangle ABC rectangle en A, de côté AB 3 cm et de côté AC 4 cm, avec les marques
+  
+  Calculer :
+  <Dresse>une liste numérotée{
+    La longueur de l'hypoténuse BC = #{racine(3^2 + 4^2)} cm
+    Le périmètre = #{3 + 4 + racine(3^2 + 4^2)} cm
+    L'aire = #{3*4/2} cm²
+  }
+}
+
+<exercice>Exercice 3 : Étude de fonction
+
+<Affiche>un cadre-ex{
+  <Soit>une fonction f(x) = x^2 - 4x + 3
+  
+  <Dresse le tableau de variations de f, x:{-infini | 2 | +infini},
+      dérivée:{- | +}, variations:{+infini \ -1 / +infini}>
+  <Représente>graphiquement la fonction f pour x appartient à [-1 ; 5] et y à [-2 ; 4], en bleu, avec 200 échantillons  % Courbe
+}
+
+<exercice>Exercice 4 : Statistiques
+
+<Affiche>un cadre-ex{
+  Notes : 12 (3x), 14 (12x), 16 (5x)
+  
+  <Représente>graphiquement une statistique barres données:{12: 3 | 14: 12 | 16: 5}
+  
+  Moyenne = #{ (12*3 + 14*12 + 16*5) / (3+12+5) }
+}
+
+```
+
+---
+
+## **🧭 Comprendre les erreurs et les cas particuliers**
+
+Ce chapitre rassemble les points de détail qui, une fois compris, évitent la plupart des blocages. Il répond aux questions que se pose tout utilisateur dès son premier document un peu long.
+
+### **🚦 Les messages d'erreur**
+
+Quand docdg rencontre une faute, il l'annonce **en français**, en désignant la balise et la ligne fautives. Les erreurs les plus fréquentes :
+
+| **Ce que vous écrivez**              | **Message docdg**                                              |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| `<Trace le point A>` sans avoir défini A | *Le point A n'a pas été défini. Déclarez-le d'abord avec `<Soit>un point A(...)`.* |
+| `<Représente graphiquement la fonction f>` sans `<Soit>une fonction f` | *La fonction f n'a pas été déclarée.*                     |
+| `Soit titre = ...` (majuscule pour une assignation) | *« Soit » avec majuscule est une action-phrase. Pour une assignation, écrivez `soit` en minuscule.* |
+| `<Affiche un cadre>{...` (accolade non refermée) | *Accolade ouverte à la ligne N jamais refermée.*                  |
+| `<Trace>un carré ABCD, de côté 5` (unité manquante) | *Longueur sans unité : écrivez « de côté 5 cm » ou « de côté 50 mm ». L'unité est obligatoire hors d'un repère.* |
+| `données:{12, 15}` (virgule dans une liste numérique) | *Liste numérique : utilisez le point-virgule (`12 ; 15`).*  |
+
+> **Pourquoi c'est important.** Des messages en français, qui nomment la cause et proposent la correction, sont ce qui distingue un outil pédagogique d'un compilateur. Tout message d'erreur qui ne serait pas en français est un cas non intercepté : signalez-le, il a vocation à être traduit.
+
+### **🔭 La portée des `soit`**
+
+Une assignation `soit x = ...` est **visible depuis sa déclaration jusqu'à la fin du document**, y compris à l'intérieur des blocs (`<Affiche un cadre>`, boucles `pour`, conditions `si`) ouverts *après* elle. À l'inverse, une variable déclarée **à l'intérieur** d'un bloc ne vit que dans ce bloc :
+
+```docdg
+soit tva = 0,2          % visible partout ensuite
+
+<Affiche>un cadre{
+  soit prix = 100       % visible seulement dans ce cadre
+  Total : #{prix * (1 + tva)} €
+}
+
+% Ici, tva existe encore ; prix, non.
+```
+
+La variable d'une boucle (`pour n de 1 à 5`) ne vit que le temps de la boucle. Cette règle est celle qu'on attend naturellement : ce qu'on pose « en tête » sert partout, ce qu'on pose « dans un tiroir » reste dans le tiroir.
+
+### **🔢 Calculs `#{...}` et virgule décimale**
+
+Un calcul `#{...}` rend son résultat avec une **virgule décimale** (règle d'affichage française), arrondi selon l'option `précision` de la classe :
+
+```docdg
+#{5/2}        % → 2,5
+#{1/3}        % → 0,333  (avec précision=3)
+#{3*4/2}      % → 6      (résultat entier : pas de virgule)
+```
+
+**Attention à la collision avec les séparateurs.** Le résultat `2,5` contient une virgule *sans espace après* : le lexer la reconnaît comme décimale, jamais comme énumération (règle n°8). Vous pouvez donc écrire sans crainte `#{5/2}` dans une phrase. En revanche, si vous insérez un calcul **dans une liste numérique** (séparée par `;`), le résultat garde sa virgule décimale et le point-virgule reste le séparateur de liste — aucune ambiguïté :
+
+```docdg
+données:{#{5/2} ; #{7/2} ; 4}   % → 2,5 ; 3,5 ; 4
+```
+
+---
+
+## **📚 Référence complète**
+
+### **🎨 Référence des couleurs (147 disponibles)**
+
+**Noirs, gris et blancs**
+```
+noir, blanc, gris, gris clair, gris foncé, gris perle, gris anthracite, gris souris, gris souris clair, gris souris foncé,
+blanc fumé, blanc antique, blanc ivoire, blanc navajo, blanc fantôme, blanc neige, blanc lin, blanc coquillage, blanc vieille dentelle
+```
+
+**Rouges**
+```
+rouge, rouge clair, rouge foncé, rouge sang, rouge brique, rouge tomate, rouge corail, rouge indien,
+rouge cramoisi, rouge saumon, rouge saumon foncé, rouge orange, rouge rosé, brique de feu
+```
+
+**Bleus**
+```
+bleu, bleu ciel, bleu clair, bleu azur, bleu canard, bleu turquoise, bleu marine, bleu nuit,
+bleu foncé, bleu acier, bleu acier clair, bleu royal, bleu cornflower, bleu dodger, bleu poudre,
+bleu Alice, bleu aigue-marine, bleu aigue-marine moyen, bleu slate, bleu slate clair, bleu slate foncé,
+bleu slate moyen, bleu violet, bleu indigo, bleu lavande, bleu lavande rosé, bleu ciel profond
+```
+
+**Verts**
+```
+vert, vert clair, vert foncé, vert forêt, vert sapin, vert pomme, vert olive, vert olive foncé,
+vert menthe, vert printanier, vert printanier moyen, vert de mer, vert de mer clair, vert de mer foncé,
+vert de mer moyen, vert honeydew, vert pale, vert lawn, vert citron, vert lime, vert lime clair,
+vert chartreuse, vert jaunâtre
+```
+
+**Jaunes et oranges**
+```
+jaune, jaune clair, jaune paille, jaune citron, jaune moutarde, jaune doré, jaune khaki, jaune khaki foncé,
+orange, orange clair, orange corail, orange foncé, orange brique, orange rouge, orange sable,
+verge d'or, verge d'or pâle, verge d'or clair, mousseline de citron
+```
+
+**Violets et magentas**
+```
+violet, violet clair, violet foncé, violet moyen, violet rouge, violet rouge moyen,
+violet rouge pâle, violet orchidée, violet orchidée foncé, magenta, fuchsia, chardon
+```
+
+**Marrons et terres**
+```
+marron, brun, brun clair, brun foncé, brun chocolat, brun rosé, brun peru, tan,
+marron selle, marron sable, terre de Sienne, olive, olive terne
+```
+
+**Autres couleurs**
+```
+cyan, cyan clair, cyan foncé, aigue-marine, aigue-marine moyen, turquoise, turquoise clair,
+turquoise foncé, turquoise moyen, turquoise pâle, corail, corail clair, saumon, saumon clair,
+saumon foncé, or, argent, rose, rose clair, rose profond, rose vif, rose brumeux,
+pêche duveteuse, prune, bleu poudre, pourpre, fouet de papaye, coquillage, soie de maïs,
+biscuit, cramoisi, lavande, vieille dentelle, lin, mocassin, neige, blé
+```
+
+### **Options de classe**
+
+
+| **Option**   | **Type**           | **Défaut**           | **Description**                |
+| ------------ | ------------------ | -------------------- | ------------------------------ |
+| `marges`     | nombre/tableau     | `20;2`               | Marges en mm                   |
+| `police`     | texte (MAJUSCULES) | `Latin Modern Roman` | Police du texte (si disponible sur le système) |
+| `math`       | texte (MAJUSCULES) | `Latin Modern Math`  | Police mathématique (si disponible)            |
+| `taille`     | nombre             | `11`                 | Taille de base (pt)            |
+| `interligne` | nombre             | `1,0`                | Coefficient d'interligne       |
+| `tabulation` | nombre             | `8`                  | Largeur tabulation (mm)        |
+| `hauteur`    | nombre             | `8`                  | Hauteur saut de ligne (mm)     |
+| `décalage`   | nombre             | `100`                | Décalage exposants/indices (%) |
+| `précision`  | nombre             | `-1`                 | Décimales pour arrondi         |
+
+---
+
+## **💡 Bonnes pratiques**
+
+1. **Structurez** : Définissez vos styles en tête avec `soit`
+2. **Factorisez** : Utilisez `soit` pour éviter la répétition
+3. **Nommez clairement** : Utilisez des noms explicites
+4. **Documentez** : Commentez les parties complexes
+5. **Testez** : Vérifiez les calculs `#{...}`
+6. **Organisez** : regroupez vos images dans un dossier de votre choix (`IMAGES`, `FIGURES`...), avec des noms clairs, et indiquez ce dossier à chaque insertion — docdg n'en cherche jamais un par défaut
+
+## **🧮 Le calcul scientifique étendu**
+
+Ce chapitre détaille tout ce que débloque le second moteur de calcul,
+SymPy — le premier moteur, le moteur interne (sans rien à installer),
+est présenté dans
+[Poser et résoudre un système](#poser-et-résoudre-un-système) ; il
+couvre l'arithmétique exacte, les systèmes linéaires et l'évaluation
+numérique `#{...}`.
+
+Dès que Python 3 et SymPy sont installés, docdg confie automatiquement les
+calculs symboliques à SymPy et les calculs numériques avancés à SciPy
+— aucune option à activer, les phrases de calcul formel appellent le
+moteur externe d'elles-mêmes. Chaque résultat s'affiche en notation
+française, virgule décimale comprise.
+
+### Le calcul formel (SymPy)
+
+| Phrase | Effet |
+|---|---|
+| `<Factorise EXPR>` | Factorisation |
+| `<Développe EXPR>` ou `<Développe et réduis EXPR>` | Développement |
+| `<Simplifie EXPR>` | Simplification |
+| `<Décompose en éléments simples EXPR>` | Éléments simples |
+| `<Calcule la forme canonique de EXPR>` ou `<Mets EXPR sous forme canonique>` | Trinôme canonique |
+| `<Résous l'équation EXPR = EXPR>` | Résolution dans ℝ |
+| `<Résous dans CC l'équation ...>` | Domaine : `RR`, `CC`, `ZZ`, `NN`, `QQ` ou `les complexes`, `les entiers`... |
+| `<Calcule la somme de EXPR pour k de a à b>` | Forme close de la somme |
+| `<Calcule le produit de EXPR pour k de a à b>` | Forme close du produit |
+| `<Calcule la dérivée de f>` / `<Calcule la dérivée seconde de f>` | Dérivées (fonction posée par `<Soit>`) |
+| `<Calcule la primitive de f>` | Primitive |
+| `<Détermine les zéros de f>` | Ensemble des zéros |
+| `<Calcule la limite de f en a>` (+ `à droite` / `à gauche`) | Limite |
+| `<Calcule le développement limité de f en a à l'ordre n>` | DL avec reste de Landau |
+| `<Calcule les racines n-ièmes de z>` | Racines complexes, ordinal en toutes lettres (`carrées`... `douzièmes`), `l'unité` admis pour 1 |
+| `<Calcule l'intégrale numérique de f entre a et b>` | Valeur approchée |
+
+### Les équations différentielles
+
+La notation prime se lit telle quelle ; l'inconnue et sa variable se
+déclarent au besoin :
+
+```
+<Résous l'équation différentielle y'' + 4y = 0>
+<Résous l'équation différentielle N' = -0,12N, d'inconnue N(t)>
+```
+
+Les équations aux dérivées partielles du premier ordre linéaire
+s'écrivent en notation indicée (`u_x`, `u_y`, `u_xx`...) :
+
+```
+<Résous l'équation aux dérivées partielles u_x + u_y = u>
+```
+
+Au-delà du premier ordre, SymPy ne sait pas résoudre symboliquement et
+docdg le dit en français.
+
+### L'algèbre linéaire calculée
+
+Une matrice posée par `<Soit la matrice M>{...}` accepte, outre
+`<Calcule le déterminant de M>` et `<Calcule l'inverse de M>` :
+
+```
+<Calcule les valeurs propres de M>
+<Diagonalise M>
+```
+
+Les valeurs propres s'affichent avec leurs multiplicités ; la
+diagonalisation donne P et D avec M = P D P⁻¹, ou explique pourquoi la
+matrice n'est pas diagonalisable.
+
+### Le calcul numérique (SciPy)
+
+| Phrase | Effet |
+|---|---|
+| `<Résous numériquement l'équation EXPR = EXPR sur [a ; b]>` | Racine par dichotomie de Brent — l'intervalle doit encadrer un changement de signe |
+| `<Calcule la probabilité que X <= a pour la loi normale(m ; s)>` | Probabilité ; opérateurs `<=`, `>=`, `=`, `<`, `>` |
+| `<Calcule le quantile d'ordre p de la loi ...>` | Quantile |
+| `<Calcule l'espérance de la loi ...>` / `<Calcule l'écart type de la loi ...>` | Moments |
+| `<Ajuste f(x) = a*exp(b*x) aux données {(0;1) (1;2,7) ...}>` | Moindres carrés non linéaires ; paramètres libres a, b, c, d |
+
+Les lois reconnues : `normale(m ; s)`, `binomiale(n ; p)`,
+`poisson(l)`, `uniforme(a ; b)`, `exponentielle(l)` (paramètre λ, à la
+française), `student(k)`, `khi-deux(k)`.
+
+## **🖋️ Les tournures et le placement**
+
+### Les verbes d'objets
+
+Chaque phrase peut commencer par un verbe : `<Affiche ...>`,
+`<Dresse ...>`, `<Construis ...>` et `<Insère ...>` s'acceptent devant
+tout objet, article compris.
+
+```
+<Dresse un tableau bordures entête>{ ... }
+<Affiche une liste à puces>{ ... }
+<Insère une image avec une largeur de 30 mm, dans le dossier {IMAGES}>{photo.png}
+<Dresse le tableau de signes de f>
+```
+
+### Les tournures du supérieur
+
+`<On pose>`, `<On considère>` et `<On note>` sont synonymes de `<Soit>`
+et s'affichent avec leur verbe. `<Étudie les variations de f>` vaut le
+tableau de variations.
+
+### La factorisation des points
+
+Les points se regroupent sous un article pluriel :
+`<Soit>les points A(2;3) et B(-1;4)` — la forme « un point... et un
+point... » est refusée avec un rappel de la règle.
+
+### Les bornes naturelles
+
+```
+<Représente graphiquement la fonction f sur [-2 ; 5], en ordonnée [0 ; 3], en bleu>
+<Représente graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2, 3)} et de points {1}>
+```
+
+### Les réglages en toutes lettres
+
+`avec 200 échantillons`, `avec l'aire entre 0 et 1`,
+`avec l'aire jusqu'à g`, `de 4 colonnes`, `de 2 lignes`,
+`de bornes {0 ; 5 ; 10}`, `d'effectifs {3 ; 7}`.
+
+### Le placement en langage naturel
+
+Dans les cellules et les zones, les codes deux lettres demeurent
+(`mc`, `hg`...) et se doublent des mots : `en haut`, `au milieu`,
+`en bas` pour la verticale ; `à gauche`, `au centre`, `à droite` pour
+l'horizontale — combinables (`en haut, à gauche`). Hors cellule, un
+paragraphe s'aligne par `<à gauche>`, `<au centre>`, `<à droite>`.
+
+### Les zones de grille
+
+Le plan `zones:["titre titre logo", "corps corps logo"]` nomme les
+zones ; chaque zone s'écrit `[nom, propriétés]{contenu}` ou
+`[nom : propriétés]{contenu}`, les propriétés en toutes lettres :
+
+```
+[titre : en haut, à gauche, une bordure bleu marine, un fond bleu Alice]{ ... }
+[corps en mc]{ ... }
+```
+
+Au niveau de la grille, `bordures`, `une bordure <couleur>`,
+`fond <couleur>` et `texte <couleur>` posent les défauts que chaque
+zone peut surcharger. Une rangée de cadres côte à côte s'obtient par
+`<Affiche une rangée, écart de 5 mm>{ ... }`.
+
+### Les données nommées
+
+Une table de données se déclare et se réutilise par son nom, ses
+entrées en `clé: valeur` comme les données en ligne :
+
+```
+soit sondage = {
+	Jeudi: 8
+	Lundi: 5
+	Mardi: 3
+}
+
+<Représente graphiquement une statistique en barres horizontal données:sondage>
+```
+
+---
+
+## **🗺️ Feuille de route**
+
+**docdg 1.0 couvre le programme de mathématiques de l'école aux classes préparatoires** : rédactions du collège, lycée complet (spécialité et maths expertes), analyse et algèbre du supérieur, Fourier et Laplace en pont vers la physique. Le projet continue d'évoluer, avec deux grands chantiers en vue :
+
+- **La physique-chimie.** Les fondations sont posées (unités, conversions, Laplace, Fourier, calcul exact) ; les prochaines versions viseront les rédactions types des sciences physiques — circuits, mécanique, thermodynamique — dans la même prose française.
+- **La géométrie et les sciences en 3D.** `<Trace>` sait aujourd'hui construire quelques solides usuels (voir [Solides en 3D](#solides-en-3d)) ; des scènes 3D plus riches sont prévues, pensées pour la physique-chimie autant que pour la géométrie dans l'espace.
+
+Ces évolutions se feront sans rien retirer : la syntaxe en prose française et la compatibilité des documents existants restent la priorité à chaque nouvelle version. Les retours d'usage (bugs, tournures manquantes, besoins non couverts) sont les bienvenus sur le dépôt du projet.
+

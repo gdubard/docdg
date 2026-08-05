@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>DocDG</title>
+<script>
+</script>
+<!--__MATH__-->
+<style>/*__STYLE_CSS__*/</style>
+</head>
+<body>
+<div id="toolbar">
+    <button id="btn-load" type="button">Charger</button>
+    <button id="btn-save" type="button">Enregistrer</button>
+    <button id="btn-export" type="button">Exporter</button>
+    <button id="btn-settings" type="button">Paramétrer</button>
+    <span id="spacer"></span>
+    <span id="status"></span>
+    <button id="btn-zoom-out" type="button">−</button>
+    <button id="btn-zoom-in" type="button">+</button>
+</div>
+<div id="settings" class="hidden">
+    <label>Orientation
+        <select id="set-orientation">
+            <option value="portrait">Portrait</option>
+            <option value="paysage">Paysage</option>
+        </select>
+    </label>
+    <fieldset>
+        <legend>Marges (mm)</legend>
+        <label>Haut <input type="number" id="mar-top" min="0" step="any"></label>
+        <label>Droite <input type="number" id="mar-right" min="0" step="any"></label>
+        <label>Bas <input type="number" id="mar-bottom" min="0" step="any"></label>
+        <label>Gauche <input type="number" id="mar-left" min="0" step="any"></label>
+    </fieldset>
+    <fieldset>
+        <legend>Espacements (mm)</legend>
+        <label>Haut <input type="number" id="esp-top" min="0" step="any"></label>
+        <label>Droite <input type="number" id="esp-right" min="0" step="any"></label>
+        <label>Bas <input type="number" id="esp-bottom" min="0" step="any"></label>
+        <label>Gauche <input type="number" id="esp-left" min="0" step="any"></label>
+    </fieldset>
+    <fieldset>
+        <legend>Texte</legend>
+        <label>Taille (pt) <input type="number" id="set-police" min="6" step="any"></label>
+        <label>Interligne <input type="number" id="set-interligne" min="1" step="0.05"></label>
+    </fieldset>
+    <button id="btn-apply" type="button">Appliquer</button>
+</div>
+<div id="fermeture" class="hidden">
+    <p>Le document a été modifié depuis le dernier enregistrement.</p>
+    <button id="btn-rester" type="button">Revenir au document</button>
+    <button id="btn-quitter" type="button">Quitter sans enregistrer</button>
+</div>
+<div id="diag"></div>
+<label for="editor"></label><textarea id="editor" spellcheck="false" placeholder="Saisir des instructions texecole, ou cliquer sur Charger."></textarea>
+<div id="preview-wrapper"><div id="pages"></div></div>
+<div id="measure"></div>
+<style id="printsize"></style>
+<script>/*__SCRIPT_JS__*/</script>
+</body>
+</html>

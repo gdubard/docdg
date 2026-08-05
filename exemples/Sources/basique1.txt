@@ -1,0 +1,141 @@
+page {
+	orientation: portrait;
+	marges: 8;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.2;
+}
+
+soit titre = <rouge gras 18pt centre>
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<titre>texecole — les bases, niveau 1
+
+<h1>Paragraphes et caractères spéciaux
+	Un document texecole s'écrit comme du texte ordinaire. Le tiret bas x_1, l'esperluette a & b, le pourcentage 50% et le tilde a ~ b s'écrivent tels quels, comme un chemin C:\Users\Léa\Documents. Les caractères qui pilotent le langage se doublent pour s'afficher : << chevrons >>, {{accolades}} et ##dièse.
+De même, il est nécessaire de doubler le caractère $$ pour qu'un dollar isolé s'affiche tel quel : il reçoit 5 $$ d'argent de poche de ses parents, puis encore 3 $$ de sa tante et enfin 6 $$ de ses grands-parents. Les zones mathématiques s'apparient ligne par ligne.
+
+<h1>Produits, comparaisons
+<Affiche>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+    $a * b$, $x +- y$, $a <= b$, $c >= d$, $e != f$
+}
+
+<h1>Fractions, puissances et indices
+	Les fractions s'écrivent avec /, les puissances avec ^, les indices avec _. L'exposant se lie à l'atome voisin, jamais à la fraction entière — les parenthèses l'y hissent :
+<Affiche>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+    $1/2$, $a/b/c$, $x^2 + y^2 = r^2$, $x_1 + x_2$   
+    $a^2/b$ — la puissance reste sur $a$
+    $a/b^2$ — la puissance reste sur $b$
+    $(a/b)^2$ — les parenthèses la hissent sur la fraction
+}
+
+<h1>Racines et lettres grecques
+<Affiche>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+    $racine(2)$, $racine(x^2 + y^2)$, $alpha + beta != gamma$, $pi >= 3$
+}
+
+<h1>Calculs et interpolation
+Un calcul s'écrit entre #{ et } — la frontière est exacte, une lettre collée à la valeur n'est jamais avalée :
+soit n = 7
+<Affiche>un cadre avec un fond vert menthe, une bordure bleu canard et des coins arrondis de 3 mm {
+    $n = #n$, donc $n^2 = #{n*n}$ et $n/2 = #{n/2}$
+    
+    $#{n}x$ vaut sept fois $x$, et $#{n}x^2$ garde sa puissance.
+    
+    La moitié de deux façons : $1/2 = #{1/2}$, à côté du littéral $0,5$.
+    
+    Arrondis : #{arrondi(5/3; 2)}, défaut #{défaut(3,7)}, excès #{excès(3,2)}.
+}
+<h1>Variables, boucles et conditions
+soit tva = 0,2
+soit prix = 150
+Le prix TTC est #{prix * (1 + tva)} euros.
+
+pour k de 1 à 3 {
+    Ligne #k : le carré de #k vaut #{k*k}.
+}
+
+soit note = 12
+si note au moins 10 {
+    Admis avec #note.
+} sinon {
+    Ajourné.
+}
+
+pour k de 0 à 2 avec un pas de 0.25 {
+    Terme #{defaut(4*k)+1} : #k.
+}
+
+<h1>Styles et couleurs en ligne
+	Du <gras>{gras}, de l'<italique>{italique}, du <souligné>{souligné}, du <barré>{barré}, des <petites capitales>{petites capitales} et du <sans empattements>{sans empattements}. Ils se combinent dans une seule balise : <gras italique rouge>{gras italique rouge}. Un nuancier : <rouge>{rouge}, <bleu>{bleu}, <vert>{vert}, <bleu marine>{bleu marine}, <orange>{orange}, <pourpre>{pourpre}, <bleu canard>{bleu canard}, <rouge tomate>{rouge tomate}, <bleu acier>{bleu acier}, <vert forêt>{vert forêt}, <cramoisi>{cramoisi}, <bleu dodger>{bleu dodger}.
+
+<h1>Tailles
+Des tailles : <8pt>{tout petit}, <10pt>{petit}, normal,
+<14pt>{moyen}, <20pt>{grand}.
+
+<h1>Alignements, tabulations et sauts
+<à gauche>Contre la marge de gauche.
+<au centre>Centré.
+<à droite>Contre la marge de droite.
+	Un paragraphe nu est justifié par défaut.
+	Autant de lignes, de tabulations et d'espaces dans le fichier.
+
+<h1>Exposants et indices
+	Le texte monte ou descend sans changer de corps : le 1<exposant>{er} de la classe ; l'eau est H<indice>{2}O ; l'aire est x<exposant>{2}. Un relevé sur mesure : x<exposant 4mm>{2}.
+
+
+<h1>Notes de bas de page
+Le principe<note>{Une note descend au bas de la page, numérotée toute
+    seule.} s'applique sans compteur à gérer.
+
+<h1>Listes
+	Une liste s'écrit <<Dresse une liste STYLE>> — un élément par ligne, sans balise d'élément. Puces : à puces, à puces vides, à puces carrées, sans puce ;
+numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres romains, en chiffres romains majuscules ; à cocher pour les cases.
+<Dresse>une liste numérotée {
+    Lire l'énoncé
+    Souligner les mots importants
+    Rédiger la réponse
+}
+
+<h1>Un tableau simple
+	Une rangée de données s'écrit entre crochets, les cellules séparées par un point-virgule. Les colonnes se déclarent dans la balise, un code par colonne : la première lettre est verticale (h/m/b), la seconde horizontale (g/c/d) — et le langage naturel fait aussi bien : en haut, à gauche vaut hg.
+
+<Dresse>un tableau [mg, mc, md] {
+    [Pomme ; Poire ; Prune]
+    [Chat ; Chien ; Cheval]
+}
+
+	Rien ici hors des crochets : le tableau n'a donc aucune entête, ce n'est qu'un jeu de colonnes alignées.
+
+	bordures trace les filets. Tout ce qui s'écrit hors des crochets est une entête : la rangée du haut le devient sans qu'on ait à le dire.
+
+<Dresse>un tableau [mc, mg, md] {
+    Figure	Formule	Valeur
+    [carré ; $1/2 + 1/3$ ; $5/6$]
+    [cercle ; $racine(2)$ ; $1,41$]
+}
+
+<h1>Un cadre simple
+<Affiche>un cadre avec un fond rose brumeux, une bordure cramoisie et un titre {Identité remarquable} {
+    L'identité $(a + b)^2 = a^2 + 2*a*b + b^2$ vaut pour tous les réels.
+    Le <gras>{double produit} $2*a*b$ est celui que l'on oublie.
+}
+
+
+<page suivante h1>Insérer une image
+	Une image s'insère par <<Insère une image>> ; les dimensions se disent en prose, comme tout attribut — ici une largeur, ailleurs un côté ou une légende. Le dossier se précise <<dans le dossier {...}>> quand l'image ne vit pas à côté du fichier source.
+<Insère une image avec une largeur de 30 mm, dans le dossier {IMAGES}>{chat.png}
+
+	Une légende s'ajoute avec <<et la légende {...}>>, sous l'image :
+<Insère une image avec une largeur de 30 mm et la légende {Cinq pommes}, dans le dossier {IMAGES}>{pommes.png}
+
+<h1>Une image dans un cadre
+	Un cadre accueille une image comme n'importe quel autre contenu ;
+<<au centre>> la place au milieu de la largeur disponible.
+
+<Affiche>un cadre avec un fond bleu Alice, une bordure bleu marine et un titre {Combien de billes ?} {
+    <au centre>{<Insère une image avec une largeur de 60 mm, dans le dossier {IMAGES}>{billes.png}}
+
+    Compte les billes de la photo : il y en a #n.
+}
