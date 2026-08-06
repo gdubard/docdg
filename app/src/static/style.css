@@ -1,3 +1,5 @@
+:root { --zoom: 0.9; }
+
 html, body { height: 100%; margin: 0; }
 
 @media screen {
@@ -263,5 +265,5 @@ html, body { height: 100%; margin: 0; }
 
 .doc table.signes td.hachure {
     background-image: repeating-linear-gradient(
-        45deg, #999 0 0.15mm, transparent 0.15mm 1.2mm);
+            45deg, #999 0 0.15mm, transparent 0.15mm 1.2mm);
 }
