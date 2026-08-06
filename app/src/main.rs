@@ -13,6 +13,7 @@ use tungstenite::{Message, WebSocket};
 use tao::event::{Event, WindowEvent};
 use tao::event_loop::{ControlFlow, EventLoopBuilder, EventLoopProxy};
 use tao::window::WindowBuilder;
+use muda::{AboutMetadata, Menu, PredefinedMenuItem, Submenu};
 use wry::http::Request;
 use wry::{WebView, WebViewBuilder};
 
@@ -153,9 +154,9 @@ fn navigateur() -> Option<PathBuf> {
                     "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
                     "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
                 ]
-                .iter()
-                .map(PathBuf::from)
-                .find(|c| c.is_file())
+                    .iter()
+                    .map(PathBuf::from)
+                    .find(|c| c.is_file())
             }
             #[cfg(target_os = "windows")]
             {
@@ -184,8 +185,8 @@ fn navigateur() -> Option<PathBuf> {
                     "microsoft-edge",
                     "brave-browser",
                 ]
-                .iter()
-                .find_map(|n| cherche_dans_path(n))
+                    .iter()
+                    .find_map(|n| cherche_dans_path(n))
             }
         })
         .clone()
@@ -312,7 +313,7 @@ fn attend_evenement(ws: &mut Ws, session: &str, nom: &str) -> Result<(), String>
             && valeur.get("sessionId").and_then(|v| v.as_str()) == Some(session);
         atteint.then(|| Ok(serde_json::Value::Null))
     })
-    .map(|_| ())
+        .map(|_| ())
 }
 
 fn commande_navigateur(chrome: &Path, profil: &Path) -> Command {
@@ -579,6 +580,54 @@ fn compositeur(proxy: EventLoopProxy<Reponse>) -> Sender<Demande> {
     envoi
 }
 
+fn menu_edition(fenetre: &tao::window::Window) {
+    let _ = fenetre;
+    let barre = Menu::new();
+
+    let application = Submenu::new("DocDG", true);
+    let _ = application.append_items(&[
+        &PredefinedMenuItem::about(
+            None,
+            Some(AboutMetadata {
+                name: Some("DocDG".into()),
+                version: Some(env!("CARGO_PKG_VERSION").into()),
+                ..Default::default()
+            }),
+        ),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::hide(None),
+        &PredefinedMenuItem::hide_others(None),
+        &PredefinedMenuItem::show_all(None),
+        &PredefinedMenuItem::separator(),
+        &PredefinedMenuItem::quit(Some("Quitter DocDG")),
+    ]);
+
+    let edition = Submenu::new("Édition", true);
+    let _ = edition.append_items(&[
+        &PredefinedMenuItem::cut(Some("Couper")),
+        &PredefinedMenuItem::copy(Some("Copier")),
+        &PredefinedMenuItem::paste(Some("Coller")),
+        &PredefinedMenuItem::select_all(Some("Tout sélectionner")),
+    ]);
+
+    let _ = barre.append_items(&[&application, &edition]);
+
+    #[cfg(target_os = "macos")]
+    barre.init_for_nsapp();
+
+    #[cfg(target_os = "windows")]
+    {
+        use tao::platform::windows::WindowExtWindows;
+        let _ = unsafe { barre.init_for_hwnd(fenetre.hwnd() as _) };
+    }
+
+    #[cfg(all(unix, not(target_os = "macos")))]
+    {
+        use tao::platform::unix::WindowExtUnix;
+        let _ = barre.init_for_gtk_window(fenetre.gtk_window(), fenetre.default_vbox());
+    }
+}
+
 fn main() -> wry::Result<()> {
     let event_loop = EventLoopBuilder::<Reponse>::with_user_event().build();
     let window = WindowBuilder::new()
@@ -586,6 +635,8 @@ fn main() -> wry::Result<()> {
         .with_inner_size(tao::dpi::LogicalSize::new(1200.0, 900.0))
         .build(&event_loop)
         .unwrap();
+
+    menu_edition(&window);
 
     let proxy = event_loop.create_proxy();
     let vers_compositeur = compositeur(proxy.clone());
