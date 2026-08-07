@@ -11,6 +11,7 @@ pub enum Obj {
     Point { coords: Vec<String> },
     Vecteur { coords: Vec<String> },
     Plan { equation: String },
+    Droite { point: Vec<String>, vecteur: Vec<String> },
 }
 
 pub type Objects = BTreeMap<String, Obj>;
@@ -27,6 +28,9 @@ pub fn objects_json(objs: &Objects) -> Value {
             Obj::Point { coords } => json!({"kind":"point","coords":coords}),
             Obj::Vecteur { coords } => json!({"kind":"vecteur","coords":coords}),
             Obj::Plan { equation } => json!({"kind":"plan","equation":equation}),
+            Obj::Droite { point, vecteur } => {
+                json!({"kind":"droite","point":point,"vecteur":vecteur})
+            }
         };
         m.insert(name.clone(), v);
     }
@@ -209,6 +213,37 @@ fn coordonnees(bloc: &str) -> Vec<Vec<String>> {
     listes
 }
 
+fn triplet_ou_reference(
+    t: &str,
+    low: &str,
+    cle: &str,
+    objs: &Objects,
+) -> Option<Vec<String>> {
+    let apres = &t[low.find(cle)? + cle.len()..];
+    let apres = apres.trim_start().trim_start_matches("le point").trim_start_matches("le vecteur").trim_start();
+    if let Some(i) = apres.find('(') {
+        let nom_avant: &str = apres[..i].trim();
+        if nom_avant.chars().all(|c| c.is_alphabetic() || c == '\'') {
+            let fin = apres[i..].find(')')? + i;
+            let comps: Vec<String> = apres[i + 1..fin]
+                .split(&[';', ','][..])
+                .map(|c| c.trim().to_string())
+                .filter(|c| !c.is_empty())
+                .collect();
+            if comps.len() == 3 {
+                return Some(comps);
+            }
+        }
+    }
+    let nom = first_word(apres);
+    match objs.get(&nom) {
+        Some(Obj::Point { coords }) | Some(Obj::Vecteur { coords }) if coords.len() == 3 => {
+            Some(coords.clone())
+        }
+        _ => None,
+    }
+}
+
 fn noms_declares(entete: &str) -> Vec<String> {
     entete
         .split(&[',', ';'][..])
@@ -219,6 +254,21 @@ fn noms_declares(entete: &str) -> Vec<String> {
 }
 
 fn declare_geometrie(t: &str, low: &str, objs: &mut Objects) -> Option<Vec<String>> {
+    if low.contains("droite") && low.contains("passant par") && low.contains("directeur") {
+        let i = low.find("droite")? + "droite".len();
+        let nom: String = t[i..]
+            .trim_start()
+            .chars()
+            .take_while(|c| c.is_alphanumeric() || *c == '_' || *c == '\'')
+            .collect();
+        let point = triplet_ou_reference(t, low, "passant par", objs)?;
+        let vecteur = triplet_ou_reference(t, low, "directeur", objs)?;
+        if nom.is_empty() || !nom.chars().next().unwrap().is_alphabetic() {
+            return None;
+        }
+        objs.insert(nom.clone(), Obj::Droite { point, vecteur });
+        return Some(vec![nom]);
+    }
     if low.contains("plan") && low.contains("équation") {
         let i = t.find("plan")? + "plan".len();
         let nom = first_word(&t[i..]);
@@ -490,11 +540,30 @@ pub fn parse_command(verb: &str, rest: &str) -> Option<Value> {
             if low.contains("image") {
                 return single("colspace", &nom_final(t)?);
             }
+            if low.contains("extremum") && low.contains("sous la contrainte") {
+                let avant = t.split("sous la contrainte").next()?;
+                let name = nom_final(avant)?;
+                let contrainte = after_key(t, &["sous la contrainte"])?;
+                return Some(json!({"op":"lagrange",
+                    "args":{"name":name,"constraint":nettoie_expr(contrainte.trim().trim_end_matches('.'))}}));
+            }
             return None;
         }
         "Étudie" | "Etudie" => {
             if low.contains("convexité") || low.contains("convexite") {
                 return single("convexity", &nom_final(t)?);
+            }
+            if low.contains("loi de densité") || low.contains("loi de densite") {
+                let apres = after_key(t, &["densité", "densite"])?;
+                let (expr, dom) = apres.trim_start_matches(|c: char| c.is_alphabetic() || c == '(' || c == ')' || c == ',' || c == ' ').split_once(" sur ")
+                    .or_else(|| apres.split_once(" sur "))?;
+                let expr = expr.split_once('=').map(|(_, e)| e).unwrap_or(expr);
+                let dedans = dom.trim().trim_start_matches('[').split_once(']')?.0;
+                let (a, b) = dedans.split_once(';')?;
+                return Some(json!({"op":"densite",
+                    "args":{"expr":nettoie_expr(expr.trim()),
+                            "from":a.trim().replace(',', "."),
+                            "to":b.trim().replace(',', ".")}}));
             }
             return None;
         }
@@ -502,6 +571,57 @@ pub fn parse_command(verb: &str, rest: &str) -> Option<Value> {
         _ => return None,
     }
 
+    if low.contains("résidus") || low.contains("residus") {
+        let expr = after_key(t, &["résidus de ", "residus de "])?;
+        return Some(json!({"op":"residus",
+            "args":{"expr":nettoie_expr(expr.trim().trim_end_matches('.'))}}));
+    }
+    if low.contains("loi normale") && low.contains("probabilité d'être entre")
+        || low.contains("loi normale") && low.contains("probabilite d'etre entre")
+    {
+        let seg = after_key(t, &["entre "])?;
+        let (a, reste) = seg.split_once(" et ")?;
+        let b = reste.split_once(" pour ").map(|(v, _)| v).unwrap_or(reste);
+        let m = after_key(t, &["espérance ", "esperance "])?;
+        let m = first_word(&m.replace(',', "."));
+        let s_txt = after_key(t, &["écart type ", "ecart type "])?;
+        let s_txt = first_word(&s_txt.replace(',', ".")).trim_end_matches('.').to_string();
+        return Some(json!({"op":"normale",
+            "args":{"from":a.trim().replace(',', "."),
+                    "to":b.trim().replace(',', "."),
+                    "m":m, "s":s_txt}}));
+    }
+    if low.contains("intégrale double") || low.contains("integrale double")
+        || low.contains("intégrale triple") || low.contains("integrale triple")
+    {
+        let expr = after_key(t, &["double de ", "triple de "])?;
+        let (expr, domaine) = expr.split_once(" sur ")?;
+        let expr = nettoie_expr(expr.trim());
+        let domaine = domaine.trim().trim_end_matches('.');
+        let bas_dom = domaine.to_lowercase();
+        if let Some(r) = after_key(domaine, &["disque de rayon"]) {
+            let rayon: String = r
+                .trim()
+                .chars()
+                .take_while(|c| c.is_ascii_alphanumeric() || *c == ',' || *c == '.' || *c == '/')
+                .collect();
+            let _ = bas_dom;
+            return Some(json!({"op":"multi_integral",
+                "args":{"expr":expr,"disque":rayon.replace(',', ".")}}));
+        }
+        let mut bornes = Vec::new();
+        for morceau in domaine.split('×') {
+            let dedans = morceau.trim().trim_start_matches('[').split_once(']')?.0;
+            let (a, b) = dedans.split_once(';')?;
+            bornes.push(json!([nettoie_expr(a.trim()), nettoie_expr(b.trim())]));
+        }
+        if bornes.len() < 2 || bornes.len() > 3 {
+            return None;
+        }
+        let noms: Vec<&str> = ["x", "y", "z"][..bornes.len()].to_vec();
+        return Some(json!({"op":"multi_integral",
+            "args":{"expr":expr,"vars":noms,"bornes":bornes}}));
+    }
     if low.contains("série de fourier") || low.contains("serie de fourier") {
         let name = after_key(t, &["Fourier de", "fourier de"]).map(first_word)?;
         let seg = after_key(t, &[" sur "])?;

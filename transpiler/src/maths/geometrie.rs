@@ -783,9 +783,6 @@ pub fn commande(verbe: &str, desc: &str, corps: Option<&str>, env: &mut Env) -> 
         if let Some(html) = cercle_trigonometrique(desc) {
             return Some(html);
         }
-        if let Some(html) = solide(desc) {
-            return Some(html);
-        }
         if let Some(html) = figure_seule(desc) {
             return Some(html);
         }
@@ -1619,8 +1616,10 @@ fn marque_droit(v: &Projection, sommet: Plan2, a: Plan2, b: Plan2) -> String {
 }
 
 fn cote_mesuree(v: &Projection, a: Plan2, b: Plan2, longueur: f64) -> String {
-    let (ax, ay) = (v.px(a.0), v.py(a.1));
-    let (bx, by) = (v.px(b.0), v.py(b.1));
+    cote_ecran(v.px(a.0), v.py(a.1), v.px(b.0), v.py(b.1), longueur, 0.5)
+}
+
+pub(crate) fn cote_ecran(ax: f64, ay: f64, bx: f64, by: f64, longueur: f64, t: f64) -> String {
     let (dx, dy) = (bx - ax, by - ay);
     let n = (dx * dx + dy * dy).sqrt();
     if n < 1e-9 {
@@ -1632,8 +1631,8 @@ fn cote_mesuree(v: &Projection, a: Plan2, b: Plan2, longueur: f64) -> String {
     } else if angle < -90.0 {
         angle += 180.0;
     }
-    let x = (ax + bx) / 2.0 - 3.2 * dy / n;
-    let y = (ay + by) / 2.0 + 3.2 * dx / n;
+    let x = ax + t * dx - 3.2 * dy / n;
+    let y = ay + t * dy + 3.2 * dx / n;
     format!(
         "<text x=\"{:.2}\" y=\"{:.2}\" class=\"lab\" dominant-baseline=\"central\" \
          transform=\"rotate({:.2} {:.2} {:.2})\">{} cm</text>",
@@ -1940,62 +1939,3 @@ fn cercle_trigonometrique(desc: &str) -> Option<String> {
     Some(crate::maths::trace::enveloppe_haute(&s, "#1a4fa0", hauteur))
 }
 
-fn solide(desc: &str) -> Option<String> {
-    let bas = desc.to_lowercase();
-    if !bas.contains("le solide") {
-        return None;
-    }
-    let hauteur = 80.0;
-    let fuite = (0.45, 0.35);
-    let mut s = String::new();
-    if bas.contains("cube") {
-        let a = nombre_apres(desc, "d'arête ")?;
-        let v = vue_centimetres(
-            &[(0.0, 0.0), (a * (1.0 + fuite.0), a * (1.0 + fuite.1))],
-            hauteur,
-        );
-        let avant = [(0.0, 0.0), (a, 0.0), (a, a), (0.0, a)];
-        let d = (a * fuite.0, a * fuite.1);
-        let arriere: Vec<Plan2> = avant.iter().map(|p| (p.0 + d.0, p.1 + d.1)).collect();
-        for i in 0..4 {
-            s.push_str(&ligne(&v, avant[i], avant[(i + 1) % 4], "#1a4fa0", false));
-        }
-        for i in 0..4 {
-            let cache = i == 0 || i == 3;
-            s.push_str(&ligne(
-                &v,
-                arriere[i],
-                arriere[(i + 1) % 4],
-                "#1a4fa0",
-                cache,
-            ));
-        }
-        for i in 0..4 {
-            s.push_str(&ligne(&v, avant[i], arriere[i], "#1a4fa0", i == 0));
-        }
-        s.push_str(&cote_mesuree(&v, avant[0], avant[1], a));
-        return Some(crate::maths::trace::enveloppe_haute(&s, "#1a4fa0", hauteur));
-    }
-    if bas.contains("pyramide") {
-        let base = nombre_apres(desc, "de base ")?;
-        let h = nombre_apres(desc, "de hauteur ")?;
-        let d = (base * fuite.0, base * fuite.1);
-        let v = vue_centimetres(&[(0.0, 0.0), (base + d.0, h.max(d.1))], hauteur);
-        let sol = [
-            (0.0, 0.0),
-            (base, 0.0),
-            (base + d.0, d.1),
-            (d.0, d.1),
-        ];
-        let sommet = (base / 2.0 + d.0 / 2.0, d.1 / 2.0 + h);
-        for i in 0..4 {
-            s.push_str(&ligne(&v, sol[i], sol[(i + 1) % 4], "#1a4fa0", i >= 2));
-        }
-        for (i, p) in sol.iter().enumerate() {
-            s.push_str(&ligne(&v, *p, sommet, "#1a4fa0", i == 3));
-        }
-        s.push_str(&cote_mesuree(&v, sol[0], sol[1], base));
-        return Some(crate::maths::trace::enveloppe_haute(&s, "#1a4fa0", hauteur));
-    }
-    None
-}

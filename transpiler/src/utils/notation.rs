@@ -262,7 +262,7 @@ fn differentielles(s: &str) -> String {
 
 const FONCTIONS: &[&str] = &[
     "arccos", "arcsin", "arctan", "argch", "argsh", "argth", "cosh", "sinh", "tanh", "cos", "sin",
-    "tan", "exp", "ln", "log", "sh", "ch", "th",
+    "tan", "ln", "log", "sh", "ch", "th",
 ];
 
 const GRECQUES: &[&str] = &[
@@ -400,6 +400,7 @@ fn to_latex_inner(src: &str) -> String {
         format!("\\mathcal{{U}}\\left({}\\right)", liste_virgules(a))
     });
     s = wrap_fn(&s, "racine", &|a| format!("\\sqrt{{{}}}", a));
+    s = wrap_fn(&s, "exp", &|a| format!("e^{{{}}}", a.trim()));
     s = wrap_fn(&s, "conjugué", &|a| format!("\\overline{{{}}}", a));
     s = wrap_fn(&s, "moyenne", &|a| format!("\\overline{{{}}}", a));
     s = wrap_fn(&s, "adhérence", &|a| format!("\\overline{{{}}}", a));

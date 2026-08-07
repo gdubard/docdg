@@ -1,19 +1,3 @@
-/**
- * @typedef {object} PageOpts
- * @property {string} orientation
- * @property {number[]} marges
- * @property {number[]} espacements
- * @property {number} police
- * @property {number} interligne
- */
-
-/**
- * @typedef {object} Transpilation
- * @property {PageOpts} page
- * @property {string} html
- * @property {string} stats
- */
-
 const editor = document.getElementById('editor');
 const pagesEl = document.getElementById('pages');
 const measure = document.getElementById('measure');
@@ -21,12 +5,14 @@ const statusEl = document.getElementById('status');
 const diagEl = document.getElementById('diag');
 const wrapper = document.getElementById('preview-wrapper');
 
-/** @type {PageOpts | null} */
 let pageOpts = null;
 let renderSeq = 0;
 let zoom = 0.9;
 let debounceTimer = null;
 let modifie = false;
+let saisies = {};
+let brouillons = {};
+let focaliseSaisie = false;
 
 function diag(message) {
     diagEl.textContent = message;
@@ -60,7 +46,7 @@ function send(obj) {
 
 function requestTranspile(mode) {
     statusEl.textContent = 'composition…';
-    send({ cmd: 'render', content: editor.value, mode: mode || 'inc' });
+    send({ cmd: 'render', content: editor.value, mode: mode || 'inc', saisies });
 }
 
 function recompose() {
@@ -72,10 +58,98 @@ function recompose() {
 function chargeContenu(text) {
     editor.value = text;
     modifie = false;
+    saisies = {};
+    brouillons = {};
     requestTranspile('full');
 }
 
-/** @param {PageOpts} opts */
+const REGLES_SAISIE = {
+    'texte': {
+        valide: (v) => v.trim().length > 0,
+        message: 'Une réponse est attendue.'
+    },
+    'entier': {
+        valide: (v) => /^[+-]?\d+$/.test(v.trim()),
+        message: 'Un entier est attendu — par exemple 12.'
+    },
+    'décimal': {
+        valide: (v) => /^[+-]?\d+(,\d+)?$/.test(v.trim()),
+        message: 'Un nombre décimal est attendu, écrit avec une virgule — par exemple 1,65.'
+    },
+    'booléen': {
+        valide: (v) => /^(vrai|faux)$/.test(v.trim().toLowerCase()),
+        message: 'Réponds par vrai ou faux.'
+    },
+    'caractère': {
+        valide: (v) => [...v.trim()].length === 1,
+        message: 'Un seul caractère est attendu.'
+    }
+};
+
+function montreErreurSaisie(bloc, message) {
+    const erreur = bloc.querySelector('.saisie-erreur');
+    if (!erreur) return;
+    erreur.textContent = message;
+    erreur.classList.add('on');
+    clearTimeout(erreur.dataset.minuterie);
+    erreur.dataset.minuterie = String(setTimeout(() => erreur.classList.remove('on'), 2800));
+}
+
+function soumetSaisie(champ) {
+    const bloc = champ.closest('.saisie');
+    if (!bloc) return;
+    const nom = bloc.getAttribute('data-nom');
+    const type = bloc.getAttribute('data-type');
+    const regle = REGLES_SAISIE[type] || REGLES_SAISIE['texte'];
+    if (!regle.valide(champ.value)) {
+        montreErreurSaisie(bloc, regle.message);
+        champ.focus();
+        return;
+    }
+    delete brouillons[nom];
+    saisies[nom] = champ.value.trim();
+    focaliseSaisie = true;
+    requestTranspile('inc');
+}
+
+function restaureSaisie() {
+    const champ = pagesEl.querySelector('.saisie-champ');
+    if (!champ) { focaliseSaisie = false; return; }
+    const bloc = champ.closest('.saisie');
+    const nom = bloc ? bloc.getAttribute('data-nom') : null;
+    if (nom && brouillons[nom] !== undefined) champ.value = brouillons[nom];
+    if (focaliseSaisie || document.activeElement !== editor) {
+        focaliseSaisie = false;
+        champ.focus();
+        champ.setSelectionRange(champ.value.length, champ.value.length);
+    }
+}
+
+pagesEl.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const champ = e.target.closest ? e.target.closest('.saisie-champ') : null;
+    if (!champ) return;
+    e.preventDefault();
+    soumetSaisie(champ);
+});
+
+pagesEl.addEventListener('input', (e) => {
+    const champ = e.target.closest ? e.target.closest('.saisie-champ') : null;
+    if (!champ) return;
+    const bloc = champ.closest('.saisie');
+    if (bloc) brouillons[bloc.getAttribute('data-nom')] = champ.value;
+});
+
+pagesEl.addEventListener('click', (e) => {
+    const valeur = e.target.closest ? e.target.closest('.saisie-valeur') : null;
+    if (!valeur) return;
+    const nom = valeur.getAttribute('data-nom');
+    brouillons[nom] = saisies[nom];
+    delete saisies[nom];
+    focaliseSaisie = true;
+    requestTranspile('inc');
+});
+
 function pageDims(opts) {
     let w = 210, h = 297;
     if (opts.orientation === 'paysage' || opts.orientation === 'landscape') { w = 297; h = 210; }
@@ -192,7 +266,6 @@ function typeset(node) {
     return Promise.resolve();
 }
 
-/** @param {Transpilation} res */
 function onTranspiled(res) {
     const seq = ++renderSeq;
     try {
@@ -211,6 +284,7 @@ function onTranspiled(res) {
             flow(d);
             attachNotes();
             fillToc();
+            restaureSaisie();
             wrapper.scrollTop = keepScroll;
             statusEl.textContent = res.stats || '';
             syncSettingsFromPage();

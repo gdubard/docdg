@@ -145,7 +145,7 @@ pub(crate) fn enveloppe_haute(corps: &str, couleur: &str, hauteur: f64) -> Strin
     )
 }
 
-fn couleur(desc: &str) -> &'static str {
+pub(crate) fn couleur(desc: &str) -> &'static str {
     let bas = desc.to_lowercase();
     for (mot, code) in [
         ("en bleu", "#1a4fa0"),

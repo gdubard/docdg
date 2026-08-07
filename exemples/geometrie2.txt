@@ -70,3 +70,36 @@ soit h2 = <bleu italique sous-section>
 
 <Soit>les points P et Q de coordonnées respectives (0 ; 0) et (1 ; 1)
 <Construis>l'image du segment [AB] par la symétrie axiale d'axe (PQ)
+<page suivante h1>Les solides en perspective cavalière
+
+<h2>Les polyèdres
+	Les arêtes cachées sont dessinées en pointillés, comme dans le cahier.
+<Trace>le solide cube, d'arête 3 cm
+<Trace>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Trace>le solide prisme, de base 3 cm et de longueur 5 cm
+<Trace>le solide pyramide, de base 4 cm et de hauteur 3 cm
+
+<page suivante h2>Les solides de révolution
+<Trace>le solide cylindre, de rayon 2 cm et de hauteur 5 cm
+<Trace>le solide cône, de rayon 2 cm et de hauteur 4 cm
+<Trace>le solide sphère, de rayon 3 cm
+
+<page suivante h1>Les patrons
+	Un patron est le solide déplié, prêt à découper et à plier.
+<Trace>le patron du cube d'arête 3 cm
+<Trace>le patron du pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Trace>le patron de la pyramide de base 4 cm et de hauteur 3 cm
+<page suivante>
+<Trace>le patron du cylindre de rayon 2 cm et de hauteur 5 cm
+<Trace>le patron du cône de rayon 2 cm et de hauteur 4 cm
+
+<page suivante h1>Les volumes
+<Calcule>le volume du pavé de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Calcule>le volume du cylindre de rayon 2 cm et de hauteur 5 cm
+<Calcule>le volume du cône de rayon 2 cm et de hauteur 4 cm
+
+<h1>Un solide à la demande
+	Le document se construit avec le lecteur : la dimension saisie dessine le solide.
+soit a = <Saisis>un entier{Quelle arête pour le cube, en centimètres ?}
+<Trace>le solide cube, d'arête #a cm
+<Calcule>le volume du pavé de longueur #a cm, de largeur #a cm et de hauteur #a cm

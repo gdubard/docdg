@@ -80,3 +80,45 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Soit>les fonctions li(x) = x et lj(x) = 2x
 
 <Calcule>le wronskien de li et lj
+<page suivante h1>Les surfaces
+	Une fonction de deux variables se représente par sa nappe $z = f(x, y)$, en perspective cavalière ombrée :
+<Trace>la surface z = x^2 - y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2]
+<Trace>la surface z = cos(x)*cos(y) pour x dans [-3 ; 3] et y dans [-3 ; 3], avec 32 mailles, en violet
+
+<page suivante h1>Les lignes de niveau
+	La même fonction se lit aussi par ses courbes $f(x, y) = c$ :
+<Trace>les lignes de niveau de z = x^2 + y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2], aux niveaux {1 ; 2 ; 3}
+<Trace>les lignes de niveau de z = x*y pour x dans [-2 ; 2] et y dans [-2 ; 2], en vert
+
+<page suivante h1>Les extremums
+<h2>Extremums libres
+<Soit>la fonction g(x, y) = x^2 + y^2 - 2*x
+<Détermine>les points critiques de g
+
+<h2>Extremums sous contrainte
+<Soit>la fonction f(x, y) = x*y
+<Détermine>les extremums de f sous la contrainte x^2 + y^2 = 2
+
+<page suivante h1>Les intégrales multiples
+<Calcule>l'intégrale double de x*y sur [0 ; 1] × [0 ; 2]
+<Calcule>l'intégrale double de x^2 + y^2 sur le disque de rayon 2
+<Calcule>l'intégrale triple de x*y*z sur [0 ; 1] × [0 ; 1] × [0 ; 2]
+
+
+<page suivante h1>Les transformations du plan complexe
+	L'image d'un quadrillage par $w = f(z)$ montre la géométrie de la transformation — les deux familles de lignes restent orthogonales là où $f$ est holomorphe de dérivée non nulle :
+<Trace>l'image du carré [-1 ; 1] × [-1 ; 1] par w = z^2
+<Trace>l'image du carré [0,2 ; 1,2] × [-1 ; 1] par w = 1/z, en violet
+
+<page suivante h2>La transformation de Joukovski
+	L'image du cercle unité par $w = z + 1/z$ est le segment $[-2 ; 2]$ ; celle d'un cercle plus grand, une ellipse :
+<Trace>l'image du cercle unité par w = z + 1/z
+<Trace>l'image du cercle de rayon 1,4 par w = z + 1/z, en vert
+
+<page suivante h1>Les résidus
+<Calcule>les résidus de 1/(z^2 + 1)
+<Calcule>les résidus de 1/(z^2*(z - 1))
+
+<page suivante h1>Une nappe à la demande
+soit k = <Saisis>un entier{Quel coefficient pour la selle ?}
+<Trace>la surface z = #k*x*y pour x dans [-1 ; 1] et y dans [-1 ; 1], en orange

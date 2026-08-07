@@ -40,3 +40,21 @@ Le quantile gaussien et son cousin de Student se rejoignent quand le nombre de m
 <Détermine>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
 
 <Détermine>le quantile d'ordre 0,975 de la loi student(100)
+<page suivante h1>Les lois à densité
+	Une densité de probabilité est positive et d'intégrale 1 ; l'espérance et la variance s'en déduisent :
+<Étudie>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+<Étudie>la loi de densité f(x) = exp(-x) sur [0 ; +infini]
+
+<h1>La loi normale
+<Trace>la densité de la loi normale d'espérance 0 et d'écart type 1
+<Calcule>la probabilité d'être entre -1 et 1 pour la loi normale d'espérance 0 et d'écart type 1
+<Calcule>la probabilité d'être entre -2 et 2 pour la loi normale d'espérance 0 et d'écart type 1
+
+<page suivante h1>Le théorème central limite
+	La somme de $n$ dés, recentrée, s'approche de la loi normale — la densité limite se superpose à la loi exacte :
+<Trace>l'illustration du théorème central limite avec la somme de 2 dés
+<Trace>l'illustration du théorème central limite avec la somme de 8 dés
+
+<h1>Autant de dés que l'on veut
+soit n = <Saisis>un entier{Combien de dés pour la somme ?}
+<Trace>l'illustration du théorème central limite avec la somme de #n dés

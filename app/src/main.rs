@@ -98,10 +98,16 @@ struct IpcMessage {
     content: String,
     #[serde(default)]
     mode: String,
+    #[serde(default)]
+    saisies: std::collections::BTreeMap<String, String>,
 }
 
 enum Demande {
-    Rendu { source: String, parallele: bool },
+    Rendu {
+        source: String,
+        parallele: bool,
+        saisies: std::collections::BTreeMap<String, String>,
+    },
     Oublie,
 }
 
@@ -556,8 +562,9 @@ fn compositeur(proxy: EventLoopProxy<Reponse>) -> Sender<Demande> {
             }
             match demande {
                 Demande::Oublie => moteur.clear_cache(),
-                Demande::Rendu { source, parallele } => {
+                Demande::Rendu { source, parallele, saisies } => {
                     let t0 = Instant::now();
+                    moteur.saisies = saisies;
                     let resultat = moteur.render(&source, parallele);
                     let stats = format!(
                         "{} — {:.1} ms",
@@ -662,6 +669,7 @@ fn main() -> wry::Result<()> {
                     let _ = vers_compositeur.send(Demande::Rendu {
                         source: msg.content,
                         parallele: msg.mode == "full",
+                        saisies: msg.saisies,
                     });
                 }
                 "load" => {

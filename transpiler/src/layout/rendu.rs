@@ -443,7 +443,200 @@ fn bump_heading_si_style(env: &mut Env, cle: &str) {
     }
 }
 
+#[derive(Clone, Copy, PartialEq)]
+pub enum TypeSaisie {
+    Texte,
+    Entier,
+    Decimal,
+    Booleen,
+    Caractere,
+}
+
+impl TypeSaisie {
+    fn nom(self) -> &'static str {
+        match self {
+            TypeSaisie::Texte => "texte",
+            TypeSaisie::Entier => "entier",
+            TypeSaisie::Decimal => "décimal",
+            TypeSaisie::Booleen => "booléen",
+            TypeSaisie::Caractere => "caractère",
+        }
+    }
+}
+
+enum ValeurSaisie {
+    Nombre(f64),
+    Booleen(bool),
+    Texte(String),
+}
+
+fn parse_saisie(line: &str) -> Option<(String, TypeSaisie, String)> {
+    let reste = line.trim_start().strip_prefix("soit ")?;
+    let (lhs, rhs) = reste.split_once('=')?;
+    let nom = lhs.trim();
+    if nom.is_empty() || nom.contains('{') {
+        return None;
+    }
+    let (tag, apres) = read_tag(rhs.trim_start())?;
+    if tag.trim() != "Saisis" {
+        return None;
+    }
+    let apres = apres.trim_start();
+    let bi = apres.find('{')?;
+    let desc = apres[..bi].split_whitespace().collect::<Vec<_>>().join(" ");
+    let ty = match desc.as_str() {
+        "un texte" => TypeSaisie::Texte,
+        "un entier" => TypeSaisie::Entier,
+        "un décimal" => TypeSaisie::Decimal,
+        "un booléen" => TypeSaisie::Booleen,
+        "un caractère" => TypeSaisie::Caractere,
+        _ => return None,
+    };
+    let (question, _) = take_group(&apres[bi..], 0)?;
+    Some((nom.to_string(), ty, question.trim().to_string()))
+}
+
+fn decimal_saisi(brut: &str) -> Option<f64> {
+    let t = brut.trim();
+    let chiffres = t.strip_prefix(['+', '-']).unwrap_or(t);
+    let (entiere, decimale) = match chiffres.split_once(',') {
+        Some((a, b)) => (a, Some(b)),
+        None => (chiffres, None),
+    };
+    if entiere.is_empty() || !entiere.bytes().all(|o| o.is_ascii_digit()) {
+        return None;
+    }
+    if let Some(d) = decimale {
+        if d.is_empty() || !d.bytes().all(|o| o.is_ascii_digit()) {
+            return None;
+        }
+    }
+    t.replace(',', ".").parse::<f64>().ok().filter(|v| v.is_finite())
+}
+
+fn valide_saisie(ty: TypeSaisie, brut: &str) -> Option<ValeurSaisie> {
+    let t = brut.trim();
+    match ty {
+        TypeSaisie::Texte => (!t.is_empty()).then(|| ValeurSaisie::Texte(t.to_string())),
+        TypeSaisie::Entier => t.parse::<i64>().ok().map(|v| ValeurSaisie::Nombre(v as f64)),
+        TypeSaisie::Decimal => decimal_saisi(t).map(ValeurSaisie::Nombre),
+        TypeSaisie::Booleen => match t.to_lowercase().as_str() {
+            "vrai" => Some(ValeurSaisie::Booleen(true)),
+            "faux" => Some(ValeurSaisie::Booleen(false)),
+            _ => None,
+        },
+        TypeSaisie::Caractere => {
+            let mut it = t.chars();
+            match (it.next(), it.next()) {
+                (Some(c), None) => Some(ValeurSaisie::Texte(c.to_string())),
+                _ => None,
+            }
+        }
+    }
+}
+
+fn applique_saisie(nom: &str, valeur: &ValeurSaisie, env: &mut Env) {
+    match valeur {
+        ValeurSaisie::Nombre(v) => {
+            env.vars.insert(nom.to_string(), *v);
+        }
+        ValeurSaisie::Booleen(b) => {
+            env.vars.insert(nom.to_string(), if *b { 1.0 } else { 0.0 });
+            env.textes
+                .insert(nom.to_string(), if *b { "vrai" } else { "faux" }.to_string());
+        }
+        ValeurSaisie::Texte(t) => {
+            env.textes.insert(nom.to_string(), t.clone());
+        }
+    }
+}
+
+fn saisie_repondue(nom: &str, ty: TypeSaisie, env: &Env) -> Option<ValeurSaisie> {
+    valide_saisie(ty, env.saisies.get(nom)?)
+}
+
+fn affichage_saisie(valeur: &ValeurSaisie) -> String {
+    match valeur {
+        ValeurSaisie::Nombre(v) => crate::maths::calcul::format_number(*v),
+        ValeurSaisie::Booleen(b) => if *b { "vrai" } else { "faux" }.to_string(),
+        ValeurSaisie::Texte(t) => t.clone(),
+    }
+}
+
+fn echappe_html(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    for c in s.chars() {
+        match c {
+            '&' => out.push_str("&amp;"),
+            '<' => out.push_str("&lt;"),
+            '>' => out.push_str("&gt;"),
+            '"' => out.push_str("&quot;"),
+            c => out.push(c),
+        }
+    }
+    out
+}
+
+fn coupe_au_blocage(seg: &str, env: &Env) -> (String, bool) {
+    let mut out = String::new();
+    let mut profondeur = 0i32;
+    for line in seg.lines() {
+        out.push_str(line);
+        out.push('\n');
+        if profondeur <= 0 {
+            if let Some((nom, ty, _)) = parse_saisie(line) {
+                if saisie_repondue(&nom, ty, env).is_none() {
+                    return (out, true);
+                }
+            }
+        }
+        crate::utils::texte::maj_profondeur(line, &mut profondeur);
+    }
+    (out, false)
+}
+
+fn applique_saisies_du_segment(seg: &str, env: &mut Env) {
+    let mut profondeur = 0i32;
+    for line in seg.lines() {
+        if profondeur <= 0 {
+            if let Some((nom, ty, _)) = parse_saisie(line) {
+                if let Some(valeur) = saisie_repondue(&nom, ty, env) {
+                    applique_saisie(&nom, &valeur, env);
+                }
+            }
+        }
+        crate::utils::texte::maj_profondeur(line, &mut profondeur);
+    }
+}
+
+fn html_saisie(nom: &str, ty: TypeSaisie, question: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String {
+    let question = render_inline(question, env, toc);
+    match saisie_repondue(nom, ty, env) {
+        Some(valeur) => {
+            applique_saisie(nom, &valeur, env);
+            format!(
+                "<p class=\"saisie-faite\"><span class=\"saisie-question\">{}</span> <span class=\"saisie-valeur\" data-nom=\"{}\" title=\"Cliquer pour répondre à nouveau\">{}</span></p>",
+                question,
+                echappe_html(nom),
+                echappe_html(&affichage_saisie(&valeur))
+            )
+        }
+        None => {
+            env.bloque = true;
+            format!(
+                "<div class=\"saisie\" data-nom=\"{}\" data-type=\"{}\"><span class=\"saisie-question\">{}</span> <input class=\"saisie-champ\" type=\"text\" autocomplete=\"off\" spellcheck=\"false\"><span class=\"saisie-erreur\"></span></div>",
+                echappe_html(nom),
+                ty.nom(),
+                question
+            )
+        }
+    }
+}
+
 fn parse_def(line: &str, env: &mut Env) {
+    if parse_saisie(line).is_some() {
+        return;
+    }
     let rest = line.trim_start().trim_start_matches("soit").trim_start();
     if let Some((lhs, rhs)) = rest.split_once('=') {
         let lhs = lhs.trim();
@@ -452,6 +645,18 @@ fn parse_def(line: &str, env: &mut Env) {
             if let Some(fin) = rhs.rfind('}') {
                 env.donnees
                     .insert(lhs.to_string(), rhs[1..fin].trim_start_matches('\n').to_string());
+            }
+            return;
+        }
+        if rhs.starts_with("si ") {
+            if let Some(choisi) = parse_ternaire(rhs, &env.vars) {
+                if let Some(v) = crate::maths::calcul::eval(&choisi, &env.vars) {
+                    env.vars.insert(lhs.to_string(), v);
+                    env.textes.remove(lhs);
+                } else {
+                    env.textes.insert(lhs.to_string(), choisi);
+                    env.vars.remove(lhs);
+                }
             }
             return;
         }
@@ -511,15 +716,25 @@ pub fn inerte(seg: &str) -> bool {
 }
 
 pub fn scan_env(seg: &str, env: &mut Env) {
+    if env.bloque {
+        return;
+    }
+    let (seg, _) = coupe_au_blocage(seg, env);
+    let seg: &str = &seg;
     collecte_donnees(seg, env);
     for line in seg.lines() {
         let t = line.trim_start();
-        if t.starts_with("soit ") {
+        if t.starts_with("soit ") && !est_ternaire(t) {
             parse_def(t, env);
         }
     }
+    applique_saisies_du_segment(seg, env);
     let seg = expand_conditions(seg, &env.vars);
     let seg = expand_loops(&seg);
+    applique_saisies_du_segment(&seg, env);
+    let (seg, bloque) = coupe_au_blocage(&seg, env);
+    env.bloque = bloque;
+    let seg: &str = &seg;
     for chunk in logical_chunks(&seg) {
         if let Some((tag, after)) = read_tag(chunk.trim_start()) {
             let tag_t = tag.trim();
@@ -555,6 +770,20 @@ pub fn scan_env(seg: &str, env: &mut Env) {
             }
         }
     }
+    for chunk in logical_chunks(seg) {
+        let t = chunk.trim_start();
+        if chunk.contains('\n') && est_ternaire(t) {
+            parse_def(t, env);
+        }
+    }
+}
+
+fn est_ternaire(line: &str) -> bool {
+    line.trim_start()
+        .strip_prefix("soit ")
+        .and_then(|r| r.split_once('='))
+        .map(|(_, rhs)| rhs.trim_start().starts_with("si "))
+        .unwrap_or(false)
 }
 
 fn ouvre_matrice(line: &str) -> Option<char> {
@@ -679,6 +908,14 @@ pub fn expand_conditions(src: &str, vars: &std::collections::BTreeMap<String, f6
     out
 }
 
+fn eval_operande(s: &str, vars: &std::collections::BTreeMap<String, f64>) -> Option<f64> {
+    match s.trim() {
+        "vrai" => Some(1.0),
+        "faux" => Some(0.0),
+        autre => crate::maths::calcul::eval(autre, vars),
+    }
+}
+
 fn eval_condition(cond: &str, vars: &std::collections::BTreeMap<String, f64>) -> bool {
     let comparateurs: &[(&str, fn(f64, f64) -> bool)] = &[
         ("au moins", |a, b| a >= b),
@@ -696,15 +933,33 @@ fn eval_condition(cond: &str, vars: &std::collections::BTreeMap<String, f64>) ->
     ];
     for (mot, f) in comparateurs {
         if let Some((g, d)) = cond.split_once(mot) {
-            let g = crate::maths::calcul::eval(g.trim(), vars);
-            let d = crate::maths::calcul::eval(d.trim(), vars);
+            let g = eval_operande(g, vars);
+            let d = eval_operande(d, vars);
             if let (Some(g), Some(d)) = (g, d) {
                 return f(g, d);
             }
             return false;
         }
     }
-    false
+    eval_operande(cond, vars).map(|v| v.abs() > 1e-9).unwrap_or(false)
+}
+
+fn parse_ternaire(rhs: &str, vars: &std::collections::BTreeMap<String, f64>) -> Option<String> {
+    let apres_si = rhs.trim_start().strip_prefix("si ")?;
+    let bi = apres_si.find('{')?;
+    let cond = apres_si[..bi].trim();
+    let (alors, suite) = take_group(&apres_si[bi..], 0)?;
+    let suite_t = suite.trim_start();
+    let sinon = suite_t
+        .strip_prefix("sinon")
+        .and_then(|r| take_group(r.trim_start(), 0))
+        .map(|(b, _)| b);
+    let choisi = if eval_condition(cond, vars) {
+        alors
+    } else {
+        sinon.unwrap_or_default()
+    };
+    Some(dedent(&choisi).trim().to_string())
 }
 
 pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
@@ -712,7 +967,13 @@ pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
         let n: usize = n.trim().parse().unwrap_or(0);
         return (format!("\u{E012}{}", n), Vec::new());
     }
+    if env.bloque {
+        return (String::new(), Vec::new());
+    }
+    let (seg, _) = coupe_au_blocage(seg, env);
+    let seg: &str = &seg;
     collecte_donnees(seg, env);
+    applique_saisies_du_segment(seg, env);
     let seg = expand_conditions(seg, &env.vars);
     let seg: &str = &seg;
     let seg = expand_loops(seg);
@@ -762,6 +1023,9 @@ pub fn render_body_indent(
     let mut para: Vec<String> = Vec::new();
     let mut vides = 0usize;
     for chunk in logical_chunks(text) {
+        if env.bloque {
+            break;
+        }
         let t = chunk.trim();
         if t == "\u{E013}" {
             flush_para(&mut para, &mut out);
@@ -777,6 +1041,13 @@ pub fn render_body_indent(
                 lignes_vides(vides, &mut out);
             }
             vides = 0;
+        }
+        if texte_libre {
+            if let Some((nom, ty, question)) = parse_saisie(t) {
+                flush_para(&mut para, &mut out);
+                out.push_str(&html_saisie(&nom, ty, &question, env, toc));
+                continue;
+            }
         }
         if t.starts_with("soit ") {
             flush_para(&mut para, &mut out);
@@ -1040,6 +1311,11 @@ const OPS_EN_PROSE: &[&str] = &[
     "integral_nature",
     "series_nature",
     "critical",
+    "lagrange",
+    "multi_integral",
+    "residus",
+    "densite",
+    "normale",
     "fourier",
     "wronskian",
     "laplace_inv",
@@ -1294,16 +1570,35 @@ fn dispatch_command(tag_t: &str, after: &str, env: &mut Env) -> Option<String> {
     }
 
     let (rest, corps) = desc_et_corps(rest_in_tag, after);
+    let rest = interpole_diese(&rest, &env.vars, &env.textes);
     if let Some(html) = crate::maths::algebre::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
     if let Some(html) = crate::maths::analyse::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
+    if let Some(html) = crate::maths::espace::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
     if let Some(html) = crate::maths::geometrie::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
     if let Some(html) = crate::maths::statistiques::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
+    if let Some(html) = crate::maths::courbes::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
+    if let Some(html) = crate::maths::surfaces::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
+    if let Some(html) = crate::maths::complexe::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
+    if let Some(html) = crate::maths::groupes::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
+    if let Some(html) = crate::maths::lois::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
     if let Some(html) = crate::maths::trace::commande(verb, &rest, corps.as_deref(), env) {
@@ -2326,7 +2621,12 @@ fn fin_de_char(s: &str, i: usize) -> usize {
     i + s[i..].chars().next().map(char::len_utf8).unwrap_or(1)
 }
 
-fn diese(s: &str, i: usize, vars: &std::collections::BTreeMap<String, f64>) -> Option<(String, usize)> {
+fn diese(
+    s: &str,
+    i: usize,
+    vars: &std::collections::BTreeMap<String, f64>,
+    textes: &std::collections::BTreeMap<String, String>,
+) -> Option<(String, usize)> {
     let apres = &s[i + 1..];
     if apres.starts_with('{') {
         if let Some((expr, reste)) = take_group(apres, 0) {
@@ -2339,21 +2639,32 @@ fn diese(s: &str, i: usize, vars: &std::collections::BTreeMap<String, f64>) -> O
         .find(|(_, c)| !(c.is_alphanumeric() || *c == '_'))
         .map(|(j, _)| j)
         .unwrap_or(apres.len());
-    if fin_nom > 0 {
-        if let Some(v) = vars.get(&apres[..fin_nom]) {
-            return Some((crate::maths::calcul::format_number(*v), i + 1 + fin_nom));
+    let bornes: Vec<usize> = apres[..fin_nom]
+        .char_indices()
+        .map(|(j, c)| j + c.len_utf8())
+        .collect();
+    for &fin in bornes.iter().rev() {
+        if let Some(t) = textes.get(&apres[..fin]) {
+            return Some((echappe_html(t), i + 1 + fin));
+        }
+        if let Some(v) = vars.get(&apres[..fin]) {
+            return Some((crate::maths::calcul::format_number(*v), i + 1 + fin));
         }
     }
     None
 }
 
-fn interpole_diese(s: &str, vars: &std::collections::BTreeMap<String, f64>) -> String {
+pub(crate) fn interpole_diese(
+    s: &str,
+    vars: &std::collections::BTreeMap<String, f64>,
+    textes: &std::collections::BTreeMap<String, String>,
+) -> String {
     let octets = s.as_bytes();
     let mut out = String::with_capacity(s.len());
     let mut i = 0;
     while i < octets.len() {
         if octets[i] == b'#' {
-            if let Some((texte, fin)) = diese(s, i, vars) {
+            if let Some((texte, fin)) = diese(s, i, vars, textes) {
                 out.push_str(&texte);
                 i = fin;
                 continue;
@@ -2373,7 +2684,7 @@ pub fn render_inline(s: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String 
     while i < octets.len() {
         let c = octets[i];
         if c == b'#' {
-            if let Some((texte, fin)) = diese(s, i, &env.vars) {
+            if let Some((texte, fin)) = diese(s, i, &env.vars, &env.textes) {
                 out.push_str(&texte);
                 i = fin;
                 continue;
@@ -2381,7 +2692,7 @@ pub fn render_inline(s: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String 
         }
         if c == b'$' {
             if let Some(j) = s[i + 1..].find('$') {
-                let inner = interpole_diese(&s[i + 1..i + 1 + j], &env.vars);
+                let inner = interpole_diese(&s[i + 1..i + 1 + j], &env.vars, &env.textes);
                 out.push_str("\\(");
                 out.push_str(&to_latex(&inner));
                 out.push_str("\\)");

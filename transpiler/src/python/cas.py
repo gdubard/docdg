@@ -1669,6 +1669,125 @@ def handle(req):
         out.append("%s(%s)|%s" % (nom_tex(a["name"]), tex(x), "|".join(totale)))
         return "\n".join(out)
 
+    if op == "lagrange":
+        f = need(env, a["name"], "function", "La fonction")
+        vs = f.get("vars") or [f["var"]]
+        lam = sp.Symbol("lambda", real=True)
+        texte = a["constraint"]
+        if "=" in texte:
+            gauche, droite = texte.split("=", 1)
+            g = parse(gauche) - parse(droite)
+        else:
+            g = parse(texte)
+        equations = [sp.Eq(sp.diff(f["expr"], v), lam * sp.diff(g, v)) for v in vs]
+        equations.append(sp.Eq(g, 0))
+        solutions = sp.solve(equations, list(vs) + [lam], dict=True)
+        candidats = []
+        for s in solutions:
+            coords = [sp.simplify(s.get(v, v)) for v in vs]
+            if any(c.free_symbols for c in coords):
+                continue
+            if any(sp.im(sp.nsimplify(c)) != 0 for c in coords):
+                continue
+            val = sp.simplify(f["expr"].subs(dict(zip(vs, coords))))
+            candidats.append((coords, val))
+        if not candidats:
+            return ("Le système de Lagrange \\(\\nabla %s = \\lambda\\,\\nabla g\\), "
+                    "\\(g = 0\\) n'a pas de solution réelle : pas d'extremum sous la contrainte."
+                    % nom_tex(a["name"]))
+        approx = [float(v.evalf()) for _, v in candidats]
+        mini, maxi = min(approx), max(approx)
+        details = []
+        for (coords, val), x in zip(candidats, approx):
+            nature = ""
+            if len(candidats) > 1:
+                if abs(x - maxi) < 1e-9:
+                    nature = " — maximum sous la contrainte"
+                elif abs(x - mini) < 1e-9:
+                    nature = " — minimum sous la contrainte"
+            details.append("\\((%s)\\), où \\(%s = %s\\)%s" % (
+                "\\,;\\,".join(tex(c) for c in coords),
+                nom_tex(a["name"]), tex(val), nature))
+        return ("On introduit le lagrangien et on résout \\(\\nabla %s = \\lambda\\,\\nabla g\\) "
+                "avec la contrainte \\(%s = 0\\). Les points candidats sont %s."
+                % (nom_tex(a["name"]), tex(g), " ; ".join(details)))
+
+    if op == "multi_integral":
+        e = parse(a["expr"])
+        if "disque" in a:
+            rayon = parse(a["disque"])
+            x, y = sym("x"), sym("y")
+            r = sym("r")
+            th = sym("theta")
+            polaire = sp.simplify(e.subs({x: r * sp.cos(th), y: r * sp.sin(th)}, simultaneous=True))
+            integrande = sp.simplify(sp.expand_trig(polaire) * r)
+            res = sp.integrate(integrande, (r, 0, rayon), (th, 0, 2 * sp.pi))
+            return ("On passe en coordonnées polaires \\(x = r\\cos\\theta\\), "
+                    "\\(y = r\\sin\\theta\\), de jacobien \\(r\\) : "
+                    "\\[\\iint_D \\left(%s\\right) dx\\,dy = "
+                    "\\int_0^{2\\pi}\\!\\!\\int_0^{%s} \\left(%s\\right) dr\\,d\\theta = %s\\]"
+                    % (tex(e), tex(rayon), tex(integrande), tex(sp.simplify(res))))
+        vs = [sym(n) for n in a["vars"]]
+        bornes = [(parse(b[0]), parse(b[1])) for b in a["bornes"]]
+        res = e
+        etapes = []
+        for v, (b0, b1) in zip(reversed(vs), reversed(bornes)):
+            res = sp.integrate(res, (v, b0, b1))
+            etapes.append(tex(sp.simplify(res)))
+        symbole = "\\iint" if len(vs) == 2 else "\\iiint"
+        domaine = "\\times".join("[%s\\,;\\,%s]" % (tex(b0), tex(b1)) for b0, b1 in bornes)
+        differentielles = "\\,".join("d%s" % tex(v) for v in vs)
+        return ("Par le théorème de Fubini, on intègre variable par variable : "
+                "\\[%s_{%s} \\left(%s\\right) %s = %s\\]"
+                % (symbole, domaine, tex(e), differentielles, etapes[-1]))
+
+    if op == "residus":
+        z = sp.Symbol("z")
+        f = parse(a["expr"], {"z": z}, complexe=True)
+        ensemble = sp.together(sp.simplify(f))
+        poles = sp.roots(sp.denom(ensemble), z)
+        if not poles:
+            return "La fonction \\(%s\\) n'a pas de pôle : ses résidus sont tous nuls." % tex(f)
+        details = []
+        for p, mult in sorted(poles.items(), key=lambda kv: (sp.re(kv[0]), sp.im(kv[0]))):
+            res = sp.residue(f, z, p)
+            genre = "simple" if mult == 1 else "d'ordre %d" % mult
+            details.append("en \\(z_0 = %s\\) (pôle %s), \\(\\mathrm{Res}(f, z_0) = %s\\)" % (
+                tex(p), genre, tex(sp.simplify(res))))
+        return ("La fonction \\(f(z) = %s\\) a pour pôles les zéros de son dénominateur : %s."
+                % (tex(f), " ; ".join(details)))
+
+    if op == "densite":
+        x = sym("x")
+        f = parse(a["expr"])
+        b0, b1 = parse(a["from"]), parse(a["to"])
+        masse = sp.simplify(sp.integrate(f, (x, b0, b1)))
+        if sp.simplify(masse - 1) != 0:
+            return ("\\(\\displaystyle\\int_{%s}^{%s} %s \\,dx = %s \\neq 1\\) : "
+                    "\\(f\\) n'est pas une densité de probabilité sur cet intervalle."
+                    % (tex(b0), tex(b1), tex(f), tex(masse)))
+        esp = sp.simplify(sp.integrate(x * f, (x, b0, b1)))
+        var = sp.simplify(sp.integrate(x ** 2 * f, (x, b0, b1)) - esp ** 2)
+        return ("\\(f\\) est positive et \\(\\displaystyle\\int_{%s}^{%s} %s \\,dx = 1\\) : "
+                "c'est une densité de probabilité. L'espérance vaut "
+                "\\(E(X) = \\displaystyle\\int x f(x)\\,dx = %s\\) et la variance "
+                "\\(V(X) = E(X^2) - E(X)^2 = %s\\)."
+                % (tex(b0), tex(b1), tex(f), tex(esp), tex(var)))
+
+    if op == "normale":
+        x = sym("x")
+        m = parse(a["m"])
+        s = parse(a["s"])
+        b0, b1 = parse(a["from"]), parse(a["to"])
+        densite = sp.exp(-((x - m) ** 2) / (2 * s ** 2)) / (s * sp.sqrt(2 * sp.pi))
+        proba = sp.simplify(sp.integrate(densite, (x, b0, b1)))
+        approx = sp.N(proba, 6)
+        return ("Pour \\(X \\sim \\mathcal{N}(%s\\,;\\,%s^2)\\), "
+                "\\(P(%s \\leq X \\leq %s) = \\displaystyle\\int_{%s}^{%s} "
+                "\\frac{1}{%s\\sqrt{2\\pi}} e^{-\\frac{(x - %s)^2}{2\\cdot %s^2}}\\,dx = %s \\approx %s\\)."
+                % (tex(m), tex(s), tex(b0), tex(b1), tex(b0), tex(b1),
+                   tex(s), tex(m), tex(s), tex(proba), fr(sp.latex(approx))))
+
     raise ValueError("Commande inconnue : %s." % op)
 
 for line in sys.stdin:

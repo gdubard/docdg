@@ -32,6 +32,9 @@ pub struct Env {
     pub vars: BTreeMap<String, f64>,
     pub donnees: BTreeMap<String, String>,
     pub etudiees: std::collections::BTreeSet<String>,
+    pub textes: BTreeMap<String, String>,
+    pub saisies: BTreeMap<String, String>,
+    pub bloque: bool,
 }
 
 impl Hash for Env {
@@ -45,6 +48,9 @@ impl Hash for Env {
         }
         self.donnees.hash(h);
         self.etudiees.hash(h);
+        self.textes.hash(h);
+        self.saisies.hash(h);
+        self.bloque.hash(h);
     }
 }
 
@@ -71,6 +77,7 @@ struct CacheEntry {
 pub struct Engine {
     cache: HashMap<u64, CacheEntry>,
     generation: u64,
+    pub saisies: BTreeMap<String, String>,
 }
 
 fn empreinte_env(env: &Env) -> u64 {
@@ -249,6 +256,7 @@ impl Engine {
         let generation = self.generation;
 
         let mut env = Env::default();
+        env.saisies = self.saisies.clone();
         layout::rendu::collecte_donnees(&body, &mut env);
 
         let mut cles: Vec<u64> = Vec::with_capacity(segs.len());

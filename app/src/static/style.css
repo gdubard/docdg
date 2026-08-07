@@ -188,6 +188,27 @@ html, body { height: 100%; margin: 0; }
 .doc .toc-dots { flex: 1; border-bottom: 1px dotted #999; }
 .doc img { max-width: 100%; }
 .doc .ligne-vide { height: 1.3em; }
+.doc .saisie { margin: 0 0 1em; }
+.doc .saisie-champ {
+    font: inherit;
+    color: #4682b4;
+    background: transparent;
+    border: none;
+    border-bottom: 0.35mm dotted #666;
+    outline: none;
+    min-width: 40mm;
+    padding: 0 1mm;
+}
+.doc .saisie-erreur {
+    display: block;
+    color: #dc143c;
+    font-size: 0.85em;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.doc .saisie-erreur.on { opacity: 1; }
+.doc .saisie-faite { margin: 0 0 1em; }
+.doc .saisie-valeur { color: #4682b4; font-weight: 700; cursor: pointer; }
 .notes-pied {
     position: absolute;
     left: 0; right: 0; bottom: 8mm;
@@ -239,6 +260,8 @@ html, body { height: 100%; margin: 0; }
     }
     .page:last-child { break-after: auto; page-break-after: auto; }
     .doc .calcul { overflow: visible; }
+    .doc .saisie-erreur { display: none; }
+    .doc .saisie-valeur { cursor: auto; }
     * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;

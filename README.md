@@ -1,4 +1,4 @@
-# *docdg 1.0*
+# *docdg 2.0*
 
 **docdg** is a Rust document class built around a French-only prose
 tag language (no anglicisms). Users write a single `.docdg` file where every
@@ -17,10 +17,12 @@ plotting, plane and solid geometry, and statistics/probability diagrams.
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-1.0-2980b9?style=flat-square)](https://github.com/gdubard/docdg)
+[![Version](https://img.shields.io/badge/version-2.0-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![License](https://img.shields.io/badge/license-GPL_v3+-8e44ad?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
+
+**[Journal des versions](CHANGELOG.md)**
 
 ---
 
@@ -57,23 +59,30 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 6. [La syntaxe](#la-syntaxe)
 7. [Les objets](#les-objets) — cadres, tableaux, images, listes, grilles, sections
 8. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
-9. [Les styles et la mise en forme](#les-styles-et-la-mise-en-forme)
-10. [Les graphiques de fonctions](#les-graphiques-de-fonctions)
-11. [Les mathématiques](#les-mathématiques)
-12. [La géométrie](#la-géométrie)
-13. [Les statistiques](#les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-14. [Le collège, rédigé](#le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
-15. [Le lycée, couvert](#le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
-16. [Le supérieur (CPGE)](#le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
-17. [Les exemples, en quatre niveaux](#les-exemples-en-quatre-niveaux)
-18. [Les documents complexes](#les-documents-complexes)
-19. [Référence complète](#référence-complète) — couleurs et options de classe
-20. [Bonnes pratiques](#bonnes-pratiques)
-21. [Feuille de route](#feuille-de-route) — ce que prépare la prochaine version
+9. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
+10. [Les styles et la mise en forme](#les-styles-et-la-mise-en-forme)
+11. [Les graphiques de fonctions](#les-graphiques-de-fonctions)
+12. [Les courbes et les coniques](#les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
+13. [Les fonctions de deux variables](#les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
+14. [Le plan complexe et les résidus](#le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
+15. [Les groupes](#les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
+16. [Les lois à densité](#les-lois-à-densité) — densités, loi normale, théorème central limite
+17. [Les mathématiques](#les-mathématiques)
+18. [La géométrie](#la-géométrie)
+19. [La géométrie dans l'espace](#la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
+20. [Les statistiques](#les-statistiques) — diagrammes, arbres de probabilités, droite graduée
+21. [Le collège, rédigé](#le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
+22. [Le lycée, couvert](#le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
+23. [Le supérieur (CPGE)](#le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
+24. [Les exemples, en quatre niveaux](#les-exemples-en-quatre-niveaux)
+25. [Les documents complexes](#les-documents-complexes)
+26. [Référence complète](#référence-complète) — couleurs et options de classe
+27. [Bonnes pratiques](#bonnes-pratiques)
+28. [Feuille de route](#feuille-de-route) — ce que prépare la prochaine version
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
-> 🌱 **docdg 1.0 couvre le programme de mathématiques de l'école au supérieur.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes) et le cœur de celui des classes préparatoires s'écrivent chacun en une phrase. Le projet reste actif — le prochain chantier est la physique-chimie. Voir le chapitre [Feuille de route](#feuille-de-route) pour le détail.
+> 🌱 **docdg couvre le programme de mathématiques du CP à la L3.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes), les classes préparatoires (MPSI/MP) et les deux premières années de licence (surfaces, plan complexe, groupes, probabilités continues) s'écrivent chacun en une phrase — et depuis la 2.0, le document peut interroger son lecteur et se recomposer avec ses réponses. Le projet reste actif — le prochain chantier est la physique-chimie. Voir le chapitre [Feuille de route](#feuille-de-route) pour le détail, et le [Journal des versions](CHANGELOG.md) pour l'historique.
 
 ---
 
@@ -1086,6 +1095,64 @@ Chaque courbe reçoit sa couleur et son nom en étiquette. Trois proses équival
 
 ---
 
+## **🖊️ Les saisies interactives**
+
+**La grande nouveauté de docdg 2.0** : un document docdg peut poser des questions au lecteur, et se construire avec ses réponses. C'est ce qu'aucun document figé — LaTeX, Typst, PDF statique — ne peut faire : puisque docdg compose lui-même son rendu, le document devient **vivant**.
+
+### La balise `<Saisis>`
+
+Une saisie se déclare comme une définition ordinaire, avec le type attendu en toutes lettres et la question entre accolades :
+
+```docdg
+soit prénom = <Saisis>un texte{Quel est le prénom de l'élève ?}
+soit âge = <Saisis>un entier{Quel est son âge ?}
+soit taille = <Saisis>un décimal{Quelle est sa taille, en mètres ?}
+soit marié = <Saisis>un booléen{Est-il marié ?}
+soit initiale = <Saisis>un caractère{Quelle est sa lettre préférée ?}
+```
+
+Cinq types, et cinq seulement : **un texte** (non vide), **un entier** (sans virgule), **un décimal** (écrit avec **la virgule**, jamais le point — `1,65`), **un booléen** (`vrai` ou `faux`, en toutes lettres), **un caractère** (un seul).
+
+### Le blocage typé
+
+**Le document s'arrête à la première question sans réponse valide.** Rien de ce qui suit ne s'affiche — ni le texte, ni les questions suivantes, ni les calculs qui dépendent de la réponse. Tant que la saisie ne correspond pas au type, un message d'erreur temporaire s'affiche sous le champ (« Un nombre décimal est attendu, écrit avec une virgule — par exemple 1,65. ») puis s'estompe. Les questions se posent donc l'une après l'autre, dans l'ordre du document.
+
+Une valeur validée s'affiche en bleu ; **cliquer dessus rouvre la question** — le document se replie jusqu'à elle et se déroule de nouveau avec la nouvelle réponse.
+
+### Les réponses sont des valeurs comme les autres
+
+Une saisie s'affiche avec `#nom` et entre dans les calculs comme n'importe quelle variable :
+
+```docdg
+#prénom a #âge ans et mesure #taille m, soit #{taille * 100} cm.
+<Trace>le solide cube, d'arête #a cm
+```
+
+Un booléen s'affiche `vrai`/`faux` mais vaut 1/0 dans les conditions ; les descriptions de balises interpolent aussi les `#`, si bien qu'un solide, un calcul ou une figure peuvent dépendre d'une réponse du lecteur.
+
+### L'alternative : le bloc et la ligne
+
+L'alternative existe sous deux formes. **Le bloc**, pour dérouler du contenu :
+
+```docdg
+si marié {
+	Il est marié.
+} sinon {
+	Il n'est pas marié.
+}
+```
+
+**La ligne**, pour produire une valeur — du texte ou un nombre :
+
+```docdg
+soit statut = si marié { marié } sinon { célibataire }
+soit tarif = si âge moins de 18 { 5 } sinon { 9 }
+```
+
+La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / `vaut faux`, ou avec tout comparateur du langage : `vaut`, `moins de`, `plus de`, `au moins`, `au plus`, `différent de`. Une valeur produite en ligne se comporte comme les autres : `#statut` l'affiche, `#{tarif * 2}` la calcule.
+
+---
+
 ## **🎨 Les styles et la mise en forme**
 
 ### **🎨 Styles en ligne**
@@ -1158,7 +1225,7 @@ Trois points d'usage, hérités de la typographie française :
 - **Contenu :** tout ce que le corps du texte accepte est admis dans la note — styles (`<italique>`), mathématiques (`$...$`), calculs (`#{...}`). Une référence bibliographique s'écrit naturellement : NOM Prénom, *Titre*, Ville, Éditeur, année.
 - **Longueur :** une note tient sur son accolade, même répartie sur plusieurs lignes du fichier source (l'accolade fermante marque la fin, comme partout ailleurs — règle n°2).
 
-> **Pourquoi `<note>` et pas « note de bas de page » en toutes lettres ?** Le mot seul suffit : il n'existe qu'une sorte de note dans un document scolaire, et la brièveté compte pour une balise appelée au fil de la phrase. La marge (`marginpar`) et les notes de fin de document, plus rares, ne sont pas retenues dans docdg 1.0.
+> **Pourquoi `<note>` et pas « note de bas de page » en toutes lettres ?** Le mot seul suffit : il n'existe qu'une sorte de note dans un document scolaire, et la brièveté compte pour une balise appelée au fil de la phrase. La marge (`marginpar`) et les notes de fin de document, plus rares, ne sont pas retenues.
 
 ### **🔖 Alias et macros avec `soit`**
 
@@ -1441,6 +1508,115 @@ Les compagnons du calcul formel s'écrivent tous par une **action** — un verbe
 
 ---
 
+## **➰ Les courbes et les coniques**
+
+Nouveauté de docdg 2.0, dans le prolongement du traceur de fonctions : les courbes paramétrées, les courbes polaires, et les coniques rédigées puis tracées.
+
+### Paramétrées et polaires
+
+Une courbe paramétrée se donne par ses deux coordonnées, une polaire par son rayon — l'intervalle de \\(t\\) accepte `pi` (`[0 ; 2*pi]`), et se tait pour valoir \\([0 ; 2\\pi]\\) :
+
+```docdg
+<Trace>la courbe paramétrée x = cos(t)^3 et y = sin(t)^3 pour t dans [0 ; 2*pi]
+<Trace>la courbe polaire r = 1 + cos(t) pour t dans [0 ; 2*pi], en rouge
+<Trace>la courbe polaire r = cos(3*t), en vert
+```
+
+Le repère est isotrope (un cercle reste un cercle), les couleurs sont celles du traceur, et les expressions interpolent les `#` — une rosace peut donc dépendre d'une saisie du lecteur : `r = cos(#n*t)`.
+
+### Les coniques, rédigées
+
+`<Étudie>` prend l'équation générale du second degré — terme croisé compris — et rédige la réduction pas à pas avant de tracer la courbe, ses foyers et son centre :
+
+```docdg
+<Étudie>la conique d'équation x^2/9 + y^2/4 = 1
+<Étudie>la conique d'équation x^2/4 - y^2 = 1
+<Étudie>la conique d'équation y^2 = 4x
+<Étudie>la conique d'équation x^2 + xy + y^2 = 3
+```
+
+La rédaction suit la méthode : discriminant \\(AC - B^2/4\\), rotation d'angle \\(\\theta\\) et valeurs propres si le terme croisé est présent, centre \\(\\Omega\\), équation réduite, puis les éléments caractéristiques — demi-axes, \\(c\\), excentricité et foyers pour l'ellipse et l'hyperbole (asymptotes comprises), sommet, paramètre \\(p\\), foyer et directrice pour la parabole. Les cas dégénérés (point, droites, ensemble vide) concluent proprement. Le cercle est reconnu comme tel.
+
+---
+
+## **🗻 Les fonctions de deux variables**
+
+Nouveauté de docdg 2.0, pour la deuxième année du supérieur : les nappes, les lignes de niveau, les extremums libres et sous contrainte, les intégrales multiples.
+
+### Les surfaces et les lignes de niveau
+
+Une nappe \\(z = f(x, y)\\) se dessine en perspective cavalière, maillée et ombrée selon l'orientation des facettes ; les lignes de niveau tracent \\(f(x, y) = c\\), étiquetées par leurs valeurs :
+
+```docdg
+<Trace>la surface z = x^2 - y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2]
+<Trace>la surface z = cos(x)*cos(y) pour x dans [-3 ; 3] et y dans [-3 ; 3], avec 32 mailles
+<Trace>les lignes de niveau de z = x^2 + y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2], aux niveaux {1 ; 2 ; 3}
+```
+
+Sans liste, neuf niveaux se répartissent d'eux-mêmes entre le minimum et le maximum. Les couleurs sont celles du traceur, et les expressions interpolent les `#` — la nappe peut dépendre d'une saisie du lecteur.
+
+### Les extremums, libres et sous contrainte
+
+Les extremums libres passent par les points critiques et la hessienne — `<Détermine>les points critiques de g` conclut minimum, maximum ou point col. Sous contrainte, docdg introduit le lagrangien, résout \\(\\nabla f = \\lambda\\,\\nabla g\\) avec \\(g = 0\\), et classe les candidats :
+
+```docdg
+<Soit>la fonction f(x, y) = x*y
+<Détermine>les extremums de f sous la contrainte x^2 + y^2 = 2
+```
+
+### Les intégrales multiples
+
+Doubles et triples sur un pavé (Fubini, variable par variable), doubles sur un disque avec le passage en polaires et son jacobien rédigés :
+
+```docdg
+<Calcule>l'intégrale double de x*y sur [0 ; 1] × [0 ; 2]
+<Calcule>l'intégrale double de x^2 + y^2 sur le disque de rayon 2
+<Calcule>l'intégrale triple de x*y*z sur [0 ; 1] × [0 ; 1] × [0 ; 2]
+```
+
+---
+
+## **🌀 Le plan complexe et les résidus**
+
+Dernier étage de docdg 2.0, avec un évaluateur complexe intégré (opérations, puissances, `i`, `exp`, `ln`, `sin`, `cos`, `sqrt`) :
+
+```docdg
+<Trace>l'image du carré [-1 ; 1] × [-1 ; 1] par w = z^2
+<Trace>l'image du cercle unité par w = z + 1/z
+<Calcule>les résidus de 1/(z^2 + 1)
+```
+
+L'image d'un quadrillage montre la géométrie de la transformation — les deux familles de lignes, bleues et rouges, restent orthogonales là où \\(f\\) est holomorphe de dérivée non nulle ; les singularités coupent proprement les courbes. Les résidus sortent rédigés : pôles, ordres, et \\(\\mathrm{Res}(f, z_0)\\) pour chacun.
+
+---
+
+## **⚙️ Les groupes**
+
+```docdg
+<Dresse>la table de Z/5Z pour l'addition
+<Dresse>la table de Z/5Z pour la multiplication
+<Détermine>les générateurs de Z/12Z
+<Décompose>la permutation (2 5 4 1 3) en cycles
+```
+
+Les tables de \\(\\mathbb{Z}/n\\mathbb{Z}\\) se dressent pour l'addition et la multiplication ; les générateurs sortent avec l'indicatrice d'Euler \\(\\varphi(n)\\) ; une permutation, donnée par la liste des images, se décompose en cycles à supports disjoints, avec ses points fixes, sa signature \\((-1)^{n-c}\\) (paire ou impaire) et son ordre (ppcm des longueurs).
+
+---
+
+## **🎲 Les lois à densité**
+
+```docdg
+<Étudie>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+<Étudie>la loi de densité f(x) = exp(-x) sur [0 ; +infini]
+<Calcule>la probabilité d'être entre -1 et 1 pour la loi normale d'espérance 0 et d'écart type 1
+<Trace>la densité de la loi normale d'espérance 0 et d'écart type 1
+<Trace>l'illustration du théorème central limite avec la somme de 8 dés
+```
+
+`<Étudie>` vérifie que l'intégrale vaut 1 (bornes infinies comprises) puis rédige l'espérance et la variance — ou signale que \\(f\\) n'est pas une densité. La loi normale donne ses probabilités exactes (en \\(\\mathrm{erf}\\)) et approchées, et sa cloche se trace. L'illustration du théorème central limite superpose la loi exacte de la somme de \\(n\\) dés (calculée par convolution) et sa densité normale limite — et \\(n\\) peut être une saisie du lecteur.
+
+---
+
 ## **🔢 Les mathématiques**
 
 > **Le cœur de docdg** : Un mini-langage mathématique puissant.
@@ -1707,6 +1883,61 @@ $densité(X ; x)$          % f_X(x) Densité
 ## **📐 La géométrie**
 
 Toute la géométrie — plane, dans l'espace, avec ou sans repère — se trace avec l'action [**`<Trace>`**](#les-actions) : figures planes, cercle trigonométrique, solides en 3D, points/droites/segments/médiatrices, y compris posés dans un repère. L'analyse se représente graphiquement avec [**`<Représente graphiquement>`**](#les-actions) : courbes de fonctions, diagrammes en escalier, statistiques, et le mode analytique dès que son contenu relève de l'analyse. Voir le chapitre **Les actions** pour le détail de chaque cas.
+
+---
+
+## **🧊 La géométrie dans l'espace**
+
+Nouveauté de docdg 2.0, portée par un **moteur de projection cavalière** (fuyante à 0,45/0,35, celle des manuels) : les solides, leurs patrons, le repère de l'espace et la géométrie analytique rédigée.
+
+### Les solides et leurs patrons
+
+Sept solides en perspective cavalière, arêtes cachées en pointillés et cotes en centimètres :
+
+```docdg
+<Trace>le solide cube, d'arête 3 cm
+<Trace>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Trace>le solide prisme, de base 3 cm et de longueur 5 cm
+<Trace>le solide pyramide, de base 4 cm et de hauteur 3 cm
+<Trace>le solide cylindre, de rayon 2 cm et de hauteur 5 cm
+<Trace>le solide cône, de rayon 2 cm et de hauteur 4 cm
+<Trace>le solide sphère, de rayon 3 cm
+```
+
+Les génératrices du cône sont les tangentes exactes à l'ellipse de base depuis le sommet. Chaque solide dépliable a son patron, prêt à découper — `<Trace>le patron du cône de rayon 2 cm et de hauteur 4 cm` — pour le cube, le pavé, la pyramide (apothème coté), le cylindre (rectangle de largeur 2πr) et le cône (secteur d'angle 2πr/g).
+
+### Le repère de l'espace
+
+Les points déclarés se placent dans un repère (O ; x, y, z) gradué, avec le chemin de coordonnées en pointillés rouges depuis l'origine — le dessin canonique de Terminale :
+
+```docdg
+<Soit>les points A(1;2;3) et B(3;1;2)
+<Trace>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
+```
+
+Les segments se citent entre crochets, les vecteurs se dessinent en flèches rouges, et les droites déclarées se tracent en vert, découpées aux bords du repère.
+
+### Les droites, les plans, les positions relatives
+
+Une droite se déclare par un point et un vecteur directeur — en coordonnées ou par référence à des objets déclarés :
+
+```docdg
+<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>le plan P d'équation 2x + y - z = 3
+<Donne>une représentation paramétrique de la droite d
+<Donne>le vecteur normal du plan P
+<Calcule>la distance du point (1 ; 2 ; 0) au plan P
+```
+
+Et les positions relatives se **rédigent pas à pas**, comme une copie modèle — colinéarité des vecteurs, résolution du système, vérification de la troisième équation, conclusion avec le point ou la droite d'intersection :
+
+```docdg
+<Étudie>la position relative des droites d et d'
+<Étudie>la position relative de la droite d et du plan P
+<Étudie>la position relative des plans P et Q
+```
+
+Chaque cas conclut proprement : droites confondues, strictement parallèles, sécantes en \(I\), ou non coplanaires ; droite incluse, strictement parallèle ou sécante au plan ; plans confondus, strictement parallèles ou sécants selon une droite \(Δ\) donnée en représentation paramétrique.
 
 ---
 
@@ -2040,12 +2271,12 @@ Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolair
 
 | Suffixe | Niveau | Fichiers |
 |---|---|---|
-| **1** | la langue et la mise en forme | `basic1`, `basic2` |
+| **1** | la langue et la mise en forme | `basique1`, `basique2` |
 | **2** | collège | `algebre2`, `analyse2`, `geometrie2`, `statistiques-probabilites2` |
-| **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `statistiques-probabilites3` |
+| **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `basique3`, `statistiques-probabilites3` |
 | **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
 
-S'y ajoutent `physique-chimie3`, `physique-chimie4` et `factorisation` (une étude complète). Chaque fichier compile seul et sert de catalogue vivant : toute action documentée ici y figure au moins une fois.
+S'y ajoutent `physique-chimie3`, `physique-chimie4` et `factorisation` (une étude complète). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. Chaque fichier se clôt sur sa figure à la demande.
 
 ---
 
@@ -2443,10 +2674,9 @@ soit sondage = {
 
 ## **🗺️ Feuille de route**
 
-**docdg 1.0 couvre le programme de mathématiques de l'école aux classes préparatoires** : rédactions du collège, lycée complet (spécialité et maths expertes), analyse et algèbre du supérieur, Fourier et Laplace en pont vers la physique. Le projet continue d'évoluer, avec deux grands chantiers en vue :
+**docdg 2.0 couvre le programme de mathématiques de l'école aux classes préparatoires et fait entrer le document dans l'interactivité** : saisies typées bloquantes, alternative en bloc et en ligne, moteur de projection cavalière — solides, patrons, repère de l'espace — géométrie analytique de l'espace rédigée pas à pas (droites, plans, positions relatives), courbes paramétrées et polaires, coniques rédigées (réduction, foyers, directrices, excentricité, tracé), fonctions de deux variables — surfaces ombrées, lignes de niveau, extremums libres et sous contrainte (Lagrange), intégrales doubles et triples avec passage en polaires — et le dernier étage de la licence : transformations du plan complexe et résidus, groupes (tables de ℤ/nℤ, générateurs, permutations), lois à densité et théorème central limite. **Le programme de mathématiques est couvert du CP à la L3.** Le projet continue d'évoluer, avec une progression arrêtée :
 
-- **La physique-chimie.** Les fondations sont posées (unités, conversions, Laplace, Fourier, calcul exact) ; les prochaines versions viseront les rédactions types des sciences physiques — circuits, mécanique, thermodynamique — dans la même prose française.
-- **La géométrie et les sciences en 3D.** `<Trace>` sait aujourd'hui construire quelques solides usuels (voir [Solides en 3D](#solides-en-3d)) ; des scènes 3D plus riches sont prévues, pensées pour la physique-chimie autant que pour la géométrie dans l'espace.
+- **La physique-chimie.** Les fondations sont posées (unités, conversions, Laplace, Fourier, calcul exact) ; les rédactions types des sciences physiques — circuits, mécanique, thermodynamique — suivront dans la même prose française.
 
 Ces évolutions se feront sans rien retirer : la syntaxe en prose française et la compatibilité des documents existants restent la priorité à chaque nouvelle version. Les retours d'usage (bugs, tournures manquantes, besoins non couverts) sont les bienvenus sur le dépôt du projet.
 
