@@ -150,8 +150,6 @@ un <cle>{mot français en minuscules} est un style, un alignement ou un saut (gr
 	Moyenne :	[13,7]
 }
 
-
-
 <h2>Entêtes emboîtées
 	Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil — le tableau a la forme qu'on lui voit.
 <Dresse>un tableau [mc, mc, mg, md] {
@@ -162,7 +160,7 @@ un <cle>{mot français en minuscules} est un style, un alignement ou un saut (gr
 	S2 :	Lundi :	[Maths ; 18]
 }
 
-<h2>Une image dans une cellule
+<page suivante h2>Une image dans une cellule
 	Une cellule de tableau accueille une formule ou une image, pas seulement du texte — chaque colonne garde son placement propre.
 <Dresse>un tableau [mc, hg, bd] {
 	Animal	Formule	Valeur
@@ -197,7 +195,7 @@ un <cle>{mot français en minuscules} est un style, un alignement ou un saut (gr
 				[Ville et code postal :]
 }
 
-<h1>Cadres avancés
+<page suivante h1>Cadres avancés
 <h2>Énoncé et solution
 	Une ligne ne portant que --- coupe le cadre en deux parties.
 <Affiche>un cadre avec un fond blanc fumé, une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Problème} {
@@ -212,7 +210,7 @@ un <cle>{mot français en minuscules} est un style, un alignement ou un saut (gr
 	}
 }
 
-<page suivante h2>Cadres côte à côte
+<h2>Cadres côte à côte
 	Une <<Affiche une rangée>> pose ses cadres en colonnes d'égale largeur.
 <Affiche>une rangée avec un écart de 5 mm {
 	<Affiche>un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 2 mm et un titre {Énoncé} {
@@ -233,7 +231,7 @@ pour n de 1 à 2 {
 	}
 }
 
-<h1>Grilles : la maquette en zones nommées
+<page suivante h1>Grilles : la maquette en zones nommées
 	La grille dispose des zones à la façon d'une maquette : le plan dessine la page avec un mot par case, un nom répété fusionne ses cases, un point marque une case vide. Chaque zone se place et s'habille en langage naturel — [nom : en haut, à gauche] ou le code court [nom hg].
 
 <Affiche>une grille avec des zones:["titre titre date", "consigne corps corps", "logo corps corps"], des bordures et un écart de 3 mm {

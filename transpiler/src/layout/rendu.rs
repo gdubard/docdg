@@ -16,6 +16,38 @@ pub fn set_base_dir(dir: Option<PathBuf>) {
 fn base_dir() -> Option<PathBuf> {
     base_slot().lock().ok().and_then(|g| g.clone())
 }
+
+#[derive(Clone, Copy, Debug)]
+pub struct ReglagesPage {
+    pub tabulation_cm: f32,
+    pub hauteur_cm: f32,
+    pub precision: i32,
+}
+
+impl Default for ReglagesPage {
+    fn default() -> Self {
+        ReglagesPage {
+            tabulation_cm: 1.0,
+            hauteur_cm: 0.5,
+            precision: -1,
+        }
+    }
+}
+
+fn reglages_slot() -> &'static Mutex<ReglagesPage> {
+    static SLOT: OnceLock<Mutex<ReglagesPage>> = OnceLock::new();
+    SLOT.get_or_init(|| Mutex::new(ReglagesPage::default()))
+}
+
+pub fn set_reglages_page(r: ReglagesPage) {
+    if let Ok(mut g) = reglages_slot().lock() {
+        *g = r;
+    }
+}
+
+pub fn reglages_page() -> ReglagesPage {
+    reglages_slot().lock().map(|g| *g).unwrap_or_default()
+}
 use crate::utils::notation::to_latex;
 use crate::{Def, Env, TocEntry};
 
@@ -24,8 +56,18 @@ pub struct PageOpts {
     pub orientation: String,
     pub marges: [f32; 4],
     pub espacements: [f32; 4],
-    pub police: f32,
+    pub police: String,
+    pub math: String,
+    pub titre: String,
+    pub auteur: String,
+    pub institution: String,
+    pub date: String,
+    pub taille: f32,
     pub interligne: f32,
+    pub tabulation: f32,
+    pub hauteur: f32,
+    pub decalage: f32,
+    pub precision: i32,
 }
 
 impl Default for PageOpts {
@@ -34,20 +76,48 @@ impl Default for PageOpts {
             orientation: "portrait".into(),
             marges: [2.0, 2.0, 2.0, 2.0],
             espacements: [0.0, 0.0, 0.0, 0.0],
-            police: 11.0,
+            police: String::new(),
+            math: String::new(),
+            titre: String::new(),
+            auteur: String::new(),
+            institution: String::new(),
+            date: String::new(),
+            taille: 11.0,
             interligne: 1.3,
+            tabulation: 10.0,
+            hauteur: 5.0,
+            decalage: 100.0,
+            precision: -1,
         }
     }
+}
+
+fn json_string(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 2);
+    out.push('"');
+    for c in s.chars() {
+        match c {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            _ => out.push(c),
+        }
+    }
+    out.push('"');
+    out
 }
 
 impl PageOpts {
     pub fn to_json(&self) -> String {
         format!(
-            "{{\"orientation\":\"{}\",\"marges\":[{},{},{},{}],\"espacements\":[{},{},{},{}],\"police\":{},\"interligne\":{}}}",
+            "{{\"orientation\":\"{}\",\"marges\":[{},{},{},{}],\"espacements\":[{},{},{},{}],\"police\":{},\"math\":{},\"taille\":{},\"interligne\":{},\"tabulation\":{},\"hauteur\":{},\"decalage\":{},\"precision\":{},\"titre\":{},\"auteur\":{},\"institution\":{},\"date\":{}}}",
             self.orientation,
             self.marges[0], self.marges[1], self.marges[2], self.marges[3],
             self.espacements[0], self.espacements[1], self.espacements[2], self.espacements[3],
-            self.police, self.interligne
+            json_string(&self.police), json_string(&self.math),
+            self.taille, self.interligne,
+            self.tabulation, self.hauteur, self.decalage, self.precision,
+            json_string(&self.titre), json_string(&self.auteur),
+            json_string(&self.institution), json_string(&self.date)
         )
     }
 }
@@ -67,52 +137,88 @@ fn parse_quad(v: &str) -> Option<[f32; 4]> {
     }
 }
 
-pub fn parse_page(src: &str) -> (PageOpts, String) {
-    let mut opts = PageOpts::default();
-    let trimmed = src.trim_start();
-    if let Some(rest) = trimmed.strip_prefix("page") {
-        let rest = rest.trim_start();
-        if rest.starts_with('{') {
-            if let Some((body, after)) = take_group(rest, 0) {
-                for item in split_top(&body, ';') {
-                    let item = item.trim();
-                    if item.is_empty() {
-                        continue;
-                    }
-                    if let Some((k, v)) = item.split_once(':') {
-                        let k = k.trim();
-                        let v = v.trim();
-                        match k {
-                            "orientation" => opts.orientation = v.to_string(),
-                            "marges" | "margin" => {
-                                if let Some(q) = parse_quad(v) {
-                                    opts.marges = q;
-                                }
-                            }
-                            "espacements" | "padding" => {
-                                if let Some(q) = parse_quad(v) {
-                                    opts.espacements = q;
-                                }
-                            }
-                            "taille" | "police" => {
-                                if let Ok(p) = v.trim_end_matches("pt").trim().parse::<f32>() {
-                                    opts.police = p;
-                                }
-                            }
-                            "interligne" => {
-                                if let Ok(p) = v.replace(',', ".").parse::<f32>() {
-                                    opts.interligne = p;
-                                }
-                            }
-                            _ => {}
-                        }
-                    }
-                }
-                return (opts, after.to_string());
+fn applique_cle(opts: &mut PageOpts, k: &str, v: &str) {
+    match k {
+        "orientation" => opts.orientation = v.to_string(),
+        "marges" | "margin" => {
+            if let Some(q) = parse_quad(v) {
+                opts.marges = q;
             }
         }
+        "espacements" | "padding" => {
+            if let Some(q) = parse_quad(v) {
+                opts.espacements = q;
+            }
+        }
+        "police" => opts.police = v.to_string(),
+        "math" => opts.math = v.to_string(),
+        "titre" => opts.titre = v.to_string(),
+        "auteur" => opts.auteur = v.to_string(),
+        "institution" => opts.institution = v.to_string(),
+        "date" => opts.date = v.to_string(),
+        "taille" => {
+            if let Ok(p) = v.trim_end_matches("pt").trim().parse::<f32>() {
+                opts.taille = p;
+            }
+        }
+        "interligne" => {
+            if let Ok(p) = v.replace(',', ".").parse::<f32>() {
+                opts.interligne = p;
+            }
+        }
+        "tabulation" => {
+            if let Ok(p) = v.trim_end_matches("mm").trim().replace(',', ".").parse::<f32>() {
+                opts.tabulation = p;
+            }
+        }
+        "hauteur" => {
+            if let Ok(p) = v.trim_end_matches("mm").trim().replace(',', ".").parse::<f32>() {
+                opts.hauteur = p;
+            }
+        }
+        "décalage" | "decalage" => {
+            if let Ok(p) = v.trim_end_matches('%').trim().replace(',', ".").parse::<f32>() {
+                opts.decalage = p;
+            }
+        }
+        "précision" | "precision" => {
+            if let Ok(p) = v.trim().parse::<i32>() {
+                opts.precision = p;
+            }
+        }
+        _ => {}
     }
-    (opts, src.to_string())
+}
+
+pub fn parse_page(src: &str) -> (PageOpts, String) {
+    let mut opts = PageOpts::default();
+    let mut reste = src;
+    loop {
+        let trimmed = reste.trim_start();
+        let apres_mot = trimmed
+            .strip_prefix("document")
+            .or_else(|| trimmed.strip_prefix("page"));
+        let Some(suite) = apres_mot else { break };
+        let suite = suite.trim_start();
+        if !suite.starts_with('{') {
+            break;
+        }
+        let Some((body, after)) = take_group(suite, 0) else {
+            break;
+        };
+        for item in split_top(&body, ';') {
+            let item = item.trim();
+            if item.is_empty() {
+                continue;
+            }
+            if let Some((k, v)) = item.split_once(':') {
+                applique_cle(&mut opts, k.trim(), v.trim());
+            }
+        }
+        let fin = src.len() - after.len();
+        reste = &src[fin..];
+    }
+    (opts, reste.to_string())
 }
 
 fn take_group(s: &str, open_idx: usize) -> Option<(String, String)> {
@@ -338,6 +444,30 @@ fn html_escape(s: &str) -> String {
     s.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
 }
 
+fn est_mot_majuscule(w: &str) -> bool {
+    let mut a_alpha = false;
+    for c in w.chars() {
+        if c.is_alphabetic() {
+            a_alpha = true;
+            if !c.is_uppercase() {
+                return false;
+            }
+        }
+    }
+    a_alpha
+}
+
+fn nom_police_at(refs: &[&str]) -> Option<(String, usize)> {
+    if refs.is_empty() || !est_mot_majuscule(refs[0]) {
+        return None;
+    }
+    let mut n = 1;
+    while n < refs.len() && est_mot_majuscule(refs[n]) {
+        n += 1;
+    }
+    Some((refs[..n].join(" "), n))
+}
+
 fn style_css(words: &[String]) -> (String, Option<u8>) {
     let mut css = String::new();
     let mut level = None;
@@ -374,6 +504,11 @@ fn style_css(words: &[String]) -> (String, Option<u8>) {
             i += 2;
             continue;
         }
+        if let Some((nom, n)) = nom_police_at(&refs[i..]) {
+            css.push_str(&format!("font-family:'{}';", nom));
+            i += n;
+            continue;
+        }
         let w = refs[i];
         match w {
             "gras" => css.push_str("font-weight:700;"),
@@ -385,6 +520,7 @@ fn style_css(words: &[String]) -> (String, Option<u8>) {
             "droite" => css.push_str("display:block;text-align:right;"),
             "petit" => css.push_str("font-size:0.85em;"),
             "grand" => css.push_str("font-size:1.25em;"),
+            "chapitre" => level = Some(0),
             "section" => level = Some(1),
             "sous-section" => level = Some(2),
             "sous-sous-section" => level = Some(3),
@@ -403,16 +539,35 @@ fn style_css(words: &[String]) -> (String, Option<u8>) {
 }
 
 fn heading(env: &mut Env, toc: &mut Vec<TocEntry>, level: u8, css: &str, text: &str) -> String {
+    if level == 0 {
+        env.chapitre += 1;
+        env.counters = [0; 3];
+        let num = env.chapitre.to_string();
+        let id = format!("chap-{}", num);
+        let title = render_inline(text.trim(), env, toc);
+        toc.push(TocEntry {
+            level,
+            num: num.clone(),
+            title: text.trim().to_string(),
+            id: id.clone(),
+        });
+        return format!(
+            "<h1 id=\"{id}\" class=\"sec lvl0\" style=\"{css}\"><span class=\"secnum\">{num}</span>&nbsp;&nbsp;{title}</h1>"
+        );
+    }
     let l = level as usize;
     env.counters[l - 1] += 1;
     for c in env.counters.iter_mut().skip(l) {
         *c = 0;
     }
-    let num: String = env.counters[..l]
+    let mut num: String = env.counters[..l]
         .iter()
         .map(|n| n.to_string())
         .collect::<Vec<_>>()
         .join(".");
+    if env.chapitre > 0 {
+        num = format!("{}.{}", env.chapitre, num);
+    }
     let id = format!("sec-{}", num.replace('.', "-"));
     let title = render_inline(text.trim(), env, toc);
     toc.push(TocEntry {
@@ -428,6 +583,11 @@ fn heading(env: &mut Env, toc: &mut Vec<TocEntry>, level: u8, css: &str, text: &
 }
 
 fn bump_heading(env: &mut Env, level: u8) {
+    if level == 0 {
+        env.chapitre += 1;
+        env.counters = [0; 3];
+        return;
+    }
     let l = level as usize;
     env.counters[l - 1] += 1;
     for c in env.counters.iter_mut().skip(l) {
@@ -649,8 +809,14 @@ fn parse_def(line: &str, env: &mut Env) {
             return;
         }
         if rhs.starts_with("si ") {
-            if let Some(choisi) = parse_ternaire(rhs, &env.vars) {
-                if let Some(v) = crate::maths::calcul::eval(&choisi, &env.vars) {
+            if let Some((choisi, autre)) = parse_ternaire_branches(rhs, &env.vars) {
+                let nombre = crate::maths::calcul::eval(&choisi, &env.vars).filter(|_| {
+                    autre
+                        .as_deref()
+                        .map(|a| crate::maths::calcul::eval(a, &env.vars).is_some())
+                        .unwrap_or(true)
+                });
+                if let Some(v) = nombre {
                     env.vars.insert(lhs.to_string(), v);
                     env.textes.remove(lhs);
                 } else {
@@ -944,7 +1110,10 @@ fn eval_condition(cond: &str, vars: &std::collections::BTreeMap<String, f64>) ->
     eval_operande(cond, vars).map(|v| v.abs() > 1e-9).unwrap_or(false)
 }
 
-fn parse_ternaire(rhs: &str, vars: &std::collections::BTreeMap<String, f64>) -> Option<String> {
+fn parse_ternaire_branches(
+    rhs: &str,
+    vars: &std::collections::BTreeMap<String, f64>,
+) -> Option<(String, Option<String>)> {
     let apres_si = rhs.trim_start().strip_prefix("si ")?;
     let bi = apres_si.find('{')?;
     let cond = apres_si[..bi].trim();
@@ -954,12 +1123,16 @@ fn parse_ternaire(rhs: &str, vars: &std::collections::BTreeMap<String, f64>) -> 
         .strip_prefix("sinon")
         .and_then(|r| take_group(r.trim_start(), 0))
         .map(|(b, _)| b);
-    let choisi = if eval_condition(cond, vars) {
-        alors
+    let propre = |b: &str| dedent(b).trim().to_string();
+    let (choisi, autre) = if eval_condition(cond, vars) {
+        (propre(&alors), sinon.as_deref().map(propre))
     } else {
-        sinon.unwrap_or_default()
+        (
+            propre(sinon.as_deref().unwrap_or_default()),
+            Some(propre(&alors)),
+        )
     };
-    Some(dedent(&choisi).trim().to_string())
+    Some((choisi, autre))
 }
 
 pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
@@ -983,11 +1156,12 @@ pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
 }
 
 fn indentation_cm(ligne: &str) -> f32 {
+    let r = reglages_page();
     let mut cm = 0.0f32;
     for c in ligne.chars() {
         match c {
-            '\t' => cm += 1.0,
-            ' ' => cm += 0.25,
+            '\t' => cm += r.tabulation_cm,
+            ' ' => cm += r.tabulation_cm / 4.0,
             _ => break,
         }
     }
@@ -1004,8 +1178,12 @@ fn flush_para(para: &mut Vec<String>, out: &mut String) {
 }
 
 fn lignes_vides(n: usize, out: &mut String) {
+    let r = reglages_page();
     for _ in 0..n {
-        out.push_str("<div class=\"ligne-vide\"></div>");
+        out.push_str(&format!(
+            "<div class=\"ligne-vide\" style=\"height:{}cm\"></div>",
+            r.hauteur_cm
+        ));
     }
 }
 
@@ -1201,6 +1379,8 @@ const VERBES: &[(&str, u8)] = &[
     ("Trigonalise", CALCUL | EN_LIGNE),
     ("Vérifie", CALCUL | EN_LIGNE),
     ("Écris", EN_LIGNE),
+    ("Équilibre", CALCUL),
+    ("Propage", CALCUL | EN_LIGNE),
     ("Étudie", CALCUL | EN_LIGNE),
 ];
 
@@ -1322,6 +1502,8 @@ const OPS_EN_PROSE: &[&str] = &[
     "convexity",
     "asymptotes",
     "trig_solve",
+    "vecteur",
+    "incertitude",
 ];
 
 fn execute(req: &serde_json::Value, env: &Env, source: &str) -> String {
@@ -1577,6 +1759,12 @@ fn dispatch_command(tag_t: &str, after: &str, env: &mut Env) -> Option<String> {
     if let Some(html) = crate::maths::analyse::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
+    if let Some(html) = crate::maths::chimie::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
+    if let Some(html) = crate::maths::physique::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
     if let Some(html) = crate::maths::espace::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
@@ -1741,6 +1929,37 @@ fn dispatch_chunk(chunk: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> Option
         }
         return Some(format!("<p>{}</p>", render_inline(reste, env, toc)));
     }
+    if tag_t == "page de titre" {
+        let lit = |env: &Env, k: &str| env.textes.get(&format!("document:{}", k)).cloned();
+        let mut html = String::from("<div class=\"page-de-titre\">");
+        if let Some(t) = lit(env, "titre") {
+            html.push_str(&format!(
+                "<div class=\"titre-doc\">{}</div>",
+                render_inline(&t, env, toc)
+            ));
+        }
+        if let Some(a) = lit(env, "auteur") {
+            html.push_str(&format!(
+                "<div class=\"auteur-doc\">{}</div>",
+                render_inline(&a, env, toc)
+            ));
+        }
+        if let Some(i) = lit(env, "institution") {
+            html.push_str(&format!(
+                "<div class=\"institution-doc\">{}</div>",
+                render_inline(&i, env, toc)
+            ));
+        }
+        if let Some(d) = lit(env, "date") {
+            html.push_str(&format!(
+                "<div class=\"date-doc\">{}</div>",
+                render_inline(&d, env, toc)
+            ));
+        }
+        html.push_str("</div>");
+        html.push_str(SAUT_HTML);
+        return Some(html);
+    }
     if tag_t.starts_with("table des matières") {
         let title = take_group(after.trim_start(), 0)
             .map(|(t, _)| t)
@@ -1817,6 +2036,10 @@ fn dispatch_chunk(chunk: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> Option
         .map(|c| c.is_uppercase())
         .unwrap_or(false)
     {
+        let mots: Vec<String> = tag_t.split_whitespace().map(|x| x.to_string()).collect();
+        if known_style_words(&mots) {
+            return None;
+        }
         let suite = after.trim().lines().next().unwrap_or("").trim();
         let commande = if suite.is_empty() {
             tag_t.to_string()
@@ -1886,8 +2109,67 @@ fn desc_mm(desc: &str, key: &str) -> Option<f32> {
     Some(value * factor)
 }
 
+fn numero_courant(env: &Env) -> Option<(String, String)> {
+    let dernier = env.counters.iter().rposition(|&c| c != 0);
+    match dernier {
+        Some(l) => {
+            let mut num: String = env.counters[..=l]
+                .iter()
+                .map(|n| n.to_string())
+                .collect::<Vec<_>>()
+                .join(".");
+            if env.chapitre > 0 {
+                num = format!("{}.{}", env.chapitre, num);
+            }
+            let id = format!("sec-{}", num.replace('.', "-"));
+            Some((num, id))
+        }
+        None if env.chapitre > 0 => {
+            Some((env.chapitre.to_string(), format!("chap-{}", env.chapitre)))
+        }
+        None => None,
+    }
+}
+
+fn declare_renvoi(nom: &str, num: &str, id: &str) -> String {
+    format!("\u{E016}{}|{}|{}\u{E017}", nom, num, id)
+}
+
+fn render_bibliography(body: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String {
+    let mut html = String::from("<div class=\"bibliographie\">");
+    let mut n = 0usize;
+    for ligne in body.lines() {
+        let t = ligne.trim();
+        if t.is_empty() || !t.starts_with('[') {
+            continue;
+        }
+        let Some(fin) = t.find(']') else { continue };
+        let cle = t[1..fin].trim();
+        let texte = t[fin + 1..].trim();
+        if cle.is_empty() {
+            continue;
+        }
+        n += 1;
+        html.push_str(&declare_renvoi(
+            &format!("cite:{}", cle),
+            &format!("[{}]", n),
+            &format!("bib-{}", cle),
+        ));
+        html.push_str(&format!(
+            "<div class=\"bib-entree\" id=\"bib-{}\"><span class=\"bib-num\">[{}]</span> {}</div>",
+            cle,
+            n,
+            render_inline(texte, env, toc)
+        ));
+    }
+    html.push_str("</div>");
+    html
+}
+
 fn dispatch_block(desc: &str, body: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String {
-    if desc.contains("un cadre") {
+    if desc.contains("une bibliographie") {
+        render_bibliography(body, env, toc)
+    } else if desc.contains("un cadre") {
         render_frame(desc, body, env, toc)
     } else if desc.contains("une liste") {
         render_list(desc, body, env, toc)
@@ -2730,6 +3012,43 @@ pub fn render_inline(s: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String 
                         continue;
                     }
                 }
+                if tag_t == "étiquette" || tag_t == "etiquette" {
+                    let a2 = after.trim_start();
+                    if let Some((arg, tail)) = take_group(a2, 0) {
+                        if let Some((num, id)) = numero_courant(env) {
+                            out.push_str(&declare_renvoi(arg.trim(), &num, &id));
+                        }
+                        advance(&mut i, &tail);
+                        continue;
+                    }
+                }
+                if tag_t == "renvoi" {
+                    let a2 = after.trim_start();
+                    if let Some((arg, tail)) = take_group(a2, 0) {
+                        out.push_str(&format!("\u{E018}{}\u{E019}", arg.trim()));
+                        advance(&mut i, &tail);
+                        continue;
+                    }
+                }
+                if tag_t == "cite" {
+                    let a2 = after.trim_start();
+                    if let Some((arg, tail)) = take_group(a2, 0) {
+                        let mut premiers = true;
+                        for cle in arg.split([',', ';']) {
+                            let cle = cle.trim();
+                            if cle.is_empty() {
+                                continue;
+                            }
+                            if !premiers {
+                                out.push_str("<span class=\"cite-sep\">,</span>");
+                            }
+                            premiers = false;
+                            out.push_str(&format!("\u{E018}cite:{}\u{E019}", cle));
+                        }
+                        advance(&mut i, &tail);
+                        continue;
+                    }
+                }
                 if tag_t == "note" {
                     let a2 = after.trim_start();
                     if let Some((arg, tail)) = take_group(a2, 0) {
@@ -2819,13 +3138,14 @@ pub fn render_inline(s: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> String 
                 i += 1;
             }
             b'\t' | b' ' => {
+                let r = reglages_page();
                 let mut cm = 0.0f32;
                 let mut j = i;
                 while j < octets.len() && (octets[j] == b'\t' || octets[j] == b' ') {
-                    cm += if octets[j] == b'\t' { 1.0 } else { 0.25 };
+                    cm += if octets[j] == b'\t' { r.tabulation_cm } else { r.tabulation_cm / 4.0 };
                     j += 1;
                 }
-                if cm > 0.25 {
+                if cm > r.tabulation_cm / 4.0 {
                     out.push_str(&format!(
                         "<span style=\"display:inline-block;width:{}cm\"></span>",
                         cm
@@ -2862,11 +3182,16 @@ fn known_style_words(ws: &[String]) -> bool {
             i += 2;
             continue;
         }
+        if let Some((_, n)) = nom_police_at(&refs[i..]) {
+            i += n;
+            continue;
+        }
         let w = refs[i];
         let ok = matches!(
             w,
             "gras" | "italique" | "souligné" | "barré" | "centre" | "gauche" | "droite"
-                | "petit" | "grand" | "num" | "section" | "sous-section" | "sous-sous-section"
+                | "petit" | "grand" | "num" | "chapitre" | "section" | "sous-section"
+                | "sous-sous-section"
         ) || (w.ends_with("pt")
             && w[..w.len() - 2].chars().all(|c| c.is_ascii_digit() || c == '.'));
         if !ok {

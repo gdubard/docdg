@@ -12,9 +12,16 @@ const OUVRIERS_MAX: usize = 4;
 const ARCHIVE_MAX: u64 = 8 * 1024 * 1024;
 
 struct Ouvrier {
-    _fils: Child,
+    fils: Child,
     entree: ChildStdin,
     sortie: BufReader<ChildStdout>,
+}
+
+impl Drop for Ouvrier {
+    fn drop(&mut self) {
+        let _ = self.fils.kill();
+        let _ = self.fils.wait();
+    }
 }
 
 struct Bassin {
@@ -43,7 +50,7 @@ fn seme() -> Option<Ouvrier> {
             let entree = fils.stdin.take()?;
             let sortie = BufReader::new(fils.stdout.take()?);
             return Some(Ouvrier {
-                _fils: fils,
+                fils,
                 entree,
                 sortie,
             });
@@ -78,7 +85,9 @@ fn bassin() -> &'static Bassin {
     static B: OnceLock<Bassin> = OnceLock::new();
     B.get_or_init(|| {
         let (envoi, reception) = channel();
-        recrute(envoi.clone());
+        for _ in 0..plafond() {
+            recrute(envoi.clone());
+        }
         Bassin {
             envoi,
             reception: Mutex::new(reception),
@@ -196,7 +205,20 @@ pub fn ask(request: &str) -> Result<String, String> {
     if let Some(connu) = verrou(memo()).get(request).cloned() {
         return Ok(connu);
     }
+    let chrono = std::time::Instant::now();
     let issue = interroge(request);
+    if std::env::var_os("DOCDG_TRACE").is_some() {
+        let mut fin = request.len().min(90);
+        while !request.is_char_boundary(fin) {
+            fin -= 1;
+        }
+        eprintln!(
+            "[{:?}] {:6.0} ms  {}",
+            std::thread::current().id(),
+            chrono.elapsed().as_secs_f64() * 1000.0,
+            &request[..fin]
+        );
+    }
     if let Ok(reponse) = &issue {
         verrou(memo()).insert(request.to_string(), reponse.clone());
         consigne(request, reponse);

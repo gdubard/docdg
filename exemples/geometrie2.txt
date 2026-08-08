@@ -44,29 +44,15 @@ soit h2 = <bleu italique sous-section>
 <Convertis>3 L en cm^3
 <Convertis>1250 g en kg
 
-
-
-
 <h2>Transformations du plan
 <Soit>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
 <Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
 <Construis>l'image du triangle ABC par la symétrie centrale de centre O
 
-
-
-
-
-
 <Soit>le vecteur u de coordonnées (2 ; -1)
 <Construis>l'image du triangle ABC par la translation de vecteur u
 <Construis>l'image du triangle ABC par la rotation de centre O et d'angle 90 degrés
 <Construis>l'image du triangle ABC par l'homothétie de centre O et de rapport 2
-
-
-
-
-
-
 
 <Soit>les points P et Q de coordonnées respectives (0 ; 0) et (1 ; 1)
 <Construis>l'image du segment [AB] par la symétrie axiale d'axe (PQ)
@@ -79,12 +65,12 @@ soit h2 = <bleu italique sous-section>
 <Trace>le solide prisme, de base 3 cm et de longueur 5 cm
 <Trace>le solide pyramide, de base 4 cm et de hauteur 3 cm
 
-<page suivante h2>Les solides de révolution
+<h2>Les solides de révolution
 <Trace>le solide cylindre, de rayon 2 cm et de hauteur 5 cm
 <Trace>le solide cône, de rayon 2 cm et de hauteur 4 cm
 <Trace>le solide sphère, de rayon 3 cm
 
-<page suivante h1>Les patrons
+<h1>Les patrons
 	Un patron est le solide déplié, prêt à découper et à plier.
 <Trace>le patron du cube d'arête 3 cm
 <Trace>le patron du pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm

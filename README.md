@@ -1,11 +1,13 @@
-# *docdg 2.0*
+# *docdg 2.2*
 
 **docdg** is a Rust document class built around a French-only prose
 tag language (no anglicisms). Users write a single `.docdg` file where every
 command reads as a natural French sentence; the Rust engine compiles it
 directly to HTML and PDF, with professional typographic quality. It covers
 layout frames and grids, tables, images, a math mini-language, function
-plotting, plane and solid geometry, and statistics/probability diagrams.
+plotting, plane and solid geometry, statistics/probability diagrams,
+physics and chemistry, and long-form publishing (chapters, title page,
+cross-references, bibliography).
 
 **Author / Maintainer:** Gérard Dubard — gerarddubard@gmail.com
 **License:** GNU General Public License, version 3 or later
@@ -17,7 +19,7 @@ plotting, plane and solid geometry, and statistics/probability diagrams.
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-2.0-2980b9?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![License](https://img.shields.io/badge/license-GPL_v3+-8e44ad?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
@@ -74,15 +76,17 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 21. [Le collège, rédigé](#le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
 22. [Le lycée, couvert](#le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
 23. [Le supérieur (CPGE)](#le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
-24. [Les exemples, en quatre niveaux](#les-exemples-en-quatre-niveaux)
-25. [Les documents complexes](#les-documents-complexes)
-26. [Référence complète](#référence-complète) — couleurs et options de classe
-27. [Bonnes pratiques](#bonnes-pratiques)
-28. [Feuille de route](#feuille-de-route) — ce que prépare la prochaine version
+24. [La physique-chimie](#la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+25. [Rédiger un article, une thèse](#rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
+26. [Les exemples, en quatre niveaux](#les-exemples-en-quatre-niveaux)
+27. [Les documents complexes](#les-documents-complexes)
+28. [Référence complète](#référence-complète) — couleurs et options de classe
+29. [Bonnes pratiques](#bonnes-pratiques)
+30. [Feuille de route](#feuille-de-route) — ce que prépare la prochaine version
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
-> 🌱 **docdg couvre le programme de mathématiques du CP à la L3.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes), les classes préparatoires (MPSI/MP) et les deux premières années de licence (surfaces, plan complexe, groupes, probabilités continues) s'écrivent chacun en une phrase — et depuis la 2.0, le document peut interroger son lecteur et se recomposer avec ses réponses. Le projet reste actif — le prochain chantier est la physique-chimie. Voir le chapitre [Feuille de route](#feuille-de-route) pour le détail, et le [Journal des versions](CHANGELOG.md) pour l'historique.
+> 🌱 **docdg couvre le programme de mathématiques du CP à la L3.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes), les classes préparatoires (MPSI/MP) et les deux premières années de licence (surfaces, plan complexe, groupes, probabilités continues) s'écrivent chacun en une phrase — et depuis la 2.0, le document peut interroger son lecteur et se recomposer avec ses réponses. La 2.1 fait entrer **la physique-chimie**, la 2.2 **la publication longue** (chapitres, page de titre, renvois croisés, bibliographie). Le projet reste actif. Voir le chapitre [Feuille de route](#feuille-de-route) pour le détail, et le [Journal des versions](CHANGELOG.md) pour l'historique.
 
 ---
 
@@ -209,14 +213,20 @@ Bonjour le monde !
 ```
 
 > C'est vraiment tout. Enregistrez ce texte dans un fichier `.docdg`, ouvrez-le avec docdg — le PDF est prêt.
-### **⚙️ Les options de page**
+### **⚙️ Le bloc document**
 
-Les paramètres de mise en page s'écrivent dans un bloc `page { }` en tête du fichier — entièrement facultatif, des valeurs par défaut raisonnables s'appliquent sans lui.
+Tout ce qui décrit le document — son identité et ses réglages — s'écrit dans un bloc `document { }` en tête du fichier. Il est entièrement facultatif : sans lui, des valeurs par défaut raisonnables s'appliquent.
 
 **docdg**
 
 ```docdg
-page {
+document {
+  // ===== Identité (facultative, pour la page de titre) =====
+  titre: De la mesure en physique;
+  auteur: Gérard Dubard;
+  institution: Université de Lyon;
+  date: 7 août 2026;
+
   // ===== Marges externes (le « margin » anglais) =====
   marges: 20;  // 20 mm sur les quatre côtés
 
@@ -224,39 +234,48 @@ page {
   espacements: 2;  // 2 mm entre le contenu et le bord des cadres
 
   // ===== Polices =====
-  police: Latin Modern Roman;  // Police du texte (MAJUSCULES)
-  math: Latin Modern Math;  // Police mathématique (MAJUSCULES)
+  police: Georgia;  // Police du texte
+  math: Latin Modern Math;  // Police mathématique (voir la note)
 
   // ===== Taille et espacement =====
   taille: 11;  // Corps de base (pt)
   interligne: 1,2;  // Coefficient d'interligne
-  tabulation: 8;  // Largeur tabulation (mm)
-  hauteur: 8;  // Hauteur saut de ligne (mm)
+  tabulation: 10;  // Largeur tabulation (mm)
+  hauteur: 5;  // Hauteur saut de ligne (mm)
   décalage: 100;  // Décalage exposants/indices (%)
 
   // ===== Calculs =====
   précision: 3;  // Décimales pour arrondi (-1 = pas d'arrondi)
-
 }
 ```
 
-> **💡 Virgule décimale.** Dans un bloc `page { }`, la virgule est la virgule décimale (`interligne: 1,2`). Les valeurs à quatre composantes utilisent le point-virgule (`marges: 25;20;25;20`). Partout dans le corps du document, la virgule reste la virgule décimale ; docdg la distingue d'une énumération par l'absence d'espace après elle.
+> **💡 Virgule décimale.** Dans le bloc, la virgule est la virgule décimale (`interligne: 1,2`). Les valeurs à quatre composantes utilisent le point-virgule (`marges: 25;20;25;20`). Partout dans le corps du document, la virgule reste la virgule décimale ; docdg la distingue d'une énumération par l'absence d'espace après elle.
+
+> **📌 Compatibilité.** L'ancien bloc `page { }` reste accepté, seul ou aux côtés d'un bloc `document { }`, dans les deux ordres : les documents écrits avant la 2.2 fonctionnent sans modification. `document { }` est la forme recommandée.
+
+> **⚠️ La clé `math`.** Elle est lue et transmise, mais **n'est pas appliquée** au rendu : docdg compose les mathématiques avec KaTeX, dont les polices sont indissociables de son algorithme d'espacement. Substituer une police système y casserait les métriques des symboles. La clé est conservée pour un futur moteur mathématique.
 
 **Tableau récapitulatif :**
 
+| **Option**   | **Type**           | **Défaut**  | **Description**                |
+| ------------ | ------------------ | ----------- | ------------------------------ |
+| `titre`      | texte              | *(vide)*    | Titre, composé par `<page de titre>` |
+| `auteur`     | texte              | *(vide)*    | Auteur                         |
+| `institution`| texte              | *(vide)*    | Institution, laboratoire, école |
+| `date`       | texte              | *(vide)*    | Date, librement formulée       |
+| `orientation`| `portrait`/`paysage` | `portrait` | Orientation de la page       |
+| `marges`     | nombre ou 4 valeurs | `20`       | Marges externes (mm) — `20` ou `25;20;25;20` (haut;droite;bas;gauche) |
+| `espacements`| nombre ou 4 valeurs | `2`        | Espacements internes des cadres, tableaux et zones (mm) |
+| `police`     | texte              | *(celle du système)* | Police du texte (si disponible) |
+| `math`       | texte              | *(vide)*    | Police mathématique — lue, non appliquée (voir ci-dessus) |
+| `taille`     | nombre             | `11`        | Taille de base (pt)            |
+| `interligne` | nombre             | `1,3`       | Coefficient d'interligne       |
+| `tabulation` | nombre             | `10`        | Largeur tabulation (mm)        |
+| `hauteur`    | nombre             | `5`         | Hauteur saut de ligne (mm)     |
+| `décalage`   | nombre             | `100`       | Décalage exposants/indices (%) |
+| `précision`  | nombre             | `-1`        | Décimales pour arrondi (`-1` = pas d'arrondi) |
 
-| **Option**   | **Type**           | **Défaut**           | **Description**                |
-| ------------ | ------------------ | -------------------- | ------------------------------ |
-| `marges`     | nombre ou 4 valeurs | `20`                | Marges externes (mm) — `20` ou `{25;20;25;20}` (haut;droite;bas;gauche) |
-| `espacements`| nombre ou 4 valeurs | `2`                 | Espacements internes des cadres, tableaux et zones (mm) — `2` ou `{4;2;4;2}` |
-| `police`     | texte (MAJUSCULES) | `Latin Modern Roman` | Police du texte (si disponible sur le système) |
-| `math`       | texte (MAJUSCULES) | `Latin Modern Math`  | Police mathématique (si disponible)            |
-| `taille`     | nombre             | `11`                 | Taille de base (pt)            |
-| `interligne` | nombre             | `1,0`                | Coefficient d'interligne       |
-| `tabulation` | nombre             | `8`                  | Largeur tabulation (mm)        |
-| `hauteur`    | nombre             | `8`                  | Hauteur saut de ligne (mm)     |
-| `décalage`   | nombre             | `100`                | Décalage exposants/indices (%) |
-| `précision`  | nombre             | `-1`                 | Décimales pour arrondi         |
+> **🖱️ Sans écrire le bloc.** Le bouton **Paramétrer** de l'application affiche toutes ces options dans un formulaire : les champs d'identité vides, les réglages avec leurs valeurs. À l'application, docdg écrit ou met à jour le bloc `document { }` en tête du fichier, en n'inscrivant que les champs remplis et les réglages qui diffèrent du défaut.
 
 ### **📝 Écrire plusieurs paragraphes**
 
@@ -1172,7 +1191,7 @@ La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / 
 
 ### **🎨 Couleurs et tailles**
 
-**Couleurs :** `rouge`, `bleu foncé`, `vert forêt` — les 147 noms français listés dans la [référence des couleurs](#-référence-des-couleurs-147-disponibles).
+**Couleurs :** `rouge`, `bleu foncé`, `vert forêt` — les 147 noms français listés dans la [référence des couleurs](#référence-des-couleurs-147-disponibles).
 
 **Filet de sécurité — teinte absente de la palette française :** les 147 noms français couvrent l'intégralité de la palette CSS/svgnames usuelle ; il ne devrait donc en pratique jamais être nécessaire d'en sortir. Si toutefois une teinte précise venait à manquer, les 147 noms français couvrent l'immense majorité des besoins. Aucun exemple de ce guide n'utilise de nom anglais — docdg se lit et s'écrit intégralement en français.
 
@@ -1286,6 +1305,9 @@ soit bonjour{nom} = Bonjour #nom !
 ```
 
 ### **🔁 Structures de contrôle**
+
+> **💡 Les deux branches s'accordent en nature.** Dans `soit statut = si marié { marié } sinon { célibataire }`, si l'une des deux branches est du texte, le résultat est du texte — même lorsqu'un mot de branche porte le nom d'une valeur déjà définie. Deux branches numériques donnent un nombre, calculable comme les autres.
+
 
 **Boucles `pour` :**
 
@@ -2265,6 +2287,151 @@ Le pont vers la physique : séries de Fourier tronquées à l'ordre voulu, trans
 
 ---
 
+---
+
+## **⚗️ La physique-chimie**
+
+Nouveauté de docdg 2.1, du lycée à la licence. **La chimie se calcule en Rust pur**, sans passer par SymPy — d'où un rendu instantané.
+
+### Les équations chimiques
+
+`<Équilibre>` trouve les coefficients par pivot de Gauss exact sur les entiers, en conservant les éléments **et la charge** — les demi-équations redox ioniques passent donc aussi :
+
+```docdg
+<Équilibre>l'équation C3H8 + O2 -> CO2 + H2O
+
+<Équilibre>l'équation Fe^2+ + MnO4^- + H^+ -> Fe^3+ + Mn^2+ + H2O
+```
+
+La flèche s'écrit `->` ou `→`, le signe `=` est accepté. Les formules admettent les parenthèses imbriquées (`Fe2(SO4)3`) et les charges (`SO4^2-`, `e^-`).
+
+### Masses molaires et tableau d'avancement
+
+```docdg
+<Calcule>la masse molaire de Fe2(SO4)3
+
+<Dresse>un tableau d'avancement pour CH4 + O2 -> CO2 + H2O avec n(CH4) = 0,5 et n(O2) = 0,8
+```
+
+La masse molaire se détaille terme à terme (table périodique embarquée, de H à Pu). Le tableau d'avancement équilibre lui-même l'équation, puis dresse les états initial, en cours et final, désigne le réactif limitant et calcule l'avancement maximal. Sans quantités, il reste littéral en `n₀ − ax`.
+
+### Unités et constantes
+
+```docdg
+<Convertis>90 km/h en m/s
+
+<Convertis>25 °C en K
+
+<Convertis>13,6 eV en J
+
+<Donne>la valeur de la constante de Planck
+```
+
+Les conversions couvrent temps, vitesses, pressions, énergies (dont l'électronvolt), puissances, fréquences, et les températures affines `°C` ↔ `K`. Dix-sept constantes fondamentales (valeurs CODATA) s'affichent en notation scientifique française.
+
+### La propagation des incertitudes
+
+La commande la plus utile en travaux pratiques : la formule des dérivées partielles, puis l'application numérique si les valeurs sont fournies.
+
+```docdg
+<Propage>l'incertitude sur R = U/I avec u(U) = 0,05, u(I) = 0,002, U = 5,12, I = 0,254
+```
+
+Sans valeurs, seule la formule symbolique est composée.
+
+### Les opérateurs de champs (licence)
+
+```docdg
+<Calcule>le gradient de V(x, y, z) = x^2 + y^2 - 2z^2
+
+<Calcule>la divergence du champ F(x, y, z) = (x^2 ; xy ; z)
+
+<Calcule>le rotationnel du champ F(x, y, z) = (y ; -x ; 0)
+
+<Calcule>le laplacien de V(x, y, z) = x^2 + y^2 - 2z^2
+```
+
+Ces formes définissent le champ sur place ; la forme sur fonction déclarée (`<Calcule>le gradient de psi`, après un `<Soit>`) reste disponible.
+
+---
+
+## **📕 Rédiger un article, une thèse**
+
+Nouveauté de docdg 2.2 : ce qu'exige un document long — une structure au-dessus de la section, une page de titre, des renvois, une bibliographie.
+
+### Les chapitres
+
+Le mot de style `chapitre` ouvre un niveau au-dessus de `section` :
+
+```docdg
+soit h0 = <bleu nuit gras chapitre num>
+soit h1 = <bleu nuit gras section num>
+
+<h0>Le pendule comme instrument
+
+<h1>Le modèle et ses limites
+```
+
+Les chapitres se numérotent seuls, remettent les compteurs de sections à zéro et **les préfixent** : les sections deviennent `1.1`, `1.2`, puis `2.1` au chapitre suivant — la convention des mémoires français. Un document sans chapitre garde exactement sa numérotation d'avant.
+
+### La page de titre
+
+Les métadonnées du bloc `document { }` se composent en première page par une balise :
+
+```docdg
+document {
+  titre: De la mesure en physique;
+  auteur: Gérard Dubard;
+  institution: Université de Lyon;
+  date: 7 août 2026;
+}
+
+<page de titre>
+
+<table des matières>{Table des matières}
+```
+
+Le titre, l'auteur, l'institution et la date sont centrés verticalement, suivis d'un saut de page. Les clés absentes sont simplement omises.
+
+### Les renvois croisés
+
+Une étiquette se pose dans un titre ou un paragraphe ; un renvoi s'y remplace par le numéro, cliquable :
+
+```docdg
+<h1>Le modèle et ses limites <étiquette>{modele}
+
+...
+
+	Le raisonnement prolonge celui de la section <renvoi>{modele}.
+```
+
+L'ordre est libre : **un renvoi peut précéder son étiquette**. Un renvoi sans étiquette s'affiche `??` en rouge, à la façon de LaTeX — l'erreur se voit sans casser la composition.
+
+### La bibliographie
+
+```docdg
+	Le protocole suit le GUM <cite>{gum2008} ; les manuels classiques <cite>{taylor, gum2008} en donnent la démonstration.
+
+<Dresse>une bibliographie {
+	[gum2008] JCGM 100:2008, Évaluation des données de mesure, BIPM, 2008.
+	[taylor] J. R. Taylor, Incertitudes et analyse des erreurs, Dunod, 2000.
+}
+```
+
+Une entrée par ligne, numérotée dans l'ordre, ancrée par sa clé. `<cite>{clé}` s'y remplace par `[n]` lié ; plusieurs clés se groupent d'un seul appel. La citation précède naturellement la bibliographie, qui ferme le document.
+
+### Les polices locales
+
+Une suite de mots **en majuscules** dans une balise de style désigne une police :
+
+```docdg
+<au centre italique 14pt>Je suis<TIMES NEW ROMAN gras>{très}fatigué.
+```
+
+La convention vaut en début de ligne, en milieu de paragraphe, et dans les styles nommés (`soit manuscrit = <SCHOLA italique>`).
+
+---
+
 ## **🗂️ Les exemples, en quatre niveaux**
 
 Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolaire, porté par le suffixe du nom de fichier :
@@ -2276,7 +2443,7 @@ Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolair
 | **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `basique3`, `statistiques-probabilites3` |
 | **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
 
-S'y ajoutent `physique-chimie3`, `physique-chimie4` et `factorisation` (une étude complète). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. Chaque fichier se clôt sur sa figure à la demande.
+S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. Chaque fichier se clôt sur sa figure à la demande.
 
 ---
 
@@ -2483,18 +2650,27 @@ biscuit, cramoisi, lavande, vieille dentelle, lin, mocassin, neige, blé
 
 ### **Options de classe**
 
+Toutes s'écrivent dans le bloc `document { }` en tête du fichier — voir [Le bloc document](#le-bloc-document) pour les explications et les exemples.
 
-| **Option**   | **Type**           | **Défaut**           | **Description**                |
-| ------------ | ------------------ | -------------------- | ------------------------------ |
-| `marges`     | nombre/tableau     | `20;2`               | Marges en mm                   |
-| `police`     | texte (MAJUSCULES) | `Latin Modern Roman` | Police du texte (si disponible sur le système) |
-| `math`       | texte (MAJUSCULES) | `Latin Modern Math`  | Police mathématique (si disponible)            |
-| `taille`     | nombre             | `11`                 | Taille de base (pt)            |
-| `interligne` | nombre             | `1,0`                | Coefficient d'interligne       |
-| `tabulation` | nombre             | `8`                  | Largeur tabulation (mm)        |
-| `hauteur`    | nombre             | `8`                  | Hauteur saut de ligne (mm)     |
-| `décalage`   | nombre             | `100`                | Décalage exposants/indices (%) |
-| `précision`  | nombre             | `-1`                 | Décimales pour arrondi         |
+| **Option**   | **Type**           | **Défaut**  | **Description**                |
+| ------------ | ------------------ | ----------- | ------------------------------ |
+| `titre`      | texte              | *(vide)*    | Titre, composé par `<page de titre>` |
+| `auteur`     | texte              | *(vide)*    | Auteur                         |
+| `institution`| texte              | *(vide)*    | Institution, laboratoire, école |
+| `date`       | texte              | *(vide)*    | Date, librement formulée       |
+| `orientation`| `portrait`/`paysage` | `portrait` | Orientation de la page       |
+| `marges`     | nombre ou 4 valeurs | `20`       | Marges externes (mm)           |
+| `espacements`| nombre ou 4 valeurs | `2`        | Espacements internes (mm)      |
+| `police`     | texte              | *(système)* | Police du texte                |
+| `math`       | texte              | *(vide)*    | Police mathématique — lue, non appliquée |
+| `taille`     | nombre             | `11`        | Taille de base (pt)            |
+| `interligne` | nombre             | `1,3`       | Coefficient d'interligne       |
+| `tabulation` | nombre             | `10`        | Largeur tabulation (mm)        |
+| `hauteur`    | nombre             | `5`         | Hauteur saut de ligne (mm)     |
+| `décalage`   | nombre             | `100`       | Décalage exposants/indices (%) |
+| `précision`  | nombre             | `-1`        | Décimales pour arrondi         |
+
+L'ancien bloc `page { }` reste accepté pour les documents antérieurs à la 2.2.
 
 ---
 
@@ -2674,9 +2850,13 @@ soit sondage = {
 
 ## **🗺️ Feuille de route**
 
-**docdg 2.0 couvre le programme de mathématiques de l'école aux classes préparatoires et fait entrer le document dans l'interactivité** : saisies typées bloquantes, alternative en bloc et en ligne, moteur de projection cavalière — solides, patrons, repère de l'espace — géométrie analytique de l'espace rédigée pas à pas (droites, plans, positions relatives), courbes paramétrées et polaires, coniques rédigées (réduction, foyers, directrices, excentricité, tracé), fonctions de deux variables — surfaces ombrées, lignes de niveau, extremums libres et sous contrainte (Lagrange), intégrales doubles et triples avec passage en polaires — et le dernier étage de la licence : transformations du plan complexe et résidus, groupes (tables de ℤ/nℤ, générateurs, permutations), lois à densité et théorème central limite. **Le programme de mathématiques est couvert du CP à la L3.** Le projet continue d'évoluer, avec une progression arrêtée :
+**docdg couvre le programme de mathématiques de l'école aux classes préparatoires, la physique-chimie du lycée à la licence, et la rédaction de documents longs.** Le document est aussi devenu vivant : saisies typées bloquantes, alternative en bloc et en ligne. Côté mathématiques, la couverture va du CP à la L3 — moteur de projection cavalière (solides, patrons, repère de l'espace), géométrie analytique de l'espace, courbes paramétrées et polaires, coniques rédigées, fonctions de deux variables (surfaces, lignes de niveau, Lagrange, intégrales multiples), transformations du plan complexe et résidus, groupes, lois à densité et théorème central limite. La 2.1 y ajoute la physique-chimie (équations, avancement, unités, constantes, incertitudes, opérateurs de champs) et la 2.2 la publication longue (chapitres, page de titre, renvois croisés, bibliographie, polices locales).
 
-- **La physique-chimie.** Les fondations sont posées (unités, conversions, Laplace, Fourier, calcul exact) ; les rédactions types des sciences physiques — circuits, mécanique, thermodynamique — suivront dans la même prose française.
+Le projet continue d'évoluer, avec une progression arrêtée :
+
+- **La qualité d'impression.** C'est le dernier écart avec LaTeX : la césure française, la gestion des veuves et orphelines, et la scission des blocs plus hauts qu'une page — aujourd'hui un paragraphe ou un tableau trop grand est déplacé entier plutôt que coupé. C'est le prochain grand chantier.
+- **La physique-chimie, suite.** Le pH et les acides faibles, la cinétique chimique, l'optique géométrique, les bilans de forces.
+- **Les environnements numérotés.** Théorèmes, définitions, démonstrations avec leurs compteurs propres, renvoyables comme les sections.
 
 Ces évolutions se feront sans rien retirer : la syntaxe en prose française et la compatibilité des documents existants restent la priorité à chaque nouvelle version. Les retours d'usage (bugs, tournures manquantes, besoins non couverts) sont les bienvenus sur le dépôt du projet.
 

@@ -1,16 +1,83 @@
-const editor = document.getElementById('editor');
+/**
+ * @typedef {Object} PageOpts
+ * @property {string} orientation
+ * @property {number[]} marges
+ * @property {number[]} espacements
+ * @property {string} police
+ * @property {string} math
+ * @property {string} titre
+ * @property {string} auteur
+ * @property {string} institution
+ * @property {string} date
+ * @property {number} taille
+ * @property {number} interligne
+ * @property {number} tabulation
+ * @property {number} hauteur
+ * @property {number} decalage
+ * @property {number} precision
+ */
+
+/**
+ * @typedef {Object} PrefsInterface
+ * @property {string} disposition
+ * @property {number} part
+ * @property {boolean} code
+ * @property {boolean} apercu
+ * @property {number} zoom
+ */
+
+/**
+ * Un contrôle de formulaire du panneau de réglages, typé pour l'accès
+ * à `.value`. Nom distinct de la variable locale `champ` employée pour
+ * les champs de saisie du document, qui la masquerait.
+ * @param {string} id
+ * @returns {HTMLInputElement|HTMLSelectElement}
+ */
+/**
+ * Remonte du point d'un événement jusqu'à l'ancêtre correspondant au
+ * sélecteur, ou rend null si la cible n'est pas un élément.
+ * @param {EventTarget} cible
+ * @param {string} selecteur
+ * @returns {Element|null}
+ */
+function element(cible, selecteur) {
+    return cible instanceof Element ? cible.closest(selecteur) : null;
+}
+
+function controle(id) {
+    return /** @type {HTMLInputElement|HTMLSelectElement} */ (document.getElementById(id));
+}
+
+const editor = /** @type {HTMLTextAreaElement} */ (document.getElementById('editor'));
 const pagesEl = document.getElementById('pages');
 const measure = document.getElementById('measure');
 const statusEl = document.getElementById('status');
 const diagEl = document.getElementById('diag');
 const wrapper = document.getElementById('preview-wrapper');
 
-let pageOpts = null;
+/** @type {PageOpts} */
+const DEFAUTS_PAGE = {
+    orientation: 'portrait',
+    marges: [20, 20, 20, 20],
+    espacements: [2, 2, 2, 2],
+    police: '', math: '',
+    titre: '', auteur: '', institution: '', date: '',
+    taille: 11, interligne: 1.3,
+    tabulation: 10, hauteur: 5, decalage: 100, precision: -1
+};
+
+/** @type {PageOpts} */
+let pageOpts = Object.assign({}, DEFAUTS_PAGE);
+let documentCompose = false;
 let renderSeq = 0;
-let zoom = 0.9;
+/** @type {Partial<PrefsInterface>} */
+const prefsInitiales = window['__PREFS__'] || {};
+let zoom = prefsInitiales.zoom || 0.9;
 let debounceTimer = null;
 let modifie = false;
+/** @type {Object<string, string>} */
 let saisies = {};
+/** @type {Object<string, string>} */
 let brouillons = {};
 let focaliseSaisie = false;
 
@@ -19,10 +86,9 @@ function diag(message) {
     diagEl.className = 'on';
 }
 
-window.onerror = (message, source, ligne, colonne) => {
-    diag(`Erreur JavaScript ligne ${ligne}:${colonne} — ${message}`);
-    return false;
-};
+window.addEventListener('error', (e) => {
+    diag(`Erreur JavaScript ligne ${e.lineno}:${e.colno} — ${e.message}`);
+});
 
 window.addEventListener('unhandledrejection', (e) => {
     diag(`Promesse rejetée — ${e.reason}`);
@@ -55,6 +121,7 @@ function recompose() {
     debounceTimer = setTimeout(() => requestTranspile('inc'), 250);
 }
 
+/** @param {string} text */
 function chargeContenu(text) {
     editor.value = text;
     modifie = false;
@@ -63,44 +130,49 @@ function chargeContenu(text) {
     requestTranspile('full');
 }
 
-const REGLES_SAISIE = {
-    'texte': {
+/**
+ * Règles de validation des saisies, par type.
+ * @type {Map<string, {valide: function(string): boolean, message: string}>}
+ */
+const REGLES_SAISIE = new Map([
+    ['texte', {
         valide: (v) => v.trim().length > 0,
         message: 'Une réponse est attendue.'
-    },
-    'entier': {
+    }],
+    ['entier', {
         valide: (v) => /^[+-]?\d+$/.test(v.trim()),
         message: 'Un entier est attendu — par exemple 12.'
-    },
-    'décimal': {
+    }],
+    ['décimal', {
         valide: (v) => /^[+-]?\d+(,\d+)?$/.test(v.trim()),
         message: 'Un nombre décimal est attendu, écrit avec une virgule — par exemple 1,65.'
-    },
-    'booléen': {
+    }],
+    ['booléen', {
         valide: (v) => /^(vrai|faux)$/.test(v.trim().toLowerCase()),
         message: 'Réponds par vrai ou faux.'
-    },
-    'caractère': {
+    }],
+    ['caractère', {
         valide: (v) => [...v.trim()].length === 1,
         message: 'Un seul caractère est attendu.'
-    }
-};
+    }]
+]);
 
 function montreErreurSaisie(bloc, message) {
     const erreur = bloc.querySelector('.saisie-erreur');
     if (!erreur) return;
     erreur.textContent = message;
     erreur.classList.add('on');
-    clearTimeout(erreur.dataset.minuterie);
+    clearTimeout(Number(erreur.dataset.minuterie));
     erreur.dataset.minuterie = String(setTimeout(() => erreur.classList.remove('on'), 2800));
 }
 
+/** @param {HTMLInputElement} champ */
 function soumetSaisie(champ) {
     const bloc = champ.closest('.saisie');
     if (!bloc) return;
     const nom = bloc.getAttribute('data-nom');
     const type = bloc.getAttribute('data-type');
-    const regle = REGLES_SAISIE[type] || REGLES_SAISIE['texte'];
+    const regle = REGLES_SAISIE.get(type) || REGLES_SAISIE.get('texte');
     if (!regle.valide(champ.value)) {
         montreErreurSaisie(bloc, regle.message);
         champ.focus();
@@ -113,7 +185,7 @@ function soumetSaisie(champ) {
 }
 
 function restaureSaisie() {
-    const champ = pagesEl.querySelector('.saisie-champ');
+    const champ = /** @type {HTMLInputElement} */ (pagesEl.querySelector('.saisie-champ'));
     if (!champ) { focaliseSaisie = false; return; }
     const bloc = champ.closest('.saisie');
     const nom = bloc ? bloc.getAttribute('data-nom') : null;
@@ -127,21 +199,30 @@ function restaureSaisie() {
 
 pagesEl.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
-    const champ = e.target.closest ? e.target.closest('.saisie-champ') : null;
+    const champ = /** @type {HTMLInputElement} */ (element(e.target, '.saisie-champ'));
     if (!champ) return;
     e.preventDefault();
     soumetSaisie(champ);
 });
 
 pagesEl.addEventListener('input', (e) => {
-    const champ = e.target.closest ? e.target.closest('.saisie-champ') : null;
+    const champ = /** @type {HTMLInputElement} */ (element(e.target, '.saisie-champ'));
     if (!champ) return;
     const bloc = champ.closest('.saisie');
-    if (bloc) brouillons[bloc.getAttribute('data-nom')] = champ.value;
+    const nom = bloc ? bloc.getAttribute('data-nom') : null;
+    if (nom) brouillons[nom] = champ.value;
 });
 
 pagesEl.addEventListener('click', (e) => {
-    const valeur = e.target.closest ? e.target.closest('.saisie-valeur') : null;
+    const lien = element(e.target, 'a[href^="#"]');
+    if (lien) {
+        e.preventDefault();
+        const href = lien.getAttribute('href') || '';
+        const cible = document.getElementById(href.slice(1));
+        if (cible) cible.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+    const valeur = element(e.target, '.saisie-valeur');
     if (!valeur) return;
     const nom = valeur.getAttribute('data-nom');
     brouillons[nom] = saisies[nom];
@@ -181,8 +262,10 @@ function newPage(d) {
     const s = document.createElement('div');
     s.className = 'sheet doc';
     s.style.padding = `${d.mt}mm ${d.mr}mm ${d.mb}mm ${d.ml}mm`;
-    s.style.fontSize = `${pageOpts.police || 11}pt`;
+    s.style.fontSize = `${pageOpts.taille || 11}pt`;
     s.style.lineHeight = String(pageOpts.interligne || 1.3);
+    if (pageOpts.police) s.style.fontFamily = `'${pageOpts.police}', Georgia, 'Times New Roman', serif`;
+    s.style.setProperty('--decalage', String((pageOpts.decalage || 100) / 100));
     p.appendChild(s);
     const no = document.createElement('div');
     no.className = 'pageno';
@@ -269,14 +352,18 @@ function typeset(node) {
 function onTranspiled(res) {
     const seq = ++renderSeq;
     try {
-        pageOpts = res.page;
+        pageOpts = Object.assign({}, DEFAUTS_PAGE, res.page);
+        documentCompose = true;
         const d = pageDims(pageOpts);
         document.getElementById('printsize').textContent =
             `@page { size: ${d.w}mm ${d.h}mm; margin: 0; }`;
         measure.className = 'doc';
         measure.style.width = `${d.cw}mm`;
-        measure.style.fontSize = `${pageOpts.police || 11}pt`;
+        measure.style.fontSize = `${pageOpts.taille || 11}pt`;
         measure.style.lineHeight = String(pageOpts.interligne || 1.3);
+        if (pageOpts.police) measure.style.fontFamily = `'${pageOpts.police}', Georgia, 'Times New Roman', serif`;
+        else measure.style.fontFamily = '';
+        measure.style.setProperty('--decalage', String((pageOpts.decalage || 100) / 100));
         measure.innerHTML = res.html;
         const keepScroll = wrapper.scrollTop;
         typeset(measure).catch(() => {}).then(() => {
@@ -295,16 +382,31 @@ function onTranspiled(res) {
     }
 }
 
-window.onTranspiled = onTranspiled;
-window.onMessage = (message, ok) => {
+window['onTranspiled'] = onTranspiled;
+window['onMessage'] = (message, ok) => {
     statusEl.textContent = ok ? message : '';
     if (!ok) diag(message); else diagEl.className = '';
 };
-window.setEditorContent = chargeContenu;
+window['setEditorContent'] = chargeContenu;
+
+document.addEventListener('click', (e) => {
+    const lien = element(e.target, 'a[href]');
+    if (!lien) return;
+    e.preventDefault();
+    const href = lien.getAttribute('href') || '';
+    if (href.startsWith('#')) {
+        const cible = document.getElementById(href.slice(1));
+        if (cible) cible.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}, true);
+
+window.addEventListener('beforeunload', (e) => {
+    e.preventDefault();
+});
 
 function panneauFermeture() { return document.getElementById('fermeture'); }
 
-window.demandeFermeture = () => {
+window['demandeFermeture'] = () => {
     if (!modifie) { send({ cmd: 'quitter' }); return; }
     panneauFermeture().className = '';
 };
@@ -341,7 +443,7 @@ function documentPourImpression() {
 }
 
 function exportPdf() {
-    if (!pageOpts) { diag("Rien à exporter : le document n'a pas encore été composé."); return; }
+    if (!documentCompose) { diag("Rien à exporter : le document n'a pas encore été composé."); return; }
     statusEl.textContent = 'export en cours…';
     send({ cmd: 'export', content: documentPourImpression() });
 }
@@ -349,22 +451,32 @@ function exportPdf() {
 function settingsPanel() { return document.getElementById('settings'); }
 
 function num(id, fallback) {
-    const v = parseFloat(document.getElementById(id).value);
+    const v = parseFloat(controle(id).value);
     return isFinite(v) ? v : fallback;
 }
 
 function syncSettingsFromPage() {
-    if (!pageOpts) return;
+    if (!documentCompose) return;
     const panel = settingsPanel();
     if (panel.contains(document.activeElement)) return;
-    document.getElementById('set-orientation').value =
+    controle('set-orientation').value =
         (pageOpts.orientation === 'paysage' || pageOpts.orientation === 'landscape') ? 'paysage' : 'portrait';
     const ids = ['mar-top', 'mar-right', 'mar-bottom', 'mar-left'];
-    ids.forEach((id, i) => { document.getElementById(id).value = pageOpts.marges[i]; });
+    ids.forEach((id, i) => { controle(id).value = String(pageOpts.marges[i]); });
     const eids = ['esp-top', 'esp-right', 'esp-bottom', 'esp-left'];
-    eids.forEach((id, i) => { document.getElementById(id).value = pageOpts.espacements[i]; });
-    document.getElementById('set-police').value = pageOpts.police;
-    document.getElementById('set-interligne').value = pageOpts.interligne;
+    eids.forEach((id, i) => { controle(id).value = String(pageOpts.espacements[i]); });
+    controle('set-police').value = String(pageOpts.taille);
+    controle('set-interligne').value = String(pageOpts.interligne);
+    controle('doc-titre').value = pageOpts.titre || '';
+    controle('doc-auteur').value = pageOpts.auteur || '';
+    controle('doc-institution').value = pageOpts.institution || '';
+    controle('doc-date').value = pageOpts.date || '';
+    controle('doc-police').value = pageOpts.police || '';
+    controle('doc-math').value = pageOpts.math || '';
+    controle('doc-tabulation').value = String(pageOpts.tabulation);
+    controle('doc-hauteur').value = String(pageOpts.hauteur);
+    controle('doc-decalage').value = String(pageOpts.decalage);
+    controle('doc-precision').value = String(pageOpts.precision);
 }
 
 function quad(a, b, c, d) {
@@ -372,27 +484,61 @@ function quad(a, b, c, d) {
     return `{${a};${b};${c};${d}}`;
 }
 
+function texte(id) {
+    return controle(id).value.trim();
+}
+
 function serializePageBlock() {
-    return 'page {\n\torientation: ' + document.getElementById('set-orientation').value + ';\n'
+    let bloc = 'document {\n';
+    for (const [cle, id] of [['titre', 'doc-titre'], ['auteur', 'doc-auteur'], ['institution', 'doc-institution'], ['date', 'doc-date']]) {
+        const v = texte(id);
+        if (v) bloc += '\t' + cle + ': ' + v + ';\n';
+    }
+    bloc += '\torientation: ' + controle('set-orientation').value + ';\n'
         + '\tmarges: ' + quad(num('mar-top', 20), num('mar-right', 20), num('mar-bottom', 20), num('mar-left', 20)) + ';\n'
-        + '\tespacements: ' + quad(num('esp-top', 2), num('esp-right', 2), num('esp-bottom', 2), num('esp-left', 2)) + ';\n'
-        + '\ttaille: ' + num('set-police', 11) + ';\n'
-        + '\tinterligne: ' + num('set-interligne', 1.3) + ';\n}';
+        + '\tespacements: ' + quad(num('esp-top', 2), num('esp-right', 2), num('esp-bottom', 2), num('esp-left', 2)) + ';\n';
+    const police = texte('doc-police');
+    if (police) bloc += '\tpolice: ' + police + ';\n';
+    const math = texte('doc-math');
+    if (math) bloc += '\tmath: ' + math + ';\n';
+    bloc += '\ttaille: ' + num('set-police', 11) + ';\n'
+        + '\tinterligne: ' + num('set-interligne', 1.3) + ';\n';
+    const tab = num('doc-tabulation', 10);
+    if (tab !== 10) bloc += '\ttabulation: ' + tab + ';\n';
+    const haut = num('doc-hauteur', 5);
+    if (haut !== 5) bloc += '\thauteur: ' + haut + ';\n';
+    const dec = num('doc-decalage', 100);
+    if (dec !== 100) bloc += '\tdécalage: ' + dec + ';\n';
+    const prec = num('doc-precision', -1);
+    if (prec !== -1) bloc += '\tprécision: ' + prec + ';\n';
+    return bloc + '}';
 }
 
 function findPageBlock(text) {
-    const m = /(^|\n)\s*page\s*\{/.exec(text);
-    if (!m) return null;
-    const open = m.index + m[0].length - 1;
-    let depth = 0;
-    for (let i = open; i < text.length; i++) {
-        if (text[i] === '{') depth++;
-        else if (text[i] === '}') {
-            depth--;
-            if (depth === 0) return { start: m.index + (m[1] ? m[1].length : 0), end: i + 1 };
+    const motif = /(^|\n)\s*(?:page|document)\s*\{/;
+    let debut = null;
+    let fin = 0;
+    for (;;) {
+        const zone = text.slice(fin);
+        const m = motif.exec(zone);
+        if (!m) break;
+        const prefixe = zone.slice(0, m.index + (m[1] ? m[1].length : 0));
+        if (debut !== null && prefixe.trim() !== '') break;
+        const open = fin + m.index + m[0].length - 1;
+        let depth = 0;
+        let ferme = -1;
+        for (let i = open; i < text.length; i++) {
+            if (text[i] === '{') depth++;
+            else if (text[i] === '}') {
+                depth--;
+                if (depth === 0) { ferme = i + 1; break; }
+            }
         }
+        if (ferme < 0) break;
+        if (debut === null) debut = fin + m.index + (m[1] ? m[1].length : 0);
+        fin = ferme;
     }
-    return null;
+    return debut === null ? null : { start: debut, end: fin };
 }
 
 function applySettings() {
@@ -422,8 +568,88 @@ document.getElementById('btn-settings').addEventListener('click', () => {
     syncSettingsFromPage();
 });
 document.getElementById('btn-apply').addEventListener('click', applySettings);
-document.getElementById('btn-zoom-in').addEventListener('click', () => setZoom(zoom + 0.1));
-document.getElementById('btn-zoom-out').addEventListener('click', () => setZoom(zoom - 0.1));
+document.getElementById('btn-zoom-in').addEventListener('click', () => { setZoom(zoom + 0.1); prefs.zoom = zoom; savePrefs(); });
+document.getElementById('btn-zoom-out').addEventListener('click', () => { setZoom(zoom - 0.1); prefs.zoom = zoom; savePrefs(); });
+
+const panneaux = document.getElementById('panneaux');
+const separateur = document.getElementById('separateur');
+const btnDisposition = document.getElementById('btn-disposition');
+const btnVoletCode = document.getElementById('btn-volet-code');
+const btnVoletApercu = document.getElementById('btn-volet-apercu');
+
+/** @type {PrefsInterface} */
+const prefs = Object.assign(
+    { disposition: 'horizontale', part: 40, code: true, apercu: true, zoom: 0.9 },
+    prefsInitiales
+);
+
+let prefsTimer = null;
+function savePrefs() {
+    clearTimeout(prefsTimer);
+    prefsTimer = setTimeout(() => send({ cmd: 'prefs', content: JSON.stringify(prefs) }), 400);
+}
+
+function appliqueDisposition() {
+    panneaux.dataset.disposition = prefs.disposition;
+    panneaux.style.setProperty('--part', prefs.part + '%');
+    panneaux.classList.toggle('sans-code', !prefs.code);
+    panneaux.classList.toggle('sans-apercu', !prefs.apercu);
+    btnVoletCode.classList.toggle('actif', prefs.code);
+    btnVoletApercu.classList.toggle('actif', prefs.apercu);
+    btnDisposition.textContent = prefs.disposition === 'horizontale' ? '⇄' : '⇅';
+}
+
+btnDisposition.addEventListener('click', () => {
+    prefs.disposition = prefs.disposition === 'horizontale' ? 'verticale' : 'horizontale';
+    appliqueDisposition();
+    savePrefs();
+});
+
+btnVoletCode.addEventListener('click', () => {
+    prefs.code = !prefs.code;
+    if (!prefs.code && !prefs.apercu) prefs.apercu = true;
+    appliqueDisposition();
+    savePrefs();
+});
+
+btnVoletApercu.addEventListener('click', () => {
+    prefs.apercu = !prefs.apercu;
+    if (!prefs.code && !prefs.apercu) prefs.code = true;
+    appliqueDisposition();
+    savePrefs();
+});
+
+let glisse = false;
+separateur.addEventListener('pointerdown', (e) => {
+    glisse = true;
+    separateur.classList.add('actif');
+    separateur.setPointerCapture(e.pointerId);
+});
+separateur.addEventListener('pointermove', (e) => {
+    if (!glisse) return;
+    const zone = panneaux.getBoundingClientRect();
+    let fraction;
+    if (prefs.disposition === 'horizontale') {
+        fraction = (e.clientX - zone.left) / zone.width;
+    } else {
+        fraction = (zone.bottom - e.clientY) / zone.height;
+    }
+    prefs.part = Math.round(Math.min(85, Math.max(15, fraction * 100)));
+    panneaux.style.setProperty('--part', prefs.part + '%');
+});
+separateur.addEventListener('pointerup', (e) => {
+    glisse = false;
+    separateur.classList.remove('actif');
+    separateur.releasePointerCapture(e.pointerId);
+    savePrefs();
+});
+separateur.addEventListener('dblclick', () => {
+    prefs.part = 40;
+    appliqueDisposition();
+    savePrefs();
+});
+
+appliqueDisposition();
 
 setZoom(zoom);
 

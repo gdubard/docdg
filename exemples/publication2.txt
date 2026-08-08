@@ -1,0 +1,55 @@
+document {
+	titre: De la mesure en physique;
+	auteur: Jean DUPONT;
+	institution: Université de Lyon — École doctorale de physique;
+	date: 7 août 2026;
+	marges: 25;
+	police: Georgia;
+	taille: 11;
+	interligne: 1,5;
+	précision: 3;
+}
+soit h0 = <bleu nuit gras chapitre num>
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section num>
+
+<page de titre>
+
+<table des matières>{Table des matières}
+
+<page suivante h0>Le pendule comme instrument
+
+<h1>Le modèle et ses limites <étiquette>{modele}
+
+	Pour un pendule de longueur $L$, l'équation exacte $theta'' + (g/L) sin(theta) = 0$ n'admet pas de solution élémentaire ; l'approximation des petits angles la linéarise.
+
+<Soit>une fonction s(x) = sin(x)
+
+<Calcule>le développement limité de s en 0 à l'ordre 5
+
+<h1>La période et la pesanteur
+
+	La période $T = 2pi racine(L/g)$ inverse la mesure : $g = 4pi^2 L/T^2$.
+
+<h2>Application numérique
+
+<Propage>l'incertitude sur g = 4pi^2 L/T^2 avec u(L) = 0,001, u(T) = 0,01, L = 0,995, T = 2,004
+
+<page suivante h0>L'incertitude comme discipline
+
+<h1>La propagation des dérivées partielles
+
+	Toute grandeur composée hérite des incertitudes de ses facteurs, pondérées par ses sensibilités <cite>{gum2008} ; le raisonnement prolonge celui de la section <renvoi>{modele}, et les manuels classiques <cite>{taylor, gum2008} en donnent la démonstration complète.
+
+<h1>Le facteur d'élargissement
+
+	L'intervalle à 95 pourcent s'obtient par le quantile de la loi normale :
+
+<Détermine>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<h1>Bibliographie
+
+<Dresse>une bibliographie {
+	[gum2008] JCGM 100:2008, Évaluation des données de mesure — Guide pour l'expression de l'incertitude de mesure, BIPM, 2008.
+	[taylor] J. R. Taylor, Incertitudes et analyse des erreurs dans les mesures physiques, Dunod, 2000.
+}

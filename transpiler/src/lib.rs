@@ -15,7 +15,7 @@ pub const MARQUE_TOC: char = '\u{E010}';
 pub const MARQUE_NOTE_APPEL: char = '\u{E014}';
 pub const MARQUE_NOTE_CORPS: char = '\u{E015}';
 
-const SEUIL_PARALLELE: usize = 4;
+const SEUIL_PARALLELE: usize = 2;
 const CACHE_MAX: usize = 4096;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -28,6 +28,7 @@ pub enum Def {
 pub struct Env {
     pub defs: BTreeMap<String, Def>,
     pub counters: [u32; 3],
+    pub chapitre: u32,
     pub objects: langage::commandes::Objects,
     pub vars: BTreeMap<String, f64>,
     pub donnees: BTreeMap<String, String>,
@@ -41,6 +42,7 @@ impl Hash for Env {
     fn hash<H: Hasher>(&self, h: &mut H) {
         self.defs.hash(h);
         self.counters.hash(h);
+        self.chapitre.hash(h);
         self.objects.hash(h);
         for (nom, valeur) in &self.vars {
             nom.hash(h);
@@ -155,7 +157,86 @@ enum Marque<'a> {
     Corps,
 }
 
+fn collecte_renvois(html: &str) -> (std::collections::BTreeMap<String, (String, String)>, String) {
+    let mut table = std::collections::BTreeMap::new();
+    let octets = html.as_bytes();
+    let mut out = String::with_capacity(html.len());
+    let mut debut = 0;
+    let mut i = 0;
+    while i + 2 < octets.len() {
+        if octets[i] == 0xEE && octets[i + 1] == 0x80 && octets[i + 2] == 0x96 {
+            let corps_debut = i + 3;
+            let mut j = corps_debut;
+            while j + 2 < octets.len()
+                && !(octets[j] == 0xEE && octets[j + 1] == 0x80 && octets[j + 2] == 0x97)
+            {
+                j += 1;
+            }
+            if j + 2 < octets.len() {
+                let corps = &html[corps_debut..j];
+                let mut morceaux = corps.splitn(3, '|');
+                if let (Some(nom), Some(num), Some(id)) =
+                    (morceaux.next(), morceaux.next(), morceaux.next())
+                {
+                    table
+                        .entry(nom.to_string())
+                        .or_insert((num.to_string(), id.to_string()));
+                }
+                out.push_str(&html[debut..i]);
+                i = j + 3;
+                debut = i;
+                continue;
+            }
+        }
+        i += 1;
+    }
+    out.push_str(&html[debut..]);
+    (table, out)
+}
+
+fn resous_renvois(html: &str, table: &std::collections::BTreeMap<String, (String, String)>) -> String {
+    let octets = html.as_bytes();
+    let mut out = String::with_capacity(html.len());
+    let mut debut = 0;
+    let mut i = 0;
+    while i + 2 < octets.len() {
+        if octets[i] == 0xEE && octets[i + 1] == 0x80 && octets[i + 2] == 0x98 {
+            let corps_debut = i + 3;
+            let mut j = corps_debut;
+            while j + 2 < octets.len()
+                && !(octets[j] == 0xEE && octets[j + 1] == 0x80 && octets[j + 2] == 0x99)
+            {
+                j += 1;
+            }
+            if j + 2 < octets.len() {
+                let nom = &html[corps_debut..j];
+                out.push_str(&html[debut..i]);
+                match table.get(nom) {
+                    Some((num, id)) => {
+                        out.push_str(&format!(
+                            "<a class=\"renvoi\" href=\"#{}\">{}</a>",
+                            id, num
+                        ));
+                    }
+                    None => {
+                        out.push_str("<span class=\"renvoi-absent\">??</span>");
+                    }
+                }
+                i = j + 3;
+                debut = i;
+                continue;
+            }
+        }
+        i += 1;
+    }
+    out.push_str(&html[debut..]);
+    out
+}
+
 fn finalise(html: &str, toc: &str) -> String {
+    let (table, html) = collecte_renvois(html);
+    let html: String = resous_renvois(&html, &table);
+    let html: &str = &html;
     let octets = html.as_bytes();
     let mut out = String::with_capacity(html.len() + toc.len());
     let mut appels = 0u32;
@@ -251,12 +332,27 @@ impl Engine {
     pub fn render(&mut self, src: &str, parallel: bool) -> RenderResult {
         let pre = preprocess(src);
         let (page, body) = layout::rendu::parse_page(&pre);
+        layout::rendu::set_reglages_page(layout::rendu::ReglagesPage {
+            tabulation_cm: page.tabulation / 10.0,
+            hauteur_cm: page.hauteur / 10.0,
+            precision: page.precision,
+        });
         let segs = segments(&body);
         self.generation = self.generation.wrapping_add(1);
         let generation = self.generation;
 
         let mut env = Env::default();
         env.saisies = self.saisies.clone();
+        for (k, v) in [
+            ("titre", &page.titre),
+            ("auteur", &page.auteur),
+            ("institution", &page.institution),
+            ("date", &page.date),
+        ] {
+            if !v.is_empty() {
+                env.textes.insert(format!("document:{}", k), v.clone());
+            }
+        }
         layout::rendu::collecte_donnees(&body, &mut env);
 
         let mut cles: Vec<u64> = Vec::with_capacity(segs.len());
@@ -330,8 +426,12 @@ impl Engine {
                 continue;
             }
             if !html.is_empty() {
+                let hauteur = layout::rendu::reglages_page().hauteur_cm;
                 for _ in 0..vides {
-                    html.push_str("<div class=\"ligne-vide\"></div>");
+                    html.push_str(&format!(
+                        "<div class=\"ligne-vide\" style=\"height:{}cm\"></div>",
+                        hauteur
+                    ));
                 }
             }
             vides = 0;

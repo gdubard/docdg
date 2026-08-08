@@ -1,4 +1,8 @@
-:root { --zoom: 0.9; }
+:root {
+    --zoom: 0.9;
+    --part: 40%;
+    --decalage: 1;
+}
 
 html, body { height: 100%; margin: 0; }
 
@@ -98,25 +102,64 @@ html, body { height: 100%; margin: 0; }
         white-space: pre-wrap;
     }
     #diag.on { display: block; }
+    #panneaux {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: row;
+    }
+    #panneaux[data-disposition="verticale"] { flex-direction: column; }
+    #volet-code {
+        flex: 0 0 var(--part, 40%);
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+    }
+    #volet-apercu {
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    #panneaux[data-disposition="verticale"] #volet-apercu { order: -1; }
+    #separateur {
+        flex: 0 0 6px;
+        background: #17181a;
+        cursor: col-resize;
+        transition: background 0.15s;
+    }
+    #panneaux[data-disposition="verticale"] #separateur { cursor: row-resize; }
+    #separateur:hover, #separateur.actif { background: #3b6ea5; }
+    #panneaux.sans-code #volet-code, #panneaux.sans-code #separateur { display: none; }
+    #panneaux.sans-apercu #volet-apercu, #panneaux.sans-apercu #separateur { display: none; }
+    #panneaux.sans-apercu #volet-code { flex: 1 1 auto; }
+    #toolbar button.actif { background: #2f4f6f; }
+    #sep-toolbar { width: 14px; }
     #editor {
-        flex: none;
+        flex: 1 1 auto;
         width: 100%;
-        height: 38vh;
         box-sizing: border-box;
         font-family: "SF Mono", Menlo, monospace;
         font-size: 13px;
         tab-size: 4;
-        resize: vertical;
+        resize: none;
         border: none;
         outline: none;
         padding: 10px 14px;
         background: #1e1f22;
         color: #d8dee9;
-        white-space: pre;
+        /* Repli visuel des lignes trop longues : le retour à la ligne est
+           d'affichage seulement, aucun caractère n'est ajouté au source.
+           `pre-wrap` conserve tabulations et espaces significatifs. */
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        overflow-x: hidden;
     }
     #preview-wrapper {
         flex: 1 1 auto;
         min-height: 0;
+        min-width: 0;
         overflow: auto;
         padding: 20px 0 40px;
     }
@@ -164,10 +207,22 @@ html, body { height: 100%; margin: 0; }
 
 .doc p { margin: 0; text-align: justify; }
 .doc h2.sec, .doc h3.sec, .doc h4.sec { margin: 1.1em 0 0.5em; }
+.doc h1.sec { font-size: 1.7em; margin: 1.4em 0 0.8em; }
 .doc h2.sec { font-size: 1.35em; }
 .doc h3.sec { font-size: 1.15em; }
 .doc h4.sec { font-size: 1.02em; }
 .doc hr.ligne { border: none; border-top: 0.4mm solid #444; margin: 1em 0; }
+.doc .page-de-titre { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 60%; padding: 12mm 0; }
+.doc .titre-doc { font-size: 2em; font-weight: 700; margin-bottom: 10mm; }
+.doc .auteur-doc { font-size: 1.25em; margin-bottom: 4mm; }
+.doc .institution-doc { font-style: italic; margin-bottom: 4mm; }
+.doc .date-doc { margin-top: 6mm; }
+.doc a.renvoi { color: inherit; text-decoration: none; }
+.doc .renvoi-absent { color: #c01c28; font-weight: 700; }
+.doc .bibliographie { margin: 0.5em 0 1em; }
+.doc .bib-entree { margin: 0 0 1.2mm; padding-left: 9mm; text-indent: -9mm; text-align: justify; }
+.doc .bib-num { font-weight: 700; }
+.doc .cite-sep { margin-right: 0.15em; }
 .doc .cadre { margin: 0 0 1em; }
 .doc .cadre-titre { color: #fff; font-weight: 700; padding: 1.2mm 3mm; }
 .doc .cadre-corps { padding: 2.5mm 3.5mm; }
@@ -182,7 +237,8 @@ html, body { height: 100%; margin: 0; }
 .doc .toc { margin: 1em 0 1.5em; }
 .doc .toc-title { font-weight: 700; font-size: 1.3em; margin-bottom: 0.6em; }
 .doc .toc-e a { display: flex; align-items: baseline; gap: 6px; color: inherit; text-decoration: none; padding: 1px 0; }
-.doc .toc-e.lvl2 { padding-left: 6mm; }
+.doc .toc-e.lvl0 { font-weight: 700; }
+.toc-e.lvl2 { padding-left: 6mm; }
 .doc .toc-e.lvl3 { padding-left: 12mm; }
 .doc .toc-num { min-width: 8mm; }
 .doc .toc-dots { flex: 1; border-bottom: 1px dotted #999; }
@@ -217,8 +273,10 @@ html, body { height: 100%; margin: 0; }
     font-size: 0.8em;
 }
 .note-ref { font-size: 0.7em; }
+.doc sup { vertical-align: baseline; position: relative; font-size: 0.72em; top: calc(-0.38em * var(--decalage, 1)); }
+.doc sub { vertical-align: baseline; position: relative; font-size: 0.72em; top: calc(0.22em * var(--decalage, 1)); }
 
-.doc .calcul { margin: 0.4em 0 1em; overflow-x: auto; overflow-y: hidden; }
+.doc .calcul { margin: 0.4em 0 1em; overflow: visible; }
 .doc .katex-display {
     text-align: inherit !important;
     margin: 0 !important;
@@ -236,7 +294,9 @@ html, body { height: 100%; margin: 0; }
 }
 
 @media print {
-    #toolbar, #editor, #diag, #measure, #settings, #fermeture { display: none !important; }
+    #toolbar, #volet-code, #separateur, #diag, #measure, #settings, #fermeture { display: none !important; }
+    #panneaux { display: block !important; }
+    #volet-apercu { display: block !important; }
     html, body {
         background: #fff;
         height: auto;
@@ -275,10 +335,16 @@ html, body { height: 100%; margin: 0; }
 
 .doc table.signes { border: 0.3mm solid #000; }
 .doc table.signes th, .doc table.signes td { padding: 0.6mm 2.5mm; }
-.doc table.signes th:first-child { text-align: left; padding-right: 4mm; }
+.doc table.signes th:first-child {
+    text-align: left;
+    padding-right: 4mm;
+    border-right: 0.3mm solid #000;
+}
 .doc table.signes tr { border-bottom: 0.3mm solid #000; }
 .doc table.signes tr:last-child { border-bottom: none; }
-.doc table.signes th:first-child { border-right: 0.3mm solid #000; }
+.doc table.avancement { margin: 2mm auto; }
+.doc table.avancement td, .doc table.avancement th { border: 0.2mm solid #000; text-align: center; }
+.doc table.avancement td:first-child { text-align: left; font-style: italic; }
 .doc table.signes td.var { height: 11mm; }
 .doc table.signes td.haut { vertical-align: top; }
 .doc table.signes td.bas { vertical-align: bottom; }

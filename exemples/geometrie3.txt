@@ -1,6 +1,6 @@
 page {
 	orientation: portrait;
-	marges: 5;
+	marges: 2;
 	espacements: 2;
 	taille: 11;
 	interligne: 1.2;
@@ -85,10 +85,11 @@ soit h2 = <bleu italique sous-section>
 <h2>Le repère orthogonal : des unités distinctes
 	Pour une grandeur qui varie vite en ordonnée, on compresse l'axe :
 	<Soit>une fonction p(x) = x^2
-<Représente>graphiquement dans un repère orthogonal (O, i, j) pour x appartient à [-3 ; 3] et y à [-9 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées {
+<Représente>graphiquement dans un repère orthogonal (O, i, j) pour x appartient à [-3 ; 3] et y à [-1 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées {
 	la courbe de la fonction p
 	le point S(0 ; 0)
 }
+
 <h2>Le cercle, de centre et de rayon
 <Trace>dans un repère où l'abscisse appartient à [-4 ; 4] et l'ordonnée à [-4 ; 4] {
 	le point O(0 ; 0)
@@ -158,7 +159,7 @@ Les médiatrices concourent au centre du cercle circonscrit.
 	<Donne>un vecteur normal de P
 
 	<Calcule>la distance du point (1 ; 2 ; 0) au plan P
-<page suivante h1>Le repère de l'espace
+<h1>Le repère de l'espace
 	Un point de l'espace se repère par trois coordonnées $(x ; y ; z)$. Le chemin en pointillés rouges suit les coordonnées depuis l'origine.
 <Soit>les points A(1;2;3) et B(3;1;2)
 <Trace>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
@@ -167,7 +168,7 @@ Les médiatrices concourent au centre du cercle circonscrit.
 <Soit>les points E(2;0;0), F(2;3;0) et G(0;3;2)
 <Trace>dans un repère de l'espace les points E, F et G, les segments [EF] et [FG]
 
-<page suivante h1>Géométrie analytique de l'espace
+<h1>Géométrie analytique de l'espace
 <Soit>le plan P d'équation 2x + y - z = 3
 <Donne>le vecteur normal du plan P
 <Calcule>la distance du point (1 ; 2 ; 0) au plan P

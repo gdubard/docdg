@@ -1,10 +1,12 @@
 pub(crate) mod algebre;
 pub(crate) mod analyse;
 pub(crate) mod calcul;
+pub(crate) mod chimie;
 pub(crate) mod complexe;
 pub(crate) mod courbes;
 pub(crate) mod groupes;
 pub(crate) mod lois;
+pub(crate) mod physique;
 pub(crate) mod espace;
 pub(crate) mod geometrie;
 pub(crate) mod statistiques;

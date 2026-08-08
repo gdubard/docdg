@@ -1,7 +1,9 @@
+import os
 import sys
 import json
 import re
 import itertools
+from functools import lru_cache
 
 try:
     import sympy as sp
@@ -54,14 +56,28 @@ TRIGONOMETRIQUES = (sp.sin, sp.cos, sp.tan, sp.sinh, sp.cosh, sp.tanh)
 SEUIL_CASCADE = 12
 
 
+@lru_cache(maxsize=512)
+def _reduis_memo(e):
+    return _reduis(e)
+
+
 def reduis(e):
+    try:
+        hash(e)
+    except TypeError:
+        return _reduis(e)
+    return _reduis_memo(e)
+
+
+def _reduis(e):
     try:
         meilleur, cout = e, sp.count_ops(e)
     except Exception:
         return e
     if cout < SEUIL_CASCADE:
         try:
-            return sp.simplify(e)
+            candidat = sp.simplify(e, ratio=1.7, rational=None)
+            return candidat if sp.count_ops(candidat) <= cout else e
         except Exception:
             return e
     formes = [(sp.factor, False), (lambda z: sp.factor(sp.cancel(z)), False),
@@ -80,6 +96,21 @@ def reduis(e):
         if prix < cout or (egalite and prix == cout and candidat != meilleur):
             meilleur, cout = candidat, prix
     return meilleur
+
+
+@lru_cache(maxsize=512)
+def _limite_memo(expr, x, point, sens):
+    if sens:
+        return sp.limit(expr, x, point, sens)
+    return sp.limit(expr, x, point)
+
+
+def limite(expr, x, point, sens=None):
+    try:
+        hash((expr, x, point, sens))
+    except TypeError:
+        return sp.limit(expr, x, point, sens) if sens else sp.limit(expr, x, point)
+    return _limite_memo(expr, x, point, sens)
 
 
 def locals_for(extra=None):
@@ -102,7 +133,7 @@ AUTORISES = ["Symbol", "Integer", "Float", "Rational", "Add", "Mul", "Pow", "Eq"
              "sinh", "cosh", "tanh", "asinh", "acosh", "atanh", "conjugate", "re", "im",
              "arg", "gamma", "erf", "Min", "Max", "pi", "E", "I", "oo", "zoo", "nan"]
 
-INTERDIT = re.compile(r"__|\blambda\b|\bimport\b|\bexec\b|\beval\b|\bopen\b"
+INTERDIT = re.compile(r"__|[\"`]|\blambda\b|\bimport\b|\bexec\b|\beval\b|\bopen\b"
                       r"|\bcompile\b|\bgetattr\b|\bsetattr\b|\bglobals\b|\blocals\b"
                       r"|\bvars\b|\bsubclasses\b|\bmro\b")
 
@@ -232,6 +263,7 @@ def racines_reelles(expr, x):
             continue
     return reelles
 
+@lru_cache(maxsize=256)
 def domaine_reel(expr, x):
 
     try:
@@ -249,6 +281,7 @@ def intervalles_de(domaine):
               if isinstance(m, sp.Interval) and float(m.start) < float(m.end)]
     return sorted(gardes, key=lambda i: float(i.start))
 
+@lru_cache(maxsize=256)
 def ruptures_de(expr, x):
 
     points = set()
@@ -261,8 +294,9 @@ def ruptures_de(expr, x):
             continue
         if isinstance(sols, sp.FiniteSet):
             points.update(s for s in sols if s.is_real and s.is_finite)
-    return points
+    return frozenset(points)
 
+@lru_cache(maxsize=256)
 def branche(expr, x, t):
 
     def sens(interieur):
@@ -285,6 +319,7 @@ def temoin(g, d):
         return g + 1
     return sp.Rational(1, 2) * (g + d)
 
+@lru_cache(maxsize=256)
 def zeros_dans(expr, x, g, d):
 
     try:
@@ -604,7 +639,7 @@ def handle(req):
         pt = parse(a["at"])
         side = a.get("side")
         d = {"droite": "+", "gauche": "-"}.get(side, "+")
-        val = sp.limit(f["expr"], f["var"], pt, d)
+        val = limite(f["expr"], f["var"], pt, d)
         mark = "^{%s}" % d if side else ""
         return r"\lim\limits_{%s \to %s%s} %s(%s) = %s" % (
             tex(f["var"]), borne(pt), mark, nom_tex(a["name"]), tex(f["var"]), borne(val))
@@ -630,7 +665,7 @@ def handle(req):
             termes = list(s.args) if s.is_Add else [s]
             lead = termes[0]
             for autre in termes[1:]:
-                rapport = sp.limit(reduis(autre / lead), x, pt)
+                rapport = limite(reduis(autre / lead), x, pt)
                 if rapport.is_infinite:
                     lead = autre
             break
@@ -1112,16 +1147,16 @@ def handle(req):
         lignes = []
         limites = {}
         for borne_inf in (-sp.oo, sp.oo):
-            limites[borne_inf] = sp.limit(f["expr"], x, borne_inf)
+            limites[borne_inf] = limite(f["expr"], x, borne_inf)
         horizontales = {}
         obliques = {}
         for cote, valeur in limites.items():
             if valeur.is_finite:
                 horizontales.setdefault(valeur, []).append(cote)
                 continue
-            pente = sp.limit(f["expr"] / x, x, cote)
+            pente = limite(f["expr"] / x, x, cote)
             if pente.is_finite and pente != 0:
-                ordonnee = sp.limit(f["expr"] - pente * x, x, cote)
+                ordonnee = limite(f["expr"] - pente * x, x, cote)
                 if ordonnee.is_finite:
                     obliques.setdefault((pente, ordonnee), []).append(cote)
 
@@ -1325,7 +1360,7 @@ def handle(req):
                 if not ouvert or bord in (-sp.oo, sp.oo):
                     continue
                 v = float(bord)
-                if x0 <= v <= x1 and sp.limit(f["expr"], x, bord,
+                if x0 <= v <= x1 and limite(f["expr"], x, bord,
                                               "+" if bord == g else "-").is_infinite:
                     out.append("ASYMPTOTE_V|%.5f" % v)
 
@@ -1350,14 +1385,14 @@ def handle(req):
             if x0 <= float(r) <= x1:
                 out.append("ASYMPTOTE_V|%.5f" % float(r))
         for cote in (-sp.oo, sp.oo):
-            valeur = sp.limit(f["expr"], x, cote)
+            valeur = limite(f["expr"], x, cote)
             if valeur.is_finite:
                 out.append("ASYMPTOTE_D|0,%.5f" % float(valeur))
                 continue
-            pente = sp.limit(f["expr"] / x, x, cote)
+            pente = limite(f["expr"] / x, x, cote)
             if not (pente.is_finite and pente != 0):
                 continue
-            ordonnee = sp.limit(f["expr"] - pente * x, x, cote)
+            ordonnee = limite(f["expr"] - pente * x, x, cote)
 
             if not (ordonnee.is_finite and ordonnee.is_number):
                 continue
@@ -1530,14 +1565,14 @@ def handle(req):
         def valeur_au_bord(b, cote):
 
             if cote:
-                return sp.limit(expr, x, b, cote)
+                return limite(expr, x, b, cote)
             try:
                 v = reduis(expr.subs(x, b))
                 if v.is_finite and not v.has(sp.zoo, sp.nan, sp.I):
                     return lisible(v)
             except Exception:
                 pass
-            return sp.limit(expr, x, b, "+")
+            return limite(expr, x, b, "+")
 
         blocs = []
         for I in morceaux:
@@ -1591,8 +1626,8 @@ def handle(req):
                 continue
             if sp.simplify(blocs[k - 1][0].end - I.start) == 0:
                 fusion = ("borne", borne(I.start), "\u2016",
-                          "=%s\\ \\Vert\\ %s" % (borne(sp.limit(expr, x, I.start, "-")),
-                                                borne(sp.limit(expr, x, I.start, "+"))))
+                          "=%s\\ \\Vert\\ %s" % (borne(limite(expr, x, I.start, "-")),
+                                                borne(limite(expr, x, I.start, "+"))))
                 plat = plat[:-1] + [fusion] + entrelace[1:]
             else:
                 plat = plat + [("lien", "", "#", "#")] + entrelace
@@ -1788,7 +1823,83 @@ def handle(req):
                 % (tex(m), tex(s), tex(b0), tex(b1), tex(b0), tex(b1),
                    tex(s), tex(m), tex(s), tex(proba), fr(sp.latex(approx))))
 
+
+    if op == "vecteur":
+        genre = a["genre"]
+        variables = [sym(v) for v in a["vars"]]
+        if genre in ("gradient", "laplacien"):
+            f = parse(a["expr"])
+            if genre == "gradient":
+                comps = [reduis(sp.diff(f, v)) for v in variables]
+                corps = " \\\\ ".join(tex(c) for c in comps)
+                return ("\\(\\overrightarrow{\\nabla} f = "
+                        "\\begin{pmatrix} %s \\end{pmatrix}\\)" % corps)
+            lap = reduis(sum(sp.diff(f, v, 2) for v in variables))
+            return "\\(\\Delta f = %s\\)" % tex(lap)
+        comps = [parse(c) for c in a["champ"]]
+        if genre == "divergence":
+            d = reduis(sum(sp.diff(c, v) for c, v in zip(comps, variables)))
+            return "\\(\\operatorname{div}\\vec{F} = %s\\)" % tex(d)
+        if genre == "rotationnel":
+            if len(comps) != 3 or len(variables) != 3:
+                raise ValueError("Le rotationnel exige un champ a trois composantes.")
+            P, Q, R = comps
+            u, v, w = variables
+            r1 = reduis(sp.diff(R, v) - sp.diff(Q, w))
+            r2 = reduis(sp.diff(P, w) - sp.diff(R, u))
+            r3 = reduis(sp.diff(Q, u) - sp.diff(P, v))
+            return ("\\(\\overrightarrow{\\mathrm{rot}}\\,\\vec{F} = "
+                    "\\begin{pmatrix} %s \\\\ %s \\\\ %s \\end{pmatrix}\\)"
+                    % (tex(r1), tex(r2), tex(r3)))
+        raise ValueError("Operateur vectoriel inconnu : %s." % genre)
+
+
+    if op == "incertitude":
+        nom = a.get("nom", "f")
+        reels = {k: sp.Symbol(k, real=True)
+                 for k in list(a.get("u", {})) + list(a.get("valeurs", {}))}
+        f = parse(a["expr"], extra=dict(reels))
+        libres = sorted(f.free_symbols, key=str)
+        precisions = {k: parse(v) for k, v in a.get("u", {}).items()}
+        valeurs = {k: parse(v) for k, v in a.get("valeurs", {}).items()}
+        concernees = [v for v in libres if str(v) in precisions]
+        if not concernees:
+            raise ValueError("Aucune incertitude u(...) n'est fournie.")
+        termes = []
+        for v in concernees:
+            d = reduis(sp.diff(f, v))
+            termes.append((v, d))
+        formule = " + ".join(
+            "\\left(\\dfrac{\\partial %s}{\\partial %s}\\right)^{2} u(%s)^{2}"
+            % (nom, tex(v), tex(v)) for v, _ in termes)
+        explicite = " + ".join(
+            "\\left(%s\\right)^{2} u(%s)^{2}" % (tex(d), tex(v)) for v, d in termes)
+        lignes = ["\\[u(%s) = \\sqrt{%s} = \\sqrt{%s}\\]" % (nom, formule, explicite)]
+        if all(str(v) in valeurs for v in libres):
+            substitution = {v: valeurs[str(v)] for v in libres}
+            somme = sum((d.subs(substitution) * precisions[str(v)]) ** 2 for v, d in termes)
+            u = sp.sqrt(somme)
+            centre = f.subs(substitution)
+            lignes.append("\\[%s = %s \\quad ; \\quad u(%s) = %s\\]"
+                          % (nom, fr(sp.latex(sp.N(centre, 4))), nom,
+                             fr(sp.latex(sp.N(u, 2)))))
+        return "\n".join(lignes)
+
     raise ValueError("Commande inconnue : %s." % op)
+
+DELAI = 20
+
+try:
+    import signal
+
+    def _trop_long(_signum, _cadre):
+        raise TimeoutError("le calcul dépasse %d secondes : il est abandonné" % DELAI)
+
+    GARDE = hasattr(signal, "SIGALRM")
+    if GARDE:
+        signal.signal(signal.SIGALRM, _trop_long)
+except ImportError:
+    GARDE = False
 
 for line in sys.stdin:
     line = line.strip()
@@ -1798,7 +1909,16 @@ for line in sys.stdin:
         print(json.dumps({"err": ABSENT}), flush=True)
         continue
     try:
+        if os.environ.get("DOCDG_CAPTURE"):
+            with open(os.environ["DOCDG_CAPTURE"], "a") as journal:
+                journal.write(line + "\n")
         req = json.loads(line)
-        print(json.dumps({"ok": handle(req)}), flush=True)
+        if GARDE:
+            signal.alarm(DELAI)
+        try:
+            print(json.dumps({"ok": handle(req)}), flush=True)
+        finally:
+            if GARDE:
+                signal.alarm(0)
     except Exception as exc:
         print(json.dumps({"err": str(exc)}), flush=True)

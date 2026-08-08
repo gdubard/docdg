@@ -281,6 +281,16 @@ pub fn format_number(v: f64) -> String {
     if !v.is_finite() {
         return "…".into();
     }
+    let precision = crate::layout::rendu::reglages_page().precision;
+    if precision >= 0 {
+        let f = 10f64.powi(precision);
+        let r = (v * f).round() / f;
+        return if precision == 0 {
+            format!("{}", r.round() as i64)
+        } else {
+            format!("{:.*}", precision as usize, r).replace('.', ",")
+        };
+    }
     let r = (v * 1e9).round() / 1e9;
     if (r - r.round()).abs() < 1e-9 {
         format!("{}", r.round() as i64)

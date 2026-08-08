@@ -50,3 +50,32 @@ La période dépend de l'amplitude dès que $sin(theta)$ s'écarte de
 	La densité de probabilité de présence est $valeur absolue(psi(x))^2$ ;
 	l'intégrale sur tout l'espace vaut $1$ après normalisation.
 }
+<page suivante h2>Opérateurs de l'électromagnétisme
+
+Le potentiel et son champ, reliés par le gradient :
+
+<Calcule>le gradient de V(x, y, z) = x^2 + y^2 - 2z^2
+
+Un champ tournant, sa divergence et son rotationnel :
+
+<Calcule>la divergence du champ F(x, y, z) = (x^2 ; xy ; z)
+
+<Calcule>le rotationnel du champ F(x, y, z) = (y ; -x ; 0)
+
+Le laplacien du potentiel — nul, l'équation de Laplace est vérifiée :
+
+<Calcule>le laplacien de V(x, y, z) = x^2 + y^2 - 2z^2
+
+<h2>Signal en créneau et série de Fourier
+
+<Soit>une fonction f(x) = x
+
+<Calcule>la série de Fourier de f à l'ordre 4 sur [-pi ; pi]
+
+<h2>Incertitude sur la pesanteur au pendule
+
+<Propage>l'incertitude sur g = 4pi^2 L/T^2 avec u(L) = 0,001, u(T) = 0,01, L = 0,995, T = 2,004
+
+<Convertis>13,6 eV en J
+
+<Donne>la valeur de la constante de Planck réduite

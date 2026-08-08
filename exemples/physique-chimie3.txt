@@ -70,3 +70,36 @@ Une bille est lancée vers le haut à $20$ m/s depuis le sol ; hauteur et vitess
 	La vitesse est la dérivée de la hauteur : $v(t) = h'(t)$. Le sommet
 	de la trajectoire est atteint quand la vitesse s'annule.
 }
+<h2>Équilibrer une équation chimique
+
+La combustion du propane, coefficients trouvés par conservation des éléments :
+
+<Équilibre>l'équation C3H8 + O2 -> CO2 + H2O
+
+Et une demi-équation redox en milieu acide, charge comprise :
+
+<Équilibre>l'équation Fe^2+ + MnO4^- + H^+ -> Fe^3+ + Mn^2+ + H2O
+
+<h2>Masse molaire et tableau d'avancement
+
+<Calcule>la masse molaire de CaCO3
+
+<Dresse>un tableau d'avancement pour CH4 + O2 -> CO2 + H2O avec n(CH4) = 0,5 et n(O2) = 0,8
+
+<h2>Conversions et constantes
+
+<Convertis>90 km/h en m/s
+
+<Convertis>25 °C en K
+
+<Convertis>1013 hPa en atm
+
+<Donne>la valeur de la vitesse de la lumière
+
+<Donne>la valeur du nombre d'Avogadro
+
+<h2>Propagation d'incertitudes
+
+La résistance mesurée par la loi d'Ohm, avec les incertitudes-types des deux appareils :
+
+<Propage>l'incertitude sur R = U/I avec u(U) = 0,05, u(I) = 0,002, U = 5,12, I = 0,254

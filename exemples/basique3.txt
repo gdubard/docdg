@@ -5,25 +5,33 @@ page {
 	taille: 11;
 	interligne: 1.2;
 }
+
 soit titre = <rouge gras 18pt centre>
 soit h1 = <bleu marine gras section num>
+
 <titre>docdg — les bases, niveau 3 : les saisies interactives
-<h1>La fiche de l'élève
+<h1>La fiche de l'enseignant
 	Un document docdg peut poser des questions au lecteur. Chaque question bloque la suite du document tant que la réponse ne correspond pas au type attendu : un entier s'écrit sans virgule, un décimal avec une virgule, un booléen se dit vrai ou faux.
+
 soit prénom = <Saisis>un texte{Quel est le prénom de l'élève ?}
 soit nom = <Saisis>un texte{Quel est le nom de l'élève ?}
 soit âge = <Saisis>un entier{Quel est son âge ?}
 soit taille = <Saisis>un décimal{Quelle est sa taille, en mètres ?}
 soit marié = <Saisis>un booléen{Est-il marié ?}
 soit initiale = <Saisis>un caractère{Quelle est sa lettre préférée ?}
-<h1>Le portrait, composé à partir des réponses
-	#prénom #nom a #âge ans et mesure #taille m, soit #{taille * 100} cm. Sa lettre préférée est #initiale.
-	L'alternative s'écrit aussi en une ligne, comme une valeur — du texte ou un nombre :
 soit statut = si marié { marié } sinon { célibataire }
 soit tarif = si âge moins de 18 { 5 } sinon { 9 }
-	Sur sa fiche, #prénom est noté #statut ; son entrée au musée coûte #tarif euros, soit #{tarif * 2} euros pour deux.
+
+<h1>Le portrait, composé à partir des réponses
+	#prénom #nom a #âge ans.
+	Il est #statut.
+	Il mesure #taille m, soit #{taille * 100} cm.
+	Sa lettre préférée est "#initiale".
+	Son entrée au musée coûte #tarif euros, soit #{tarif * 2} euros pour deux.
+
 <h1>Les réponses se calculent
 	Les valeurs saisies sont des valeurs comme les autres : dans dix ans, #prénom aura #{âge + 10} ans ; s'il grandit de 12 cm, il mesurera #{taille + 0,12} m.
+
 <Affiche>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
 	$#taille  m = #{taille * 100}  cm = #{taille * 1000}  mm$
 }

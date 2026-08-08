@@ -1,6 +1,6 @@
 page {
 	orientation: portrait;
-	marges: 2;
+	marges: 30;
 	espacements: 2;
 	taille: 11;
 	interligne: 1.0;
@@ -9,9 +9,10 @@ soit h1 = <bleu marine gras section num>
 
 <h1>Étude d'une fonction
 <Soit>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
-<Dresse>les tableaux de variations de f, g, et h
 
 <Dresse>les tableaux de signes de f, g, et h
+
+<Dresse>les tableaux de variations de f, g, et h
 
 <Calcule>les dérivées de f, g et h
 

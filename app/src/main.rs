@@ -122,10 +122,41 @@ fn json_str(s: &str) -> String {
 }
 
 
+fn chemin_prefs() -> Option<PathBuf> {
+    #[cfg(unix)]
+    let base = std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".config"));
+    #[cfg(windows)]
+    let base = std::env::var_os("APPDATA").map(PathBuf::from);
+    let dossier = base?.join("docdg");
+    std::fs::create_dir_all(&dossier).ok()?;
+    Some(dossier.join("interface.json"))
+}
+
+fn lit_prefs() -> String {
+    chemin_prefs()
+        .and_then(|c| std::fs::read_to_string(c).ok())
+        .filter(|s| serde_json::from_str::<serde_json::Value>(s).is_ok())
+        .unwrap_or_else(|| "{}".into())
+}
+
+fn ecrit_prefs(contenu: &str) {
+    if serde_json::from_str::<serde_json::Value>(contenu).is_err() {
+        return;
+    }
+    if let Some(chemin) = chemin_prefs() {
+        let _ = std::fs::write(chemin, contenu);
+    }
+}
+
 fn build_html() -> String {
     INDEX_HTML
         .replacen("/*__STYLE_CSS__*/", STYLE_CSS, 1)
         .replacen("/*__SCRIPT_JS__*/", APP_JS, 1)
+        .replacen(
+            "/*__PREFS__*/",
+            &format!("window.__PREFS__ = {};", lit_prefs()),
+            1,
+        )
         .replacen("<!--__MATH__-->", &katex(), 1)
 }
 
@@ -638,7 +669,7 @@ fn menu_edition(fenetre: &tao::window::Window) {
 fn main() -> wry::Result<()> {
     let event_loop = EventLoopBuilder::<Reponse>::with_user_event().build();
     let window = WindowBuilder::new()
-        .with_title("DocDG — texecole")
+        .with_title("DocDG")
         .with_inner_size(tao::dpi::LogicalSize::new(1200.0, 900.0))
         .build(&event_loop)
         .unwrap();
@@ -651,6 +682,8 @@ fn main() -> wry::Result<()> {
     let cible = fenetre.clone();
     let quitte = Rc::new(RefCell::new(false));
     let demande_quitter = quitte.clone();
+    let derniere_demande: Rc<RefCell<Option<Instant>>> =
+        Rc::new(RefCell::new(None));
 
     let builder = WebViewBuilder::new()
         .with_html(build_html())
@@ -740,6 +773,9 @@ fn main() -> wry::Result<()> {
                         let _ = proxy_export.send_event(Reponse::Message(issue.0, issue.1));
                     });
                 }
+                "prefs" => {
+                    ecrit_prefs(&msg.content);
+                }
                 "quitter" => {
                     let _ = proxy.send_event(Reponse::Quitter);
                 }
@@ -785,11 +821,27 @@ fn main() -> wry::Result<()> {
                 event: WindowEvent::CloseRequested,
                 ..
             } => {
-                if *demande_quitter.borrow() {
+                let demande = Instant::now();
+                let precedente = *derniere_demande.borrow();
+                let recent = match precedente {
+                    Some(t) => demande.duration_since(t).as_secs_f32() < 2.0,
+                    None => false,
+                };
+                let interroge = fenetre
+                    .borrow()
+                    .as_ref()
+                    .map(|vue| {
+                        vue.evaluate_script(
+                            "if (window.demandeFermeture) { window.demandeFermeture(); }",
+                        )
+                        .is_ok()
+                    })
+                    .unwrap_or(false);
+                if *demande_quitter.borrow() || recent || !interroge {
                     eteint();
                     *flux = ControlFlow::Exit;
-                } else if let Some(vue) = fenetre.borrow().as_ref() {
-                    let _ = vue.evaluate_script("window.demandeFermeture();");
+                } else {
+                    *derniere_demande.borrow_mut() = Some(demande);
                 }
             }
             _ => {}

@@ -14,12 +14,23 @@
     <button id="btn-save" type="button">Enregistrer</button>
     <button id="btn-export" type="button">Exporter</button>
     <button id="btn-settings" type="button">Paramétrer</button>
+    <span id="sep-toolbar"></span>
+    <button id="btn-disposition" type="button" title="Basculer la disposition">⇄</button>
+    <button id="btn-volet-code" type="button" class="actif" title="Afficher ou masquer le code">Code</button>
+    <button id="btn-volet-apercu" type="button" class="actif" title="Afficher ou masquer l'aperçu">Aperçu</button>
     <span id="spacer"></span>
     <span id="status"></span>
     <button id="btn-zoom-out" type="button">−</button>
     <button id="btn-zoom-in" type="button">+</button>
 </div>
 <div id="settings" class="hidden">
+    <fieldset>
+        <legend>Document</legend>
+        <label>Titre <input type="text" id="doc-titre" placeholder="—"></label>
+        <label>Auteur <input type="text" id="doc-auteur" placeholder="—"></label>
+        <label>Institution <input type="text" id="doc-institution" placeholder="—"></label>
+        <label>Date <input type="text" id="doc-date" placeholder="—"></label>
+    </fieldset>
     <label>Orientation
         <select id="set-orientation">
             <option value="portrait">Portrait</option>
@@ -42,8 +53,17 @@
     </fieldset>
     <fieldset>
         <legend>Texte</legend>
+        <label>Police <input type="text" id="doc-police" placeholder="Georgia, Times…"></label>
+        <label>Math <input type="text" id="doc-math" placeholder="—"></label>
         <label>Taille (pt) <input type="number" id="set-police" min="6" step="any"></label>
         <label>Interligne <input type="number" id="set-interligne" min="1" step="0.05"></label>
+    </fieldset>
+    <fieldset>
+        <legend>Réglages</legend>
+        <label>Tabulation (mm) <input type="number" id="doc-tabulation" min="1" step="any"></label>
+        <label>Hauteur de ligne (mm) <input type="number" id="doc-hauteur" min="1" step="any"></label>
+        <label>Décalage exposants (%) <input type="number" id="doc-decalage" min="0" step="any"></label>
+        <label>Précision (décimales, −1 = libre) <input type="number" id="doc-precision" min="-1" step="1"></label>
     </fieldset>
     <button id="btn-apply" type="button">Appliquer</button>
 </div>
@@ -53,10 +73,14 @@
     <button id="btn-quitter" type="button">Quitter sans enregistrer</button>
 </div>
 <div id="diag"></div>
-<label for="editor"></label><textarea id="editor" spellcheck="false" placeholder="Saisir des instructions texecole, ou cliquer sur Charger."></textarea>
-<div id="preview-wrapper"><div id="pages"></div></div>
+<div id="panneaux" data-disposition="horizontale">
+    <div id="volet-code"><label for="editor"></label><textarea id="editor" spellcheck="false" placeholder="Saisir des instructions docdg, ou cliquer sur Charger."></textarea></div>
+    <div id="separateur" title="Glisser pour redimensionner — double-clic pour rétablir"></div>
+    <div id="volet-apercu"><div id="preview-wrapper"><div id="pages"></div></div></div>
+</div>
 <div id="measure"></div>
 <style id="printsize"></style>
+<script>/*__PREFS__*/</script>
 <script>/*__SCRIPT_JS__*/</script>
 </body>
 </html>

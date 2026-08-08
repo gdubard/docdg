@@ -383,6 +383,87 @@ pub fn parse_command(verb: &str, rest: &str) -> Option<Value> {
     let t = rest.trim();
     let low = t.to_lowercase();
 
+    if verb == "Propage" {
+        let apres = after_key(t, &["l'incertitude sur", "incertitude sur"])?;
+        let (modele, params) = apres.split_once(" avec ")?;
+        let (gauche, droite) = modele.split_once('=')?;
+        let nom = first_word(gauche.trim());
+        let mut u = serde_json::Map::new();
+        let mut valeurs = serde_json::Map::new();
+        let mut morceaux: Vec<String> = Vec::new();
+        let mut courant = String::new();
+        let mut chars = params.chars().peekable();
+        while let Some(c) = chars.next() {
+            if c == ',' && !chars.peek().map(|n| n.is_ascii_digit()).unwrap_or(false) {
+                morceaux.push(std::mem::take(&mut courant));
+            } else {
+                courant.push(c);
+            }
+        }
+        morceaux.push(courant);
+        for morceau in &morceaux {
+            let m = morceau.trim().trim_end_matches('.');
+            let Some((cle, valeur)) = m.split_once('=') else {
+                continue;
+            };
+            let (cle, valeur) = (cle.trim(), valeur.trim().replace(',', "."));
+            if let Some(variable) = cle.strip_prefix("u(").and_then(|r| r.strip_suffix(')')) {
+                u.insert(variable.trim().to_string(), json!(valeur));
+            } else if is_name(cle) {
+                valeurs.insert(cle.to_string(), json!(valeur));
+            }
+        }
+        return Some(json!({"op":"incertitude","args":{
+            "nom": nom,
+            "expr": nettoie_expr(droite.trim()),
+            "u": u,
+            "valeurs": valeurs}}));
+    }
+
+    if (verb == "Calcule" || verb == "Détermine")
+        && t.contains('=')
+        && (low.contains("gradient") || low.contains("divergence")
+            || low.contains("rotationnel") || low.contains("laplacien"))
+    {
+        let genre = ["gradient", "divergence", "rotationnel", "laplacien"]
+            .iter()
+            .find(|g| low.contains(*g))?
+            .to_string();
+        let apres = after_key(
+            t,
+            &["du champ", "de la fonction", "du", "de"],
+        )?;
+        let (gauche, droite) = apres.split_once('=')?;
+        let variables: Vec<String> = gauche
+            .split_once('(')
+            .and_then(|(_, r)| r.split_once(')'))
+            .map(|(v, _)| {
+                v.split([',', ';'])
+                    .map(|x| x.trim().to_string())
+                    .filter(|x| !x.is_empty())
+                    .collect()
+            })
+            .unwrap_or_else(|| vec!["x".into(), "y".into(), "z".into()]);
+        let droite = droite.trim().trim_end_matches('.');
+        if genre == "gradient" || genre == "laplacien" {
+            return Some(json!({"op":"vecteur","args":{
+                "genre": genre,
+                "vars": variables,
+                "expr": nettoie_expr(droite)}}));
+        }
+        let composantes: Vec<String> = droite
+            .trim_start_matches('(')
+            .trim_end_matches(')')
+            .split(';')
+            .map(|c| nettoie_expr(c.trim()))
+            .collect();
+        return Some(json!({"op":"vecteur","args":{
+            "genre": genre,
+            "vars": variables,
+            "champ": composantes}}));
+    }
+
+
     let single = |op: &str, name: &str| Some(json!({"op": op, "args": {"name": name}}));
 
     match verb {

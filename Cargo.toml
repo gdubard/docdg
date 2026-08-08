@@ -1,5 +1,5 @@
 [workspace]
-members = ["transpiler", "app"]
+members = ["transpiler", "app", "bench"]
 resolver = "2"
 
 [profile.release]
