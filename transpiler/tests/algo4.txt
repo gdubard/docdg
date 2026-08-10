@@ -1,0 +1,111 @@
+document {
+	titre: Algorithmique — les fonctions;
+	auteur: Gérard DUBARD;
+	institution: Atelier d'algorithmique appliquée;
+	date: août 2026;
+	orientation: portrait;
+	marges: 25;
+	espacements: 0;
+	police: Georgia;
+	taille: 11;
+	interligne: 1,4;
+	tabulation: 8;
+	hauteur: 6;
+	césure: oui;
+	orphelines: 2;
+	veuves: 2;
+}
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section>
+
+<h1>Deux sortes de fonctions
+
+docdg distingue la fonction mathématique — objet d'étude qu'on dérive, qu'on trace, dont on cherche les limites — et la fonction algorithmique, calcul nommé qu'on réutilise. Les chevrons marquent la première, le soit nu la seconde, exactement comme ils distinguent déjà la matrice de l'algèbre du conteneur de l'algorithmique.
+
+Une fonction algorithmique déclare le type de chacun de ses paramètres et celui de sa valeur. Elle s'appelle ensuite par son nom, arguments séparés par le point-virgule comme toute donnée.
+
+<h1>La forme la plus simple
+
+soit addition(a: entier ; b: entier): entier = a + b
+
+L'appel se fait dans un calcul : #{addition(3 ; 7)}, ou #{addition(12 ; 30)}.
+
+Les types ne sont pas décoratifs. Passer un décimal là où un entier est attendu arrête le calcul et le dit : #{addition(2,5 ; 7)}. Se tromper de nombre d'arguments également : #{addition(3)}.
+
+<h1>Un corps entre accolades
+
+Quand le calcul tient en une expression, l'accolade est facultative :
+
+soit aire(L: réel ; l: réel): réel = { L * l }
+
+L'aire d'un rectangle de 2,5 sur 4 vaut #{aire(2,5 ; 4)}.
+
+<h2>Plusieurs instructions
+
+Dès que le corps compte plusieurs lignes, la valeur produite doit être désignée par retourne — rien n'est implicite :
+
+soit hypoténuse(a: réel ; b: réel): réel = {
+	soit carrés = a*a + b*b
+	retourne racine(carrés)
+}
+
+Le triangle de côtés 3 et 4 a pour hypoténuse #{hypoténuse(3 ; 4)}, celui de côtés 5 et 12 a pour hypoténuse #{hypoténuse(5 ; 12)}.
+
+Une fonction dont le corps ne retourne rien est une erreur, pas un silence :
+
+soit oubli(a: entier): entier = { soit x = a }
+
+Appel : #{oubli(3)}.
+
+<h1>La récursivité
+
+Une fonction peut s'appeler elle-même. La condition d'arrêt s'écrit avec si … sinon, qui produit ici une valeur plutôt qu'un texte :
+
+soit factorielle(n: entier): entier = si n vaut 0 { 1 } sinon { n * factorielle(n - 1) }
+
+Les premières factorielles : #{factorielle(1)}, #{factorielle(2)}, #{factorielle(3)}, #{factorielle(4)}, #{factorielle(5)}, #{factorielle(6)}.
+
+La suite de Fibonacci se définit de la même façon, avec deux appels par tour :
+
+soit fib(n: entier): entier = si n moins de 2 { n } sinon { fib(n - 1) + fib(n - 2) }
+
+Les douze premiers termes, dressés par une boucle qui appelle la fonction à chaque rang :
+
+<Dresse>un tableau [mc ; md]{
+	Rang	Terme
+	pour n de 0 à 11 {
+		[#n ; #{fib(n)}]
+	}
+}
+
+La récursion est bornée : au-delà de deux cents appels imbriqués, docdg s'arrête et le dit, plutôt que d'épuiser la pile.
+
+<h1>Fonctions et boucles
+
+Une fonction s'appelle partout où un calcul est admis — dans le texte, dans une rangée de tableau, dans la condition d'une boucle, dans un accumulateur.
+
+soit carré(n: entier): entier = n * n
+
+soit somme: une collection d'entiers = {}
+pour k de 1 à 6 {
+	soit somme = somme + {carré(k)}
+}
+
+Les six premiers carrés, calculés par la fonction et rassemblés dans une collection : #somme.
+
+Et le test de divisibilité, écrit une fois, réutilisé partout :
+
+soit divise(d: entier ; n: entier): entier = n % d
+
+<Dresse>un tableau [mc ; mc]{
+	Diviseur	de 60
+	pour d de 1 à 60 {
+		si divise(d ; 60) vaut 0 {
+			[#d ; convient]
+		}
+	}
+}
+
+<h1>Ce que les fonctions ne font pas encore
+
+Les paramètres et les valeurs de retour sont des nombres. Une fonction ne prend pas encore une collection en argument, n'en retourne pas, et ne manipule ni textes ni dictionnaires. Rien n'empêche non plus aujourd'hui de donner le même nom à une fonction mathématique et à une fonction algorithmique — la collision reste à interdire.

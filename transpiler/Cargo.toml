@@ -1,0 +1,10 @@
+[package]
+name = "docdg-transpiler"
+version = "2.3.0"
+edition = "2021"
+
+[dependencies]
+hyphenation = "0.8"
+rayon = "1.10"
+seahash = "4.1"
+serde_json = "1"

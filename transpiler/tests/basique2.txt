@@ -1,0 +1,267 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.1;
+}
+
+soit titre = <rouge gras 18pt centre>
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<titre>texecole — les bases, niveau 2
+
+soit cle = <gras cramoisi>
+soit h3 = <bleu canard italique sous-sous-section>
+
+<table des matières>{Sommaire}
+
+<page suivante h1>Valeur absolue, norme, vecteur
+<Affiche un cadre avec un fond vert menthe et une bordure bleu canard>{
+	$abs(x)$, $norme(v)$, la relation $vecteur(AB) + vecteur(BC) = vecteur(AC)$
+	et la norme d'un vecteur $norme(vecteur(AB))$.
+}
+
+<h1>Ensembles de nombres
+	Une capitale doublée est un ensemble en gras de tableau :
+<Affiche un cadre avec un fond bleu Alice,  une bordure bleue, des coins arrondis de 1 mm et un titre {La chaîne usuelle}>{
+	$NN inclus dans ZZ inclus dans DD inclus dans QQ inclus dans RR inclus dans CC$
+}
+	Les ensembles savants suivent — $PP$ pour la probabilité, $KK$ pour un corps, $HH$ pour les quaternions.
+
+<h1>Quantificateurs et connecteurs
+<Affiche un cadre avec un fond vert menthe, une bordure bleu canard, des coins arrondis de 3 mm et un titre {Un énoncé, posé en mots}>{
+	$pour tout x dans RR, il existe y dans RR, y > x$
+	$(P et Q) ou négation de P$
+}
+
+<h1>Implication et équivalence
+<Affiche un cadre avec un fond vert menthe et une bordure bleu canard>{
+	$x = y => x^2 = y^2$
+	$x^2 = y^2 <=> abs(x) = abs(y)$
+	$abs(x) <= 1 <=> -1 <= x <= 1$
+}
+
+<h1>La négation d'un seul !
+	Un ! devant une relation ou un quantificateur donne sa forme barrée :
+<Affiche un cadre avec un fond bleu lavande, une bordure bleu indigo, des coins arrondis de 3 mm et un titre {Énoncer un irrationnel}>{
+	$racine(2) dans RR$ et $racine(2) n'appartient pas à QQ$
+	$il n'existe pas de m dans NN, pour tout n dans NN, n <= m$
+}
+
+<h1>Relations et opérations ensemblistes
+<Affiche un cadre avec un fond vert honeydew, une bordure vert foncé, des coins arrondis de 3 mm et un titre {De Morgan en une ligne}>{
+	$non(A union B) = non(A) inter non(B)$
+	$A inter B inclus dans ou égal à A$ <3tabulations> $A privé de A = vide$
+}
+
+<h1>Partie entière
+<Affiche un cadre avec un fond rose brumeux et une bordure cramoisie>{
+	$défaut(3,7) = 3$ <3tabulations> $excès(3,2) = 4$ <3tabulations> $défaut(n/2)$
+}
+<h1>La barre : conjugué, moyenne, adhérence, négation
+<Affiche un cadre avec un fond vieille dentelle, une bordure orange foncé, des coins arrondis de 3 mm et un titre {Quatre lectures d'une barre}>{
+	Conjugué : $conjugué(z) = a - i*b$ quand $z = a + i*b$.
+
+	Moyenne : $moyenne(x) = 1/n somme(k=1; n) x_k$.
+
+	Adhérence : $adhérence(A)$ est le plus petit fermé contenant $A$.
+
+	Complémentaire : $non(A union B)$ est le complémentaire de $A union B$.
+}
+
+<h1>Arithmétique et ensembles
+<Affiche un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un titre {Une notation qui énonce}>{
+	$parties de(A)$ est l'ensemble des parties, $intervalle entier(1; n)$ l'intervalle
+	entier, $card(A)$ le cardinal, $signe(x)$ le signe et
+	$a congru à b modulo n$ une congruence ; la factorielle $factorielle(5)$.
+}
+
+<h1>La règle des mots
+	Une balise s'écrit <<...>> et ses attributs se lisent d'un coup d'œil :
+un <cle>{mot français en minuscules} est un style, un alignement ou un saut (gras, centre, 2tabulations) ; une <cle>{couleur} se nomme en français, composés compris (bleu marine, vert forêt) ; une
+<cle>{taille} s'écrit Npt.
+
+<h1>Échappements
+	Une poignée de caractères pilote le langage ; pour les afficher, on les double — c'est toute la règle.
+<Affiche un cadre avec un fond bleu lavande, une bordure pourpre, des coins arrondis de 3 mm et un titre {Doubler rend littéral}>{
+	Chevrons littéraux : << et >>. Accolades : {{ et }}. Dièse : ##. Dollar : $$.
+
+	Une paire équilibrée s'affiche comme une seule, donc l'ensemble en
+	compréhension {{ x : x > 0 }} et l'ensemble vide {{}} s'écrivent
+	par paires.
+
+	Tiret bas x_1, esperluette a & b, 50% de remise, a ~ b et le chemin
+	C:\Users\Léa\Documents s'écrivent tels quels.
+}
+
+	Dans un cadre, un retour à la ligne génère un nouveau paragraphe :
+<Affiche un cadre avec un fond bleu lavande, une bordure pourpre et des coins arrondis de 3 mm>{
+	Première ligne d'une adresse
+	seconde ligne de l'adresse
+}
+
+<page suivante h1>Structure et sommaire
+	Les mots-clés section, sous-section et sous-sous-section — repliés dans h1, h2, h3 en tête de fichier — se numérotent seuls et nourrissent le sommaire de la première page.
+
+<h2>Un titre de deuxième niveau
+	Cette sous-section se numérote un cran plus bas et s'indente dans le sommaire.
+
+<h3>Un titre de troisième niveau
+	Un cran plus profond encore, avec son propre compteur.
+
+<h1>Listes imbriquées
+	Une liste écrite sous un élément devient sa sous-liste :
+
+<Affiche une liste à puces>{
+	Fruits
+	<Dresse une liste à puces vides>{
+		pommes
+		poires
+	}
+	Légumes
+	<Dresse une liste à puces carrées>{
+		carottes
+		navets
+	}
+}
+
+<Affiche une liste à cocher>{
+	Apporter une règle
+	Coller la feuille dans le cahier
+	Écrire son nom et la date
+}
+
+<Affiche une liste en chiffres romains>{
+	Premier acte
+	Deuxième acte
+}
+
+<h1>Tableaux avancés
+<h2>Fusions déduites de la forme
+	Aucune fusion ne se déclare. Une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit : le titre, seul sur sa rangée, couvre les quatre colonnes. Une entête suivie de plusieurs rangées de données descend sur autant de lignes : Lundi porte deux crochets, il couvre deux rangées.
+
+<Dresse>un tableau [mc ; mg ; mc ; mc] {
+	Bulletin trimestriel
+	Jour	Matière	Note	Coef.
+	Lundi :	[Maths ; 15 ; 4]
+				  [Français ; 12 ; 3]
+	Mardi :	[EPS ; 16 ; 2]
+	Moyenne :	[13,7]
+}
+
+
+
+<h2>Entêtes emboîtées
+	Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil — le tableau a la forme qu'on lui voit.
+<Dresse>un tableau [mc ; mc ; mg ; md] {
+	Semaine	Jour	Matière	Note
+	S1 :	 Lundi :	[Maths ; 15]
+						[Français ; 12]
+			Mardi :	[EPS ; 16]
+	S2 :	Lundi :	[Maths ; 18]
+}
+
+<h2>Une image dans une cellule
+	Une cellule de tableau accueille une formule ou une image, pas seulement du texte — chaque colonne garde son placement propre.
+<Dresse>un tableau [mc ; hg ; bd] {
+	Animal	Formule	Valeur
+	[<Insère une image avec une largeur de 18 mm, dans le dossier {IMAGES}>{chat.png} ; $1/2 + 1/3$ ; $5/6$]
+	[<Insère une image avec une largeur de 18 mm, dans le dossier {IMAGES}>{chien.png} ; $racine(2)$ ; $1,41$]
+}
+
+<h2>Couleurs du tableau
+	fond colore le corps, la bordure prend sa couleur, l'entête les siennes — sans cadre autour. Les couleurs d'entête habillent toutes les cellules d'entête, la rangée du haut comme la colonne de gauche.
+<Dresse>un tableau [mc ; mg ; mc] avec un écart de 3 mm, un fond bleu Alice, une bordure bleu marine et un entête en blanc sur fond bleu {
+	Jour	Matière	Note
+	Lundi :	[Maths ; 15]
+	Mardi :	[Français ; 12]
+}
+
+<h2>Rangées dynamiques
+	Le nombre de colonnes est vérifié à chaque rangée, donc boucles et interpolation vivent dans un tableau.
+<Dresse un tableau [mc ; mg ; mc] avec bordures et entête>{
+	Table des carrés
+	n	Légende	Carré
+	pour n de 1 à 3 {
+		[ligne #n; #n ;	$#n^2$]
+	}
+}
+<page suivante h2>Cellules multilignes
+	La balise <<nouvelle ligne>> empile un contenu dans une seule cellule.
+<Dresse>un tableau [mg ; mg] {
+	Champ		Saisie
+	Nom : 		[Nom :]
+				[Prénom :]
+	Adresse :	[Rue et numéro :]
+				[Ville et code postal :]
+}
+
+<h1>Cadres avancés
+<h2>Énoncé et solution
+	Une ligne ne portant que --- coupe le cadre en deux parties.
+<Affiche>un cadre avec un fond blanc fumé, une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Problème} {
+	<au centre>{<Insère une image avec une largeur de 40 mm, dans le dossier {FIGURES}>{figure1.jpg}}
+	
+	Mesure la hauteur du triangle sur ta figure, à l'échelle 1:10.
+	---
+	<Affiche>une liste numérotée {
+		Lire la hauteur en millimètres.
+		Multiplier par 10.
+		Donner la réponse en centimètres.
+	}
+}
+
+<h2>Cadres côte à côte
+	Une <<Affiche une rangée>> pose ses cadres en colonnes d'égale largeur.
+<Affiche>une rangée avec un écart de 5 mm {
+	<Affiche>un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 2 mm et un titre {Énoncé} {
+		Le périmètre d'un triangle rectangle de côtés 3 et 4 se trouve
+		en calculant d'abord l'hypoténuse par le théorème de Pythagore.
+	}
+	<Affiche>un cadre avec un fond bleu Alice, une bordure bleu marine, des coins arrondis de 2 mm et un titre {Résultat} {
+		Hypoténuse : $racine(3^2 + 4^2) = 5$, d'où le périmètre $12$.
+		<au centre>{<Insère une image avec une largeur de 25 mm, dans le dossier {FIGURES}>{figure1.jpg}}
+	}
+}
+
+<page suivante h2>Un composant réutilisable
+soit carte{n} = <Affiche un cadre avec un titre {Exercice #n} et une bordure grise>
+pour n de 1 à 2 {
+	<carte #n>{
+		Calcule $#n^2 + #n$ et écris le résultat ci-dessous.
+	}
+}
+
+<h1>Grilles : la maquette en zones nommées
+	La grille dispose des zones à la façon d'une maquette : le plan dessine la page avec un mot par case, un nom répété fusionne ses cases, un point marque une case vide. Chaque zone se place et s'habille en langage naturel — [nom : en haut, à gauche] ou le code court [nom hg].
+
+<Affiche>une grille avec des zones:["titre titre date", "consigne corps corps", "logo corps corps"] des bordures et un écart de 3 mm {
+	[titre : en haut, à gauche, avec un fond bleu Alice et une bordure bleu marine]{
+		<bleu marine gras 14pt>Contrôle de mathématiques
+	}
+	[date : en haut, à droite]{
+		Le 12 mai
+	}
+	[consigne: au milieu, au centre, avec un fond gris perle]{
+		Calculatrice autorisée.
+	}
+	[logo : au milieu, au centre]{
+		<Insère une image avec une largeur de 20 mm, dans le dossier {IMAGES}>{oiseau.png}
+	}
+	[corps: en mc]{
+		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
+	}
+}
+
+<h1>Imbrication et titres longs
+	Un conteneur accueille tout ce qu'un autre accueille : les blocs s'emboîtent aussi profondément que la page le permet.
+<Affiche>un cadre avec un fond blanc fumé,  une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Emboîtement} {
+	<au centre>{<gras>{Centré, gras, encadré : trois accolades fermantes à la suite, sans ambiguïté.}}
+}
+
+	Un titre de cadre est du texte ordinaire : il peut courir sur deux lignes et porter un chevron qui n'a rien d'une balise :
+<Affiche un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un  titre {seuil a> b, vérifié sur deux lignes}>{
+	Le titre a débordé sur une seconde ligne et contenait un $>$ littéral.
+}

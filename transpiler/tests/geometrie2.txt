@@ -1,0 +1,72 @@
+page {
+	orientation: portrait;
+	marges: 15;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.2;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Géométrie — collège
+
+<h2>Le théorème de Pythagore
+<Calcule>AC dans le triangle ABC rectangle en B, avec AB = 3 et BC = 4
+<Calcule>EF dans le triangle DEF rectangle en F, avec DE = 13 et DF = 5
+<Vérifie>si le triangle ABC est rectangle, avec AB = 3, BC = 4 et AC = 5
+<Vérifie>si le triangle RST est rectangle, avec RS = 4, ST = 5 et RT = 6
+
+<h2>Le théorème de Thalès
+<Calcule>AC par le théorème de Thalès, avec AM = 3, AB = 6 et AN = 4
+<Calcule>MN par le théorème de Thalès, avec AM = 3, AB = 6 et BC = 10
+<Vérifie>si les droites (MN) et (BC) sont parallèles, avec AM = 3, AB = 6, AN = 4 et AC = 8
+
+<page suivante h2>Trigonométrie du triangle rectangle
+<Calcule>BC dans le triangle ABC rectangle en B, avec l'angle A = 30 degrés et AC = 8
+<Calcule>AB dans le triangle ABC rectangle en B, avec l'angle A = 40 degrés et AC = 10
+<Calcule>l'angle A dans le triangle ABC rectangle en B, avec AB = 3 et AC = 6
+
+<h2>Périmètres, aires et volumes
+<Calcule>le périmètre du rectangle de longueur 7 et de largeur 4
+<Calcule>le périmètre du cercle de rayon 5
+<Calcule>le périmètre du triangle de côtés 3, 4 et 5
+<Calcule>l'aire du carré de côté 6
+<Calcule>l'aire du triangle de base 6 et de hauteur 4
+<Calcule>l'aire du disque de rayon 3
+<Calcule>le volume du pavé droit de longueur 5, de largeur 3 et de hauteur 2
+<Calcule>le volume du cylindre de rayon 2 et de hauteur 5
+<Calcule>le volume du cône de rayon 3 et de hauteur 4
+<Calcule>le volume de la boule de rayon 3
+
+<h2>Conversions d'unités
+<Convertis>3,5 km en m
+<Convertis>2500 cm^2 en m^2
+<Convertis>3 L en cm^3
+<Convertis>1250 g en kg
+
+
+
+
+<h2>Transformations du plan
+<Soit>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+<Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
+<Construis>l'image du triangle ABC par la symétrie centrale de centre O
+
+
+
+
+
+
+<Soit>le vecteur u de coordonnées (2 ; -1)
+<Construis>l'image du triangle ABC par la translation de vecteur u
+<Construis>l'image du triangle ABC par la rotation de centre O et d'angle 90 degrés
+<Construis>l'image du triangle ABC par l'homothétie de centre O et de rapport 2
+
+
+
+
+
+
+
+<Soit>les points P et Q de coordonnées respectives (0 ; 0) et (1 ; 1)
+<Construis>l'image du segment [AB] par la symétrie axiale d'axe (PQ)

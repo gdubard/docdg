@@ -1,0 +1,165 @@
+document {
+	titre: Algorithmique — structures combinées;
+	auteur: Gérard DUBARD;
+	institution: Atelier d'algorithmique appliquée;
+	date: août 2026;
+	orientation: portrait;
+	marges: 25;
+	espacements: 0;
+	police: Georgia;
+	taille: 11;
+	interligne: 1,4;
+	tabulation: 8;
+	hauteur: 6;
+	césure: oui;
+	orphelines: 2;
+	veuves: 2;
+}
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section>
+
+<h1>Ce que ce document ajoute à algo1
+
+Une condition seule, une boucle seule : c'est ce qu'`algo1` montrait. Ici, les deux se mêlent — une condition à l'intérieur d'une boucle décide, tour par tour, ce qui reste dans le document. On y ajoute aussi l'opérateur ternaire, pour affecter une valeur plutôt qu'afficher un texte, et les conditions composées, « et » comme « ou ».
+
+<h1>Une boucle qui filtre
+
+<h2>Les multiples de 3 entre 1 et 20
+
+Aucune ligne n'est écrite pour les tours silencieux — ils n'existent simplement pas dans le résultat. Chaque tour retenu forme sa propre ligne : c'est la boucle elle-même qui écrit le document, tour après tour.
+
+pour n de 1 à 20 {
+	si n % 3 vaut 0 {
+		Multiple retenu : #n
+	}
+}
+
+<h2>La même idée, en tableau
+
+<Dresse>un tableau [mc ; mc]{
+	n	Multiple de 3 ?
+	pour n de 1 à 20 {
+		si n % 3 vaut 0 {
+			[#n ; oui]
+		}
+	}
+}
+
+<h1>Chercher les diviseurs d'un entier
+
+Un entier \(d\) divise \(n\) lorsque le reste de la division de \(n\) par \(d\) est nul. Balayer tous les diviseurs candidats de 1 à \(n\), et ne retenir que ceux qui divisent effectivement, donne la liste complète des diviseurs — la première brique, sur le papier comme ici, de tout test de primalité.
+
+<Dresse>un tableau sécable [mc ; mc]{
+	Diviseur	de 84
+	pour d de 1 à 84 {
+		si 84 % d vaut 0 {
+			[#d ; convient]
+		}
+	}
+}
+
+Un nombre premier n'a, par définition, aucun diviseur strictement compris entre 1 et lui-même. La table ci-dessus liste ceux de 84 — huit en tout, largement plus que les deux attendus d'un nombre premier.
+
+<h1>Filtrer par intervalle
+
+`appartient à` et sa négation `n'appartient pas à` filtrent un intervalle aussi simplement qu'un test de divisibilité — utile chaque fois que l'algorithme cherche « à partir de quel rang » une grandeur franchit un seuil.
+
+<Dresse>un tableau [mc ; mc ; mc]{
+	Rang	Terme	Écart
+	pour n de 0 à 20 {
+		si (n appartient à [16;20]) {
+			[#n ; #{2^(n+1) - 1} ; #{2^n}]
+		}
+	}
+}
+
+<h1>L'opérateur ternaire
+
+`si ... sinon` peut aussi produire une valeur plutôt que du texte — affecté directement à une variable, comme un opérateur ternaire.
+
+soit n = 17
+soit parité = si n % 2 vaut 0 { pair } sinon { impair }
+#n est #parité.
+
+<h1>Conditions composées
+
+`et` comme `ou` combinent deux conditions dans le même test ; les parenthèses en précisent l'ordre quand les deux se mêlent.
+
+<Dresse>un tableau [mc ; mc]{
+	n	Retenu
+	pour n de 1 à 30 {
+		si n % 3 vaut 0 et n % 5 vaut 0 {
+			[#n ; multiple de 15]
+		}
+	}
+}
+
+soit n = 5
+si (n % 3 vaut 0 et n % 5 vaut 0) ou n vaut 5 {
+	Retenu par l'exception.
+}
+sinon {
+	Écarté.
+}
+
+<h1>L'accumulateur
+
+Une variable posée avant la boucle et réaffectée à l'intérieur garde sa valeur d'un tour au suivant : c'est l'accumulateur, celui qui totalise une somme ou compte les cas retenus.
+
+soit somme = 0
+pour k de 1 à 100 {
+	soit somme = somme + k
+}
+La somme des entiers de 1 à 100 vaut #somme.
+
+soit produit = 1
+pour k de 1 à 5 {
+	soit produit = produit * k
+}
+La factorielle de 5 vaut #produit.
+
+<h1>Compter sous condition
+
+L'accumulateur placé à l'intérieur d'un `si` ne s'incrémente que sur les tours retenus — le compteur de l'algorithmique classique.
+
+soit diviseurs = 0
+pour d de 1 à 84 {
+	si 84 % d vaut 0 {
+		soit diviseurs = diviseurs + 1
+	}
+}
+84 possède #diviseurs diviseurs.
+
+soit diviseurs = 0
+pour d de 1 à 83 {
+	si 83 % d vaut 0 {
+		soit diviseurs = diviseurs + 1
+	}
+}
+83 en possède #diviseurs : c'est donc un nombre premier.
+
+<h1>Les boucles conditionnelles
+
+`pour` répète un nombre de fois connu d'avance. Quand ce nombre dépend du calcul lui-même, c'est `tant que` qui convient : la condition est vérifiée <gras>{avant} chaque passage, si bien que la boucle peut n'en faire aucun.
+
+soit p = 1
+soit rang = 0
+tant que p < 1000 faire {
+	soit p = p * 2
+	soit rang = rang + 1
+}
+La première puissance de 2 supérieure à 1000 est #p, atteinte au rang #rang.
+
+La variante `faire … tant que` vérifie la condition <gras>{après} chaque passage : le corps s'exécute donc au moins une fois, même lorsque la condition est fausse dès le départ.
+
+soit n = 10
+faire {
+	Passage unique, avec n valant #n.
+	soit n = n + 1
+} tant que n < 3
+
+Les deux formes reposent sur l'accumulateur de la section précédente : sans une variable qui avance d'un tour à l'autre, une boucle conditionnelle ne s'arrêterait jamais.
+
+<h1>Pour la suite
+
+Les containers — vecteurs, matrices, dictionnaires clé:valeur — seront le sujet d'`algo3`.

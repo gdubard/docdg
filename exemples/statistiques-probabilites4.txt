@@ -1,0 +1,60 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Statistiques et probabilités — supérieur
+<h2>Lois continues du supérieur, calculées
+<Calcule la probabilité que X <= 0,5 pour la loi uniforme(0 ; 2)>
+
+<Calcule la probabilité que X >= 1 pour la loi exponentielle(2)>
+
+<Calcule la probabilité que X <= 2 pour la loi student(10)>
+
+<Calcule la probabilité que X >= 3,84 pour la loi khi-deux(1)>
+
+<Détermine>le quantile d'ordre 0,975 de la loi student(9)
+
+<h2>La loi des grands nombres, illustrée par une boucle
+La fréquence théorique de pile vaut $0,5$ ; l'écart type de la fréquence observée sur $n$ lancers vaut $1/(2 racine(n))$ — il fond quand $n$ grandit :
+
+pour n dans [100, 400, 1600, 6400] {
+	Pour #n lancers, l'écart type de la fréquence vaut #{defaut(1/(2*racine(n)))}.
+}
+
+<h2>Le théorème central limite, en un cadre
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 3 mm et un titre {Théorème central limite} {
+	Si $X_1, ..., X_n$ sont indépendantes, de même loi, d'espérance
+	$mu$ et d'écart type $sigma$, alors la moyenne centrée réduite
+	converge en loi vers $normal(0; 1)$ : c'est ce qui fait de la loi
+	normale la loi des erreurs de mesure.
+}
+
+Le quantile gaussien et son cousin de Student se rejoignent quand le nombre de mesures grandit :
+
+<Détermine>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<Détermine>le quantile d'ordre 0,975 de la loi student(100)
+<page suivante h1>Les lois à densité
+	Une densité de probabilité est positive et d'intégrale 1 ; l'espérance et la variance s'en déduisent :
+<Étudie>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+<Étudie>la loi de densité f(x) = exp(-x) sur [0 ; +infini]
+
+<h1>La loi normale
+<Trace>la densité de la loi normale d'espérance 0 et d'écart type 1
+<Calcule>la probabilité d'être entre -1 et 1 pour la loi normale d'espérance 0 et d'écart type 1
+<Calcule>la probabilité d'être entre -2 et 2 pour la loi normale d'espérance 0 et d'écart type 1
+
+<page suivante h1>Le théorème central limite
+	La somme de $n$ dés, recentrée, s'approche de la loi normale — la densité limite se superpose à la loi exacte :
+<Trace>l'illustration du théorème central limite avec la somme de 2 dés
+<Trace>l'illustration du théorème central limite avec la somme de 8 dés
+
+<h1>Autant de dés que l'on veut
+soit n = <Saisis>un entier{Combien de dés pour la somme ?}
+<Trace>l'illustration du théorème central limite avec la somme de #n dés

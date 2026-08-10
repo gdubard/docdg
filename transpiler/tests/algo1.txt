@@ -1,0 +1,64 @@
+document {
+	titre: Algorithmique — entrées, sorties, structures de base;
+	auteur: Gérard DUBARD;
+	institution: Atelier d'algorithmique appliquée;
+	date: août 2026;
+	orientation: portrait;
+	marges: 25;
+	espacements: 0;
+	police: Georgia;
+	taille: 11;
+	interligne: 1,4;
+	tabulation: 8;
+	hauteur: 6;
+	césure: oui;
+}
+soit h1 = <bleu nuit gras section num>
+
+<h1>Variables et sortie
+
+Une variable se pose avec `soit`, se relit avec `#`, entre dans un calcul avec `#{...}` — l'équivalent d'une affectation suivie d'un affichage.
+
+soit tva = 0,2
+soit prix = 150
+Le prix TTC est #{prix * (1 + tva)} euros.
+
+<h1>Une boucle simple
+
+`pour` répète un bloc un nombre de fois connu à l'avance — l'équivalent d'un `for`.
+
+pour k de 1 à 3 {
+	Ligne #k : le carré de #k vaut #{k*k}.
+}
+
+<h1>Une condition simple
+
+`si ... sinon` choisit entre deux issues, une fois, sans répétition.
+
+soit note = 12
+si note au moins 10 {
+	Admis avec #note.
+}
+sinon {
+	Ajourné.
+}
+
+<h1>Une boucle avec un pas
+
+Le pas se règle en prose, comme tout réglage : `avec un pas de p`. Ici la boucle avance de 0,25 en 0,25.
+
+pour k de 0 à 2 avec un pas de 0,25 {
+	Terme #{défaut(4*k)+1} : #k.
+}
+
+<h1>Une entrée
+
+`<Saisis>` est la question que le document pose à son lecteur — l'équivalent d'un `input`. La réponse se relit ensuite comme n'importe quelle variable, calculs compris.
+
+soit âge = <Saisis>un entier{Quel est ton âge ?}
+soit tarif = si âge moins de 18 { 5 } sinon { 9 }
+Entrée : #tarif euros.
+
+<h1>Pour la suite
+
+Ce document ne mêle jamais une condition à une boucle : chaque structure s'y montre seule, comme un premier cours l'exigerait. `algo2` les combine, ajoute l'opérateur ternaire employé ci-dessus pour le tarif, et les conditions composées avec « et », « ou ».

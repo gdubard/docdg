@@ -1,0 +1,75 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Algèbre — supérieur
+
+<h2>Valeurs propres et diagonalisation
+<Soit>la matrice A {
+	2 ; 1
+	1 ; 2
+}
+<Détermine>les valeurs propres de A
+<Diagonalise A>
+Une matrice à valeur propre double :
+
+<Soit>la matrice B {
+	3 ; 0
+	0 ; 3
+}
+<Détermine>les valeurs propres de B
+
+<h2>Polynômes et fractions rationnelles
+<Décompose>en éléments simples (3x+1)/(x^2 - x)
+<Calcule>la somme de k^3 pour k de 1 à n
+
+<h2>Rang, noyau, image
+<Soit>la matrice C {
+	1 ; 2 ; 3
+	2 ; 4 ; 6
+	1 ; 0 ; 1
+}
+<Calcule>le rang de C
+<Détermine>le noyau de C
+<Détermine>l'image de C
+
+<page suivante h2>Réduction : polynômes caractéristique et minimal, trigonalisation
+<Soit>la matrice D {
+	3 ; 1 ; 0
+	0 ; 3 ; 0
+	0 ; 0 ; 2
+}
+<Calcule>le polynôme caractéristique de D
+<Calcule>le polynôme minimal de D
+<Trigonalise>D
+
+<h2>Polynômes formels
+<Effectue>la division euclidienne de X^3 + 2X - 1 par X^2 + 1
+<Calcule>le PGCD de X^3 - 1 et X^2 - 1
+<Factorise>X^4 - 1 dans R[X]
+<Factorise>X^4 - 1 dans C[X]
+
+<h1>Le groupe Z/nZ
+<h2>Les tables
+<Dresse>la table de Z/5Z pour l'addition
+<Dresse>la table de Z/5Z pour la multiplication
+
+<page suivante h2>Les générateurs
+<Détermine>les générateurs de Z/12Z
+<Détermine>les générateurs de Z/7Z
+
+<h1>Le groupe symétrique
+	Une permutation se donne par la liste des images de $1, 2, \dots, n$ :
+<Décompose>la permutation (2 5 4 1 3) en cycles
+<Décompose>la permutation (2 1 4 3 6 5) en cycles
+<Décompose>la permutation (3 1 2 5 4) en cycles
+
+<h1>Une table à la demande
+soit n = <Saisis>un entier{Quel module pour la table d'addition ?}
+<Dresse>la table de Z/#nZ pour l'addition
