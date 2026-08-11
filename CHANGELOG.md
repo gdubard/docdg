@@ -4,13 +4,768 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
+## 2.5 — les objets (en cours)
+
+### Ajouté
+
+**La programmation orientée objet.** Classes, attributs typés, méthodes,
+constructeur : le dernier chapitre du programme de terminale NSI qui manquait.
+
+```
+soit une classe Point {
+	abscisse: un réel
+	ordonnée: un réel
+
+	soit norme(): un réel = racine(abscisse * abscisse + ordonnée * ordonnée)
+	soit translaté(dx: un réel ; dy: un réel): un Point = Point(abscisse + dx ; ordonnée + dy)
+}
+
+soit p: un Point = Point(3 ; 4)
+```
+
+La phrase de déclaration est celle des mathématiques — « soit une classe
+Point ». Le nom d'une classe commence par une majuscule : c'est ce qui le
+distingue d'un type du langage. Un attribut se lit `p.abscisse`, une méthode
+s'appelle `p.norme()` — le point est ce que l'élève verra en Python, et il ne
+sert qu'à l'intérieur d'un calcul, jamais dans la prose où il termine les
+phrases.
+
+Dans le corps d'une méthode, **les attributs sont visibles par leur nom**,
+sans préfixe : `racine(abscisse * abscisse + …)` se lit comme la formule.
+
+**Décision de conception : une classe est une fonction qui construit.** En
+Python, `Point(3, 4)` *est* un appel de la classe. Le constructeur est donc
+enregistré comme une entrée ordinaire de la table des fonctions, et les
+méthodes sous la clé `Point.norme` — si bien que la vérification d'arité et de
+types est celle qui existait déjà, et qu'aucune signature du moteur n'a changé.
+
+**L'encapsulation.** Le défaut est la visibilité, comme en Scala ; un seul mot
+la retire, et il se place en tête, comme `private` en C# :
+
+```
+soit une classe Compte {
+	titulaire: une chaîne
+	privé solde: un réel
+
+	privé soit taux(): un réel = 0,02
+	soit intérêts(): un réel = solde * taux()
+}
+```
+
+Un mot, un défaut : il n'y a rien à retenir pour le cas courant, qui est celui
+de l'élève. `privée` est accepté au féminin.
+
+Ce qui est privé reste **entièrement visible depuis la classe** : `intérêts()`
+lit l'attribut privé et appelle la méthode privée. Du dehors, l'un et l'autre
+sont refusés avec un message qui dit l'issue — « il ne se lit que depuis la
+classe ».
+
+Une méthode en appelle une autre **par son nom nu**, sans préfixe : c'est tout
+l'objet de l'encapsulation, une méthode publique s'appuyant sur des méthodes
+privées. Le nom est complété à la lecture de la classe, et les attributs sont
+passés sous les noms qu'ils portent déjà dans la portée de l'appelante.
+
+Les fautes sont dites : arité du constructeur, type d'un attribut, attribut
+absent, méthode absente, attribut ou méthode privé, objet d'une classe passé
+pour une autre.
+
+**L'héritage.** Un mot suffit, et c'est celui du français :
+
+```
+soit une classe Chien hérite de Animal {
+	race: chaîne
+
+	soit cri(): chaîne = "ouaf"
+}
+```
+
+L'enfant reçoit les attributs du parent **en tête des siens**, ses méthodes, et
+ses secrets — ce qui est privé chez le parent le reste chez l'enfant. Une
+méthode redéfinie l'emporte, sans que celle du parent en soit affectée.
+
+**Un enfant tient la place de son parent** : `décrit(x: Animal)` accepte un
+chien, et `x.carte()` fonctionne. L'inverse est refusé et dit — « un Animal
+n'est pas un Chien ».
+
+*Décision de conception : la lignée voyage avec la valeur.* `Valeur::Objet`
+porte le nom de sa classe **et la liste de ses ancêtres**, si bien que le
+vérificateur de types n'a jamais à consulter la table des classes — il lit ce
+qu'il a sous la main. Les méthodes héritées sont recopiées chez l'enfant à la
+lecture de la classe, avec ses attributs à lui : l'appel reste un appel
+ordinaire.
+
+**Les arbres et les graphes** — sans un seul type nouveau. Le programme les
+demande par leurs représentations, et le langage les portait déjà : un graphe
+est une **liste d'adjacence**, c'est-à-dire un dictionnaire dont les valeurs
+sont des listes ; un arbre parfait tient dans un tableau, les fils de `i`
+étant en `2i+1` et `2i+2`.
+
+```
+soit g: dictionnaire de textes et de listes de textes = {A: {B ; C} ; B: {D} ; C: {D} ; D: {}}
+```
+
+Les parcours **en largeur** et **en profondeur** s'écrivent avec la file et la
+pile — c'est l'exercice du programme, et c'est ce qui donne son sens à leur
+distinction.
+
+Deux verrous levés pour y parvenir :
+
+- **Un attribut peut contenir un objet.** Les attributs voyagent sous forme
+  écrite jusqu'à l'appel, et un objet ne se relisait pas. Une valeur a
+  désormais une **forme relisible**, distincte de sa forme affichée : un point
+  s'imprime `Point(abscisse: 3)` pour le lecteur, mais se réécrit `Point(3)` —
+  l'appel qui le construit. Sans cela, ni arbre chaîné ni liste chaînée.
+- **La source d'une boucle n'est plus forcément un nom** : `pour v dans g[s]`
+  parcourt ce qu'une lecture indexée a rendu.
+
+**Les piles et les files**, nommées, avec leurs six opérations et leur
+discipline.
+
+```
+soit p: pile d'entiers = {}
+soit p = empile(p ; 1)
+soit p = empile(p ; 2)
+#{sommet(p)}   → 2      #{dépile(p)}   → {1}
+
+soit f: file d'entiers = {1 ; 2}
+#{tête(f)}     → 1      #{défile(f)}   → {2}
+```
+
+`empile`, `dépile`, `sommet` d'un côté ; `enfile`, `défile`, `tête` de
+l'autre ; `est vide` et `longueur` pour les deux. Chaque opération rend une
+**nouvelle** structure : `soit p = empile(p ; 3)` montre que la pile d'après
+n'est pas celle d'avant.
+
+**La discipline est tenue** — c'est tout leur intérêt. Une file n'a pas de
+sommet, une pile n'a pas de tête, aucune des deux ne s'indexe, et ni l'une ni
+l'autre ne se confond avec une liste. Une structure vide n'a ni sommet ni tête,
+et le dit.
+
+Ces types ne remplacent pas l'exercice : `algo4` continue de montrer comment
+les écrire à la main, ce que le programme demande avant de les employer. Une
+**fonction écrite par l'utilisateur l'emporte d'ailleurs sur la primitive du
+même nom** — sans quoi l'élève qui nomme la sienne `sommet` ou `dépile` se
+heurterait au langage au lieu d'apprendre.
+
+**L'abstraction.** Une classe peut dire ce que ses filles doivent savoir
+faire, sans dire comment : une méthode déclarée sans membre droit n'a pas de
+corps.
+
+```
+soit une classe abstraite Forme {
+	nom: chaîne
+
+	soit aire(): réel
+	soit carte(): chaîne = nom
+}
+
+soit une classe Carré qui hérite de la classe Forme {
+	côté: réel
+
+	soit aire(): réel = côté * côté
+}
+```
+
+Une classe abstraite ne s'instancie pas — « seules ses classes filles le
+font ». Et une classe concrète ne peut rien laisser sans corps : « ou bien la
+classe les définit, ou bien elle se déclare abstraite ». C'est la faute que
+l'abstraction sert à dire, et elle se dit à la déclaration, non à l'appel.
+
+**La modification d'un attribut** : `p.x = 5`, sans `soit` puisque rien n'est
+déclaré. Le type déclaré de l'attribut est vérifié, un attribut inexistant est
+dit, et ce qui est privé ne s'écrit pas plus du dehors qu'il ne s'y lit.
+
+*Sur mutation ou copie.* docdg n'a **pas de références** : une boîte n'est
+jamais partagée. Muter la boîte et lui réaffecter une copie modifiée sont donc
+indiscernables — il n'y a rien qu'un marqueur de référence pourrait
+distinguer, et le langage reste entièrement par valeur. Une méthode, elle,
+reçoit ses attributs en copie : pour transformer un objet, elle en **rend un
+nouveau**, comme `translaté`.
+
+**Le polymorphisme.** La liaison est **dynamique par construction** : le nom
+de classe est lu dans la *valeur*, non dans le type déclaré. Un paramètre
+déclaré `Animal` qui reçoit un chien appelle `Chien.cri()`.
+
+```
+soit z: liste d'Animal = {Chien("Rex") ; Chat("Mia")}
+pour a dans z {
+	[#{a.cri()}]
+}
+```
+
+Deux verrous levés pour y parvenir. Un objet peut désormais se **construire à
+l'intérieur d'un littéral** de collection. Et un objet **ne survit pas à son
+impression** : la boucle qui le parcourt reçoit la valeur, non sa forme
+écrite. Au niveau du document, chaque tour reçoit sa propre boîte sous un nom
+qui lui est propre — le contenu d'un tour est déroulé sur-le-champ mais lu
+plus tard, et un nom réemployé ne porterait que la dernière valeur.
+
+**L'héritage se dit de quatre façons**, de la plus brève à la plus parlée :
+`hérite de`, `hérite de la classe`, `qui hérite de`, `qui hérite de la
+classe`. C'est la phrase qui commande.
+
+**Le type se passe du déterminant** dans une classe : `x: réel` plutôt que
+`x: un réel`. À ce niveau la prose n'apporte rien, et l'article reste accepté.
+
+**L'arbre binaire récursif s'écrit sans valeur nulle** : l'arbre vide est une
+classe. `Arbre` abstraite, `Vide` et `Nœud` filles — la hiérarchie dit tout, un
+arbre est vide ou c'est un nœud. Rien à ajouter au langage : les quatre piliers
+suffisaient.
+
+### Simplifié
+
+**Une notion, un mot.** Plusieurs écritures s'étaient accumulées pour une même
+action — chacune ajoutée de bonne foi, l'ensemble obligeant le lecteur à se
+demander si elles diffèrent. Elles sont réduites :
+
+| Retiré | Reste |
+|---|---|
+| `élaguer`, `compacter` | `élague`, `compacte` |
+| `renvoie` | `retourne` |
+| `hérite de la classe`, `qui hérite de` | `hérite de`, `qui hérite de la classe` |
+| `tableau` comme type | `liste` |
+
+`liste` et `chaîne de caractères` sont les mots qu'emploient les professeurs
+d'informatique : ce sont **les seuls** du langage, y compris dans les types
+composés — « une liste de chaînes de caractères ». `chaîne`, `texte`,
+`collection` et `tableau` ne sont plus reconnus du tout : les garder « pour
+compatibilité » aurait été garder les doublons sous un autre nom. Les
+variantes sans accent (`chaine de caracteres`) restent admises parce qu'un
+clavier peut manquer, non parce qu'elles nomment autre chose.
+
+`<Saisis>une chaîne de caractères` remplace `<Saisis>un texte` : la commande
+emploie le vocabulaire du langage.
+
+**Les messages suivent le même vocabulaire** : « la liste compte 3 élément(s) »
+et non « la collection », « une chaîne de caractères » et non « un texte ». Un langage qui dit `liste` et se plaint d'une
+`collection` fait chercher deux notions là où il n'y en a qu'une.
+
+**Les guillemets délimitent une chaîne de caractères partout** : au singulier,
+dans une liste, et désormais **en clé de dictionnaire**, où ils restaient
+collés à la valeur. C'est la distinction qui compte pour un professeur
+d'informatique — le texte d'un document s'écrit nu, comme en LaTeX ; une
+chaîne de caractères se cite, parce qu'elle relève de la programmation.
+
+```
+soit mots: liste de chaînes de caractères = {"chat" ; "chien"}
+soit trajets: dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5}
+#{trajets["Marche"]}
+```
+
+### Corrigé
+
+**Un `tant que` de document fait enfin croître un conteneur.**
+`soit v = v + {k}` n'y accumulait que la valeur d'avant la boucle :
+`subst_var` protège les accolades — et c'est ce qu'il faut, une accolade
+délimite des données —, si bien que le tour ne pouvait rien y injecter. La
+protection est levée pour les seules lignes qui font croître un conteneur ; la
+prose garde ses accolades intactes.
+
+**On ne parcourt plus une pile en silence.** `pour x dans p` ne faisait rien
+sans rien dire, ce qui laissait croire la pile vide. C'est désormais une faute
+dite : « on ne parcourt pas une pile : on la vide, en la dépilant ».
+
+**Deux noms d'exemple corrigés.** `médiane_basse` devient `médiane` — le nom
+composé n'avait aucune raison d'être, et la « médiane basse » n'a de sens que
+pour un nombre pair de valeurs, ce qui n'était pas le cas. Sa formule emploie
+désormais `quotient de longueur(t) par 2` au lieu d'un décalage écrit à la
+main, qui datait d'avant l'existence de `quotient`. `remplace_tête` devient
+`modifie`.
+
+La règle est rappelée dans `algo3` : un nom de fonction tient en **un seul
+mot**, le nom composé étant réservé aux mots du langage. Le trait bas ne sert
+que lorsque deux mots sont vraiment nécessaires — parce que l'algorithme porte
+ce nom, tel le tri par insertion.
+
+**`élague` et `compacte`** — deux traitements distincts, que confondre serait
+une erreur : le premier retire les espaces des deux bouts, celui dont on a
+besoin après une saisie ; le second les retire tous, y compris à l'intérieur,
+si bien que les mots se resserrent. L'impératif suit `insère`, `supprime`,
+`ajoute` ; `élaguer` et `compacter` sont admis aussi, l'un et l'autre se disant
+en classe.
+
+**Un tour sauté ne laisse plus de ligne vide.** `continuer` émettait le
+séparateur de fin de tour alors que le tour ne produit rien : une ligne vide
+apparaissait là où il n'y a précisément rien. Le séparateur n'est plus émis que
+si le tour a écrit quelque chose.
+
+**Une primitive prépositionnelle accepte la parenthèse vide** :
+`dans m compacte()`.
+
+**`jonction` et `découpe`** — écrire une suite sur une ligne, et le chemin
+inverse.
+
+```
+#{jonction(premiers(50) ; ", ")}   → 2, 3, 5, 7, 11, …
+#{jonction("un code" ; " - ")}     → u - n -   - c - o - d - e
+#{découpe("un code" ; " ")}        → {un ; code}
+```
+
+Une boucle qui affiche met chaque tour sur sa ligne ; l'accumulateur, lui,
+laisse toujours un séparateur de trop à la fin. Il n'y a pas de raison de faire
+compter l'élève.
+
+Trois défauts ont été levés au passage, chacun visible seulement à l'usage :
+
+- **Les guillemets gardent les espaces.** Leur contenu était rogné, si bien
+  qu'un séparateur `" - "` devenait `"-"`. C'est pourtant ce à quoi ils
+  servent.
+- **Un point-virgule entre guillemets est une valeur, non une coupure** : le
+  découpage des arguments l'avalait, et `jonction(v ; " ; ")` était illisible.
+- **Un texte calculé n'est pas recalculé.** `jonction(v ; " / ")` rendait
+  « 1 / 2 », que l'évaluateur reprenait pour une division : le résultat valait
+  un demi. Un texte déjà calculé porte désormais une marque, ôtée à
+  l'affichage — et ôtée aussi dans les conditions, où le texte est comparé et
+  non montré.
+
+**`algo4` met en œuvre les quatre piliers**, avec des exemples simples et
+exécutés : un point pour les objets et leurs méthodes, un compte bancaire pour
+l'encapsulation, un animal et son chien pour l'héritage, une liste d'animaux
+pour le polymorphisme, une forme abstraite pour l'abstraction. Le fichier
+annonçait encore la POO comme à venir. Il gagne aussi l'arbre binaire écrit
+avec des objets, les graphes par liste d'adjacence, les deux parcours, et les
+piles et files du langage à côté de celles écrites à la main.
+
+Ces dernières sont renommées avec un suffixe : **une fonction qu'on écrit
+masque la primitive du même nom** — c'est voulu, pour que l'élève puisse écrire
+la sienne — mais cela empêcherait d'employer les deux dans un même document.
+Le fichier le dit désormais.
+
+**La source d'une boucle est vérifiée.** `pour c dans un code` faisait un
+unique tour sur « un code », au lieu d'en lire les lettres : la dernière
+branche traitait toute source inconnue comme une liste séparée par des
+virgules. Une source qui n'est ni un nom posé, ni un littéral, ni une chaîne
+entre guillemets est désormais **dite** — « une chaîne écrite sur place se met
+entre guillemets ». Les formes `{…}`, `[…]`, le nom d'une boîte et le littéral
+cité restent admis.
+
+**L'affectation se passe de `soit`.** `soit` déclare ; le répéter à chaque
+tour n'apprenait rien et ne se lisait pas :
+
+```
+soit somme = 0
+pour k de 1 à 100 {
+	somme = somme + k
+}
+La somme des entiers de 1 à 100 vaut #somme.
+```
+
+La condition qui rend la levée sûre tient en un mot : **le nom doit déjà
+exister**. Une ligne de prose contenant un signe égal n'est donc jamais prise
+pour une affectation, et un dièse à droite la signe comme prose — on écrit
+`k=#k` pour afficher, jamais pour affecter. `soit` reste admis partout.
+
+La réécriture se fait sur le texte, avant que quoi que ce soit ne mesure des
+positions : rien en aval n'a eu à changer.
+
+**Un attribut textuel s'affiche sans ses guillemets.** La forme *relisible* —
+celle qui les porte — sert à faire voyager une valeur jusqu'à un appel ; à
+l'affichage, c'est la forme lue qui convient. `#{c.titulaire}` rendait
+« "Léa" » au lieu de « Léa ».
+
+### Documentation
+
+**Le chapitre du langage algorithmique rattrape la 2.5.** Il datait de la 2.4 et
+ignorait tout ce qui a suivi : il gagne les piles et les files, les objets et
+les quatre piliers, les arbres et les graphes, `jonction` et `découpe`,
+`élague` et `compacte`, et la règle des guillemets.
+
+**Les doubles affectations du README sont corrigées.** Il montrait encore
+`soit n = n + 1` dans une boucle, là où `n = n + 1` suffit : `soit` déclare une
+fois, l'affectation suit. Deux écritures pour un seul effet, c'est un doublon —
+non un *shadowing*, puisque le nom est réaffecté et non ombré.
+
+Les 154 blocs de code du README ont été exécutés : les seuls messages restants
+viennent de catalogues de commandes montrées hors de tout document, où l'objet
+n'est délibérément pas déclaré.
+
+**Les liens du sommaire ne fonctionnaient pas** — ils renvoyaient tous en haut
+du fichier. Les titres portent un émoji, que GitHub retire de l'ancre en
+laissant un tiret : le vrai lien est `#-les-objets`, non `#les-objets`. Les
+émojis à sélecteur de variante (`🛠️`) laissaient en outre un caractère
+invisible qui décalait l'ancre une seconde fois. Les 34 liens internes sont
+recalculés selon l'algorithme de GitHub, et aucun ne vise plus dans le vide.
+
+### Limite connue
+
+Au **niveau du document**, la condition d'un `tant que` est évaluée avant que
+les conteneurs n'existent : `tant que est vide(p) vaut faux` n'y voit pas `p`.
+L'ordre du pipeline place ce déroulement avant la création des boîtes. Dans un
+corps de fonction, où tout est déroulé au moment de l'appel, la même écriture
+fonctionne — et c'est là qu'un algorithme s'écrit.
+
+---
+
+## 2.4 — une fonction ne rend plus seulement des nombres
+
+### Ajouté
+
+**Les fonctions reçoivent et rendent des conteneurs et des textes.** Jusqu'ici
+`appelle` rendait un `f64` et liait ses paramètres dans une table de nombres :
+la documentation le disait — « les paramètres et valeurs de retour sont des
+nombres ». Aucun tri, aucune recherche, aucune manipulation de texte ne
+s'écrivait donc en fonction. La contrainte est levée.
+
+- Un paramètre déclaré `une collection de ...`, `un dictionnaire ...`, `une
+  matrice ...` ou `un texte` est lié en **boîte locale**, non en nombre.
+- La valeur retournée est une `Valeur`, vérifiée contre le type annoncé par le
+  même `verifie` que les conteneurs.
+- **Le passage se fait par copie** : une fonction reçoit une valeur, elle ne
+  peut rien renvoyer dans la série de l'appelant. C'est ce qui rend saine
+  l'acceptation d'une `collection d'entiers` là où une `collection de réels`
+  est attendue — aucune écriture ne peut y injecter un réel.
+- Dans un corps de fonction, `soit t = v` copie une boîte, et `t[i] = x` écrit
+  par indice : le tri par insertion s'écrit tel qu'un manuel le montre.
+- `a + b` joint deux collections ou deux textes, et `a + {x}` fait croître une
+  collection, à l'intérieur d'une fonction comme au dehors.
+- Un fragment nu attendu comme texte *est* ce texte, conformément à l'usage
+  des littéraux (`{chat ; chien ; cheval}`).
+
+**L'interpolation rend les valeurs composées.** `#{f(v)}` où `f` rend une
+collection affichait « calcul absent » : l'évaluateur numérique ne sait pas
+lire `{1 ; 2 ; 3}`. La forme littérale est désormais rendue telle quelle.
+
+**Les messages de type nomment ce qu'ils attendent, avec l'article accordé** :
+« 3 ne se lit pas comme une collection d'entiers » — genre et élision compris.
+
+**Les primitives de conteneur.** Dix mots, résolus avant les fonctions de
+l'utilisateur — elles ne sont pas redéfinissables :
+
+| Rend une valeur | Rend vrai ou faux |
+|---|---|
+| `longueur`, `somme`, `min`, `max` | `contient(x ; v)` |
+| `tri`, `inverse` | |
+| `indice de(x ; v)` | |
+| `insertion(v ; i ; x)`, `suppression(v ; i)` | |
+
+Le nommage suit une règle : un **nom** pour ce qui produit une valeur, un
+**verbe** pour ce qui répond par oui ou non. Le nom composé (`indice de`) est
+réservé au langage ; un nom de fonction écrit par l'utilisateur tient en un
+seul mot.
+
+- Chacune rend une **nouvelle** collection : la série de départ ne bouge pas.
+- `min(a ; b)` reste la fonction mathématique à deux arguments ; seule la forme
+  à un argument conteneur est une primitive de collection.
+- `tri` sur des textes suit la **collation française** : « école » se classe
+  avant « Zoé », alors que le codepoint de « é » vient après celui de « z ».
+- `indice de` sur un élément absent est une **faute dite**, non un −1 : la
+  valeur sentinelle est un idiome de programmeur, pas de pédagogue.
+
+**La tranche `v[i à j]`**, bornes incluses — comme « de 1 à 5 » fait cinq
+tours. Le `à` évite la collision avec l'indexation matricielle `A[i ; j]`. Une
+tranche dont la borne gauche dépasse la droite est **vide, et non fautive** :
+c'est ce qui permet de conclure une fusion de deux listes triées en une ligne.
+
+**Le `soit` d'un corps de fonction** accepte un type déclaré
+(`soit r: une collection de réels = {}`) et reconnaît une valeur composée
+(`soit t = tri(v)`), qu'il range en boîte locale au lieu de la forcer en
+nombre.
+
+**Le vocabulaire s'aligne sur celui des enseignants.** `liste` et `tableau`
+nomment désormais le même type que `collection` ; `chaîne`, `chaîne de
+caractères` et `texte` sont synonymes ; `renvoie` s'écrit aussi bien que
+`retourne`. `inverse(v)` remplace `miroir(v)` : la syntaxe `inverse(...)` et la
+prose « l'inverse de la matrice M » ne se confondent pas, la parenthèse les
+sépare.
+
+**`non`**, troisième connecteur logique enseigné avec `et` et `ou`, manquait.
+Les conditions lisent aussi `vrai` et `faux` en toutes lettres, et un booléen
+s'affiche ainsi : `contient(15 ; notes)` rend « vrai », non « 1 ».
+
+**`insère`, `supprime`, `ajoute`** — à l'impératif, non `insertion` et
+`suppression` : le nom aurait télescopé « tri par insertion », l'algorithme et
+l'opération portant le même mot dans la même page. `ajoute(v ; x)` nomme enfin
+l'opération la plus employée du programme, que la concaténation `v + {x}`
+couvrait sans la dire.
+
+**La préposition dit qui reçoit l'opération.** `dans notes insère(0 ; 20)` se
+lit comme une phrase et nomme sans ambiguïté le conteneur, là où
+`insère(notes ; 0 ; 20)` laissait deviner lequel des trois arguments le
+désignait. Trois écritures coexistent, au choix de ce qui se lit le mieux : la
+forme fonctionnelle, la forme prépositionnelle, et la forme directe
+`notes contient(15)` pour les questions par oui ou non.
+
+**La division euclidienne se dit comme au collège** : `quotient de 17 par 5`,
+`reste de 17 par 5` — la phrase dit lequel des deux nombres est le dividende,
+ce que `quotient(17 ; 5)` taisait. Les formes brèves restent admises, et la
+tournure accepte un appel comme dividende : `quotient de longueur(notes) par 2`.
+
+**`sortir`** arrête une boucle sans quitter ce qui l'entoure — c'est la
+recherche qui cesse dès qu'elle a trouvé. Dans un corps de fonction comme dans
+une boucle de document.
+
+**La forme française `v contient(1)`.** Le conteneur peut précéder la
+primitive et se glisse à sa place parmi les arguments : la phrase se lit à voix
+haute. `contient(1 ; v)` reste admis.
+
+**Le p-uplet.** Le programme de NSI le distingue explicitement de la liste :
+longueur fixe, types pouvant différer. Il s'écrit `(entier ; entier)`, se
+retourne, se délie et se lit par rang.
+
+- `soit divise(a: entier ; b: entier): (entier ; entier) = (quotient de a par b ; reste de a par b)`
+- `soit (q ; r) = divise(17 ; 5)` — la **déliaison** pose les deux noms d'un
+  coup, au niveau document comme dans un corps de fonction ;
+- `soit c: (entier ; texte) = (3 ; "trois")` — les membres peuvent différer, et
+  `c[1]` rend le second ;
+- l'arité est vérifiée : délier trois noms d'un couple est une faute dite, et
+  `(1 ; 2)` n'est pas acceptable là où une liste est attendue.
+
+Les extrema d'une série se rendent enfin en un seul parcours.
+
+**`aléatoire(a ; b)`** tire un entier entre les deux bornes, comprises — un
+xorshift sans dépendance, semé par l'horloge. Deux compilations donnent deux
+tirages : c'est ce qu'une simulation attend. Sans lui, ni Monte-Carlo, ni
+marche aléatoire, ni étude de fréquences.
+
+**`continuer`** arrête le tour en cours ; la boucle poursuit. Le pendant de
+`sortir`, dans un corps de fonction comme dans une boucle de document.
+
+**Une déclaration typée accepte un appel**, y compris pour un type scalaire :
+`soit x: entier = f(3)`.
+
+**L'affectation d'une valeur composée devient cohérente.** Cinq écritures
+naturelles échouaient, chacune pour une raison différente :
+
+- `pour k dans d { … d[k] … }` — une **clé de dictionnaire peut être une
+  variable**, non plus seulement un mot écrit à la main ;
+- `soit f(): un dictionnaire … = {a: 1}` — l'accolade délimite ici un
+  **littéral**, non un bloc d'instructions ; la distinction se fait sur la
+  présence d'un mot du langage à l'intérieur ;
+- `soit p: une liste d'entiers = empile({} ; 1)` — le membre droit d'une
+  déclaration typée **n'est plus forcément un littéral** : un appel, une
+  primitive, une concaténation conviennent ;
+- `soit p = empile({} ; 1)` — une valeur composée **se pose sans que son type
+  soit écrit** ; docdg reconnaît ce qu'elle est ;
+- `soit v = tri(v)` — un conteneur **se réaffecte**. L'accumulateur
+  `soit S = S + {k}` reste prioritaire et intact.
+
+La pile et la file s'écrivent désormais entièrement dans le langage, en sept
+lignes et sans une ligne de moteur.
+
+**Le chapitre « texte » du programme s'écrit enfin.** La déclaration d'une
+chaîne ne menait nulle part : sept manques la rendaient inerte. Ils sont
+comblés ensemble.
+
+- `m[0]` lit **une lettre**, qui est une chaîne d'un seul caractère — docdg
+  n'introduit pas de type distinct, pas plus que Python. L'indice hors bornes
+  compte en lettres.
+- `pour c dans m` parcourt les lettres, dans un document comme dans un corps
+  de fonction.
+- `majuscule`, `minuscule`, `sans accents` — `majuscule("été")` rend `ÉTÉ`,
+  non `ETE` : la typographie française accentue les capitales.
+- `code("B")` et `caractère(97)` font le va-et-vient entre une lettre et son
+  rang Unicode.
+- `texte(42)` et `nombre("1,5")` convertissent, explicitement.
+- Un littéral entre guillemets est lu comme chaîne partout, y compris en
+  argument : `m contient("jour")`.
+- Une **lecture indexée sert d'argument** : `code(m[0])`, `ajoute(r ; a[i])`.
+  La concaténation `r + {a[i]}` le permettait déjà, l'appel nommé non.
+- **Deux textes se comparent** dans une condition, avec la collation
+  française : `si u vaut inverse(u)` reconnaît un palindrome.
+
+César chiffre, le palindrome se reconnaît, le comptage de lettres tourne.
+
+**La chaîne de caractères devient une valeur ordinaire** :
+`soit m: chaîne de caractères = "bonjour"`. Un type scalaire n'a pas de
+littéral entre accolades — sa valeur tient sur la fin de la ligne. Les
+guillemets, droits ou français, délimitent sans appartenir à la valeur, ce qui
+permet d'y garder espaces et signes du langage. La chaîne se mesure
+(`longueur`), se découpe (`m[0 à 7]`), se joint (`+`) et se passe en argument.
+
+**`quotient(a ; b)`** — la division euclidienne du collège. Le reste s'obtenait
+déjà par `%` ; le quotient entier manquait, alors qu'il donne l'indice du
+milieu dans une recherche dichotomique.
+
+### Corrigé
+
+**Une primitive restait inerte dans la condition d'un `si` de document.**
+`expand_conditions` n'avait accès ni aux conteneurs ni aux fonctions : la même
+écriture fonctionnait dans un corps de fonction et pas dans le document. Les
+conditions de tour d'une boucle sont désormais résolues au déroulement, ce qui
+rend au passage visible un `sortir` niché dans un `si`.
+
+**Un point-virgule d'appel coupait une cellule de tableau en deux.** `split_top`
+comptait les accolades et les crochets, mais pas les parenthèses : la rangée
+`[contient(2 ; v) ; #{contient(2 ; v)}]` produisait quatre cellules au lieu de
+deux. Les parenthèses comptent maintenant au même titre.
+
+**Les boucles ne tournaient pas dans un corps de fonction.** `expand_loops_avec`
+et son homologue pour `tant que` balayaient toutes les lignes du document à la
+recherche d'un bloc à dérouler, sans savoir qu'une ligne peut appartenir au
+corps d'une fonction. La coupure tombait alors au milieu d'une déclaration,
+dont l'accolade fermante restait de l'autre côté :
+
+- avec `pour`, `parse_declaration` échouait sur le fragment tronqué et la
+  fonction n'était jamais enregistrée — l'appel ressortait en « … » ;
+- avec `tant que`, la boucle était extraite du corps et la fonction rendait la
+  valeur qu'elle avait avant d'y entrer.
+
+Les deux balayeurs sautent désormais par-dessus une déclaration de fonction
+complète. C'est le même défaut, dans la même famille, que celui qui empêchait
+autrefois une condition de fonctionner à l'intérieur d'une boucle.
+
+Un corps de fonction accepte maintenant `pour … de … à …`, `pour … dans …`,
+`tant que … faire`, `si … sinon` imbriqués, et l'écriture indexée `t[i] = x`.
+Moyenne, comptage et recherche linéaire s'écrivent enfin.
+
+### Documentation
+
+**Les exemples d'algorithmique passent de quatre fichiers à trois**, alignés sur
+la numérotation des autres séries — qui toutes commencent à 2. `algo1`
+disparaît : son contenu relevait de l'école primaire, où docdg n'a pas d'objet.
+
+| Fichier | Contenu |
+|---|---|
+| `algo2` | déclarer et initialiser, entrer et sortir, décider, répéter — y compris `sortir` et `continuer` |
+| `algo3` | les conteneurs, les chaînes de caractères, et les fonctions |
+| `algo4` | récursivité, algorithmes classiques, structures de données avancées |
+
+`algo4` gagne les algorithmes que le programme demande et qu'aucun document ne
+montrait : recherche linéaire, dichotomie, tri par insertion, tri par
+sélection, fusion de deux listes triées.
+
+Une observation en découle, qui vaut d'être écrite : **une saisie arrête le
+document jusqu'à la réponse.** Placée au milieu d'`algo2`, elle masquait tout
+ce qui suivait. Elle figure désormais en fin de document, et la règle est dite
+dans le texte.
+
+`exemples/algo4.txt` gagne une section « Recevoir et rendre un conteneur » et
+perd son avertissement obsolète : la collision entre fonction mathématique et
+fonction algorithmique était déjà refusée.
+
 ## 2.3 — la qualité du gris typographique
 
 La composition du texte courant, au niveau de la ligne : les mots se coupent
 en fin de ligne selon les motifs français, et aucune ligne ne reste seule au
 bas ou au sommet d'une page.
 
+**Le vocabulaire s'aligne sur celui des enseignants.** `liste` et `tableau`
+nomment désormais le même type que `collection` ; `chaîne`, `chaîne de
+caractères` et `texte` sont synonymes ; `renvoie` s'écrit aussi bien que
+`retourne`. `inverse(v)` remplace `miroir(v)` : la syntaxe `inverse(...)` et la
+prose « l'inverse de la matrice M » ne se confondent pas, la parenthèse les
+sépare.
+
+**`non`**, troisième connecteur logique enseigné avec `et` et `ou`, manquait.
+Les conditions lisent aussi `vrai` et `faux` en toutes lettres, et un booléen
+s'affiche ainsi : `contient(15 ; notes)` rend « vrai », non « 1 ».
+
+**`insère`, `supprime`, `ajoute`** — à l'impératif, non `insertion` et
+`suppression` : le nom aurait télescopé « tri par insertion », l'algorithme et
+l'opération portant le même mot dans la même page. `ajoute(v ; x)` nomme enfin
+l'opération la plus employée du programme, que la concaténation `v + {x}`
+couvrait sans la dire.
+
+**La préposition dit qui reçoit l'opération.** `dans notes insère(0 ; 20)` se
+lit comme une phrase et nomme sans ambiguïté le conteneur, là où
+`insère(notes ; 0 ; 20)` laissait deviner lequel des trois arguments le
+désignait. Trois écritures coexistent, au choix de ce qui se lit le mieux : la
+forme fonctionnelle, la forme prépositionnelle, et la forme directe
+`notes contient(15)` pour les questions par oui ou non.
+
+**La division euclidienne se dit comme au collège** : `quotient de 17 par 5`,
+`reste de 17 par 5` — la phrase dit lequel des deux nombres est le dividende,
+ce que `quotient(17 ; 5)` taisait. Les formes brèves restent admises, et la
+tournure accepte un appel comme dividende : `quotient de longueur(notes) par 2`.
+
+**`sortir`** arrête une boucle sans quitter ce qui l'entoure — c'est la
+recherche qui cesse dès qu'elle a trouvé. Dans un corps de fonction comme dans
+une boucle de document.
+
+**La forme française `v contient(1)`.** Le conteneur peut précéder la
+primitive et se glisse à sa place parmi les arguments : la phrase se lit à voix
+haute. `contient(1 ; v)` reste admis.
+
+**Le p-uplet.** Le programme de NSI le distingue explicitement de la liste :
+longueur fixe, types pouvant différer. Il s'écrit `(entier ; entier)`, se
+retourne, se délie et se lit par rang.
+
+- `soit divise(a: entier ; b: entier): (entier ; entier) = (quotient de a par b ; reste de a par b)`
+- `soit (q ; r) = divise(17 ; 5)` — la **déliaison** pose les deux noms d'un
+  coup, au niveau document comme dans un corps de fonction ;
+- `soit c: (entier ; texte) = (3 ; "trois")` — les membres peuvent différer, et
+  `c[1]` rend le second ;
+- l'arité est vérifiée : délier trois noms d'un couple est une faute dite, et
+  `(1 ; 2)` n'est pas acceptable là où une liste est attendue.
+
+Les extrema d'une série se rendent enfin en un seul parcours.
+
+**`aléatoire(a ; b)`** tire un entier entre les deux bornes, comprises — un
+xorshift sans dépendance, semé par l'horloge. Deux compilations donnent deux
+tirages : c'est ce qu'une simulation attend. Sans lui, ni Monte-Carlo, ni
+marche aléatoire, ni étude de fréquences.
+
+**`continuer`** arrête le tour en cours ; la boucle poursuit. Le pendant de
+`sortir`, dans un corps de fonction comme dans une boucle de document.
+
+**Une déclaration typée accepte un appel**, y compris pour un type scalaire :
+`soit x: entier = f(3)`.
+
+**L'affectation d'une valeur composée devient cohérente.** Cinq écritures
+naturelles échouaient, chacune pour une raison différente :
+
+- `pour k dans d { … d[k] … }` — une **clé de dictionnaire peut être une
+  variable**, non plus seulement un mot écrit à la main ;
+- `soit f(): un dictionnaire … = {a: 1}` — l'accolade délimite ici un
+  **littéral**, non un bloc d'instructions ; la distinction se fait sur la
+  présence d'un mot du langage à l'intérieur ;
+- `soit p: une liste d'entiers = empile({} ; 1)` — le membre droit d'une
+  déclaration typée **n'est plus forcément un littéral** : un appel, une
+  primitive, une concaténation conviennent ;
+- `soit p = empile({} ; 1)` — une valeur composée **se pose sans que son type
+  soit écrit** ; docdg reconnaît ce qu'elle est ;
+- `soit v = tri(v)` — un conteneur **se réaffecte**. L'accumulateur
+  `soit S = S + {k}` reste prioritaire et intact.
+
+La pile et la file s'écrivent désormais entièrement dans le langage, en sept
+lignes et sans une ligne de moteur.
+
+**Le chapitre « texte » du programme s'écrit enfin.** La déclaration d'une
+chaîne ne menait nulle part : sept manques la rendaient inerte. Ils sont
+comblés ensemble.
+
+- `m[0]` lit **une lettre**, qui est une chaîne d'un seul caractère — docdg
+  n'introduit pas de type distinct, pas plus que Python. L'indice hors bornes
+  compte en lettres.
+- `pour c dans m` parcourt les lettres, dans un document comme dans un corps
+  de fonction.
+- `majuscule`, `minuscule`, `sans accents` — `majuscule("été")` rend `ÉTÉ`,
+  non `ETE` : la typographie française accentue les capitales.
+- `code("B")` et `caractère(97)` font le va-et-vient entre une lettre et son
+  rang Unicode.
+- `texte(42)` et `nombre("1,5")` convertissent, explicitement.
+- Un littéral entre guillemets est lu comme chaîne partout, y compris en
+  argument : `m contient("jour")`.
+- Une **lecture indexée sert d'argument** : `code(m[0])`, `ajoute(r ; a[i])`.
+  La concaténation `r + {a[i]}` le permettait déjà, l'appel nommé non.
+- **Deux textes se comparent** dans une condition, avec la collation
+  française : `si u vaut inverse(u)` reconnaît un palindrome.
+
+César chiffre, le palindrome se reconnaît, le comptage de lettres tourne.
+
+**La chaîne de caractères devient une valeur ordinaire** :
+`soit m: chaîne de caractères = "bonjour"`. Un type scalaire n'a pas de
+littéral entre accolades — sa valeur tient sur la fin de la ligne. Les
+guillemets, droits ou français, délimitent sans appartenir à la valeur, ce qui
+permet d'y garder espaces et signes du langage. La chaîne se mesure
+(`longueur`), se découpe (`m[0 à 7]`), se joint (`+`) et se passe en argument.
+
+**`quotient(a ; b)`** — la division euclidienne du collège. Le reste s'obtenait
+déjà par `%` ; le quotient entier manquait, alors qu'il donne l'indice du
+milieu dans une recherche dichotomique.
+
 ### Corrigé
+
+**Une primitive restait inerte dans la condition d'un `si` de document.**
+`expand_conditions` n'avait accès ni aux conteneurs ni aux fonctions : la même
+écriture fonctionnait dans un corps de fonction et pas dans le document. Les
+conditions de tour d'une boucle sont désormais résolues au déroulement, ce qui
+rend au passage visible un `sortir` niché dans un `si`.
+
+**Un point-virgule d'appel coupait une cellule de tableau en deux.** `split_top`
+comptait les accolades et les crochets, mais pas les parenthèses : la rangée
+`[contient(2 ; v) ; #{contient(2 ; v)}]` produisait quatre cellules au lieu de
+deux. Les parenthèses comptent maintenant au même titre.
 
 - **Une couleur de fond d'entête déteignait sur tout le tableau.** Dans
   `des entêtes en blanc sur fond bleu marine`, le mot `fond` était capté par
@@ -346,7 +1101,133 @@ propagation d'incertitudes — qui exerce chaque réglage.
   pagination. Aperçu masqué, le volet code occupe désormais tout l'espace,
   symétriquement à l'aperçu.
 
+**Le vocabulaire s'aligne sur celui des enseignants.** `liste` et `tableau`
+nomment désormais le même type que `collection` ; `chaîne`, `chaîne de
+caractères` et `texte` sont synonymes ; `renvoie` s'écrit aussi bien que
+`retourne`. `inverse(v)` remplace `miroir(v)` : la syntaxe `inverse(...)` et la
+prose « l'inverse de la matrice M » ne se confondent pas, la parenthèse les
+sépare.
+
+**`non`**, troisième connecteur logique enseigné avec `et` et `ou`, manquait.
+Les conditions lisent aussi `vrai` et `faux` en toutes lettres, et un booléen
+s'affiche ainsi : `contient(15 ; notes)` rend « vrai », non « 1 ».
+
+**`insère`, `supprime`, `ajoute`** — à l'impératif, non `insertion` et
+`suppression` : le nom aurait télescopé « tri par insertion », l'algorithme et
+l'opération portant le même mot dans la même page. `ajoute(v ; x)` nomme enfin
+l'opération la plus employée du programme, que la concaténation `v + {x}`
+couvrait sans la dire.
+
+**La préposition dit qui reçoit l'opération.** `dans notes insère(0 ; 20)` se
+lit comme une phrase et nomme sans ambiguïté le conteneur, là où
+`insère(notes ; 0 ; 20)` laissait deviner lequel des trois arguments le
+désignait. Trois écritures coexistent, au choix de ce qui se lit le mieux : la
+forme fonctionnelle, la forme prépositionnelle, et la forme directe
+`notes contient(15)` pour les questions par oui ou non.
+
+**La division euclidienne se dit comme au collège** : `quotient de 17 par 5`,
+`reste de 17 par 5` — la phrase dit lequel des deux nombres est le dividende,
+ce que `quotient(17 ; 5)` taisait. Les formes brèves restent admises, et la
+tournure accepte un appel comme dividende : `quotient de longueur(notes) par 2`.
+
+**`sortir`** arrête une boucle sans quitter ce qui l'entoure — c'est la
+recherche qui cesse dès qu'elle a trouvé. Dans un corps de fonction comme dans
+une boucle de document.
+
+**La forme française `v contient(1)`.** Le conteneur peut précéder la
+primitive et se glisse à sa place parmi les arguments : la phrase se lit à voix
+haute. `contient(1 ; v)` reste admis.
+
+**Le p-uplet.** Le programme de NSI le distingue explicitement de la liste :
+longueur fixe, types pouvant différer. Il s'écrit `(entier ; entier)`, se
+retourne, se délie et se lit par rang.
+
+- `soit divise(a: entier ; b: entier): (entier ; entier) = (quotient de a par b ; reste de a par b)`
+- `soit (q ; r) = divise(17 ; 5)` — la **déliaison** pose les deux noms d'un
+  coup, au niveau document comme dans un corps de fonction ;
+- `soit c: (entier ; texte) = (3 ; "trois")` — les membres peuvent différer, et
+  `c[1]` rend le second ;
+- l'arité est vérifiée : délier trois noms d'un couple est une faute dite, et
+  `(1 ; 2)` n'est pas acceptable là où une liste est attendue.
+
+Les extrema d'une série se rendent enfin en un seul parcours.
+
+**`aléatoire(a ; b)`** tire un entier entre les deux bornes, comprises — un
+xorshift sans dépendance, semé par l'horloge. Deux compilations donnent deux
+tirages : c'est ce qu'une simulation attend. Sans lui, ni Monte-Carlo, ni
+marche aléatoire, ni étude de fréquences.
+
+**`continuer`** arrête le tour en cours ; la boucle poursuit. Le pendant de
+`sortir`, dans un corps de fonction comme dans une boucle de document.
+
+**Une déclaration typée accepte un appel**, y compris pour un type scalaire :
+`soit x: entier = f(3)`.
+
+**L'affectation d'une valeur composée devient cohérente.** Cinq écritures
+naturelles échouaient, chacune pour une raison différente :
+
+- `pour k dans d { … d[k] … }` — une **clé de dictionnaire peut être une
+  variable**, non plus seulement un mot écrit à la main ;
+- `soit f(): un dictionnaire … = {a: 1}` — l'accolade délimite ici un
+  **littéral**, non un bloc d'instructions ; la distinction se fait sur la
+  présence d'un mot du langage à l'intérieur ;
+- `soit p: une liste d'entiers = empile({} ; 1)` — le membre droit d'une
+  déclaration typée **n'est plus forcément un littéral** : un appel, une
+  primitive, une concaténation conviennent ;
+- `soit p = empile({} ; 1)` — une valeur composée **se pose sans que son type
+  soit écrit** ; docdg reconnaît ce qu'elle est ;
+- `soit v = tri(v)` — un conteneur **se réaffecte**. L'accumulateur
+  `soit S = S + {k}` reste prioritaire et intact.
+
+La pile et la file s'écrivent désormais entièrement dans le langage, en sept
+lignes et sans une ligne de moteur.
+
+**Le chapitre « texte » du programme s'écrit enfin.** La déclaration d'une
+chaîne ne menait nulle part : sept manques la rendaient inerte. Ils sont
+comblés ensemble.
+
+- `m[0]` lit **une lettre**, qui est une chaîne d'un seul caractère — docdg
+  n'introduit pas de type distinct, pas plus que Python. L'indice hors bornes
+  compte en lettres.
+- `pour c dans m` parcourt les lettres, dans un document comme dans un corps
+  de fonction.
+- `majuscule`, `minuscule`, `sans accents` — `majuscule("été")` rend `ÉTÉ`,
+  non `ETE` : la typographie française accentue les capitales.
+- `code("B")` et `caractère(97)` font le va-et-vient entre une lettre et son
+  rang Unicode.
+- `texte(42)` et `nombre("1,5")` convertissent, explicitement.
+- Un littéral entre guillemets est lu comme chaîne partout, y compris en
+  argument : `m contient("jour")`.
+- Une **lecture indexée sert d'argument** : `code(m[0])`, `ajoute(r ; a[i])`.
+  La concaténation `r + {a[i]}` le permettait déjà, l'appel nommé non.
+- **Deux textes se comparent** dans une condition, avec la collation
+  française : `si u vaut inverse(u)` reconnaît un palindrome.
+
+César chiffre, le palindrome se reconnaît, le comptage de lettres tourne.
+
+**La chaîne de caractères devient une valeur ordinaire** :
+`soit m: chaîne de caractères = "bonjour"`. Un type scalaire n'a pas de
+littéral entre accolades — sa valeur tient sur la fin de la ligne. Les
+guillemets, droits ou français, délimitent sans appartenir à la valeur, ce qui
+permet d'y garder espaces et signes du langage. La chaîne se mesure
+(`longueur`), se découpe (`m[0 à 7]`), se joint (`+`) et se passe en argument.
+
+**`quotient(a ; b)`** — la division euclidienne du collège. Le reste s'obtenait
+déjà par `%` ; le quotient entier manquait, alors qu'il donne l'indice du
+milieu dans une recherche dichotomique.
+
 ### Corrigé
+
+**Une primitive restait inerte dans la condition d'un `si` de document.**
+`expand_conditions` n'avait accès ni aux conteneurs ni aux fonctions : la même
+écriture fonctionnait dans un corps de fonction et pas dans le document. Les
+conditions de tour d'une boucle sont désormais résolues au déroulement, ce qui
+rend au passage visible un `sortir` niché dans un `si`.
+
+**Un point-virgule d'appel coupait une cellule de tableau en deux.** `split_top`
+comptait les accolades et les crochets, mais pas les parenthèses : la rangée
+`[contient(2 ; v) ; #{contient(2 ; v)}]` produisait quatre cellules au lieu de
+deux. Les parenthèses comptent maintenant au même titre.
 
 - **La fenêtre ne se refermait plus après un clic dans la table des matières
   ou sur un renvoi.** La webview est créée par `with_html`, sans URL de base :
@@ -416,7 +1297,133 @@ physiques : la chimie se calcule en Rust pur, sans détour par SymPy.
 - Gradient et laplacien sur définition inline (`de f(x, y) = ...`) ; la forme
   existante sur fonction déclarée (`le gradient de psi`) reste la référence.
 
+**Le vocabulaire s'aligne sur celui des enseignants.** `liste` et `tableau`
+nomment désormais le même type que `collection` ; `chaîne`, `chaîne de
+caractères` et `texte` sont synonymes ; `renvoie` s'écrit aussi bien que
+`retourne`. `inverse(v)` remplace `miroir(v)` : la syntaxe `inverse(...)` et la
+prose « l'inverse de la matrice M » ne se confondent pas, la parenthèse les
+sépare.
+
+**`non`**, troisième connecteur logique enseigné avec `et` et `ou`, manquait.
+Les conditions lisent aussi `vrai` et `faux` en toutes lettres, et un booléen
+s'affiche ainsi : `contient(15 ; notes)` rend « vrai », non « 1 ».
+
+**`insère`, `supprime`, `ajoute`** — à l'impératif, non `insertion` et
+`suppression` : le nom aurait télescopé « tri par insertion », l'algorithme et
+l'opération portant le même mot dans la même page. `ajoute(v ; x)` nomme enfin
+l'opération la plus employée du programme, que la concaténation `v + {x}`
+couvrait sans la dire.
+
+**La préposition dit qui reçoit l'opération.** `dans notes insère(0 ; 20)` se
+lit comme une phrase et nomme sans ambiguïté le conteneur, là où
+`insère(notes ; 0 ; 20)` laissait deviner lequel des trois arguments le
+désignait. Trois écritures coexistent, au choix de ce qui se lit le mieux : la
+forme fonctionnelle, la forme prépositionnelle, et la forme directe
+`notes contient(15)` pour les questions par oui ou non.
+
+**La division euclidienne se dit comme au collège** : `quotient de 17 par 5`,
+`reste de 17 par 5` — la phrase dit lequel des deux nombres est le dividende,
+ce que `quotient(17 ; 5)` taisait. Les formes brèves restent admises, et la
+tournure accepte un appel comme dividende : `quotient de longueur(notes) par 2`.
+
+**`sortir`** arrête une boucle sans quitter ce qui l'entoure — c'est la
+recherche qui cesse dès qu'elle a trouvé. Dans un corps de fonction comme dans
+une boucle de document.
+
+**La forme française `v contient(1)`.** Le conteneur peut précéder la
+primitive et se glisse à sa place parmi les arguments : la phrase se lit à voix
+haute. `contient(1 ; v)` reste admis.
+
+**Le p-uplet.** Le programme de NSI le distingue explicitement de la liste :
+longueur fixe, types pouvant différer. Il s'écrit `(entier ; entier)`, se
+retourne, se délie et se lit par rang.
+
+- `soit divise(a: entier ; b: entier): (entier ; entier) = (quotient de a par b ; reste de a par b)`
+- `soit (q ; r) = divise(17 ; 5)` — la **déliaison** pose les deux noms d'un
+  coup, au niveau document comme dans un corps de fonction ;
+- `soit c: (entier ; texte) = (3 ; "trois")` — les membres peuvent différer, et
+  `c[1]` rend le second ;
+- l'arité est vérifiée : délier trois noms d'un couple est une faute dite, et
+  `(1 ; 2)` n'est pas acceptable là où une liste est attendue.
+
+Les extrema d'une série se rendent enfin en un seul parcours.
+
+**`aléatoire(a ; b)`** tire un entier entre les deux bornes, comprises — un
+xorshift sans dépendance, semé par l'horloge. Deux compilations donnent deux
+tirages : c'est ce qu'une simulation attend. Sans lui, ni Monte-Carlo, ni
+marche aléatoire, ni étude de fréquences.
+
+**`continuer`** arrête le tour en cours ; la boucle poursuit. Le pendant de
+`sortir`, dans un corps de fonction comme dans une boucle de document.
+
+**Une déclaration typée accepte un appel**, y compris pour un type scalaire :
+`soit x: entier = f(3)`.
+
+**L'affectation d'une valeur composée devient cohérente.** Cinq écritures
+naturelles échouaient, chacune pour une raison différente :
+
+- `pour k dans d { … d[k] … }` — une **clé de dictionnaire peut être une
+  variable**, non plus seulement un mot écrit à la main ;
+- `soit f(): un dictionnaire … = {a: 1}` — l'accolade délimite ici un
+  **littéral**, non un bloc d'instructions ; la distinction se fait sur la
+  présence d'un mot du langage à l'intérieur ;
+- `soit p: une liste d'entiers = empile({} ; 1)` — le membre droit d'une
+  déclaration typée **n'est plus forcément un littéral** : un appel, une
+  primitive, une concaténation conviennent ;
+- `soit p = empile({} ; 1)` — une valeur composée **se pose sans que son type
+  soit écrit** ; docdg reconnaît ce qu'elle est ;
+- `soit v = tri(v)` — un conteneur **se réaffecte**. L'accumulateur
+  `soit S = S + {k}` reste prioritaire et intact.
+
+La pile et la file s'écrivent désormais entièrement dans le langage, en sept
+lignes et sans une ligne de moteur.
+
+**Le chapitre « texte » du programme s'écrit enfin.** La déclaration d'une
+chaîne ne menait nulle part : sept manques la rendaient inerte. Ils sont
+comblés ensemble.
+
+- `m[0]` lit **une lettre**, qui est une chaîne d'un seul caractère — docdg
+  n'introduit pas de type distinct, pas plus que Python. L'indice hors bornes
+  compte en lettres.
+- `pour c dans m` parcourt les lettres, dans un document comme dans un corps
+  de fonction.
+- `majuscule`, `minuscule`, `sans accents` — `majuscule("été")` rend `ÉTÉ`,
+  non `ETE` : la typographie française accentue les capitales.
+- `code("B")` et `caractère(97)` font le va-et-vient entre une lettre et son
+  rang Unicode.
+- `texte(42)` et `nombre("1,5")` convertissent, explicitement.
+- Un littéral entre guillemets est lu comme chaîne partout, y compris en
+  argument : `m contient("jour")`.
+- Une **lecture indexée sert d'argument** : `code(m[0])`, `ajoute(r ; a[i])`.
+  La concaténation `r + {a[i]}` le permettait déjà, l'appel nommé non.
+- **Deux textes se comparent** dans une condition, avec la collation
+  française : `si u vaut inverse(u)` reconnaît un palindrome.
+
+César chiffre, le palindrome se reconnaît, le comptage de lettres tourne.
+
+**La chaîne de caractères devient une valeur ordinaire** :
+`soit m: chaîne de caractères = "bonjour"`. Un type scalaire n'a pas de
+littéral entre accolades — sa valeur tient sur la fin de la ligne. Les
+guillemets, droits ou français, délimitent sans appartenir à la valeur, ce qui
+permet d'y garder espaces et signes du langage. La chaîne se mesure
+(`longueur`), se découpe (`m[0 à 7]`), se joint (`+`) et se passe en argument.
+
+**`quotient(a ; b)`** — la division euclidienne du collège. Le reste s'obtenait
+déjà par `%` ; le quotient entier manquait, alors qu'il donne l'indice du
+milieu dans une recherche dichotomique.
+
 ### Corrigé
+
+**Une primitive restait inerte dans la condition d'un `si` de document.**
+`expand_conditions` n'avait accès ni aux conteneurs ni aux fonctions : la même
+écriture fonctionnait dans un corps de fonction et pas dans le document. Les
+conditions de tour d'une boucle sont désormais résolues au déroulement, ce qui
+rend au passage visible un `sortir` niché dans un `si`.
+
+**Un point-virgule d'appel coupait une cellule de tableau en deux.** `split_top`
+comptait les accolades et les crochets, mais pas les parenthèses : la rangée
+`[contient(2 ; v) ; #{contient(2 ; v)}]` produisait quatre cellules au lieu de
+deux. Les parenthèses comptent maintenant au même titre.
 
 - Le bassin SymPy se remplit entièrement dès `prechauffe()` au lieu d'un seul
   ouvrier ; un ouvrier abandonné est tué et moissonné (plus d'orphelin).
@@ -513,7 +1520,133 @@ cavalière (fuyante 0,45/0,35) :
 - Illustration du théorème central limite : loi exacte de la somme de *n*
   dés (par convolution) superposée à sa limite normale.
 
+**Le vocabulaire s'aligne sur celui des enseignants.** `liste` et `tableau`
+nomment désormais le même type que `collection` ; `chaîne`, `chaîne de
+caractères` et `texte` sont synonymes ; `renvoie` s'écrit aussi bien que
+`retourne`. `inverse(v)` remplace `miroir(v)` : la syntaxe `inverse(...)` et la
+prose « l'inverse de la matrice M » ne se confondent pas, la parenthèse les
+sépare.
+
+**`non`**, troisième connecteur logique enseigné avec `et` et `ou`, manquait.
+Les conditions lisent aussi `vrai` et `faux` en toutes lettres, et un booléen
+s'affiche ainsi : `contient(15 ; notes)` rend « vrai », non « 1 ».
+
+**`insère`, `supprime`, `ajoute`** — à l'impératif, non `insertion` et
+`suppression` : le nom aurait télescopé « tri par insertion », l'algorithme et
+l'opération portant le même mot dans la même page. `ajoute(v ; x)` nomme enfin
+l'opération la plus employée du programme, que la concaténation `v + {x}`
+couvrait sans la dire.
+
+**La préposition dit qui reçoit l'opération.** `dans notes insère(0 ; 20)` se
+lit comme une phrase et nomme sans ambiguïté le conteneur, là où
+`insère(notes ; 0 ; 20)` laissait deviner lequel des trois arguments le
+désignait. Trois écritures coexistent, au choix de ce qui se lit le mieux : la
+forme fonctionnelle, la forme prépositionnelle, et la forme directe
+`notes contient(15)` pour les questions par oui ou non.
+
+**La division euclidienne se dit comme au collège** : `quotient de 17 par 5`,
+`reste de 17 par 5` — la phrase dit lequel des deux nombres est le dividende,
+ce que `quotient(17 ; 5)` taisait. Les formes brèves restent admises, et la
+tournure accepte un appel comme dividende : `quotient de longueur(notes) par 2`.
+
+**`sortir`** arrête une boucle sans quitter ce qui l'entoure — c'est la
+recherche qui cesse dès qu'elle a trouvé. Dans un corps de fonction comme dans
+une boucle de document.
+
+**La forme française `v contient(1)`.** Le conteneur peut précéder la
+primitive et se glisse à sa place parmi les arguments : la phrase se lit à voix
+haute. `contient(1 ; v)` reste admis.
+
+**Le p-uplet.** Le programme de NSI le distingue explicitement de la liste :
+longueur fixe, types pouvant différer. Il s'écrit `(entier ; entier)`, se
+retourne, se délie et se lit par rang.
+
+- `soit divise(a: entier ; b: entier): (entier ; entier) = (quotient de a par b ; reste de a par b)`
+- `soit (q ; r) = divise(17 ; 5)` — la **déliaison** pose les deux noms d'un
+  coup, au niveau document comme dans un corps de fonction ;
+- `soit c: (entier ; texte) = (3 ; "trois")` — les membres peuvent différer, et
+  `c[1]` rend le second ;
+- l'arité est vérifiée : délier trois noms d'un couple est une faute dite, et
+  `(1 ; 2)` n'est pas acceptable là où une liste est attendue.
+
+Les extrema d'une série se rendent enfin en un seul parcours.
+
+**`aléatoire(a ; b)`** tire un entier entre les deux bornes, comprises — un
+xorshift sans dépendance, semé par l'horloge. Deux compilations donnent deux
+tirages : c'est ce qu'une simulation attend. Sans lui, ni Monte-Carlo, ni
+marche aléatoire, ni étude de fréquences.
+
+**`continuer`** arrête le tour en cours ; la boucle poursuit. Le pendant de
+`sortir`, dans un corps de fonction comme dans une boucle de document.
+
+**Une déclaration typée accepte un appel**, y compris pour un type scalaire :
+`soit x: entier = f(3)`.
+
+**L'affectation d'une valeur composée devient cohérente.** Cinq écritures
+naturelles échouaient, chacune pour une raison différente :
+
+- `pour k dans d { … d[k] … }` — une **clé de dictionnaire peut être une
+  variable**, non plus seulement un mot écrit à la main ;
+- `soit f(): un dictionnaire … = {a: 1}` — l'accolade délimite ici un
+  **littéral**, non un bloc d'instructions ; la distinction se fait sur la
+  présence d'un mot du langage à l'intérieur ;
+- `soit p: une liste d'entiers = empile({} ; 1)` — le membre droit d'une
+  déclaration typée **n'est plus forcément un littéral** : un appel, une
+  primitive, une concaténation conviennent ;
+- `soit p = empile({} ; 1)` — une valeur composée **se pose sans que son type
+  soit écrit** ; docdg reconnaît ce qu'elle est ;
+- `soit v = tri(v)` — un conteneur **se réaffecte**. L'accumulateur
+  `soit S = S + {k}` reste prioritaire et intact.
+
+La pile et la file s'écrivent désormais entièrement dans le langage, en sept
+lignes et sans une ligne de moteur.
+
+**Le chapitre « texte » du programme s'écrit enfin.** La déclaration d'une
+chaîne ne menait nulle part : sept manques la rendaient inerte. Ils sont
+comblés ensemble.
+
+- `m[0]` lit **une lettre**, qui est une chaîne d'un seul caractère — docdg
+  n'introduit pas de type distinct, pas plus que Python. L'indice hors bornes
+  compte en lettres.
+- `pour c dans m` parcourt les lettres, dans un document comme dans un corps
+  de fonction.
+- `majuscule`, `minuscule`, `sans accents` — `majuscule("été")` rend `ÉTÉ`,
+  non `ETE` : la typographie française accentue les capitales.
+- `code("B")` et `caractère(97)` font le va-et-vient entre une lettre et son
+  rang Unicode.
+- `texte(42)` et `nombre("1,5")` convertissent, explicitement.
+- Un littéral entre guillemets est lu comme chaîne partout, y compris en
+  argument : `m contient("jour")`.
+- Une **lecture indexée sert d'argument** : `code(m[0])`, `ajoute(r ; a[i])`.
+  La concaténation `r + {a[i]}` le permettait déjà, l'appel nommé non.
+- **Deux textes se comparent** dans une condition, avec la collation
+  française : `si u vaut inverse(u)` reconnaît un palindrome.
+
+César chiffre, le palindrome se reconnaît, le comptage de lettres tourne.
+
+**La chaîne de caractères devient une valeur ordinaire** :
+`soit m: chaîne de caractères = "bonjour"`. Un type scalaire n'a pas de
+littéral entre accolades — sa valeur tient sur la fin de la ligne. Les
+guillemets, droits ou français, délimitent sans appartenir à la valeur, ce qui
+permet d'y garder espaces et signes du langage. La chaîne se mesure
+(`longueur`), se découpe (`m[0 à 7]`), se joint (`+`) et se passe en argument.
+
+**`quotient(a ; b)`** — la division euclidienne du collège. Le reste s'obtenait
+déjà par `%` ; le quotient entier manquait, alors qu'il donne l'indice du
+milieu dans une recherche dichotomique.
+
 ### Corrigé
+
+**Une primitive restait inerte dans la condition d'un `si` de document.**
+`expand_conditions` n'avait accès ni aux conteneurs ni aux fonctions : la même
+écriture fonctionnait dans un corps de fonction et pas dans le document. Les
+conditions de tour d'une boucle sont désormais résolues au déroulement, ce qui
+rend au passage visible un `sortir` niché dans un `si`.
+
+**Un point-virgule d'appel coupait une cellule de tableau en deux.** `split_top`
+comptait les accolades et les crochets, mais pas les parenthèses : la rangée
+`[contient(2 ; v) ; #{contient(2 ; v)}]` produisait quatre cellules au lieu de
+deux. Les parenthèses comptent maintenant au même titre.
 
 - `exp(x)` s'affiche désormais `e^x`, notation francophone, au lieu de
   `\exp(x)`.

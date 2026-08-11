@@ -501,7 +501,7 @@ dependencies = [
 
 [[package]]
 name = "docdg"
-version = "2.3.0"
+version = "2.4.0"
 dependencies = [
  "docdg-transpiler",
  "muda",
@@ -522,7 +522,7 @@ dependencies = [
 
 [[package]]
 name = "docdg-transpiler"
-version = "2.3.0"
+version = "2.4.0"
 dependencies = [
  "hyphenation",
  "rayon",

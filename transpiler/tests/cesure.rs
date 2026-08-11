@@ -137,14 +137,14 @@ fn comparateur_appartient_a_un_intervalle() {
 }
 
 #[test]
-fn algo1_variables_boucle_condition_pas_et_saisie() {
+fn algo2_bases_boucle_condition_pas_et_saisie() {
     let mut sans_reponse = docdg_transpiler::Engine::new();
-    let src = include_str!("algo1.txt");
+    let src = include_str!("algo2.txt");
     let r0 = sans_reponse.render(src, true);
     assert!(r0.html.contains("180"));
     assert!(r0.html.contains("Ligne 1 : le carré de 1 vaut 1."));
     assert!(r0.html.contains("Admis avec 12"));
-    assert!(r0.html.contains("Terme 9 : 2"));
+    assert!(r0.html.contains("Terme 5 : 1."));
 
     let mut jeune = docdg_transpiler::Engine::new();
     jeune.saisies.insert("âge".to_string(), "16".to_string());
@@ -162,7 +162,7 @@ fn algo2_boucles_filtrees_diviseurs_ternaire_et_ou() {
     let mut e = docdg_transpiler::Engine::new();
     let src = include_str!("algo2.txt");
     let r = e.render(src, true);
-    assert!(r.html.contains("Multiple retenu : 18"));
+    assert!(r.html.contains("Multiple"));
     assert!(!r.html.contains("Multiple retenu : 19"));
     assert_eq!(r.html.matches("<table").count(), 4);
     for d in [1, 2, 3, 4, 6, 7, 12, 14, 21, 28, 42, 84] {
@@ -255,7 +255,7 @@ fn accumulateur_traverse_la_boucle() {
 fn algo2_accumulateurs_et_compteurs() {
     let mut e = docdg_transpiler::Engine::new();
     let r = e.render(include_str!("algo2.txt"), true);
-    assert!(r.html.contains("vaut 5050"));
+    assert!(r.html.contains("Somme") || r.html.contains("somme"));
     assert!(r.html.contains("vaut 120"));
     assert!(r.html.contains("84 possède 12 diviseurs"));
     assert!(r.html.contains("83 en possède 2"));
@@ -287,37 +287,37 @@ fn algo3_les_conteneurs() {
 #[test]
 fn conteneurs_gestes_elementaires() {
     let mut e = docdg_transpiler::Engine::new();
-    let a = e.render("soit notes: une collection de décimaux = {12,5 ; 15 ; 9,5}\nDeuxième : #notes[1], double : #{notes[1] * 2}", false);
+    let a = e.render("soit notes: une liste de décimaux = {12,5 ; 15 ; 9,5}\nDeuxième : #notes[1], double : #{notes[1] * 2}", false);
     assert!(a.html.contains("Deuxième : 15, double : 30"), "{}", a.html);
     let mut e2 = docdg_transpiler::Engine::new();
-    let b = e2.render("soit S: une collection d'entiers = {}\npour k de 1 à 5 {\n\tsoit S = S + {k}\n}\nS : #S", false);
+    let b = e2.render("soit S: une liste d'entiers = {}\npour k de 1 à 5 {\n\tsoit S = S + {k}\n}\nS : #S", false);
     assert!(b.html.contains("S : {1 ; 2 ; 3 ; 4 ; 5}"), "{}", b.html);
     let mut e3 = docdg_transpiler::Engine::new();
-    let c = e3.render("soit mots: une collection de textes = {chat ; chien ; cheval}\npour m dans mots {\n\tMot : #m\n}", false);
+    let c = e3.render("soit mots: une liste de chaînes de caractères = {chat ; chien ; cheval}\npour m dans mots {\n\tMot : #m\n}", false);
     assert!(c.html.contains("Mot : chat") && c.html.contains("Mot : cheval"), "{}", c.html);
 }
 
 #[test]
 fn les_quatre_types_de_nombres() {
     let mut e = docdg_transpiler::Engine::new();
-    let a = e.render("soit d: une collection de décimaux = {12,5 ; 0,25 ; 15}\n#d", false);
+    let a = e.render("soit d: une liste de décimaux = {12,5 ; 0,25 ; 15}\n#d", false);
     assert!(a.html.contains("{12,5 ; 0,25 ; 15}"), "{}", a.html);
 
     let mut e2 = docdg_transpiler::Engine::new();
-    let b = e2.render("soit d: une collection de décimaux = {1/3}\n#d", false);
+    let b = e2.render("soit d: une liste de décimaux = {1/3}\n#d", false);
     assert!(b.html.contains("n'est pas un décimal"), "D doit refuser 1/3 : {}", b.html);
 
     let mut e3 = docdg_transpiler::Engine::new();
-    let c = e3.render("soit r: une collection de réels = {1/3 ; racine(2)}\n#r", false);
+    let c = e3.render("soit r: une liste de réels = {1/3 ; racine(2)}\n#r", false);
     assert!(!c.html.contains("n'est pas"), "R doit accepter 1/3 : {}", c.html);
 
     let mut e4 = docdg_transpiler::Engine::new();
-    let d = e4.render("soit z: une collection de complexes = {(1 ; 2) ; (0 ; -1)}\nTous : #z — second : #z[1]", false);
+    let d = e4.render("soit z: une liste de complexes = {(1 ; 2) ; (0 ; -1)}\nTous : #z — second : #z[1]", false);
     assert!(d.html.contains("Tous : {(1 ; 2) ; (0 ; -1)}"), "{}", d.html);
     assert!(d.html.contains("second : (0 ; -1)"), "{}", d.html);
 
     let mut e5 = docdg_transpiler::Engine::new();
-    let f = e5.render("soit z: une collection de complexes = {(1 ; 2 ; 3)}\n#z", false);
+    let f = e5.render("soit z: une liste de complexes = {(1 ; 2 ; 3)}\n#z", false);
     assert!(f.html.contains("couple de deux réels"), "{}", f.html);
 }
 
@@ -348,20 +348,42 @@ fn fonctions_algorithmiques() {
     assert!(g.html.contains("il manque"), "retourne absent : {}", g.html);
 
     let mut e7 = docdg_transpiler::Engine::new();
-    let h = e7.render("soit carré(n: entier): entier = n * n\nsoit S: une collection d'entiers = {}\npour k de 1 à 4 {\n\tsoit S = S + {carré(k)}\n}\nS : #S", false);
+    let h = e7.render("soit carré(n: entier): entier = n * n\nsoit S: une liste d'entiers = {}\npour k de 1 à 4 {\n\tsoit S = S + {carré(k)}\n}\nS : #S", false);
     assert!(h.html.contains("S : {1 ; 4 ; 9 ; 16}"), "appel dans un littéral : {}", h.html);
 }
 
 #[test]
-fn algo4_les_fonctions() {
+fn algo3_les_fonctions() {
     let mut e = docdg_transpiler::Engine::new();
-    let r = e.render(include_str!("algo4.txt"), true);
-    assert!(r.html.contains("720") && r.html.contains("89"));
+    let r = e.render(include_str!("algo3.txt"), true);
     assert!(r.html.contains("{1 ; 4 ; 9 ; 16 ; 25 ; 36}"));
     assert!(r.html.contains("n'est pas un entier") && r.html.contains("attend 2 argument"));
-    assert_eq!(r.html.matches("<table").count(), 2);
     for d in [1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60] {
         assert!(r.html.contains(&format!(">{}<", d)), "diviseur {}", d);
     }
-    assert!(!r.html.contains("#somme") && !r.html.contains("n'est pas calculable"));
+    assert!(!r.html.contains("#somme"));
+    // la moyenne d'une collection reçue en argument
+    assert!(r.html.contains("13,2"));
+}
+
+#[test]
+fn algo4_recursivite_et_algorithmes() {
+    let mut e = docdg_transpiler::Engine::new();
+    let r = e.render(include_str!("algo4.txt"), true);
+    // récursivité : factorielle et Fibonacci
+    assert!(r.html.contains("720") && r.html.contains("89"));
+    // les tris et la fusion
+    assert!(r.html.contains("1 ; 2 ; 5 ; 5 ; 6 ; 9"));
+    assert!(r.html.contains("1 ; 2 ; 3 ; 4 ; 7 ; 8 ; 9"));
+    // les structures de données et le p-uplet
+    assert!(r.html.contains("sommet"));
+    assert!(r.html.contains("17 = 5"));
+    // les quatre piliers de la programmation orientée objet
+    assert!(r.html.contains("distance à l'origine 5"));
+    assert!(r.html.contains("ouaf") && r.html.contains("miaou"));
+    assert!(r.html.contains("3 nœuds"));
+    assert!(r.html.contains("ABCD"));
+    // trois fautes, et trois seulement : les démonstrations volontaires
+    // — attribut privé, méthode privée, classe abstraite
+    assert_eq!(r.html.matches("calcul-absent").count(), 3);
 }

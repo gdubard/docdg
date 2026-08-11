@@ -11,6 +11,18 @@ pub enum TypeVal {
     Collection(Box<TypeVal>),
     Dictionnaire(Box<TypeVal>),
     Matrice(Option<(usize, usize)>, Box<TypeVal>),
+    /// Le p-uplet du programme de NSI : arité fixe, types hétérogènes,
+    /// noté `(entier ; entier)`. Il se distingue de la collection, homogène et
+    /// de longueur variable — le programme les distingue explicitement.
+    Uplet(Vec<TypeVal>),
+    /// Une pile : dernier entré, premier sorti. Le sommet est le dernier
+    /// élément écrit.
+    Pile(Box<TypeVal>),
+    /// Une file : premier entré, premier sorti. La tête est le premier.
+    File(Box<TypeVal>),
+    /// Une classe, désignée par son nom. Un nom de classe commence par une
+    /// majuscule : c'est ce qui le distingue d'un type du langage.
+    Objet(String),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -21,6 +33,15 @@ pub enum Valeur {
     Collection(Vec<Valeur>),
     Dictionnaire(Vec<(String, Valeur)>),
     Matrice(usize, usize, Vec<f64>),
+    Uplet(Vec<Valeur>),
+    Pile(Vec<Valeur>),
+    File(Vec<Valeur>),
+    /// Un objet : le nom de sa classe, la liste de ses ancêtres du plus
+    /// proche au plus lointain, puis ses attributs dans l'ordre où la classe
+    /// les déclare. La lignée voyage avec la valeur : c'est ce qui permet à
+    /// un chien de tenir la place d'un animal sans que le vérificateur ait
+    /// besoin de consulter les classes.
+    Objet(String, Vec<String>, Vec<(String, Valeur)>),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -31,19 +52,75 @@ pub struct Boite {
 
 pub type Boites = BTreeMap<String, Boite>;
 
+/// Le nom du type au singulier — pour les messages qui parlent d'une valeur,
+/// non d'une famille de valeurs.
+pub fn nom_type_singulier(t: &TypeVal) -> String {
+    match t {
+        TypeVal::Entier => "entier".into(),
+        TypeVal::Decimal => "décimal".into(),
+        TypeVal::Reel => "réel".into(),
+        TypeVal::Complexe => "complexe".into(),
+        TypeVal::Texte => "chaîne de caractères".into(),
+        TypeVal::Booleen => "booléen".into(),
+        TypeVal::Collection(e) => format!("liste {}", elide(&nom_type(e))),
+        TypeVal::Dictionnaire(e) => {
+            format!("dictionnaire de textes et {}", elide(&nom_type(e)))
+        }
+        TypeVal::Matrice(Some((l, c)), e) => {
+            format!("matrice {}×{} {}", l, c, elide(&nom_type(e)))
+        }
+        TypeVal::Matrice(None, e) => format!("matrice {}", elide(&nom_type(e))),
+        TypeVal::Pile(e) => format!("pile {}", elide(&nom_type(e))),
+        TypeVal::File(e) => format!("file {}", elide(&nom_type(e))),
+        TypeVal::Objet(n) => n.clone(),
+        TypeVal::Uplet(ts) => format!(
+            "p-uplet ({})",
+            ts.iter().map(nom_type_singulier).collect::<Vec<_>>().join(" ; ")
+        ),
+    }
+}
+
+/// « de » devant consonne, « d' » devant voyelle — l'élision française.
+fn elide(mot: &str) -> String {
+    let premiere = mot.chars().next().unwrap_or('x').to_lowercase().next().unwrap_or('x');
+    if "aeiouyàâéèêëîïôöùûü".contains(premiere) {
+        format!("d'{}", mot)
+    } else {
+        format!("de {}", mot)
+    }
+}
+
 fn nom_type(t: &TypeVal) -> String {
     match t {
         TypeVal::Entier => "entiers".into(),
         TypeVal::Decimal => "décimaux".into(),
         TypeVal::Reel => "réels".into(),
         TypeVal::Complexe => "complexes".into(),
-        TypeVal::Texte => "textes".into(),
+        TypeVal::Texte => "chaînes de caractères".into(),
         TypeVal::Booleen => "booléens".into(),
-        TypeVal::Collection(e) => format!("collections de {}", nom_type(e)),
+        TypeVal::Collection(e) => format!("listes {}", elide(&nom_type(e))),
         TypeVal::Dictionnaire(e) => format!("dictionnaires de textes et de {}", nom_type(e)),
         TypeVal::Matrice(Some((l, c)), e) => format!("matrices {}×{} de {}", l, c, nom_type(e)),
         TypeVal::Matrice(None, e) => format!("matrices de {}", nom_type(e)),
+        TypeVal::Pile(e) => format!("piles {}", elide(&nom_type(e))),
+        TypeVal::File(e) => format!("files {}", elide(&nom_type(e))),
+        TypeVal::Objet(n) => format!("objets {}", n),
+        TypeVal::Uplet(ts) => format!(
+            "p-uplets ({})",
+            ts.iter().map(nom_type_singulier).collect::<Vec<_>>().join(" ; ")
+        ),
     }
+}
+
+/// Retire les guillemets qui délimitent une chaîne de caractères, droits ou
+/// français. Ils ne font pas partie de la valeur : ils disent seulement où
+/// elle commence et où elle finit.
+pub fn sans_guillemets(s: &str) -> &str {
+    let s = s.trim();
+    s.strip_prefix('"')
+        .and_then(|r| r.strip_suffix('"'))
+        .or_else(|| s.strip_prefix('«').and_then(|r| r.strip_suffix('»')))
+        .unwrap_or(s)
 }
 
 fn sans_article(s: &str) -> &str {
@@ -68,12 +145,49 @@ fn lit_dimensions(s: &str) -> Option<((usize, usize), &str)> {
 
 pub fn parse_type(s: &str) -> Option<TypeVal> {
     let s = sans_article(s);
-    if let Some(r) = s.strip_prefix("collections").or_else(|| s.strip_prefix("collection")) {
-        return Some(TypeVal::Collection(Box::new(parse_type(sans_article(r))?)));
+    // `(entier ; entier)`, éventuellement précédé de « p-uplet »
+    let s = s.strip_prefix("p-uplets").or_else(|| s.strip_prefix("p-uplet")).unwrap_or(s).trim();
+    if let Some(interieur) = s.strip_prefix('(').and_then(|r| r.strip_suffix(')')) {
+        let parts = coupe_niveau_zero(interieur, ';');
+        if parts.len() >= 2 {
+            let mut membres = Vec::with_capacity(parts.len());
+            for m in parts {
+                membres.push(parse_type(m)?);
+            }
+            return Some(TypeVal::Uplet(membres));
+        }
+    }
+    // « liste » et « tableau » sont les mots du programme de NSI ;
+    // « collection » reste accepté. Un même type, trois façons de le nommer.
+    for (tete, pile) in [("piles", true), ("pile", true), ("files", false), ("file", false)] {
+        if let Some(r) = s.strip_prefix(tete) {
+            if r.is_empty() || r.starts_with(|c: char| c.is_whitespace() || c == '\'') {
+                let element = Box::new(parse_type(sans_article(r))?);
+                return Some(if pile {
+                    TypeVal::Pile(element)
+                } else {
+                    TypeVal::File(element)
+                });
+            }
+        }
+    }
+    // `liste` est le mot du programme de NSI, et le seul du langage :
+    // une notion, un mot.
+    for tete in ["listes", "liste"] {
+        if let Some(r) = s.strip_prefix(tete) {
+            if r.is_empty() || r.starts_with(|c: char| c.is_whitespace() || c == '\'') {
+                return Some(TypeVal::Collection(Box::new(parse_type(sans_article(r))?)));
+            }
+        }
     }
     if let Some(r) = s.strip_prefix("dictionnaire") {
         let r = sans_article(r);
-        let r = r.strip_prefix("textes")?.trim_start();
+        // La clé est toujours une chaîne de caractères ; le mot qui la nomme
+        // suit le vocabulaire du langage, non une forme figée.
+        let r = ["chaînes de caractères", "chaines de caracteres"]
+            .iter()
+            .find_map(|mot| r.strip_prefix(mot))?
+            .trim_start();
         let r = r.strip_prefix("et")?.trim_start();
         return Some(TypeVal::Dictionnaire(Box::new(parse_type(sans_article(r))?)));
     }
@@ -89,12 +203,23 @@ pub fn parse_type(s: &str) -> Option<TypeVal> {
         }
         return Some(TypeVal::Matrice(None, Box::new(parse_type(sans_article(r))?)));
     }
-    match s.trim_end_matches(|c: char| c == '.' || c == ';') {
+    let nu = s.trim_end_matches(|c: char| c == '.' || c == ';').trim();
+    if nu.chars().next().map(|c| c.is_uppercase()).unwrap_or(false)
+        && nu.chars().all(|c| c.is_alphanumeric() || c == '_')
+    {
+        return Some(TypeVal::Objet(nu.to_string()));
+    }
+    match nu {
         "entiers" | "entier" => Some(TypeVal::Entier),
         "décimaux" | "decimaux" | "décimal" | "decimal" => Some(TypeVal::Decimal),
         "réels" | "reels" | "réel" | "reel" => Some(TypeVal::Reel),
         "complexes" | "complexe" => Some(TypeVal::Complexe),
-        "textes" | "texte" => Some(TypeVal::Texte),
+        // « chaîne de caractères » est le terme qu'emploient les professeurs
+        // d'informatique : c'est le seul du langage. Les variantes sans
+        // accent sont admises parce qu'un clavier peut manquer, non parce
+        // qu'elles nomment autre chose.
+        "chaînes de caractères" | "chaîne de caractères"
+        | "chaines de caracteres" | "chaine de caracteres" => Some(TypeVal::Texte),
         "booléens" | "booleens" | "booléen" | "booleen" => Some(TypeVal::Booleen),
         _ => None,
     }
@@ -178,6 +303,32 @@ pub fn verifie(t: &TypeVal, v: &Valeur) -> Result<(), String> {
             }
             Ok(())
         }
+        (TypeVal::Pile(e), Valeur::Pile(elems)) | (TypeVal::File(e), Valeur::File(elems)) => {
+            for el in elems {
+                verifie(e, el)?;
+            }
+            Ok(())
+        }
+        (TypeVal::Objet(attendu), Valeur::Objet(recu, ancetres, _)) => {
+            if attendu == recu || ancetres.iter().any(|a| a == attendu) {
+                Ok(())
+            } else {
+                Err(format!("un {} n'est pas un {}", recu, attendu))
+            }
+        }
+        (TypeVal::Uplet(ts), Valeur::Uplet(vs)) => {
+            if ts.len() != vs.len() {
+                return Err(format!(
+                    "ce p-uplet compte {} valeur(s) au lieu de {}",
+                    vs.len(),
+                    ts.len()
+                ));
+            }
+            for (te, v) in ts.iter().zip(vs.iter()) {
+                verifie(te, v)?;
+            }
+            Ok(())
+        }
         (TypeVal::Matrice(dims, e), Valeur::Matrice(l, c, cases)) => {
             if let Some((dl, dc)) = dims {
                 if dl != l || dc != c {
@@ -216,6 +367,46 @@ fn parse_element(
     if let Some(b) = boites.get(brut) {
         verifie(attendu, &b.val).map_err(|e| format!("{} : {}", brut, e))?;
         return Ok(b.val.clone());
+    }
+    // Une chaîne peut s'écrire entre guillemets — droits ou français. Les
+    // guillemets ne font pas partie de la valeur ; ils la délimitent, ce qui
+    // permet d'y garder les espaces et les signes du langage.
+    if matches!(attendu, TypeVal::Texte) {
+        let sans = brut
+            .strip_prefix('"')
+            .and_then(|r| r.strip_suffix('"'))
+            .or_else(|| brut.strip_prefix('«').and_then(|r| r.strip_suffix('»')));
+        if let Some(contenu) = sans {
+            // Les guillemets servent précisément à garder les espaces :
+            // un séparateur comme « - » en dépend.
+            return Ok(Valeur::Texte(contenu.to_string()));
+        }
+    }
+    // `{Chien("Rex") ; Chat("Mia")}` — un élément peut être un objet qu'on
+    // construit sur place. Seul ce cas passe par l'évaluateur d'expressions :
+    // les autres types se lisent déjà ici, et l'y renvoyer tournerait en rond.
+    if matches!(attendu, TypeVal::Objet(_)) {
+        return super::fonctions::evalue_valeur(brut, attendu, vars, boites, fns);
+    }
+    if let TypeVal::Uplet(membres) = attendu {
+        let interieur = brut
+            .strip_prefix('(')
+            .and_then(|r| r.strip_suffix(')'))
+            .ok_or_else(|| format!("{} : un p-uplet s'écrit (valeur ; valeur)", brut))?;
+        let parts = coupe_niveau_zero(interieur, ';');
+        if parts.len() != membres.len() {
+            return Err(format!(
+                "{} : ce p-uplet compte {} valeur(s) au lieu de {}",
+                brut,
+                parts.len(),
+                membres.len()
+            ));
+        }
+        let mut valeurs = Vec::with_capacity(parts.len());
+        for (m, te) in parts.iter().zip(membres.iter()) {
+            valeurs.push(parse_element(m, te, vars, boites, fns)?);
+        }
+        return Ok(Valeur::Uplet(valeurs));
     }
     if matches!(attendu, TypeVal::Complexe) {
         let interieur = brut
@@ -270,6 +461,19 @@ pub fn parse_litteral(
         .and_then(|r| r.strip_suffix('}'))
         .ok_or_else(|| "un littéral s'écrit entre accolades".to_string())?;
     let interieur = interieur.trim();
+    if let TypeVal::Pile(elem) | TypeVal::File(elem) = attendu {
+        let interieur = interieur.trim();
+        let mut valeurs = Vec::new();
+        if !interieur.is_empty() {
+            for m in coupe_niveau_zero(interieur, ';') {
+                valeurs.push(parse_element(m, elem, vars, boites, fns)?);
+            }
+        }
+        return Ok(match attendu {
+            TypeVal::Pile(_) => Valeur::Pile(valeurs),
+            _ => Valeur::File(valeurs),
+        });
+    }
     match attendu {
         TypeVal::Collection(elem) => {
             if interieur.is_empty() {
@@ -290,8 +494,10 @@ pub fn parse_litteral(
                 let (cle, val) = part
                     .split_once(':')
                     .ok_or_else(|| format!("{} : une paire s'écrit clé: valeur", part.trim()))?;
+                // La clé est une chaîne de caractères : les guillemets la
+                // délimitent, comme partout ailleurs, sans lui appartenir.
                 paires.push((
-                    cle.trim().to_string(),
+                    sans_guillemets(cle.trim()).to_string(),
                     parse_element(val, elem, vars, boites, fns)?,
                 ));
             }
@@ -406,6 +612,29 @@ fn formate(v: &Valeur, t: &TypeVal) -> String {
                 .collect::<Vec<_>>()
                 .join(" ; ")
         ),
+        (Valeur::Pile(elems), TypeVal::Pile(e)) | (Valeur::File(elems), TypeVal::File(e)) => {
+            format!(
+                "{{{}}}",
+                elems.iter().map(|el| formate(el, e)).collect::<Vec<_>>().join(" ; ")
+            )
+        }
+        (Valeur::Objet(nom, _, attributs), _) => format!(
+            "{}({})",
+            nom,
+            attributs
+                .iter()
+                .map(|(n, v)| format!("{}: {}", n, formate(v, &type_de_valeur(v))))
+                .collect::<Vec<_>>()
+                .join(" ; ")
+        ),
+        (Valeur::Uplet(vs), TypeVal::Uplet(ts)) => format!(
+            "({})",
+            vs.iter()
+                .zip(ts.iter())
+                .map(|(v, te)| formate(v, te))
+                .collect::<Vec<_>>()
+                .join(" ; ")
+        ),
         (Valeur::Matrice(l, c, cases), TypeVal::Matrice(_, e)) => {
             let mut rangees = Vec::new();
             for i in 0..*l {
@@ -421,14 +650,123 @@ fn formate(v: &Valeur, t: &TypeVal) -> String {
     }
 }
 
+/// Dépouille une lettre de son accent — trente lignes, aucune dépendance.
+/// C'est ce qui fait classer « école » avant « Zoé » alors que le codepoint
+/// de « é » vient après celui de « z ».
+pub fn depouille(c: char) -> char {
+    match c {
+        'à' | 'â' | 'ä' | 'á' | 'ã' => 'a',
+        'ç' => 'c',
+        'é' | 'è' | 'ê' | 'ë' => 'e',
+        'î' | 'ï' | 'ì' | 'í' => 'i',
+        'ô' | 'ö' | 'ò' | 'ó' | 'õ' => 'o',
+        'ù' | 'û' | 'ü' | 'ú' => 'u',
+        'ÿ' | 'ý' => 'y',
+        'ñ' => 'n',
+        'À' | 'Â' | 'Ä' | 'Á' | 'Ã' => 'A',
+        'Ç' => 'C',
+        'É' | 'È' | 'Ê' | 'Ë' => 'E',
+        'Î' | 'Ï' | 'Ì' | 'Í' => 'I',
+        'Ô' | 'Ö' | 'Ò' | 'Ó' | 'Õ' => 'O',
+        'Ù' | 'Û' | 'Ü' | 'Ú' => 'U',
+        'Ñ' => 'N',
+        autre => autre,
+    }
+}
+
+/// Le type que porte une valeur, pour les messages de faute.
+pub fn type_de_valeur(v: &Valeur) -> TypeVal {
+    match v {
+        Valeur::Nombre(_) => TypeVal::Reel,
+        Valeur::Complexe(_, _) => TypeVal::Complexe,
+        Valeur::Texte(_) => TypeVal::Texte,
+        Valeur::Collection(_) => TypeVal::Collection(Box::new(TypeVal::Reel)),
+        Valeur::Dictionnaire(_) => TypeVal::Dictionnaire(Box::new(TypeVal::Reel)),
+        Valeur::Matrice(l, c, _) => TypeVal::Matrice(Some((*l, *c)), Box::new(TypeVal::Reel)),
+        Valeur::Uplet(v) => TypeVal::Uplet(v.iter().map(type_de_valeur).collect()),
+        Valeur::Pile(e) => TypeVal::Pile(Box::new(
+            e.first().map(type_de_valeur).unwrap_or(TypeVal::Reel),
+        )),
+        Valeur::File(e) => TypeVal::File(Box::new(
+            e.first().map(type_de_valeur).unwrap_or(TypeVal::Reel),
+        )),
+        Valeur::Objet(n, _, _) => TypeVal::Objet(n.clone()),
+    }
+}
+
+/// Le nombre d'éléments d'un conteneur — ce que rend `longueur(v)`.
+pub fn cardinal(v: &Valeur) -> usize {
+    match v {
+        Valeur::Collection(e) => e.len(),
+        Valeur::Dictionnaire(p) => p.len(),
+        Valeur::Matrice(l, _, _) => *l,
+        Valeur::Texte(s) => s.chars().count(),
+        Valeur::Uplet(v) => v.len(),
+        Valeur::Pile(e) | Valeur::File(e) => e.len(),
+        Valeur::Objet(_, _, a) => a.len(),
+        _ => 1,
+    }
+}
+
+/// La forme **relisible** d'une valeur : celle qu'on peut réécrire dans le
+/// texte et qui sera relue à l'identique.
+///
+/// Elle diffère de la forme affichée : un objet s'imprime `Point(abscisse: 3)`
+/// pour le lecteur, mais se réécrit `Point(3)` — l'appel qui le construit.
+/// C'est ce qui permet à un attribut de contenir lui-même un objet, donc à un
+/// arbre ou à une liste chaînée d'exister.
+pub fn forme_relisible(v: &Valeur) -> String {
+    match v {
+        Valeur::Texte(s) => format!("\"{}\"", s),
+        Valeur::Objet(nom, _, attributs) => format!(
+            "{}({})",
+            nom,
+            attributs
+                .iter()
+                .map(|(_, x)| forme_relisible(x))
+                .collect::<Vec<_>>()
+                .join(" ; ")
+        ),
+        Valeur::Collection(e) | Valeur::Pile(e) | Valeur::File(e) => format!(
+            "{{{}}}",
+            e.iter().map(forme_relisible).collect::<Vec<_>>().join(" ; ")
+        ),
+        Valeur::Uplet(e) => format!(
+            "({})",
+            e.iter().map(forme_relisible).collect::<Vec<_>>().join(" ; ")
+        ),
+        Valeur::Dictionnaire(paires) => format!(
+            "{{{}}}",
+            paires
+                .iter()
+                .map(|(k, x)| format!("{}: {}", k, forme_relisible(x)))
+                .collect::<Vec<_>>()
+                .join(" ; ")
+        ),
+        autre => formate(autre, &type_de_valeur(autre)),
+    }
+}
+
 pub fn affiche(b: &Boite) -> String {
     formate(&b.val, &b.type_val)
 }
 
-fn type_element(b: &Boite) -> TypeVal {
+pub fn type_element(b: &Boite) -> TypeVal {
     match &b.type_val {
         TypeVal::Collection(e) | TypeVal::Dictionnaire(e) | TypeVal::Matrice(_, e) => (**e).clone(),
         autre => autre.clone(),
+    }
+}
+
+/// Les valeurs d'un conteneur, telles quelles. Un objet ne survit pas à
+/// l'écriture puis à la relecture de son texte : la boucle qui le parcourt
+/// doit recevoir la valeur, non sa forme imprimée.
+pub fn valeurs_pour_boucle(b: &Boite) -> Option<Vec<Valeur>> {
+    match &b.val {
+        Valeur::Collection(e) if e.iter().any(|v| matches!(v, Valeur::Objet(_, _, _))) => {
+            Some(e.clone())
+        }
+        _ => None,
     }
 }
 
@@ -437,6 +775,8 @@ pub fn elements_pour_boucle(b: &Boite) -> Vec<String> {
     match &b.val {
         Valeur::Collection(elems) => elems.iter().map(|el| formate(el, &te)).collect(),
         Valeur::Dictionnaire(paires) => paires.iter().map(|(k, _)| k.clone()).collect(),
+        // `pour c dans mot` livre les lettres, une à une.
+        Valeur::Texte(s) => s.chars().map(|c| c.to_string()).collect(),
         Valeur::Matrice(l, c, cases) => (0..*l)
             .map(|i| {
                 format!(
@@ -459,11 +799,100 @@ pub fn lit_index(
     vars: &BTreeMap<String, f64>,
     boites: &Boites,
 ) -> Result<(Valeur, TypeVal), String> {
+    // Une clé peut être une variable : `pour k dans d { … d[k] … }`. Le nom
+    // nu est remplacé par son contenu avant la recherche.
+    let resolus;
+    let indices_bruts = if matches!(b.val, Valeur::Dictionnaire(_)) {
+        let indices_bruts = sans_guillemets(indices_bruts);
+        resolus = resoudre_noms_scalaires(indices_bruts, boites);
+        resolus.as_str()
+    } else {
+        indices_bruts
+    };
     let parts: Vec<&str> = coupe_niveau_zero(indices_bruts, ';')
         .into_iter()
         .map(|s| s.trim())
         .collect();
     let te = type_element(b);
+    // `v[i à j]` — une tranche, bornes incluses, comme « de 1 à 5 » fait cinq
+    // tours. Le « à » évite la collision avec l'indexation matricielle
+    // `A[i ; j]`. Une tranche dont la borne gauche dépasse la droite est vide :
+    // c'est ce qui permet de conclure une fusion de listes en une ligne.
+    if parts.len() == 1 {
+        if let Some((g, d)) = parts[0].split_once(" à ") {
+            let borne = |e: &str| -> Result<i64, String> {
+                let r = resoudre_lectures(e, vars, boites, true);
+                crate::maths::calcul::eval(&r, vars)
+                    .map(|n| n.round() as i64)
+                    .ok_or_else(|| format!("{} n'est pas une position", e.trim()))
+            };
+            let (i, j) = (borne(g)?, borne(d)?);
+            let taille = cardinal(&b.val) as i64;
+            if i > j {
+                return Ok(match &b.val {
+                    Valeur::Texte(_) => (Valeur::Texte(String::new()), TypeVal::Texte),
+                    _ => (Valeur::Collection(Vec::new()), b.type_val.clone()),
+                });
+            }
+            if i < 0 || j >= taille {
+                return Err(format!(
+                    "la tranche de {} à {} sort des bornes : {} compte {} élément(s)",
+                    i, j, nom, taille
+                ));
+            }
+            return Ok(match &b.val {
+                Valeur::Collection(elems) => (
+                    Valeur::Collection(elems[i as usize..=j as usize].to_vec()),
+                    b.type_val.clone(),
+                ),
+                Valeur::Texte(s) => {
+                    let lettres: Vec<char> = s.chars().collect();
+                    (
+                        Valeur::Texte(lettres[i as usize..=j as usize].iter().collect()),
+                        TypeVal::Texte,
+                    )
+                }
+                _ => return Err(format!("{} ne se découpe pas en tranches", nom)),
+            });
+        }
+    }
+    if let Valeur::Uplet(vs) = &b.val {
+        let expr = resoudre_lectures(parts[0], vars, boites, true);
+        let i = crate::maths::calcul::eval(&expr, vars)
+            .ok_or_else(|| format!("{} n'est pas une position", parts[0]))?
+            .round() as i64;
+        if i < 0 || i as usize >= vs.len() {
+            return Err(format!(
+                "l'indice {} sort des bornes : {} compte {} valeur(s), d'indices 0 à {}",
+                i, nom, vs.len(), vs.len().saturating_sub(1)
+            ));
+        }
+        let te = match &b.type_val {
+            TypeVal::Uplet(ts) => ts[i as usize].clone(),
+            autre => autre.clone(),
+        };
+        return Ok((vs[i as usize].clone(), te));
+    }
+    if let Valeur::Texte(s) = &b.val {
+        // Une lettre est une chaîne d'un seul caractère : docdg n'a pas de
+        // type « caractère » distinct, et le programme de NSI n'en demande
+        // pas — en Python non plus une lettre n'est qu'une chaîne de un.
+        let expr = resoudre_lectures(parts[0], vars, boites, true);
+        let i = crate::maths::calcul::eval(&expr, vars)
+            .ok_or_else(|| format!("{} n'est pas une position", parts[0]))?
+            .round() as i64;
+        let lettres: Vec<char> = s.chars().collect();
+        if i < 0 || i as usize >= lettres.len() {
+            return Err(format!(
+                "l'indice {} sort des bornes : {} compte {} lettre(s), d'indices 0 à {}",
+                i,
+                nom,
+                lettres.len(),
+                lettres.len().saturating_sub(1)
+            ));
+        }
+        return Ok((Valeur::Texte(lettres[i as usize].to_string()), TypeVal::Texte));
+    }
     match &b.val {
         Valeur::Collection(elems) => {
             let expr = resoudre_lectures(parts[0], vars, boites, true);
@@ -473,7 +902,7 @@ pub fn lit_index(
                 as usize;
             let el = elems.get(i).ok_or_else(|| {
                 format!(
-                    "{}[{}] — indice hors bornes (la collection compte {} élément(s))",
+                    "{}[{}] — indice hors bornes (la liste compte {} élément(s))",
                     nom, i, elems.len()
                 )
             })?;
@@ -603,6 +1032,100 @@ pub fn resoudre_lectures(
     out
 }
 
+/// Remplace les noms nus qui désignent une **chaîne** par leur contenu.
+/// Les conteneurs ne sont pas touchés : ils n'ont de sens qu'indexés ou passés
+/// à une primitive, qui les lit d'elle-même.
+pub fn resoudre_noms_scalaires(texte: &str, boites: &Boites) -> String {
+    let mut sortie = String::with_capacity(texte.len());
+    let lettres: Vec<char> = texte.chars().collect();
+    let mut i = 0usize;
+    while i < lettres.len() {
+        if !(lettres[i].is_alphabetic() || lettres[i] == '_') {
+            sortie.push(lettres[i]);
+            i += 1;
+            continue;
+        }
+        let debut = i;
+        while i < lettres.len() && (lettres[i].is_alphanumeric() || lettres[i] == '_') {
+            i += 1;
+        }
+        let mot: String = lettres[debut..i].iter().collect();
+        // un nom suivi d'une parenthèse ou d'un crochet est un appel ou une
+        // lecture : on le laisse à qui sait le traiter
+        let colle = lettres.get(i).map(|c| *c == '(' || c == &'[').unwrap_or(false);
+        match boites.get(&mot) {
+            Some(b) if !colle && matches!(b.val, Valeur::Texte(_)) => {
+                if let Valeur::Texte(s) = &b.val {
+                    sortie.push_str(s);
+                }
+            }
+            _ => sortie.push_str(&mot),
+        }
+    }
+    sortie
+}
+
+/// `p.abscisse = 5` — la modification d'un attribut.
+///
+/// docdg n'a **pas de références** : une boîte n'est jamais partagée. Muter la
+/// boîte et lui réaffecter une copie modifiée sont donc indiscernables, et la
+/// question mutation ou copie ne se pose pas — il n'y a rien qu'un `&`
+/// pourrait distinguer. Le langage reste entièrement par valeur.
+pub fn ecrit_attribut(
+    nom: &str,
+    membre: &str,
+    rhs: &str,
+    vars: &BTreeMap<String, f64>,
+    boites: &mut Boites,
+    fns: &super::fonctions::Fonctions,
+) -> Result<(), String> {
+    let boite = boites
+        .get(nom)
+        .ok_or_else(|| format!("{} n'a pas été posé", nom))?
+        .clone();
+    let Valeur::Objet(classe, ancetres, attributs) = boite.val else {
+        return Err(format!("{} n'est pas un objet", nom));
+    };
+    if fns
+        .get(&classe)
+        .map(|f| f.prives.iter().any(|n| n == membre))
+        .unwrap_or(false)
+    {
+        return Err(format!(
+            "{} est un attribut privé de {} : il ne s'écrit que depuis la classe",
+            membre, classe
+        ));
+    }
+    let position = attributs
+        .iter()
+        .position(|(n, _)| n == membre)
+        .ok_or_else(|| format!("{} n'a pas d'attribut {}", classe, membre))?;
+    let attendu = fns
+        .get(&classe)
+        .and_then(|f| f.params.get(position).map(|(_, t)| t.clone()))
+        .unwrap_or_else(|| type_de_valeur(&attributs[position].1));
+    let valeur = super::fonctions::evalue_valeur(rhs, &attendu, vars, boites, fns).map_err(
+        |_| {
+            format!(
+                "{} ne se lit pas comme {}",
+                rhs.trim(),
+                nom_type_singulier(&attendu)
+            )
+        },
+    )?;
+    verifie(&attendu, &valeur).map_err(|e| format!("{}.{} : {}", nom, membre, e))?;
+    let mut nouveaux = attributs;
+    nouveaux[position].1 = valeur;
+    boites.insert(
+        nom.to_string(),
+        Boite {
+            type_val: boite.type_val,
+            val: Valeur::Objet(classe, ancetres, nouveaux),
+        },
+    );
+    Ok(())
+}
+
 pub fn ecrit_index(
     nom: &str,
     indices_bruts: &str,
@@ -631,7 +1154,7 @@ pub fn ecrit_index(
                 as usize;
             if i >= elems.len() {
                 return Err(format!(
-                    "{}[{}] — indice hors bornes (la collection compte {} élément(s)) ; une collection grandit par +, jamais par indice",
+                    "{}[{}] — indice hors bornes (la liste compte {} élément(s)) ; une liste grandit par +, jamais par indice",
                     nom,
                     i,
                     elems.len()
@@ -792,14 +1315,117 @@ pub fn instruction_conteneur(
     let fin_ligne = sans_alinea.find('\n').unwrap_or(sans_alinea.len());
     let ligne = &sans_alinea[..fin_ligne];
     if let Some(reste) = ligne.strip_prefix("soit ") {
+        // `soit (q ; r) = divise(17 ; 5)` — la déliaison d'un p-uplet. Les
+        // deux noms sont posés d'un coup, chacun avec le type de son membre.
+        if reste.trim_start().starts_with('(') {
+            if let Some((noms_bruts, rhs)) = reste.split_once('=') {
+                let noms_bruts = noms_bruts.trim();
+                if let Some(interieur) = noms_bruts
+                    .strip_prefix('(')
+                    .and_then(|r| r.strip_suffix(')'))
+                {
+                    let noms: Vec<String> = coupe_niveau_zero(interieur, ';')
+                        .iter()
+                        .map(|s| s.trim().to_string())
+                        .collect();
+                    if noms.len() >= 2 && noms.iter().all(|n| {
+                        !n.is_empty() && n.chars().all(|c| c.is_alphanumeric() || c == '_')
+                    }) {
+                        let brut = desentinelle(rhs[..rhs.len().min(fin_ligne)].trim());
+                        let remplacement =
+                            match super::fonctions::devine_valeur(&brut, vars, boites, fns) {
+                                Ok((Valeur::Uplet(valeurs), TypeVal::Uplet(types)))
+                                    if valeurs.len() == noms.len() =>
+                                {
+                                    for ((n, v), te) in
+                                        noms.iter().zip(valeurs).zip(types.into_iter())
+                                    {
+                                        boites.insert(
+                                            n.clone(),
+                                            Boite { type_val: te, val: v },
+                                        );
+                                    }
+                                    String::new()
+                                }
+                                Ok((Valeur::Uplet(valeurs), _)) => erreur_div(
+                                    ligne,
+                                    &format!(
+                                        "la déliaison attend {} nom(s) ; le p-uplet en compte {}",
+                                        noms.len(),
+                                        valeurs.len()
+                                    ),
+                                ),
+                                Ok(_) => erreur_div(
+                                    ligne,
+                                    "on ne délie que les p-uplets",
+                                ),
+                                Err(e) => erreur_div(ligne, &e),
+                            };
+                        return Some(Instruction {
+                            consomme: decale + fin_ligne,
+                            remplacement,
+                        });
+                    }
+                }
+            }
+        }
         if let Some((nom, apres_dp)) = reste.split_once(':') {
             let nom = nom.trim();
             if !nom.is_empty()
                 && nom.chars().all(|c| c.is_alphanumeric() || c == '_')
                 && !apres_dp.trim_start().starts_with('=')
             {
-                let (avant_egal, _) = apres_dp.split_once('=')?;
+                let (avant_egal, apres_egal) = apres_dp.split_once('=')?;
                 let type_val = parse_type(avant_egal)?;
+                // Un type scalaire n'a pas de littéral entre accolades : sa
+                // valeur tient sur la fin de la ligne. C'est ce qui permet
+                // `soit m: chaîne de caractères = "bonjour"`.
+                if !matches!(
+                    type_val,
+                    TypeVal::Collection(_) | TypeVal::Dictionnaire(_) | TypeVal::Matrice(_, _)
+                ) {
+                    let brut = apres_egal[..apres_egal.len().min(fin_ligne)].trim();
+                    let brut = desentinelle(brut);
+                    // Un membre droit peut être un littéral — `"bonjour"`,
+                    // `(3 ; 2)` — ou une expression : un appel, une primitive.
+                    // On tente la seconde lecture d'abord, la plus large.
+                    // Si les deux lectures échouent, c'est la première qu'on
+                    // rapporte : elle nomme le type attendu, là où la seconde
+                    // dit seulement qu'un calcul est impossible.
+                    let lu = super::fonctions::evalue_valeur(&brut, &type_val, vars, boites, fns)
+                        .or_else(|premiere| {
+                            parse_element(&brut, &type_val, vars, boites, fns)
+                                .map_err(|_| premiere)
+                        });
+                    let remplacement = match lu {
+                        Ok(val) => {
+                            boites.insert(nom.to_string(), Boite { type_val, val });
+                            String::new()
+                        }
+                        Err(e) => erreur_div(&format!("soit {}: …", nom), &e),
+                    };
+                    return Some(Instruction {
+                        consomme: decale + fin_ligne,
+                        remplacement,
+                    });
+                }
+                // Un membre droit qui ne commence pas par une accolade est
+                // une expression : un appel, une primitive, une concaténation.
+                if !apres_egal.trim_start().starts_with('{') {
+                    let brut = desentinelle(apres_egal[..apres_egal.len().min(fin_ligne)].trim());
+                    let remplacement =
+                        match super::fonctions::evalue_valeur(&brut, &type_val, vars, boites, fns) {
+                            Ok(val) => {
+                                boites.insert(nom.to_string(), Boite { type_val, val });
+                                String::new()
+                            }
+                            Err(e) => erreur_div(&format!("soit {}: …", nom), &e),
+                        };
+                    return Some(Instruction {
+                        consomme: decale + fin_ligne,
+                        remplacement,
+                    });
+                }
                 let (g_deb, g_fin) = prend_groupe(sans_alinea)?;
                 let litteral = desentinelle(&sans_alinea[g_deb..g_fin]);
                 let litteral = litteral.as_str();
@@ -820,19 +1446,70 @@ pub fn instruction_conteneur(
         }
         if let Some((nom, rhs)) = reste.split_once('=') {
             let nom = nom.trim();
-            if boites.contains_key(nom) && !nom.contains('[') {
-                let rhs = desentinelle(rhs[..rhs.len().min(fin_ligne)].trim());
-                let remplacement = match concatene(nom, &rhs, vars, boites, fns) {
-                    Ok(()) => String::new(),
-                    Err(e) => erreur_div(ligne, &e),
-                };
-                return Some(Instruction {
-                    consomme: decale + fin_ligne,
-                    remplacement,
-                });
+            let nom_simple = !nom.is_empty()
+                && !nom.contains('[')
+                && nom.chars().next().map(|c| c.is_alphabetic() || c == '_').unwrap_or(false)
+                && nom.chars().all(|c| c.is_alphanumeric() || c == '_');
+            if !nom_simple {
+                return None;
+            }
+            let rhs = desentinelle(rhs[..rhs.len().min(fin_ligne)].trim());
+
+            // Une boîte déjà posée : la concaténation d'abord — c'est
+            // l'accumulateur `soit S = S + {k}`. Si elle n'a pas de sens, on
+            // réévalue l'expression dans le type de la boîte : c'est ce qui
+            // permet `soit v = tri(v)`.
+            if let Some(b) = boites.get(nom).cloned() {
+                if concatene(nom, &rhs, vars, boites, fns).is_ok() {
+                    return Some(Instruction { consomme: decale + fin_ligne, remplacement: String::new() });
+                }
+                let remplacement =
+                    match super::fonctions::evalue_valeur(&rhs, &b.type_val, vars, boites, fns) {
+                        Ok(val) => {
+                            boites.insert(nom.to_string(), Boite { type_val: b.type_val, val });
+                            String::new()
+                        }
+                        Err(e) => erreur_div(ligne, &e),
+                    };
+                return Some(Instruction { consomme: decale + fin_ligne, remplacement });
+            }
+
+            // Un nom neuf : si l'expression produit une valeur composée, elle
+            // mérite une boîte, sans qu'il faille en écrire le type. Un nombre
+            // reste un nombre et suit son chemin habituel.
+            if let Ok((val, type_val)) = super::fonctions::devine_valeur(&rhs, vars, boites, fns) {
+                if !matches!(val, Valeur::Nombre(_) | Valeur::Complexe(_, _)) {
+                    boites.insert(nom.to_string(), Boite { type_val, val });
+                    return Some(Instruction { consomme: decale + fin_ligne, remplacement: String::new() });
+                }
             }
         }
         return None;
+    }
+    // `p.abscisse = 5`, sans `soit` puisque rien n'est déclaré
+    if let Some(egal) = ligne.find('=') {
+        if !ligne[egal..].starts_with("==") {
+            let gauche = ligne[..egal].trim();
+            if let Some((porteur, membre)) = gauche.split_once('.') {
+                let porteur = porteur.trim();
+                let membre = membre.trim();
+                if boites.contains_key(porteur)
+                    && membre.chars().all(|c| c.is_alphanumeric() || c == '_')
+                    && !membre.is_empty()
+                {
+                    let rhs = desentinelle(ligne[egal + 1..].trim());
+                    let remplacement =
+                        match ecrit_attribut(porteur, membre, &rhs, vars, boites, fns) {
+                            Ok(()) => String::new(),
+                            Err(e) => erreur_div(ligne, &e),
+                        };
+                    return Some(Instruction {
+                        consomme: decale + fin_ligne,
+                        remplacement,
+                    });
+                }
+            }
+        }
     }
     let crochet = ligne.find('[')?;
     let nom = ligne[..crochet].trim();

@@ -13,8 +13,8 @@ soit h1 = <bleu marine gras section num>
 <h1>La fiche de l'enseignant
 	Un document docdg peut poser des questions au lecteur. Chaque question bloque la suite du document tant que la réponse ne correspond pas au type attendu : un entier s'écrit sans virgule, un décimal avec une virgule, un booléen se dit vrai ou faux.
 
-soit prénom = <Saisis>un texte{Quel est le prénom de l'élève ?}
-soit nom = <Saisis>un texte{Quel est le nom de l'élève ?}
+soit prénom = <Saisis>une chaîne de caractères{Quel est le prénom de l'élève ?}
+soit nom = <Saisis>une chaîne de caractères{Quel est le nom de l'élève ?}
 soit âge = <Saisis>un entier{Quel est son âge ?}
 soit taille = <Saisis>un décimal{Quelle est sa taille, en mètres ?}
 soit marié = <Saisis>un booléen{Est-il marié ?}

@@ -1,6 +1,6 @@
 use docdg_transpiler::Engine;
 
-const SRC: &str = "soit prénom = <Saisis>un texte{Quel est le prénom de l'élève ?}\nsoit âge = <Saisis>un entier{Quel est son âge ?}\nsoit taille = <Saisis>un décimal{Quelle est sa taille, en mètres ?}\nsoit marié = <Saisis>un booléen{Est-il marié ?}\nsoit initiale = <Saisis>un caractère{Quelle est sa lettre préférée ?}\n\n#prénom a #âge ans, mesure #taille m ; sa lettre préférée est #initiale.\n\nsi marié vaut 1 {\n\tIl est marié.\n} sinon {\n\tIl n'est pas marié.\n}\n";
+const SRC: &str = "soit prénom = <Saisis>une chaîne de caractères{Quel est le prénom de l'élève ?}\nsoit âge = <Saisis>un entier{Quel est son âge ?}\nsoit taille = <Saisis>un décimal{Quelle est sa taille, en mètres ?}\nsoit marié = <Saisis>un booléen{Est-il marié ?}\nsoit initiale = <Saisis>un caractère{Quelle est sa lettre préférée ?}\n\n#prénom a #âge ans, mesure #taille m ; sa lettre préférée est #initiale.\n\nsi marié vaut 1 {\n\tIl est marié.\n} sinon {\n\tIl n'est pas marié.\n}\n";
 
 fn moteur(reponses: &[(&str, &str)]) -> Engine {
     let mut e = Engine::new();

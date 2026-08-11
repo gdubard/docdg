@@ -1,5 +1,5 @@
 document {
-	titre: Algorithmique — les fonctions;
+	titre: Algorithmique 4 — récursivité et algorithmes avancés;
 	auteur: Gérard DUBARD;
 	institution: Atelier d'algorithmique appliquée;
 	date: août 2026;
@@ -17,45 +17,6 @@ document {
 }
 soit h1 = <bleu nuit gras section num>
 soit h2 = <bleu nuit italique sous-section>
-
-<h1>Deux sortes de fonctions
-
-docdg distingue la fonction mathématique — objet d'étude qu'on dérive, qu'on trace, dont on cherche les limites — et la fonction algorithmique, calcul nommé qu'on réutilise. Les chevrons marquent la première, le soit nu la seconde, exactement comme ils distinguent déjà la matrice de l'algèbre du conteneur de l'algorithmique.
-
-Une fonction algorithmique déclare le type de chacun de ses paramètres et celui de sa valeur. Elle s'appelle ensuite par son nom, arguments séparés par le point-virgule comme toute donnée.
-
-<h1>La forme la plus simple
-
-soit addition(a: entier ; b: entier): entier = a + b
-
-L'appel se fait dans un calcul : #{addition(3 ; 7)}, ou #{addition(12 ; 30)}.
-
-Les types ne sont pas décoratifs. Passer un décimal là où un entier est attendu arrête le calcul et le dit : #{addition(2,5 ; 7)}. Se tromper de nombre d'arguments également : #{addition(3)}.
-
-<h1>Un corps entre accolades
-
-Quand le calcul tient en une expression, l'accolade est facultative :
-
-soit aire(L: réel ; l: réel): réel = { L * l }
-
-L'aire d'un rectangle de 2,5 sur 4 vaut #{aire(2,5 ; 4)}.
-
-<h2>Plusieurs instructions
-
-Dès que le corps compte plusieurs lignes, la valeur produite doit être désignée par retourne — rien n'est implicite :
-
-soit hypoténuse(a: réel ; b: réel): réel = {
-	soit carrés = a*a + b*b
-	retourne racine(carrés)
-}
-
-Le triangle de côtés 3 et 4 a pour hypoténuse #{hypoténuse(3 ; 4)}, celui de côtés 5 et 12 a pour hypoténuse #{hypoténuse(5 ; 12)}.
-
-Une fonction dont le corps ne retourne rien est une erreur, pas un silence :
-
-soit oubli(a: entier): entier = { soit x = a }
-
-Appel : #{oubli(3)}.
 
 <h1>La récursivité
 
@@ -80,32 +41,407 @@ Les douze premiers termes, dressés par une boucle qui appelle la fonction à ch
 
 La récursion est bornée : au-delà de deux cents appels imbriqués, docdg s'arrête et le dit, plutôt que d'épuiser la pile.
 
-<h1>Fonctions et boucles
+<h1>Les algorithmes classiques
 
-Une fonction s'appelle partout où un calcul est admis — dans le texte, dans une rangée de tableau, dans la condition d'une boucle, dans un accumulateur.
+Les exercices du programme s'écrivent avec ce qui précède : une fonction, une boucle, une collection reçue en copie.
 
-soit carré(n: entier): entier = n * n
+<h2>Chercher
 
-soit somme: une collection d'entiers = {}
-pour k de 1 à 6 {
-	soit somme = somme + {carré(k)}
-}
-
-Les six premiers carrés, calculés par la fonction et rassemblés dans une collection : #somme.
-
-Et le test de divisibilité, écrit une fois, réutilisé partout :
-
-soit divise(d: entier ; n: entier): entier = n % d
-
-<Dresse>un tableau [mc ; mc]{
-	Diviseur	de 60
-	pour d de 1 à 60 {
-		si divise(d ; 60) vaut 0 {
-			[#d ; convient]
+soit recherche(v: une liste d'entiers ; x: entier): un entier = {
+	pour i de 0 à longueur(v) - 1 {
+		si v[i] vaut x {
+			retourne i
 		}
 	}
+	retourne -1
 }
 
-<h1>Ce que les fonctions ne font pas encore
+Le `retourne` placé dans la boucle en sort sur-le-champ : c'est le geste que montre tout manuel. Dans une série triée, la dichotomie coupe l'intervalle en deux à chaque tour.
 
-Les paramètres et les valeurs de retour sont des nombres. Une fonction ne prend pas encore une collection en argument, n'en retourne pas, et ne manipule ni textes ni dictionnaires. Rien n'empêche non plus aujourd'hui de donner le même nom à une fonction mathématique et à une fonction algorithmique — la collision reste à interdire.
+soit dichotomie(v: une liste d'entiers ; x: entier): un entier = {
+	soit g = 0
+	soit d = longueur(v) - 1
+	tant que g moins de d faire {
+		soit m = quotient de g + d par 2
+		si v[m] moins de x {
+			soit g = m + 1
+		} sinon {
+			soit d = m
+		}
+	}
+	retourne g
+}
+
+soit premiers: une liste d'entiers = {2 ; 3 ; 5 ; 7 ; 11 ; 13 ; 17 ; 19}
+
+11 occupe la position #{dichotomie(premiers ; 11)} ; recherche(premiers ; 4) ne le trouve pas : #{recherche(premiers ; 4)}.
+
+<h2>Trier
+
+soit tri_par_insertion(v: une liste d'entiers): une liste d'entiers = {
+	soit t = v
+	pour i de 1 à longueur(t) - 1 {
+		soit x = t[i]
+		soit j = i - 1
+		tant que j au moins 0 et t[j] plus de x faire {
+			t[j + 1] = t[j]
+			soit j = j - 1
+		}
+		t[j + 1] = x
+	}
+	retourne t
+}
+
+soit tri_par_sélection(v: une liste d'entiers): une liste d'entiers = {
+	soit t = v
+	pour i de 0 à longueur(t) - 2 {
+		soit p = i
+		pour j de i + 1 à longueur(t) - 1 {
+			si t[j] moins de t[p] {
+				soit p = j
+			}
+		}
+		soit x = t[i]
+		t[i] = t[p]
+		t[p] = x
+	}
+	retourne t
+}
+
+soit désordre: une liste d'entiers = {5 ; 2 ; 9 ; 1 ; 5 ; 6}
+
+<Dresse>un tableau [mg ; mg]{
+	Méthode	Résultat
+	[Insertion ; #{tri_par_insertion(désordre)}]
+	[Sélection ; #{tri_par_sélection(désordre)}]
+	[Série d'origine ; #désordre]
+}
+
+La série de départ n'a pas bougé : une fonction rend une valeur, elle ne modifie rien à distance. La primitive tri(désordre) donne le même résultat — #{tri(désordre)} — mais on n'apprend pas à trier en l'appelant.
+
+<h2>Fusionner deux listes triées
+
+soit fusion(a: une liste d'entiers ; b: une liste d'entiers): une liste d'entiers = {
+	soit r: une liste d'entiers = {}
+	soit i = 0
+	soit j = 0
+	tant que i moins de longueur(a) et j moins de longueur(b) faire {
+		si a[i] au plus b[j] {
+			soit r = ajoute(r ; a[i])
+			soit i = i + 1
+		} sinon {
+			soit r = ajoute(r ; b[j])
+			soit j = j + 1
+		}
+	}
+	retourne r + a[i à longueur(a) - 1] + b[j à longueur(b) - 1]
+}
+
+#{fusion({1 ; 4 ; 7 ; 9} ; {2 ; 3 ; 8})}
+
+À la sortie de la boucle, l'une des deux tranches finales est toujours vide — une tranche dont la borne de gauche dépasse celle de droite n'est pas une faute. C'est ce qui permet de conclure en une ligne.
+
+<h1>Les structures de données
+
+<h2>Les écrire à la main
+
+Sept lignes suffisent, et aucune n'est du moteur : la structure du programme de terminale se démontre au tableau au lieu d'être cachée dans le logiciel. On les nomme ici avec un suffixe, car une fonction qu'on écrit masque la primitive du même nom — c'est voulu, pour que l'élève puisse écrire la sienne, mais cela empêcherait d'employer les deux dans un même document.
+
+soit empile_liste(p: liste d'entiers ; x: entier): liste d'entiers = ajoute(p ; x)
+soit sommet_liste(p: liste d'entiers): entier = p[longueur(p) - 1]
+soit dépile_liste(p: liste d'entiers): liste d'entiers = p[0 à longueur(p) - 2]
+
+soit enfile_liste(f: liste d'entiers ; x: entier): liste d'entiers = ajoute(f ; x)
+soit tête_liste(f: liste d'entiers): entier = f[0]
+soit défile_liste(f: liste d'entiers): liste d'entiers = f[1 à longueur(f) - 1]
+
+soit vide_liste(c: liste d'entiers): booléen = si longueur(c) vaut 0 { 1 } sinon { 0 }
+
+soit p = empile_liste(empile_liste(empile_liste({} ; 1) ; 2) ; 3)
+
+La pile #p a pour sommet #{sommet_liste(p)} ; après dépilement il reste #{dépile_liste(p)}. La file {1 ; 2 ; 3} a pour tête #{tête_liste({1 ; 2 ; 3})} et laisse #{défile_liste({1 ; 2 ; 3})}.
+
+Le type de p n'est pas écrit : une valeur composée se pose telle quelle, docdg reconnaît ce qu'elle est.
+
+<h2>Celles du langage
+
+Une fois l'exercice fait, le langage les fournit — avec leur discipline, qui est tout leur intérêt. Une file n'a pas de sommet, une pile n'a pas de tête, et aucune des deux ne s'indexe.
+
+soit q: pile d'entiers = {}
+q = empile(q ; 1)
+q = empile(q ; 2)
+
+La pile #q a pour sommet #{sommet(q)} ; dépilée, il reste #{dépile(q)}. Elle est vide ? #{est vide(q)}
+
+soit r: file d'entiers = {1 ; 2 ; 3}
+
+La file #r a pour tête #{tête(r)} ; défilée, il reste #{défile(r)}.
+
+<h2>Rendre plusieurs valeurs : le p-uplet
+
+Un p-uplet a une longueur fixe et des types qui peuvent différer, là où une collection est homogène et de longueur libre. Il s'écrit entre parenthèses, comme un point du plan.
+
+soit divise(a: entier ; b: entier): (entier ; entier) = (quotient de a par b ; reste de a par b)
+
+soit (q ; r) = divise(17 ; 5)
+
+17 = 5 × #q + #r — la déliaison pose les deux noms d'un coup.
+
+L'exercice qui justifie à lui seul le p-uplet : deux résultats, un seul parcours.
+
+soit extrema(v: une liste d'entiers): (entier ; entier) = {
+	soit petit = v[0]
+	soit grand = v[0]
+	pour x dans v {
+		si x moins de petit { soit petit = x }
+		si x plus de grand { soit grand = x }
+	}
+	retourne (petit ; grand)
+}
+
+soit (mini ; maxi) = extrema({12 ; 15 ; 9 ; 18})
+
+La plus petite valeur est #mini, la plus grande #maxi.
+
+Les membres se lisent aussi par leur rang, et les types peuvent différer :
+
+soit c: (entier ; chaîne de caractères) = (3 ; "trois")
+
+#c — dont le second membre est #{c[1]}.
+
+<h1>Tirer au hasard
+
+aléatoire(a ; b) rend un entier entre les deux bornes, comprises. Deux compilations donnent deux tirages : c'est ce qu'une simulation attend.
+
+soit lancers(n: entier): un entier = {
+	soit six = 0
+	pour k de 1 à n {
+		si aléatoire(1 ; 6) vaut 6 {
+			soit six = six + 1
+		}
+	}
+	retourne six
+}
+
+Sur 60 lancers d'un dé, #{lancers(60)} six — pour une espérance de 10.
+
+<h1>Les objets
+
+Une classe rassemble des données et ce qu'on sait en faire. Elle se déclare comme une phrase de mathématiques, et le type de ses attributs n'a pas besoin d'article : à ce niveau la prose n'apporte rien.
+
+soit une classe Point {
+	abscisse: réel
+	ordonnée: réel
+
+	soit norme(): réel = racine(abscisse * abscisse + ordonnée * ordonnée)
+	soit translaté(dx: réel ; dy: réel): Point = Point(abscisse + dx ; ordonnée + dy)
+}
+
+soit p: Point = Point(3 ; 4)
+
+Le point #p a pour distance à l'origine #{p.norme()}. Translaté d'une unité dans chaque direction, il devient #{p.translaté(1 ; 1)}.
+
+Le nom d'une classe commence par une majuscule : c'est ce qui le distingue d'un type du langage. Un attribut se lit avec un point, une méthode s'appelle de même. Dans le corps d'une méthode, les attributs sont visibles par leur nom, sans rien devant : la formule s'écrit comme au tableau.
+
+Un attribut se modifie sans soit, puisque rien n'est déclaré :
+
+soit q: Point = Point(1 ; 2)
+q.abscisse = 6
+
+Le point q vaut #q.
+
+<h2>Premier pilier : l'encapsulation
+
+Une classe peut garder pour elle ce qui ne regarde pas le dehors. Un seul mot le dit, et tout ce qui n'est pas marqué reste visible.
+
+soit une classe Compte {
+	titulaire: chaîne de caractères
+	privé solde: réel
+
+	privé soit taux(): réel = 0,02
+	soit intérêts(): réel = solde * taux()
+}
+
+soit c: Compte = Compte("Léa" ; 250)
+
+Le titulaire se lit du dehors : #{c.titulaire}. Les intérêts se calculent : #{c.intérêts()} — la méthode publique lit l'attribut privé et appelle la méthode privée, ce qui est tout l'objet de l'encapsulation.
+
+Mais le solde ne se lit pas du dehors : #{c.solde}
+
+Ni la méthode privée ne s'appelle : #{c.taux()}
+
+<h2>Deuxième pilier : l'héritage
+
+Une classe peut reprendre une autre et la prolonger. Elle en reçoit les attributs, les méthodes et les secrets.
+
+soit une classe Animal {
+	nom: chaîne de caractères
+
+	soit cri(): chaîne de caractères = "..."
+	soit carte(): chaîne de caractères = nom
+}
+
+soit une classe Chien qui hérite de la classe Animal {
+	race: chaîne de caractères
+
+	soit cri(): chaîne de caractères = "ouaf"
+}
+
+soit une classe Chat qui hérite de la classe Animal {
+	soit cri(): chaîne de caractères = "miaou"
+}
+
+soit rex: Chien = Chien("Rex" ; "berger")
+
+Rex reçoit de sa classe mère la méthode carte, qui donne #{rex.carte()}, et redéfinit cri, qui donne #{rex.cri()}. L'animal, lui, garde le sien :
+
+soit loup: Animal = Animal("Loup")
+
+#{loup.cri()}
+
+<h2>Troisième pilier : le polymorphisme
+
+Un chien tient la place d'un animal. C'est la valeur qui décide de la méthode appelée, non le type écrit :
+
+soit fait(x: Animal): chaîne de caractères = x.cri()
+
+#{fait(rex)} — la fonction attend un animal, elle a reçu un chien, et c'est le cri du chien qui sort.
+
+Rangés ensemble, chacun garde le sien :
+
+soit z: liste d'Animal = {Chien("Rex" ; "berger") ; Chat("Mia")}
+
+pour a dans z {
+	[#{a.cri()}]
+}
+
+<h2>Quatrième pilier : l'abstraction
+
+Une classe peut dire ce que ses filles doivent savoir faire, sans dire comment. Une méthode déclarée sans membre droit n'a pas de corps.
+
+soit une classe abstraite Forme {
+	nom: chaîne de caractères
+
+	soit aire(): réel
+	soit carte(): chaîne de caractères = nom
+}
+
+soit une classe Carré qui hérite de la classe Forme {
+	côté: réel
+
+	soit aire(): réel = côté * côté
+}
+
+soit une classe Rectangle qui hérite de la classe Forme {
+	largeur: réel
+	hauteur: réel
+
+	soit aire(): réel = largeur * hauteur
+}
+
+soit mesure(f: Forme): réel = f.aire()
+
+Un carré de 3 a pour aire #{mesure(Carré("c" ; 3))} ; un rectangle 2 sur 5 a pour aire #{mesure(Rectangle("r" ; 2 ; 5))}. La fonction mesure ne sait rien de l'une ni de l'autre : elle sait seulement qu'une forme a une aire.
+
+Une classe abstraite ne s'instancie pas — c'est le rôle de ses filles : #{Forme("f")}
+
+<h1>L'arbre binaire, écrit avec des objets
+
+Les quatre piliers suffisent à écrire un arbre, sans avoir besoin d'une valeur nulle : l'arbre vide est une classe. La hiérarchie dit tout — un arbre est vide, ou c'est un nœud.
+
+soit une classe abstraite Arbre {
+	soit taille(): entier
+	soit hauteur(): entier
+}
+
+soit une classe Vide qui hérite de la classe Arbre {
+	soit taille(): entier = 0
+	soit hauteur(): entier = 0
+}
+
+soit une classe Nœud qui hérite de la classe Arbre {
+	valeur: entier
+	gauche: Arbre
+	droit: Arbre
+
+	soit taille(): entier = 1 + gauche.taille() + droit.taille()
+	soit hauteur(): entier = 1 + max(gauche.hauteur() ; droit.hauteur())
+}
+
+soit t: Nœud = Nœud(1 ; Nœud(2 ; Vide() ; Vide()) ; Nœud(3 ; Vide() ; Vide()))
+
+Cet arbre compte #{t.taille()} nœuds et sa hauteur vaut #{t.hauteur()}.
+
+Un attribut peut donc contenir un objet : c'est ce qui permet à une structure de se contenir elle-même.
+
+<h1>Les graphes
+
+Un graphe se donne par sa liste d'adjacence : un dictionnaire dont chaque clé est un sommet et chaque valeur la liste de ses voisins.
+
+soit g: dictionnaire de chaînes de caractères et de listes de chaînes de caractères = {"A": {"B" ; "C"} ; "B": {"D"} ; "C": {"D"} ; "D": {}}
+
+Le graphe compte #{longueur(g)} sommets ; les voisins de A sont #{g["A"]}.
+
+Les deux parcours diffèrent par une seule chose : la file donne le parcours en largeur, la pile le parcours en profondeur.
+
+soit largeur(g: dictionnaire de chaînes de caractères et de listes de chaînes de caractères ; départ: chaîne de caractères): chaîne de caractères = {
+	soit vus: chaîne de caractères = ""
+	soit f: file de chaînes de caractères = {}
+	f = enfile(f ; départ)
+	tant que est vide(f) vaut faux faire {
+		soit s = tête(f)
+		f = défile(f)
+		si vus contient(s) vaut faux {
+			vus = vus + s
+			pour v dans g[s] {
+				f = enfile(f ; v)
+			}
+		}
+	}
+	retourne vus
+}
+
+soit profondeur(g: dictionnaire de chaînes de caractères et de listes de chaînes de caractères ; départ: chaîne de caractères): chaîne de caractères = {
+	soit vus: chaîne de caractères = ""
+	soit p: pile de chaînes de caractères = {}
+	p = empile(p ; départ)
+	tant que est vide(p) vaut faux faire {
+		soit s = sommet(p)
+		p = dépile(p)
+		si vus contient(s) vaut faux {
+			vus = vus + s
+			pour v dans g[s] {
+				p = empile(p ; v)
+			}
+		}
+	}
+	retourne vus
+}
+
+Depuis A, en largeur : #{largeur(g ; "A")}. En profondeur : #{profondeur(g ; "A")}.
+
+<h1>Écrire un résultat sur une ligne
+
+soit premiers(n: entier): liste d'entiers = {
+	soit p: liste d'entiers = {}
+	pour m de 2 à n {
+		soit d = 0
+		pour k de 2 à m - 1 {
+			si reste de m par k vaut 0 {
+				d = d + 1
+			}
+		}
+		si d vaut 0 {
+			p = ajoute(p ; m)
+		}
+	}
+	retourne p
+}
+
+Les nombres premiers jusqu'à 50 : #{jonction(premiers(50) ; ", ")}.
+
+La primitive jonction évite l'accumulateur, qui laisse toujours un séparateur de trop à la fin.
+
+<h1>Pour la suite
+
+Les quatre piliers de la programmation orientée objet, les structures de données du programme et leurs parcours sont couverts. Ce qui reste tient moins du langage que de son emploi : écrire ses propres classes, ses propres structures, et les faire tenir dans un document qu'on donne à lire.

@@ -274,11 +274,14 @@ fn split_top(s: &str, sep: char) -> Vec<String> {
     let mut depth = 0i32;
     for c in s.chars() {
         match c {
-            '{' | '[' => {
+            // La parenthèse compte au même titre que l'accolade et le crochet :
+            // sans elle, le point-virgule d'un appel — `contient(2 ; v)` — était
+            // pris pour un séparateur de colonne et coupait la cellule en deux.
+            '{' | '[' | '(' => {
                 depth += 1;
                 cur.push(c);
             }
-            '}' | ']' => {
+            '}' | ']' | ')' => {
                 depth -= 1;
                 cur.push(c);
             }
@@ -392,6 +395,22 @@ fn accolade_du_corps(entete: &str) -> Option<usize> {
     None
 }
 
+/// Repère une ligne réduite au seul mot `sortir` et rend sa position.
+fn position_de_sortir(contenu: &str) -> Option<usize> {
+    position_du_mot(contenu, "sortir")
+}
+
+fn position_du_mot(contenu: &str, mot: &str) -> Option<usize> {
+    let mut position = 0usize;
+    for ligne in contenu.lines() {
+        if ligne.trim() == mot {
+            return Some(position);
+        }
+        position += ligne.len() + 1;
+    }
+    None
+}
+
 fn condition_de_tour(
     body: &str,
     vars: &std::collections::BTreeMap<String, f64>,
@@ -464,6 +483,67 @@ fn dedent(body: &str) -> String {
 
 const TOURS_MAX: usize = 2000;
 
+/// `somme = somme + k` — l'affectation d'un nom **déjà déclaré**.
+///
+/// `soit` déclare ; le répéter à chaque tour n'apprend rien et ne se lit pas.
+/// La condition tient en un mot : le nom doit déjà exister. Une ligne de prose
+/// qui contient un signe égal n'est donc jamais prise pour une affectation —
+/// c'est ce qui rend la levée sûre.
+///
+/// La réécriture se fait ici, sur le texte, avant que quoi que ce soit ne
+/// mesure des positions : rien en aval n'a à changer.
+pub fn normalise_affectations(texte: &str) -> String {
+    let mut connus: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
+    let mut sortie = String::with_capacity(texte.len());
+    for ligne in texte.lines() {
+        let nu = ligne.trim_start();
+        let retrait = &ligne[..ligne.len() - nu.len()];
+
+        // ce que la ligne déclare
+        if let Some(reste) = nu.strip_prefix("soit ") {
+            let tete = reste
+                .split_once('=')
+                .map(|(g, _)| g)
+                .unwrap_or(reste)
+                .trim();
+            let nom = tete.split([':', '(']).next().unwrap_or("").trim();
+            if !nom.is_empty() && nom.chars().all(|c| c.is_alphanumeric() || c == '_') {
+                connus.insert(nom.to_string());
+            }
+        }
+        if let Some(reste) = nu.strip_prefix("pour ") {
+            if let Some(nom) = reste.split_whitespace().next() {
+                connus.insert(nom.to_string());
+            }
+        }
+
+        // ce que la ligne affecte
+        let mut reecrite = None;
+        if !nu.starts_with("soit ") && !nu.starts_with('<') && !nu.starts_with('[') {
+            if let Some((gauche, droite)) = nu.split_once('=') {
+                let nom = gauche.trim();
+                // Un dièse à droite signe la prose : on écrit `k=#k` pour
+                // afficher, jamais pour affecter — dans du code, le nom se
+                // lit directement.
+                let simple = !nom.is_empty()
+                    && !droite.contains('#')
+                    && !droite.starts_with('=')
+                    && nom.chars().next().map(|c| c.is_alphabetic() || c == '_').unwrap_or(false)
+                    && nom.chars().all(|c| c.is_alphanumeric() || c == '_');
+                if simple && connus.contains(nom) {
+                    reecrite = Some(format!("{}soit {}", retrait, nu));
+                }
+            }
+        }
+        sortie.push_str(reecrite.as_deref().unwrap_or(ligne));
+        sortie.push('\n');
+    }
+    if !texte.ends_with('\n') {
+        sortie.pop();
+    }
+    sortie
+}
+
 fn applique_affectations(
     body: &str,
     etat: &mut std::collections::BTreeMap<String, f64>,
@@ -490,6 +570,25 @@ fn applique_affectations(
                     continue;
                 }
             }
+        }
+        if let Some((entrees, consomme)) = crate::langage::fonctions::parse_classe(rest, fonctions) {
+            let manquantes = crate::langage::fonctions::methodes_sans_corps(&entrees);
+            if !manquantes.is_empty() && !crate::langage::fonctions::est_abstraite(&entrees) {
+                sortie.push_str(&format!(
+                    "<rouge gras>{{⚠ {} laisse {} sans corps : ou bien la classe les définit, ou bien elle se déclare abstraite}}\n",
+                    entrees[0].0,
+                    manquantes.join(", ")
+                ));
+            } else {
+                for (nom, f) in entrees {
+                    fonctions.insert(nom, f);
+                }
+            }
+            pos += consomme;
+            if body[pos..].starts_with('\n') {
+                pos += 1;
+            }
+            continue;
         }
         if let Some((nom, f, consomme)) =
             crate::langage::fonctions::parse_declaration(rest)
@@ -553,6 +652,25 @@ fn execute_conteneurs(
     let mut pos = 0usize;
     while pos < texte.len() {
         let rest = &texte[pos..];
+        if let Some((entrees, consomme)) = crate::langage::fonctions::parse_classe(rest, fonctions) {
+            let manquantes = crate::langage::fonctions::methodes_sans_corps(&entrees);
+            if !manquantes.is_empty() && !crate::langage::fonctions::est_abstraite(&entrees) {
+                sortie.push_str(&format!(
+                    "<rouge gras>{{⚠ {} laisse {} sans corps : ou bien la classe les définit, ou bien elle se déclare abstraite}}\n",
+                    entrees[0].0,
+                    manquantes.join(", ")
+                ));
+            } else {
+                for (nom, f) in entrees {
+                    fonctions.insert(nom, f);
+                }
+            }
+            pos += consomme;
+            if texte[pos..].starts_with('\n') {
+                pos += 1;
+            }
+            continue;
+        }
         if let Some((nom, f, consomme)) =
             crate::langage::fonctions::parse_declaration(rest)
         {
@@ -597,19 +715,36 @@ pub fn expand_loops_avec(
     loop {
         let mut found = None;
         {
-            let lines: Vec<&str> = rest.lines().collect();
-            let mut offset = 0usize;
-            for line in &lines {
+            let mut i = 0usize;
+            while i < rest.len() {
+                let fin_ligne = rest[i..].find('\n').map(|j| i + j).unwrap_or(rest.len());
+                let line = &rest[i..fin_ligne];
                 let t = line.trim_start();
+                // Une déclaration de fonction emporte son corps : les boucles
+                // qu'il contient appartiennent à la fonction, non au document.
+                // Sans ce saut, la coupure tombait au milieu de la déclaration,
+                // dont l'accolade fermante restait de l'autre côté — la
+                // fonction n'était alors jamais enregistrée.
+                if t.starts_with("soit ") {
+                    if let Some(consomme) = crate::langage::fonctions::fin_de_classe(&rest[i..]) {
+                        i += consomme;
+                        continue;
+                    }
+                    if let Some((_, _, consomme)) =
+                        crate::langage::fonctions::parse_declaration(&rest[i..])
+                    {
+                        i += consomme;
+                        continue;
+                    }
+                }
                 if t.starts_with("pour ")
                     && t.contains('{')
                     && (t.contains(" dans ") || (t.contains(" de ") && t.contains(" à ")))
                 {
-                    let start = offset + (line.len() - t.len());
-                    found = Some(start);
+                    found = Some(i + (line.len() - t.len()));
                     break;
                 }
-                offset += line.len() + 1;
+                i = fin_ligne + 1;
             }
         }
         match found {
@@ -620,6 +755,12 @@ pub fn expand_loops_avec(
                 let spec = head.trim_start_matches("pour").trim();
                 let vide: std::collections::BTreeMap<String, f64> = std::collections::BTreeMap::new();
                 let mut values: Vec<String> = Vec::new();
+                // Une collection d'objets ne se parcourt pas par substitution
+                // de texte : l'objet ne survivrait pas à son impression. Ses
+                // valeurs voyagent telles quelles, en boîte, un tour après
+                // l'autre.
+                let mut objets: Option<Vec<crate::langage::conteneurs::Valeur>> = None;
+                let mut faute: Option<String> = None;
                 let var;
                 if let Some((v, liste)) = spec.split_once(" dans ") {
                     var = v.trim().to_string();
@@ -632,8 +773,18 @@ pub fn expand_loops_avec(
                             }
                         }
                     } else if let Some(b) = boites.get(liste) {
+                        objets = crate::langage::conteneurs::valeurs_pour_boucle(b);
                         values = crate::langage::conteneurs::elements_pour_boucle(b);
-                    } else {
+                    } else if let Ok((val, type_val)) =
+                        crate::langage::fonctions::devine_valeur(liste, vars, boites, fonctions)
+                    {
+                        // La source n'est pas forcément un nom : une chaîne
+                        // écrite sur place se parcourt lettre à lettre, comme
+                        // celle qu'on aurait posée dans une variable.
+                        let boite = crate::langage::conteneurs::Boite { type_val, val };
+                        objets = crate::langage::conteneurs::valeurs_pour_boucle(&boite);
+                        values = crate::langage::conteneurs::elements_pour_boucle(&boite);
+                    } else if liste.starts_with('[') {
                         let inner = liste.trim_start_matches('[').trim_end_matches(']');
                         for item in inner.split(',') {
                             let item = item.trim();
@@ -641,6 +792,16 @@ pub fn expand_loops_avec(
                                 values.push(item.to_string());
                             }
                         }
+                    } else {
+                        // Une source qui n'est ni un nom posé, ni un littéral,
+                        // ni une chaîne entre guillemets se disait en silence
+                        // comme un unique tour — `pour c dans un code` faisait
+                        // un tour sur « un code » au lieu d'en lire les
+                        // lettres. La faute vaut mieux que le faux-semblant.
+                        faute = Some(format!(
+                            "{} n'est pas un conteneur : une chaîne écrite sur place se met entre guillemets",
+                            liste
+                        ));
                     }
                 } else {
                     let p1: Vec<&str> = spec.splitn(2, " de ").collect();
@@ -670,22 +831,72 @@ pub fn expand_loops_avec(
                 let tail = &rest[head_end..];
                 if let Some((body, after)) = take_group(tail, 0) {
                     let mut expanded = String::new();
+                    if let Some(message) = &faute {
+                        expanded.push_str(&format!("<rouge gras>{{⚠ {}}}\n", message));
+                    }
                     let body = dedent(&body);
                     let debordement = values.len() >= TOURS_MAX;
                     values.truncate(TOURS_MAX);
                     let avant = vars.clone();
-                    for v in &values {
+                    for (rang, v) in values.iter().enumerate() {
                         if let Some(n) = crate::maths::calcul::eval(v, &vide) {
                             vars.insert(var.clone(), n);
                         }
-                        let substituee = subst_var(&body, &var, v);
+                        let substituee = match objets.as_ref().and_then(|o| o.get(rang)) {
+                            Some(objet) => {
+                                // Chaque tour reçoit sa propre boîte, sous un
+                                // nom qui lui est propre : le contenu du tour
+                                // est déroulé maintenant mais lu plus tard,
+                                // et un nom réemployé ne porterait que la
+                                // dernière valeur.
+                                let nom_du_tour = format!("{}__{}", var, rang);
+                                boites.insert(
+                                    nom_du_tour.clone(),
+                                    crate::langage::conteneurs::Boite {
+                                        type_val: crate::langage::conteneurs::type_de_valeur(objet),
+                                        val: objet.clone(),
+                                    },
+                                );
+                                subst_var(&body, &var, &nom_du_tour)
+                            }
+                            None => subst_var(&body, &var, v),
+                        };
                         let substituee = if substituee.contains("pour ") {
                             expand_loops_avec(&substituee, vars, boites, fonctions, noms_math)
                         } else {
                             substituee
                         };
+                        // Les conditions du tour sont résolues ici : sans quoi
+                        // un `sortir` niché dans un `si` resterait invisible,
+                        // les conditions n'étant développées qu'après les
+                        // boucles.
+                        let substituee = if substituee.contains("si ") {
+                            expand_conditions_avec(&substituee, vars, Some(boites), Some(fonctions))
+                        } else {
+                            substituee
+                        };
                         if let Some(retenu) = condition_de_tour(&substituee, vars, boites, fonctions) {
                             let contenu = applique_affectations(&retenu, vars, boites, fonctions);
+                            // `sortir` arrête ce tour à cet endroit, et la
+                            // boucle avec lui : c'est la recherche qui cesse
+                            // dès qu'elle a trouvé.
+                            // `continuer` coupe le tour, la boucle poursuit.
+                            if let Some(coupe) = position_du_mot(&contenu, "continuer") {
+                                // Un tour sauté ne produit rien : lui donner
+                                // son séparateur ferait apparaître une ligne
+                                // vide là où il n'y a précisément rien.
+                                let garde = &contenu[..coupe];
+                                if !garde.trim().is_empty() {
+                                    expanded.push_str(garde);
+                                    expanded.push_str("\n\u{E013}\n");
+                                }
+                                continue;
+                            }
+                            if let Some(coupe) = position_de_sortir(&contenu) {
+                                expanded.push_str(&contenu[..coupe]);
+                                expanded.push_str("\n\u{E013}\n");
+                                break;
+                            }
                             expanded.push_str(&contenu);
                             expanded.push_str("\n\u{E013}\n");
                         }
@@ -731,7 +942,45 @@ fn subst_vars_multi(s: &str, vars: &std::collections::BTreeMap<String, f64>) -> 
     out
 }
 
-fn traite_tour_tant_que(body: &str, vars: &mut std::collections::BTreeMap<String, f64>) -> String {
+/// Substitue les variables **jusque dans les accolades**.
+///
+/// `subst_var` les protège, et c'est ce qu'il faut : une accolade délimite des
+/// données, qu'on ne veut pas voir réécrites. Mais dans le corps d'un `tant
+/// que`, `soit v = v + {k}` a besoin de la valeur du tour — sans quoi
+/// l'accumulateur ne reçoit que la valeur d'avant la boucle. La levée ne vaut
+/// donc que pour les lignes qui font croître un conteneur.
+fn subst_vars_partout(
+    s: &str,
+    vars: &std::collections::BTreeMap<String, f64>,
+) -> String {
+    let lettres: Vec<char> = s.chars().collect();
+    let mut out = String::with_capacity(s.len());
+    let mut i = 0usize;
+    while i < lettres.len() {
+        if lettres[i].is_alphanumeric() || lettres[i] == '_' {
+            let debut = i;
+            while i < lettres.len() && (lettres[i].is_alphanumeric() || lettres[i] == '_') {
+                i += 1;
+            }
+            let mot: String = lettres[debut..i].iter().collect();
+            match vars.get(&mot) {
+                Some(v) => out.push_str(&crate::maths::calcul::format_number(*v)),
+                None => out.push_str(&mot),
+            }
+        } else {
+            out.push(lettres[i]);
+            i += 1;
+        }
+    }
+    out
+}
+
+fn traite_tour_tant_que(
+    body: &str,
+    vars: &mut std::collections::BTreeMap<String, f64>,
+    boites: &mut crate::langage::conteneurs::Boites,
+    fonctions: &crate::langage::fonctions::Fonctions,
+) -> String {
     let mut out = String::new();
     for line in body.lines() {
         let t = line.trim_start();
@@ -747,7 +996,22 @@ fn traite_tour_tant_que(body: &str, vars: &mut std::collections::BTreeMap<String
                 }
             }
         }
-        out.push_str(&subst_vars_multi(line, vars));
+        // Une opération sur conteneur s'applique **pendant** le tour : c'est
+        // le seul moment où la variable de boucle a sa valeur du tour.
+        let ligne_seule = format!("{}\n", line);
+        if let Some(instr) =
+            crate::langage::conteneurs::instruction_conteneur(&ligne_seule, vars, boites, fonctions)
+        {
+            out.push_str(&instr.remplacement);
+            continue;
+        }
+        let croissance = t.starts_with("soit ")
+            && t.split_once('=').map(|(_, d)| d.contains('{')).unwrap_or(false);
+        if croissance {
+            out.push_str(&subst_vars_partout(line, vars));
+        } else {
+            out.push_str(&subst_vars_multi(line, vars));
+        }
         out.push('\n');
     }
     out
@@ -772,28 +1036,55 @@ fn reaffectations_finales(
     out
 }
 
-pub fn expand_tant_que(src: &str, vars_init: &std::collections::BTreeMap<String, f64>) -> String {
+/// Comme les conditions et les boucles `pour`, un `tant que` de document doit
+/// voir les conteneurs : sa condition peut les interroger, et son corps les
+/// faire croître. Sans cela `soit v = v + {k}` n'y accumulait que la valeur
+/// que `k` avait avant la boucle — les accolades étant protégées de la
+/// substitution, le tour ne pouvait rien y injecter.
+pub fn expand_tant_que_avec(
+    src: &str,
+    vars_init: &std::collections::BTreeMap<String, f64>,
+    boites: &mut crate::langage::conteneurs::Boites,
+    fonctions: &crate::langage::fonctions::Fonctions,
+) -> String {
     let mut out = String::new();
     let mut rest = src.to_string();
     loop {
         let mut avant = None;
         let mut apres = None;
         {
-            let lines: Vec<&str> = rest.lines().collect();
-            let mut offset = 0usize;
-            for line in &lines {
+            let mut i = 0usize;
+            while i < rest.len() {
+                let fin_ligne = rest[i..].find('\n').map(|j| i + j).unwrap_or(rest.len());
+                let line = &rest[i..fin_ligne];
                 let t = line.trim_start();
+                // Même règle que pour les boucles `pour` : le corps d'une
+                // fonction n'appartient pas au document. Sans ce saut, la
+                // boucle était extraite du corps et la fonction rendait la
+                // valeur qu'elle avait avant d'entrer dedans.
+                if t.starts_with("soit ") {
+                    if let Some(consomme) = crate::langage::fonctions::fin_de_classe(&rest[i..]) {
+                        i += consomme;
+                        continue;
+                    }
+                    if let Some((_, _, consomme)) =
+                        crate::langage::fonctions::parse_declaration(&rest[i..])
+                    {
+                        i += consomme;
+                        continue;
+                    }
+                }
                 if t.starts_with("tant que ") && t.contains('{') {
-                    avant = Some(offset + (line.len() - t.len()));
+                    avant = Some(i + (line.len() - t.len()));
                     break;
                 }
                 if (t == "faire" || t.starts_with("faire ") || t.starts_with("faire{"))
                     && t.contains('{')
                 {
-                    apres = Some(offset + (line.len() - t.len()));
+                    apres = Some(i + (line.len() - t.len()));
                     break;
                 }
-                offset += line.len() + 1;
+                i = fin_ligne + 1;
             }
         }
         if let Some(start) = avant {
@@ -807,8 +1098,24 @@ pub fn expand_tant_que(src: &str, vars_init: &std::collections::BTreeMap<String,
                 let mut vars = vars_init.clone();
                 let mut expanded = String::new();
                 let mut tours = 0usize;
-                while eval_condition(&cond_txt, &vars) && tours < TOURS_MAX {
-                    expanded.push_str(&traite_tour_tant_que(&body, &mut vars));
+                while eval_condition(
+                    &crate::langage::conteneurs::resoudre_noms_scalaires(
+                        &crate::langage::conteneurs::resoudre_lectures(
+                            &crate::langage::fonctions::resoudre_appels(
+                                &cond_txt, &vars, boites, fonctions, 0,
+                            ),
+                            &vars,
+                            boites,
+                            true,
+                        ),
+                        boites,
+                    ),
+                    &vars,
+                ) && tours < TOURS_MAX
+                {
+                    expanded.push_str(&traite_tour_tant_que(
+                        &body, &mut vars, boites, fonctions,
+                    ));
                     expanded.push_str("\n\u{E013}\n");
                     tours += 1;
                 }
@@ -833,10 +1140,23 @@ pub fn expand_tant_que(src: &str, vars_init: &std::collections::BTreeMap<String,
                     let mut expanded = String::new();
                     let mut tours = 0usize;
                     loop {
-                        expanded.push_str(&traite_tour_tant_que(&body, &mut vars));
+                        expanded.push_str(&traite_tour_tant_que(
+                            &body, &mut vars, boites, fonctions,
+                        ));
                         expanded.push_str("\n\u{E013}\n");
                         tours += 1;
-                        if !eval_condition(&cond_txt, &vars) || tours >= TOURS_MAX {
+                        let condition = crate::langage::conteneurs::resoudre_noms_scalaires(
+                            &crate::langage::conteneurs::resoudre_lectures(
+                                &crate::langage::fonctions::resoudre_appels(
+                                    &cond_txt, &vars, boites, fonctions, 0,
+                                ),
+                                &vars,
+                                boites,
+                                true,
+                            ),
+                            boites,
+                        );
+                        if !eval_condition(&condition, &vars) || tours >= TOURS_MAX {
                             break;
                         }
                     }
@@ -1064,7 +1384,9 @@ fn parse_saisie(line: &str) -> Option<(String, TypeSaisie, String)> {
     let bi = apres.find('{')?;
     let desc = apres[..bi].split_whitespace().collect::<Vec<_>>().join(" ");
     let ty = match desc.as_str() {
-        "un texte" => TypeSaisie::Texte,
+        // Le même mot que le type du langage : une saisie textuelle rend une
+        // chaîne de caractères, il n'y a pas lieu de la nommer autrement.
+        "une chaîne de caractères" | "une chaine de caracteres" => TypeSaisie::Texte,
         "un entier" => TypeSaisie::Entier,
         "un décimal" => TypeSaisie::Decimal,
         "un booléen" => TypeSaisie::Booleen,
@@ -1347,11 +1669,17 @@ pub fn scan_env(seg: &str, env: &mut Env) {
     let mut boites_scan = env.conteneurs.clone();
     let mut fonctions_scan = env.fonctions.clone();
     let noms_math = noms_de_fonctions_math(env, seg);
-    let seg = expand_tant_que(seg, &vars_scan);
+    let seg = normalise_affectations(seg);
+    let seg = expand_tant_que_avec(&seg, &vars_scan, &mut boites_scan, &fonctions_scan);
     let seg = expand_loops_avec(&seg, &mut vars_scan, &mut boites_scan, &mut fonctions_scan, &noms_math);
     env.conteneurs = boites_scan;
     env.fonctions = fonctions_scan;
-    let seg = expand_conditions(&seg, &env.vars);
+    let seg = expand_conditions_avec(
+        &seg,
+        &env.vars,
+        Some(&env.conteneurs),
+        Some(&env.fonctions),
+    );
     for line in seg.lines() {
         let t = line.trim_start();
         if t.starts_with("soit ") && !est_ternaire(t) {
@@ -1478,7 +1806,15 @@ fn logical_chunks(text: &str) -> Vec<String> {
     out
 }
 
-pub fn expand_conditions(src: &str, vars: &std::collections::BTreeMap<String, f64>) -> String {
+/// La condition d'un `si` de document doit voir les conteneurs et les
+/// fonctions, sans quoi `si v contient(1)` reste du texte mort — alors que la
+/// même écriture fonctionne dans un corps de fonction.
+pub fn expand_conditions_avec(
+    src: &str,
+    vars: &std::collections::BTreeMap<String, f64>,
+    boites: Option<&crate::langage::conteneurs::Boites>,
+    fonctions: Option<&crate::langage::fonctions::Fonctions>,
+) -> String {
     let mut rest = src.to_string();
     let mut out = String::new();
     loop {
@@ -1505,6 +1841,13 @@ pub fn expand_conditions(src: &str, vars: &std::collections::BTreeMap<String, f6
             }
         };
         let cond_txt = rest[start + 3..head_end].trim().to_string();
+        let cond_txt = match (boites, fonctions) {
+            (Some(b), Some(f)) => {
+                let resolue = crate::langage::fonctions::resoudre_appels(&cond_txt, vars, b, f, 0);
+                crate::langage::conteneurs::resoudre_lectures(&resolue, vars, b, true)
+            }
+            _ => cond_txt,
+        };
         let tail = &rest[head_end..];
         let (alors, apres) = match take_group(tail, 0) {
             Some(x) => x,
@@ -1607,6 +1950,16 @@ fn eval_condition(cond: &str, vars: &std::collections::BTreeMap<String, f64>) ->
     if let Some((g, d)) = split_top_niveau(cond, " ou ") {
         return eval_condition(g, vars) || eval_condition(d, vars);
     }
+    // La négation, troisième connecteur logique enseigné avec « et » et « ou ».
+    // Elle se lit après eux : « non a et b » se comprend « (non a) et b ».
+    if let Some(reste) = cond.trim().strip_prefix("non ") {
+        return !eval_condition(reste, vars);
+    }
+    match cond.trim() {
+        "vrai" => return true,
+        "faux" => return false,
+        _ => {}
+    }
     if let Some((g, d)) = split_top_niveau(cond, " et ") {
         return eval_condition(g, vars) && eval_condition(d, vars);
     }
@@ -1650,10 +2003,30 @@ fn eval_condition_simple(cond: &str, vars: &std::collections::BTreeMap<String, f
     ];
     for (mot, f) in comparateurs {
         if let Some((g, d)) = cond.split_once(mot) {
+            let (gt, dt) = (g.trim().to_string(), d.trim().to_string());
             let g = eval_operande(g, vars);
             let d = eval_operande(d, vars);
             if let (Some(g), Some(d)) = (g, d) {
                 return f(g, d);
+            }
+            // Deux textes se comparent aussi : l'égalité d'un palindrome à son
+            // inverse n'est pas un calcul de nombres. La collation française
+            // sert d'ordre — « école » avant « Zoé ».
+            if !gt.is_empty() && !dt.is_empty() {
+                let cle = |s: &str| -> String {
+                    s.trim_matches('"')
+                        .chars()
+                        .map(crate::langage::conteneurs::depouille)
+                        .flat_map(|c| c.to_lowercase())
+                        .collect()
+                };
+                let ordre = cle(&gt).cmp(&cle(&dt));
+                let (a, b) = match ordre {
+                    std::cmp::Ordering::Less => (0.0, 1.0),
+                    std::cmp::Ordering::Equal => (0.0, 0.0),
+                    std::cmp::Ordering::Greater => (1.0, 0.0),
+                };
+                return f(a, b);
             }
             return false;
         }
@@ -1702,11 +2075,12 @@ pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
     let mut boites = env.conteneurs.clone();
     let mut fonctions = env.fonctions.clone();
     let noms_math = noms_de_fonctions_math(env, seg);
-    let seg = expand_tant_que(seg, &vars_locales);
+    let seg = normalise_affectations(seg);
+    let seg = expand_tant_que_avec(&seg, &vars_locales, &mut boites, &fonctions);
     let seg: &str = &seg;
     let seg = expand_loops_avec(seg, &mut vars_locales, &mut boites, &mut fonctions, &noms_math);
     let seg: &str = &seg;
-    let seg = expand_conditions(seg, &vars_locales);
+    let seg = expand_conditions_avec(seg, &vars_locales, Some(&boites), Some(&fonctions));
     for (nom, valeur) in &vars_locales {
         env.vars.insert(nom.clone(), *valeur);
     }
@@ -3556,6 +3930,7 @@ fn diese_avec(
     if apres.starts_with('{') {
         if let Some((expr, reste)) = take_group(apres, 0) {
             let fin = i + 1 + (apres.len() - reste.len());
+            let original = expr.clone();
             let expr = match (boites, fns) {
                 (Some(b), Some(fs)) => {
                     let e = crate::langage::fonctions::resoudre_appels(&expr, vars, b, fs, 0);
@@ -3577,6 +3952,20 @@ fn diese_avec(
                 }
                 _ => expr,
             };
+            // Depuis P0, un appel peut rendre une collection, un dictionnaire
+            // ou un texte : la substitution laisse alors une forme littérale,
+            // que l'évaluateur numérique ne sait pas lire. On la rend telle
+            // quelle plutôt que d'annoncer un calcul absent.
+            // Un texte déjà calculé s'affiche tel quel : le recalculer
+            // ferait de « 1 / 2 » un demi.
+            if let Some(texte) =
+                crate::langage::fonctions::desencadre_texte(&expr)
+            {
+                return Some((echappe_html(texte.trim()), fin));
+            }
+            if expr != original && crate::maths::calcul::eval(&expr, vars).is_none() {
+                return Some((echappe_html(expr.trim()), fin));
+            }
             return Some((crate::maths::calcul::eval_display(&expr, vars), fin));
         }
     }

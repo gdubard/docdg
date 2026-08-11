@@ -1,10 +1,10 @@
 document {
-	titre: Algorithmique — les conteneurs;
+	titre: Algorithmique 3 — conteneurs et fonctions;
 	auteur: Gérard DUBARD;
 	institution: Atelier d'algorithmique appliquée;
 	date: août 2026;
 	orientation: portrait;
-	marges: 25;
+	marges: 10;
 	espacements: 0;
 	police: Georgia;
 	taille: 11;
@@ -22,10 +22,10 @@ soit h2 = <bleu nuit italique sous-section>
 
 Un conteneur se déclare comme toute variable — le nom, le deux-points, le type en toutes lettres, puis la valeur. Le type est toujours écrit ; le point-virgule sépare les éléments ; l'accolade les rassemble. Les indices commencent à 0, comme en NSI.
 
-<h1>La collection
+<h1>La liste
 
-soit notes: une collection de décimaux = {12,5 ; 15 ; 9,5}
-soit mots: une collection de textes = {chat ; chien ; cheval}
+soit notes: une liste de décimaux = {12,5 ; 15 ; 9,5}
+soit mots: une liste de chaînes de caractères = {"chat" ; "chien" ; "cheval"}
 
 Le dièse affiche le conteneur entier : #notes — et l'indice lit un élément : la deuxième note est #notes[1], le premier mot est #mots[0]. Un élément entre dans un calcul comme toute valeur : le double de la deuxième note vaut #{notes[1] * 2}.
 
@@ -37,9 +37,9 @@ Après correction : #notes. En revanche, lire au-delà des bornes est une erreur
 
 <h2>Grandir par concaténation
 
-Une collection déclarée vide grandit par +, qui concatène toujours deux conteneurs — l'élément ajouté s'écrit donc en singleton, entre accolades :
+Une liste déclarée vide grandit par +, qui concatène toujours deux conteneurs — l'élément ajouté s'écrit donc en singleton, entre accolades :
 
-soit S: une collection d'entiers = {}
+soit S: une liste d'entiers = {}
 pour k de 1 à 5 {
 	soit S = S + {k * k}
 }
@@ -48,13 +48,13 @@ Les cinq premiers carrés : #S.
 
 <h1>Le dictionnaire
 
-soit trajets: un dictionnaire de textes et d'entiers = {Marche: 5 ; Bus: 3}
+soit trajets: un dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5 ; "Bus": 3}
 
-La clé lit sa valeur : à pied, #trajets[Marche] minutes. Le + ajoute une paire :
+La clé lit sa valeur : à pied, #trajets["Marche"] minutes. Le + ajoute une paire :
 
-soit trajets = trajets + {Vélo: 7}
+soit trajets = trajets + {"Vélo": 7}
 
-Le dictionnaire complet : #trajets. Une clé absente est une erreur explicite : #trajets[Métro].
+Le dictionnaire complet : #trajets. Une clé absente est une erreur explicite : #trajets["Métro"].
 
 La boucle dans livre les clés, et l'indexation retrouve chaque valeur :
 
@@ -62,7 +62,7 @@ pour t dans trajets {
 	#t : #{trajets[t]} minutes.
 }
 
-<h1>La matrice
+<page suivante h1>La matrice
 
 Une matrice porte ses dimensions dans son type. La forme littérale tient sur une ligne ; la forme bloc s'aligne à l'œil dans l'éditeur — tabulations entre colonnes, retours à la ligne entre rangées, aucun point-virgule :
 
@@ -87,11 +87,11 @@ La table de multiplication : #T — et sa case centrale : #T[1 ; 1].
 
 <h1>Composer les conteneurs
 
-Un tableau à plusieurs dimensions dont la taille n'est pas connue d'avance est une collection de collections. La rangée se déclare dans la boucle — elle repart vide à chaque tour — pendant que le conteneur extérieur, déclaré avant, accumule :
+Un tableau à plusieurs dimensions dont la taille n'est pas connue d'avance est une liste de listes. La rangée se déclare dans la boucle — elle repart vide à chaque tour — pendant que le conteneur extérieur, déclaré avant, accumule :
 
-soit M: une collection de collections d'entiers = {}
+soit M: une liste de listes d'entiers = {}
 pour i de 0 à 2 {
-	soit rangée: une collection d'entiers = {}
+	soit rangée: une liste d'entiers = {}
 	pour j de 0 à 3 {
 		soit rangée = rangée + {i * j}
 	}
@@ -104,23 +104,235 @@ Le résultat : #M.
 
 Le langage distingue les ensembles tels que les mathématiques les enseignent : un entier appartient à \(\mathbb{Z}\), un décimal à \(\mathbb{D}\) — son développement décimal est fini — un réel à \(\mathbb{R}\), et un complexe est un couple de deux réels.
 
-soit ent: une collection d'entiers = {1 ; -4 ; 12}
-soit dec: une collection de décimaux = {12,5 ; 0,25 ; 15}
-soit ree: une collection de réels = {1/3 ; racine(2) ; 2,5}
-soit cpx: une collection de complexes = {(1 ; 2) ; (0 ; -1)}
+soit ent: une liste d'entiers = {1 ; -4 ; 12}
+soit dec: une liste de décimaux = {12,5 ; 0,25 ; 15}
+soit ree: une liste de réels = {1/3 ; racine(2) ; 2,5}
+soit cpx: une liste de complexes = {(1 ; 2) ; (0 ; -1)}
 
 Entiers : #ent — décimaux : #dec — réels : #ree — complexes : #cpx. Le second complexe vaut #cpx[1], couple dont la partie réelle est nulle.
 
 L'inclusion \(\mathbb{D} \subset \mathbb{R}\) se vérifie dans les deux sens : un tiers est un réel parfaitement légitime, mais son développement décimal est infini, donc il n'est pas décimal — et docdg le dit :
 
-soit faux_decimal: une collection de décimaux = {1/3}
+soit faux_decimal: une liste de décimaux = {1/3}
 
 <h1>Le type protège
 
 Le type déclaré est vérifié à chaque instant — et l'erreur parle, avec la ligne fautive, plutôt que de composer un document faux :
 
-soit E: une collection d'entiers = {1 ; 2,5 ; 3}
+soit E: une liste d'entiers = {1 ; 2,5 ; 3}
 
+<h1>Mesurer, chercher, ranger
+
+Un conteneur ne se contente pas de se remplir : il se mesure, se parcourt, se range. Le vocabulaire suit une règle simple — un nom pour ce qui produit une valeur, un verbe pour ce qui répond par oui ou non.
+
+soit notes: une liste d'entiers = {12 ; 15 ; 9 ; 18 ; 11}
+
+<Dresse>un tableau [mg ; mc]{
+	Écriture	Résultat
+	[longueur(notes) ; #{longueur(notes)}]
+	[somme(notes) ; #{somme(notes)}]
+	[min(notes) ; #{min(notes)}]
+	[max(notes) ; #{max(notes)}]
+	[tri(notes) ; #{tri(notes)}]
+	[inverse(notes) ; #{inverse(notes)}]
+	[notes contient(15) ; #{notes contient(15)}]
+	[dans notes indice de(15) ; #{dans notes indice de(15)}]
+	[dans notes insère(0 ; 20) ; #{dans notes insère(0 ; 20)}]
+	[dans notes supprime(2) ; #{dans notes supprime(2)}]
+	[dans notes ajoute(7) ; #{dans notes ajoute(7)}]
+	[notes ; #notes]
+}
+
+Trois écritures pour une même opération, selon ce qui se lit le mieux : la forme fonctionnelle insère(notes ; 0 ; 20), la forme prépositionnelle dans notes insère(0 ; 20), et pour les questions par oui ou non la forme directe notes contient(15). C'est la phrase qui commande, non la machine.
+
+<h2>La division euclidienne
+
+Le quotient et le reste se disent comme au collège, avec leurs prépositions :
+
+<Dresse>un tableau [mg ; mc]{
+	Écriture	Résultat
+	[quotient de 17 par 5 ; #{quotient de 17 par 5}]
+	[reste de 17 par 5 ; #{reste de 17 par 5}]
+	[quotient de longueur(notes) par 2 ; #{quotient de longueur(notes) par 2}]
+}
+
+La forme brève quotient(17 ; 5) reste admise, mais la phrase dit lequel des deux nombres est le dividende.
+
+Chacune de ces écritures rend une <gras>nouvelle liste : la série de départ n'est jamais modifiée. La primitive longueur mesure aussi bien un dictionnaire, une matrice ou une chaîne de caractères.
+
+Le conteneur peut aussi précéder la primitive, ce qui se lit comme une phrase : notes contient(15) rend #{notes contient(15)}, et notes indice de(15) rend #{notes indice de(15)}. Les deux écritures sont admises.
+
+<h2>La chaîne de caractères
+Une chaîne se déclare comme un nombre — les guillemets délimitent la valeur sans lui appartenir.
+soit devise: chaîne de caractères = "liberté égalité fraternité"
+
+#devise compte #{longueur(devise)} lettres, dont les huit premières sont #{devise[0 à 7]}. La première est #{devise[0]} — une lettre est une chaîne d'un seul caractère, docdg n'a pas de type distinct.
+
+La chaîne se parcourt lettre à lettre. Les crochets ne servent qu'à rendre chaque tour visible : sans eux, sept lettres sur sept lignes consécutives ne feraient qu'un seul paragraphe, et se reliraient comme le mot de départ.
+
+pour c dans "exact" {
+	[#c]
+}
+
+<h2>Écrire une suite sur une ligne
+Une boucle qui affiche met chaque tour sur sa ligne. Pour aligner une suite sur une seule ligne, avec le séparateur qu'on veut, on la compacte pour enlever les espaces, puis on la joint :
+
+#{jonction(compacte("un code") ; ", ")}
+
+soit v: liste d'entiers = {12 ; 15 ; 9}
+
+#{jonction(v ; ", ")} — et avec un autre séparateur : #{jonction(v ; " — ")}.
+
+Le chemin inverse découpe une ligne en ses morceaux : #{découpe("un code" ; " ")}. Avec un séparateur vide, ce sont les lettres : #{découpe("code" ; "")}.
+
+Une chaîne écrite sur place se met entre guillemets. Sans eux, docdg refuse plutôt que de faire un tour unique sur la phrase entière.
+
+<Dresse>un tableau [mg ; mc]{
+	Écriture	Résultat
+	[majuscule("été") ; #{majuscule("été")}]
+	[minuscule("BONJOUR") ; #{minuscule("BONJOUR")}]
+	[sans accents("élève") ; #{sans accents("élève")}]
+	[élague("  bonjour  ") ; [#{élague("  bonjour  ")}]]
+	[compacte("un code") ; #{compacte("un code")}]
+	[inverse(devise) ; #{inverse("liberté")}]
+	[devise contient("égalité") ; #{devise contient("égalité")}]
+	[code("B") ; #{code("B")}]
+	[caractère(97) ; #{caractère(97)}]
+	[texte(42) ; #{texte(42)}]
+	[nombre("1,5") ; #{nombre("1,5")}]
+}
+
+majuscule accentue les capitales — ÉTÉ et non ETE, comme l'exige la typographie française. code et caractère font le va-et-vient entre une lettre et son rang Unicode : c'est ce qui permet d'écrire un chiffrement.
+
+Chercher un élément absent n'est pas une valeur, c'est une erreur, et elle se dit : #{indice de(7 ; notes)}.
+
+<h2>La tranche
+
+Deux positions séparées par à désignent une portion, bornes incluses — comme pour n de 1 à 5 fait cinq tours.
+
+Les trois premières notes : #{notes[0 à 2]}. La dernière seule : #{notes[4 à 4]}.
+
+Une tranche dont la borne de gauche dépasse celle de droite est simplement vide : #{notes[3 à 2]}. Ce n'est pas une faute, et c'est ce qui permet de conclure une fusion de deux listes triées en une seule ligne.
+
+<h2>Le classement des chaînes
+
+soit mots: une liste de chaînes de caractères = {"Zoé" ; "école" ; "avion" ; "èdre"}
+
+#{tri(mots)}
+
+L'accent ne retourne pas le mot à la fin de l'alphabet : la comparaison porte d'abord sur les lettres dépouillées, l'accent ne servant qu'à départager — comme dans un dictionnaire.
+
+<h1>Deux sortes de fonctions
+
+docdg distingue la fonction mathématique — objet d'étude qu'on dérive, qu'on trace, dont on cherche les limites — et la fonction algorithmique, calcul nommé qu'on réutilise. Les chevrons marquent la première, le soit nu la seconde, exactement comme ils distinguent déjà la matrice de l'algèbre du conteneur de l'algorithmique.
+
+Une fonction algorithmique déclare le type de chacun de ses paramètres et celui de sa valeur. Elle s'appelle ensuite par son nom, arguments séparés par le point-virgule comme toute donnée.
+
+<h1>La forme la plus simple
+
+soit addition(a: entier ; b: entier): entier = a + b
+
+L'appel se fait dans un calcul : #{addition(3 ; 7)}, ou #{addition(12 ; 30)}.
+
+Les types ne sont pas décoratifs. Passer un décimal là où un entier est attendu arrête le calcul et le dit : #{addition(2,5 ; 7)}. Se tromper de nombre d'arguments également : #{addition(3)}.
+
+<page suivante h1>Un corps entre accolades
+
+Quand le calcul tient en une expression, l'accolade est facultative :
+
+soit aire(L: réel ; l: réel): réel = { L * l }
+
+L'aire d'un rectangle de 2,5 sur 4 vaut #{aire(2,5 ; 4)}.
+
+<h2>Plusieurs instructions
+
+Dès que le corps compte plusieurs lignes, la valeur produite doit être désignée par retourne — rien n'est implicite :
+
+soit hypoténuse(a: réel ; b: réel): réel = {
+	soit carrés = a*a + b*b
+	retourne racine(carrés)
+}
+
+Le triangle de côtés 3 et 4 a pour hypoténuse #{hypoténuse(3 ; 4)}, celui de côtés 5 et 12 a pour hypoténuse #{hypoténuse(5 ; 12)}.
+
+Une fonction dont le corps ne retourne rien est une erreur, pas un silence :
+
+soit oubli(a: entier): entier = { soit x = a }
+
+Appel : #{oubli(3)}.
+
+<h1>Fonctions et boucles
+
+Une fonction s'appelle partout où un calcul est admis — dans le texte, dans une rangée de tableau, dans la condition d'une boucle, dans un accumulateur.
+soit carré(n: entier): entier = n * n
+soit somme: une liste d'entiers = {}
+pour k de 1 à 6 {
+	soit somme = somme + {carré(k)}
+}
+
+Les six premiers carrés, calculés par la fonction et rassemblés dans une liste : #somme.
+Et le test de divisibilité, écrit une fois, réutilisé partout :
+
+soit divise(d: entier ; n: entier): entier = n % d
+
+<Dresse>un tableau [mc ; mc]{
+	Diviseur	de 60
+	pour d de 1 à 60 {
+		si divise(d ; 60) vaut 0 {
+			[#d ; convient]
+		}
+	}
+}
+
+<h1>Recevoir et rendre un conteneur
+Un paramètre peut être une collection, un dictionnaire, une matrice ou un texte : son type s'écrit comme celui d'une variable.
+soit moyenne(v: une liste de réels): un réel = {
+	soit s = 0
+	pour x dans v {
+		soit s = s + x
+	}
+	retourne s / longueur(v)
+}
+soit notes: une liste de réels = {12,5 ; 15 ; 9,5 ; 18 ; 11}
+La moyenne de la série vaut #{moyenne(notes)}.
+La primitive longueur mesure un conteneur — collection, dictionnaire, matrice ou texte.
+Une collection d'entiers est acceptée là où une liste de réels est attendue : la fonction reçoit une copie, elle ne peut donc rien renvoyer dans la série de l'appelant.
+<h2>Rendre une collection
+soit doublée(v: une liste d'entiers): une liste d'entiers = v + v
+La série {1 ; 2 ; 3} doublée donne #{doublée({1 ; 2 ; 3})}.
+<h2>Chercher dans une collection reçue
+soit recherche(v: une liste d'entiers ; x: entier): un entier = {
+	soit trouvé = -1
+	pour i de 0 à longueur(v) - 1 {
+		si v[i] vaut x {
+			soit trouvé = i
+		}
+	}
+	retourne trouvé
+}
+15 occupe la position #{recherche({4 ; 8 ; 15 ; 16} ; 15)} ; 7 n'y figure pas : #{recherche({4 ; 8 ; 15 ; 16} ; 7)}.
+<h2>Modifier une copie locale
+Un nom posé sur un conteneur reçu en désigne une copie : l'écriture indexée n'atteint jamais la série de l'appelant.
+soit modifie(v: liste d'entiers): liste d'entiers = {
+	soit t = v
+	t[0] = 100
+	retourne t
+}
+soit série: liste d'entiers = {1 ; 2 ; 3}
+Copie modifiée : #{modifie(série)} — série d'origine : #série.
+<h2>Les chaînes de caractères
+soit joint(a: chaîne de caractères ; b: chaîne de caractères): chaîne de caractères = a + b
+#{joint(bon ; jour)}
+Les types restent vérifiés, et le message nomme ce qu'il attendait : #{recherche(3 ; 1)}.
+<h1>Les primitives dans un corps
+Les primitives de conteneur — longueur, tri, inverse, somme, min, max, quotient, contient, indice de, insère, supprime, ajoute — s'emploient partout, y compris dans un corps de fonction :
+soit médiane(v: liste de réels): réel = {
+	soit t = tri(v)
+	retourne t[quotient de longueur(t) par 2]
+}
+La médiane de {7 ; 1 ; 5 ; 3 ; 9} vaut #{médiane({7 ; 1 ; 5 ; 3 ; 9})} — la série est d'abord triée, puis on lit la valeur du milieu. La formule vaut pour un nombre impair de valeurs.
+
+Un nom de fonction tient en un seul mot : le nom composé est réservé aux mots du langage lui-même, comme indice de ou sans accents. Quand deux mots sont vraiment nécessaires — parce que l'algorithme porte ce nom, tel le tri par insertion — le trait bas les relie : tri_par_insertion. Partout ailleurs, un mot suffit et se lit mieux.
 <h1>Pour la suite
 
-algo4 portera sur les conteneurs plus complexes — parcours d'une collection de collections, matrices dans des calculs, tris et recherches — et sur les fonctions, dont le vocabulaire reste à fixer.
+algo4 porte sur la récursivité, les algorithmes classiques du programme — tris, recherches, fusion — et les structures de données qu'on construit avec ce qui précède.

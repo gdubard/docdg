@@ -1,5 +1,5 @@
 document {
-	titre: Algorithmique — structures combinées;
+	titre: Algorithmique 2 — déclarer, entrer, décider, répéter;
 	auteur: Gérard DUBARD;
 	institution: Atelier d'algorithmique appliquée;
 	date: août 2026;
@@ -18,9 +18,45 @@ document {
 soit h1 = <bleu nuit gras section num>
 soit h2 = <bleu nuit italique sous-section>
 
-<h1>Ce que ce document ajoute à algo1
+<h1>Ce que ce document couvre
 
-Une condition seule, une boucle seule : c'est ce qu'`algo1` montrait. Ici, les deux se mêlent — une condition à l'intérieur d'une boucle décide, tour par tour, ce qui reste dans le document. On y ajoute aussi l'opérateur ternaire, pour affecter une valeur plutôt qu'afficher un texte, et les conditions composées, « et » comme « ou ».
+Déclarer une variable et l'initialiser, poser une question au lecteur, décider selon une condition, répéter un traitement. Chaque structure s'y montre d'abord seule, puis les deux se mêlent : une condition à l'intérieur d'une boucle décide, tour par tour, ce qui reste dans le document.
+
+<h1>Variables et sortie
+
+Une variable se pose avec `soit`, se relit avec `#`, entre dans un calcul avec `#{...}` — l'équivalent d'une affectation suivie d'un affichage.
+
+soit tva = 0,2
+soit prix = 150
+Le prix TTC est #{prix * (1 + tva)} euros.
+
+<h1>Une boucle simple
+
+`pour` répète un bloc un nombre de fois connu à l'avance — l'équivalent d'un `for`.
+
+pour k de 1 à 3 {
+	Ligne #k : le carré de #k vaut #{k*k}.
+}
+
+<h1>Une condition simple
+
+`si ... sinon` choisit entre deux issues, une fois, sans répétition.
+
+soit note = 12
+si note au moins 10 {
+	Admis avec #note.
+}
+sinon {
+	Ajourné.
+}
+
+<h1>Une boucle avec un pas négatif
+
+Le pas se règle en prose, comme tout réglage : `avec un pas de p`. Ici la boucle avance de 0,25 en 0,25.
+
+pour k de 2 à 0 avec un pas de -0,25 {
+	Terme #{défaut(-4*k)+9} : #k.
+}
 
 <h1>Une boucle qui filtre
 
@@ -160,6 +196,39 @@ faire {
 
 Les deux formes reposent sur l'accumulateur de la section précédente : sans une variable qui avance d'un tour à l'autre, une boucle conditionnelle ne s'arrêterait jamais.
 
+<h1>Interrompre une répétition
+
+Deux mots gouvernent le cours d'une boucle. `sortir` l'arrête entièrement — c'est la recherche qui cesse dès qu'elle a trouvé. `continuer` n'arrête que le tour en cours.
+
+soit premier_diviseur = 0
+pour d de 2 à 100 {
+	si reste de 91 par d vaut 0 {
+		soit premier_diviseur = d
+		sortir
+	}
+}
+
+Le plus petit diviseur de 91 autre que 1 est #premier_diviseur.
+
+pour k de 1 à 6 {
+	si reste de k par 2 vaut 0 {
+		continuer
+	}
+	[#k]
+}
+
+Seuls les rangs impairs ont laissé une trace.
+
+<h1>Une entrée
+
+Une saisie <gras>arrête le document jusqu'à ce que la réponse arrive : tout ce qui la suit attend. C'est pourquoi elle se place en fin de document, ou dans un document qui ne sert qu'à cela.
+
+`<Saisis>` est la question que le document pose à son lecteur — l'équivalent d'un `input`. La réponse se relit ensuite comme n'importe quelle variable, calculs compris.
+
+soit âge = <Saisis>un entier{Quel est ton âge ?}
+soit tarif = si âge moins de 18 { 5 } sinon { 9 }
+Entrée : #tarif euros.
+
 <h1>Pour la suite
 
-Les containers — vecteurs, matrices, dictionnaires clé:valeur — seront le sujet d'`algo3`.
+algo3 introduit les conteneurs — collections, dictionnaires, matrices, chaînes de caractères — et les fonctions, qui nomment un calcul pour le réutiliser.
