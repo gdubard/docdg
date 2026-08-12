@@ -2425,7 +2425,7 @@ Intégrales en forme close, impropres avec nature et valeur, équivalents en un 
 <Calcule>le projeté orthogonal de a sur b
 ```
 
-$\operatorname{Ker}$ et $\operatorname{Im}$ en $\operatorname{Vect}(\dots)$, $\chi_M$ factorisé, $\pi_M$ vérifié par annulation, trigonalisation $M = PTP^{-1}$ (avec signalement quand $T$ est en fait diagonale), Gram-Schmidt exact en dimension quelconque.
+$\mathrm{Ker}$ et $\mathrm{Im}$ en $\mathrm{Vect}(\dots)$, $\chi_M$ factorisé, $\pi_M$ vérifié par annulation, trigonalisation $M = PTP^{-1}$ (avec signalement quand $T$ est en fait diagonale), Gram-Schmidt exact en dimension quelconque.
 
 ```docdg
 <Effectue>la division euclidienne de X^3 + 2X - 1 par X^2 + 1
