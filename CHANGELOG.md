@@ -4,7 +4,18 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
-## 2.5 — les objets (en cours)
+## 2.4 — l'informatique au complet
+
+La partie informatique — algorithmique et programmation — couvre désormais
+tout le programme de NSI : les conteneurs et les fonctions qui les reçoivent
+et les rendent, les piles et les files, les arbres et les graphes, et les
+objets avec leurs quatre piliers. Rien n'y manque plus.
+
+L'autre moitié du travail ne se voit pas dans une liste de fonctionnalités :
+le vocabulaire et la syntaxe ont été repris pour qu'une notion ne s'écrive
+que d'une seule façon. Plusieurs écritures s'étaient accumulées pour une même
+action, chacune ajoutée de bonne foi, l'ensemble obligeant le lecteur à se
+demander si elles diffèrent. Elles n'en font plus qu'une.
 
 ### Ajouté
 
@@ -212,194 +223,6 @@ classe. `Arbre` abstraite, `Vide` et `Nœud` filles — la hiérarchie dit tout,
 arbre est vide ou c'est un nœud. Rien à ajouter au langage : les quatre piliers
 suffisaient.
 
-### Simplifié
-
-**Une notion, un mot.** Plusieurs écritures s'étaient accumulées pour une même
-action — chacune ajoutée de bonne foi, l'ensemble obligeant le lecteur à se
-demander si elles diffèrent. Elles sont réduites :
-
-| Retiré | Reste |
-|---|---|
-| `élaguer`, `compacter` | `élague`, `compacte` |
-| `renvoie` | `retourne` |
-| `hérite de la classe`, `qui hérite de` | `hérite de`, `qui hérite de la classe` |
-| `tableau` comme type | `liste` |
-
-`liste` et `chaîne de caractères` sont les mots qu'emploient les professeurs
-d'informatique : ce sont **les seuls** du langage, y compris dans les types
-composés — « une liste de chaînes de caractères ». `chaîne`, `texte`,
-`collection` et `tableau` ne sont plus reconnus du tout : les garder « pour
-compatibilité » aurait été garder les doublons sous un autre nom. Les
-variantes sans accent (`chaine de caracteres`) restent admises parce qu'un
-clavier peut manquer, non parce qu'elles nomment autre chose.
-
-`<Saisis>une chaîne de caractères` remplace `<Saisis>un texte` : la commande
-emploie le vocabulaire du langage.
-
-**Les messages suivent le même vocabulaire** : « la liste compte 3 élément(s) »
-et non « la collection », « une chaîne de caractères » et non « un texte ». Un langage qui dit `liste` et se plaint d'une
-`collection` fait chercher deux notions là où il n'y en a qu'une.
-
-**Les guillemets délimitent une chaîne de caractères partout** : au singulier,
-dans une liste, et désormais **en clé de dictionnaire**, où ils restaient
-collés à la valeur. C'est la distinction qui compte pour un professeur
-d'informatique — le texte d'un document s'écrit nu, comme en LaTeX ; une
-chaîne de caractères se cite, parce qu'elle relève de la programmation.
-
-```
-soit mots: liste de chaînes de caractères = {"chat" ; "chien"}
-soit trajets: dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5}
-#{trajets["Marche"]}
-```
-
-### Corrigé
-
-**Un `tant que` de document fait enfin croître un conteneur.**
-`soit v = v + {k}` n'y accumulait que la valeur d'avant la boucle :
-`subst_var` protège les accolades — et c'est ce qu'il faut, une accolade
-délimite des données —, si bien que le tour ne pouvait rien y injecter. La
-protection est levée pour les seules lignes qui font croître un conteneur ; la
-prose garde ses accolades intactes.
-
-**On ne parcourt plus une pile en silence.** `pour x dans p` ne faisait rien
-sans rien dire, ce qui laissait croire la pile vide. C'est désormais une faute
-dite : « on ne parcourt pas une pile : on la vide, en la dépilant ».
-
-**Deux noms d'exemple corrigés.** `médiane_basse` devient `médiane` — le nom
-composé n'avait aucune raison d'être, et la « médiane basse » n'a de sens que
-pour un nombre pair de valeurs, ce qui n'était pas le cas. Sa formule emploie
-désormais `quotient de longueur(t) par 2` au lieu d'un décalage écrit à la
-main, qui datait d'avant l'existence de `quotient`. `remplace_tête` devient
-`modifie`.
-
-La règle est rappelée dans `algo3` : un nom de fonction tient en **un seul
-mot**, le nom composé étant réservé aux mots du langage. Le trait bas ne sert
-que lorsque deux mots sont vraiment nécessaires — parce que l'algorithme porte
-ce nom, tel le tri par insertion.
-
-**`élague` et `compacte`** — deux traitements distincts, que confondre serait
-une erreur : le premier retire les espaces des deux bouts, celui dont on a
-besoin après une saisie ; le second les retire tous, y compris à l'intérieur,
-si bien que les mots se resserrent. L'impératif suit `insère`, `supprime`,
-`ajoute` ; `élaguer` et `compacter` sont admis aussi, l'un et l'autre se disant
-en classe.
-
-**Un tour sauté ne laisse plus de ligne vide.** `continuer` émettait le
-séparateur de fin de tour alors que le tour ne produit rien : une ligne vide
-apparaissait là où il n'y a précisément rien. Le séparateur n'est plus émis que
-si le tour a écrit quelque chose.
-
-**Une primitive prépositionnelle accepte la parenthèse vide** :
-`dans m compacte()`.
-
-**`jonction` et `découpe`** — écrire une suite sur une ligne, et le chemin
-inverse.
-
-```
-#{jonction(premiers(50) ; ", ")}   → 2, 3, 5, 7, 11, …
-#{jonction("un code" ; " - ")}     → u - n -   - c - o - d - e
-#{découpe("un code" ; " ")}        → {un ; code}
-```
-
-Une boucle qui affiche met chaque tour sur sa ligne ; l'accumulateur, lui,
-laisse toujours un séparateur de trop à la fin. Il n'y a pas de raison de faire
-compter l'élève.
-
-Trois défauts ont été levés au passage, chacun visible seulement à l'usage :
-
-- **Les guillemets gardent les espaces.** Leur contenu était rogné, si bien
-  qu'un séparateur `" - "` devenait `"-"`. C'est pourtant ce à quoi ils
-  servent.
-- **Un point-virgule entre guillemets est une valeur, non une coupure** : le
-  découpage des arguments l'avalait, et `jonction(v ; " ; ")` était illisible.
-- **Un texte calculé n'est pas recalculé.** `jonction(v ; " / ")` rendait
-  « 1 / 2 », que l'évaluateur reprenait pour une division : le résultat valait
-  un demi. Un texte déjà calculé porte désormais une marque, ôtée à
-  l'affichage — et ôtée aussi dans les conditions, où le texte est comparé et
-  non montré.
-
-**`algo4` met en œuvre les quatre piliers**, avec des exemples simples et
-exécutés : un point pour les objets et leurs méthodes, un compte bancaire pour
-l'encapsulation, un animal et son chien pour l'héritage, une liste d'animaux
-pour le polymorphisme, une forme abstraite pour l'abstraction. Le fichier
-annonçait encore la POO comme à venir. Il gagne aussi l'arbre binaire écrit
-avec des objets, les graphes par liste d'adjacence, les deux parcours, et les
-piles et files du langage à côté de celles écrites à la main.
-
-Ces dernières sont renommées avec un suffixe : **une fonction qu'on écrit
-masque la primitive du même nom** — c'est voulu, pour que l'élève puisse écrire
-la sienne — mais cela empêcherait d'employer les deux dans un même document.
-Le fichier le dit désormais.
-
-**La source d'une boucle est vérifiée.** `pour c dans un code` faisait un
-unique tour sur « un code », au lieu d'en lire les lettres : la dernière
-branche traitait toute source inconnue comme une liste séparée par des
-virgules. Une source qui n'est ni un nom posé, ni un littéral, ni une chaîne
-entre guillemets est désormais **dite** — « une chaîne écrite sur place se met
-entre guillemets ». Les formes `{…}`, `[…]`, le nom d'une boîte et le littéral
-cité restent admis.
-
-**L'affectation se passe de `soit`.** `soit` déclare ; le répéter à chaque
-tour n'apprenait rien et ne se lisait pas :
-
-```
-soit somme = 0
-pour k de 1 à 100 {
-	somme = somme + k
-}
-La somme des entiers de 1 à 100 vaut #somme.
-```
-
-La condition qui rend la levée sûre tient en un mot : **le nom doit déjà
-exister**. Une ligne de prose contenant un signe égal n'est donc jamais prise
-pour une affectation, et un dièse à droite la signe comme prose — on écrit
-`k=#k` pour afficher, jamais pour affecter. `soit` reste admis partout.
-
-La réécriture se fait sur le texte, avant que quoi que ce soit ne mesure des
-positions : rien en aval n'a eu à changer.
-
-**Un attribut textuel s'affiche sans ses guillemets.** La forme *relisible* —
-celle qui les porte — sert à faire voyager une valeur jusqu'à un appel ; à
-l'affichage, c'est la forme lue qui convient. `#{c.titulaire}` rendait
-« "Léa" » au lieu de « Léa ».
-
-### Documentation
-
-**Le chapitre du langage algorithmique rattrape la 2.5.** Il datait de la 2.4 et
-ignorait tout ce qui a suivi : il gagne les piles et les files, les objets et
-les quatre piliers, les arbres et les graphes, `jonction` et `découpe`,
-`élague` et `compacte`, et la règle des guillemets.
-
-**Les doubles affectations du README sont corrigées.** Il montrait encore
-`soit n = n + 1` dans une boucle, là où `n = n + 1` suffit : `soit` déclare une
-fois, l'affectation suit. Deux écritures pour un seul effet, c'est un doublon —
-non un *shadowing*, puisque le nom est réaffecté et non ombré.
-
-Les 154 blocs de code du README ont été exécutés : les seuls messages restants
-viennent de catalogues de commandes montrées hors de tout document, où l'objet
-n'est délibérément pas déclaré.
-
-**Les liens du sommaire ne fonctionnaient pas** — ils renvoyaient tous en haut
-du fichier. Les titres portent un émoji, que GitHub retire de l'ancre en
-laissant un tiret : le vrai lien est `#-les-objets`, non `#les-objets`. Les
-émojis à sélecteur de variante (`🛠️`) laissaient en outre un caractère
-invisible qui décalait l'ancre une seconde fois. Les 34 liens internes sont
-recalculés selon l'algorithme de GitHub, et aucun ne vise plus dans le vide.
-
-### Limite connue
-
-Au **niveau du document**, la condition d'un `tant que` est évaluée avant que
-les conteneurs n'existent : `tant que est vide(p) vaut faux` n'y voit pas `p`.
-L'ordre du pipeline place ce déroulement avant la création des boîtes. Dans un
-corps de fonction, où tout est déroulé au moment de l'appel, la même écriture
-fonctionne — et c'est là qu'un algorithme s'écrit.
-
----
-
-## 2.4 — une fonction ne rend plus seulement des nombres
-
-### Ajouté
-
 **Les fonctions reçoivent et rendent des conteneurs et des textes.** Jusqu'ici
 `appelle` rendait un `f64` et liait ses paramètres dans une table de nombres :
 la documentation le disait — « les paramètres et valeurs de retour sont des
@@ -576,7 +399,156 @@ permet d'y garder espaces et signes du langage. La chaîne se mesure
 déjà par `%` ; le quotient entier manquait, alors qu'il donne l'indice du
 milieu dans une recherche dichotomique.
 
+### Simplifié
+
+**Une notion, un mot.** Plusieurs écritures s'étaient accumulées pour une même
+action — chacune ajoutée de bonne foi, l'ensemble obligeant le lecteur à se
+demander si elles diffèrent. Elles sont réduites :
+
+| Retiré | Reste |
+|---|---|
+| `élaguer`, `compacter` | `élague`, `compacte` |
+| `renvoie` | `retourne` |
+| `hérite de la classe`, `qui hérite de` | `hérite de`, `qui hérite de la classe` |
+| `tableau` comme type | `liste` |
+
+`liste` et `chaîne de caractères` sont les mots qu'emploient les professeurs
+d'informatique : ce sont **les seuls** du langage, y compris dans les types
+composés — « une liste de chaînes de caractères ». `chaîne`, `texte`,
+`collection` et `tableau` ne sont plus reconnus du tout : les garder « pour
+compatibilité » aurait été garder les doublons sous un autre nom. Les
+variantes sans accent (`chaine de caracteres`) restent admises parce qu'un
+clavier peut manquer, non parce qu'elles nomment autre chose.
+
+`<Saisis>une chaîne de caractères` remplace `<Saisis>un texte` : la commande
+emploie le vocabulaire du langage.
+
+**Les messages suivent le même vocabulaire** : « la liste compte 3 élément(s) »
+et non « la collection », « une chaîne de caractères » et non « un texte ». Un langage qui dit `liste` et se plaint d'une
+`collection` fait chercher deux notions là où il n'y en a qu'une.
+
+**Les guillemets délimitent une chaîne de caractères partout** : au singulier,
+dans une liste, et désormais **en clé de dictionnaire**, où ils restaient
+collés à la valeur. C'est la distinction qui compte pour un professeur
+d'informatique — le texte d'un document s'écrit nu, comme en LaTeX ; une
+chaîne de caractères se cite, parce qu'elle relève de la programmation.
+
+```
+soit mots: liste de chaînes de caractères = {"chat" ; "chien"}
+soit trajets: dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5}
+#{trajets["Marche"]}
+```
+
 ### Corrigé
+
+**Un `tant que` de document fait enfin croître un conteneur.**
+`soit v = v + {k}` n'y accumulait que la valeur d'avant la boucle :
+`subst_var` protège les accolades — et c'est ce qu'il faut, une accolade
+délimite des données —, si bien que le tour ne pouvait rien y injecter. La
+protection est levée pour les seules lignes qui font croître un conteneur ; la
+prose garde ses accolades intactes.
+
+**On ne parcourt plus une pile en silence.** `pour x dans p` ne faisait rien
+sans rien dire, ce qui laissait croire la pile vide. C'est désormais une faute
+dite : « on ne parcourt pas une pile : on la vide, en la dépilant ».
+
+**Deux noms d'exemple corrigés.** `médiane_basse` devient `médiane` — le nom
+composé n'avait aucune raison d'être, et la « médiane basse » n'a de sens que
+pour un nombre pair de valeurs, ce qui n'était pas le cas. Sa formule emploie
+désormais `quotient de longueur(t) par 2` au lieu d'un décalage écrit à la
+main, qui datait d'avant l'existence de `quotient`. `remplace_tête` devient
+`modifie`.
+
+La règle est rappelée dans `algo3` : un nom de fonction tient en **un seul
+mot**, le nom composé étant réservé aux mots du langage. Le trait bas ne sert
+que lorsque deux mots sont vraiment nécessaires — parce que l'algorithme porte
+ce nom, tel le tri par insertion.
+
+**`élague` et `compacte`** — deux traitements distincts, que confondre serait
+une erreur : le premier retire les espaces des deux bouts, celui dont on a
+besoin après une saisie ; le second les retire tous, y compris à l'intérieur,
+si bien que les mots se resserrent. L'impératif suit `insère`, `supprime`,
+`ajoute` ; `élaguer` et `compacter` sont admis aussi, l'un et l'autre se disant
+en classe.
+
+**Un tour sauté ne laisse plus de ligne vide.** `continuer` émettait le
+séparateur de fin de tour alors que le tour ne produit rien : une ligne vide
+apparaissait là où il n'y a précisément rien. Le séparateur n'est plus émis que
+si le tour a écrit quelque chose.
+
+**Une primitive prépositionnelle accepte la parenthèse vide** :
+`dans m compacte()`.
+
+**`jonction` et `découpe`** — écrire une suite sur une ligne, et le chemin
+inverse.
+
+```
+#{jonction(premiers(50) ; ", ")}   → 2, 3, 5, 7, 11, …
+#{jonction("un code" ; " - ")}     → u - n -   - c - o - d - e
+#{découpe("un code" ; " ")}        → {un ; code}
+```
+
+Une boucle qui affiche met chaque tour sur sa ligne ; l'accumulateur, lui,
+laisse toujours un séparateur de trop à la fin. Il n'y a pas de raison de faire
+compter l'élève.
+
+Trois défauts ont été levés au passage, chacun visible seulement à l'usage :
+
+- **Les guillemets gardent les espaces.** Leur contenu était rogné, si bien
+  qu'un séparateur `" - "` devenait `"-"`. C'est pourtant ce à quoi ils
+  servent.
+- **Un point-virgule entre guillemets est une valeur, non une coupure** : le
+  découpage des arguments l'avalait, et `jonction(v ; " ; ")` était illisible.
+- **Un texte calculé n'est pas recalculé.** `jonction(v ; " / ")` rendait
+  « 1 / 2 », que l'évaluateur reprenait pour une division : le résultat valait
+  un demi. Un texte déjà calculé porte désormais une marque, ôtée à
+  l'affichage — et ôtée aussi dans les conditions, où le texte est comparé et
+  non montré.
+
+**`algo4` met en œuvre les quatre piliers**, avec des exemples simples et
+exécutés : un point pour les objets et leurs méthodes, un compte bancaire pour
+l'encapsulation, un animal et son chien pour l'héritage, une liste d'animaux
+pour le polymorphisme, une forme abstraite pour l'abstraction. Le fichier
+annonçait encore la POO comme à venir. Il gagne aussi l'arbre binaire écrit
+avec des objets, les graphes par liste d'adjacence, les deux parcours, et les
+piles et files du langage à côté de celles écrites à la main.
+
+Ces dernières sont renommées avec un suffixe : **une fonction qu'on écrit
+masque la primitive du même nom** — c'est voulu, pour que l'élève puisse écrire
+la sienne — mais cela empêcherait d'employer les deux dans un même document.
+Le fichier le dit désormais.
+
+**La source d'une boucle est vérifiée.** `pour c dans un code` faisait un
+unique tour sur « un code », au lieu d'en lire les lettres : la dernière
+branche traitait toute source inconnue comme une liste séparée par des
+virgules. Une source qui n'est ni un nom posé, ni un littéral, ni une chaîne
+entre guillemets est désormais **dite** — « une chaîne écrite sur place se met
+entre guillemets ». Les formes `{…}`, `[…]`, le nom d'une boîte et le littéral
+cité restent admis.
+
+**L'affectation se passe de `soit`.** `soit` déclare ; le répéter à chaque
+tour n'apprenait rien et ne se lisait pas :
+
+```
+soit somme = 0
+pour k de 1 à 100 {
+	somme = somme + k
+}
+La somme des entiers de 1 à 100 vaut #somme.
+```
+
+La condition qui rend la levée sûre tient en un mot : **le nom doit déjà
+exister**. Une ligne de prose contenant un signe égal n'est donc jamais prise
+pour une affectation, et un dièse à droite la signe comme prose — on écrit
+`k=#k` pour afficher, jamais pour affecter. `soit` reste admis partout.
+
+La réécriture se fait sur le texte, avant que quoi que ce soit ne mesure des
+positions : rien en aval n'a eu à changer.
+
+**Un attribut textuel s'affiche sans ses guillemets.** La forme *relisible* —
+celle qui les porte — sert à faire voyager une valeur jusqu'à un appel ; à
+l'affichage, c'est la forme lue qui convient. `#{c.titulaire}` rendait
+« "Léa" » au lieu de « Léa ».
 
 **Une primitive restait inerte dans la condition d'un `si` de document.**
 `expand_conditions` n'avait accès ni aux conteneurs ni aux fonctions : la même
@@ -608,7 +580,97 @@ Un corps de fonction accepte maintenant `pour … de … à …`, `pour … dans
 `tant que … faire`, `si … sinon` imbriqués, et l'écriture indexée `t[i] = x`.
 Moyenne, comptage et recherche linéaire s'écrivent enfin.
 
+**`sortir` et `continuer` agissent dans un `tant que` de document.** Les deux
+mots fonctionnaient dans une boucle `pour` et dans un corps de fonction, mais
+restaient sans le moindre effet dans un `tant que` ou un `faire … tant que`
+écrit au niveau du document : la boucle allait jusqu'au bout, sans message.
+Une recherche séquentielle — l'usage même du `tant que` — sortait donc
+fausse.
+
+Le corps d'un tour ouvre désormais ses blocs `si` **au fil des lignes**, avec
+les variables telles qu'elles sont à ce point du tour, et non telles qu'elles
+étaient en entrant : c'est ce qui rend visible à temps un `sortir` niché dans
+un `si`. Un tour interrompu qui ne produit rien ne laisse plus de séparateur
+derrière lui — la boucle coupée rend exactement le même document que la
+boucle bornée.
+
+**Le lanceur Python de Windows était ignoré.** Le moteur essayait `python3`
+puis `python`, jamais `py` — que la documentation annonçait pourtant. Sur une
+installation Windows ordinaire, SymPy restait donc silencieusement absent, et
+les variations, dérivées et lois tombaient en mode dégradé sans que rien ne
+le dise.
+
+**Les messages d'erreur parlent d'une seule voix.** Le moteur avait deux
+présentations pour la même chose : un filet rouge en marge pour les calculs,
+du gras rouge pour les conteneurs. Le vocabulaire et la mise en forme sont
+désormais définis en un seul endroit. Le canal des conteneurs garde la mise
+en forme du langage — une instruction de conteneur rend du docdg, que le
+moteur relit ensuite, et y glisser du HTML le ferait échapper.
+
+### Interne
+
+**Le rendu ne recopie plus l'environnement à chaque segment.** Les conteneurs
+et les fonctions sont partagés derrière un compteur de références, et
+l'instantané d'environnement est mutualisé entre les segments qui ne le
+modifient pas. Le coût du rendu était le produit du nombre de segments par
+celui des conteneurs ; il ne l'est plus. Sur mille paragraphes portant deux
+cents conteneurs, le rendu passe de 383 ms à 110 ms.
+
+**La découpe en segments ne dépend plus des lignes vides.** Une ligne vide
+reste une coupure — c'est la plus lisible — mais elle n'est plus la seule :
+deux lignes de prose se séparent d'elles-mêmes. Un document écrit au
+kilomètre ne formait qu'un segment unique, et perdait du même coup le cache
+incrémental (toute frappe recomposait tout) et le parallélisme (un segment
+n'atteint jamais le seuil) : la mise en forme de l'auteur décidait de la
+réactivité de l'aperçu, sans qu'il puisse le savoir. Huit cents lignes de
+prose donnent maintenant huit cents segments, et une frappe en fin de
+document se recompose en 0,7 ms.
+
+*Décision de conception : la coupure fine se recolle à l'assemblage.* Un
+segment était **aussi** l'unité de paragraphe — les lignes d'un même segment
+se joignent par un saut de ligne. Couper ailleurs changeait donc le rendu.
+Deux paragraphes que seule une coupure fine sépare sont recollés, et la
+coupure n'est admise qu'entre deux lignes de prose nue, seul endroit où l'on
+sache par avance ce que le rendu en fera : une image ou un cadre décide
+lui-même s'il ferme le paragraphe. Le HTML des vingt-trois documents
+d'exemple déterministes est identique, octet pour octet.
+
+**Le contrôle de flux quitte `rendu.rs`.** Le fichier mêlait sur plus de
+quatre mille lignes l'analyse de la source, l'exécution des boucles, les
+saisies et la composition du HTML — c'est là que `sortir` avait fini par
+fonctionner d'un côté et pas de l'autre, deux traitements du même mot à six
+cents lignes l'un de l'autre. Les boucles, les conditions et les affectations
+forment maintenant un module à part.
+
+**Le parcours des délimiteurs est écrit une fois.** Cinq fonctions appariaient
+des accolades ou coupaient au premier niveau, chacune avec ses règles :
+l'une comptait les crochets, l'autre non ; l'une respectait les guillemets,
+l'autre les traversait ; l'une tolérait une fermante orpheline. Ces
+différences sont réelles et restent — mais elles se déclarent désormais par
+un nom au lieu de se réécrire à chaque fois.
+
 ### Documentation
+
+**Le chapitre du langage algorithmique rattrape le moteur.** Il datait de la
+2.3 et ignorait tout ce qui a suivi : il gagne les piles et les files, les objets et
+les quatre piliers, les arbres et les graphes, `jonction` et `découpe`,
+`élague` et `compacte`, et la règle des guillemets.
+
+**Les doubles affectations du README sont corrigées.** Il montrait encore
+`soit n = n + 1` dans une boucle, là où `n = n + 1` suffit : `soit` déclare une
+fois, l'affectation suit. Deux écritures pour un seul effet, c'est un doublon —
+non un *shadowing*, puisque le nom est réaffecté et non ombré.
+
+Les 154 blocs de code du README ont été exécutés : les seuls messages restants
+viennent de catalogues de commandes montrées hors de tout document, où l'objet
+n'est délibérément pas déclaré.
+
+**Les liens du sommaire ne fonctionnaient pas** — ils renvoyaient tous en haut
+du fichier. Les titres portent un émoji, que GitHub retire de l'ancre en
+laissant un tiret : le vrai lien est `#-les-objets`, non `#les-objets`. Les
+émojis à sélecteur de variante (`🛠️`) laissaient en outre un caractère
+invisible qui décalait l'ancre une seconde fois. Les 34 liens internes sont
+recalculés selon l'algorithme de GitHub, et aucun ne vise plus dans le vide.
 
 **Les exemples d'algorithmique passent de quatre fichiers à trois**, alignés sur
 la numérotation des autres séries — qui toutes commencent à 2. `algo1`
@@ -632,6 +694,16 @@ dans le texte.
 `exemples/algo4.txt` gagne une section « Recevoir et rendre un conteneur » et
 perd son avertissement obsolète : la collision entre fonction mathématique et
 fonction algorithmique était déjà refusée.
+
+### Limite connue
+
+Au **niveau du document**, la condition d'un `tant que` est évaluée avant que
+les conteneurs n'existent : `tant que est vide(p) vaut faux` n'y voit pas `p`.
+L'ordre du pipeline place ce déroulement avant la création des boîtes. Dans un
+corps de fonction, où tout est déroulé au moment de l'appel, la même écriture
+fonctionne — et c'est là qu'un algorithme s'écrit.
+
+---
 
 ## 2.3 — la qualité du gris typographique
 
