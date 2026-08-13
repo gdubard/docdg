@@ -8,6 +8,7 @@ pub use utils::cesure::cesure_html;
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 use std::hash::{Hash, Hasher};
+use std::sync::Arc;
 
 pub use layout::rendu::{set_base_dir, PageOpts};
 pub use python::pont::{bassin_ouvert, prechauffe};
@@ -37,8 +38,14 @@ pub struct Env {
     pub etudiees: std::collections::BTreeSet<String>,
     pub textes: BTreeMap<String, String>,
     pub saisies: BTreeMap<String, String>,
-    pub conteneurs: BTreeMap<String, langage::conteneurs::Boite>,
-    pub fonctions: langage::fonctions::Fonctions,
+    /// Les conteneurs et les fonctions sont partagés derrière un compteur de
+    /// références : ce sont les deux parties lourdes de l'environnement, et
+    /// l'environnement est recopié une fois par segment rendu. Les recopier
+    /// vraiment rendait le coût du rendu proportionnel au produit du nombre
+    /// de segments par celui des conteneurs. L'écriture, elle, reste franche :
+    /// on recopie à la première modification, et à elle seule.
+    pub conteneurs: Arc<BTreeMap<String, langage::conteneurs::Boite>>,
+    pub fonctions: Arc<langage::fonctions::Fonctions>,
     pub bloque: bool,
 }
 
@@ -56,11 +63,11 @@ impl Hash for Env {
         self.etudiees.hash(h);
         self.textes.hash(h);
         self.saisies.hash(h);
-        for (nom, boite) in &self.conteneurs {
+        for (nom, boite) in self.conteneurs.iter() {
             nom.hash(h);
-            langage::conteneurs::affiche(boite).hash(h);
+            langage::conteneurs::empreinte_boite(boite, h);
         }
-        for (nom, f) in &self.fonctions {
+        for (nom, f) in self.fonctions.iter() {
             nom.hash(h);
             f.corps.hash(h);
         }
@@ -297,12 +304,58 @@ pub fn unescape(s: &str) -> String {
     finalise(s, "")
 }
 
+/// Une ligne de prose et rien d'autre : ni balise, ni accolade, ni
+/// mathématiques, ni interpolation, ni tabulation, ni mot du langage.
+///
+/// C'est la seule ligne dont on sache **par avance** ce que le rendu en fera :
+/// elle rejoint le paragraphe en cours, précédée d'un saut de ligne. Tout le
+/// reste — une image, un cadre, un calcul — décide lui-même s'il ferme le
+/// paragraphe ou s'y ajoute, et nul ne peut le prédire de l'extérieur sans
+/// refaire le travail du moteur de rendu.
+fn prose_pure(t: &str) -> bool {
+    if t.is_empty() {
+        return false;
+    }
+    // L'indentation se rend — elle pose un retrait avant la ligne. Une ligne
+    // indentée n'est donc pas de la prose nue, et la couper devant ferait
+    // disparaître le saut qui la précède.
+    if t.starts_with([' ', '\t']) {
+        return false;
+    }
+    if t.contains(['<', '>', '{', '}', '(', ')', '$', '#', '\t', '|', '[', ']']) {
+        return false;
+    }
+    for mot in [
+        "soit ", "pour ", "si ", "sinon", "tant que", "faire", "---", "%",
+    ] {
+        if t.starts_with(mot) {
+            return false;
+        }
+    }
+    true
+}
+
+/// Découpe le corps en unités de rendu et de cache.
+///
+/// La ligne vide reste une coupure — c'est la plus lisible. Mais elle ne peut
+/// pas rester la **seule** : un document écrit au kilomètre ne formait alors
+/// qu'un segment unique, et perdait du même coup le cache incrémental (toute
+/// frappe recomposait tout) et le parallélisme (un segment n'atteint jamais
+/// le seuil). La mise en forme de l'auteur décidait de la réactivité de
+/// l'aperçu, sans qu'il puisse le savoir.
+///
+/// Deux lignes de premier niveau se séparent donc d'elles-mêmes, **à
+/// condition qu'il soit sûr de les séparer** : accolades, chevrons et
+/// parenthèses refermés, et la ligne suivante qui ne prolonge pas la
+/// précédente. Dans le doute, on ne coupe pas : le pire qu'il puisse arriver
+/// est de retrouver le comportement d'avant.
 pub fn segments(body: &str) -> Vec<String> {
     let mut out = Vec::new();
     let mut cur = String::new();
     let mut depth: i32 = 0;
     let mut vides = 0usize;
-    for line in body.lines() {
+    let lignes: Vec<&str> = body.lines().collect();
+    for (i, line) in lignes.iter().enumerate() {
         let d0 = depth;
         utils::texte::maj_profondeur(line, &mut depth);
         if line.trim().is_empty() && d0 <= 0 && depth <= 0 {
@@ -313,13 +366,21 @@ pub fn segments(body: &str) -> Vec<String> {
                 cur.clear();
                 vides += 1;
             }
-        } else {
-            if vides > 0 {
-                out.push(format!("\u{E011}{}", vides));
-            }
-            vides = 0;
-            cur.push_str(line);
-            cur.push('\n');
+            continue;
+        }
+        if vides > 0 {
+            out.push(format!("\u{E011}{}", vides));
+        }
+        vides = 0;
+        cur.push_str(line);
+        cur.push('\n');
+        // On ne coupe qu'entre deux lignes de prose pure : là, et là
+        // seulement, la coupure est exactement réversible à l'assemblage.
+        let coupable = depth <= 0
+            && prose_pure(line)
+            && lignes.get(i + 1).map(|s| prose_pure(s)).unwrap_or(false);
+        if coupable && !cur.trim().is_empty() {
+            out.push(std::mem::take(&mut cur));
         }
     }
     if !cur.trim().is_empty() {
@@ -368,25 +429,33 @@ impl Engine {
         layout::rendu::collecte_donnees(&body, &mut env);
 
         let mut cles: Vec<u64> = Vec::with_capacity(segs.len());
-        let mut manquants: Vec<(usize, Env)> = Vec::new();
+        let mut manquants: Vec<(usize, Arc<Env>)> = Vec::new();
         let mut prevus: HashSet<u64> = HashSet::new();
         let mut base = empreinte_env(&env);
+        // L'environnement ne change qu'aux segments qui le touchent : un
+        // paragraphe ordinaire le laisse intact. Les segments voisins peuvent
+        // donc *partager* le même instantané au lieu d'en recopier chacun le
+        // sien. Sans ce partage, un document de mille segments portant deux
+        // cents conteneurs recopiait deux cents conteneurs mille fois — le
+        // coût du rendu était le produit des deux.
+        let mut instantane = Arc::new(env.clone());
         for (i, s) in segs.iter().enumerate() {
             let cle = empreinte(base, s);
             if !self.cache.contains_key(&cle) && prevus.insert(cle) {
-                manquants.push((i, env.clone()));
+                manquants.push((i, Arc::clone(&instantane)));
             }
             cles.push(cle);
             if !layout::rendu::inerte(s) {
                 layout::rendu::scan_env(s, &mut env);
                 base = empreinte_env(&env);
+                instantane = Arc::new(env.clone());
             }
         }
 
         let reglages = layout::rendu::reglages_page();
-        let rendu = |(i, e): &(usize, Env)| -> (usize, String, Vec<TocEntry>) {
+        let rendu = |(i, e): &(usize, Arc<Env>)| -> (usize, String, Vec<TocEntry>) {
             layout::rendu::set_reglages_page(reglages);
-            let mut local = e.clone();
+            let mut local = (**e).clone();
             let (html, toc) = layout::rendu::render_segment(&segs[*i], &mut local);
             (*i, html, toc)
         };
@@ -427,6 +496,7 @@ impl Engine {
 
         let mut html = String::new();
         let mut vides = 0usize;
+        let mut premier = true;
         for cle in &cles {
             let h = match self.cache.get(cle) {
                 Some(e) => e.html.as_str(),
@@ -448,8 +518,27 @@ impl Engine {
                     ));
                 }
             }
+            // Une coupure fine — celle qui n'est pas une ligne vide — sert au
+            // cache, pas à la mise en page : elle ne doit pas créer un
+            // paragraphe là où l'auteur n'en a pas voulu. Deux paragraphes
+            // que seule cette coupure sépare se recollent donc, exactement
+            // comme les lignes d'un même segment se joignent par un saut de
+            // ligne. C'est ce qui permet de découper le document aussi
+            // finement qu'on veut sans que le rendu s'en aperçoive.
+            let recolle = !premier
+                && vides == 0
+                && html.ends_with("</p>")
+                && h.starts_with("<p>")
+                && !h.starts_with("<p class");
+            if recolle {
+                html.truncate(html.len() - "</p>".len());
+                html.push_str("<br>");
+                html.push_str(&h["<p>".len()..]);
+            } else {
+                html.push_str(h);
+            }
             vides = 0;
-            html.push_str(h);
+            premier = false;
         }
 
         RenderResult {

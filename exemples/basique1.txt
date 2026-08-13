@@ -1,8 +1,8 @@
 page {
 	orientation: portrait;
-	marges: 8;
+	marges: 15;
 	espacements: 2;
-	taille: 11;
+	taille: 12;
 	interligne: 1.2;
 }
 
@@ -86,8 +86,7 @@ Des tailles : <8pt>{tout petit}, <10pt>{petit}, normal,
 
 
 <h1>Notes de bas de page
-Le principe<note>{Une note descend au bas de la page, numérotée toute
-    seule.} s'applique sans compteur à gérer.
+Le principe<note>{Une note descend au bas de la page, numérotée toute seule.} s'applique sans compteur à gérer.
 
 <h1>Listes
 	Une liste s'écrit <<Dresse une liste STYLE>> — un élément par ligne, sans balise d'élément. Puces : à puces, à puces vides, à puces carrées, sans puce ;
@@ -100,12 +99,10 @@ numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres 
 
 <h1>Un tableau simple
 	Une rangée de données s'écrit entre crochets, les cellules séparées par un point-virgule. Les colonnes se déclarent dans la balise, un code par colonne : la première lettre est verticale (h/m/b), la seconde horizontale (g/c/d) — et le langage naturel fait aussi bien : en haut, à gauche vaut hg.
-
 <Dresse>un tableau [mg ; mc ; md] {
     [Pomme ; Poire ; Prune]
     [Chat ; Chien ; Cheval]
 }
-
 	Rien ici hors des crochets : le tableau n'a donc aucune entête, ce n'est qu'un jeu de colonnes alignées.
 
 	bordures trace les filets. Tout ce qui s'écrit hors des crochets est une entête : la rangée du haut le devient sans qu'on ait à le dire.
@@ -130,7 +127,7 @@ numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres 
 	Une légende s'ajoute avec <<et la légende {...}>>, sous l'image :
 <Insère une image avec une largeur de 30 mm et la légende {Cinq pommes}, dans le dossier {IMAGES}>{pommes.png}
 
-<h1>Une image dans un cadre
+<page suivante h1>Une image dans un cadre
 	Un cadre accueille une image comme n'importe quel autre contenu ;
 <<au centre>> la place au milieu de la largeur disponible.
 

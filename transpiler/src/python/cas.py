@@ -686,6 +686,51 @@ def handle(req):
             etapes += " = %s" % tex(substituee)
         return "%s = %s" % (etapes, tex(r))
 
+    if op == "recurrence_somme":
+        # La récurrence d'une formule sommatoire, calculée de bout en bout :
+        # l'initialisation évalue les deux membres au premier rang, l'hérédité
+        # ajoute le terme suivant et referme la formule.
+        n = sym("n")
+        k = sym(a.get("index", "k"))
+        lo = parse(a["from"])
+        terme = parse(a["term"], {a.get("index", "k"): k, "n": n})
+        formule = parse(a["closed"], {"n": n})
+        # initialisation
+        init_g = terme.subs(k, lo)
+        init_d = formule.subs(n, lo)
+        if sp.simplify(init_g - init_d) != 0:
+            raise ValueError("La formule est fausse au premier rang.")
+        # hérédité : F(n) + terme(n+1) doit se refermer en F(n+1)
+        suivant = terme.subs(k, n + 1)
+        cible = formule.subs(n, n + 1)
+        if sp.simplify(formule + suivant - cible) != 0:
+            raise ValueError("La formule ne se transmet pas au rang suivant.")
+        return "|".join([
+            tex(sp.nsimplify(init_g)),
+            tex(sp.nsimplify(init_d)),
+            tex(suivant),
+            tex(formule),
+            tex(sp.factor(cible)),
+        ])
+
+    if op == "toujours_positif":
+        # Une différence polynomiale positive sur R tout entier : la forme
+        # canonique le montre quand elle s'écrit carré plus constante positive.
+        x = sym(a.get("var", "x"))
+        d = sp.expand(parse(a["expr"], {a.get("var", "x"): x}))
+        poly = sp.Poly(d, x)
+        if poly.degree() == 2:
+            A, B, C = [sp.nsimplify(c) for c in poly.all_coeffs()]
+            alpha = sp.nsimplify(-B / (2 * A))
+            beta = sp.nsimplify(C - B ** 2 / (4 * A))
+            if A > 0 and beta >= 0:
+                canon = A * (x - alpha) ** 2 + beta
+                return "|".join([tex(d), tex(canon), tex(beta)])
+        carre = sp.factor(d)
+        if carre.is_Pow and carre.exp == 2:
+            return "|".join([tex(d), tex(carre), "0"])
+        raise ValueError("La positivité ne se lit pas sur une forme canonique.")
+
     if op == "sum":
         k = sym(a.get("index", "k"))
         expr = parse(a["expr"], {a.get("index", "k"): k})

@@ -38,7 +38,12 @@ fn verrou<T>(m: &Mutex<T>) -> MutexGuard<'_, T> {
 }
 
 fn seme() -> Option<Ouvrier> {
-    for py in ["python3", "python"] {
+    // Windows n'installe pas toujours `python3` ni `python` dans le PATH :
+    // le lanceur officiel s'y appelle `py`. Sans lui, SymPy restait
+    // silencieusement absent sur une installation Windows standard, et les
+    // variations, dérivées et lois tombaient en mode dégradé sans que rien ne
+    // le dise.
+    for py in ["python3", "python", "py"] {
         if let Ok(mut fils) = Command::new(py)
             .arg("-c")
             .arg(WORKER_PY)

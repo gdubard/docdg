@@ -1,0 +1,90 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Démonstrations — les raisonnements de base
+
+	Une démonstration s'écrit avec le verbe <gras>{Montre} et elle seule. Le raisonnement direct est la forme nue ; les autres se nomment après le verbe, parce que chaque raisonnement doit s'annoncer avant de se dérouler. Le moteur fournit la charpente — l'annonce, les étapes, la conclusion quand la logique l'exige — et l'auteur n'écrit que les mathématiques.
+
+<h2>La démonstration directe
+	L'annonce, puis les déductions, chacune justifiée :
+
+<Montre>que la somme de deux entiers pairs est paire {
+	Soient $a$ et $b$ deux entiers pairs : il existe deux entiers $k$ et $k'$ tels que $a = 2k$ et $b = 2k'$.
+	Alors $a + b = 2(k + k')$, qui est pair.
+}
+
+<h2>La récurrence
+	Sans corps, le moteur démontre lui-même : il vérifie l'initialisation et l'hérédité par le calcul formel, puis rédige — et refuse si la formule est fausse.
+
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k = (n(n+1))/2$
+
+	Avec un corps, l'auteur écrit les mathématiques et le moteur fournit la charpente. Les deux étapes portent leur nom canonique, et la conclusion invoque le principe — l'oublier coûte des points :
+
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k = (n(n+1))/2$ {
+	initialisation{
+		Pour $n = 0$, les deux membres valent $0$ : la propriété est vraie au rang $0$.
+	}
+	hérédité{
+		Soit $n$ un entier naturel pour lequel la propriété est vraie.
+		Alors $somme(k=0;n+1) k = (n(n+1))/2 + (n+1) = ((n+1)(n+2))/2$ : elle est vraie au rang suivant.
+	}
+}
+
+<h2>La contraposée
+	Pour montrer une implication, on peut montrer sa contraposée — le moteur la demande en toutes lettres, puis referme en revenant à l'énoncé de départ :
+
+<Montre>par contraposée que si $n^2$ est pair, alors $n$ est pair {
+	contraposée{
+		si $n$ est impair, alors $n^2$ est impair
+	}
+	Supposons $n$ impair : $n = 2k + 1$ pour un entier $k$.
+	Alors $n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$, qui est impair.
+}
+
+<h2>L'absurde
+	On suppose le contraire, on nomme la contradiction, on conclut :
+
+<Montre>par l'absurde que $racine(2)$ est irrationnel {
+	absurde{
+		$racine(2)$ s'écrit $a/b$ avec $a$ entier et $b$ entier non nul, la fraction étant irréductible
+	}
+	En élevant au carré, $a^2 = 2b^2$, donc $a$ est pair : $a = 2k$.
+	Il vient $b^2 = 2k^2$, donc $b$ est pair lui aussi.
+	contradiction{
+		$a$ et $b$ seraient tous deux pairs, et la fraction ne serait pas irréductible
+	}
+}
+
+<h2>La disjonction de cas
+	Les cas se déclarent par le mot <gras>{cas} suivi de leur description ; le moteur les numérote et constate à la fin qu'ils couvrent tout :
+
+<Montre>par disjonction de cas que pour tout entier $n$, le produit $n(n+1)$ est pair {
+	cas $n$ pair {
+		Alors $n = 2k$, et $n(n+1) = 2k(2k+1)$ est pair.
+	}
+	cas $n$ impair {
+		Alors $n + 1 = 2(k+1)$, et le produit est encore pair.
+	}
+}
+
+<page suivante h2>La propriété universelle
+	Sans corps, une inégalité polynomiale se démontre seule par la forme canonique :
+
+<Montre>par élément quelconque réel $x$, $x^2 + 2x + 5 >= 0$
+
+	Avec un corps : on fixe un élément quelconque — l'ouverture par <gras>{Soit} est systématique — et le choix quelconque fonde la généralisation :
+
+<Montre>par élément quelconque réel $x$, $x^2 + 1 >= 2x$ {
+	soit{
+		$x$ un réel quelconque
+	}
+	On calcule $(x^2 + 1) - 2x = (x - 1)^2$, qui est positif ou nul.
+	Donc $x^2 + 1 >= 2x$.
+}

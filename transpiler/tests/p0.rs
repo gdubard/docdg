@@ -1046,3 +1046,72 @@ fn les_guillemets_delimitent_partout() {
     assert!(d.contains("{Marche: 5}"), "{}", d);
     assert!(rend("soit d: dictionnaire de chaînes de caractères et d'entiers = {\"A\": 1}\nR : #{d[\"A\"]}").contains('1'));
 }
+
+// ═══════════ `sortir` et `continuer` dans les boucles à condition ═══════════
+//
+// La sortie anticipée fonctionnait dans `pour` et dans les corps de fonction,
+// mais restait sans effet dans un `tant que` du document : la boucle allait
+// jusqu'au bout, sans le moindre message. Une recherche séquentielle — le cas
+// d'usage même du `tant que` — sortait donc fausse.
+
+#[test]
+fn sortir_arrete_un_tant_que_de_document() {
+    let html = rend("soit n = 0\ntant que n < 5 faire {\n\tsi n plus de 2 {\n\t\tsortir\n\t}\n\t[#n]\n\tsoit n = n + 1\n}");
+    assert!(html.contains("[0]") && html.contains("[2]"), "{}", html);
+    assert!(!html.contains("[3]"), "sortir devait couper avant 3 : {}", html);
+    assert!(!html.contains("sortir"), "le mot ne doit pas fuir : {}", html);
+}
+
+#[test]
+fn continuer_saute_un_tour_de_tant_que() {
+    let html = rend("soit n = 0\ntant que n < 4 faire {\n\tsoit n = n + 1\n\tsi n vaut 2 {\n\t\tcontinuer\n\t}\n\t[#n]\n}");
+    assert!(html.contains("[1]") && html.contains("[3]") && html.contains("[4]"), "{}", html);
+    assert!(!html.contains("[2]"), "le tour 2 devait être sauté : {}", html);
+    assert!(!html.contains("continuer"), "le mot ne doit pas fuir : {}", html);
+}
+
+#[test]
+fn sortir_arrete_un_faire_tant_que() {
+    let html = rend("soit n = 0\nfaire {\n\tsi n plus de 2 {\n\t\tsortir\n\t}\n\t[#n]\n\tsoit n = n + 1\n} tant que n < 5");
+    assert!(html.contains("[2]"), "{}", html);
+    assert!(!html.contains("[3]"), "sortir devait couper avant 3 : {}", html);
+}
+
+#[test]
+fn un_tant_que_interrompu_n_ajoute_pas_de_ligne_vide() {
+    // le tour qui ne fait que sortir ne produit rien : il ne doit pas laisser
+    // de séparateur derrière lui
+    let avec = rend("soit n = 0\ntant que n < 5 faire {\n\tsi n plus de 2 {\n\t\tsortir\n\t}\n\t[#n]\n\tsoit n = n + 1\n}");
+    let sans = rend("soit n = 0\ntant que n < 3 faire {\n\t[#n]\n\tsoit n = n + 1\n}");
+    assert_eq!(avec, sans, "la boucle coupée doit rendre le même document que la boucle bornée");
+}
+
+#[test]
+fn le_si_d_un_tant_que_voit_les_variables_du_tour() {
+    // la condition se lit avec la valeur que la variable a *à cet endroit* du
+    // tour, non avec celle qu'elle avait en entrant
+    let html = rend("soit n = 0\ntant que n < 3 faire {\n\tsoit n = n + 1\n\tsi n vaut 2 {\n\t\tDEUX\n\t} sinon {\n\t\tAUTRE\n\t}\n}");
+    assert!(html.contains("DEUX"), "{}", html);
+    assert_eq!(html.matches("AUTRE").count(), 2, "{}", html);
+}
+
+// ═══════════ l'accord de « Soit » ═══════════
+//
+// L'impératif s'accorde avec ce qu'il pose : « Soient les points A, B et C ».
+// La faute se relève avant même la lecture de la démonstration.
+
+#[test]
+fn soit_s_accorde_au_pluriel() {
+    let points = rend("<Soit>les points A(1;2), B(-1;2) et C(-1;-2)");
+    assert!(points.contains("Soient"), "{}", points);
+    assert!(points.contains("les points de coordonnées"), "{}", points);
+    let fonctions = rend("<Soit>les fonctions f(x) = x^2 et g(x) = -x^2");
+    assert!(fonctions.contains("Soient"), "{}", fonctions);
+    assert!(fonctions.contains("les fonctions définies par"), "{}", fonctions);
+}
+
+#[test]
+fn soit_reste_au_singulier_pour_un_seul_objet() {
+    let un = rend("<Soit>un point A(2;3)");
+    assert!(!un.contains("Soient"), "{}", un);
+}

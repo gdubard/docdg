@@ -553,6 +553,29 @@ pub fn commande(verbe: &str, desc: &str, _corps: Option<&str>, env: &mut Env) ->
     if (verbe == "Trace" || verbe == "Représente") && bas.contains("courbe polaire") {
         return polaire(desc);
     }
+    // La rosace se demande par son nombre de pétales ; le coefficient se
+    // déduit de la parité — r = cos(k·t) dessine k pétales si k est impair,
+    // 2k s'il est pair. Demander 4 pétales trace donc cos(2t), pas cos(4t).
+    if (verbe == "Trace" || verbe == "Représente") && bas.contains("rosace") {
+        let n: u32 = desc
+            .split("rosace à")
+            .nth(1)?
+            .trim()
+            .split_whitespace()
+            .next()?
+            .parse()
+            .ok()?;
+        if n == 0 {
+            return None;
+        }
+        let k = if n % 2 == 1 { n } else { n / 2 };
+        let style = desc
+            .split_once(" pétales")
+            .map(|(_, r)| r.trim_start_matches(|c: char| c == ','))
+            .unwrap_or("");
+        let recrit = format!("la courbe polaire r = cos({}*t){}", k, style);
+        return polaire(&recrit);
+    }
     if verbe == "Étudie" && bas.contains("la conique") && bas.contains("équation") {
         return conique(desc, env);
     }

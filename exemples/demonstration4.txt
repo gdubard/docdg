@@ -1,0 +1,89 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.8;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Démonstrations — la panoplie du supérieur
+
+	Les raisonnements de ce document complètent ceux du précédent : analyse-synthèse, double inclusion, principe des tiroirs, existence et unicité. Chacun s'annonce avant de se dérouler — pour l'analyse-synthèse, l'annonce n'est pas une politesse : l'analyse commence par supposer la conclusion vraie, et le correcteur qui ne lit pas l'annonce y verrait un cercle.
+
+<h2>L'analyse-synthèse
+	L'analyse cherche les conditions nécessaires, la synthèse vérifie qu'elles suffisent :
+
+<Montre>par analyse-synthèse que toute fonction $f$ de $RR$ dans $RR$ se décompose en somme d'une fonction paire et d'une fonction impaire {
+	analyse{
+		Supposons $f = g + h$ avec $g$ paire et $h$ impaire.
+		En évaluant en $x$ et en $-x$ : $f(x) = g(x) + h(x)$ et $f(-x) = g(x) - h(x)$.
+		Nécessairement $g(x) = (f(x) + f(-x))/2$ et $h(x) = (f(x) - f(-x))/2$ : les candidats sont imposés.
+	}
+	synthèse{
+		Posons $g$ et $h$ par ces formules.
+		La fonction $g$ est paire, la fonction $h$ est impaire, et leur somme redonne $f$ : les candidats conviennent.
+		L'analyse ne laissait aucun choix : la décomposition est en outre unique.
+	}
+}
+
+<h2>La double inclusion
+	L'égalité de deux ensembles se prouve moitié par moitié :
+
+<Montre>par double inclusion que l'ensemble des réels $x$ vérifiant $x^2 = 1$ est $\{-1 ; 1\}$ {
+	directe{
+		Soit $x$ un réel tel que $x^2 = 1$.
+		Alors $(x - 1)(x + 1) = 0$, donc $x = 1$ ou $x = -1$.
+	}
+	réciproque{
+		Les réels $1$ et $-1$ vérifient l'équation : la vérification est immédiate.
+	}
+}
+
+<h2>Le principe des tiroirs
+	Nommer les objets, nommer les tiroirs, compter :
+
+<Montre>par le principe des tiroirs que dans un groupe de $13$ personnes, deux au moins sont nées le même mois {
+	objets{
+		les $13$ personnes du groupe
+	}
+	tiroirs{
+		les $12$ mois de l'année
+	}
+	Chaque personne est rangée dans le tiroir de son mois de naissance.
+}
+
+<h2>L'existence et l'unicité
+	Deux preuves distinctes : construire un objet qui convient, puis confondre deux candidats :
+
+<Montre>l'existence et l'unicité de la fonction affine $f$ vérifiant $f(0) = 1$ et $f(2) = 5$ {
+	existence{
+		La fonction définie par $f(x) = 2x + 1$ est affine, et $f(0) = 1$, $f(2) = 5$ : elle convient.
+	}
+	unicité{
+		Soient $f$ et $g$ deux fonctions affines vérifiant les deux conditions.
+		Une fonction affine est déterminée par ses valeurs en deux points distincts : $f$ et $g$ coïncident en $0$ et en $2$, donc $f = g$.
+	}
+}
+
+<h2>Les raisonnements se composent
+	Une étape est du docdg vivant : elle peut contenir des calculs du moteur, pas seulement de la prose.
+
+soit discriminant = 9 - 8
+
+<Montre>que le trinôme $2x^2 - 3x + 1$ admet deux racines réelles {
+	Le discriminant vaut $Delta = (-3)^2 - 4 * 2 * 1$, soit #discriminant.
+	Il est strictement positif : le trinôme admet deux racines réelles distinctes.
+}
+
+<h2>La bibliothèque des classiques
+	Certaines démonstrations reposent sur une idée, non sur un calcul : aucun système de calcul formel ne trouvera l'argument d'Euclide. Elles sont écrites une fois et rangées dans une base ; l'énoncé seul suffit à les appeler, et elles traversent la même charpente que celles écrites à la main.
+
+<Montre>que $racine(2)$ est irrationnel
+
+<Montre>qu'il existe une infinité de nombres premiers
+
+<Montre>que la limite d'une suite est unique
+
+	Si l'énoncé n'est ni calculable ni en bibliothèque, le moteur le dit et propose les fiches les plus proches, plutôt que de laisser chercher.

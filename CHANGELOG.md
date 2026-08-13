@@ -4,6 +4,326 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
+## 2.5 — la rédaction du supérieur
+
+### Ajouté
+
+**Les démonstrations : neuf raisonnements, une charpente chacun.** Le verbe est
+`<Montre>` et lui seul — « Montrons que » compte 425 occurrences dans le corpus
+dépouillé, « Démontrons que » 3. Le raisonnement direct est la forme nue ; les
+neuf autres se nomment après le verbe, d'un seul nom chacun : `par
+contraposée`, `par l'absurde`, `par récurrence`, `par disjonction de cas`, `par
+analyse-synthèse`, `par double inclusion`, `pour tout`, `par le principe des
+tiroirs`, et `l'existence et l'unicité` par le complément.
+
+```
+<Montre>par récurrence que pour tout entier $n$, … {
+	initialisation{ … }
+	hérédité{ … }
+}
+```
+
+*La règle d'or s'applique ici comme partout* : le verbe seul dans la balise, le
+raisonnement et l'énoncé en complément. Les dix noms sont uniformes — tous
+introduits par « par », y compris la propriété universelle qui se dit `par
+élément quelconque` : « pour tout » ouvrait aussi bien un énoncé qu'une demande
+de raisonnement, et le moteur ne pouvait pas les distinguer.
+
+Le raisonnement est **exigé quand l'auteur écrit le corps** — les étapes le
+nomment déjà, `initialisation{}` n'a de sens que pour une récurrence. Il est
+**facultatif quand le moteur fournit la démonstration**, puisque le
+raisonnement est alors une propriété de la preuve, non de la demande ; mais
+s'il est donné et qu'il contredit la fiche, il est refusé plutôt que passé sous
+silence — sans quoi le corps d'une preuve directe se verrait réclamer les
+étapes d'une récurrence.
+
+Le moteur fournit la charpente — l'annonce, les étapes étiquetées, la
+conclusion quand la logique l'exige — et l'auteur n'écrit que les
+mathématiques. Le principe directeur vient d'Alain Troesch : **chaque
+raisonnement s'annonce avant de se dérouler**. Pour l'analyse-synthèse,
+l'annonce n'est pas une politesse — l'analyse commence par supposer la
+conclusion vraie, et le correcteur pressé qui ne lit pas l'annonce y voit une
+pétition de principe.
+
+Les clôtures sont dosées d'après le corpus, où les formules d'achèvement sont
+quasi absentes (« ce qui achève la démonstration » : 12 occurrences sur 2,1
+millions de mots ; « cqfd » : 0). Ne sont refermés que les raisonnements dont
+la conclusion fait partie de la logique : la récurrence invoque son principe,
+la contraposée revient à l'énoncé direct, l'absurde conclut de la
+contradiction, la disjonction constate que les cas couvrent tout, la double
+inclusion assemble ses deux moitiés. Une étape oubliée est signalée par son
+nom ; un raisonnement inconnu répond en listant les formes admises.
+
+Le corps d'une étape est du docdg vivant : prose, mathématiques,
+interpolations et commandes s'y composent. Deux documents d'exemple,
+`demonstration3.txt` et `demonstration4.txt`, déroulent la panoplie.
+
+**Le moteur démontre lui-même ce qui est à sa portée.** L'absence de corps
+signifie dans les démonstrations ce qu'elle signifie partout dans le langage :
+le moteur fait le travail. `<Montre>par récurrence que pour tout entier $n$,
+$somme(k=0;n) k = (n(n+1))/2$` — sans accolades — vérifie l'initialisation et
+l'hérédité par le calcul formel, puis rédige la démonstration complète, chaîne
+d'égalités comprise. `<Montre pour tout>réel $x$, $x^2 + 1 >= 2x$` établit
+l'inégalité par la forme canonique : la différence s'écrit carré plus
+constante positive, et la rédaction le dit.
+
+**Une bibliothèque de démonstrations classiques, du lycée à la L3.** Tout ne se
+calcule pas : l'irrationalité de \(\sqrt2\), le théorème de Cantor, la
+divergence de la série harmonique reposent sur une idée, et aucun système de
+calcul formel ne les trouvera. **Cent deux** démonstrations sont écrites
+une fois et rangées dans une base au format JSON, appelées par leur seul
+énoncé :
+
+```
+<Montre>que $racine(2)$ est irrationnel
+<Montre>qu'il existe une infinité de nombres premiers
+<Montre>l'existence et l'unicité de la division euclidienne
+```
+
+La base stocke le **corps en docdg**, non du HTML : une fiche traverse la même
+charpente que la démonstration écrite à la main, et une correction profite
+aussitôt à toutes les formes de rendu. Les énoncés se comparent après
+normalisation — minuscules, accents pliés, mathématiques et ponctuation
+retirées — de sorte que « racine de 2 est irrationnel » et
+« que $racine(2)$ est irrationnel. » désignent la même fiche. L'auteur garde le
+dernier mot : un raisonnement précisé dans la balise l'emporte sur celui de la
+fiche.
+
+*Le principe qui délimite la base :* **on n'y range que ce qu'aucun outil ne
+sait faire.** SymPy, SciPy et les crates couvrent la grande majorité des
+démonstrations exigibles ; une fiche dont le contenu se réduit à une identité ou
+à une inégalité vérifiable serait une redondance, et deux sources pour un même
+résultat finissent toujours par diverger. Quatre fiches ont ainsi été retirées —
+formule du binôme, inégalité de Bernoulli, parité d'un produit d'entiers
+consécutifs, carré pair — parce qu'elles relèvent du calcul formel : elles
+figurent désormais à la feuille de route du pont SymPy, pas dans la base.
+
+La base est incorporée au binaire et suit les versions — docdg travaille en
+classe, hors ligne, sans dépendance ni compte à créer.
+
+Et le moteur **refuse de démontrer un mensonge** : une formule fausse est
+rejetée avec la raison — « la formule est fausse au premier rang », « la
+formule ne se transmet pas au rang suivant », « la positivité ne se lit pas
+sur une forme canonique ». La vérification précède toujours la rédaction.
+
+### Ajouté
+
+**Chaque version a un terme.** docdg reste distribué gratuitement, mais une
+installation est valable **90 jours**. La barre d'outils affiche discrètement
+les jours restants, en gris tant que le terme est loin, en avertissement dans
+les quinze derniers jours — personne ne doit découvrir l'échéance le matin où
+il en a besoin. Passé le délai, l'application s'ouvre sur une page qui explique
+où trouver la version suivante ; l'éditeur n'est pas chargé.
+
+La date d'installation vit dans `installation.json`, au même endroit que les
+réglages d'interface. La date de dernière ouverture y est conservée à côté, et
+le calcul retient la plus tardive des deux : **reculer l'horloge du système ne
+rend pas de jours**.
+
+*Ce que le verrou ne fait pas :* il ne touche à aucun document. Les fichiers
+`.docdg` sont ceux de l'utilisateur, sur son disque, et la version suivante les
+rouvre tels quels. Le terme porte sur le logiciel, jamais sur le travail.
+
+### Changé
+
+**La bibliothèque de démonstrations n'a plus qu'une source.** Le fichier
+externe, que l'enseignant pouvait placer à côté de l'exécutable ou dans son
+dossier de réglages, est retiré : la base livrée avec le logiciel suit les
+versions, et deux sources pour un même résultat finissent toujours par
+diverger. Une fiche corrigée arrive désormais avec la mise à jour.
+
+### Interface
+
+**Annuler et rétablir, enfin.** Ctrl+Z annule, Ctrl+Y ou Ctrl+Maj+Z rétablit,
+et deux flèches ↶ ↷ dans la barre d'outils font de même à la souris. Le
+textarea perdait son historique natif à chaque réécriture programmée du
+contenu — tabulation, réglages de page, chargement — : l'éditeur tient
+désormais le sien, les frappes rapprochées groupées par gestes de 400 ms,
+les insertions ponctuelles isolées dans leur propre pas, l'ouverture d'un
+document repartant d'un historique vierge.
+
+**La prose de calcul se scinde entre les pages.** Une résolution pas à pas,
+une étude, une position relative — toute sortie rédigée du moteur — formait
+un seul bloc qu'il était impossible de répartir sur deux pages : au premier
+paramètre modifié, une demi-page se vidait. Ces blocs se scindent désormais
+par nature : les paragraphes entiers qui tiennent restent, le paragraphe
+frontière se coupe s'il s'y prête, le reste part en page suivante — et
+seules les formules hors texte demeurent d'un seul tenant.
+
+**La numérotation des pages se choisit.** Dans le bloc `page { … }`,
+`numérotation: simple;` affiche `1`, `2`, `3` ; `numérotation: sans;` ne
+numérote pas ; par défaut, la forme composée `1 / 3` demeure. L'option écrite
+à la main survit à l'ouverture du panneau de réglages.
+
+**Le grand blanc avant une figure reportée se comble.** Un objet insécable —
+figure, tableau de signes ou de variations — qui ne tenait pas dans l'espace
+restant basculait en page suivante en laissant une demi-page vide. Les blocs
+qui le suivent remontent désormais combler ce blanc, avec trois interdits qui
+préservent le sens de lecture : jamais au-delà d'un titre, jamais par-dessus
+un saut de page, et l'on s'arrête au premier bloc qui ne tient pas — seul
+l'objet reporté flotte, comme une figure de livre, le texte garde son ordre.
+
+**En disposition empilée, le code garde le haut.** L'aperçu passait au-dessus
+du code quand les panneaux s'empilaient ; l'ordre naturel — le code en haut,
+le rendu en bas — est rétabli, et le séparateur se mesure depuis le haut en
+conséquence.
+
+### Corrigé
+
+**Deux rendus étaient faux sans être en erreur — des tests de contenu les
+verrouillent.** « <Décompose>4 782 » répondait par une décomposition en
+éléments simples (un résultat absurde pour un entier) : la commande écrit
+désormais la décomposition positionnelle de l'école — « 4 782 = (4 × 1 000) +
+(7 × 100) + (8 × 10) + 2 », chaque produit parenthésé pour que les paquets se
+voient, rangs à zéro omis — et la décomposition en éléments
+simples se demande avec son complément. La rosace à 4 pétales en dessinait 8 :
+\(r = \cos(k\,t)\) donne \(k\) pétales si \(k\) est impair, \(2k\) sinon —
+« la rosace à N pétales » choisit maintenant le coefficient d'après la parité,
+et l'exemple demande des pétales plutôt qu'un coefficient. Un nouveau fichier
+de tests (`contenu.rs`) vérifie ce qui est écrit, pas seulement l'absence
+d'erreur.
+
+**Le recueil fait loi — et des tests le vérifient.** Le document de référence
+sur le langage mathématique du supérieur est désormais adossé à une suite de
+tests : aucun symbole logique (∀, ∃, ⇒, ⇔) dans la prose — le critère est
+celui du recueil, le *mélange* de mots et de symboles dans une même phrase,
+les formules isolées et les tableaux restant tolérés — ; « Soient » au
+pluriel ; le nom puis la nature ; pas de « tel que » parasite dans les
+déclarations. L'audit a corrigé six fiches de la bibliothèque qui écrivaient
+« il existe N tel que \(n>N\Rightarrow…\) » : l'implication s'y dit
+désormais en français — « tel que, pour n>N, … ».
+
+**Le mot juste pour le point : on le place.** `<Place>un point B(3 ; 1)` le
+déclare et le marque — c'est le geste du compas posé sur la feuille, et c'est
+le mot des enseignants. Le point placé est connu de tout le document : la
+collecte des déclarations le voit au même titre qu'un `<Soit>`.
+
+**Chaque action du manuel a son exemple — et les niveaux sont exacts.** L'audit
+de couverture croise désormais les commandes du manuel avec les 30 fichiers
+d'exemple : arbres horizontaux et en prose, disque, demi-droites dans les deux
+sens, cercle par son centre, fonction en la variable \(t\), champ de vecteurs,
+pivot pas à pas — tout ce qui manquait a rejoint le fichier de son niveau. Le
+PGCD, les pourcentages et les programmes de calcul sont au collège
+(`algebre2`), pas à l'école élémentaire : `calcul1` s'en tient au programme du
+cycle 2 et 3 — opérations, décomposition, fractions de même dénominateur,
+division euclidienne, conversions. Un exemple migre au passage vers la forme
+verbe-seul des listes (`<Dresse>une liste à puces`) ; l'insertion d'images
+garde sa balise d'objet — `<Insère une image …>{fichier}` — qui est la forme
+du manuel (règle n°12). Et
+`vitrine4.txt` assume l'autre bout du spectre : la démonstration de force, où
+chaque ligne source produit une rédaction complète — pour le futur site comme
+pour le lecteur pressé.
+
+**Deux nouveaux documents d'exemple, et un audit de couverture.** Les
+commandes du manuel ont été confrontées aux fichiers d'exemple : l'arithmétique
+n'y figurait nulle part. `calcul1.txt` la couvre — fractions, PGCD, division
+euclidienne, notation scientifique, pourcentages, programmes de calcul — et
+`geometrie1.txt` déroule les figures planes. Deux tests permanents verrouillent
+l'ensemble : chaque bloc du manuel rend sans erreur, et chaque exemple aussi —
+au nombre d'erreurs près pour les deux fichiers qui **démontrent** le canal
+d'erreur, dont le compte exact est verrouillé.
+
+**Chaque bloc du manuel rend sans erreur — et un test le garantit.** Les 155
+exemples de code du README sont désormais extraits et rendus par la suite de
+tests : un exemple du manuel qui échouerait ferait échouer la compilation de
+la version. Pour y parvenir, chaque bloc est autoportant — les objets qu'il
+utilise s'y déclarent —, les droites s'y tracent par leur équation réduite
+(« la droite y = 2x + 1 ») ou entre deux points déclarés (« la droite (AB) »),
+les régions du plan se grisent (« la région y > x + 1 »), les racines
+n-ièmes d'un complexe quelconque se calculent (« les racines cubiques de
+8i »), et un commentaire de fin de ligne n'atteint plus jamais le solveur.
+
+**Les figures planes du manuel, toutes tenues par le moteur.** Le triangle
+rectangle se place à son angle droit (« rectangle en A, de côté AB 3 cm et de
+côté AC 4 cm »), l'isocèle a ses deux côtés égaux, les longueurs s'entendent
+aussi en millimètres. Le segment et la demi-droite portent leur longueur
+(« [AB] tel que AB = 4 cm »), le cercle se donne par rayon, par diamètre ou
+par référence à deux points déclarés (« de rayon AB »). « <Trace>le point A »
+reprend un point posé par `<Soit>`, `<Trace>{ … }` groupe des figures ou des
+solides sans changer le vocabulaire, et un objet manquant produit son erreur
+nommée — « le point A n'a pas été déclaré — posez-le par <Soit>un point
+A(x;y) ».
+
+**Trois commandes documentées rendues opérantes.** `<Représente>graphiquement la
+fonction f` sans intervalle trace désormais dans la fenêtre standard
+\([-5\,;\,5]\) — la commande la plus naturelle du logiciel échouait sur son cas
+le plus simple. `<Soit>{ … }` en bloc déclare une ligne après l'autre, chaque
+ligne passant par le même chemin que la forme en ligne. Et le champ de
+vecteurs s'énonce : « Soit \(F\) le champ de vecteurs de \(\mathbb{R}^3\) dans
+\(\mathbb{R}^3\) défini par… » — déclaration purement notationnelle, comme le
+manuel l'annonçait sans que le moteur le fasse.
+
+**Le manuel ne promet plus ce que le moteur ne tient pas.** La suite se déclare
+par `<Soit>la suite u définie par u(0) = 1 et u(n+1) = 2u(n) + 1` — la forme
+`<Définis>…{ }` documentée n'avait jamais existé. Les statistiques et la droite
+graduée s'écrivent en prose (« avec les données {…} », « sur [-5 ; 5],
+d'intervalle {…} ») — l'écriture `attribut:valeur` que le manuel montrait est
+celle-là même qu'il déclare abandonnée. La section des opérations posées est
+retirée : la fonctionnalité n'existe pas encore.
+
+**Une démonstration ne bascule plus en bloc à la page suivante.** Elle sortait
+enveloppée dans un conteneur, et la mise en page ne scinde que ce qu'elle sait
+scinder : le conteneur en faisait un bloc unique, qu'un manque de place en fin
+de page renvoyait tout entier plus loin — en laissant derrière lui un blanc
+parfois considérable. La démonstration rend désormais une **suite de
+paragraphes** sans enveloppe : chacun se pose où il tient, et la coupure se
+fait entre deux étapes plutôt qu'avant la première.
+
+### Changé
+
+**La déclaration nomme avant de qualifier.** docdg écrivait « Soit une fonction
+f(x) = x² − 2 », « Soit le point A(2 ; 3) », « Soit la matrice M = … ». L'usage
+du supérieur pose l'inverse : le **nom** d'abord, sa **nature** ensuite.
+
+```
+Soit f la fonction définie par f(x) = x² − 2.
+Soit A le point de coordonnées (2 ; 3).
+Soient A et B les points de coordonnées (1 ; 2) et (−1 ; 2).
+Soit u le vecteur de coordonnées (3 ; −2).
+Soit M la matrice définie par : M = …
+Soit (u_n) la suite définie par récurrence, avec …
+```
+
+*La mesure, plutôt que le jugement.* Six ouvrages de référence — Deschamps,
+Nguyen, Gugger, Monier, Gorny, Preteseille, soit 2,1 millions de mots — ont été
+dépouillés. L'ordre nom-nature l'emporte **777 contre 15**, et chez les six
+auteurs sans exception : 291 contre 6 chez Deschamps, 149 contre 2 chez
+Preteseille, 103 contre 0 chez Gorny. Ce n'est pas une préférence d'auteur,
+c'est une convention.
+
+Le système garde l'ordre inverse — « Soit (s) le système » — parce que son nom
+est une étiquette parenthésée et non le nom propre de l'objet, et que c'est la
+seule forme que le corpus atteste.
+
+**La déclaration est une phrase, non une formule.** Elle sortait en bloc
+mathématique, les mots français enveloppés de `\text{}`. Alain Troesch le dit
+sans détour dans ses *Fondements* : une bonne rédaction passe par une mise en
+langage des règles logiques, on rédige par phrases et non par un enchaînement
+de formules. Seule l'expression reste désormais en mathématiques.
+
+Au passage, la forme retenue satisfait une règle que l'ancienne frôlait de
+trop près : `f(x)` désigne une **valeur**, jamais une application. « Soit une
+fonction f(x) = … » nommait fonction ce qui n'en est pas une ; « Soit f la
+fonction définie par f(x) = … » nomme `f`, et n'emploie `f(x)` qu'après
+« définie par ».
+
+**L'impératif s'accorde** : « Soient A et B les points… ». Les deux formes se
+rencontrent dans les manuels — l'invariable y est même la plus fréquente, 363
+contre 209 devant deux noms coordonnés. Mais docdg sert de modèle à qui rédige
+une copie, et l'accord est la seule forme qu'un correcteur ne relèvera jamais.
+
+### Corrigé
+
+**La virgule décimale n'est plus prise pour un séparateur de coordonnées.**
+`<Soit>un point A(2;-1,5)` posait un point de l'espace, de coordonnées
+(2 ; −1 ; 5). Les composantes se coupaient sur le point-virgule **et** sur la
+virgule, alors que la règle n°8 du manuel réserve celle-ci au rôle de virgule
+décimale à l'intérieur d'un nombre. Encadrée de chiffres, elle appartient
+désormais au nombre — et la faute passait jusqu'ici sans le moindre message.
+
+---
+
+>>>>>>> 2bfe4ad (feat: release v2.5 - ajout de la POO, des démonstrations et refonte des tests)
 ## 2.4 — l'informatique au complet
 
 La partie informatique — algorithmique et programmation — couvre désormais

@@ -187,6 +187,69 @@ fn liste_fr(mots: &[String]) -> String {
     }
 }
 
+/// La décomposition positionnelle de l'école élémentaire :
+/// « 4 782 = 4 × 1 000 + 7 × 100 + 8 × 10 + 2 ». Les rangs à zéro s'omettent,
+/// le chiffre des unités s'écrit seul.
+fn decomposition_positionnelle(desc: &str) -> Option<String> {
+    let compact: String = desc
+        .trim()
+        .trim_end_matches('.')
+        .chars()
+        .filter(|c| !c.is_whitespace() && *c != '\u{202f}' && *c != '\u{a0}')
+        .collect();
+    if compact.is_empty() || !compact.chars().all(|c| c.is_ascii_digit()) {
+        return None;
+    }
+    let n: u64 = compact.parse().ok()?;
+    if n < 10 {
+        return None;
+    }
+    let chiffres: Vec<u32> = compact.chars().map(|c| c.to_digit(10).unwrap()).collect();
+    let mut termes: Vec<String> = Vec::new();
+    let total = chiffres.len();
+    for (i, c) in chiffres.iter().enumerate() {
+        if *c == 0 {
+            continue;
+        }
+        let rang = total - 1 - i;
+        if rang == 0 {
+            // Les unités ne forment pas un produit : elles s'écrivent seules.
+            termes.push(format!("{}", c));
+        } else {
+            // Chaque produit est parenthésé : l'élève voit des paquets, non
+            // une file d'opérations — c'est tout l'objet de l'exercice.
+            let puissance = 10u64.pow(rang as u32);
+            termes.push(format!(
+                "({} \\times {})",
+                c,
+                groupe_milliers(puissance)
+            ));
+        }
+    }
+    // Un terme seul n'a rien à grouper : « 50 = 5 × 10 », sans parenthèses.
+    if termes.len() == 1 {
+        termes[0] = termes[0].trim_start_matches('(').trim_end_matches(')').to_string();
+    }
+    Some(bloc_prose(&[format!(
+        "\\[{} = {}\\]",
+        groupe_milliers(n),
+        termes.join(" + ")
+    )]))
+}
+
+/// Les milliers se séparent d'une espace fine, à la française.
+fn groupe_milliers(n: u64) -> String {
+    let brut = n.to_string();
+    let mut out = String::new();
+    for (i, c) in brut.chars().enumerate() {
+        if i > 0 && (brut.len() - i) % 3 == 0 {
+            out.push_str("\\,");
+        }
+        out.push(c);
+    }
+    out
+}
+
 pub(crate) fn commande_en_ligne(verbe: &str, desc: &str) -> Option<String> {
     let bas = desc.to_lowercase();
     match verbe {
@@ -251,6 +314,16 @@ pub(crate) fn commande_en_ligne(verbe: &str, desc: &str) -> Option<String> {
 pub fn commande(verbe: &str, desc: &str, corps: Option<&str>, env: &mut Env) -> Option<String> {
     let bas = desc.to_lowercase();
     match verbe {
+        // Décomposer un nombre entier, au sens de l'école élémentaire :
+        // « 4 782 = 4 × 1 000 + 7 × 100 + 8 × 10 + 2 ». La décomposition en
+        // éléments simples, elle, se demande avec son complément et continue
+        // vers le calcul formel.
+        "Décompose" => {
+            if let Some(html) = decomposition_positionnelle(desc) {
+                return Some(html);
+            }
+            None
+        }
         "Écris" => {
             if bas.contains("notation scientifique") {
                 return notation_scientifique(desc);

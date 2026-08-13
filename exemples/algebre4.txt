@@ -73,3 +73,15 @@ Une matrice à valeur propre double :
 <h1>Une table à la demande
 soit n = <Saisis>un entier{Quel module pour la table d'addition ?}
 <Dresse>la table de Z/#nZ pour l'addition
+
+<page suivante h2>Racines complexes et réduction
+<Calcule>les racines cinquièmes de l'unité
+<Calcule>les racines cubiques de 8i
+
+<Soit>la matrice T {
+	2 ; 1
+	0 ; 2
+}
+<Trigonalise>T
+<Soit>les vecteurs u(1;0;1) et v(0;1;1)
+<Orthonormalise>la famille u et v

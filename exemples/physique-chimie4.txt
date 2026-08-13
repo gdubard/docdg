@@ -3,7 +3,7 @@ page {
 	marges: 5;
 	espacements: 2;
 	taille: 11;
-	interligne: 1.2;
+	interligne: 1.4;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>

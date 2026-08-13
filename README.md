@@ -1,4 +1,4 @@
-# *docdg 2.4*
+# *docdg 2.5*
 
 **docdg** is a Rust document class built around a French-only prose
 tag language (no anglicisms). Users write a single `.docdg` file where every
@@ -19,7 +19,7 @@ cross-references, bibliography).
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-2.4-2980b9?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.5-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![License](https://img.shields.io/badge/license-GPL_v3+-8e44ad?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
@@ -54,36 +54,38 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 ## **📚 Sommaire détaillé**
 
 1. [Qu'est-ce que docdg ?](#-quest-ce-que-docdg-)
-2. [Fonctionnalités clés](#-fonctionnalités-clés)
-3. [Pourquoi docdg ?](#-pourquoi-docdg-)
-4. [Ce dont vous avez besoin](#-ce-dont-vous-avez-besoin)
-5. [Premiers documents](#-premiers-documents)
-6. [La syntaxe](#-la-syntaxe)
-7. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
-8. [Les actions](#-les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
-9. [Les saisies interactives](#-les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
-10. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
-11. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
-12. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
-13. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
-14. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
-15. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
-16. [Les groupes](#-les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
-17. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
-18. [Les mathématiques](#-les-mathématiques)
-19. [La géométrie](#-la-géométrie)
-20. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
-21. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-22. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
-23. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
-24. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
-25. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-26. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
-27. [Les exemples, par niveau](#-les-exemples-par-niveau)
-28. [Les documents complexes](#-les-documents-complexes)
-29. [Référence complète](#-référence-complète) — couleurs et options de classe
-30. [Bonnes pratiques](#-bonnes-pratiques)
-31. [Feuille de route](#-feuille-de-route) — ce que prépare la prochaine version
+2. [Ce que la 2.5 apporte](#-ce-que-la-25-apporte) — rédaction du supérieur, démonstrations, terme des versions
+3. [Fonctionnalités clés](#-fonctionnalités-clés)
+4. [Pourquoi docdg ?](#-pourquoi-docdg-)
+5. [Ce dont vous avez besoin](#-ce-dont-vous-avez-besoin)
+6. [Premiers documents](#-premiers-documents)
+7. [La syntaxe](#-la-syntaxe)
+8. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
+9. [Les actions](#-les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
+10. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
+11. [Les saisies interactives](#-les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
+12. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
+13. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
+14. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
+15. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
+16. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
+17. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
+18. [Les groupes](#-les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
+19. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
+20. [Les mathématiques](#-les-mathématiques)
+21. [La géométrie](#-la-géométrie)
+22. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
+23. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
+24. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
+25. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
+26. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
+27. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+28. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
+29. [Les exemples, par niveau](#-les-exemples-par-niveau)
+30. [Les documents complexes](#-les-documents-complexes)
+31. [Référence complète](#-référence-complète) — couleurs et options de classe
+32. [Bonnes pratiques](#-bonnes-pratiques)
+33. [Feuille de route](#-feuille-de-route) — ce que prépare la prochaine version
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
@@ -128,6 +130,14 @@ Ce manuel suit une **progression logique** :
 Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg génère le HTML et le PDF pour vous, en coulisse.
 
 ---
+
+## **🆕 Ce que la 2.5 apporte**
+
+**La rédaction du supérieur.** Le vocabulaire et la syntaxe des énoncés ont été repris pour coller à ce qu'attendent les enseignants de mathématiques du supérieur. Le travail ne s'est pas fait au jugé : six ouvrages de référence — 2,1 millions de mots — ont été dépouillés. L'ordre nom-nature de la déclaration y est unanime, 777 occurrences contre 15, chez les six auteurs sans exception. docdg écrit désormais « Soit *f* la fonction définie par *f*(*x*) = … » et non « Soit une fonction *f*(*x*) = … », en phrases plutôt qu'en formules enveloppant du texte.
+
+**Les démonstrations.** Dix raisonnements — direct, contraposée, absurde, récurrence, disjonction de cas, analyse-synthèse, double inclusion, élément quelconque, principe des tiroirs, existence et unicité — chacun avec sa charpente : l'annonce, les étapes étiquetées, la conclusion quand la logique l'exige. Le moteur fournit la charpente, vous écrivez les mathématiques. Et lorsque l'énoncé est à sa portée, il démontre seul : par le **calcul formel** (SymPy, SciPy) quand il s'agit de vérifier une identité ou une inégalité, par une **bibliothèque de plus de cent démonstrations types** quand il s'agit d'une idée que rien ne calcule. Une formule fausse est refusée avec sa raison — le moteur ne démontre pas un mensonge.
+
+**Chaque version a un terme.** docdg reste gratuit, mais une installation est valable 90 jours ; la barre d'outils affiche les jours restants. Vos documents ne sont pas affectés — ce sont vos fichiers, sur votre disque.
 
 ## **✨ Fonctionnalités clés**
 
@@ -281,6 +291,7 @@ document {
 | `décalage`   | nombre             | `100`       | Décalage exposants/indices (%) |
 | `césure`     | `oui`/`non`        | `oui`       | Coupure des mots en fin de ligne, selon les motifs français |
 | `orphelines` | nombre             | `2`         | Lignes minimales laissées en bas de page |
+| `numérotation` | `composée`, `simple` ou `sans` | `composée` | Numéros de page : `1 / 3`, `1` seul, ou aucun |
 | `veuves`     | nombre             | `2`         | Lignes minimales reportées en haut de page |
 | `précision`  | nombre             | `-1`        | Décimales pour arrondi (`-1` = pas d'arrondi) |
 
@@ -611,9 +622,7 @@ Notation colonne, deux ou trois coordonnées, fractions acceptées. Le nom est f
 Le tableau se dresse tout seul. La somme des probabilités est vérifiée : une loi qui ne totalise pas 1 est refusée, avec le total fautif dans le message.
 
 ```docdg
-<Définis>la suite u par récurrence{
-	u(0) = 1 ; u(n+1) = 2u(n) + 1
-}
+<Soit>la suite u définie par u(0) = 1 et u(n+1) = 2u(n) + 1
 
 <Calcule>les 6 premiers termes de u
 ```
@@ -633,32 +642,6 @@ Le trinôme se donne tel qu'il s'écrit, un par ligne. L'étude sort complète :
 ```
 
 Les fractions restent exactes tant que le discriminant est un carré parfait ; sinon le radical est conservé et une valeur approchée l'accompagne. La variable se précise si besoin : `<Étudie le second degré en t>`.
-
-### **3️⃣ `<Pose l'opération>` — Opérations posées**
-
-Un nombre, un signe, un nombre : chaque chiffre prend sa case, le trait se pose tout seul, la ligne du résultat reste vide pour l'élève.
-
-```docdg
-<Pose>l'opération{
-	347 + 58
-	4732 - 1589
-}
-```
-
-Une opération par ligne. Les signes acceptés sont `+`, `-` et `×` (ou `*`, ou `x`). Les décimaux s'alignent sur la virgule et se complètent par des zéros, comme au tableau.
-
-| **Option** | **S'écrit** | **Défaut** | **Description** |
-| --- | --- | --- | --- |
-| Résultat | `avec le résultat` | absent | Remplit la ligne du résultat ; pour la multiplication, affiche les produits partiels décalés |
-
-```docdg
-<Pose>une opération avec le résultat{
-	47 × 23
-	12,5 + 3,75
-}
-```
-
-La soustraction refuse de descendre sous zéro et la multiplication se pose sur des entiers : dans les deux cas le message le dit en français.
 
 ### **3️⃣ `<Insère une image>` — Insertion d'images**
 
@@ -833,6 +816,74 @@ soit chapitre = <bleu gras sous-section decimal>
 
 ---
 
+## **🧾 Les démonstrations**
+
+Une démonstration s'écrit avec le verbe **`<Montre>`** et lui seul — la règle d'or s'applique ici comme partout : le verbe dans la balise, le raisonnement et l'énoncé en complément, `<Montre>par récurrence que …` — dans les manuels du supérieur, « Montrons que » écrase toutes les autres annonces. Le raisonnement direct est la forme nue ; les neuf autres se nomment après le verbe, d'un seul nom chacun, parce que **chaque raisonnement s'annonce avant de se dérouler** — une analyse-synthèse non annoncée, par exemple, ressemble à une pétition de principe pour le correcteur pressé.
+
+Le moteur fournit la charpente — l'annonce, les étapes nommées, la conclusion quand la logique l'exige — et vous n'écrivez que les mathématiques. Les clôtures suivent l'usage réel : seules celles qui **font partie du raisonnement** sont produites (la récurrence invoque son principe, l'absurde conclut de la contradiction, la disjonction constate que les cas couvrent tout), et jamais de « ce qui achève la démonstration ».
+
+| Raisonnement | Écriture | Étapes attendues |
+|---|---|---|
+| directe | `<Montre>que …` | — |
+| contraposée | `<Montre>par contraposée que …` | `contraposée{…}` |
+| absurde | `<Montre>par l'absurde que …` | `absurde{…}`, et `contradiction{…}` en option |
+| récurrence | `<Montre>par récurrence que …` | `initialisation{…}`, `hérédité{…}` |
+| disjonction de cas | `<Montre>par disjonction de cas que …` | `cas ⟨description⟩ {…}`, répété |
+| analyse-synthèse | `<Montre>par analyse-synthèse que …` | `analyse{…}`, `synthèse{…}` |
+| double inclusion | `<Montre>par double inclusion que …` | `directe{…}`, `réciproque{…}` |
+| propriété universelle | `<Montre>par élément quelconque …` | `soit{…}` |
+| tiroirs | `<Montre>par le principe des tiroirs que …` | `objets{…}`, `tiroirs{…}` |
+| existence et unicité | `<Montre>l'existence et l'unicité de …` | `existence{…}`, `unicité{…}` |
+
+**Exemple :**
+
+```docdg
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k = (n(n+1))/2$ {
+	initialisation{
+		Pour $n = 0$, les deux membres valent $0$.
+	}
+	hérédité{
+		Soit $n$ un entier pour lequel la propriété est vraie.
+		Alors $somme(k=0;n+1) k = (n(n+1))/2 + (n+1) = ((n+1)(n+2))/2$.
+	}
+}
+```
+
+Le moteur annonce « Montrons par récurrence que… », étiquette **Initialisation** et **Hérédité**, et conclut : « La propriété est vraie au premier rang et héréditaire : d'après le principe de récurrence, … ». Une étape oubliée est signalée — `il manque l'étape « initialisation{…} »` — et un raisonnement inconnu liste les formes admises.
+
+Le corps d'une étape est du docdg vivant : prose, mathématiques `$…$`, interpolations `#variable` et commandes du langage s'y composent librement. Les documents `exemples/demonstration3.txt` et `exemples/demonstration4.txt` déroulent la panoplie complète.
+
+### **Trois sources, une seule rédaction**
+
+Une démonstration peut venir de trois endroits, et sort toujours dans la même langue :
+
+| Source | Quand | Ce qu'elle apporte |
+|---|---|---|
+| **Vous** | vous écrivez le corps entre accolades | les mathématiques ; le moteur fournit la charpente |
+| **Le calcul formel** (SymPy, SciPy) | pas de corps, et l'énoncé est calculable | la vérification **et** la rédaction, chaîne d'égalités comprise |
+| **La bibliothèque** (`demonstrations.json`) | pas de corps, et l'énoncé y figure | les démonstrations d'idée, que rien ne calcule |
+
+**Sans corps, le moteur démontre lui-même** ce qui est à la portée du calcul formel — comme partout dans le langage, l'absence d'accolades signifie que le moteur fait le travail :
+
+```docdg
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k = (n(n+1))/2$
+<Montre>par élément quelconque réel $x$, $x^2 + 1 >= 2x$
+```
+
+La première vérifie l'initialisation et l'hérédité par le calcul, puis rédige la démonstration complète ; la seconde établit l'inégalité par la forme canonique. Une formule fausse est **refusée avec la raison** — le moteur ne démontre pas un mensonge.
+
+**Ce que le calcul n'atteint pas, la bibliothèque le fournit.** Une idée ne se calcule pas : plus de cent démonstrations classiques, du lycée à la L3, sont écrites une fois et appelées par leur seul énoncé. La base ne contient **que** cela — tout ce qu'une identité ou une inégalité vérifiable démontre relève de SymPy, jamais d'une fiche.
+
+```docdg
+<Montre>que $racine(2)$ est irrationnel
+<Montre>qu'il existe une infinité de nombres premiers
+<Montre>l'existence et l'unicité de la division euclidienne
+```
+
+La base ne contient **que** ce qu'aucun outil ne sait faire : une idée, une construction, un argument de structure. Tout ce qu'une identité ou une inégalité vérifiable démontre relève de SymPy — deux sources pour un même résultat finiraient par diverger. On y trouve donc l'irrationalité de √2, le théorème de Cantor, la divergence de la série harmonique, la caractérisation d'un sous-groupe ; on n'y trouve ni la formule du binôme ni l'inégalité de Bernoulli, qui se vérifient par le calcul.
+
+L'énoncé est reconnu après normalisation — accents, mathématiques et ponctuation n'y font rien. Un raisonnement précisé dans la balise l'emporte sur celui de la fiche, et un énoncé absent fait proposer les plus proches. La base vit dans `transpiler/src/maths/demonstrations.json` et suit les versions du logiciel : chaque fiche porte son identifiant, ses clés, son niveau, son raisonnement et son corps **en docdg**.
+
 ## **✏️ Les actions**
 
 ### **`<Soit>` — Poser des hypothèses de départ**
@@ -857,16 +908,27 @@ soit chapitre = <bleu gras sous-section decimal>
 **Affiche :**
 
 ```
-Soit un point A(2;-1,5)
+Soit A le point de coordonnées (2 ; -1,5).
 ```
 
 La forme en bloc, elle, affiche un énoncé par ligne :
 
 ```
-Soit
-	un point A(2;-1,5)
-	un point B(-4,1;3,4)
+Soit A le point de coordonnées (2 ; -1,5).
+Soit B le point de coordonnées (-4,1 ; 3,4).
 ```
+
+**L'ordre suit l'usage du supérieur : le nom, puis la nature.** « Soit A le point de coordonnées (2 ; 3) », et non « Soit le point A(2 ; 3) ». Le pluriel accorde l'impératif — « Soient A et B les points de coordonnées … ». Chaque déclaration est une **phrase**, non une formule affichée :
+
+| Déclaration | Rendu |
+|---|---|
+| `<Soit>une fonction f(x) = x^2 - 2` | Soit *f* la fonction définie par *f*(*x*) = *x*² − 2. |
+| `<Soit>les fonctions f(x) = x^2 et g(x) = -x^2` | Soient *f* et *g* les fonctions définies par … |
+| `<Soit>un vecteur u(3;-2)` | Soit *u⃗* le vecteur de coordonnées (3 ; −2). |
+| `<Soit>la matrice M{…}` | Soit *M* la matrice définie par : puis la matrice hors texte |
+| `<Soit>le système s{…}` | Soit (*s*) le système : puis le système hors texte |
+
+Le système garde l'ordre inverse : son nom est une étiquette parenthésée, non le nom propre de l'objet.
 
 Les points ainsi déclarés peuvent ensuite être repris par `<Trace>` (voir plus bas) sans qu'il soit nécessaire de redonner leurs coordonnées.
 
@@ -936,6 +998,7 @@ en clé:valeur (le seul réglage technique restant à ce niveau) — `rotation:N
 
 ```docdg
 <Trace>le cercle O, de rayon 3 cm                 % rayon en cm
+<Soit>les points A(0;0) et B(3;0)
 <Trace>le cercle O, de rayon AB                  % rayon = longueur du segment AB
 <Trace>le cercle O, de diamètre 6 cm             % via le diamètre plutôt que le rayon
 <Trace>le cercle, de centre O et de rayon 4 cm   % centre nommé, sans coordonnées
@@ -957,9 +1020,15 @@ Mêmes options pour `disque` (`de centre A`, `de rayon N` ou `de diamètre N`, `
 **Exemples :**
 
 ```docdg
-<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5]
-<Trace>dans un repère orthonormé où l'abscisse appartient à [-4 ; 4] et l'ordonnée à [-3 ; 3], avec une unité de 1,5 cm
-<Trace>dans un repère orthogonal où l'abscisse appartient à [-3 ; 3] et l'ordonnée à [-3 ; 3], avec des unités respectives de 2 cm et 0,5 cm
+<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5] {
+	le point A(1;2)
+}
+<Trace>dans un repère orthonormé où l'abscisse appartient à [-4 ; 4] et l'ordonnée à [-3 ; 3], avec une unité de 1,5 cm {
+	le point A(1;2)
+}
+<Trace>dans un repère orthogonal où l'abscisse appartient à [-3 ; 3] et l'ordonnée à [-3 ; 3], avec des unités graphiques de 2 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées {
+	le point A(1;2)
+}
 ```
 
 Déclarer un repère `orthonormé` avec deux unités distinctes est une contradiction : docdg la refuse et rappelle la forme `orthogonal`. *(L'ancien réglage `unité:N` en clé:valeur, comme les réglages d'affichage `avec le quadrillage`, `avec les axes` et `avec les noms`, n'existent plus : l'unité est une grandeur qui se dit en prose, et les axes gradués sont constitutifs du repère.)*
@@ -1002,8 +1071,9 @@ Même convention que pour les figures planes : `arête`, `rayon`, `diamètre`, `
 Pour tracer un élément isolé, sans ouvrir un repère complet :
 
 ```docdg
+<Soit>un point A(2;-1,5)
 <Trace>le point A                    % A doit avoir été défini au préalable (ex. via <Soit>)
-<Trace>le point A(2;-1,5)            % définit A et le trace
+<Place>un point B(3 ; 1)             % place B : le déclare et le marque
 <Trace>la droite (AB)
 <Trace>la demi-droite [AB)
 <Trace>la demi-droite (AB]
@@ -1031,15 +1101,14 @@ Pour construire une figure complète dans une partie (ou un cadre) — plusieurs
 **Syntaxe :**
 
 ```docdg
-<Trace>{
-    un repère où l'abscisse appartient à [xmin ; xmax] et l'ordonnée à [ymin ; ymax]
-    le point A(x;y)
-    la droite y = mx + b
-    la droite passant par A et B
-    le vecteur u(x;y)
-    le cercle C, de centre (x;y) et de rayon r
-    la tangente au cercle C, au point T
-    la région y > x+1
+<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5] {
+	le point A(-1;0)
+	le point B(2;3)
+	la droite y = 2x + 1
+	la droite passant par A et B
+	le vecteur u(1;2)
+	le cercle C, de centre (1;-2) et de rayon 1,5
+	la région y > x + 1
 }
 ```
 
@@ -1158,6 +1227,10 @@ Une valeur validée s'affiche en bleu ; **cliquer dessus rouvre la question** �
 Une saisie s'affiche avec `#nom` et entre dans les calculs comme n'importe quelle variable :
 
 ```docdg
+soit prénom = "Iris"
+soit âge = 9
+soit taille = 1,32
+soit a = 3
 #prénom a #âge ans et mesure #taille m, soit #{taille * 100} cm.
 <Trace>le solide cube, d'arête #a cm
 ```
@@ -1488,7 +1561,7 @@ Un **nom** pour ce qui produit une valeur, un **verbe** pour ce qui répond par 
 **Écrire une suite sur une ligne.** Une boucle qui affiche met chaque tour sur sa ligne ; `jonction` aligne une suite avec le séparateur voulu, sans l'écueil de l'accumulateur qui en laisse un de trop à la fin.
 
 ```docdg
-#{jonction(premiers(50) ; ", ")}
+#{jonction({2 ; 3 ; 5 ; 7} ; ", ")}
 #{découpe("un code" ; " ")}
 ```
 
@@ -1625,6 +1698,7 @@ Comme pour un point, plusieurs déclarations se regroupent entre accolades :
 ### **Tracé de la courbe**
 
 ```docdg
+<Soit>une fonction f(x) = x^2 - 2
 <Représente>graphiquement la fonction f
 <Représente>graphiquement la fonction f pour x appartient à [-5 ; 5] et y à [-10 ; 10]
 <Représente>graphiquement la fonction f, en rouge et de trait 0,5 mm
@@ -1651,12 +1725,12 @@ Chaque construction se pose en une phrase, sur une fonction ou une matrice déj�
 
 <Calcule>le développement limité de f en 0 à l'ordre 4    % avec le o(x^4) français
 
-<Calcule>les racines cinquièmes de l'unité     % S = {1, e^(2ipi/5), ...}
+<Calcule>les racines cinquièmes de l'unité     % S = (1, e^(2ipi/5), ...)
 <Calcule>les racines cubiques de 8i            % racines n-ièmes complexes
 
 <Factorise>x^2 - 5x + 6                        % (x - 2)(x - 3)
 <Simplifie>(x^2 - 1)/(x - 1)                   % x + 1
-<Résous>l'équation x^2 = 2x + 1                % S = {1 - rac(2), 1 + rac(2)}
+<Résous>l'équation x^2 = 2x + 1                % S = (1 - rac(2), 1 + rac(2))
 
 <Soit la matrice M>{
     2 ; 1
@@ -1701,6 +1775,7 @@ C'est la seule forme : on nomme la fonction, docdg fait le reste. `<Étudie les 
 Les compagnons du calcul formel s'écrivent tous par une **action** — un verbe à l'impératif, jamais un nom seul : `<Calcule la dérivée de q>` (et `<Calcule la dérivée seconde de q>`) affiche la dérivée simplifiée ; `<Détermine les zéros de q>` l'ensemble exact des solutions de q(x) = 0, radicaux compris ; `<Calcule la primitive de q>` une primitive (avec sa constante). Les verbes interchangeables sont `Calcule`, `Détermine`, `Donne`, `Cherche`, `Trouve`, `Établis`, `Évalue`. Ces phrases se **factorisent** au pluriel (règle n°10) : `<Calcule la dérivée de f, g et h>` affiche les trois dérivées, une par ligne — l'argument doit être une pure liste de noms, virgules entre eux, « et » avant le dernier. Le tracé de la même fonction se fait par une phrase en langage naturel :
 
 ```docdg
+<Soit>une fonction q(x) = x^3 - x
 <Représente>graphiquement la fonction q pour x appartient à [-2 ; 2] et y à [-3 ; 3], avec 200 échantillons
 ```
 
@@ -1724,6 +1799,7 @@ Une courbe paramétrée se donne par ses deux coordonnées, une polaire par son 
 ```docdg
 <Trace>la courbe paramétrée x = cos(t)^3 et y = sin(t)^3 pour t dans [0 ; 2*pi]
 <Trace>la courbe polaire r = 1 + cos(t) pour t dans [0 ; 2*pi], en rouge
+<Trace>la rosace à 4 pétales, en violet       % le moteur choisit le coefficient : cos(2t)
 <Trace>la courbe polaire r = cos(3*t), en vert
 ```
 
@@ -2125,6 +2201,10 @@ Une droite se déclare par un point et un vecteur directeur — en coordonnées 
 Et les positions relatives se **rédigent pas à pas**, comme une copie modèle — colinéarité des vecteurs, résolution du système, vérification de la troisième équation, conclusion avec le point ou la droite d'intersection :
 
 ```docdg
+<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>la droite d' passant par B(0;1;3) et de vecteur directeur v(2;2;-2)
+<Soit>le plan P d'équation 2x + y - z = 3
+<Soit>le plan Q d'équation 2x + y - z = 5
 <Étudie>la position relative des droites d et d'
 <Étudie>la position relative de la droite d et du plan P
 <Étudie>la position relative des plans P et Q
@@ -2155,23 +2235,21 @@ Chaque cas conclut proprement : droites confondues, strictement parallèles, sé
 **Exemples :**
 
 ```docdg
-<Représente>graphiquement une statistique barres données:{1: 4 | 2: 7 | 3: 2}
-<Représente>graphiquement une statistique camembert données:{Pommes: 5 | Poires: 3 | Bananes: 2}
-<Représente>graphiquement une statistique histogramme bornes:{0 ; 5 ; 10 ; 20} effectifs:{3 ; 7 ; 2}
-<Représente>graphiquement une statistique nuage données:{(1 ; 2,1) (2 ; 2,6) (3 ; 3,4)}, avec ajustement
-<Représente>graphiquement une statistique boite a moustaches données:{12 ; 15 ; 9 ; 21 ; 14 ; 15 ; 18 ; 11 ; 16}
+<Représente>graphiquement une statistique en barres avec les données {1: 4 | 2: 7 | 3: 2}
+<Représente>graphiquement une statistique en camembert avec les données {Pommes: 5 | Poires: 3 | Bananes: 2}
+<Représente>graphiquement une statistique en histogramme avec les bornes {0 ; 5 ; 10 ; 20} et les effectifs {3 ; 7 ; 2}
 ```
 
 **Avec variables :**
 
 ```docdg
 soit notes = {
-    Mathematiques = 15,5;
-    Francais = 12,0;
-    Histoire = 14,0
+	Mathématiques: 15,5
+	Français: 12
+	Histoire: 14
 }
-<Représente>graphiquement une statistique barres données:notes
-<Représente>graphiquement une statistique camembert données:notes
+<Représente>graphiquement une statistique en barres avec les données notes
+<Représente>graphiquement une statistique en camembert avec les données notes
 ```
 
 ### **🌳 Arbres de probabilités**
@@ -2226,15 +2304,15 @@ soit notes = {
 **Syntaxe résolue (inéquation) :**
 
 ```docdg
-<Représente>graphiquement la droite graduée x:{-5 ; 5}{
-    abs(x - 1/2) >= 5/2
+<Représente>graphiquement la droite graduée sur [-5 ; 5] {
+	abs(x - 1/2) >= 5/2
 }
 ```
 
 **Syntaxe déclarée (ensemble donné) :**
 
 ```docdg
-<Représente>graphiquement la droite graduée x:{-5 ; 5} intervalle:{[-2 ; 3) union (4 ; inf)} points:{-4}
+<Représente>graphiquement la droite graduée sur [-5 ; 5], d'intervalle {[-2 ; 3)} et de points {-4}
 ```
 
 **Symboles :** `[`/`]` = inclus, `(`/`)` = exclu, `union`, `inf`, `-inf`
@@ -2313,6 +2391,7 @@ Dix figures (du carré à la boule), formule affichée, $\pi$ gardé exact ($36\
 ### **Nombres et programmes de calcul**
 
 ```docdg
+<Soit>une fonction f(x) = 2x + 1
 <Calcule>1/2 + 1/3
 <Simplifie>la fraction 84/60
 <Écris>le nombre 45 600 en notation scientifique
@@ -2340,6 +2419,7 @@ Mise au même dénominateur, inverse pour la division, simplification par le PGC
 
 ```docdg
 <Soit>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+<Soit>un vecteur u(2;1)
 
 <Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
 <Construis>l'image du triangle ABC par la symétrie centrale de centre O
@@ -2389,6 +2469,10 @@ Produit scalaire détaillé (orthogonalité signalée quand il est nul), normes 
 <Dresse>la matrice d'adjacence de G
 <Dénombre>les chemins de longueur 3 de A à B dans G
 
+<Soit>la matrice M {
+	0,5 ; 0,5
+	0,2 ; 0,8
+}
 <Calcule>la puissance 3 de M
 <Calcule>l'état stable de M
 <Résous>l'équation diophantienne 12x + 20y = 8
@@ -2406,6 +2490,7 @@ Les graphes se donnent une arête par ligne (`--` non orienté, `->` orienté) e
 > Le registre des classes préparatoires s'écrit tel quel. Les résultats sont exacts ; les impossibilités renvoient honnêtement au raisonnement à rédiger.
 
 ```docdg
+<Soit>les fonctions f(x) = x^2, g(x) = 1/x^2 et s(x) = sin(x)
 <Calcule>l'intégrale de f entre 0 et 1
 <Détermine>la nature de l'intégrale de g entre 1 et +infini
 <Calcule>un équivalent de s en 0
@@ -2415,6 +2500,11 @@ Les graphes se donnent une arête par ligne (`--` non orienté, `->` orienté) e
 Intégrales en forme close, impropres avec nature et valeur, équivalents en un point ou en $\pm\infty$ (notation $\sim$), séries avec convergence prouvée et somme quand elle existe ($\pi^2/6$…).
 
 ```docdg
+<Soit>la matrice M {
+	2 ; 1
+	1 ; 1
+}
+<Soit>les vecteurs u(1;0;1), v(0;1;1), a(1;2;0) et b(1;0;0)
 <Calcule>le rang de M
 <Détermine>le noyau de M
 <Détermine>l'image de M
@@ -2448,6 +2538,7 @@ Les polynômes formels parlent la langue du chapitre : quotient et reste, PGCD u
 Les fonctions de plusieurs variables se posent naturellement ; les points critiques viennent avec leur nature par la hessienne (minimum, maximum, point col).
 
 ```docdg
+<Soit>les fonctions f(x) = x^2, g(x) = x et F(p) = 1/(p^2 + 1)
 <Calcule>la série de Fourier de f sur [-pi ; pi] à l'ordre 4
 <Calcule>la transformée de Laplace de f
 <Calcule>la transformée de Laplace inverse de F
@@ -2614,7 +2705,7 @@ Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolair
 | **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `basique3`, `statistiques-probabilites3` |
 | **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
 
-S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie) ; la 2.3 y ajoute **`publication3`** (une démonstration typographique — césure, veuves et orphelines, cadre et tableau sécables). La 2.4 réorganise la série algorithmique en trois niveaux, comme toutes les autres : **`algo2`** (déclarer et initialiser, entrer et sortir, décider, répéter — jusqu'à `sortir` et `continuer`), **`algo3`** (les conteneurs, les chaînes de caractères et les fonctions) et **`algo4`** (récursivité, algorithmes classiques du programme — recherche, dichotomie, tris, fusion — et structures de données avancées : pile, file, p-uplet, simulation). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. Chaque fichier se clôt sur sa figure à la demande.
+S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie) ; la 2.3 y ajoute **`publication3`** (une démonstration typographique — césure, veuves et orphelines, cadre et tableau sécables). La 2.4 réorganise la série algorithmique en trois niveaux, comme toutes les autres : **`algo2`** (déclarer et initialiser, entrer et sortir, décider, répéter — jusqu'à `sortir` et `continuer`), **`algo3`** (les conteneurs, les chaînes de caractères et les fonctions) et **`algo4`** (récursivité, algorithmes classiques du programme — recherche, dichotomie, tris, fusion — et structures de données avancées : pile, file, p-uplet, simulation). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. La 2.5 ajoute **`vitrine4`** (la démonstration de force : étude de fonction complète, récurrence vérifiée et rédigée par le moteur, système au pivot, géométrie de l'espace — chaque ligne source y produit une rédaction entière), **`calcul1`** (l'école élémentaire : les quatre opérations, décomposition, fractions de même dénominateur, division euclidienne, conversions), **`geometrie1`** (les figures planes : points placés, droites et segments, triangles, cercles, repère), **`demonstration3`** (direct, récurrence, contraposée, absurde, disjonction de cas, propriété universelle) et **`demonstration4`** (analyse-synthèse, double inclusion, principe des tiroirs, existence et unicité, bibliothèque des classiques). Chaque fichier se clôt sur sa figure à la demande.
 
 ---
 
@@ -3021,7 +3112,7 @@ soit sondage = {
 
 ## **🗺️ Feuille de route**
 
-**docdg couvre le programme de mathématiques de l'école aux classes préparatoires, la physique-chimie du lycée à la licence, et la rédaction de documents longs.** Le document est aussi devenu vivant : saisies typées bloquantes, alternative en bloc et en ligne. Côté mathématiques, la couverture va du CP à la L3 — moteur de projection cavalière (solides, patrons, repère de l'espace), géométrie analytique de l'espace, courbes paramétrées et polaires, coniques rédigées, fonctions de deux variables (surfaces, lignes de niveau, Lagrange, intégrales multiples), transformations du plan complexe et résidus, groupes, lois à densité et théorème central limite. La 2.1 y ajoute la physique-chimie (équations, avancement, unités, constantes, incertitudes, opérateurs de champs), la 2.2 la publication longue (chapitres, page de titre, renvois croisés, bibliographie, polices locales), et la 2.4 un langage algorithmique complet — conteneurs et chaînes passés en argument, primitives, p-uplets, récursivité, tirage aléatoire — couvrant le programme de NSI et l'informatique commune des classes préparatoires.
+**docdg couvre le programme de mathématiques de l'école aux classes préparatoires, la physique-chimie du lycée à la licence, et la rédaction de documents longs.** Le document est aussi devenu vivant : saisies typées bloquantes, alternative en bloc et en ligne. Côté mathématiques, la couverture va du CP à la L3 — moteur de projection cavalière (solides, patrons, repère de l'espace), géométrie analytique de l'espace, courbes paramétrées et polaires, coniques rédigées, fonctions de deux variables (surfaces, lignes de niveau, Lagrange, intégrales multiples), transformations du plan complexe et résidus, groupes, lois à densité et théorème central limite. La 2.1 y ajoute la physique-chimie (équations, avancement, unités, constantes, incertitudes, opérateurs de champs), la 2.2 la publication longue (chapitres, page de titre, renvois croisés, bibliographie, polices locales), et la 2.4 un langage algorithmique complet — conteneurs et chaînes passés en argument, primitives, p-uplets, récursivité, tirage aléatoire — couvrant le programme de NSI et l'informatique commune des classes préparatoires. La 2.5, enfin, aligne la rédaction sur l'usage des enseignants du supérieur et introduit les démonstrations : dix raisonnements, la preuve automatique par le calcul formel, et une bibliothèque de démonstrations types du lycée à la L3.
 
 Le projet continue d'évoluer, avec une progression arrêtée :
 

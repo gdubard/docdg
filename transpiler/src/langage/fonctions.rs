@@ -22,51 +22,13 @@ pub struct Fonction {
 
 pub type Fonctions = BTreeMap<String, Fonction>;
 
-fn groupe_apparie(s: &str, ouvre: char, ferme: char) -> Option<usize> {
-    let mut profondeur = 0i32;
-    for (i, c) in s.char_indices() {
-        if c == ouvre {
-            profondeur += 1;
-        } else if c == ferme {
-            profondeur -= 1;
-            if profondeur == 0 {
-                return Some(i);
-            }
-        }
-    }
-    None
-}
+use crate::utils::decoupe::groupe_apparie;
 
 /// Découpe les arguments d'un appel sur les points-virgules de premier
 /// niveau, **guillemets exceptés** : dans `jonction(v ; " ; ")`, le second
 /// point-virgule est une valeur, non une coupure.
 fn coupe_args(s: &str) -> Vec<&str> {
-    let mut morceaux = Vec::new();
-    let mut profondeur = 0i32;
-    let mut debut = 0usize;
-    let mut entre_guillemets = false;
-    for (i, c) in s.char_indices() {
-        if c == '"' {
-            entre_guillemets = !entre_guillemets;
-            continue;
-        }
-        if entre_guillemets {
-            continue;
-        }
-        match c {
-            '(' | '{' | '[' => profondeur += 1,
-            ')' | '}' | ']' => profondeur -= 1,
-            ';' if profondeur == 0 => {
-                morceaux.push(&s[debut..i]);
-                debut = i + 1;
-            }
-            _ => {}
-        }
-    }
-    if debut <= s.len() {
-        morceaux.push(&s[debut..]);
-    }
-    morceaux
+    crate::utils::decoupe::coupe_arguments(s)
 }
 
 fn nom_valide(s: &str) -> bool {
@@ -1735,7 +1697,7 @@ fn evalue_corps(
                 let cond_resolue = resoudre_appels(cond, locales, boites, fonctions, profondeur);
                 let cond_resolue =
                     super::conteneurs::resoudre_lectures(&cond_resolue, locales, boites, true);
-                let vrai = crate::layout::rendu::evalue_condition_publique(&cond_resolue, locales);
+                let vrai = crate::layout::controle::evalue_condition_publique(&cond_resolue, locales);
                 if vrai {
                     return evalue_corps(alors, locales, boites, attendu, fonctions, profondeur);
                 }
@@ -2306,5 +2268,5 @@ fn condition_vraie(
     let resolue = desencadre_texte(&resolue).unwrap_or(resolue);
     let resolue = super::conteneurs::resoudre_lectures(&resolue, locales, boites, true);
     let resolue = super::conteneurs::resoudre_noms_scalaires(&resolue, boites);
-    crate::layout::rendu::evalue_condition_publique(&resolue, locales)
+    crate::layout::controle::evalue_condition_publique(&resolue, locales)
 }

@@ -89,3 +89,15 @@ soit h2 = <bleu italique sous-section>
 soit a = <Saisis>un entier{Quelle arête pour le cube, en centimètres ?}
 <Trace>le solide cube, d'arête #a cm
 <Calcule>le volume du pavé de longueur #a cm, de largeur #a cm et de hauteur #a cm
+
+<page suivante h1>Dans un repère
+	Le repère accueille points, droites par leur équation réduite, et régions du plan :
+
+<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5] {
+	le point M(-1 ; 0)
+	le point N(2 ; 3)
+	la droite y = 2x + 1
+	la droite passant par M et N
+	la médiatrice de [MN], en bleu
+	la région y > x + 1
+}

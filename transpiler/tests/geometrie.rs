@@ -300,13 +300,14 @@ fn le_cercle_trigonometrique_porte_les_angles_signes() {
 
 #[test]
 fn les_declarations_se_groupent_en_une_phrase() {
+    // le nom précède la nature, et une seule phrase pose les quatre points
     let h = rendu("<Soit>les points A(1;1), B(5;3), C(2;4) et D(4 ; -1)\n");
-    assert_eq!(h.matches("Soit les points").count(), 1);
-    assert!(!h.contains("Soit le point"));
-    assert!(h.contains("et \\(D\\left(4\\ ;\\ -1\\right)\\)"));
+    assert_eq!(h.matches("les points de coordonnées").count(), 1);
+    assert!(h.contains("Soient \\(A\\), \\(B\\), \\(C\\) et \\(D\\)"), "{}", h);
+    assert!(h.contains("et \\(\\left(4\\ ;\\ -1\\right)\\)"), "{}", h);
 
     let h = rendu("<Soit>le vecteur u de coordonnées (2 ; -1)\n");
-    assert!(h.contains("Soit le vecteur"));
+    assert!(h.contains("le vecteur de coordonnées"), "{}", h);
 }
 
 #[test]

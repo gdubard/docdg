@@ -9,6 +9,9 @@ pub enum Obj {
     Sequence { first: String, rec: String },
     Graph { sommets: Vec<String>, arcs: Vec<(usize, usize)> },
     Point { coords: Vec<String> },
+    /// Un objet qui ne vit que par sa phrase de déclaration — le champ de
+    /// vecteurs, notamment, n'a rien à calculer.
+    Notation { phrase: String },
     Vecteur { coords: Vec<String> },
     Plan { equation: String },
     Droite { point: Vec<String>, vecteur: Vec<String> },
@@ -26,6 +29,7 @@ pub fn objects_json(objs: &Objects) -> Value {
             Obj::Sequence { first, rec } => json!({"kind":"sequence","first":first,"rec":rec}),
             Obj::Graph { sommets, arcs } => json!({"kind":"graph","sommets":sommets,"arcs":arcs}),
             Obj::Point { coords } => json!({"kind":"point","coords":coords}),
+            Obj::Notation { .. } => json!({"kind":"notation"}),
             Obj::Vecteur { coords } => json!({"kind":"vecteur","coords":coords}),
             Obj::Plan { equation } => json!({"kind":"plan","equation":equation}),
             Obj::Droite { point, vecteur } => {
@@ -98,6 +102,21 @@ fn is_name(s: &str) -> bool {
 pub fn parse_declaration(rest: &str, block: Option<&str>, objs: &mut Objects) -> Option<Vec<String>> {
     let t = rest.trim();
     let low = t.to_lowercase();
+
+    // Le champ de vecteurs est purement notationnel : il n'a ni courbe ni
+    // tableau de variations associables, il n'est donc pas enregistré. Mais
+    // la déclaration s'énonce — comme les autres, le nom avant la nature.
+    if low.starts_with("un champ de vecteurs") || low.starts_with("le champ de vecteurs") {
+        let apres = &t["un champ de vecteurs".len()..];
+        let nom = apres.split_whitespace().next()?.to_string();
+        objs.insert(
+            nom.clone(),
+            Obj::Notation {
+                phrase: format!("le champ de vecteurs {}", apres.trim()),
+            },
+        );
+        return Some(vec![nom]);
+    }
 
     if low.starts_with("la matrice") || low.starts_with("les matrices") {
         let after = strip_article(&t["la matrice".len().min(t.len())..]);
@@ -191,6 +210,35 @@ pub fn parse_declaration(rest: &str, block: Option<&str>, objs: &mut Objects) ->
     None
 }
 
+/// Les composantes d'un couple ou d'un triplet de coordonnées.
+///
+/// Le point-virgule les sépare ; la virgule aussi, **sauf lorsqu'elle est
+/// décimale** — encadrée de chiffres, elle appartient au nombre. Sans cette
+/// réserve, le point `A(2;-1,5)` que documente le manuel devenait un triplet
+/// `(2 ; -1 ; 5)`, et la faute passait sans le moindre message.
+fn separe_composantes(interieur: &str) -> Vec<String> {
+    let lettres: Vec<char> = interieur.chars().collect();
+    let mut morceaux = Vec::new();
+    let mut courant = String::new();
+    for (i, c) in lettres.iter().enumerate() {
+        let decimale = *c == ','
+            && i > 0
+            && lettres[i - 1].is_ascii_digit()
+            && lettres.get(i + 1).map(char::is_ascii_digit).unwrap_or(false);
+        if (*c == ';' || *c == ',') && !decimale {
+            morceaux.push(std::mem::take(&mut courant));
+        } else {
+            courant.push(*c);
+        }
+    }
+    morceaux.push(courant);
+    morceaux
+        .into_iter()
+        .map(|c| c.trim().to_string())
+        .filter(|c| !c.is_empty())
+        .collect()
+}
+
 fn coordonnees(bloc: &str) -> Vec<Vec<String>> {
     let mut listes = Vec::new();
     let mut reste = bloc;
@@ -200,11 +248,7 @@ fn coordonnees(bloc: &str) -> Vec<Vec<String>> {
             Some(j) => j,
             None => break,
         };
-        let comps: Vec<String> = apres[..j]
-            .split(&[';', ','][..])
-            .map(|c| c.trim().to_string())
-            .filter(|c| !c.is_empty())
-            .collect();
+        let comps = separe_composantes(&apres[..j]);
         if comps.len() >= 2 {
             listes.push(comps);
         }
@@ -326,6 +370,10 @@ fn nom_final(s: &str) -> Option<String> {
 }
 
 fn nettoie_expr(s: &str) -> String {
+    // Dans une expression à résoudre, un « % » n'est jamais un opérateur —
+    // « 30 % de 250 » n'est pas une équation. C'est donc un commentaire de
+    // fin de ligne, et il s'arrête ici plutôt que d'atteindre le solveur.
+    let s = s.split(" %").next().unwrap_or(s);
     let mut t = s.trim().trim_end_matches('.').to_string();
     for q in [
         "diophantienne",
@@ -777,10 +825,17 @@ pub fn parse_command(verb: &str, rest: &str) -> Option<Value> {
         } else {
             None
         };
+        // La borne est un mot : « +infini », « 0 », « -infini ». Le reste de
+        // la ligne — un commentaire, par exemple — ne la concerne pas.
         let at = at_seg
             .replace("à droite", "")
             .replace("à gauche", "")
-            .trim()
+            .split('%')
+            .next()
+            .unwrap_or("")
+            .split_whitespace()
+            .next()
+            .unwrap_or("")
             .to_string();
         return Some(json!({"op":"limit","args":{"name":name,"at":at,"side":side}}));
     }

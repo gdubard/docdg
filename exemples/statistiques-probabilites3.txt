@@ -26,6 +26,14 @@ $EE(X) = somme(k=1;n) k PP(X = k)$
 
 <h2>Arbre de probabilités
 Un nœud à branche unique reçoit son complément automatiquement, le produit de chaque chemin s'imprimant à la feuille :
+<Construis>un arbre horizontal avec les produits {
+	Pile : 0,5
+	Face : 0,5
+}
+<Construis>un arbre prose avec les produits {
+	Pile : 0,5
+	Face : 0,5
+}
 <Construis>un arbre avec les produits {
 	A 0,3 {
 		B 0,6

@@ -1,3 +1,5 @@
+use super::controle::*;
+
 use crate::utils::couleurs::parse_color_at;
 use std::path::PathBuf;
 use std::sync::{Mutex, OnceLock};
@@ -77,6 +79,9 @@ pub struct PageOpts {
     pub cesure: bool,
     pub veuves: u32,
     pub orphelines: u32,
+    /// La numérotation des pages : « composée » (1 / 3), « simple » (1) ou
+    /// « sans ».
+    pub numerotation: String,
 }
 
 impl Default for PageOpts {
@@ -100,6 +105,7 @@ impl Default for PageOpts {
             cesure: true,
             veuves: 2,
             orphelines: 2,
+            numerotation: "composée".to_string(),
         }
     }
 }
@@ -121,7 +127,7 @@ fn json_string(s: &str) -> String {
 impl PageOpts {
     pub fn to_json(&self) -> String {
         format!(
-            "{{\"orientation\":\"{}\",\"marges\":[{},{},{},{}],\"espacements\":[{},{},{},{}],\"police\":{},\"math\":{},\"taille\":{},\"interligne\":{},\"tabulation\":{},\"hauteur\":{},\"decalage\":{},\"precision\":{},\"cesure\":{},\"veuves\":{},\"orphelines\":{},\"titre\":{},\"auteur\":{},\"institution\":{},\"date\":{}}}",
+            "{{\"orientation\":\"{}\",\"marges\":[{},{},{},{}],\"espacements\":[{},{},{},{}],\"police\":{},\"math\":{},\"taille\":{},\"interligne\":{},\"tabulation\":{},\"hauteur\":{},\"decalage\":{},\"precision\":{},\"cesure\":{},\"veuves\":{},\"orphelines\":{},\"numerotation\":\"{}\",\"titre\":{},\"auteur\":{},\"institution\":{},\"date\":{}}}",
             self.orientation,
             self.marges[0], self.marges[1], self.marges[2], self.marges[3],
             self.espacements[0], self.espacements[1], self.espacements[2], self.espacements[3],
@@ -129,6 +135,7 @@ impl PageOpts {
             self.taille, self.interligne,
             self.tabulation, self.hauteur, self.decalage, self.precision,
             self.cesure, self.veuves, self.orphelines,
+            match self.numerotation.as_str() { "simple" => "simple", "sans" => "sans", _ => "composee" },
             json_string(&self.titre), json_string(&self.auteur),
             json_string(&self.institution), json_string(&self.date)
         )
@@ -210,6 +217,14 @@ fn applique_cle(opts: &mut PageOpts, k: &str, v: &str) {
                 opts.orphelines = p.max(1);
             }
         }
+        "numérotation" | "numerotation" => {
+            let val = v.trim().to_lowercase();
+            opts.numerotation = match val.as_str() {
+                "simple" => "simple".to_string(),
+                "sans" | "non" | "aucune" => "sans".to_string(),
+                _ => "composée".to_string(),
+            };
+        }
         _ => {}
     }
 }
@@ -245,52 +260,19 @@ pub fn parse_page(src: &str) -> (PageOpts, String) {
     (opts, reste.to_string())
 }
 
-fn take_group(s: &str, open_idx: usize) -> Option<(String, String)> {
-    if !s[open_idx..].starts_with('{') {
-        return None;
-    }
-    let octets = s.as_bytes();
-    let mut depth = 0i32;
-    let mut i = open_idx;
-    while i < octets.len() {
-        match octets[i] {
-            b'{' => depth += 1,
-            b'}' => {
-                depth -= 1;
-                if depth == 0 {
-                    return Some((s[open_idx + 1..i].to_string(), s[i + 1..].to_string()));
-                }
-            }
-            _ => {}
-        }
-        i += 1;
-    }
-    None
+pub(crate) fn take_group(s: &str, open_idx: usize) -> Option<(String, String)> {
+    crate::utils::decoupe::prend_accolades(s, open_idx)
+        .map(|(corps, suite)| (corps.to_string(), suite.to_string()))
 }
 
+/// La parenthèse compte au même titre que l'accolade et le crochet : sans
+/// elle, le point-virgule d'un appel — `contient(2 ; v)` — était pris pour un
+/// séparateur de colonne et coupait la cellule en deux.
 fn split_top(s: &str, sep: char) -> Vec<String> {
-    let mut out = Vec::new();
-    let mut cur = String::new();
-    let mut depth = 0i32;
-    for c in s.chars() {
-        match c {
-            // La parenthèse compte au même titre que l'accolade et le crochet :
-            // sans elle, le point-virgule d'un appel — `contient(2 ; v)` — était
-            // pris pour un séparateur de colonne et coupait la cellule en deux.
-            '{' | '[' | '(' => {
-                depth += 1;
-                cur.push(c);
-            }
-            '}' | ']' | ')' => {
-                depth -= 1;
-                cur.push(c);
-            }
-            c if c == sep && depth <= 0 => out.push(std::mem::take(&mut cur)),
-            c => cur.push(c),
-        }
-    }
-    out.push(cur);
-    out
+    crate::utils::decoupe::coupe_fragments(s, sep)
+        .into_iter()
+        .map(str::to_string)
+        .collect()
 }
 
 fn read_tag(s: &str) -> Option<(String, String)> {
@@ -313,7 +295,7 @@ fn read_tag(s: &str) -> Option<(String, String)> {
     None
 }
 
-fn subst_var(s: &str, var: &str, val: &str) -> String {
+pub(crate) fn subst_var(s: &str, var: &str, val: &str) -> String {
     let s = subst_in_calc_groups(s, var, val);
     let s: &str = &s;
     let pat = format!("#{}", var);
@@ -361,823 +343,9 @@ fn noms_de_fonctions_math(env: &Env, seg: &str) -> std::collections::BTreeSet<St
     noms
 }
 
-fn accolade_du_corps(entete: &str) -> Option<usize> {
-    let mut i = 0usize;
-    while let Some(p) = entete[i..].find('{') {
-        let abs = i + p;
-        let avant = entete[..abs].trim_end();
-        if avant.ends_with(" dans") || avant.ends_with(" dans ") {
-            let mut profondeur = 0i32;
-            let mut fin = None;
-            for (k, c) in entete[abs..].char_indices() {
-                match c {
-                    '{' => profondeur += 1,
-                    '}' => {
-                        profondeur -= 1;
-                        if profondeur == 0 {
-                            fin = Some(abs + k + 1);
-                            break;
-                        }
-                    }
-                    _ => {}
-                }
-            }
-            match fin {
-                Some(f) => {
-                    i = f;
-                    continue;
-                }
-                None => return Some(abs),
-            }
-        }
-        return Some(abs);
-    }
-    None
-}
 
-/// Repère une ligne réduite au seul mot `sortir` et rend sa position.
-fn position_de_sortir(contenu: &str) -> Option<usize> {
-    position_du_mot(contenu, "sortir")
-}
+pub(crate) const TOURS_MAX: usize = 2000;
 
-fn position_du_mot(contenu: &str, mot: &str) -> Option<usize> {
-    let mut position = 0usize;
-    for ligne in contenu.lines() {
-        if ligne.trim() == mot {
-            return Some(position);
-        }
-        position += ligne.len() + 1;
-    }
-    None
-}
-
-fn condition_de_tour(
-    body: &str,
-    vars: &std::collections::BTreeMap<String, f64>,
-    boites: &crate::langage::conteneurs::Boites,
-    fonctions: &crate::langage::fonctions::Fonctions,
-) -> Option<String> {
-    let t = body.trim_start();
-    if !t.starts_with("si ") {
-        return Some(body.to_string());
-    }
-    let Some(bi) = t.find('{') else {
-        return Some(body.to_string());
-    };
-    let cond_txt = t[3..bi].trim();
-    let Some((alors, apres)) = take_group(t, bi) else {
-        return Some(body.to_string());
-    };
-    let apres_t = apres.trim_start();
-    let (sinon, reste) = if let Some(r) = apres_t.strip_prefix("sinon") {
-        let r = r.trim_start();
-        match take_group(r, 0) {
-            Some((b, s)) => (Some(b), s),
-            None => (None, apres.clone()),
-        }
-    } else {
-        (None, apres.clone())
-    };
-    if !reste.trim().is_empty() {
-        return Some(body.to_string());
-    }
-    let cond_resolue = crate::langage::fonctions::resoudre_appels(cond_txt, vars, boites, fonctions, 0);
-    let cond_resolue = crate::langage::conteneurs::resoudre_lectures(&cond_resolue, vars, boites, true);
-    if eval_condition(&cond_resolue, vars) {
-        Some(dedent(&alors))
-    } else {
-        sinon.map(|b| dedent(&b))
-    }
-}
-
-pub const SEP_ITERATION: char = '\u{E013}';
-
-fn sans_separateur(body: &str) -> String {
-    body.lines()
-        .filter(|l| l.trim() != "\u{E013}")
-        .collect::<Vec<_>>()
-        .join("\n")
-}
-
-fn retrait(l: &str) -> usize {
-    l.chars().take_while(|c| c.is_whitespace()).count()
-}
-
-fn dedent(body: &str) -> String {
-    let min = body
-        .lines()
-        .filter(|l| !l.trim().is_empty())
-        .map(retrait)
-        .min()
-        .unwrap_or(0);
-    body.lines()
-        .map(|l| match l.char_indices().nth(min) {
-            Some((i, _)) if retrait(l) >= min => &l[i..],
-            _ => l.trim_start(),
-        })
-        .collect::<Vec<_>>()
-        .join("\n")
-        .trim_matches('\n')
-        .to_string()
-}
-
-const TOURS_MAX: usize = 2000;
-
-/// `somme = somme + k` — l'affectation d'un nom **déjà déclaré**.
-///
-/// `soit` déclare ; le répéter à chaque tour n'apprend rien et ne se lit pas.
-/// La condition tient en un mot : le nom doit déjà exister. Une ligne de prose
-/// qui contient un signe égal n'est donc jamais prise pour une affectation —
-/// c'est ce qui rend la levée sûre.
-///
-/// La réécriture se fait ici, sur le texte, avant que quoi que ce soit ne
-/// mesure des positions : rien en aval n'a à changer.
-pub fn normalise_affectations(texte: &str) -> String {
-    let mut connus: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
-    let mut sortie = String::with_capacity(texte.len());
-    for ligne in texte.lines() {
-        let nu = ligne.trim_start();
-        let retrait = &ligne[..ligne.len() - nu.len()];
-
-        // ce que la ligne déclare
-        if let Some(reste) = nu.strip_prefix("soit ") {
-            let tete = reste
-                .split_once('=')
-                .map(|(g, _)| g)
-                .unwrap_or(reste)
-                .trim();
-            let nom = tete.split([':', '(']).next().unwrap_or("").trim();
-            if !nom.is_empty() && nom.chars().all(|c| c.is_alphanumeric() || c == '_') {
-                connus.insert(nom.to_string());
-            }
-        }
-        if let Some(reste) = nu.strip_prefix("pour ") {
-            if let Some(nom) = reste.split_whitespace().next() {
-                connus.insert(nom.to_string());
-            }
-        }
-
-        // ce que la ligne affecte
-        let mut reecrite = None;
-        if !nu.starts_with("soit ") && !nu.starts_with('<') && !nu.starts_with('[') {
-            if let Some((gauche, droite)) = nu.split_once('=') {
-                let nom = gauche.trim();
-                // Un dièse à droite signe la prose : on écrit `k=#k` pour
-                // afficher, jamais pour affecter — dans du code, le nom se
-                // lit directement.
-                let simple = !nom.is_empty()
-                    && !droite.contains('#')
-                    && !droite.starts_with('=')
-                    && nom.chars().next().map(|c| c.is_alphabetic() || c == '_').unwrap_or(false)
-                    && nom.chars().all(|c| c.is_alphanumeric() || c == '_');
-                if simple && connus.contains(nom) {
-                    reecrite = Some(format!("{}soit {}", retrait, nu));
-                }
-            }
-        }
-        sortie.push_str(reecrite.as_deref().unwrap_or(ligne));
-        sortie.push('\n');
-    }
-    if !texte.ends_with('\n') {
-        sortie.pop();
-    }
-    sortie
-}
-
-fn applique_affectations(
-    body: &str,
-    etat: &mut std::collections::BTreeMap<String, f64>,
-    boites: &mut crate::langage::conteneurs::Boites,
-    fonctions: &mut crate::langage::fonctions::Fonctions,
-) -> String {
-    let mut sortie = String::new();
-    let mut pos = 0usize;
-    while pos < body.len() {
-        let rest = &body[pos..];
-        let debut_ligne = rest.trim_start_matches(['\t', ' ']);
-        let controle = ["pour ", "tant que ", "faire", "si ", "sinon"]
-            .iter()
-            .any(|m| debut_ligne.starts_with(m));
-        if controle && debut_ligne.contains('{') {
-            let decale = rest.len() - debut_ligne.len();
-            if let Some(ouvre) = debut_ligne.find('{') {
-                if let Some((corps, apres)) = take_group(&debut_ligne[ouvre..], 0) {
-                    let fin = decale + ouvre + corps.len() + 2 + (debut_ligne[ouvre..].len() - apres.len() - corps.len() - 2);
-                    let _ = fin;
-                    let consomme = decale + ouvre + (debut_ligne[ouvre..].len() - apres.len());
-                    sortie.push_str(&rest[..consomme]);
-                    pos += consomme;
-                    continue;
-                }
-            }
-        }
-        if let Some((entrees, consomme)) = crate::langage::fonctions::parse_classe(rest, fonctions) {
-            let manquantes = crate::langage::fonctions::methodes_sans_corps(&entrees);
-            if !manquantes.is_empty() && !crate::langage::fonctions::est_abstraite(&entrees) {
-                sortie.push_str(&format!(
-                    "<rouge gras>{{⚠ {} laisse {} sans corps : ou bien la classe les définit, ou bien elle se déclare abstraite}}\n",
-                    entrees[0].0,
-                    manquantes.join(", ")
-                ));
-            } else {
-                for (nom, f) in entrees {
-                    fonctions.insert(nom, f);
-                }
-            }
-            pos += consomme;
-            if body[pos..].starts_with('\n') {
-                pos += 1;
-            }
-            continue;
-        }
-        if let Some((nom, f, consomme)) =
-            crate::langage::fonctions::parse_declaration(rest)
-        {
-            fonctions.insert(nom, f);
-            pos += consomme;
-            if body[pos..].starts_with('\n') {
-                pos += 1;
-            }
-            continue;
-        }
-        if let Some(instr) = crate::langage::conteneurs::instruction_conteneur(rest, etat, boites, fonctions) {
-            sortie.push_str(&instr.remplacement);
-            pos += instr.consomme;
-            if body[pos..].starts_with('\n') {
-                pos += 1;
-            }
-            continue;
-        }
-        let fin = body[pos..].find('\n').map(|j| pos + j).unwrap_or(body.len());
-        let ligne = &body[pos..fin];
-        let mut courante = ligne.to_string();
-        for (nom, valeur) in etat.iter() {
-            courante = subst_var(&courante, nom, &crate::maths::calcul::format_number(*valeur));
-        }
-        let t = courante.trim_start();
-        let mut gardee = true;
-        if t.starts_with("soit ") && !est_ternaire(t) {
-            let reste = t.trim_start_matches("soit").trim_start();
-            if let Some((lhs, rhs)) = reste.split_once('=') {
-                let (lhs, rhs) = (lhs.trim(), rhs.trim());
-                if !lhs.contains('{') && !rhs.starts_with('<') && !rhs.starts_with('{') {
-                    let rhs2 = crate::langage::fonctions::resoudre_appels(rhs, etat, boites, fonctions, 0);
-                    let rhs2 = crate::langage::conteneurs::resoudre_lectures(&rhs2, etat, boites, true);
-                    if let Some(v) = crate::maths::calcul::eval(&rhs2, etat) {
-                        etat.insert(lhs.to_string(), v);
-                        gardee = false;
-                    }
-                }
-            }
-        }
-        if gardee {
-            sortie.push_str(&courante);
-        }
-        if fin < body.len() {
-            sortie.push('\n');
-        }
-        pos = fin + 1;
-    }
-    sortie
-}
-
-fn execute_conteneurs(
-    texte: &str,
-    vars: &std::collections::BTreeMap<String, f64>,
-    boites: &mut crate::langage::conteneurs::Boites,
-    fonctions: &mut crate::langage::fonctions::Fonctions,
-    noms_math: &std::collections::BTreeSet<String>,
-) -> String {
-    let mut sortie = String::new();
-    let mut pos = 0usize;
-    while pos < texte.len() {
-        let rest = &texte[pos..];
-        if let Some((entrees, consomme)) = crate::langage::fonctions::parse_classe(rest, fonctions) {
-            let manquantes = crate::langage::fonctions::methodes_sans_corps(&entrees);
-            if !manquantes.is_empty() && !crate::langage::fonctions::est_abstraite(&entrees) {
-                sortie.push_str(&format!(
-                    "<rouge gras>{{⚠ {} laisse {} sans corps : ou bien la classe les définit, ou bien elle se déclare abstraite}}\n",
-                    entrees[0].0,
-                    manquantes.join(", ")
-                ));
-            } else {
-                for (nom, f) in entrees {
-                    fonctions.insert(nom, f);
-                }
-            }
-            pos += consomme;
-            if texte[pos..].starts_with('\n') {
-                pos += 1;
-            }
-            continue;
-        }
-        if let Some((nom, f, consomme)) =
-            crate::langage::fonctions::parse_declaration(rest)
-        {
-            if noms_math.contains(&nom) {
-                sortie.push_str(&format!(
-                    "<rouge gras>{{⚠ {} est déjà une fonction mathématique : un nom ne peut désigner qu'un seul objet}}\n",
-                    nom
-                ));
-            } else {
-                fonctions.insert(nom, f);
-            }
-            pos += consomme;
-            if texte[pos..].starts_with('\n') {
-                pos += 1;
-            }
-            continue;
-        }
-        if let Some(instr) = crate::langage::conteneurs::instruction_conteneur(rest, vars, boites, fonctions) {
-            sortie.push_str(&instr.remplacement);
-            pos += instr.consomme;
-            if texte[pos..].starts_with('\n') {
-                pos += 1;
-            }
-            continue;
-        }
-        let fin = texte[pos..].find('\n').map(|j| pos + j + 1).unwrap_or(texte.len());
-        sortie.push_str(&texte[pos..fin]);
-        pos = fin;
-    }
-    sortie
-}
-
-pub fn expand_loops_avec(
-    src: &str,
-    vars: &mut std::collections::BTreeMap<String, f64>,
-    boites: &mut crate::langage::conteneurs::Boites,
-    fonctions: &mut crate::langage::fonctions::Fonctions,
-    noms_math: &std::collections::BTreeSet<String>,
-) -> String {
-    let mut out = String::new();
-    let mut rest = src.to_string();
-    loop {
-        let mut found = None;
-        {
-            let mut i = 0usize;
-            while i < rest.len() {
-                let fin_ligne = rest[i..].find('\n').map(|j| i + j).unwrap_or(rest.len());
-                let line = &rest[i..fin_ligne];
-                let t = line.trim_start();
-                // Une déclaration de fonction emporte son corps : les boucles
-                // qu'il contient appartiennent à la fonction, non au document.
-                // Sans ce saut, la coupure tombait au milieu de la déclaration,
-                // dont l'accolade fermante restait de l'autre côté — la
-                // fonction n'était alors jamais enregistrée.
-                if t.starts_with("soit ") {
-                    if let Some(consomme) = crate::langage::fonctions::fin_de_classe(&rest[i..]) {
-                        i += consomme;
-                        continue;
-                    }
-                    if let Some((_, _, consomme)) =
-                        crate::langage::fonctions::parse_declaration(&rest[i..])
-                    {
-                        i += consomme;
-                        continue;
-                    }
-                }
-                if t.starts_with("pour ")
-                    && t.contains('{')
-                    && (t.contains(" dans ") || (t.contains(" de ") && t.contains(" à ")))
-                {
-                    found = Some(i + (line.len() - t.len()));
-                    break;
-                }
-                i = fin_ligne + 1;
-            }
-        }
-        match found {
-            Some(start) => {
-                let prefixe = execute_conteneurs(&rest[..start], vars, boites, fonctions, noms_math);
-                let head_end = accolade_du_corps(&rest[start..]).unwrap_or(0) + start;
-                let head = &rest[start..head_end];
-                let spec = head.trim_start_matches("pour").trim();
-                let vide: std::collections::BTreeMap<String, f64> = std::collections::BTreeMap::new();
-                let mut values: Vec<String> = Vec::new();
-                // Une collection d'objets ne se parcourt pas par substitution
-                // de texte : l'objet ne survivrait pas à son impression. Ses
-                // valeurs voyagent telles quelles, en boîte, un tour après
-                // l'autre.
-                let mut objets: Option<Vec<crate::langage::conteneurs::Valeur>> = None;
-                let mut faute: Option<String> = None;
-                let var;
-                if let Some((v, liste)) = spec.split_once(" dans ") {
-                    var = v.trim().to_string();
-                    let liste = liste.trim();
-                    if liste.starts_with('{') {
-                        let inner = liste.trim_start_matches('{').trim_end_matches('}');
-                        for item in crate::langage::conteneurs::decoupe_elements(inner) {
-                            if !item.is_empty() {
-                                values.push(item);
-                            }
-                        }
-                    } else if let Some(b) = boites.get(liste) {
-                        objets = crate::langage::conteneurs::valeurs_pour_boucle(b);
-                        values = crate::langage::conteneurs::elements_pour_boucle(b);
-                    } else if let Ok((val, type_val)) =
-                        crate::langage::fonctions::devine_valeur(liste, vars, boites, fonctions)
-                    {
-                        // La source n'est pas forcément un nom : une chaîne
-                        // écrite sur place se parcourt lettre à lettre, comme
-                        // celle qu'on aurait posée dans une variable.
-                        let boite = crate::langage::conteneurs::Boite { type_val, val };
-                        objets = crate::langage::conteneurs::valeurs_pour_boucle(&boite);
-                        values = crate::langage::conteneurs::elements_pour_boucle(&boite);
-                    } else if liste.starts_with('[') {
-                        let inner = liste.trim_start_matches('[').trim_end_matches(']');
-                        for item in inner.split(',') {
-                            let item = item.trim();
-                            if !item.is_empty() {
-                                values.push(item.to_string());
-                            }
-                        }
-                    } else {
-                        // Une source qui n'est ni un nom posé, ni un littéral,
-                        // ni une chaîne entre guillemets se disait en silence
-                        // comme un unique tour — `pour c dans un code` faisait
-                        // un tour sur « un code » au lieu d'en lire les
-                        // lettres. La faute vaut mieux que le faux-semblant.
-                        faute = Some(format!(
-                            "{} n'est pas un conteneur : une chaîne écrite sur place se met entre guillemets",
-                            liste
-                        ));
-                    }
-                } else {
-                    let p1: Vec<&str> = spec.splitn(2, " de ").collect();
-                    var = p1[0].trim().to_string();
-                    let reste = p1.get(1).copied().unwrap_or("1 à 1");
-                    let p2: Vec<&str> = reste.splitn(2, " à ").collect();
-                    let a = crate::maths::calcul::eval(p2[0].trim(), &vide).unwrap_or(1.0);
-                    let fin = p2.get(1).copied().unwrap_or("1");
-                    let (fin, pas) = match fin.split_once("avec un pas de") {
-                        Some((f, p)) => (
-                            f.trim().trim_end_matches(','),
-                            crate::maths::calcul::eval(p.trim(), &vide).unwrap_or(1.0),
-                        ),
-                        None => (fin.trim(), 1.0),
-                    };
-                    let b = crate::maths::calcul::eval(fin, &vide).unwrap_or(1.0);
-                    let mut n = a;
-                    let eps = pas.abs() * 1e-9;
-                    while (pas > 0.0 && n <= b + eps) || (pas < 0.0 && n >= b - eps) {
-                        values.push(crate::maths::calcul::format_number(n));
-                        n += pas;
-                        if values.len() >= TOURS_MAX {
-                            break;
-                        }
-                    }
-                }
-                let tail = &rest[head_end..];
-                if let Some((body, after)) = take_group(tail, 0) {
-                    let mut expanded = String::new();
-                    if let Some(message) = &faute {
-                        expanded.push_str(&format!("<rouge gras>{{⚠ {}}}\n", message));
-                    }
-                    let body = dedent(&body);
-                    let debordement = values.len() >= TOURS_MAX;
-                    values.truncate(TOURS_MAX);
-                    let avant = vars.clone();
-                    for (rang, v) in values.iter().enumerate() {
-                        if let Some(n) = crate::maths::calcul::eval(v, &vide) {
-                            vars.insert(var.clone(), n);
-                        }
-                        let substituee = match objets.as_ref().and_then(|o| o.get(rang)) {
-                            Some(objet) => {
-                                // Chaque tour reçoit sa propre boîte, sous un
-                                // nom qui lui est propre : le contenu du tour
-                                // est déroulé maintenant mais lu plus tard,
-                                // et un nom réemployé ne porterait que la
-                                // dernière valeur.
-                                let nom_du_tour = format!("{}__{}", var, rang);
-                                boites.insert(
-                                    nom_du_tour.clone(),
-                                    crate::langage::conteneurs::Boite {
-                                        type_val: crate::langage::conteneurs::type_de_valeur(objet),
-                                        val: objet.clone(),
-                                    },
-                                );
-                                subst_var(&body, &var, &nom_du_tour)
-                            }
-                            None => subst_var(&body, &var, v),
-                        };
-                        let substituee = if substituee.contains("pour ") {
-                            expand_loops_avec(&substituee, vars, boites, fonctions, noms_math)
-                        } else {
-                            substituee
-                        };
-                        // Les conditions du tour sont résolues ici : sans quoi
-                        // un `sortir` niché dans un `si` resterait invisible,
-                        // les conditions n'étant développées qu'après les
-                        // boucles.
-                        let substituee = if substituee.contains("si ") {
-                            expand_conditions_avec(&substituee, vars, Some(boites), Some(fonctions))
-                        } else {
-                            substituee
-                        };
-                        if let Some(retenu) = condition_de_tour(&substituee, vars, boites, fonctions) {
-                            let contenu = applique_affectations(&retenu, vars, boites, fonctions);
-                            // `sortir` arrête ce tour à cet endroit, et la
-                            // boucle avec lui : c'est la recherche qui cesse
-                            // dès qu'elle a trouvé.
-                            // `continuer` coupe le tour, la boucle poursuit.
-                            if let Some(coupe) = position_du_mot(&contenu, "continuer") {
-                                // Un tour sauté ne produit rien : lui donner
-                                // son séparateur ferait apparaître une ligne
-                                // vide là où il n'y a précisément rien.
-                                let garde = &contenu[..coupe];
-                                if !garde.trim().is_empty() {
-                                    expanded.push_str(garde);
-                                    expanded.push_str("\n\u{E013}\n");
-                                }
-                                continue;
-                            }
-                            if let Some(coupe) = position_de_sortir(&contenu) {
-                                expanded.push_str(&contenu[..coupe]);
-                                expanded.push_str("\n\u{E013}\n");
-                                break;
-                            }
-                            expanded.push_str(&contenu);
-                            expanded.push_str("\n\u{E013}\n");
-                        }
-                    }
-                    vars.remove(&var);
-                    for (nom, valeur) in vars.iter() {
-                        if avant.get(nom) != Some(valeur) {
-                            expanded.push_str(&format!(
-                                "soit {} = {}\n\u{E013}\n",
-                                nom,
-                                crate::maths::calcul::format_number(*valeur)
-                            ));
-                        }
-                    }
-                    if debordement {
-                        expanded.push_str(&format!(
-                            "La boucle a été arrêtée après {} tours.\n\u{E013}\n",
-                            TOURS_MAX
-                        ));
-                    }
-                    out.push_str(&prefixe);
-                    rest = format!("{}\n{}", expanded, after);
-                } else {
-                    out.push_str(&prefixe);
-                    out.push_str(&rest[start..head_end + 1]);
-                    rest = rest[head_end + 1..].to_string();
-                }
-            }
-            None => {
-                out.push_str(&execute_conteneurs(&rest, vars, boites, fonctions, noms_math));
-                break;
-            }
-        }
-    }
-    out
-}
-
-fn subst_vars_multi(s: &str, vars: &std::collections::BTreeMap<String, f64>) -> String {
-    let mut out = s.to_string();
-    for (nom, val) in vars {
-        out = subst_var(&out, nom, &crate::maths::calcul::format_number(*val));
-    }
-    out
-}
-
-/// Substitue les variables **jusque dans les accolades**.
-///
-/// `subst_var` les protège, et c'est ce qu'il faut : une accolade délimite des
-/// données, qu'on ne veut pas voir réécrites. Mais dans le corps d'un `tant
-/// que`, `soit v = v + {k}` a besoin de la valeur du tour — sans quoi
-/// l'accumulateur ne reçoit que la valeur d'avant la boucle. La levée ne vaut
-/// donc que pour les lignes qui font croître un conteneur.
-fn subst_vars_partout(
-    s: &str,
-    vars: &std::collections::BTreeMap<String, f64>,
-) -> String {
-    let lettres: Vec<char> = s.chars().collect();
-    let mut out = String::with_capacity(s.len());
-    let mut i = 0usize;
-    while i < lettres.len() {
-        if lettres[i].is_alphanumeric() || lettres[i] == '_' {
-            let debut = i;
-            while i < lettres.len() && (lettres[i].is_alphanumeric() || lettres[i] == '_') {
-                i += 1;
-            }
-            let mot: String = lettres[debut..i].iter().collect();
-            match vars.get(&mot) {
-                Some(v) => out.push_str(&crate::maths::calcul::format_number(*v)),
-                None => out.push_str(&mot),
-            }
-        } else {
-            out.push(lettres[i]);
-            i += 1;
-        }
-    }
-    out
-}
-
-fn traite_tour_tant_que(
-    body: &str,
-    vars: &mut std::collections::BTreeMap<String, f64>,
-    boites: &mut crate::langage::conteneurs::Boites,
-    fonctions: &crate::langage::fonctions::Fonctions,
-) -> String {
-    let mut out = String::new();
-    for line in body.lines() {
-        let t = line.trim_start();
-        if let Some(reste) = t.strip_prefix("soit ") {
-            if let Some((lhs, rhs)) = reste.split_once('=') {
-                let lhs = lhs.trim();
-                let rhs = rhs.trim();
-                if !lhs.contains('{') && !rhs.starts_with('{') && !rhs.starts_with('<') {
-                    if let Some(v) = crate::maths::calcul::eval(rhs, vars) {
-                        vars.insert(lhs.to_string(), v);
-                        continue;
-                    }
-                }
-            }
-        }
-        // Une opération sur conteneur s'applique **pendant** le tour : c'est
-        // le seul moment où la variable de boucle a sa valeur du tour.
-        let ligne_seule = format!("{}\n", line);
-        if let Some(instr) =
-            crate::langage::conteneurs::instruction_conteneur(&ligne_seule, vars, boites, fonctions)
-        {
-            out.push_str(&instr.remplacement);
-            continue;
-        }
-        let croissance = t.starts_with("soit ")
-            && t.split_once('=').map(|(_, d)| d.contains('{')).unwrap_or(false);
-        if croissance {
-            out.push_str(&subst_vars_partout(line, vars));
-        } else {
-            out.push_str(&subst_vars_multi(line, vars));
-        }
-        out.push('\n');
-    }
-    out
-}
-
-fn reaffectations_finales(
-    avant: &std::collections::BTreeMap<String, f64>,
-    apres: &std::collections::BTreeMap<String, f64>,
-) -> String {
-    let mut out = String::new();
-    for (nom, val_avant) in avant {
-        if let Some(val_apres) = apres.get(nom) {
-            if (val_apres - val_avant).abs() > 1e-12 {
-                out.push_str(&format!(
-                    "soit {} = {}\n",
-                    nom,
-                    crate::maths::calcul::format_number(*val_apres)
-                ));
-            }
-        }
-    }
-    out
-}
-
-/// Comme les conditions et les boucles `pour`, un `tant que` de document doit
-/// voir les conteneurs : sa condition peut les interroger, et son corps les
-/// faire croître. Sans cela `soit v = v + {k}` n'y accumulait que la valeur
-/// que `k` avait avant la boucle — les accolades étant protégées de la
-/// substitution, le tour ne pouvait rien y injecter.
-pub fn expand_tant_que_avec(
-    src: &str,
-    vars_init: &std::collections::BTreeMap<String, f64>,
-    boites: &mut crate::langage::conteneurs::Boites,
-    fonctions: &crate::langage::fonctions::Fonctions,
-) -> String {
-    let mut out = String::new();
-    let mut rest = src.to_string();
-    loop {
-        let mut avant = None;
-        let mut apres = None;
-        {
-            let mut i = 0usize;
-            while i < rest.len() {
-                let fin_ligne = rest[i..].find('\n').map(|j| i + j).unwrap_or(rest.len());
-                let line = &rest[i..fin_ligne];
-                let t = line.trim_start();
-                // Même règle que pour les boucles `pour` : le corps d'une
-                // fonction n'appartient pas au document. Sans ce saut, la
-                // boucle était extraite du corps et la fonction rendait la
-                // valeur qu'elle avait avant d'entrer dedans.
-                if t.starts_with("soit ") {
-                    if let Some(consomme) = crate::langage::fonctions::fin_de_classe(&rest[i..]) {
-                        i += consomme;
-                        continue;
-                    }
-                    if let Some((_, _, consomme)) =
-                        crate::langage::fonctions::parse_declaration(&rest[i..])
-                    {
-                        i += consomme;
-                        continue;
-                    }
-                }
-                if t.starts_with("tant que ") && t.contains('{') {
-                    avant = Some(i + (line.len() - t.len()));
-                    break;
-                }
-                if (t == "faire" || t.starts_with("faire ") || t.starts_with("faire{"))
-                    && t.contains('{')
-                {
-                    apres = Some(i + (line.len() - t.len()));
-                    break;
-                }
-                i = fin_ligne + 1;
-            }
-        }
-        if let Some(start) = avant {
-            let head_end = rest[start..].find('{').unwrap() + start;
-            let head = rest[start..head_end].trim();
-            let head = head.trim_start_matches("tant que").trim();
-            let cond_txt = head.trim_end_matches("faire").trim().to_string();
-            let tail = &rest[head_end..];
-            if let Some((body, after)) = take_group(tail, 0) {
-                let body = dedent(&body);
-                let mut vars = vars_init.clone();
-                let mut expanded = String::new();
-                let mut tours = 0usize;
-                while eval_condition(
-                    &crate::langage::conteneurs::resoudre_noms_scalaires(
-                        &crate::langage::conteneurs::resoudre_lectures(
-                            &crate::langage::fonctions::resoudre_appels(
-                                &cond_txt, &vars, boites, fonctions, 0,
-                            ),
-                            &vars,
-                            boites,
-                            true,
-                        ),
-                        boites,
-                    ),
-                    &vars,
-                ) && tours < TOURS_MAX
-                {
-                    expanded.push_str(&traite_tour_tant_que(
-                        &body, &mut vars, boites, fonctions,
-                    ));
-                    expanded.push_str("\n\u{E013}\n");
-                    tours += 1;
-                }
-                expanded.push_str(&reaffectations_finales(vars_init, &vars));
-                out.push_str(&rest[..start]);
-                rest = format!("{}\n{}", expanded, after);
-            } else {
-                out.push_str(&rest[..head_end + 1]);
-                rest = rest[head_end + 1..].to_string();
-            }
-        } else if let Some(start) = apres {
-            let head_end = rest[start..].find('{').unwrap() + start;
-            let tail = &rest[head_end..];
-            if let Some((body, after)) = take_group(tail, 0) {
-                let apres_t = after.trim_start();
-                if let Some(r) = apres_t.strip_prefix("tant que") {
-                    let fin_ligne = r.find('\n').unwrap_or(r.len());
-                    let cond_txt = r[..fin_ligne].trim().to_string();
-                    let reste_apres = &r[fin_ligne..];
-                    let body = dedent(&body);
-                    let mut vars = vars_init.clone();
-                    let mut expanded = String::new();
-                    let mut tours = 0usize;
-                    loop {
-                        expanded.push_str(&traite_tour_tant_que(
-                            &body, &mut vars, boites, fonctions,
-                        ));
-                        expanded.push_str("\n\u{E013}\n");
-                        tours += 1;
-                        let condition = crate::langage::conteneurs::resoudre_noms_scalaires(
-                            &crate::langage::conteneurs::resoudre_lectures(
-                                &crate::langage::fonctions::resoudre_appels(
-                                    &cond_txt, &vars, boites, fonctions, 0,
-                                ),
-                                &vars,
-                                boites,
-                                true,
-                            ),
-                            boites,
-                        );
-                        if !eval_condition(&condition, &vars) || tours >= TOURS_MAX {
-                            break;
-                        }
-                    }
-                    expanded.push_str(&reaffectations_finales(vars_init, &vars));
-                    out.push_str(&rest[..start]);
-                    rest = format!("{}\n{}", expanded, reste_apres);
-                } else {
-                    out.push_str(&rest[..head_end + 1]);
-                    rest = rest[head_end + 1..].to_string();
-                }
-            } else {
-                out.push_str(&rest[..head_end + 1]);
-                rest = rest[head_end + 1..].to_string();
-            }
-        } else {
-            out.push_str(&rest);
-            break;
-        }
-    }
-    out
-}
 
 fn html_escape(s: &str) -> String {
     s.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
@@ -1666,14 +834,14 @@ pub fn scan_env(seg: &str, env: &mut Env) {
     }
     applique_saisies_du_segment(seg, env);
     let mut vars_scan = env.vars.clone();
-    let mut boites_scan = env.conteneurs.clone();
-    let mut fonctions_scan = env.fonctions.clone();
+    let mut boites_scan = (*env.conteneurs).clone();
+    let mut fonctions_scan = (*env.fonctions).clone();
     let noms_math = noms_de_fonctions_math(env, seg);
     let seg = normalise_affectations(seg);
     let seg = expand_tant_que_avec(&seg, &vars_scan, &mut boites_scan, &fonctions_scan);
     let seg = expand_loops_avec(&seg, &mut vars_scan, &mut boites_scan, &mut fonctions_scan, &noms_math);
-    env.conteneurs = boites_scan;
-    env.fonctions = fonctions_scan;
+    env.conteneurs = std::sync::Arc::new(boites_scan);
+    env.fonctions = std::sync::Arc::new(fonctions_scan);
     let seg = expand_conditions_avec(
         &seg,
         &env.vars,
@@ -1695,6 +863,11 @@ pub fn scan_env(seg: &str, env: &mut Env) {
             let tag_t = tag.trim();
             if tag_t == "Soit" || tag_t.starts_with("Soit ") || tag_t.starts_with("On pose") {
                 let _ = declare(tag_t, &after, env);
+            } else if tag_t == "Place" {
+                // Un point placé est déclaré : la collecte doit le voir, sans
+                // quoi les segments suivants — rendus depuis leurs propres
+                // instantanés — l'ignoreraient.
+                crate::maths::geometrie::collecte_place(&after, env);
             } else if tag_t.starts_with("Construis") {
                 let (_, rest_in_tag) = verbe_et_reste(tag_t);
                 let (desc, corps) = desc_et_corps(rest_in_tag, &after);
@@ -1733,7 +906,7 @@ pub fn scan_env(seg: &str, env: &mut Env) {
     }
 }
 
-fn est_ternaire(line: &str) -> bool {
+pub(crate) fn est_ternaire(line: &str) -> bool {
     line.trim_start()
         .strip_prefix("soit ")
         .and_then(|r| r.split_once('='))
@@ -1806,233 +979,7 @@ fn logical_chunks(text: &str) -> Vec<String> {
     out
 }
 
-/// La condition d'un `si` de document doit voir les conteneurs et les
-/// fonctions, sans quoi `si v contient(1)` reste du texte mort — alors que la
-/// même écriture fonctionne dans un corps de fonction.
-pub fn expand_conditions_avec(
-    src: &str,
-    vars: &std::collections::BTreeMap<String, f64>,
-    boites: Option<&crate::langage::conteneurs::Boites>,
-    fonctions: Option<&crate::langage::fonctions::Fonctions>,
-) -> String {
-    let mut rest = src.to_string();
-    let mut out = String::new();
-    loop {
-        let found = rest.lines().scan(0usize, |off, line| {
-            let start = *off;
-            *off += line.len() + 1;
-            Some((start, line))
-        }).find(|(_, line)| {
-            let t = line.trim_start();
-            t.starts_with("si ") && t.contains('{')
-        }).map(|(start, line)| start + (line.len() - line.trim_start().len()));
-        let start = match found {
-            Some(i) => i,
-            None => {
-                out.push_str(&rest);
-                break;
-            }
-        };
-        let head_end = match rest[start..].find('{') {
-            Some(i) => start + i,
-            None => {
-                out.push_str(&rest);
-                break;
-            }
-        };
-        let cond_txt = rest[start + 3..head_end].trim().to_string();
-        let cond_txt = match (boites, fonctions) {
-            (Some(b), Some(f)) => {
-                let resolue = crate::langage::fonctions::resoudre_appels(&cond_txt, vars, b, f, 0);
-                crate::langage::conteneurs::resoudre_lectures(&resolue, vars, b, true)
-            }
-            _ => cond_txt,
-        };
-        let tail = &rest[head_end..];
-        let (alors, apres) = match take_group(tail, 0) {
-            Some(x) => x,
-            None => {
-                out.push_str(&rest);
-                break;
-            }
-        };
-        let apres_t = apres.trim_start();
-        let (sinon, suite) = if let Some(r) = apres_t.strip_prefix("sinon") {
-            let r = r.trim_start();
-            match take_group(r, 0) {
-                Some((b, s)) => (Some(b), s),
-                None => (None, apres.clone()),
-            }
-        } else {
-            (None, apres.clone())
-        };
-        let vrai = eval_condition(&cond_txt, vars);
-        out.push_str(&rest[..start]);
-        if vrai {
-            out.push_str(&dedent(&alors));
-        } else if let Some(b) = sinon {
-            out.push_str(&dedent(&b));
-        }
-        rest = suite;
-    }
-    out
-}
 
-fn eval_operande(s: &str, vars: &std::collections::BTreeMap<String, f64>) -> Option<f64> {
-    match s.trim() {
-        "vrai" => Some(1.0),
-        "faux" => Some(0.0),
-        autre => crate::maths::calcul::eval(autre, vars),
-    }
-}
-
-fn depouille_parentheses_globales(s: &str) -> String {
-    let t = s.trim();
-    if t.starts_with('(') && t.ends_with(')') {
-        let interieur = &t[1..t.len() - 1];
-        let mut profondeur = 0i32;
-        let mut referme_avant_la_fin = false;
-        for (idx, c) in interieur.char_indices() {
-            match c {
-                '(' => profondeur += 1,
-                ')' => {
-                    profondeur -= 1;
-                    if profondeur < 0 && idx + 1 < interieur.len() {
-                        referme_avant_la_fin = true;
-                    }
-                }
-                _ => {}
-            }
-        }
-        if profondeur == 0 && !referme_avant_la_fin {
-            return interieur.trim().to_string();
-        }
-    }
-    t.to_string()
-}
-
-fn parse_intervalle(s: &str) -> Option<(String, String)> {
-    let s = s.trim();
-    let i = s.find('[')?;
-    let j = s.rfind(']')?;
-    if j <= i {
-        return None;
-    }
-    let (a, b) = s[i + 1..j].split_once(';')?;
-    Some((a.trim().to_string(), b.trim().to_string()))
-}
-
-fn split_top_niveau<'a>(s: &'a str, sep: &str) -> Option<(&'a str, &'a str)> {
-    let mut profondeur = 0i32;
-    for (i, c) in s.char_indices() {
-        match c {
-            '(' => profondeur += 1,
-            ')' => profondeur -= 1,
-            _ => {}
-        }
-        if profondeur == 0 && s[i..].starts_with(sep) {
-            return Some((&s[..i], &s[i + sep.len()..]));
-        }
-    }
-    None
-}
-
-pub fn evalue_condition_publique(
-    cond: &str,
-    vars: &std::collections::BTreeMap<String, f64>,
-) -> bool {
-    eval_condition(cond, vars)
-}
-
-fn eval_condition(cond: &str, vars: &std::collections::BTreeMap<String, f64>) -> bool {
-    let cond = depouille_parentheses_globales(cond);
-    let cond: &str = &cond;
-    if let Some((g, d)) = split_top_niveau(cond, " ou ") {
-        return eval_condition(g, vars) || eval_condition(d, vars);
-    }
-    // La négation, troisième connecteur logique enseigné avec « et » et « ou ».
-    // Elle se lit après eux : « non a et b » se comprend « (non a) et b ».
-    if let Some(reste) = cond.trim().strip_prefix("non ") {
-        return !eval_condition(reste, vars);
-    }
-    match cond.trim() {
-        "vrai" => return true,
-        "faux" => return false,
-        _ => {}
-    }
-    if let Some((g, d)) = split_top_niveau(cond, " et ") {
-        return eval_condition(g, vars) && eval_condition(d, vars);
-    }
-    eval_condition_simple(cond, vars)
-}
-
-fn eval_condition_simple(cond: &str, vars: &std::collections::BTreeMap<String, f64>) -> bool {
-    let cond = depouille_parentheses_globales(cond);
-    let cond: &str = &cond;
-    if let Some((g, d)) = cond.split_once("n'appartient pas à") {
-        return match (eval_operande(g, vars), parse_intervalle(d)) {
-            (Some(v), Some((a, b))) => match (eval_operande(&a, vars), eval_operande(&b, vars)) {
-                (Some(a), Some(b)) => !(v >= a && v <= b),
-                _ => false,
-            },
-            _ => false,
-        };
-    }
-    if let Some((g, d)) = cond.split_once("appartient à") {
-        return match (eval_operande(g, vars), parse_intervalle(d)) {
-            (Some(v), Some((a, b))) => match (eval_operande(&a, vars), eval_operande(&b, vars)) {
-                (Some(a), Some(b)) => v >= a && v <= b,
-                _ => false,
-            },
-            _ => false,
-        };
-    }
-    let comparateurs: &[(&str, fn(f64, f64) -> bool)] = &[
-        ("au moins", |a, b| a >= b),
-        ("au plus", |a, b| a <= b),
-        ("moins de", |a, b| a < b),
-        ("plus de", |a, b| a > b),
-        ("différent de", |a, b| (a - b).abs() > 1e-9),
-        ("vaut", |a, b| (a - b).abs() < 1e-9),
-        (">=", |a, b| a >= b),
-        ("<=", |a, b| a <= b),
-        ("!=", |a, b| (a - b).abs() > 1e-9),
-        ("<", |a, b| a < b),
-        (">", |a, b| a > b),
-        ("=", |a, b| (a - b).abs() < 1e-9),
-    ];
-    for (mot, f) in comparateurs {
-        if let Some((g, d)) = cond.split_once(mot) {
-            let (gt, dt) = (g.trim().to_string(), d.trim().to_string());
-            let g = eval_operande(g, vars);
-            let d = eval_operande(d, vars);
-            if let (Some(g), Some(d)) = (g, d) {
-                return f(g, d);
-            }
-            // Deux textes se comparent aussi : l'égalité d'un palindrome à son
-            // inverse n'est pas un calcul de nombres. La collation française
-            // sert d'ordre — « école » avant « Zoé ».
-            if !gt.is_empty() && !dt.is_empty() {
-                let cle = |s: &str| -> String {
-                    s.trim_matches('"')
-                        .chars()
-                        .map(crate::langage::conteneurs::depouille)
-                        .flat_map(|c| c.to_lowercase())
-                        .collect()
-                };
-                let ordre = cle(&gt).cmp(&cle(&dt));
-                let (a, b) = match ordre {
-                    std::cmp::Ordering::Less => (0.0, 1.0),
-                    std::cmp::Ordering::Equal => (0.0, 0.0),
-                    std::cmp::Ordering::Greater => (1.0, 0.0),
-                };
-                return f(a, b);
-            }
-            return false;
-        }
-    }
-    eval_operande(cond, vars).map(|v| v.abs() > 1e-9).unwrap_or(false)
-}
 
 fn parse_ternaire_branches(
     rhs: &str,
@@ -2072,8 +1019,8 @@ pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
     collecte_donnees(seg, env);
     applique_saisies_du_segment(seg, env);
     let mut vars_locales = vars_avec_affectations_locales(seg, &env.vars);
-    let mut boites = env.conteneurs.clone();
-    let mut fonctions = env.fonctions.clone();
+    let mut boites = (*env.conteneurs).clone();
+    let mut fonctions = (*env.fonctions).clone();
     let noms_math = noms_de_fonctions_math(env, seg);
     let seg = normalise_affectations(seg);
     let seg = expand_tant_que_avec(&seg, &vars_locales, &mut boites, &fonctions);
@@ -2084,8 +1031,8 @@ pub fn render_segment(seg: &str, env: &mut Env) -> (String, Vec<TocEntry>) {
     for (nom, valeur) in &vars_locales {
         env.vars.insert(nom.clone(), *valeur);
     }
-    env.conteneurs = boites;
-    env.fonctions = fonctions;
+    env.conteneurs = std::sync::Arc::new(boites);
+    env.fonctions = std::sync::Arc::new(fonctions);
     let mut toc = Vec::new();
     let html = render_body(&seg, env, &mut toc);
     (html, toc)
@@ -2311,6 +1258,7 @@ const VERBES: &[(&str, u8)] = &[
     ("Représente", 0),
     ("Résous", CALCUL | EN_LIGNE),
     ("Simplifie", CALCUL | EN_LIGNE),
+    ("Place", 0),
     ("Trace", 0),
     ("Trigonalise", CALCUL | EN_LIGNE),
     ("Vérifie", CALCUL | EN_LIGNE),
@@ -2345,10 +1293,9 @@ fn bloc_inconnu(commande: &str) -> String {
         Some((v, r)) => (v, r),
         None => (commande, ""),
     };
-    format!(
-        "<div class=\"calcul-absent\">Commande non prise en charge : &lt;{}&gt;{}</div>",
-        html_escape(verbe),
-        html_escape(suite)
+    crate::utils::erreur::bloc(
+        &format!("<{}>{}", verbe, suite),
+        "commande non prise en charge",
     )
 }
 
@@ -2485,9 +1432,8 @@ fn execute(req: &serde_json::Value, env: &Env, source: &str) -> String {
             }
         }
         Err(e) => format!(
-            "<div class=\"calcul-absent\">&lt;{}&gt; — {}</div>",
-            html_escape(source),
-            html_escape(&e)
+            "{}",
+            crate::utils::erreur::bloc(&format!("<{}>", source), &e)
         ),
     }
 }
@@ -2530,28 +1476,81 @@ fn matrice_pmatrix(rows: &[Vec<String>]) -> String {
     format!("\\begin{{pmatrix}}{}\\end{{pmatrix}}", corps)
 }
 
+/// La suite d'une déclaration notationnelle : la prose reste de la prose,
+/// les morceaux mathématiques — ensembles `RR^n`, définition `F(x, y, z) = …`
+/// — passent en mathématiques.
+fn math_notation(texte: &str) -> String {
+    let t = texte.trim();
+    let (tete, definition) = match t.split_once("défini par") {
+        Some((a, b)) => (a.trim(), Some(b.trim())),
+        None => (t, None),
+    };
+    let tete = tete
+        .replace("de RR^3 dans RR^3", "de \\(\\mathbb{R}^3\\) dans \\(\\mathbb{R}^3\\)")
+        .replace("de RR^2 dans RR^2", "de \\(\\mathbb{R}^2\\) dans \\(\\mathbb{R}^2\\)")
+        .replace("de RR dans RR", "de \\(\\mathbb{R}\\) dans \\(\\mathbb{R}\\)");
+    match definition {
+        Some(d) => format!(
+            " {} défini par \\({}\\)",
+            tete,
+            crate::maths::algebre::decimales_fr(&to_latex(d))
+        ),
+        None => format!(" {}", tete),
+    }
+}
+
 fn declaration_html(noms: &[String], env: &Env, pose: bool) -> String {
     let mut out = String::new();
     let mut fonctions: Vec<String> = Vec::new();
-    let mut points: Vec<String> = Vec::new();
-    let mut vecteurs: Vec<String> = Vec::new();
+    // Chaque objet posé garde son nom et ses coordonnées séparés : la phrase
+    // les rassemble ensuite dans l'ordre de l'usage.
+    let mut points: Vec<(String, String)> = Vec::new();
+    let mut vecteurs: Vec<(String, String)> = Vec::new();
     for nom in noms {
         match env.objects.get(nom) {
-            Some(crate::langage::commandes::Obj::Matrix { rows }) => out.push_str(&bloc_calcul(&format!(
-                "\\text{{Soit la matrice }} {} = {}",
-                nom,
-                matrice_pmatrix(rows)
-            ))),
-            Some(crate::langage::commandes::Obj::System { eqs }) => out.push_str(&bloc_calcul(&format!(
-                "\\text{{Soit le système }} ({}) : {}",
-                nom,
-                systeme_tex(eqs)
-            ))),
+            // Le nom précède la nature, et la déclaration est une phrase :
+            // seule la matrice elle-même reste en mathématiques.
+            // Purement notationnel : la phrase est tout ce que l'objet
+            // possède, et elle suit l'ordre nom-nature comme les autres. La
+            // description passe par le rendu en ligne, où `RR^3` et la
+            // formule deviennent des mathématiques.
+            Some(crate::langage::commandes::Obj::Notation { phrase }) => {
+                let (avant, apres) = phrase
+                    .split_once(&format!("vecteurs {}", nom))
+                    .map(|(a, b)| (a.to_string(), b.to_string()))
+                    .unwrap_or((phrase.clone(), String::new()));
+                let nature = avant.trim_end().trim_end_matches("le champ de");
+                let _ = nature;
+                out.push_str(&crate::maths::algebre::bloc_prose(&[format!(
+                    "Soit \\({}\\) le champ de vecteurs{}.",
+                    nom,
+                    math_notation(apres.trim_end_matches('.'))
+                )]));
+            }
+            Some(crate::langage::commandes::Obj::Matrix { rows }) => {
+                out.push_str(&crate::maths::algebre::bloc_prose(&[format!(
+                    "Soit \\({}\\) la matrice définie par : \\[{} = {}\\]",
+                    nom,
+                    nom,
+                    matrice_pmatrix(rows)
+                )]))
+            }
+            // Le système garde l'ordre « Soit le système (S) » : le nom est ici
+            // une étiquette parenthésée, non le nom propre de l'objet, et c'est
+            // la seule forme que le corpus atteste. Mais la déclaration devient
+            // une phrase, comme toutes les autres.
+            Some(crate::langage::commandes::Obj::System { eqs }) => {
+                out.push_str(&crate::maths::algebre::bloc_prose(&[format!(
+                    "Soit \\(({})\\) le système : \\[{}\\]",
+                    nom,
+                    systeme_tex(eqs)
+                )]))
+            }
             Some(crate::langage::commandes::Obj::Sequence { first, rec }) => {
                 let relation = crate::maths::algebre::decimales_fr(&to_latex(rec))
                     .replace("PREV", &format!("{}_{{n}}", nom));
                 out.push_str(&crate::maths::algebre::bloc_prose(&[format!(
-                    "Soit la suite \\(({}_n)\\) définie par récurrence, avec \\({}_0 = {}\\) et \\({}_{{n+1}} = {}\\).",
+                    "Soit \\(({}_n)\\) la suite définie par récurrence, avec \\({}_0 = {}\\) et \\({}_{{n+1}} = {}\\).",
                     nom,
                     nom,
                     crate::maths::algebre::decimales_fr(&to_latex(first)),
@@ -2559,15 +1558,13 @@ fn declaration_html(noms: &[String], env: &Env, pose: bool) -> String {
                     relation
                 )]));
             }
-            Some(crate::langage::commandes::Obj::Point { coords }) => points.push(format!(
-                "\\({}\\left({}\\right)\\)",
-                nom,
-                coords.join("\\ ;\\ ")
+            Some(crate::langage::commandes::Obj::Point { coords }) => points.push((
+                format!("\\({}\\)", nom),
+                format!("\\(\\left({}\\right)\\)", coords.join("\\ ;\\ ")),
             )),
-            Some(crate::langage::commandes::Obj::Vecteur { coords }) => vecteurs.push(format!(
-                "\\(\\vec{{{}}}\\left({}\\right)\\)",
-                nom,
-                coords.join("\\ ;\\ ")
+            Some(crate::langage::commandes::Obj::Vecteur { coords }) => vecteurs.push((
+                format!("\\(\\vec{{{}}}\\)", nom),
+                format!("\\(\\left({}\\right)\\)", coords.join("\\ ;\\ ")),
             )),
             Some(crate::langage::commandes::Obj::Plan { equation }) => {
                 out.push_str(&crate::maths::algebre::bloc_prose(&[format!(
@@ -2579,21 +1576,34 @@ fn declaration_html(noms: &[String], env: &Env, pose: bool) -> String {
             _ => {}
         }
     }
+    // Le nom précède la nature — « Soit A le point de coordonnées (2 ; 3) »,
+    // et non « Soit le point A(2 ; 3) ». C'est l'ordre qu'emploient les six
+    // ouvrages mesurés, sans exception, sur tous les objets qu'ils posent.
+    //
+    // « Soient » au pluriel : l'impératif s'accorde avec ce qu'il pose. Les
+    // deux formes se rencontrent, mais celle-ci est la seule qu'un correcteur
+    // ne relèvera jamais.
     for (objets, singulier, pluriel) in [
-        (&points, "Soit le point", "Soit les points"),
-        (&vecteurs, "Soit le vecteur", "Soit les vecteurs"),
+        (&points, "le point de coordonnées", "les points de coordonnées"),
+        (&vecteurs, "le vecteur de coordonnées", "les vecteurs de coordonnées"),
     ] {
         if objets.is_empty() {
             continue;
         }
-        let liste = match objets.len() {
-            1 => objets[0].clone(),
-            n => format!("{} et {}", objets[..n - 1].join(", "), objets[n - 1]),
+        let joint = |v: Vec<String>| match v.len() {
+            1 => v[0].clone(),
+            n => format!("{} et {}", v[..n - 1].join(", "), v[n - 1]),
         };
-        let tete = if objets.len() == 1 { singulier } else { pluriel };
+        let noms = joint(objets.iter().map(|(n, _)| n.clone()).collect());
+        let coords = joint(objets.iter().map(|(_, c)| c.clone()).collect());
+        let (tete, nature) = if objets.len() == 1 {
+            ("Soit", singulier)
+        } else {
+            ("Soient", pluriel)
+        };
         out.push_str(&crate::maths::algebre::bloc_prose(&[format!(
-            "{} {}.",
-            tete, liste
+            "{} {} {} {}.",
+            tete, noms, nature, coords
         )]));
     }
     if !fonctions.is_empty() {
@@ -2610,17 +1620,43 @@ fn declaration_html(noms: &[String], env: &Env, pose: bool) -> String {
                 _ => None,
             })
             .collect();
-        let tete = match (pose, corps.len() > 1) {
-            (true, false) => "\\text{On pose une fonction }",
-            (true, true) => "\\text{On pose les fonctions }",
-            (false, false) => "\\text{Soit une fonction }",
-            (false, true) => "\\text{Soit les fonctions }",
+        // La déclaration suit l'ordre de l'usage : le **nom** d'abord, sa
+        // **nature** ensuite — « Soit f la fonction définie par… », comme on
+        // écrit « Soit u un vecteur de E » ou « Soit A une matrice carrée
+        // d'ordre n ». L'ordre inverse — « Soit une fonction f(x) = … » —
+        // pose l'objet avant de l'avoir nommé.
+        //
+        // Et c'est une **phrase**, non une formule affichée : les mots
+        // français n'ont pas à vivre dans un bloc mathématique enveloppés de
+        // `\text{}`. Seule l'expression reste en mathématiques, au fil du
+        // texte.
+        let noms: Vec<String> = fonctions.iter().map(|n| to_latex(n)).collect();
+        let liste_noms = match noms.len() {
+            1 => format!("\\({}\\)", noms[0]),
+            n => format!(
+                "\\({}\\) et \\({}\\)",
+                noms[..n - 1].join("\\), \\("),
+                noms[n - 1]
+            ),
         };
-        out.push_str(&bloc_calcul(&format!(
-            "{} {}",
-            tete,
-            corps.join("\\text{ et }")
-        )));
+        let formules: Vec<String> = corps.iter().map(|c| format!("\\({}\\)", c)).collect();
+        let liste_formules = match formules.len() {
+            1 => formules[0].clone(),
+            n => format!("{} et {}", formules[..n - 1].join(", "), formules[n - 1]),
+        };
+        let phrase = match (pose, corps.len() > 1) {
+            (true, false) => format!("On pose {}.", liste_formules),
+            (true, true) => format!("On pose {}.", liste_formules),
+            (false, false) => format!(
+                "Soit {} la fonction définie par {}.",
+                liste_noms, liste_formules
+            ),
+            (false, true) => format!(
+                "Soient {} les fonctions définies par {}.",
+                liste_noms, liste_formules
+            ),
+        };
+        out.push_str(&crate::maths::algebre::bloc_prose(&[phrase]));
     }
     out
 }
@@ -2643,6 +1679,29 @@ fn declare(tag_t: &str, after: &str, env: &mut Env) -> Option<String> {
     } else {
         head.to_string()
     };
+    // La forme en bloc : `<Soit>{` puis une déclaration par ligne. Chaque
+    // ligne passe par le même chemin que la forme en ligne — un énoncé par
+    // déclaration, dans l'ordre d'écriture.
+    if decl.starts_with('{') {
+        let interieur = block.as_deref()?;
+        let mut html = String::new();
+        for ligne in interieur.lines() {
+            let ligne = ligne.trim();
+            if ligne.is_empty() {
+                continue;
+            }
+            match declare(tag_t, ligne, env) {
+                Some(un) => html.push_str(&un),
+                None => {
+                    html.push_str(&crate::utils::erreur::bloc(
+                        &format!("<{}>{}", tag_t, ligne),
+                        "déclaration non reconnue",
+                    ));
+                }
+            }
+        }
+        return Some(html);
+    }
     if decl.is_empty() {
         return None;
     }
@@ -2926,6 +1985,107 @@ fn dispatch_chunk(chunk: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> Option
             None => {}
         }
         return Some(html);
+    }
+    // Les démonstrations passent avant les commandes ordinaires : leur corps
+    // contient du docdg à rendre récursivement, ce que seul ce point du code
+    // sait faire — la table des matières est encore sous la main.
+    if tag_t == "Montre" || tag_t.starts_with("Montre ") {
+        let (verb, modificateur) = verbe_et_reste(tag_t);
+        if verb == "Montre" {
+            // Sans corps, le moteur écrit la démonstration lui-même quand le
+            // raisonnement est à la portée du calcul formel — l'absence
+            // d'accolades signifie ici ce qu'elle signifie partout : le
+            // moteur fait le travail.
+            if !after.trim_start().lines().next().unwrap_or("").contains('{') {
+                let complement = after.trim().lines().next().unwrap_or("").trim();
+                let complement = interpole_diese(complement, &env.vars, &env.textes);
+                // Le raisonnement se lit en tête du complément — la règle d'or
+                // veut le verbe seul dans la balise. L'ancienne écriture, qui
+                // le mettait dans la balise, reste comprise.
+                let (depuis_complement, reste) =
+                    super::demonstration::separe_raisonnement(&complement);
+                let (modificateur, desc) = if !modificateur.is_empty() {
+                    (modificateur.to_string(), complement.clone())
+                } else {
+                    (depuis_complement, reste)
+                };
+                let modificateur = modificateur.as_str();
+                if !desc.is_empty() {
+                    match modificateur {
+                        "par récurrence" => {
+                            if let Some(html) =
+                                super::demonstration::recurrence_automatique(&desc, env, toc)
+                            {
+                                return Some(html);
+                            }
+                        }
+                        "par élément quelconque" => {
+                            if let Some(html) =
+                                super::demonstration::pour_tout_automatique(&desc, env, toc)
+                            {
+                                return Some(html);
+                            }
+                        }
+                        _ => {}
+                    }
+                    // Ce que le calcul n'atteint pas, la bibliothèque le
+                    // fournit : une idée ne se calcule pas, elle s'écrit une
+                    // fois puis se relit.
+                    if let Some(html) = super::demonstration::depuis_bibliotheque(
+                        &desc,
+                        modificateur,
+                        env,
+                        toc,
+                    ) {
+                        return Some(html);
+                    }
+                    // Faute de fiche, l'échec enseigne : il dit ce que la
+                    // bibliothèque contient de plus proche, plutôt que de
+                    // laisser l'auteur deviner.
+                    let proches = super::demonstration::suggestions(&desc);
+                    if !proches.is_empty() {
+                        return Some(crate::utils::erreur::bloc(
+                            &format!("<{}>", tag_t),
+                            &format!(
+                                "cette démonstration n'est ni calculable ni en bibliothèque — écrivez son corps entre accolades, ou voyez : {}",
+                                proches.join(" ; ")
+                            ),
+                        ));
+                    }
+                }
+            }
+            // Avec un corps : `<Montre>par X que E { … }`. Le raisonnement se
+            // lit là encore en tête du complément.
+            if let Some((desc, corps)) = find_body_brace(&after) {
+                let desc = interpole_diese(desc.trim(), &env.vars, &env.textes);
+                let (depuis_complement, reste) =
+                    super::demonstration::separe_raisonnement(&desc);
+                let (modificateur, desc) = if !modificateur.is_empty() {
+                    (modificateur.to_string(), desc)
+                } else {
+                    (depuis_complement, reste)
+                };
+                let modificateur = modificateur.as_str();
+                if modificateur.is_empty() && desc.trim().starts_with("l'existence et l'unicité")
+                {
+                    if let Some(html) =
+                        super::demonstration::existence_unicite(&desc, &corps, env, toc)
+                    {
+                        return Some(html);
+                    }
+                }
+                let tag_norme = if modificateur.is_empty() {
+                    "Montre".to_string()
+                } else {
+                    format!("Montre {}", modificateur)
+                };
+                if let Some(html) =
+                    super::demonstration::montre(&tag_norme, &desc, &corps, env, toc)
+                {
+                    return Some(html);
+                }
+            }
+        }
     }
     if let Some(html) = dispatch_command(tag_t, &after, env) {
         return Some(html);
@@ -3998,8 +3158,8 @@ fn diese_avec(
                                 echappe_html(&crate::langage::conteneurs::formate_valeur(&v, &t))
                             }
                             Err(e) => format!(
-                                "<span class=\"calcul-absent\">{}</span>",
-                                echappe_html(&e)
+                                "{}",
+                                crate::utils::erreur::en_ligne(&e)
                             ),
                         };
                         return Some((texte, i + 1 + fin + fc + 1));

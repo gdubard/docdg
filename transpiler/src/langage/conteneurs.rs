@@ -226,22 +226,7 @@ pub fn parse_type(s: &str) -> Option<TypeVal> {
 }
 
 fn coupe_niveau_zero(s: &str, sep: char) -> Vec<&str> {
-    let mut morceaux = Vec::new();
-    let mut profondeur = 0i32;
-    let mut debut = 0usize;
-    for (i, c) in s.char_indices() {
-        match c {
-            '{' | '(' => profondeur += 1,
-            '}' | ')' => profondeur -= 1,
-            c2 if c2 == sep && profondeur == 0 => {
-                morceaux.push(&s[debut..i]);
-                debut = i + c2.len_utf8();
-            }
-            _ => {}
-        }
-    }
-    morceaux.push(&s[debut..]);
-    morceaux
+    crate::utils::decoupe::coupe_elements(s, sep)
 }
 
 fn nombre_de(v: &Valeur) -> Option<f64> {
@@ -749,6 +734,146 @@ pub fn forme_relisible(v: &Valeur) -> String {
 
 pub fn affiche(b: &Boite) -> String {
     formate(&b.val, &b.type_val)
+}
+
+/// L'empreinte structurelle d'une boîte, **sans rien allouer**.
+///
+/// Le cache de segments hachait jusqu'ici la forme imprimée de chaque
+/// conteneur — `affiche(boite)` — et il le refaisait après *chaque* segment :
+/// le coût du rendu était le produit du nombre de segments par celui des
+/// conteneurs, une chaîne complète étant construite puis jetée à chaque
+/// croisement. Ici on descend dans la valeur elle-même.
+///
+/// L'empreinte distingue au moins tout ce que la forme imprimée distinguait :
+/// deux boîtes de même empreinte sont bien interchangeables pour le cache.
+pub fn empreinte_boite<H: std::hash::Hasher>(b: &Boite, h: &mut H) {
+    empreinte_type(&b.type_val, h);
+    empreinte_valeur(&b.val, h);
+}
+
+fn empreinte_type<H: std::hash::Hasher>(t: &TypeVal, h: &mut H) {
+    use std::hash::Hash;
+    match t {
+        TypeVal::Entier => h.write_u8(0),
+        TypeVal::Decimal => h.write_u8(1),
+        TypeVal::Reel => h.write_u8(2),
+        TypeVal::Complexe => h.write_u8(3),
+        TypeVal::Texte => h.write_u8(4),
+        TypeVal::Booleen => h.write_u8(5),
+        TypeVal::Collection(e) => {
+            h.write_u8(6);
+            empreinte_type(e, h);
+        }
+        TypeVal::Dictionnaire(e) => {
+            h.write_u8(7);
+            empreinte_type(e, h);
+        }
+        TypeVal::Matrice(dim, e) => {
+            h.write_u8(8);
+            match dim {
+                Some((l, c)) => {
+                    h.write_u8(1);
+                    h.write_usize(*l);
+                    h.write_usize(*c);
+                }
+                None => h.write_u8(0),
+            }
+            empreinte_type(e, h);
+        }
+        TypeVal::Uplet(ts) => {
+            h.write_u8(9);
+            h.write_usize(ts.len());
+            for x in ts {
+                empreinte_type(x, h);
+            }
+        }
+        TypeVal::Pile(e) => {
+            h.write_u8(10);
+            empreinte_type(e, h);
+        }
+        TypeVal::File(e) => {
+            h.write_u8(11);
+            empreinte_type(e, h);
+        }
+        TypeVal::Objet(nom) => {
+            h.write_u8(12);
+            nom.hash(h);
+        }
+    }
+}
+
+fn empreinte_valeur<H: std::hash::Hasher>(v: &Valeur, h: &mut H) {
+    use std::hash::Hash;
+    match v {
+        // `to_bits` plutôt que le nombre : c'est la seule façon de hacher un
+        // flottant, et elle sépare `0,0` de `-0,0` — ce que la forme imprimée
+        // ne faisait pas non plus.
+        Valeur::Nombre(n) => {
+            h.write_u8(0);
+            h.write_u64(n.to_bits());
+        }
+        Valeur::Complexe(re, im) => {
+            h.write_u8(1);
+            h.write_u64(re.to_bits());
+            h.write_u64(im.to_bits());
+        }
+        Valeur::Texte(s) => {
+            h.write_u8(2);
+            s.hash(h);
+        }
+        Valeur::Collection(e) => {
+            h.write_u8(3);
+            empreinte_suite(e, h);
+        }
+        Valeur::Dictionnaire(paires) => {
+            h.write_u8(4);
+            h.write_usize(paires.len());
+            for (cle, val) in paires {
+                cle.hash(h);
+                empreinte_valeur(val, h);
+            }
+        }
+        Valeur::Matrice(l, c, cases) => {
+            h.write_u8(5);
+            h.write_usize(*l);
+            h.write_usize(*c);
+            for x in cases {
+                h.write_u64(x.to_bits());
+            }
+        }
+        Valeur::Uplet(e) => {
+            h.write_u8(6);
+            empreinte_suite(e, h);
+        }
+        Valeur::Pile(e) => {
+            h.write_u8(7);
+            empreinte_suite(e, h);
+        }
+        Valeur::File(e) => {
+            h.write_u8(8);
+            empreinte_suite(e, h);
+        }
+        Valeur::Objet(classe, ancetres, attributs) => {
+            h.write_u8(9);
+            classe.hash(h);
+            h.write_usize(ancetres.len());
+            for a in ancetres {
+                a.hash(h);
+            }
+            h.write_usize(attributs.len());
+            for (nom, val) in attributs {
+                nom.hash(h);
+                empreinte_valeur(val, h);
+            }
+        }
+    }
+}
+
+fn empreinte_suite<H: std::hash::Hasher>(e: &[Valeur], h: &mut H) {
+    h.write_usize(e.len());
+    for x in e {
+        empreinte_valeur(x, h);
+    }
 }
 
 pub fn type_element(b: &Boite) -> TypeVal {
@@ -1297,11 +1422,7 @@ fn sans_syntaxe(s: &str) -> String {
 }
 
 fn erreur_div(ligne: &str, message: &str) -> String {
-    format!(
-        "<rouge gras>{{⚠ {} — {}}}\n",
-        sans_syntaxe(ligne.trim()),
-        sans_syntaxe(message)
-    )
+    crate::utils::erreur::source(&sans_syntaxe(ligne), &sans_syntaxe(message))
 }
 
 pub fn instruction_conteneur(

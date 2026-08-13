@@ -71,7 +71,7 @@ const DEFAUTS_PAGE = {
     titre: '', auteur: '', institution: '', date: '',
     taille: 11, interligne: 1.3,
     tabulation: 10, hauteur: 5, decalage: 100, precision: -1,
-    cesure: true, veuves: 2, orphelines: 2
+    cesure: true, veuves: 2, orphelines: 2, numerotation: 'composee'
 };
 
 /** @type {PageOpts} */
@@ -80,6 +80,29 @@ let documentCompose = false;
 let renderSeq = 0;
 /** @type {Partial<PrefsInterface>} */
 const prefsInitiales = window['__PREFS__'] || {};
+
+/**
+ * Le compte à rebours de la version.
+ *
+ * Discret tant que le terme est loin — un chiffre gris dans la barre — il
+ * passe en avertissement dans les derniers jours. Le but n'est pas d'alarmer
+ * mais d'éviter la surprise : personne ne doit découvrir l'échéance le matin
+ * où il en a besoin.
+ */
+function afficheEcheance() {
+    const e = window['__ECHEANCE__'];
+    const zone = document.getElementById('echeance');
+    if (!zone || !e || typeof e.jours !== 'number') return;
+    const j = e.jours;
+    const preavis = typeof e.preavis === 'number' ? e.preavis : 15;
+    zone.textContent = j === 0
+        ? 'dernier jour de cette version'
+        : (j === 1 ? 'un jour restant' : j + ' jours restants');
+    zone.title = 'Chaque version de docdg est valable un temps limité. '
+        + 'Passé ce délai, installez la version suivante — vos documents ne sont pas affectés.';
+    zone.classList.remove('hidden');
+    zone.classList.toggle('proche', j <= preavis);
+}
 let zoom = prefsInitiales.zoom || 0.9;
 let debounceTimer = null;
 let modifie = false;
@@ -132,6 +155,7 @@ function recompose() {
 /** @param {string} text */
 function chargeContenu(text) {
     editor.value = text;
+    histReinitialise();
     modifie = false;
     saisies = {};
     brouillons = {};
@@ -373,8 +397,41 @@ function coupeTableau(t, limite) {
     return suite;
 }
 
+/*
+ * La prose de calcul — résolutions pas à pas, études, positions relatives —
+ * est une suite de paragraphes et de formules : elle se scinde par nature.
+ * On garde les enfants entiers qui tiennent, on scinde le paragraphe
+ * frontière s'il s'y prête, et le reste part en page suivante dans une
+ * coquille identique. Une formule hors texte, elle, ne se coupe jamais.
+ */
+function coupeProse(b, limite, orphelines, veuves) {
+    const enfants = Array.from(b.children);
+    if (enfants.length < 2) return null;
+    const haut = b.getBoundingClientRect().top;
+    const echelle = b.offsetWidth ? b.getBoundingClientRect().width / b.offsetWidth : 1;
+    let garde = 0;
+    for (const c of enfants) {
+        const r = c.getBoundingClientRect();
+        if ((r.bottom - haut) / echelle <= limite) garde += 1;
+        else break;
+    }
+    let reste = null;
+    if (garde < enfants.length && enfants[garde].tagName === 'P') {
+        const frontiere = enfants[garde];
+        const dedans = (frontiere.getBoundingClientRect().top - haut) / echelle;
+        reste = coupeParagraphe(frontiere, limite - dedans, orphelines, veuves);
+        if (reste) garde += 1;
+    }
+    if (garde === 0 || garde >= enfants.length) return null;
+    const suite = b.cloneNode(false);
+    if (reste) suite.appendChild(reste);
+    for (const c of enfants.slice(garde)) suite.appendChild(c);
+    return suite;
+}
+
 function coupeBloc(b, limite, orphelines, veuves) {
     if (b.tagName === 'P') return coupeParagraphe(b, limite, orphelines, veuves);
+    if (b.classList.contains('calcul-prose')) return coupeProse(b, limite, orphelines, veuves);
     if (!b.classList.contains('secable')) {
         if (b.tagName === 'TABLE' || b.classList.contains('cadre')) {
             diag(`${b.tagName === 'TABLE' ? 'Tableau' : 'Cadre'} non scindé : bloc insécable (classes « ${b.className} »).`);
@@ -424,6 +481,35 @@ function coupeParagraphe(p, limite, orphelines, veuves) {
     return null;
 }
 
+/*
+ * La flottaison limitée. Quand un bloc insécable — figure, tableau de
+ * variations — est reporté en page suivante, la page qu'il quitte garderait
+ * un grand blanc : les blocs qui le suivent remontent le combler, tant
+ * qu'ils tiennent en entier. Trois interdits préservent le sens de lecture :
+ * jamais au-delà d'un titre, jamais un saut de page, et l'on s'arrête au
+ * premier bloc qui ne tient pas — seul l'objet reporté « flotte », le texte
+ * garde son ordre.
+ */
+function remonteFlottants(page, file, usable, hautPx) {
+    let examines = 0;
+    while (file.length && examines < 8) {
+        const c = file[0];
+        if (!c.classList
+            || c.classList.contains('sec')
+            || (c.className || '').includes('pagebreak')) {
+            break;
+        }
+        page.appendChild(c);
+        const bas = c.offsetTop + c.offsetHeight - page.offsetTop - hautPx;
+        if (bas > usable) {
+            page.removeChild(c);
+            break;
+        }
+        file.shift();
+        examines += 1;
+    }
+}
+
 function flow(d) {
     pagesEl.innerHTML = '';
     const usable = mmToPx(d.ch) - 2;
@@ -453,9 +539,16 @@ function flow(d) {
             continue;
         }
         if (sheet.children.length <= 1) continue;
+        const pageQuittee = sheet;
         sheet = newPage(d);
         if (suit) sheet.appendChild(titre);
         sheet.appendChild(b);
+        // Le report laisse un blanc derrière lui : les blocs suivants le
+        // comblent — sauf si le bloc a entraîné son titre, car remonter du
+        // contenu le placerait avant le titre de sa propre section.
+        if (!suit) {
+            remonteFlottants(pageQuittee, file, usable, hautPx);
+        }
         const deborde = b.offsetTop + b.offsetHeight - sheet.offsetTop - hautPx;
         if (deborde > usable) {
             const suite = coupeBloc(b, usable - (b.offsetTop - sheet.offsetTop - hautPx), orphelines, veuves);
@@ -466,8 +559,16 @@ function flow(d) {
         }
     }
     const pages = pagesEl.querySelectorAll('.page');
+    const mode = pageOpts.numerotation || 'composee';
     pages.forEach((page, i) => {
-        page.querySelector('.pageno').textContent = `${i + 1} / ${pages.length}`;
+        const no = page.querySelector('.pageno');
+        if (mode === 'sans') {
+            no.textContent = '';
+        } else if (mode === 'simple') {
+            no.textContent = String(i + 1);
+        } else {
+            no.textContent = `${i + 1} / ${pages.length}`;
+        }
     });
 }
 
@@ -564,13 +665,93 @@ window['demandeFermeture'] = () => {
     panneauFermeture().className = '';
 };
 
-editor.addEventListener('input', recompose);
+/*
+ * Annuler / rétablir. Le textarea perd son historique natif dès que le code
+ * réécrit `editor.value` (tabulation, réglages de page, chargement) : il faut
+ * donc tenir l'historique nous-mêmes. Les frappes rapprochées sont groupées
+ * par paquets de 400 ms — annuler remonte par gestes, pas caractère par
+ * caractère.
+ */
+const histAvant = [];
+const histApres = [];
+let histDernierPush = 0;
+let histEtatConnu = { texte: '', debut: 0, fin: 0 };
+const btnAnnuler = document.getElementById('btn-annuler');
+const btnRetablir = document.getElementById('btn-retablir');
+
+function histEtat() {
+    return { texte: editor.value, debut: editor.selectionStart, fin: editor.selectionEnd };
+}
+
+function majBoutonsHistorique() {
+    btnAnnuler.disabled = histAvant.length === 0;
+    btnRetablir.disabled = histApres.length === 0;
+}
+
+/** Enregistre l'état d'avant la mutation en cours. `force` isole les gestes
+ *  ponctuels (tabulation, réglages) du flot des frappes. */
+function histPousse(force) {
+    const maintenant = Date.now();
+    if (force || maintenant - histDernierPush > 400) {
+        histAvant.push(histEtatConnu);
+        if (histAvant.length > 500) {
+            histAvant.shift();
+        }
+        histDernierPush = maintenant;
+    }
+    histApres.length = 0;
+    majBoutonsHistorique();
+}
+
+function histRestaure(etat) {
+    editor.value = etat.texte;
+    editor.setSelectionRange(etat.debut, etat.fin);
+    editor.focus();
+    histEtatConnu = histEtat();
+    majBoutonsHistorique();
+    recompose();
+}
+
+function annuler() {
+    if (histAvant.length === 0) {
+        return;
+    }
+    histApres.push(histEtat());
+    histRestaure(histAvant.pop());
+}
+
+function retablir() {
+    if (histApres.length === 0) {
+        return;
+    }
+    histAvant.push(histEtat());
+    histRestaure(histApres.pop());
+}
+
+function histReinitialise() {
+    histAvant.length = 0;
+    histApres.length = 0;
+    histEtatConnu = histEtat();
+    histDernierPush = 0;
+    majBoutonsHistorique();
+}
+
+btnAnnuler.addEventListener('click', annuler);
+btnRetablir.addEventListener('click', retablir);
+
+editor.addEventListener('input', () => {
+    histPousse(false);
+    histEtatConnu = histEtat();
+    recompose();
+});
 
 function remplaceSelection(texte) {
+    histPousse(true);
     const debut = editor.selectionStart;
     const fin = editor.selectionEnd;
     editor.value = editor.value.slice(0, debut) + texte + editor.value.slice(fin);
     editor.selectionStart = editor.selectionEnd = debut + texte.length;
+    histEtatConnu = histEtat();
     editor.focus();
     recompose();
 }
@@ -579,6 +760,16 @@ editor.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
         e.preventDefault();
         remplaceSelection('\t');
+        return;
+    }
+    const raccourci = e.ctrlKey || e.metaKey;
+    if (raccourci && !e.shiftKey && (e.key === 'z' || e.key === 'Z')) {
+        e.preventDefault();
+        annuler();
+    } else if ((raccourci && (e.key === 'y' || e.key === 'Y'))
+        || (raccourci && e.shiftKey && (e.key === 'z' || e.key === 'Z'))) {
+        e.preventDefault();
+        retablir();
     }
 });
 
@@ -672,6 +863,10 @@ function serializePageBlock() {
     if (orph !== 2) bloc += '\torphelines: ' + orph + ';\n';
     const veuv = num('doc-veuves', 2);
     if (veuv !== 2) bloc += '\tveuves: ' + veuv + ';\n';
+    // L'option n'a pas de widget : elle se recopie depuis le document pour
+    // que l'ouverture des réglages ne l'efface pas.
+    if (pageOpts.numerotation === 'simple') bloc += '\tnumérotation: simple;\n';
+    if (pageOpts.numerotation === 'sans') bloc += '\tnumérotation: sans;\n';
     return bloc + '}';
 }
 
@@ -703,6 +898,7 @@ function findPageBlock(text) {
 }
 
 function applySettings() {
+    histPousse(true);
     modifie = true;
     const block = serializePageBlock();
     const src = editor.value;
@@ -710,6 +906,7 @@ function applySettings() {
     editor.value = found
         ? src.slice(0, found.start) + block + src.slice(found.end)
         : `${block}\n\n${src}`;
+    histEtatConnu = histEtat();
     requestTranspile('full');
 }
 
@@ -793,7 +990,8 @@ separateur.addEventListener('pointermove', (e) => {
     if (prefs.disposition === 'horizontale') {
         fraction = (e.clientX - zone.left) / zone.width;
     } else {
-        fraction = (zone.bottom - e.clientY) / zone.height;
+        // Le volet du code occupe le haut : sa part se mesure depuis le haut.
+        fraction = (e.clientY - zone.top) / zone.height;
     }
     prefs.part = Math.round(Math.min(85, Math.max(15, fraction * 100)));
     panneaux.style.setProperty('--part', prefs.part + '%');
@@ -812,6 +1010,8 @@ separateur.addEventListener('dblclick', () => {
 
 appliqueDisposition();
 
+afficheEcheance();
+
 setZoom(zoom);
 
 if (!ipcAvailable()) {
@@ -819,4 +1019,5 @@ if (!ipcAvailable()) {
 }
 
 editor.value = '';
+histReinitialise();
 requestTranspile('full');

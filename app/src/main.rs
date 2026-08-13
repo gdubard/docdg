@@ -148,13 +148,120 @@ fn ecrit_prefs(contenu: &str) {
     }
 }
 
+/// La durée de vie d'une version, en jours.
+///
+/// docdg est distribué gratuitement, mais chaque version a un terme : passé
+/// ce délai, elle demande à être remplacée. C'est le moyen de garantir que
+/// personne ne travaille durablement avec une version dépassée — les
+/// démonstrations livrées, les règles de rédaction et les corrections du
+/// moteur suivent les versions.
+const DUREE_JOURS: i64 = 90;
+
+/// À partir de combien de jours restants l'échéance s'annonce.
+const PREAVIS_JOURS: i64 = 15;
+
+fn chemin_installation() -> Option<PathBuf> {
+    #[cfg(unix)]
+    let base = std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".config"));
+    #[cfg(windows)]
+    let base = std::env::var_os("APPDATA").map(PathBuf::from);
+    let dossier = base?.join("docdg");
+    std::fs::create_dir_all(&dossier).ok()?;
+    Some(dossier.join("installation.json"))
+}
+
+struct Echeance {
+    jours_restants: i64,
+    expire: bool,
+}
+
+/// L'état du compte à rebours, mis à jour à chaque ouverture.
+///
+/// La date de dernière ouverture est conservée à côté de celle d'installation :
+/// une horloge reculée ne rend donc pas de jours, puisque le calcul prend la
+/// plus tardive des deux dates. Sans cette précaution, il suffirait de reculer
+/// la date du système pour repartir à zéro.
+fn etat_echeance() -> Echeance {
+    let maintenant = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map(|d| d.as_secs() as i64)
+        .unwrap_or(0);
+    let chemin = chemin_installation();
+    let lu = chemin
+        .as_ref()
+        .and_then(|c| std::fs::read_to_string(c).ok())
+        .and_then(|t| serde_json::from_str::<serde_json::Value>(&t).ok());
+    let installation = lu
+        .as_ref()
+        .and_then(|v| v.get("installation"))
+        .and_then(|x| x.as_i64())
+        .unwrap_or(maintenant);
+    let derniere = lu
+        .as_ref()
+        .and_then(|v| v.get("derniere_ouverture"))
+        .and_then(|x| x.as_i64())
+        .unwrap_or(maintenant);
+    let reference = maintenant.max(derniere);
+    if let Some(c) = &chemin {
+        let _ = std::fs::write(
+            c,
+            format!(
+                "{{\n  \"installation\": {},\n  \"derniere_ouverture\": {}\n}}\n",
+                installation, reference
+            ),
+        );
+    }
+    let ecoules = (reference - installation).max(0) / 86_400;
+    let restants = DUREE_JOURS - ecoules;
+    Echeance {
+        jours_restants: restants.max(0),
+        expire: restants <= 0,
+    }
+}
+
+/// La page qui remplace l'application lorsque la version est échue.
+///
+/// L'éditeur n'est pas chargé du tout : il n'y a rien à contourner dans la
+/// page. Les documents de l'utilisateur, eux, sont des fichiers sur son
+/// disque — ils ne sont ni touchés ni rendus illisibles, et la version
+/// suivante les rouvrira tels quels.
+fn page_echue() -> String {
+    format!(
+        "<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\">\
+<title>docdg — version échue</title><style>\
+body{{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;\
+background:#2b3440;color:#e8ecf1;font:16px/1.6 system-ui,sans-serif}}\
+main{{max-width:34rem;padding:2rem}}h1{{font-size:1.4rem;margin:0 0 1rem}}\
+p{{margin:0 0 .8rem}}code{{background:#1e252e;padding:.1rem .3rem;border-radius:3px}}\
+</style></head><body><main>\
+<h1>Cette version de docdg est arrivée à son terme</h1>\
+<p>Chaque version est valable {} jours après son installation. Passé ce délai, \
+elle demande à être remplacée par la suivante.</p>\
+<p>Vos documents ne sont pas affectés : ce sont vos fichiers <code>.docdg</code>, \
+sur votre disque. La nouvelle version les rouvrira tels quels.</p>\
+<p>Rendez-vous sur <code>github.com/gdubard/docdg</code> pour télécharger la \
+version courante.</p>\
+</main></body></html>",
+        DUREE_JOURS
+    )
+}
+
 fn build_html() -> String {
+    let echeance = etat_echeance();
+    if echeance.expire {
+        return page_echue();
+    }
     INDEX_HTML
         .replacen("/*__STYLE_CSS__*/", STYLE_CSS, 1)
         .replacen("/*__SCRIPT_JS__*/", APP_JS, 1)
         .replacen(
             "/*__PREFS__*/",
-            &format!("window.__PREFS__ = {};", lit_prefs()),
+            &format!(
+                "window.__PREFS__ = {}; window.__ECHEANCE__ = {{\"jours\": {}, \"preavis\": {}}};",
+                lit_prefs(),
+                echeance.jours_restants,
+                PREAVIS_JOURS
+            ),
             1,
         )
         .replacen("<!--__MATH__-->", &katex(), 1)

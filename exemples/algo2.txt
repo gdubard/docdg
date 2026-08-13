@@ -37,8 +37,8 @@ Une saisie <gras>arrête le document jusqu'à ce que la réponse arrive : tout c
 `<Saisis>` est la question que le document pose à son lecteur — l'équivalent d'un `input`. La réponse se relit ensuite comme n'importe quelle variable, calculs compris.
 
 soit âge = <Saisis>un entier{Quel est ton âge ?}
-soit tarif = si âge moins de 18 { 5 } sinon { 9 }
-Entrée : #tarif euros.
+soit majorité = si âge moins de 18 { mineur(e) } sinon { majeur(e) }
+Tu es #majorité.
 
 
 <h1>Une boucle simple

@@ -84,7 +84,13 @@ fn nombre_apres(desc: &str, cle: &str) -> Option<f64> {
     let fin = reste
         .find(|c: char| !(c.is_ascii_digit() || c == ',' || c == '.' || c == '-'))
         .unwrap_or(reste.len());
-    reel(&reste[..fin])
+    let valeur = reel(&reste[..fin])?;
+    // Les longueurs se donnent en centimètres ; « mm » divise par dix, pour
+    // que « 3 mm » ne dessine pas trois centimètres.
+    if reste[fin..].trim_start().starts_with("mm") {
+        return Some(valeur / 10.0);
+    }
+    Some(valeur)
 }
 
 fn lettres_triangle(desc: &str, bas: &str) -> Option<Vec<char>> {
@@ -752,6 +758,23 @@ fn vecteurs(verbe: &str, desc: &str, bas: &str, env: &Env) -> Option<String> {
             env,
         )?);
     }
+    // Les racines n-ièmes d'un complexe quelconque : « les racines cubiques
+    // de 8i » résout \(x^n = z\) dans \(\mathbb{C}\) — le solveur sait déjà
+    // le faire, il suffit de lui poser la question.
+    if verbe == "Calcule" && bas.contains("racines ") && bas.contains(" de ") {
+        let n = rang(bas)?;
+        let z = desc
+            .split('%')
+            .next()
+            .unwrap_or("")
+            .rsplit_once(" de ")
+            .map(|(_, r)| r.trim().trim_end_matches('.').to_string())
+            .filter(|z| !z.is_empty())?;
+        return en_formule(demande(
+            serde_json::json!({"op":"solve","args":{"expr":format!("x^{} = {}", n, z),"domain":"C"}}),
+            env,
+        )?);
+    }
     None
 }
 
@@ -779,9 +802,160 @@ pub fn commande(verbe: &str, desc: &str, corps: Option<&str>, env: &mut Env) -> 
     if verbe == "Construis" {
         return construis(desc, env);
     }
+    // « Placer » est le mot exact pour un point : on place un point, on ne
+    // le trace pas. `<Place>un point B(3 ; 1)` le déclare et le marque —
+    // c'est le geste du compas posé sur la feuille.
+    if verbe == "Place" && bas.contains("point") {
+        let nom = nom_apres(desc, "point");
+        if nom.is_empty() {
+            return None;
+        }
+        if let Some((x, y)) = coords_inline(desc) {
+            if point_declare(&nom, env).is_none() {
+                env.objects.insert(
+                    nom.clone(),
+                    crate::langage::commandes::Obj::Point {
+                        coords: vec![texte_fr(x), texte_fr(y)],
+                    },
+                );
+            }
+        }
+        match coords_inline(desc).or_else(|| point_declare(&nom, env)) {
+            Some(p) => {
+                let hauteur = 40.0;
+                let v =
+                    vue_centimetres(&[(p.0 - 0.6, p.1 - 0.4), (p.0 + 0.6, p.1 + 0.4)], hauteur);
+                let dessin = marque_point(&v, p, &nom, "#1a4fa0");
+                return Some(crate::maths::trace::enveloppe_haute(&dessin, "#1a4fa0", hauteur));
+            }
+            None => {
+                return Some(crate::utils::erreur::bloc(
+                    &format!("<Place>{}", desc),
+                    &format!(
+                        "le point {} demande ses coordonnées — <Place>un point {}(x ; y)",
+                        nom, nom
+                    ),
+                ))
+            }
+        }
+    }
     if verbe == "Trace" && !bas.contains("dans un repère") {
         if let Some(html) = cercle_trigonometrique(desc) {
             return Some(html);
+        }
+        // Le point seul : « <Trace>le point A » reprend un point déclaré par
+        // <Soit>, ou le pose si les coordonnées suivent le nom.
+        if bas.starts_with("le point") && corps.is_none() {
+            let nom = nom_apres(desc, "point");
+            // Des coordonnées en ligne définissent le point : il devient
+            // réutilisable — « définit B et le trace », dit le manuel.
+            if let Some((x, y)) = coords_inline(desc) {
+                if !nom.is_empty() && point_declare(&nom, env).is_none() {
+                    env.objects.insert(
+                        nom.clone(),
+                        crate::langage::commandes::Obj::Point {
+                            coords: vec![texte_fr(x), texte_fr(y)],
+                        },
+                    );
+                }
+            }
+            if let Some(p) = coords_inline(desc).or_else(|| point_declare(&nom, env)) {
+                let hauteur = 40.0;
+                let v = vue_centimetres(&[(p.0 - 0.6, p.1 - 0.4), (p.0 + 0.6, p.1 + 0.4)], hauteur);
+                let dessin = marque_point(&v, p, &nom, "#1a4fa0");
+                return Some(crate::maths::trace::enveloppe_haute(&dessin, "#1a4fa0", hauteur));
+            }
+            return Some(crate::utils::erreur::bloc(
+                &format!("<Trace>{}", desc),
+                &format!("le point {} n'a pas été déclaré — posez-le par <Soit>un point {}(x;y)", nom, nom),
+            ));
+        }
+        // Le rayon peut se donner par référence : « de rayon AB » mesure la
+        // distance entre deux points déclarés.
+        if (bas.starts_with("le cercle") || bas.starts_with("le disque"))
+            && bas.contains("de rayon ")
+            && nombre_apres(desc, "de rayon ").is_none()
+        {
+            let reference: String = apres_cle(desc, "de rayon ")
+                .unwrap_or("")
+                .trim()
+                .chars()
+                .take_while(|c| c.is_alphabetic())
+                .collect();
+            let lettres: Vec<String> = reference.chars().map(|c| c.to_string()).collect();
+            if lettres.len() == 2 {
+                if let (Some(a), Some(b)) = (
+                    point_declare(&lettres[0], env),
+                    point_declare(&lettres[1], env),
+                ) {
+                    let rayon = ((b.0 - a.0).powi(2) + (b.1 - a.1).powi(2)).sqrt();
+                    let recrit = desc.replacen(
+                        &format!("de rayon {}", reference),
+                        &format!("de rayon {}", texte_fr(rayon)),
+                        1,
+                    );
+                    if let Some(html) = figure_seule(&recrit) {
+                        return Some(html);
+                    }
+                }
+                return Some(crate::utils::erreur::bloc(
+                    &format!("<Trace>{}", desc),
+                    &format!(
+                        "le rayon {} demande les points {} et {} déclarés par <Soit>",
+                        reference, lettres[0], lettres[1]
+                    ),
+                ));
+            }
+        }
+        // Entre deux points déclarés : « la droite (AB) », « la demi-droite
+        // [AB) », « le segment de droite [AB] » — la figure se cadre sur les
+        // points, la ligne se trace par le même moteur que dans un repère.
+        if corps.is_none()
+            && !bas.contains("tel que")
+            && !bas.contains("telle que")
+            && (bas.starts_with("la droite (")
+                || bas.starts_with("la demi-droite")
+                || bas.starts_with("le segment"))
+        {
+            let lettres: Vec<String> = desc
+                .chars()
+                .skip_while(|c| !"[(".contains(*c))
+                .take_while(|c| !"])".contains(*c))
+                .filter(|c| c.is_alphabetic())
+                .map(|c| c.to_string())
+                .collect();
+            if lettres.len() == 2 {
+                match (point_declare(&lettres[0], env), point_declare(&lettres[1], env)) {
+                    (Some(pa), Some(pb)) => {
+                        let marge = 0.8;
+                        let cadre = [
+                            (pa.0.min(pb.0) - marge, pa.1.min(pb.1) - marge),
+                            (pa.0.max(pb.0) + marge, pa.1.max(pb.1) + marge),
+                        ];
+                        let hauteur = ((cadre[1].1 - cadre[0].1) * CM + 30.0).max(56.0);
+                        let v = vue_centimetres(&cadre, hauteur);
+                        let mut dessin = elements_places(desc, &v, env, Vec::new());
+                        for (nom, p) in [(&lettres[0], pa), (&lettres[1], pb)] {
+                            dessin.push_str(&marque_point(&v, p, nom, "#1a4fa0"));
+                        }
+                        if dessin.is_empty() {
+                            return None;
+                        }
+                        return Some(crate::maths::trace::enveloppe_haute(
+                            &dessin, "#1a4fa0", hauteur,
+                        ));
+                    }
+                    _ => {
+                        return Some(crate::utils::erreur::bloc(
+                            &format!("<Trace>{}", desc),
+                            &format!(
+                                "les points {} et {} doivent être déclarés par <Soit>",
+                                lettres[0], lettres[1]
+                            ),
+                        ))
+                    }
+                }
+            }
         }
         if let Some(html) = figure_seule(desc) {
             return Some(html);
@@ -817,6 +991,27 @@ pub fn commande(verbe: &str, desc: &str, corps: Option<&str>, env: &mut Env) -> 
 }
 
 type Plan2 = (f64, f64);
+
+/// La collecte des points placés : `<Place>un point B(3 ; 1)` déclare B au
+/// même titre qu'un `<Soit>` — les segments suivants doivent le connaître.
+pub(crate) fn collecte_place(after: &str, env: &mut Env) {
+    let desc = after.lines().next().unwrap_or("").trim();
+    if !desc.to_lowercase().contains("point") {
+        return;
+    }
+    let nom = nom_apres(desc, "point");
+    if nom.is_empty() {
+        return;
+    }
+    if let Some((x, y)) = coords_inline(desc) {
+        env.objects.insert(
+            nom,
+            crate::langage::commandes::Obj::Point {
+                coords: vec![texte_fr(x), texte_fr(y)],
+            },
+        );
+    }
+}
 
 fn point_declare(nom: &str, env: &Env) -> Option<Plan2> {
     match env.objects.get(nom) {
@@ -1405,7 +1600,7 @@ fn elements_places(
         }
         let bas = l.to_lowercase();
 
-        if bas.starts_with("le point") {
+        if bas.starts_with("le point") || bas.starts_with("un point") {
             let nom = nom_apres(l, "point");
             if let Some(p) = coords_inline(l).or_else(|| point_declare(&nom, env)) {
                 locaux.push((nom.clone(), p));
@@ -1522,6 +1717,41 @@ fn elements_places(
             continue;
         }
 
+        // La droite par son équation réduite : « la droite y = 2x + 1 ».
+        // Les coefficients se lisent sur la forme mx + b — celle du manuel.
+        if bas.starts_with("la droite") && l.contains("y =") {
+            if let Some((m, b_)) = pente_ordonnee(l) {
+                if let Some((p, q)) = v.coupe((0.0, b_), (1.0, m), false) {
+                    s.push_str(&ligne(v, p, q, TRAIT, false));
+                }
+            }
+            continue;
+        }
+        // La région délimitée par une droite : « la région y > x + 1 » grise
+        // le demi-plan, bord en trait plein pour ⩾/⩽, pointillé sinon.
+        if bas.starts_with("la région") {
+            if let Some((m, b_)) = pente_ordonnee(l) {
+                let dessus = l.contains('>');
+                let large = l.contains(">=") || l.contains("<=") || l.contains('⩾') || l.contains('⩽');
+                let (ya, yb) = (m * v.x0 + b_, m * v.x1 + b_);
+                let bord = if dessus { v.y1 } else { v.y0 };
+                s.push_str(&format!(
+                    "<polygon points=\"{:.2},{:.2} {:.2},{:.2} {:.2},{:.2} {:.2},{:.2}\" fill=\"#1a4fa0\" fill-opacity=\"0.12\" stroke=\"none\"/>",
+                    v.px(v.x0), v.py(ya.clamp(v.y0, v.y1)),
+                    v.px(v.x1), v.py(yb.clamp(v.y0, v.y1)),
+                    v.px(v.x1), v.py(bord),
+                    v.px(v.x0), v.py(bord)
+                ));
+                if let Some((p, q)) = v.coupe((0.0, b_), (1.0, m), false) {
+                    s.push_str(&format!(
+                        "<line x1=\"{:.2}\" y1=\"{:.2}\" x2=\"{:.2}\" y2=\"{:.2}\" stroke=\"#1a4fa0\" stroke-width=\"1.2\"{}/>",
+                        v.px(p.0), v.py(p.1), v.px(q.0), v.py(q.1),
+                        if large { "" } else { " stroke-dasharray=\"5 4\"" }
+                    ));
+                }
+            }
+            continue;
+        }
         let segment = bas.starts_with("le segment");
         let demi = bas.starts_with("la demi-droite");
         let droite = bas.starts_with("la droite");
@@ -1645,6 +1875,49 @@ pub(crate) fn cote_ecran(ax: f64, ay: f64, bx: f64, by: f64, longueur: f64, t: f
     )
 }
 
+/// Les coefficients de « y = mx + b » — les seules formes du manuel :
+/// « y = 2x + 1 », « y = -x + 3 », « y = x », « y = 0,5x - 2 », « y = 3 ».
+fn pente_ordonnee(l: &str) -> Option<(f64, f64)> {
+    // « y = », mais aussi « y > », « y >= », « y < », « y <= » : la région
+    // se donne par une inégalité, la droite par une égalité — mêmes
+    // coefficients.
+    let i = l.find('y')?;
+    let apres_y = l[i + 1..].trim_start();
+    let apres = apres_y
+        .strip_prefix(">=")
+        .or_else(|| apres_y.strip_prefix("<="))
+        .or_else(|| apres_y.strip_prefix('='))
+        .or_else(|| apres_y.strip_prefix('>'))
+        .or_else(|| apres_y.strip_prefix('<'))?
+        .trim();
+    let fin = apres
+        .find(|c: char| c == ',' && !apres.starts_with(','))
+        .map(|_| apres.len())
+        .unwrap_or(apres.len());
+    let expr: String = apres[..fin]
+        .chars()
+        .take_while(|c| *c != '%')
+        .collect::<String>()
+        .split(|c: char| c == '>' || c == '<')
+        .next()
+        .unwrap_or("")
+        .replace(' ', "");
+    // sépare la partie en x du reste
+    if let Some(i) = expr.find('x') {
+        let coeff = &expr[..i];
+        let m = match coeff {
+            "" | "+" => 1.0,
+            "-" => -1.0,
+            autre => reel(autre)?,
+        };
+        let reste = &expr[i + 1..];
+        let b = if reste.is_empty() { 0.0 } else { reel(reste)? };
+        Some((m, b))
+    } else {
+        Some((0.0, reel(&expr)?))
+    }
+}
+
 fn sommets_nommes(desc: &str, cle: &str) -> Vec<String> {
     let bas = desc.to_lowercase();
     match bas.find(cle) {
@@ -1660,6 +1933,89 @@ fn sommets_nommes(desc: &str, cle: &str) -> Vec<String> {
 
 fn polygone_regle(desc: &str) -> Option<(Vec<String>, Vec<Plan2>, f64, bool)> {
     let bas = desc.to_lowercase();
+    // Le triangle rectangle se donne par son sommet de l'angle droit et ses
+    // deux côtés de l'angle droit : « rectangle en A, de côté AB 3 cm et de
+    // côté AC 4 cm ». Le sommet nommé se place à l'angle droit, chaque côté
+    // part le long d'un axe.
+    if bas.contains("triangle") && bas.contains("rectangle en ") {
+        let noms = sommets_nommes(desc, "triangle ");
+        if noms.len() == 3 {
+            let sommet_droit = bas
+                .split_once("rectangle en ")
+                .and_then(|(_, r)| r.trim_start().chars().next())
+                .map(|c| c.to_uppercase().to_string())?;
+            let mut cotes: Vec<(String, f64)> = Vec::new();
+            let mut reste = desc;
+            while let Some(i) = reste.to_lowercase().find("de côté ") {
+                let apres = &reste[i + "de côté ".len()..];
+                let nom_cote: String = apres
+                    .trim_start()
+                    .chars()
+                    .take_while(|c| c.is_alphabetic())
+                    .collect();
+                if let Some(longueur) =
+                    nombre_apres(apres, &format!("{} ", nom_cote.to_lowercase()))
+                {
+                    cotes.push((nom_cote, longueur));
+                }
+                reste = apres;
+            }
+            let autre = |c: &str| -> Option<f64> {
+                cotes
+                    .iter()
+                    .find(|(n, _)| n.contains(c) && n.contains(&sommet_droit))
+                    .map(|(_, l)| *l)
+            };
+            let voisins: Vec<&String> =
+                noms.iter().filter(|n| **n != sommet_droit).collect();
+            if voisins.len() == 2 {
+                let l1 = autre(voisins[0])?;
+                let l2 = autre(voisins[1])?;
+                // L'ordre d'écriture des sommets est respecté : le tour du
+                // triangle suit les noms donnés.
+                let place = |nom: &String| -> Plan2 {
+                    if *nom == sommet_droit {
+                        (0.0, 0.0)
+                    } else if nom == voisins[0] {
+                        (l1, 0.0)
+                    } else {
+                        (0.0, l2)
+                    }
+                };
+                let sommets: Vec<Plan2> = noms.iter().map(place).collect();
+                return Some((noms, sommets, 0.0, false));
+            }
+        }
+        return None;
+    }
+    // L'isocèle : deux côtés égaux issus du sommet nommé, la base vaut par
+    // défaut les trois quarts du côté — la figure n'est pas à l'échelle d'un
+    // énoncé, elle montre la forme.
+    if bas.contains("triangle") && bas.contains("isocèle en ") {
+        let noms = sommets_nommes(desc, "triangle ");
+        let cote = nombre_apres(desc, "de côté ")?;
+        if noms.len() == 3 {
+            let sommet = bas
+                .split_once("isocèle en ")
+                .and_then(|(_, r)| r.trim_start().chars().next())
+                .map(|c| c.to_uppercase().to_string())?;
+            let base = nombre_apres(desc, "de base ").unwrap_or(cote * 0.75);
+            let h = (cote * cote - base * base / 4.0).max(0.01).sqrt();
+            let autres: Vec<&String> = noms.iter().filter(|n| **n != sommet).collect();
+            let place = |nom: &String| -> Plan2 {
+                if *nom == sommet {
+                    (base / 2.0, h)
+                } else if autres.first().map(|a| *a == nom).unwrap_or(false) {
+                    (0.0, 0.0)
+                } else {
+                    (base, 0.0)
+                }
+            };
+            let sommets: Vec<Plan2> = noms.iter().map(place).collect();
+            return Some((noms, sommets, 0.0, false));
+        }
+        return None;
+    }
     let cote = nombre_apres(desc, "de côté ")?;
     if bas.contains("équilatéral") || bas.contains("equilateral") {
         let noms = sommets_nommes(desc, "triangle ");
@@ -1707,8 +2063,60 @@ fn polygone_regle(desc: &str) -> Option<(Vec<String>, Vec<Plan2>, f64, bool)> {
 fn figure_seule(desc: &str) -> Option<String> {
     let bas = desc.to_lowercase();
 
+    // Le segment se donne par ses extrémités et sa longueur : « le segment
+    // [AB] tel que AB = 4 cm » — « de droite » est admis, la demi-droite
+    // aussi, qui se prolonge d'une flèche au-delà de son second point.
+    if bas.starts_with("le segment") || bas.starts_with("la demi-droite") {
+        let demi = bas.starts_with("la demi-droite");
+        let longueur = nombre_apres(desc, "= ")?;
+        let noms: Vec<String> = desc
+            .chars()
+            .skip_while(|c| !"[(".contains(*c))
+            .skip(1)
+            .take_while(|c| !"])".contains(*c))
+            .filter(|c| c.is_alphabetic())
+            .map(|c| c.to_string())
+            .collect();
+        if noms.len() != 2 {
+            return None;
+        }
+        let a = (0.0, 0.0);
+        let b = (longueur, 0.0);
+        let bout = if demi { longueur * 1.35 } else { longueur };
+        let hauteur = 46.0;
+        let v = vue_centimetres(&[a, (bout, 0.0)], hauteur);
+        let mut corps = format!(
+            "<line x1=\"{:.2}\" y1=\"{:.2}\" x2=\"{:.2}\" y2=\"{:.2}\" stroke=\"#1a4fa0\" stroke-width=\"1.2\"{}/>",
+            v.px(a.0),
+            v.py(a.1),
+            v.px(bout),
+            v.py(0.0),
+            if demi { " marker-end=\"url(#fleche)\"" } else { "" }
+        );
+        if demi {
+            corps = format!(
+                "<defs><marker id=\"fleche\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L6,3 L0,6 z\" fill=\"#1a4fa0\"/></marker></defs>{}",
+                corps
+            );
+        }
+        for (nom, p) in [(&noms[0], a), (&noms[1], b)] {
+            corps.push_str(&format!(
+                "<line x1=\"{:.2}\" y1=\"{:.2}\" x2=\"{:.2}\" y2=\"{:.2}\" stroke=\"#1a4fa0\" stroke-width=\"1.2\"/>",
+                v.px(p.0), v.py(p.1) - 4.0, v.px(p.0), v.py(p.1) + 4.0
+            ));
+            corps.push_str(&format!(
+                "<text x=\"{:.2}\" y=\"{:.2}\" class=\"nom\" text-anchor=\"middle\">{}</text>",
+                v.px(p.0), v.py(p.1) - 9.0, nom
+            ));
+        }
+        corps.push_str(&cote_mesuree(&v, a, b, longueur));
+        return Some(crate::maths::trace::enveloppe_haute(&corps, "#1a4fa0", hauteur));
+    }
+
     if bas.starts_with("le cercle") || bas.starts_with("le disque") {
-        let rayon = nombre_apres(desc, "de rayon ")?;
+        // Le diamètre vaut deux rayons — et se dit aussi.
+        let rayon = nombre_apres(desc, "de rayon ")
+            .or_else(|| nombre_apres(desc, "de diamètre ").map(|d| d / 2.0))?;
         let centre = coords_inline(desc).unwrap_or((0.0, 0.0));
         let hauteur = 2.2 * rayon * CM + 12.0;
         let v = vue_centimetres(
@@ -1779,7 +2187,12 @@ fn figure_seule(desc: &str) -> Option<String> {
         if marques {
             corps.push_str(&marque_cote(&v, a, b, 1));
         }
-        corps.push_str(&cote_mesuree(&v, a, b, cote));
+        let longueur = if cote > 0.0 {
+            cote
+        } else {
+            ((b.0 - a.0).powi(2) + (b.1 - a.1).powi(2)).sqrt()
+        };
+        corps.push_str(&cote_mesuree(&v, a, b, longueur));
     }
     Some(crate::maths::trace::enveloppe_haute(&corps, "#1a4fa0", hauteur))
 }
@@ -1799,7 +2212,31 @@ fn figure_libre(corps: &str, env: &Env) -> Option<String> {
         }
     }
     if sommets.len() < 3 || noms.len() < sommets.len() {
-        return None;
+        // Pas de polygone directeur : la figure se cadre alors sur les points
+        // du bloc — « le point A(1;2)… le segment [AB] » se suffit.
+        let points: Vec<Plan2> = corps
+            .lines()
+            .filter_map(|l| coords_inline(l.trim()).or_else(|| {
+                let t = l.trim().to_lowercase();
+                if t.starts_with("le point") || t.starts_with("un point") {
+                    point_declare(&nom_apres(l.trim(), "point"), env)
+                } else {
+                    None
+                }
+            }))
+            .collect();
+        if points.len() < 2 {
+            return None;
+        }
+        let haut = points.iter().fold(f64::NEG_INFINITY, |m, p| m.max(p.1));
+        let bas_ = points.iter().fold(f64::INFINITY, |m, p| m.min(p.1));
+        let hauteur = ((haut - bas_) * CM + 44.0).max(60.0);
+        let v = vue_centimetres(&points, hauteur);
+        let dessin = elements_places(corps, &v, env, Vec::new());
+        if dessin.is_empty() {
+            return None;
+        }
+        return Some(crate::maths::trace::enveloppe_haute(&dessin, "#1a4fa0", hauteur));
     }
     let haut = sommets.iter().fold(f64::NEG_INFINITY, |m, p| m.max(p.1));
     let bas = sommets.iter().fold(f64::INFINITY, |m, p| m.min(p.1));
@@ -1829,12 +2266,16 @@ fn figure_libre(corps: &str, env: &Env) -> Option<String> {
         }
     }
     for i in 0..sommets.len() {
-        dessin.push_str(&cote_mesuree(
-            &v,
-            sommets[i],
-            sommets[(i + 1) % sommets.len()],
-            cote,
-        ));
+        let a = sommets[i];
+        let b = sommets[(i + 1) % sommets.len()];
+        // Un polygone régulier porte partout son côté ; le triangle rectangle
+        // ou isocèle mesure chaque côté pour lui-même.
+        let longueur = if cote > 0.0 {
+            cote
+        } else {
+            ((b.0 - a.0).powi(2) + (b.1 - a.1).powi(2)).sqrt()
+        };
+        dessin.push_str(&cote_mesuree(&v, a, b, longueur));
     }
     dessin.push_str(&elements_places(corps, &v, env, places));
     Some(crate::maths::trace::enveloppe_haute(&dessin, "#1a4fa0", hauteur))

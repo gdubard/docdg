@@ -113,7 +113,7 @@ un <cle>{mot français en minuscules} est un style, un alignement ou un saut (gr
 <h1>Listes imbriquées
 	Une liste écrite sous un élément devient sa sous-liste :
 
-<Affiche une liste à puces>{
+<Dresse>une liste à puces{
 	Fruits
 	<Dresse une liste à puces vides>{
 		pommes

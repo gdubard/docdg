@@ -6,7 +6,8 @@ fn analyse_college_complet() {
     let mut e = Engine::new();
     let r = e.render(src, true);
     assert!(!r.html.contains("calcul-absent"));
-    assert!(r.html.contains("\\text{Soit une fonction } f(x) = 2x + 1"));
+    // la déclaration nomme avant de qualifier, et se lit comme une phrase
+    assert!(r.html.contains("Soit \\(f\\) la fonction définie par \\(f(x) = 2x + 1\\)."));
     assert!(r.html.contains("f(3) = 2\\times 3 + 1 = 7"));
     assert!(r.html.contains("\\mathscr{S} = \\left\\{3\\right\\}"));
     assert!(r.html.contains("g(5) = -3\\times 5 = -15"));

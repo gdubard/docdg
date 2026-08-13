@@ -1,9 +1,9 @@
 page {
 	orientation: portrait;
-	marges: 10;
+	marges: 5;
 	espacements: 2;
 	taille: 11;
-	interligne: 1.5;
+	interligne: 1.6;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>
@@ -34,6 +34,7 @@ soit h2 = <bleu italique sous-section>
 	x - y = 1
 }
 <Résous>le système s
+<Résous>le système s, pas à pas
 
 
 <h2>Déterminant et inverse
@@ -105,7 +106,7 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 <Dresse>la décomposition en facteurs premiers de 360
 <Applique>l'algorithme d'Euclide à 84 et 60
 
-<h2>Nombres complexes
+<page suivante h2>Nombres complexes
 <Écris>le complexe z = 1 + i sous ses trois formes
 
 <Écris>le complexe w = -2i sous ses trois formes

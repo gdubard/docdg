@@ -582,9 +582,14 @@ pub fn represente(desc: &str, bloc: Option<&str>, env: &Env) -> Option<String> {
         return Some(html);
     }
     let nom = nom_apres(desc, "la fonction ")?;
+    // Sans intervalle, la fenêtre standard [-5 ; 5] : demander la courbe sans
+    // préciser le cadre est l'usage le plus courant, et la commande la plus
+    // naturelle du logiciel ne doit pas échouer sur son cas le plus simple.
+    // Un domaine écrit garde bien sûr le dernier mot.
     let (x0, x1) = intervalle_avant(desc, "en abscisse")
         .or_else(|| intervalle(desc, " sur "))
-        .or_else(|| intervalle(desc, "x dans"))?;
+        .or_else(|| intervalle(desc, "x dans"))
+        .unwrap_or((-5.0, 5.0));
     let (y0, y1) = intervalle_avant(desc, "en ordonnée")
         .or_else(|| intervalle_avant(desc, "en ordonnee"))
         .or_else(|| intervalle(desc, "y dans"))
@@ -724,7 +729,39 @@ pub fn commande(verbe: &str, desc: &str, corps: Option<&str>, env: &mut Env) -> 
             Some(bloc) if desc.to_lowercase().contains("repère") => trace(desc, bloc, env),
             _ => represente(desc, corps, env),
         },
-        "Trace" => trace(desc, corps?, env),
+        "Trace" => {
+            let bloc = corps?;
+            // Un bloc dont les lignes sont elles-mêmes des solides ou des
+            // patrons se rend ligne à ligne : `<Trace>{` groupe, il ne change
+            // pas le vocabulaire.
+            if desc.trim().is_empty()
+                && bloc.lines().any(|l| {
+                    let t = l.trim().to_lowercase();
+                    t.starts_with("le solide") || t.starts_with("le patron")
+                })
+            {
+                let mut html = String::new();
+                for ligne in bloc.lines() {
+                    let ligne = ligne.trim();
+                    if ligne.is_empty() {
+                        continue;
+                    }
+                    match crate::maths::espace::commande("Trace", ligne, None, env)
+                        .or_else(|| commande("Trace", ligne, None, env))
+                    {
+                        Some(un) => html.push_str(&un),
+                        None => {
+                            html.push_str(&crate::utils::erreur::bloc(
+                                &format!("<Trace>{}", ligne),
+                                "figure non reconnue",
+                            ));
+                        }
+                    }
+                }
+                return Some(html);
+            }
+            trace(desc, bloc, env)
+        }
         _ => None,
     }
 }

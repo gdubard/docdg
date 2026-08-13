@@ -1,0 +1,38 @@
+page {
+	orientation: portrait;
+	marges: 15;
+	espacements: 2;
+	taille: 12;
+	interligne: 1.8;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Vitrine — ce que docdg compose en quelques lignes
+
+	Chaque section de ce document tiendrait en exercice d'annale. L'enjeu n'est pas la difficulté : c'est que <gras>{chaque ligne source produit une rédaction complète} — le calcul, la phrase, la figure.
+
+<h2>Une étude de fonction, de bout en bout
+<Soit>une fonction f(x) = (x^2 - 1)/(x^2 + 1)
+<Calcule>la dérivée de f
+<Dresse>les tableaux de variations de f
+<Représente>graphiquement la fonction f pour x appartient à [-4 ; 4] et y à [-1,5 ; 1,5]
+
+<page suivante h2>Une démonstration que le moteur écrit et vérifie
+<Montre>par récurrence que pour tout entier $n >= 1$, $somme(k=1;n) k^3 = ((n(n+1))/2)^2$
+
+<h2>Une démonstration d'idée, appelée par son énoncé
+<Montre>que la limite d'une suite est unique
+<h2>Un système, déroulé au pivot
+<Soit>le système s {
+	2x + y - z = 3
+	x - y + 2z = 1
+	3x + 2y + z = 10
+}
+<page suivante>
+<Résous>le système s, pas à pas
+
+<h2>La géométrie rédigée et tracée
+<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>le plan P d'équation 2x + y - z = 3
+<Étudie>la position relative de la droite d et du plan P

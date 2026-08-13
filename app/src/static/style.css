@@ -33,6 +33,14 @@ html, body { height: 100%; margin: 0; }
         cursor: pointer;
     }
     #toolbar button:hover { background: #5b6572; }
+    #echeance {
+        font-size: 12px;
+        color: #9aa4b1;
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+    #echeance.proche { color: #ffd479; font-weight: 600; }
+    #echeance.hidden { display: none; }
     #spacer { flex: 1; }
     #status { font-size: 12px; color: #9aa; }
     #settings {
@@ -122,7 +130,6 @@ html, body { height: 100%; margin: 0; }
         display: flex;
         flex-direction: column;
     }
-    #panneaux[data-disposition="verticale"] #volet-apercu { order: -1; }
     #separateur {
         flex: 0 0 6px;
         background: #17181a;

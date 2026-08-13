@@ -28,7 +28,8 @@ fn algebre_lycee_complet() {
     let mut e = Engine::new();
     let r = e.render(src, true);
     assert!(!r.html.contains("calcul-absent"));
-    assert!(r.html.contains("\\text{Soit le système } (s)"));
+    // la déclaration est une phrase, et non une formule enveloppant du texte
+    assert!(r.html.contains("Soit \\((s)\\) le système"));
     assert!(r.html.contains("Étape 1. Pivot sur \\(x\\)"));
     assert!(r.html.contains("L_{2} \\leftarrow L_{2} - 4\\,L_{1}"));
     assert!(r.html.contains("L_{3} \\leftarrow L_{3} - \\left(-6\\right)\\,L_{2}"));

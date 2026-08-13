@@ -116,10 +116,22 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Trace>l'image du cercle unité par w = z + 1/z
 <Trace>l'image du cercle de rayon 1,4 par w = z + 1/z, en vert
 
-<h1>Les résidus
+<page suivante h1>Les résidus
 <Calcule>les résidus de 1/(z^2 + 1)
 <Calcule>les résidus de 1/(z^2*(z - 1))
 
 <h1>Une nappe à la demande
 soit k = <Saisis>un entier{Quel coefficient pour la selle ?}
 <Trace>la surface z = #k*x*y pour x dans [-1 ; 1] et y dans [-1 ; 1], en orange
+
+<h2>Intégrale exacte
+<Soit>une fonction j(x) = x^2
+<Calcule>l'intégrale de j entre 0 et 1
+
+<h2>Autres variables, autres objets
+	La variable se lit dans la définition — $t$ pour le temps, comme en physique :
+
+<Soit>une fonction g(t) = t^2 + 1
+<Calcule>la dérivée de g
+
+<Soit>un champ de vecteurs F de RR^2 dans RR^2 défini par F(x, y) = (-y, x)

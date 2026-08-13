@@ -6,6 +6,7 @@ document {
 	orientation: portrait;
 	marges: 10;
 	espacements: 0;
+	numérotation: sans;
 	police: Georgia;
 	taille: 11;
 	interligne: 1,3;
