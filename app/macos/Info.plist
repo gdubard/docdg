@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>docdg</string>
+	<key>CFBundleDisplayName</key>
+	<string>docdg</string>
+	<key>CFBundleIdentifier</key>
+	<string>fr.docdg.app</string>
+	<key>CFBundleExecutable</key>
+	<string>docdg</string>
+	<key>CFBundleIconFile</key>
+	<string>docdg</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.education</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.6.0</string>
+	<key>CFBundleVersion</key>
+	<string>2.6.0</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.15</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>© Gérard Dubard</string>
+</dict>
+</plist>

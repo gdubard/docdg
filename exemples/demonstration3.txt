@@ -1,0 +1,59 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Démonstrations — ce que docdg rédige seul
+
+	Pas une ligne de mathématiques n'est écrite dans ce document. Chaque démonstration tient en un énoncé, sans accolades : le moteur cherche la preuve, la rédige et la met en forme. Deux sources l'alimentent — le calcul formel pour ce qui se vérifie, une bibliothèque de démonstrations classiques pour ce qui repose sur une idée. Comparez la source et le rendu : c'est là que la différence se voit.
+
+<h2>Ce que le calcul formel démontre
+	Une récurrence sans corps est vérifiée puis rédigée : le moteur teste l'initialisation, mène l'hérédité par le calcul symbolique et refuse la formule fausse. L'auteur n'a écrit que la formule.
+
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k = (n(n+1))/2$
+
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k^2 = (n(n+1)(2n+1))/6$
+
+<Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k^3 = (n^2(n+1)^2)/4$
+
+	Une propriété universelle se traite de même, par forme canonique :
+
+<Montre>par élément quelconque réel $x$, $x^2 + 2x + 5 >= 0$
+
+<Montre>par élément quelconque réel $x$, $x^2 + 1 >= 2x$
+
+<page suivante h2>Ce que le calcul formel n'atteint pas
+	Aucun système de calcul ne trouvera l'argument d'Euclide, ni la diagonale de Cantor : ces preuves reposent sur une construction, non sur une vérification. Elles sont rangées en bibliothèque et l'énoncé seul les appelle.
+
+<Montre>que $racine(2)$ est irrationnel
+
+<Montre>que $racine(3)$ est irrationnel
+
+<Montre>qu'il existe une infinité de nombres premiers
+
+<Montre>qu'il n'existe pas de plus grand entier naturel
+
+<h2>Sommes, rationnels et irrationnels
+
+<Montre>que la somme de deux rationnels est rationnelle
+
+<Montre>que la somme d'un rationnel et d'un irrationnel est irrationnelle
+
+<page suivante h2>Dénombrement et théorèmes du programme
+
+<Montre>que dans un groupe de $13$ personnes, deux au moins sont nées le même mois
+
+<Montre>que max(a,b) = (a+b+|a-b|)/2
+
+<Montre>que toute suite croissante et majorée converge vers la borne supérieure de ses termes
+
+<h2>Arithmétique
+
+<Montre>le théorème de Bézout
+
+<Montre>le lemme de Gauss

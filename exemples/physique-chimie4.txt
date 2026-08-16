@@ -1,0 +1,81 @@
+page {
+	orientation: portrait;
+	marges: 5;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.4;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Physique et chimie — niveau 4
+
+<h2>Résolution numérique
+	En chimie des équilibres, la concentration $x$ d'un acide faible ($C = 0,1$ mol/L, $K_a = 1,8 \cdot 10^{-3}$) vérifie une équation sans solution exacte utile — on la résout numériquement :
+	<Résous>numériquement l'équation x^2/(0,1 - x) = 0,0018 sur [0 ; 0,09]
+
+<h2>Ajustement de courbe
+	Cinq mesures d'une population de noyaux au cours du temps, ajustées au modèle exponentiel (paramètres libres $a$ et $b$) :
+
+<Ajuste N(t) = a*exp(b*t) aux données {(0;100) (1;61) (2;37) (3;22) (4;14)}>
+
+<h2>Oscillateur harmonique
+	Un ressort de pulsation $omega = 2$ :
+	<Résous>l'équation différentielle y'' + 4y = 0
+
+<h2>Équation aux dérivées partielles
+	Une équation de transport avec terme source, du premier ordre :
+	<Résous>l'équation aux dérivées partielles u_x + u_y = u
+
+<h2>Intervalle de confiance de Student
+	Pour neuf mesures, le quantile bilatéral à 95 pourcent :
+	<Détermine>le quantile d'ordre 0,975 de la loi student(8)
+
+<h2>Pendule simple : au-delà des petits angles
+La période dépend de l'amplitude dès que $sin(theta)$ s'écarte de
+	$theta$ — le développement limité mesure l'écart :
+	<Soit>une fonction s(x) = sin(x)
+	<Calcule>le développement limité de s en 0 à l'ordre 5
+
+<h2>Racines de l'unité, physique du signal
+	L'échantillonnage à $n$ points d'un signal périodique repose sur les racines n-ièmes de l'unité (transformée de Fourier discrète) :
+	<Calcule>les racines sixièmes de l'unité
+
+<h2>Paquet d'ondes gaussien
+	<Soit>une fonction psi(x) = exp(-x^2/2)
+	<Calcule>les dérivées de psi et s
+	<Calcule>l'intégrale numérique de psi entre -3 et 3
+<Représente>graphiquement la fonction psi pour x dans [-3 ; 3] et y dans [0 ; 1,1], en bleu, avec 200 échantillons
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice et un titre {Le lien} {
+	La densité de probabilité de présence est $valeur absolue(psi(x))^2$ ;
+	l'intégrale sur tout l'espace vaut $1$ après normalisation.
+}
+<page suivante h2>Opérateurs de l'électromagnétisme
+
+Le potentiel et son champ, reliés par le gradient :
+
+<Calcule>le gradient de V(x, y, z) = x^2 + y^2 - 2z^2
+
+Un champ tournant, sa divergence et son rotationnel :
+
+<Calcule>la divergence du champ F(x, y, z) = (x^2 ; xy ; z)
+
+<Calcule>le rotationnel du champ F(x, y, z) = (y ; -x ; 0)
+
+Le laplacien du potentiel — nul, l'équation de Laplace est vérifiée :
+
+<Calcule>le laplacien de V(x, y, z) = x^2 + y^2 - 2z^2
+
+<h2>Signal en créneau et série de Fourier
+
+<Soit>une fonction f(x) = x
+
+<Calcule>la série de Fourier de f à l'ordre 4 sur [-pi ; pi]
+
+<h2>Incertitude sur la pesanteur au pendule
+
+<Propage>l'incertitude sur g = 4pi^2 L/T^2 avec u(L) = 0,001, u(T) = 0,01, L = 0,995, T = 2,004
+
+<Convertis>13,6 eV en J
+
+<Donne>la valeur de la constante de Planck réduite

@@ -1,0 +1,58 @@
+page {
+	orientation: portrait;
+	marges: 2;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Géométrie — supérieur
+
+
+<h2>Vocabulaire du supérieur
+
+Le produit scalaire abstrait est $produit scalaire(u; v)$, l'orthogonal d'un sous-espace $orthogonal(F)$, la projection orthogonale
+$projeté orthogonal(F; x)$ et le produit mixte $produit mixte(u; v; w)$.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {L'inégalité de Cauchy-Schwarz} {
+	$valeur absolue(vecteur(u) . vecteur(v)) <= norme(vecteur(u)) norme(vecteur(v))$,
+	avec égalité exactement quand $colinéaires(u; v)$.
+}
+
+<h2>Espaces préhilbertiens : Gram-Schmidt et projection
+
+<Soit>les vecteurs e et f de coordonnées respectives (1 ; 1 ; 0) et (1 ; 0 ; 1)
+
+<Orthonormalise>la famille e et f
+
+<Soit>les vecteurs g et h de coordonnées respectives (2 ; 1) et (1 ; 1)
+
+<Calcule>le projeté orthogonal de g sur h
+<page suivante h1>Les courbes paramétrées
+	Une courbe paramétrée se donne par ses deux coordonnées en fonction de $t$ :
+<Trace>la courbe paramétrée x = cos(t)^3 et y = sin(t)^3 pour t dans [0 ; 2*pi]
+<Trace>la courbe paramétrée x = 2*cos(t) et y = sin(2*t) pour t dans [0 ; 2*pi], en violet
+
+<page suivante h1>Les courbes polaires
+	Une courbe polaire se donne par le rayon en fonction de l'angle $t$ :
+<Trace>la courbe polaire r = 1 + cos(t) pour t dans [0 ; 2*pi], en rouge
+<Trace>la courbe polaire r = cos(3*t), en vert
+
+<h1>Les coniques, rédigées
+<h2>L'ellipse
+<Étudie>la conique d'équation x^2/9 + y^2/4 = 1
+
+<page suivante h2>L'hyperbole
+<Étudie>la conique d'équation x^2/4 - y^2 = 1
+
+<page suivante h2>La parabole
+<Étudie>la conique d'équation y^2 = 4x
+
+<page suivante h2>Le terme croisé et la rotation
+<Étudie>la conique d'équation x^2 + xy + y^2 = 3
+
+<page suivante h1>Une rosace à la demande
+soit n = <Saisis>un entier{Combien de pétales pour la rosace ?}
+<Trace>la courbe polaire r = cos(#n*t), en violet

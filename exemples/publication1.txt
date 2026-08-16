@@ -1,0 +1,58 @@
+document {
+	titre: De la mesure du pendule simple;
+	auteur: Jean DUPONT;
+	institution: École doctorale de physique de Lyon 1;
+	date: 7 août 2026;
+	orientation: portrait;
+	marges: {25;25;25;15};
+	espacements: 0;
+	script: Georgia;
+	math: Latin Modern Math;
+	taille: 12;
+	interligne: 1.8;
+	tabulation: 8;
+	hauteur: 6;
+	précision: 3;
+}
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section>
+soit resume = <italique 10pt>
+soit motcle = <petites capitales>
+
+<page de titre>
+
+<resume>{Résumé — On mesure l'intensité de la pesanteur à partir de la période d'un pendule simple, en propageant les incertitudes de mesure et en discutant l'approximation des petits angles. Les valeurs numériques sont arrondies à trois décimales par le réglage de page.}
+
+<motcle>{Mots-clés} : pendule, pesanteur, incertitudes, développement limité.
+
+<h1>Le modèle et son domaine de validité
+
+	Pour un pendule de longueur $L$, l'équation du mouvement s'écrit $theta'' + (g/L) sin(theta) = 0$. L'approximation des petits angles remplace $sin(theta)$ par $theta$ ; le développement limité chiffre l'erreur commise<note>{Le terme suivant du développement, en $theta^3/6$, reste inférieur à un millième pour $theta < 0,18$ radian.} :
+
+<Soit>une fonction s(x) = sin(x)
+
+<Calcule>le développement limité de s en 0 à l'ordre 5
+
+	Dans ce régime, la période vaut $T = 2pi racine(L/g)$, d'où $g = 4pi^2 L/T^2$.
+
+<h1>Mesures et propagation des incertitudes
+
+	La longueur est mesurée au réglet, la période au chronomètre sur vingt oscillations :
+
+<Dresse>un tableau [mc ; mc ; mc] {
+	Grandeur	Valeur	Incertitude-type
+	[$L$ (m) ; 0,995 ; 0,001]
+	[$T$ (s) ; 2,004 ; 0,010]
+}
+
+	L'incertitude sur $g$ se propage par la formule des dérivées partielles :
+
+<Propage>l'incertitude sur g = 4pi^2 L/T^2 avec u(L) = 0,001, u(T) = 0,01, L = 0,995, T = 2,004
+
+	La valeur tabulée <TIMES NEW ROMAN>{g = 9,806 65 m s⁻²} est comprise dans l'intervalle mesuré.
+
+<Donne>la valeur de l'intensité de la pesanteur
+
+<h1>Conclusion
+
+	La mesure au chronomètre suffit pour trois chiffres significatifs ; l'essentiel de l'incertitude vient de la période, dont le poids est doublé par l'exposant<note>{La dérivée logarithmique donne $u(g)/g = racine((u(L)/L)^2 + (2u(T)/T)^2)$.}. Au-delà de $0,3$ radian, l'approximation cède : la période croît avec l'amplitude.

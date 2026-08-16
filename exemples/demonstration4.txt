@@ -1,0 +1,95 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Démonstrations — la bibliothèque du supérieur
+
+	Comme demonstration3, ce document ne contient aucune mathématique écrite à la main : chaque énoncé appelle une fiche, et le moteur rédige. La bibliothèque couvre le premier cycle universitaire et les classes préparatoires — analyse, algèbre linéaire, théorie des groupes, arithmétique, topologie. Les fiches traversent la même charpente que les démonstrations écrites par l'auteur : même annonce, mêmes étapes nommées, même conclusion.
+
+<h2>Suites et limites
+
+<Montre>l'unicité de la limite d'une suite
+
+<Montre>toute suite convergente est bornée
+
+<Montre>le théorème des gendarmes
+
+<Montre>toute suite bornée admet une sous-suite convergente
+
+<page suivante h2>Fonctions et dérivation
+
+<Montre>toute fonction dérivable est continue
+
+<Montre>théorème de Rolle
+
+<Montre>théorème des accroissements finis
+
+<h2>Séries
+
+<Montre>le terme général d'une série convergente tend vers zéro
+
+<Montre>la série harmonique diverge
+
+<page suivante h2>Ensembles et applications
+
+<Montre>les lois de De Morgan
+
+<Montre>la distributivité de l'intersection sur la réunion
+
+<Montre>la composée de deux injections est injective
+
+<Montre>un ensemble à n éléments admet 2^n parties
+
+<Montre>il n'existe pas de surjection d'un ensemble sur l'ensemble de ses parties
+
+<Montre>argument diagonal de Cantor
+
+<page suivante h2>Structures algébriques
+
+<Montre>l'unicité de l'élément neutre d'un groupe
+
+<Montre>l'unicité de l'inverse dans un groupe
+
+<Montre>l'inverse d'un produit est le produit des inverses dans l'ordre inverse
+
+<Montre>l'intersection de deux sous-groupes est un sous-groupe
+
+<Montre>tout groupe d'ordre premier est cyclique
+
+<Montre>théorème de Lagrange
+
+<page suivante h2>Algèbre linéaire
+
+<Montre>le noyau d'une application linéaire est un sous-espace vectoriel
+
+<Montre>l'image d'une application linéaire est un sous-espace vectoriel
+
+<Montre>une famille orthogonale de vecteurs non nuls est libre
+
+<Montre>théorème du rang
+
+<Montre>procédé de Gram-Schmidt
+
+<page suivante h2>Arithmétique
+
+<Montre>l'existence et l'unicité de la division euclidienne
+
+<Montre>le lemme d'Euclide
+
+<Montre>petit théorème de Fermat
+
+<Montre>parmi cinq entiers deux ont le même reste modulo quatre
+
+<h2>Analyse et topologie
+
+<Montre>l'inégalité triangulaire
+
+<Montre>toute fonction se décompose en somme d'une fonction paire et d'une fonction impaire
+
+<Montre>théorème du point fixe de Banach

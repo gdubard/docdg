@@ -1,0 +1,39 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.4;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Calcul — l'école élémentaire, rédigée
+
+<h2>Les quatre opérations
+	Le calcul s'écrit, se pose en ligne, se vérifie :
+
+<Calcule>247 + 385
+<Calcule>1 000 - 458
+<Calcule>36 * 24
+
+<h2>Décomposer les nombres
+	Un nombre se lit par ses milliers, ses centaines, ses dizaines et ses unités :
+
+<Décompose>4 782
+<Décompose>3095
+
+<h2>Fractions de même dénominateur
+	Des parts d'un même tout s'ajoutent et se retranchent :
+
+<Calcule>2/7 + 3/7
+<Calcule>5/8 - 3/8
+
+<h2>La division euclidienne
+	Partager, et dire ce qui reste :
+
+<Effectue>la division euclidienne de 152 par 6
+
+<h2>Convertir les unités
+<Convertis>3,5 km en m
+<Convertis>150 min en h

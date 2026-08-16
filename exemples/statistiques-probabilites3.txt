@@ -1,0 +1,113 @@
+page {
+	orientation: portrait;
+	marges: 5;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.2;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Statistiques et probabilités — lycée
+
+<h2>Notations du dénombrement
+Le coefficient binomial est $C(n; k)$ ; à un seul argument, $C(t)$ reste une fonction ordinaire.
+L'arrangement est $A(n; k)$, la factorielle $factorielle(n)$.
+La règle de Pascal et le binôme :
+
+$C(n; k) = C(n-1; k-1) + C(n-1; k)$
+
+$(a + b)^n = somme(k=0;n) C(n; k) a^k b^(n-k)$
+
+<h2>Probabilité et espérance
+$PP(A)$ est une probabilité, $EE(X)$ une espérance ; le conditionnement se dit « sachant » : $PP(A sachant B)$.
+$PP(A) = PP(A sachant B) PP(B) + PP(A sachant non(B)) PP(non(B))$
+$EE(X) = somme(k=1;n) k PP(X = k)$
+
+<h2>Arbre de probabilités
+Un nœud à branche unique reçoit son complément automatiquement, le produit de chaque chemin s'imprimant à la feuille :
+<Construis>un arbre horizontal avec les produits {
+	Pile : 0,5
+	Face : 0,5
+}
+<Construis>un arbre prose avec les produits {
+	Pile : 0,5
+	Face : 0,5
+}
+<Construis>un arbre avec les produits {
+	A 0,3 {
+		B 0,6
+	}
+	!A 0,7 {
+		B 0,1
+	}
+}
+
+<h2>Diagrammes statistiques
+<Représente>graphiquement une statistique en barres avec les données {1: 4 | 2: 7 | 3: 2 | 4: 5}
+<Représente>graphiquement une statistique en camembert avec les données {Marche: 5 | Bus: 3 | Vélo: 2}
+Les mêmes données, déclarées une fois et réutilisées par leur nom :
+soit sondage = {
+	Jeudi: 8
+	Lundi: 5
+	Mardi: 3
+}
+<Représente>graphiquement une statistique en barres avec les données sondage et en disposition horizontale
+Un histogramme à classes, de bornes et d'effectifs déclarés en toutes lettres :
+<Représente>graphiquement une statistique en histogramme avec les bornes {0 ; 5 ; 10 ; 20} et les effectifs {3 ; 7 ; 2}
+<Représente>graphiquement une statistique en boîte à moustaches avec les données {2 ; 3 ; 5 ; 7 ; 8 ; 11 ; 13}
+
+Un nuage de points avec sa droite d'ajustement :
+
+<Représente>graphiquement une statistique en nuage avec ajustement et les données {(1;2) (2;2,8) (3;4,1) (4;4,9)}
+
+<h2>Lois du lycée, calculées
+<Calcule la probabilité que X <= 1,96 pour la loi normale(0 ; 1)>
+<Calcule la probabilité que X >= 3 pour la loi binomiale(10 ; 0,5)>
+<Calcule>la probabilité que X = 2 pour la loi poisson(1,5)
+<Détermine>le quantile d'ordre 0,95 de la loi normale(0 ; 1)
+<Calcule>l'espérance de la loi binomiale(20 ; 0,05)
+<Calcule>l'écart type de la loi poisson(4)
+
+
+<h2>Loi de probabilité
+Les valeurs et les probabilités se donnent en deux lignes ; le tableau se dresse tout seul et la somme des probabilités est vérifiée — une loi qui ne totalise pas 1 est refusée avec le total fautif.
+<Dresse>la loi de probabilité de X {
+	valeurs : [1 ; 2 ; 3]
+	probabilités : [1/6 ; 1/3 ; 1/2]
+}
+<Calcule>l'espérance de X
+<Calcule>la variance de X
+<Calcule>l'écart type de X
+
+<h2>Variance, écart type, covariance
+$variance(X)$ est la variance, $écart type(X)$ l'écart type,
+$covariance(X; Y)$ la covariance ; l'identité de König-Huygens :
+$variance(X) = EE(X^2) - EE(X)^2$
+Et sur les séries statistiques, les trois se calculent :
+<Calcule>la variance de la série 12 ; 15 ; 9 ; 14
+<Calcule>l'écart type de la série 12 ; 15 ; 9 ; 14
+<Calcule>la variance de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calcule>la covariance des séries 1 ; 2 ; 3 et 2 ; 4 ; 7
+
+<h2>Lois en notation
+$X$ suit $normal(0; 1)$, la normale centrée réduite ; $N$ suit
+$poisson(lambda)$ avec $PP(N = k) = exp(-lambda) lambda^k / factorielle(k)$ ;
+$S$ suit $binomiale(n; p)$ avec $EE(S) = n p$.
+
+<h2>répartition et densité
+$répartition de(X; x) = PP(X <= x)$ et, pour une loi continue,
+$répartition de(X; x) = intégrale(t=-infini;x) densité de(X; t)$.
+
+<h2>Espérances et écarts types, en tableau
+<Dresse>un tableau [ml, mc, mc] avec une bordure bleu marine {
+	Loi	Espérance	Écart-type
+	[binomiale(n, p) ; $n p$ ; $racine(n p (1-p))$]
+	[poisson(lambda) ; $lambda$ ; $racine(lambda)$]
+	[exponentielle(lambda) ; $1/lambda$ ; $1/lambda$]
+	[uniforme(a, b) ; $(a+b)/2$ ; $(b-a)/racine(12)$]
+}
+
+<h2>Échantillonnage et concentration
+<Calcule>l'intervalle de fluctuation pour n = 100 et p = 0,3
+<Applique>l'inégalité de Bienaymé-Tchebychev pour une espérance de 5, une variance de 2 et un écart de 3

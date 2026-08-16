@@ -1,0 +1,1132 @@
+{
+ "version": 1,
+ "note": "Les démonstrations classiques que le calcul formel n'atteint pas. Le corps est du docdg : il traverse la même charpente que celui qu'un auteur écrirait à la main. Les clés sont comparées après normalisation — minuscules, accents pliés, mathématiques et ponctuation retirées.",
+ "fiches": [
+  {
+   "id": "racine-2-irrationnelle",
+   "niveau": "lycée",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "racine(2) est irrationnel",
+    "racine de 2 est irrationnel",
+    "racine(2) n'est pas rationnel",
+    "2 n'a pas de racine rationnelle"
+   ],
+   "énoncé": "que $racine(2)$ est irrationnel",
+   "corps": "absurde{\n\t$racine(2)$ est rationnel : il s'écrit $racine(2) = a/b$ avec $a$ et $b$ entiers, $b$ non nul, la fraction étant irréductible\n}\nEn élevant au carré, $2 = a^2/b^2$, donc $a^2 = 2b^2$.\nAinsi $a^2$ est pair, et comme le carré d'un impair est impair, $a$ est pair : il existe un entier $k$ tel que $a = 2k$.\nEn reportant, $4k^2 = 2b^2$, soit $b^2 = 2k^2$ : par le même argument, $b$ est pair.\ncontradiction{\n\t$a$ et $b$ sont tous deux pairs, alors que la fraction était irréductible\n}"
+  },
+  {
+   "id": "infinite-nombres-premiers",
+   "niveau": "lycée",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "il existe une infinite de nombres premiers",
+    "l'ensemble des nombres premiers est infini",
+    "les nombres premiers sont en nombre infini"
+   ],
+   "énoncé": "qu'il existe une infinité de nombres premiers",
+   "source": "Euclide, Éléments, livre IX",
+   "corps": "absurde{\n\tles nombres premiers sont en nombre fini : notons-les $p_1, p_2, ..., p_r$\n}\nPosons $N = p_1 * p_2 * ... * p_r + 1$. Cet entier vaut au moins $2$, il admet donc un diviseur premier $p$.\nCe $p$ figure dans la liste : il divise le produit $p_1 * p_2 * ... * p_r$.\nDivisant $N$ et ce produit, il divise leur différence, qui vaut $1$.\ncontradiction{\n\taucun nombre premier ne divise $1$, puisque tout premier vaut au moins $2$\n}"
+  },
+  {
+   "id": "somme-rationnels-rationnelle",
+   "niveau": "lycée",
+   "raisonnement": "",
+   "clés": [
+    "la somme de deux rationnels est rationnelle",
+    "la somme de deux nombres rationnels est un rationnel"
+   ],
+   "énoncé": "que la somme de deux rationnels est rationnelle",
+   "corps": "Soient $x$ et $y$ deux rationnels : il existe des entiers $a$, $b$, $c$, $d$, avec $b$ et $d$ non nuls, tels que $x = a/b$ et $y = c/d$.\nAlors $x + y = (ad + bc)/(bd)$.\nLe numérateur $ad + bc$ et le dénominateur $bd$ sont entiers, et $bd$ est non nul comme produit de deux entiers non nuls.\nLa somme $x + y$ s'écrit donc comme quotient de deux entiers de dénominateur non nul : elle est rationnelle."
+  },
+  {
+   "id": "rationnel-plus-irrationnel",
+   "niveau": "lycée",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "la somme d'un rationnel et d'un irrationnel est irrationnelle",
+    "rationnel plus irrationnel est irrationnel"
+   ],
+   "énoncé": "que la somme d'un rationnel et d'un irrationnel est irrationnelle",
+   "corps": "Soient $r$ un rationnel et $x$ un irrationnel.\nabsurde{\n\t$r + x$ est rationnel\n}\nAlors $x = (r + x) - r$ s'écrit comme différence de deux rationnels.\nOr la différence de deux rationnels est rationnelle : $x$ serait donc rationnel.\ncontradiction{\n\t$x$ était supposé irrationnel\n}"
+  },
+  {
+   "id": "cardinal-parties",
+   "niveau": "CPGE",
+   "raisonnement": "par récurrence",
+   "clés": [
+    "un ensemble a n elements admet 2^n parties",
+    "le cardinal de l'ensemble des parties est 2^n",
+    "card(P(E)) = 2^n"
+   ],
+   "énoncé": "qu'un ensemble à $n$ éléments admet exactement $2^n$ parties",
+   "corps": "initialisation{\n\tL'ensemble vide possède une seule partie, lui-même, et $2^0 = 1$.\n}\nhérédité{\n\tSoit $n$ un entier pour lequel tout ensemble à $n$ éléments admet $2^n$ parties.\n\tSoit $E$ un ensemble à $n+1$ éléments, et $a$ l'un de ses éléments ; posons $F = E$ privé de $a$, qui compte $n$ éléments.\n\tLes parties de $E$ se répartissent en deux familles disjointes : celles qui ne contiennent pas $a$, qui sont exactement les parties de $F$, et celles qui le contiennent, obtenues en ajoutant $a$ à une partie de $F$.\n\tChaque famille compte $2^n$ éléments par hypothèse de récurrence, d'où $2^n + 2^n = 2^(n+1)$ parties.\n}"
+  },
+  {
+   "id": "decomposition-paire-impaire",
+   "niveau": "CPGE",
+   "raisonnement": "par analyse-synthèse",
+   "clés": [
+    "toute fonction se decompose en somme d'une fonction paire et d'une fonction impaire",
+    "decomposition d'une fonction en partie paire et partie impaire"
+   ],
+   "énoncé": "que toute fonction $f$ de $RR$ dans $RR$ s'écrit de façon unique comme somme d'une fonction paire et d'une fonction impaire",
+   "corps": "analyse{\n\tSupposons $f = g + h$ avec $g$ paire et $h$ impaire.\n\tPour tout réel $x$ : $f(x) = g(x) + h(x)$, et en $-x$ : $f(-x) = g(x) - h(x)$.\n\tEn additionnant puis en soustrayant, $g(x) = (f(x) + f(-x))/2$ et $h(x) = (f(x) - f(-x))/2$ : les deux fonctions sont imposées, ce qui donne l'unicité.\n}\nsynthèse{\n\tPosons $g$ et $h$ par ces deux formules ; leur somme vaut $f$.\n\tPour tout réel $x$, $g(-x) = (f(-x) + f(x))/2 = g(x)$ : la fonction $g$ est paire.\n\tDe même $h(-x) = (f(-x) - f(x))/2 = -h(x)$ : la fonction $h$ est impaire.\n\tLes candidats conviennent, ce qui donne l'existence.\n}"
+  },
+  {
+   "id": "division-euclidienne",
+   "niveau": "CPGE",
+   "raisonnement": "existence et unicité",
+   "clés": [
+    "l'existence et l'unicite de la division euclidienne",
+    "division euclidienne",
+    "existence et unicite du quotient et du reste"
+   ],
+   "énoncé": "l'existence et l'unicité du quotient et du reste de la division euclidienne d'un entier $a$ par un entier $b$ strictement positif",
+   "corps": "existence{\n\tConsidérons l'ensemble des entiers naturels de la forme $a - qb$, où $q$ parcourt les entiers relatifs.\n\tIl est non vide : en prenant $q$ suffisamment petit, $a - qb$ devient positif puisque $b$ est strictement positif.\n\tToute partie non vide de $NN$ admet un plus petit élément ; notons $r = a - qb$ ce minimum.\n\tSi l'on avait $r >= b$, alors $r - b = a - (q+1)b$ serait un élément positif strictement plus petit que $r$, ce qui contredirait la minimalité.\n\tDonc $0 <= r < b$, et $a = qb + r$.\n}\nunicité{\n\tSupposons $a = qb + r = q'b + r'$ avec $0 <= r < b$ et $0 <= r' < b$.\n\tAlors $b(q - q') = r' - r$, donc $b$ divise $r' - r$.\n\tOr $-b < r' - r < b$ : le seul multiple de $b$ dans cet intervalle est $0$.\n\tDonc $r = r'$, puis $b(q - q') = 0$ et, $b$ étant non nul, $q = q'$.\n}"
+  },
+  {
+   "id": "tiroirs-mois",
+   "niveau": "lycée",
+   "raisonnement": "par le principe des tiroirs",
+   "clés": [
+    "dans un groupe de 13 personnes deux au moins sont nees le meme mois",
+    "13 personnes meme mois"
+   ],
+   "énoncé": "que dans un groupe de $13$ personnes, deux au moins sont nées le même mois",
+   "corps": "objets{\n\tles $13$ personnes du groupe\n}\ntiroirs{\n\tles $12$ mois de l'année\n}\nChaque personne est rangée dans le tiroir de son mois de naissance : l'association est bien définie, chacun n'ayant qu'un mois de naissance."
+  },
+  {
+   "id": "composee-injections",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "la composee de deux injections est injective",
+    "la composee de deux applications injectives est injective"
+   ],
+   "énoncé": "que la composée de deux applications injectives est injective",
+   "corps": "Soient $f$ de $E$ dans $F$ et $g$ de $F$ dans $G$ deux applications injectives.\nSoient $x$ et $x'$ deux éléments de $E$ tels que $g(f(x)) = g(f(x'))$.\nL'application $g$ étant injective, il vient $f(x) = f(x')$.\nL'application $f$ étant injective, il vient $x = x'$.\nDeux éléments de même image sont donc égaux : la composée est injective."
+  },
+  {
+   "id": "suite-convergente-bornee",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "toute suite convergente est bornee",
+    "une suite convergente est bornee"
+   ],
+   "énoncé": "que toute suite convergente est bornée",
+   "corps": "Soit $(u_n)$ une suite convergeant vers un réel $l$.\nEn appliquant la définition de la limite avec $epsilon = 1$, il existe un rang $N$ à partir duquel $|u_n - l| <= 1$, donc $|u_n| <= |l| + 1$.\nLes termes d'indice strictement inférieur à $N$ sont en nombre fini : notons $M$ le plus grand des modules $|u_0|$, $|u_1|$, ... , $|u_N|$.\nPour tout entier $n$, $|u_n|$ est alors majoré par le plus grand des deux nombres $M$ et $|l| + 1$.\nLa suite est donc bornée."
+  },
+  {
+   "id": "unicite-limite",
+   "niveau": "L1",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "l'unicite de la limite d'une suite",
+    "la limite d'une suite est unique",
+    "unicite de la limite"
+   ],
+   "énoncé": "que la limite d'une suite convergente est unique",
+   "corps": "Soit $(u_n)$ une suite convergente.\nabsurde{\n\tla suite admet deux limites distinctes $l$ et $l'$\n}\nPosons $epsilon = |l - l'|/3$, qui est strictement positif puisque $l$ et $l'$ diffèrent.\nÀ partir d'un certain rang, $|u_n - l| <= epsilon$ ; à partir d'un autre, $|u_n - l'| <= epsilon$. Au-delà des deux, les deux majorations valent ensemble.\nL'inégalité triangulaire donne alors $|l - l'| <= |l - u_n| + |u_n - l'| <= 2 * epsilon$, c'est-à-dire $|l - l'| <= 2|l - l'|/3$.\ncontradiction{\n\t$|l - l'|$ est strictement positif et vérifierait $|l - l'| <= 2|l - l'|/3$, ce qui donnerait $1 <= 2/3$\n}"
+  },
+  {
+   "id": "derivable-implique-continue",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "toute fonction derivable est continue",
+    "une fonction derivable en un point y est continue",
+    "la derivabilite implique la continuite"
+   ],
+   "énoncé": "que toute fonction dérivable en un point y est continue",
+   "corps": "Soit $f$ une fonction dérivable en un point $a$.\nPour $x$ distinct de $a$, on écrit $f(x) - f(a) = (f(x) - f(a))/(x - a) * (x - a)$.\nLorsque $x$ tend vers $a$, le premier facteur tend vers $f'(a)$ par définition de la dérivabilité, et le second tend vers $0$.\nLe produit tend donc vers $f'(a) * 0$, c'est-à-dire vers $0$.\nAinsi $f(x)$ tend vers $f(a)$ : la fonction est continue en $a$."
+  },
+  {
+   "id": "sous-espace-intersection",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "l'intersection de deux sous-espaces vectoriels est un sous-espace vectoriel",
+    "intersection de sous-espaces vectoriels"
+   ],
+   "énoncé": "que l'intersection de deux sous-espaces vectoriels d'un même espace est un sous-espace vectoriel",
+   "corps": "Soient $F$ et $G$ deux sous-espaces vectoriels d'un espace $E$.\nLe vecteur nul appartient à $F$ et à $G$, donc à leur intersection, qui est ainsi non vide.\nSoient $u$ et $v$ deux vecteurs de l'intersection, et $lambda$ un scalaire.\nComme $u$ et $v$ sont dans $F$, qui est stable par combinaison linéaire, le vecteur $u + lambda v$ appartient à $F$.\nLe même argument appliqué à $G$ montre qu'il appartient à $G$.\nIl appartient donc à l'intersection : celle-ci est stable par combinaison linéaire, c'est un sous-espace vectoriel."
+  },
+  {
+   "id": "noyau-injectivite",
+   "niveau": "L2",
+   "raisonnement": "par double inclusion",
+   "clés": [
+    "une application lineaire est injective si et seulement si son noyau est nul",
+    "injectivite et noyau",
+    "ker f = 0 equivaut a f injective"
+   ],
+   "énoncé": "par double implication qu'une application linéaire est injective si et seulement si son noyau est réduit au vecteur nul",
+   "corps": "directe{\n\tSupposons $f$ injective. Soit $u$ un vecteur du noyau : $f(u) = 0$.\n\tPar linéarité, $f(0) = 0$, donc $f(u) = f(0)$, et l'injectivité donne $u = 0$.\n\tLe noyau ne contient que le vecteur nul.\n}\nréciproque{\n\tSupposons le noyau réduit au vecteur nul. Soient $u$ et $v$ tels que $f(u) = f(v)$.\n\tPar linéarité, $f(u - v) = 0$, donc $u - v$ appartient au noyau, donc $u - v = 0$.\n\tAinsi $u = v$ : l'application est injective.\n}"
+  },
+  {
+   "id": "racine-p-irrationnelle",
+   "niveau": "L1",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "la racine carree d'un nombre premier est irrationnelle",
+    "racine(p) est irrationnel pour p premier"
+   ],
+   "énoncé": "que la racine carrée d'un nombre premier est irrationnelle",
+   "corps": "Soit $p$ un nombre premier.\nabsurde{\n\t$racine(p)$ est rationnel : il s'écrit $a/b$ avec $a$ et $b$ entiers, $b$ non nul, la fraction étant irréductible\n}\nEn élevant au carré, $a^2 = p b^2$, donc $p$ divise $a^2$.\nLe nombre $p$ étant premier, il divise $a$ : il existe un entier $k$ tel que $a = pk$.\nEn reportant, $p^2 k^2 = p b^2$, soit $b^2 = p k^2$ : le même argument montre que $p$ divise $b$.\ncontradiction{\n\t$p$ divise à la fois $a$ et $b$, alors que la fraction était irréductible\n}"
+  },
+  {
+   "id": "inegalite-triangulaire",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "l'inegalite triangulaire",
+    "|a+b| <= |a| + |b|",
+    "la valeur absolue d'une somme est majoree par la somme des valeurs absolues"
+   ],
+   "énoncé": "que pour tous réels $a$ et $b$, $|a+b| <= |a| + |b|$",
+   "corps": "Soient $a$ et $b$ deux réels.\nTout réel est majoré par sa valeur absolue, donc $ab <= |ab| = |a| * |b|$.\nEn élevant au carré le membre de gauche : $|a+b|^2 = (a+b)^2 = a^2 + 2ab + b^2$.\nEn majorant le double produit : $|a+b|^2 <= |a|^2 + 2|a| * |b| + |b|^2 = (|a| + |b|)^2$.\nLes deux nombres $|a+b|$ et $|a| + |b|$ sont positifs, et la fonction racine carrée est croissante sur les positifs : l'inégalité se conserve en prenant les racines.\nDonc $|a+b| <= |a| + |b|$."
+  },
+  {
+   "id": "cauchy-schwarz",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "l'inegalite de cauchy-schwarz",
+    "l'inegalite de cauchy schwarz",
+    "le carre du produit scalaire est majore par le produit des carres des normes"
+   ],
+   "énoncé": "l'inégalité de Cauchy-Schwarz : $(somme(k=1;n) a_k b_k)^2 <= (somme(k=1;n) a_k^2) * (somme(k=1;n) b_k^2)$",
+   "corps": "Soient $a_1, ..., a_n$ et $b_1, ..., b_n$ des réels.\nPour tout réel $t$, considérons $P(t) = somme(k=1;n) (a_k t + b_k)^2$, somme de carrés, donc positive ou nulle.\nEn développant, $P(t) = A t^2 + 2B t + C$ avec $A = somme(k=1;n) a_k^2$, $B = somme(k=1;n) a_k b_k$ et $C = somme(k=1;n) b_k^2$.\nSi tous les $a_k$ sont nuls, l'inégalité est immédiate, les deux membres étant nuls.\nSinon $A$ est strictement positif : $P$ est un trinôme du second degré de signe constant, son discriminant est donc négatif ou nul.\nCe discriminant vaut $4B^2 - 4AC$, d'où $B^2 <= A C$, ce qui est l'inégalité annoncée."
+  },
+  {
+   "id": "caracterisation-sous-groupe",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "la caracterisation d'un sous-groupe",
+    "une partie non vide stable par produit et inverse est un sous-groupe"
+   ],
+   "énoncé": "qu'une partie non vide $H$ d'un groupe $G$, stable par $x y^(-1)$, est un sous-groupe de $G$",
+   "corps": "Soit $H$ une partie non vide de $G$ telle que, pour tous $x$ et $y$ de $H$, l'élément $x y^(-1)$ appartienne encore à $H$.\nLa partie $H$ étant non vide, choisissons-y un élément $x$. En appliquant l'hypothèse au couple $(x ; x)$, l'élément neutre $x x^(-1) = e$ appartient à $H$.\nSoit alors $y$ dans $H$. En appliquant l'hypothèse au couple $(e ; y)$, l'inverse $e y^(-1) = y^(-1)$ appartient à $H$ : la partie est stable par passage à l'inverse.\nSoient enfin $x$ et $y$ dans $H$. L'élément $y^(-1)$ y est aussi, et l'hypothèse appliquée au couple $(x ; y^(-1))$ donne $x (y^(-1))^(-1) = x y$ dans $H$ : la partie est stable par produit.\nContenant le neutre et stable par produit et par inverse, $H$ est un sous-groupe de $G$."
+  },
+  {
+   "id": "suites-adjacentes",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "deux suites adjacentes convergent vers la meme limite",
+    "le theoreme des suites adjacentes",
+    "suites adjacentes"
+   ],
+   "énoncé": "que deux suites adjacentes convergent vers une même limite",
+   "corps": "Soient $(u_n)$ croissante et $(v_n)$ décroissante telles que $v_n - u_n$ tende vers $0$.\nLa suite $(v_n - u_n)$ est décroissante comme somme d'une décroissante et de l'opposée d'une croissante, et elle tend vers $0$ : elle est donc positive, c'est-à-dire $u_n <= v_n$ pour tout $n$.\nAinsi $(u_n)$ est croissante et majorée par $v_0$ : elle converge vers un réel $l$.\nDe même $(v_n)$ est décroissante et minorée par $u_0$ : elle converge vers un réel $l'$.\nPar passage à la limite dans la différence, $l' - l = 0$, donc les deux limites coïncident."
+  },
+  {
+   "id": "croissante-majoree",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "toute suite croissante et majoree converge",
+    "le theoreme de la limite monotone",
+    "une suite croissante majoree converge vers sa borne superieure"
+   ],
+   "énoncé": "que toute suite croissante et majorée converge vers la borne supérieure de ses termes",
+   "corps": "Soit $(u_n)$ une suite croissante et majorée.\nL'ensemble de ses termes est une partie non vide et majorée de $RR$ : elle admet donc une borne supérieure, notée $l$.\nSoit $epsilon$ un réel strictement positif. Le réel $l - epsilon$ ne majore pas l'ensemble, sans quoi $l$ n'en serait pas le plus petit majorant.\nIl existe donc un rang $N$ tel que $u_N > l - epsilon$.\nLa suite étant croissante et $l$ majorant tous ses termes, on a $l - epsilon < u_n <= l$ pour tout $n >= N$.\nTout intervalle ouvert centré en $l$ contient donc les termes à partir d'un certain rang : la suite converge vers $l$."
+  },
+  {
+   "id": "racine-3-irrationnelle",
+   "niveau": "lycée",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "racine(3) est irrationnel",
+    "racine de 3 est irrationnel"
+   ],
+   "énoncé": "que $racine(3)$ est irrationnel",
+   "corps": "absurde{\n\t$racine(3)$ s'écrit $a/b$ avec $a$ et $b$ entiers, $b$ non nul, la fraction étant irréductible\n}\nEn élevant au carré, $a^2 = 3b^2$, donc $3$ divise $a^2$.\nLe nombre $3$ étant premier, il divise $a$ : posons $a = 3k$.\nEn reportant, $9k^2 = 3b^2$, soit $b^2 = 3k^2$ : le même argument donne que $3$ divise $b$.\ncontradiction{\n\t$3$ divise $a$ et $b$, alors que la fraction était irréductible\n}"
+  },
+  {
+   "id": "pas-de-plus-grand-entier",
+   "niveau": "lycée",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "il n'existe pas de plus grand entier",
+    "l'ensemble des entiers n'a pas de maximum"
+   ],
+   "énoncé": "qu'il n'existe pas de plus grand entier naturel",
+   "corps": "absurde{\n\til existe un entier naturel $N$ supérieur ou égal à tous les autres\n}\nConsidérons l'entier $N + 1$, qui est encore un entier naturel.\nPar hypothèse, $N + 1 <= N$, ce qui donne $1 <= 0$.\ncontradiction{\n\t$1$ est strictement positif\n}"
+  },
+  {
+   "id": "diviseur-premier",
+   "niveau": "CPGE",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "tout entier superieur ou egal a 2 admet un diviseur premier",
+    "existence d'un diviseur premier"
+   ],
+   "énoncé": "que tout entier supérieur ou égal à $2$ admet un diviseur premier",
+   "corps": "absurde{\n\til existe des entiers supérieurs ou égaux à $2$ sans diviseur premier\n}\nToute partie non vide de $NN$ admet un plus petit élément : notons $n$ le plus petit de ces entiers.\nL'entier $n$ n'est pas premier, sans quoi il serait son propre diviseur premier.\nIl admet donc un diviseur $d$ avec $1 < d < n$, et cet entier $d$ est supérieur ou égal à $2$.\nPar minimalité de $n$, l'entier $d$ possède un diviseur premier $p$ ; par transitivité de la divisibilité, $p$ divise $n$.\ncontradiction{\n\t$n$ était supposé sans diviseur premier\n}"
+  },
+  {
+   "id": "decomposition-facteurs-premiers",
+   "niveau": "CPGE",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "tout entier superieur ou egal a 2 est un produit de nombres premiers",
+    "l'existence de la decomposition en facteurs premiers"
+   ],
+   "énoncé": "que tout entier supérieur ou égal à $2$ s'écrit comme produit de nombres premiers",
+   "corps": "absurde{\n\tcertains entiers supérieurs ou égaux à $2$ ne s'écrivent pas ainsi\n}\nNotons $n$ le plus petit d'entre eux, qui existe car toute partie non vide de $NN$ admet un minimum.\nSi $n$ était premier, il serait un produit à un seul facteur : il ne l'est donc pas.\nIl s'écrit alors $n = ab$ avec $1 < a < n$ et $1 < b < n$.\nPar minimalité de $n$, chacun des entiers $a$ et $b$ est un produit de nombres premiers ; leur juxtaposition en fournit un pour $n$.\ncontradiction{\n\t$n$ était supposé sans décomposition\n}"
+  },
+  {
+   "id": "lemme-euclide",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "le lemme d'euclide",
+    "si un nombre premier divise un produit il divise l'un des facteurs"
+   ],
+   "énoncé": "que si un nombre premier $p$ divise un produit $ab$, alors il divise $a$ ou il divise $b$",
+   "corps": "Soient $p$ premier et $a$, $b$ deux entiers tels que $p$ divise $ab$.\nSupposons que $p$ ne divise pas $a$.\nLes seuls diviseurs positifs de $p$ étant $1$ et $p$, le plus grand commun diviseur de $p$ et $a$ vaut $1$ : ils sont premiers entre eux.\nLe théorème de Bézout fournit alors des entiers $u$ et $v$ tels que $up + va = 1$.\nEn multipliant par $b$ : $upb + vab = b$. Le premier terme est divisible par $p$, le second aussi puisque $p$ divise $ab$.\nLeur somme $b$ est donc divisible par $p$."
+  },
+  {
+   "id": "entre-deux-rationnels",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "entre deux rationnels distincts il existe un rationnel",
+    "la densite des rationnels dans eux-memes"
+   ],
+   "énoncé": "qu'entre deux rationnels distincts se trouve toujours un troisième rationnel",
+   "corps": "Soient $r$ et $s$ deux rationnels avec $r < s$.\nConsidérons leur moyenne $m = (r + s)/2$.\nComme somme et quotient de rationnels, $m$ est rationnel.\nDe $r < s$ on tire $2r < r + s < 2s$, puis, en divisant par $2$ qui est positif, $r < m < s$.\nLe rationnel $m$ est donc strictement compris entre les deux."
+  },
+  {
+   "id": "suite-extraite",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "toute suite extraite d'une suite convergente converge vers la meme limite",
+    "les suites extraites d'une suite convergente"
+   ],
+   "énoncé": "que toute suite extraite d'une suite convergente converge vers la même limite",
+   "corps": "Soit $(u_n)$ convergeant vers $l$, et $(u_(phi(n)))$ une suite extraite, où $phi$ est strictement croissante de $NN$ dans $NN$.\nUne application strictement croissante de $NN$ dans $NN$ vérifie $phi(n) >= n$ pour tout $n$, ce qu'une récurrence immédiate établit.\nSoit $epsilon$ un réel strictement positif. Il existe un rang $N$ tel que $|u_n - l| <= epsilon$ pour tout $n >= N$.\nPour $n >= N$, on a $phi(n) >= n >= N$, donc $|u_(phi(n)) - l| <= epsilon$.\nLa suite extraite converge donc vers $l$."
+  },
+  {
+   "id": "suite-croissante-non-majoree",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "toute suite croissante non majoree tend vers plus l'infini",
+    "une suite croissante non majoree diverge vers l'infini"
+   ],
+   "énoncé": "que toute suite croissante et non majorée tend vers $+infini$",
+   "corps": "Soit $(u_n)$ croissante et non majorée, et soit $A$ un réel quelconque.\nLa suite n'étant pas majorée, le réel $A$ ne majore pas ses termes : il existe un rang $N$ tel que $u_N > A$.\nLa suite étant croissante, $u_n >= u_N > A$ pour tout $n >= N$.\nTout réel $A$ est donc dépassé à partir d'un certain rang : la suite tend vers $+infini$."
+  },
+  {
+   "id": "bornee-fois-nulle",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "le produit d'une suite bornee par une suite tendant vers zero tend vers zero"
+   ],
+   "énoncé": "que le produit d'une suite bornée par une suite de limite nulle tend vers $0$",
+   "corps": "Soient $(u_n)$ bornée et $(v_n)$ de limite nulle.\nIl existe un réel $M$ strictement positif tel que $|u_n| <= M$ pour tout $n$.\nSoit $epsilon$ un réel strictement positif. Comme $(v_n)$ tend vers $0$, il existe un rang $N$ à partir duquel $|v_n| <= epsilon/M$.\nPour $n >= N$, il vient $|u_n v_n| = |u_n| * |v_n| <= M * epsilon/M = epsilon$.\nLe produit tend donc vers $0$."
+  },
+  {
+   "id": "gendarmes",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "le theoreme des gendarmes",
+    "le theoreme d'encadrement des suites"
+   ],
+   "énoncé": "le théorème des gendarmes : une suite encadrée par deux suites de même limite converge vers cette limite",
+   "corps": "Soient $(u_n)$, $(v_n)$ et $(w_n)$ telles que $u_n <= v_n <= w_n$ pour tout $n$, les suites $(u_n)$ et $(w_n)$ convergeant vers un même réel $l$.\nSoit $epsilon$ un réel strictement positif.\nÀ partir d'un certain rang, $l - epsilon <= u_n$ ; à partir d'un autre, $w_n <= l + epsilon$. Au-delà des deux, les deux encadrements valent ensemble.\nPar transitivité, $l - epsilon <= u_n <= v_n <= w_n <= l + epsilon$.\nAinsi $|v_n - l| <= epsilon$ à partir de ce rang : la suite $(v_n)$ converge vers $l$."
+  },
+  {
+   "id": "cauchy-bornee",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "toute suite de cauchy est bornee",
+    "une suite de cauchy est bornee"
+   ],
+   "énoncé": "que toute suite de Cauchy est bornée",
+   "corps": "Soit $(u_n)$ une suite de Cauchy.\nEn appliquant la définition avec $epsilon = 1$, il existe un rang $N$ tel que $|u_n - u_m| <= 1$ pour tous $n$ et $m$ supérieurs ou égaux à $N$.\nEn particulier, pour $n >= N$, $|u_n| <= |u_N| + 1$.\nLes termes d'indice strictement inférieur à $N$ sont en nombre fini : notons $M$ le plus grand de leurs modules.\nTout terme est alors majoré par le plus grand des deux nombres $M$ et $|u_N| + 1$ : la suite est bornée."
+  },
+  {
+   "id": "composee-continues",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "la composee de deux fonctions continues est continue"
+   ],
+   "énoncé": "que la composée de deux fonctions continues est continue",
+   "corps": "Soient $f$ continue en $a$ et $g$ continue en $b = f(a)$.\nSoit $epsilon$ un réel strictement positif.\nLa continuité de $g$ en $b$ fournit un réel $eta$ strictement positif tel que $|y - b| <= eta$ entraîne $|g(y) - g(b)| <= epsilon$.\nLa continuité de $f$ en $a$ fournit alors un réel $delta$ strictement positif tel que $|x - a| <= delta$ entraîne $|f(x) - b| <= eta$.\nEn composant les deux implications, $|x - a| <= delta$ entraîne $|g(f(x)) - g(f(a))| <= epsilon$ : la composée est continue en $a$."
+  },
+  {
+   "id": "derivee-nulle-constante",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "une fonction de derivee nulle sur un intervalle est constante"
+   ],
+   "énoncé": "qu'une fonction dérivable de dérivée nulle sur un intervalle y est constante",
+   "corps": "Soit $f$ dérivable sur un intervalle $I$, de dérivée nulle, et soient $a$ et $b$ deux points de $I$ avec $a < b$.\nLa fonction $f$ est continue sur $[a ; b]$ et dérivable sur $]a ; b[$ : le théorème des accroissements finis s'applique.\nIl fournit un point $c$ de $]a ; b[$ tel que $f(b) - f(a) = (b - a) f'(c)$.\nOr $f'(c) = 0$, donc $f(b) = f(a)$.\nDeux points quelconques ont la même image : la fonction est constante sur $I$."
+  },
+  {
+   "id": "derivee-positive-croissante",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "une fonction de derivee positive est croissante",
+    "le lien entre signe de la derivee et sens de variation"
+   ],
+   "énoncé": "qu'une fonction dérivable de dérivée positive sur un intervalle y est croissante",
+   "corps": "Soit $f$ dérivable sur un intervalle $I$, de dérivée positive ou nulle, et soient $a$ et $b$ deux points de $I$ avec $a < b$.\nLe théorème des accroissements finis fournit un point $c$ de $]a ; b[$ tel que $f(b) - f(a) = (b - a) f'(c)$.\nLe facteur $b - a$ est strictement positif et $f'(c)$ est positif ou nul : le produit est positif ou nul.\nDonc $f(a) <= f(b)$, et la fonction est croissante sur $I$."
+  },
+  {
+   "id": "unicite-limite-fonction",
+   "niveau": "L1",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "l'unicite de la limite d'une fonction en un point"
+   ],
+   "énoncé": "que la limite d'une fonction en un point, lorsqu'elle existe, est unique",
+   "corps": "Soit $f$ admettant en $a$ les limites $l$ et $l'$.\nabsurde{\n\tces deux limites diffèrent\n}\nPosons $epsilon = |l - l'|/3$, strictement positif.\nIl existe un voisinage de $a$ sur lequel $|f(x) - l| <= epsilon$, et un autre sur lequel $|f(x) - l'| <= epsilon$ ; sur leur intersection, qui est encore un voisinage de $a$, les deux majorations valent.\nEn choisissant un point $x$ de ce voisinage, l'inégalité triangulaire donne $|l - l'| <= |l - f(x)| + |f(x) - l'| <= 2 * epsilon$, soit $|l - l'| <= 2|l - l'|/3$.\ncontradiction{\n\t$|l - l'|$ est strictement positif et vérifierait $1 <= 2/3$\n}"
+  },
+  {
+   "id": "terme-general-serie",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "le terme general d'une serie convergente tend vers zero"
+   ],
+   "énoncé": "que le terme général d'une série convergente tend vers $0$",
+   "corps": "Soit une série de terme général $u_n$, dont la suite des sommes partielles $(S_n)$ converge vers un réel $S$.\nPour tout entier $n >= 1$, on a $u_n = S_n - S_(n-1)$.\nLes deux suites $(S_n)$ et $(S_(n-1))$ convergent vers la même limite $S$.\nPar différence, la suite $(u_n)$ converge vers $S - S = 0$."
+  },
+  {
+   "id": "serie-harmonique",
+   "niveau": "CPGE",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "la serie harmonique diverge",
+    "la somme des inverses des entiers diverge"
+   ],
+   "énoncé": "que la série harmonique diverge",
+   "corps": "Notons $S_n = somme(k=1;n) 1/k$ la somme partielle d'ordre $n$.\nabsurde{\n\tla série converge : la suite $(S_n)$ tend vers un réel $S$\n}\nRegroupons les termes d'indice compris entre $n+1$ et $2n$ : chacun est supérieur ou égal à $1/(2n)$, et ils sont au nombre de $n$.\nDonc $S_(2n) - S_n >= n * 1/(2n) = 1/2$ pour tout $n >= 1$.\nOr les deux suites $(S_(2n))$ et $(S_n)$ tendent vers $S$, donc leur différence tend vers $0$.\ncontradiction{\n\tune suite tendant vers $0$ ne peut rester supérieure ou égale à $1/2$\n}"
+  },
+  {
+   "id": "distributivite-ensembles",
+   "niveau": "L1",
+   "raisonnement": "par double inclusion",
+   "clés": [
+    "la distributivite de l'intersection sur la reunion",
+    "A inter (B union C) = (A inter B) union (A inter C)"
+   ],
+   "énoncé": "que $A inter (B union C) = (A inter B) union (A inter C)$",
+   "corps": "directe{\n\tSoit $x$ dans $A inter (B union C)$ : il appartient à $A$, et à $B$ ou à $C$.\n\tS'il appartient à $B$, il est dans $A inter B$ ; s'il appartient à $C$, il est dans $A inter C$.\n\tDans les deux cas il appartient à la réunion.\n}\nréciproque{\n\tSoit $x$ dans $(A inter B) union (A inter C)$.\n\tDans l'un comme dans l'autre cas, $x$ appartient à $A$, et il appartient à $B$ ou à $C$, donc à $B union C$.\n\tIl est donc dans $A inter (B union C)$.\n}"
+  },
+  {
+   "id": "de-morgan",
+   "niveau": "L1",
+   "raisonnement": "par double inclusion",
+   "clés": [
+    "les lois de de morgan",
+    "le complementaire d'une reunion est l'intersection des complementaires"
+   ],
+   "énoncé": "que le complémentaire d'une réunion est l'intersection des complémentaires",
+   "corps": "directe{\n\tSoit $x$ n'appartenant pas à $A union B$.\n\tS'il appartenait à $A$, il appartiendrait à la réunion : il n'appartient donc pas à $A$, et de même pas à $B$.\n\tIl appartient donc aux deux complémentaires, donc à leur intersection.\n}\nréciproque{\n\tSoit $x$ appartenant à l'intersection des deux complémentaires : il n'est ni dans $A$ ni dans $B$.\n\tIl n'est donc dans aucun des deux, c'est-à-dire pas dans leur réunion.\n}"
+  },
+  {
+   "id": "cantor",
+   "niveau": "L2",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "il n'existe pas de surjection d'un ensemble sur l'ensemble de ses parties",
+    "le theoreme de cantor"
+   ],
+   "énoncé": "le théorème de Cantor : il n'existe pas de surjection d'un ensemble $E$ sur l'ensemble de ses parties",
+   "corps": "absurde{\n\til existe une surjection $f$ de $E$ sur l'ensemble des parties de $E$\n}\nConsidérons la partie $D$ formée des éléments $x$ de $E$ qui n'appartiennent pas à $f(x)$.\nLa surjectivité fournit un élément $a$ de $E$ tel que $f(a) = D$.\nSi $a$ appartient à $D$, alors par définition de $D$ il n'appartient pas à $f(a)$, c'est-à-dire pas à $D$.\nS'il n'appartient pas à $D$, alors il n'appartient pas à $f(a)$, donc il vérifie la condition définissant $D$ : il appartient à $D$.\ncontradiction{\n\t$a$ appartient à $D$ si et seulement s'il n'y appartient pas\n}"
+  },
+  {
+   "id": "composee-surjections",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "la composee de deux surjections est surjective"
+   ],
+   "énoncé": "que la composée de deux applications surjectives est surjective",
+   "corps": "Soient $f$ de $E$ dans $F$ et $g$ de $F$ dans $G$ deux applications surjectives.\nSoit $z$ un élément de $G$.\nLa surjectivité de $g$ fournit un élément $y$ de $F$ tel que $g(y) = z$.\nLa surjectivité de $f$ fournit un élément $x$ de $E$ tel que $f(x) = y$.\nAlors $g(f(x)) = g(y) = z$ : tout élément de $G$ est atteint, la composée est surjective."
+  },
+  {
+   "id": "injectivite-de-la-premiere",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "si la composee g rond f est injective alors f est injective"
+   ],
+   "énoncé": "que si la composée $g rond f$ est injective, alors $f$ est injective",
+   "corps": "Soient $x$ et $x'$ deux éléments tels que $f(x) = f(x')$.\nEn appliquant $g$ aux deux membres, $g(f(x)) = g(f(x'))$.\nLa composée $g rond f$ étant injective, il vient $x = x'$.\nDeux éléments de même image par $f$ sont donc égaux : l'application $f$ est injective."
+  },
+  {
+   "id": "injective-surjective-fini",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "une application d'un ensemble fini dans lui-meme est injective si et seulement si elle est surjective"
+   ],
+   "énoncé": "qu'une application d'un ensemble fini dans lui-même est injective si et seulement si elle est surjective",
+   "corps": "Soit $E$ un ensemble fini de cardinal $n$ et $f$ une application de $E$ dans $E$.\nSi $f$ est injective, les $n$ images des éléments de $E$ sont deux à deux distinctes : l'image de $f$ est une partie de $E$ de cardinal $n$, donc $E$ tout entier, et $f$ est surjective.\nSi $f$ est surjective, l'image de $f$ est $E$, de cardinal $n$ ; or une application non injective identifierait deux éléments et son image aurait au plus $n-1$ éléments.\nL'application est donc injective.\nLes deux propriétés s'impliquent mutuellement : elles sont équivalentes."
+  },
+  {
+   "id": "unicite-neutre",
+   "niveau": "L1",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "l'unicite de l'element neutre d'un groupe",
+    "le neutre d'un groupe est unique"
+   ],
+   "énoncé": "que l'élément neutre d'un groupe est unique",
+   "corps": "Soit $G$ un groupe.\nabsurde{\n\t$G$ possède deux éléments neutres distincts $e$ et $e'$\n}\nCalculons le produit $e e'$ de deux façons.\nComme $e$ est neutre, $e e' = e'$. Comme $e'$ est neutre, $e e' = e$.\nDonc $e = e'$.\ncontradiction{\n\tles deux neutres étaient supposés distincts\n}"
+  },
+  {
+   "id": "unicite-inverse",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "l'unicite de l'inverse dans un groupe",
+    "l'inverse d'un element d'un groupe est unique"
+   ],
+   "énoncé": "que l'inverse d'un élément d'un groupe est unique",
+   "corps": "Soient $G$ un groupe, $x$ un élément de $G$, et $y$ et $z$ deux inverses de $x$.\nCalculons le produit $y x z$ en l'associant de deux façons.\nEn associant à gauche : $(y x) z = e z = z$.\nEn associant à droite : $y (x z) = y e = y$.\nL'associativité assure que les deux calculs donnent le même résultat, donc $y = z$."
+  },
+  {
+   "id": "inverse-produit",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "l'inverse d'un produit est le produit des inverses dans l'ordre inverse"
+   ],
+   "énoncé": "que dans un groupe, l'inverse du produit $xy$ est $y^(-1) x^(-1)$",
+   "corps": "Soient $x$ et $y$ deux éléments d'un groupe.\nCalculons le produit de $xy$ par $y^(-1) x^(-1)$ : en associant, $x (y y^(-1)) x^(-1) = x e x^(-1) = x x^(-1) = e$.\nLe produit dans l'autre ordre donne de même $y^(-1) (x^(-1) x) y = y^(-1) e y = e$.\nL'élément $y^(-1) x^(-1)$ est donc un inverse de $xy$, et l'inverse étant unique, il en est l'inverse."
+  },
+  {
+   "id": "intersection-sous-groupes",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "l'intersection de deux sous-groupes est un sous-groupe"
+   ],
+   "énoncé": "que l'intersection de deux sous-groupes est un sous-groupe",
+   "corps": "Soient $H$ et $K$ deux sous-groupes d'un groupe $G$.\nL'élément neutre appartient à $H$ et à $K$, donc à leur intersection, qui est ainsi non vide.\nSoient $x$ et $y$ dans l'intersection.\nComme $H$ est un sous-groupe et que $x$ et $y$ y sont, l'élément $x y^(-1)$ appartient à $H$.\nLe même argument appliqué à $K$ montre qu'il appartient à $K$.\nIl appartient donc à l'intersection : celle-ci est un sous-groupe de $G$."
+  },
+  {
+   "id": "noyau-sous-espace",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "le noyau d'une application lineaire est un sous-espace vectoriel"
+   ],
+   "énoncé": "que le noyau d'une application linéaire est un sous-espace vectoriel",
+   "corps": "Soit $f$ une application linéaire de $E$ dans $F$.\nPar linéarité, $f(0) = 0$ : le vecteur nul appartient au noyau, qui est donc non vide.\nSoient $u$ et $v$ deux vecteurs du noyau et $lambda$ un scalaire.\nPar linéarité, $f(u + lambda v) = f(u) + lambda f(v) = 0 + lambda * 0 = 0$.\nLe vecteur $u + lambda v$ appartient donc au noyau : celui-ci est stable par combinaison linéaire, c'est un sous-espace vectoriel de $E$."
+  },
+  {
+   "id": "image-sous-espace",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "l'image d'une application lineaire est un sous-espace vectoriel"
+   ],
+   "énoncé": "que l'image d'une application linéaire est un sous-espace vectoriel",
+   "corps": "Soit $f$ une application linéaire de $E$ dans $F$.\nLe vecteur nul de $F$ est l'image du vecteur nul de $E$ : l'image est non vide.\nSoient $y$ et $y'$ deux vecteurs de l'image et $lambda$ un scalaire : il existe $x$ et $x'$ dans $E$ tels que $y = f(x)$ et $y' = f(x')$.\nPar linéarité, $y + lambda y' = f(x) + lambda f(x') = f(x + lambda x')$.\nCe vecteur est donc dans l'image : celle-ci est stable par combinaison linéaire, c'est un sous-espace vectoriel de $F$."
+  },
+  {
+   "id": "famille-orthogonale-libre",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "une famille orthogonale de vecteurs non nuls est libre"
+   ],
+   "énoncé": "qu'une famille orthogonale de vecteurs non nuls est libre",
+   "corps": "Soit $(e_1, ..., e_n)$ une famille orthogonale de vecteurs non nuls, et soit une combinaison linéaire nulle $lambda_1 e_1 + ... + lambda_n e_n = 0$.\nFixons un indice $i$ et calculons le produit scalaire de cette égalité par $e_i$.\nPar bilinéarité, tous les termes d'indice différent de $i$ s'annulent par orthogonalité, et il reste $lambda_i (e_i | e_i) = 0$.\nLe vecteur $e_i$ étant non nul, son carré scalaire est strictement positif, donc $lambda_i = 0$.\nTous les coefficients sont nuls : la famille est libre."
+  },
+  {
+   "id": "groupe-ordre-premier",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "tout groupe d'ordre premier est cyclique",
+    "un groupe dont l'ordre est premier est cyclique"
+   ],
+   "énoncé": "que tout groupe dont l'ordre est un nombre premier est cyclique",
+   "corps": "Soit $G$ un groupe d'ordre $p$, avec $p$ premier.\nComme $p >= 2$, le groupe possède un élément $x$ distinct du neutre.\nLe sous-groupe engendré par $x$ a pour ordre un diviseur de $p$, d'après le théorème de Lagrange.\nLes seuls diviseurs de $p$ étant $1$ et $p$, et cet ordre valant au moins $2$ puisque le sous-groupe contient le neutre et $x$, il vaut $p$.\nLe sous-groupe engendré par $x$ est donc $G$ tout entier : le groupe est cyclique, engendré par $x$."
+  },
+  {
+   "id": "inverse-irrationnel",
+   "niveau": "CPGE",
+   "raisonnement": "par contraposée",
+   "clés": [
+    "l'inverse d'un irrationnel est irrationnel"
+   ],
+   "énoncé": "que l'inverse d'un irrationnel non nul est irrationnel",
+   "corps": "contraposée{\n\tsi $1/x$ est rationnel, alors $x$ est rationnel\n}\nSupposons $1/x$ rationnel et non nul : il s'écrit $p/q$ avec $p$ et $q$ entiers non nuls.\nEn passant à l'inverse, $x = q/p$, quotient de deux entiers de dénominateur non nul.\nDonc $x$ est rationnel."
+  },
+  {
+   "id": "non-bornee-diverge",
+   "niveau": "CPGE",
+   "raisonnement": "par contraposée",
+   "clés": [
+    "une suite non bornee ne converge pas",
+    "toute suite non bornee diverge"
+   ],
+   "énoncé": "que toute suite non bornée diverge",
+   "corps": "contraposée{\n\tsi une suite converge, alors elle est bornée\n}\nSoit $(u_n)$ convergeant vers un réel $l$.\nEn appliquant la définition de la limite avec $epsilon = 1$, il existe un rang $N$ tel que $|u_n| <= |l| + 1$ pour tout $n >= N$.\nLes termes d'indice strictement inférieur à $N$ sont en nombre fini : notons $M$ le plus grand de leurs modules.\nTout terme est alors majoré par le plus grand des deux nombres $M$ et $|l| + 1$ : la suite est bornée."
+  },
+  {
+   "id": "puissance-irrationnelle-rationnelle",
+   "niveau": "L1",
+   "raisonnement": "par disjonction de cas",
+   "clés": [
+    "il existe deux irrationnels dont la puissance est rationnelle"
+   ],
+   "énoncé": "qu'il existe deux irrationnels $a$ et $b$ tels que $a^b$ soit rationnel",
+   "corps": "Considérons le nombre $racine(2)^racine(2)$, et distinguons selon sa nature.\ncas ce nombre est rationnel {\n\tAlors $a = racine(2)$ et $b = racine(2)$ conviennent, tous deux irrationnels.\n}\ncas ce nombre est irrationnel {\n\tPosons $a = racine(2)^racine(2)$, irrationnel par hypothèse de ce cas, et $b = racine(2)$.\n\tAlors $a^b = (racine(2)^racine(2))^racine(2) = racine(2)^2 = 2$, qui est rationnel.\n}\nLa démonstration ne dit pas lequel des deux couples convient — elle établit seulement qu'il en existe un."
+  },
+  {
+   "id": "maximum-valeur-absolue",
+   "niveau": "lycée",
+   "raisonnement": "par disjonction de cas",
+   "clés": [
+    "le maximum de deux reels s'exprime avec la valeur absolue",
+    "max(a,b) = (a+b+|a-b|)/2"
+   ],
+   "énoncé": "que pour tous réels $a$ et $b$, le plus grand des deux vaut $(a + b + |a - b|)/2$",
+   "corps": "cas $a >= b$ {\n\tAlors $a - b$ est positif, donc $|a - b| = a - b$.\n\tL'expression vaut $(a + b + a - b)/2 = a$, qui est bien le plus grand des deux.\n}\ncas $a < b$ {\n\tAlors $a - b$ est strictement négatif, donc $|a - b| = b - a$.\n\tL'expression vaut $(a + b + b - a)/2 = b$, qui est bien le plus grand des deux.\n}"
+  },
+  {
+   "id": "tiroirs-restes",
+   "niveau": "CPGE",
+   "raisonnement": "par le principe des tiroirs",
+   "clés": [
+    "parmi cinq entiers deux ont le meme reste modulo quatre"
+   ],
+   "énoncé": "que parmi cinq entiers quelconques, deux au moins ont le même reste dans la division par $4$",
+   "corps": "objets{\n\tles cinq entiers\n}\ntiroirs{\n\tles quatre restes possibles dans la division par $4$, à savoir $0$, $1$, $2$ et $3$\n}\nChaque entier est rangé dans le tiroir de son reste, que la division euclidienne détermine de façon unique."
+  },
+  {
+   "id": "archimede",
+   "niveau": "CPGE",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "la propriete d'archimede",
+    "pour tout reel il existe un entier plus grand"
+   ],
+   "énoncé": "la propriété d'Archimède : pour tout réel $x$, il existe un entier naturel strictement supérieur à $x$",
+   "corps": "absurde{\n\til existe un réel $x$ que tout entier naturel minore, c'est-à-dire que $x$ majore $NN$\n}\nL'ensemble $NN$ est non vide et majoré : il admet une borne supérieure, notée $M$.\nLe réel $M - 1$ ne majore pas $NN$, sans quoi $M$ n'en serait pas le plus petit majorant : il existe un entier $n$ tel que $n > M - 1$.\nAlors $n + 1 > M$, et $n + 1$ est encore un entier naturel.\ncontradiction{\n\t$M$ majore $NN$ et se trouve dépassé par l'un de ses éléments\n}"
+  },
+  {
+   "id": "bolzano-weierstrass",
+   "niveau": "CPGE",
+   "raisonnement": "par récurrence",
+   "clés": [
+    "toute suite bornee admet une sous-suite convergente",
+    "theoreme de bolzano-weierstrass",
+    "bolzano weierstrass"
+   ],
+   "énoncé": "que toute suite bornée de réels admet au moins une sous-suite convergente",
+   "corps": "Soit $(u_n)$ une suite bornée : il existe $a_0 < b_0$ tels que tous les termes sont dans $[a_0;b_0]$.\nOn construit par récurrence une suite de segments emboîtés $I_n = [a_n;b_n]$ de longueur $(b_0-a_0)/2^n$ contenant chacun une infinité de termes de la suite.\ninitialisation{\n$I_0 = [a_0;b_0]$ convient.\n}\nhérédité{\nSupposons $I_n$ construit. On partage $I_n$ en deux segments de même longueur. Au moins l’un des deux contient une infinité de termes ; on le choisit pour $I_{n+1}$.\n}\nLes suites $(a_n)$ et $(b_n)$ sont adjacentes (croissante/décroissante, différence → 0) donc convergent vers une même limite $\\ell$.\nOn extrait alors une sous-suite en choisissant à chaque étape un indice strictement plus grand tel que $u_{\\varphi(n)} \\in I_n$ : on a $|u_{\\varphi(n)} - \\ell| \\le (b_0-a_0)/2^n \\to 0$."
+  },
+  {
+   "id": "heine",
+   "niveau": "CPGE",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "toute fonction continue sur un segment est uniformement continue",
+    "theoreme de heine",
+    "heine"
+   ],
+   "énoncé": "que toute fonction continue sur un segment est uniformément continue",
+   "corps": "Soit $f$ continue sur $[a;b]$.\nabsurde{\n$f$ n’est pas uniformément continue : il existe $\\varepsilon>0$ tel que pour tout $n$ on trouve $x_n,y_n$ avec $|x_n-y_n|<1/n$ et $|f(x_n)-f(y_n)|\\ge\\varepsilon$.\n}\nLa suite $(x_n)$ est bornée, donc admet (Bolzano-Weierstrass) une sous-suite convergente vers un point $c\\in[a;b]$. La sous-suite correspondante de $(y_n)$ converge aussi vers $c$.\nPar continuité de $f$ en $c$, $|f(x_{\\varphi(n)})-f(y_{\\varphi(n)})|\\to 0$, contradiction avec $\\ge\\varepsilon$.\ncontradiction{\n$f$ est donc uniformément continue.\n}"
+  },
+  {
+   "id": "rolle",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de rolle",
+    "si f(a)=f(b) alors il existe c avec f'(c)=0"
+   ],
+   "énoncé": "le théorème de Rolle : si $f$ est continue sur $[a;b]$, dérivable sur $]a;b[$ et $f(a)=f(b)$, alors il existe $c\\in]a;b[$ tel que $f'(c)=0$",
+   "corps": "Si $f$ est constante, tout point convient.\nSinon $f$ admet un extremum global en un point $c\\in]a;b[$ (théorème des bornes atteintes).\nEn ce point la dérivée s’annule (sinon le taux d’accroissement garderait un signe constant au voisinage et $c$ ne serait pas un extremum)."
+  },
+  {
+   "id": "accroissements-finis",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "theoreme des accroissements finis",
+    "il existe c tel que f(b)-f(a)=(b-a)f'(c)"
+   ],
+   "énoncé": "le théorème des accroissements finis : si $f$ est continue sur $[a;b]$ et dérivable sur $]a;b[$, alors il existe $c\\in]a;b[$ tel que $f(b)-f(a)=(b-a)f'(c)$",
+   "corps": "On pose $g(x)=f(x)-\\dfrac{f(b)-f(a)}{b-a}(x-a)$.\nAlors $g(a)=g(b)$, donc par Rolle il existe $c$ avec $g'(c)=0$, ce qui donne exactement la relation annoncée."
+  },
+  {
+   "id": "base-incomplete",
+   "niveau": "L2",
+   "raisonnement": "par récurrence",
+   "clés": [
+    "theoreme de la base incomplete",
+    "toute famille libre se complete en une base"
+   ],
+   "énoncé": "que dans un espace vectoriel de dimension finie, toute famille libre peut être complétée en une base",
+   "corps": "Soit $E$ de dimension $n$ et $L=(f_1,\\dots,f_p)$ libre avec $p\\le n$.\ninitialisation{\nSi $p=n$, $L$ est déjà une base.\n}\nhérédité{\nSi $p<n$, $L$ n’est pas génératrice : il existe $v\\notin\\mathrm{Vect}(L)$. La famille $(f_1,\\dots,f_p,v)$ est libre (sinon $v$ serait combinaison linéaire). On recommence.\n}\nAprès au plus $n-p$ adjonctions on obtient une famille libre de $n$ vecteurs, donc une base."
+  },
+  {
+   "id": "theoreme-du-rang",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme du rang",
+    "rg(f)=dim(E)-dim(ker f)"
+   ],
+   "énoncé": "le théorème du rang : pour une application linéaire $f:E\\to F$ entre espaces de dimension finie, $\\mathrm{rg}(f)=\\dim E-\\dim(\\ker f)$",
+   "corps": "Soit $S$ un supplémentaire de $\\ker f$ dans $E$.\nLa restriction de $f$ à $S$ est injective (son noyau est trivial) et d’image $\\mathrm{Im}f$.\nDonc $S$ est isomorphe à $\\mathrm{Im}f$, d’où $\\dim S=\\mathrm{rg}(f)$.\nOr $\\dim E=\\dim(\\ker f)+\\dim S$, ce qui donne la relation."
+  },
+  {
+   "id": "petit-fermat",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "petit theoreme de fermat",
+    "a^p \\equiv a mod p pour p premier"
+   ],
+   "énoncé": "le petit théorème de Fermat : si $p$ est premier, alors pour tout entier $a$ on a $a^p\\equiv a\\pmod{p}$",
+   "corps": "Si $p$ divise $a$, c’est immédiat.\nSinon $a$ et $p$ sont premiers entre eux.\nLes $p-1$ restes $a,2a,\\dots,(p-1)a$ modulo $p$ sont une permutation de $1,2,\\dots,p-1$.\nEn multipliant : $a^{p-1}(p-1)!\\equiv(p-1)!\\pmod{p}$.\nComme $(p-1)!$ est inversible modulo $p$, on obtient $a^{p-1}\\equiv1\\pmod{p}$, puis $a^p\\equiv a\\pmod{p}$."
+  },
+  {
+   "id": "lagrange-groupes",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de lagrange",
+    "l'ordre d'un sous-groupe divise l'ordre du groupe"
+   ],
+   "énoncé": "le théorème de Lagrange : l’ordre d’un sous-groupe d’un groupe fini divise l’ordre du groupe",
+   "corps": "Soit $H$ un sous-groupe de $G$ (fini). Les classes à gauche $gH$ forment une partition de $G$.\nToutes ont le même cardinal $\\mathrm{Card}(H)$ (l’application $h\\mapsto gh$ est bijective).\nDonc $\\mathrm{Card}(G)=\\mathrm{Card}(H)\\times$ (nombre de classes), ce qui prouve la divisibilité."
+  },
+  {
+   "id": "cantor-bernstein",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de cantor-bernstein",
+    "s'il existe une injection de A dans B et de B dans A alors il existe une bijection"
+   ],
+   "énoncé": "le théorème de Cantor-Bernstein : s’il existe une injection de $A$ dans $B$ et une injection de $B$ dans $A$, alors il existe une bijection entre $A$ et $B$",
+   "corps": "Soient $f:A\\hookrightarrow B$ et $g:B\\hookrightarrow A$.\nOn pose $C=g(B)\\subset A$ et $h=g\\circ f:A\\to C$.\nIl suffit de construire une bijection $\\varphi:A\\to C$ ; alors $g^{-1}\\circ\\varphi$ est une bijection de $A$ sur $B$.\nOn définit par récurrence $A_0=A\\setminus C$, $A_{n+1}=h(A_n)$, et $X=\\bigcup A_n$.\nOn pose $\\varphi(x)=h(x)$ si $x\\in X$ et $\\varphi(x)=x$ sinon.\nOn vérifie que $\\varphi$ est bijective de $A$ sur $C$."
+  },
+  {
+   "id": "weierstrass-approximation",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de weierstrass",
+    "toute fonction continue sur un segment est limite uniforme de polynomes"
+   ],
+   "énoncé": "le premier théorème de Weierstrass : toute fonction continue sur un segment est limite uniforme d’une suite de polynômes",
+   "corps": "On se ramène à $[0;1]$ par changement affine.\nOn utilise les polynômes de Bernstein : $B_n(f)(x)=\\sum_{k=0}^n f(k/n)\\binom{n}{k}x^k(1-x)^{n-k}$.\nPar le théorème de Heine $f$ est uniformément continue. Un calcul de variance et d’espérance (loi binomiale) montre que $\\|B_n(f)-f\\|_\\infty\\to0$."
+  },
+  {
+   "id": "theoreme-valeurs-intermediaires",
+   "niveau": "lycée",
+   "raisonnement": "par récurrence",
+   "clés": [
+    "theoreme des valeurs intermediaires",
+    "tvi",
+    "si f continue et f(a)f(b)<0 alors il existe c avec f(c)=0"
+   ],
+   "énoncé": "le théorème des valeurs intermédiaires : si $f$ est continue sur $[a;b]$ et $k$ est entre $f(a)$ et $f(b)$, alors il existe $c\\in[a;b]$ tel que $f(c)=k$",
+   "corps": "On se ramène à $k=0$ et $f(a)<0<f(b)$.\nOn construit par dichotomie une suite de segments emboîtés $[a_n;b_n]$ avec $f(a_n)\\le 0\\le f(b_n)$ et $b_n-a_n=(b-a)/2^n$.\ninitialisation{\n$[a_0;b_0]=[a;b]$ convient.\n}\nhérédité{\nSoit $m$ le milieu. Si $f(m)\\ge 0$ on prend $[a_{n+1};b_{n+1}]=[a_n;m]$, sinon $[m;b_n]$.\n}\nLes suites $(a_n)$ et $(b_n)$ convergent vers un même $c$. Par continuité $f(c)=0$."
+  },
+  {
+   "id": "bornes-atteintes",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "theoreme des bornes atteintes",
+    "toute fonction continue sur un segment est bornee et atteint ses bornes"
+   ],
+   "énoncé": "que toute fonction continue sur un segment $[a;b]$ est bornée et atteint ses bornes",
+   "corps": "Soit $f$ continue sur $[a;b]$.\nLa suite $x_n$ où $f(x_n)\\to\\sup f$ (éventuellement $+\\infty$) est bornée, donc admet une sous-suite convergente vers $c\\in[a;b]$.\nPar continuité $f(c)=\\sup f$, donc le supremum est atteint (et fini).\nMême argument pour l’infimum."
+  },
+  {
+   "id": "darboux",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de darboux",
+    "la derivee verifie la propriete des valeurs intermediaires"
+   ],
+   "énoncé": "le théorème de Darboux : si $f$ est dérivable sur un intervalle, alors $f'$ vérifie la propriété des valeurs intermédiaires (même si $f'$ n’est pas continue)",
+   "corps": "Soient $a<b$ et $k$ entre $f'(a)$ et $f'(b)$. On suppose $f'(a)<k<f'(b)$.\nOn pose $g(x)=f(x)-kx$. Alors $g'(a)<0<g'(b)$.\n$g$ admet un minimum global en $c\\in]a;b[$ (sinon les dérivées aux extrémités ne pourraient pas avoir ces signes).\nEn ce point $g'(c)=0$, donc $f'(c)=k$."
+  },
+  {
+   "id": "taylor-lagrange",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "formule de taylor-lagrange",
+    "reste de lagrange"
+   ],
+   "énoncé": "la formule de Taylor-Lagrange : si $f$ est $n+1$ fois dérivable, alors il existe $c$ entre $a$ et $x$ tel que $f(x)=\\sum_{k=0}^n\\frac{f^{(k)}(a)}{k!}(x-a)^k+\\frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$",
+   "corps": "On fixe $x$ et on considère la fonction $\\varphi(t)=f(x)-\\sum_{k=0}^n\\frac{f^{(k)}(t)}{k!}(x-t)^k-R(x-t)^{n+1}$ où $R$ est choisi pour que $\\varphi(a)=0$.\nAlors $\\varphi(x)=0$ et $\\varphi(a)=0$.\nPar Rolle répété $n+1$ fois, il existe $c$ avec $\\varphi^{(n+1)}(c)=0$, ce qui donne l’expression de $R$."
+  },
+  {
+   "id": "critere-cauchy-suites",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "critere de cauchy pour les suites",
+    "suite de cauchy dans R"
+   ],
+   "énoncé": "qu’une suite réelle est convergente si et seulement si elle est de Cauchy",
+   "corps": "Si $(u_n)$ converge vers $\\ell$, elle est de Cauchy (prendre $N$ pour $\\varepsilon/2$).\nRéciproquement, une suite de Cauchy est bornée, donc admet une sous-suite convergente vers $\\ell$ (Bolzano-Weierstrass).\nOn montre alors que toute la suite converge vers $\\ell$ : pour $\\varepsilon>0$, prendre $N$ tel que, pour $p, q \\ge N$, $|u_p-u_q|<\\varepsilon/2$, puis $n\\ge N$ et un terme de la sous-suite assez loin."
+  },
+  {
+   "id": "convergence-absolue-serie",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "convergence absolue implique convergence",
+    "serie absolument convergente"
+   ],
+   "énoncé": "qu’une série absolument convergente est convergente",
+   "corps": "Soit $\\sum|u_n|$ convergente. On pose $v_n=u_n^+$ et $w_n=u_n^-$ (parties positives et négatives).\nAlors $0\\le v_n\\le|u_n|$ et $0\\le w_n\\le|u_n|$, donc $\\sum v_n$ et $\\sum w_n$ convergent (comparaison).\nOr $u_n=v_n-w_n$, donc $\\sum u_n$ converge."
+  },
+  {
+   "id": "cesaro",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de cesaro",
+    "moyenne de cesaro"
+   ],
+   "énoncé": "le théorème de Cesàro : si $(u_n)$ converge vers $\\ell$, alors la suite des moyennes $\\sigma_n=\\frac{1}{n}\\sum_{k=1}^n u_k$ converge aussi vers $\\ell$",
+   "corps": "Soit $\\varepsilon>0$. Il existe $N$ tel que, pour $n>N$, $|u_n-\\ell|<\\varepsilon/2$.\nOn découpe $\\sigma_n-\\ell=\\frac{1}{n}\\sum_{k=1}^N(u_k-\\ell)+\\frac{1}{n}\\sum_{k=N+1}^n(u_k-\\ell)$.\nLe premier terme tend vers 0, le second est majoré par $\\varepsilon/2$ en valeur absolue pour $n$ assez grand."
+  },
+  {
+   "id": "monotone-convergence",
+   "niveau": "lycée",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de convergence monotone",
+    "suite croissante majoree converge"
+   ],
+   "énoncé": "qu’une suite croissante majorée de réels converge (vers son supremum)",
+   "corps": "Soit $(u_n)$ croissante et majorée. Soit $\\ell=\\sup\\{u_n\\}$.\nPour tout $\\varepsilon>0$ il existe $N$ tel que $u_N>\\ell-\\varepsilon$ (définition du supremum).\nPour $n\\ge N$, $\\ell-\\varepsilon<u_N\\le u_n\\le\\ell$, donc $|u_n-\\ell|<\\varepsilon$."
+  },
+  {
+   "id": "dimension-somme-sous-espaces",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "formule de dimension",
+    "dim(F+G)=dim F + dim G - dim(F cap G)"
+   ],
+   "énoncé": "la formule de la dimension : $\\dim(F+G)=\\dim F+\\dim G-\\dim(F\\cap G)$",
+   "corps": "Soit $(e_1,\\dots,e_r)$ une base de $F\\cap G$. On la complète en une base de $F$ : $(e_1,\\dots,e_r,f_1,\\dots,f_p)$ et en une base de $G$ : $(e_1,\\dots,e_r,g_1,\\dots,g_q)$.\nOn montre que $(e_1,\\dots,e_r,f_1,\\dots,f_p,g_1,\\dots,g_q)$ est une base de $F+G$.\nLa relation de cardinalité donne alors la formule."
+  },
+  {
+   "id": "existence-base",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "existence d'une base",
+    "tout espace vectoriel de dimension finie admet une base"
+   ],
+   "énoncé": "que tout espace vectoriel de dimension finie non nul admet une base",
+   "corps": "Soit $E\\neq\\{0\\}$. Il existe $v_1\\neq 0$. Si $\\mathrm{Vect}(v_1)=E$ on s’arrête.\nSinon on ajoute $v_2\\notin\\mathrm{Vect}(v_1)$, et ainsi de suite.\nLe processus s’arrête en au plus $\\dim E$ étapes (aucune famille libre ne peut dépasser la dimension) et on obtient une famille libre génératrice."
+  },
+  {
+   "id": "steinitz",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "lemme de steinitz",
+    "echange de steinitz"
+   ],
+   "énoncé": "le lemme de Steinitz : si $(v_1,\\dots,v_n)$ engendre $E$ et $(u_1,\\dots,u_p)$ est libre, alors $p\\le n$ et on peut remplacer $p$ vecteurs de la famille génératrice par les $u_i$",
+   "corps": "On montre par récurrence sur $k\\le p$ que l’on peut trouver une famille génératrice contenant $u_1,\\dots,u_k$ et $n-k$ vecteurs parmi les $v_j$.\nÀ chaque étape, $u_{k+1}$ s’écrit comme combinaison linéaire de la famille courante ; le coefficient d’au moins un $v_j$ restant est non nul (sinon contradiction avec la liberté), et on l’échange."
+  },
+  {
+   "id": "gram-schmidt",
+   "niveau": "L2",
+   "raisonnement": "par récurrence",
+   "clés": [
+    "procede de gram-schmidt",
+    "orthogonalisation"
+   ],
+   "énoncé": "le procédé de Gram-Schmidt : toute famille libre admet une famille orthonormée ayant le même espace engendré",
+   "corps": "Soit $(v_1,\\dots,v_p)$ libre.\ninitialisation{\nOn pose $e_1 = v_1/(norme(v_1))$.\n}\nhérédité{\nOn pose $w_{k+1}=v_{k+1}-\\sum_{i=1}^k\\langle v_{k+1},e_i\\rangle e_i$, puis $e_{k+1} = w_{k+1}/(norme(w_{k+1}))$.\n$w_{k+1}\\neq 0$ car la famille est libre, et $e_{k+1}$ est orthogonal aux précédents.\n}\nPar construction $\\mathrm{Vect}(e_1,\\dots,e_k)=\\mathrm{Vect}(v_1,\\dots,v_k)$."
+  },
+  {
+   "id": "projection-orthogonale",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "existence et unicite de la projection orthogonale",
+    "projection sur un sous-espace"
+   ],
+   "énoncé": "qu’il existe une unique projection orthogonale sur un sous-espace de dimension finie d’un espace préhilbertien",
+   "corps": "Soit $F$ de dimension finie et $x\\in E$.\nExistence : on prend une base orthonormée de $F$ et on pose $p(x)=\\sum\\langle x,e_i\\rangle e_i$. Alors $x-p(x)\\perp F$.\nUnicité : si $p$ et $q$ sont deux projections, $p(x)-q(x)\\in F$ et $p(x)-q(x)\\perp F$, donc $p(x)-q(x)=0$."
+  },
+  {
+   "id": "bezout",
+   "niveau": "lycée",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de bezout",
+    "identite de bezout",
+    "pgcd combinaison lineaire"
+   ],
+   "énoncé": "le théorème de Bézout : si $a$ et $b$ sont non nuls, il existe $u,v\\in\\mathbb{Z}$ tels que $au+bv=\\mathrm{pgcd}(a,b)$",
+   "corps": "Soit $I=\\{au+bv\\mid u,v\\in\\mathbb{Z}\\}$. C’est un idéal de $\\mathbb{Z}$, donc de la forme $d\\mathbb{Z}$ avec $d>0$.\n$d$ divise $a$ et $b$, donc $d$ divise $\\mathrm{pgcd}(a,b)$.\nMais $\\mathrm{pgcd}(a,b)$ appartient à $I$ (ou divise tout élément de $I$), donc $d=\\mathrm{pgcd}(a,b)$."
+  },
+  {
+   "id": "gauss",
+   "niveau": "lycée",
+   "raisonnement": "",
+   "clés": [
+    "lemme de gauss",
+    "si a divise bc et pgcd(a,b)=1 alors a divise c"
+   ],
+   "énoncé": "le lemme de Gauss : si $a$ divise $bc$ et $\\mathrm{pgcd}(a,b)=1$, alors $a$ divise $c$",
+   "corps": "Par Bézout il existe $u,v$ tels que $au+bv=1$.\nOn multiplie par $c$ : $auc+bvc=c$.\n$a$ divise $auc$ et $a$ divise $bc$ donc $a$ divise $bvc$, ainsi $a$ divise $c$."
+  },
+  {
+   "id": "wilson",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de wilson",
+    "(p-1)! \\equiv -1 mod p"
+   ],
+   "énoncé": "le théorème de Wilson : $p$ est premier si et seulement si $(p-1)!\\equiv-1\\pmod{p}$",
+   "corps": "Si $p$ est premier, dans $\\mathbb{Z}/p\\mathbb{Z}$ chaque élément non nul a un inverse. Les seuls éléments égaux à leur inverse sont $\\pm 1$.\nOn regroupe les autres par paires $\\{x,x^{-1}\\}$, leur produit vaut 1. Donc $(p-1)!\\equiv-1\\pmod{p}$.\nRéciproquement, si $p$ est composé ($p>4$), un facteur de $p$ apparaît dans $(p-1)!$, donc le factorial est divisible par $p$."
+  },
+  {
+   "id": "euler-totient",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "theoreme d'euler",
+    "a^phi(n) equiv 1 mod n"
+   ],
+   "énoncé": "le théorème d’Euler : si $\\mathrm{pgcd}(a,n)=1$, alors $a^{\\varphi(n)}\\equiv 1\\pmod{n}$",
+   "corps": "Le groupe $(\\mathbb{Z}/n\\mathbb{Z})^\\times$ est de cardinal $\\varphi(n)$.\nLa classe de $a$ appartient à ce groupe. Par Lagrange, son ordre divise $\\varphi(n)$, donc $a^{\\varphi(n)}\\equiv 1\\pmod{n}$."
+  },
+  {
+   "id": "structure-groupe-cyclique",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "sous-groupes d'un groupe cyclique",
+    "groupe cyclique d'ordre n"
+   ],
+   "énoncé": "que tout sous-groupe d’un groupe cyclique est cyclique, et qu’il y a exactement un sous-groupe pour chaque diviseur de l’ordre",
+   "corps": "Soit $G=\\langle g\\rangle$ d’ordre $n$. Soit $H$ un sous-groupe non trivial. Soit $k$ le plus petit entier $>0$ tel que $g^k\\in H$.\nOn montre que $H=\\langle g^k\\rangle$ et que $k$ divise $n$.\nRéciproquement, pour tout diviseur $d$ de $n$, $\\langle g^{n/d}\\rangle$ est l’unique sous-groupe d’ordre $d$."
+  },
+  {
+   "id": "cauchy-groupes",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de cauchy pour les groupes",
+    "si p premier divise |G| alors il existe element d'ordre p"
+   ],
+   "énoncé": "le théorème de Cauchy : si $p$ est un nombre premier divisant l’ordre d’un groupe fini $G$, alors $G$ possède un élément d’ordre $p$",
+   "corps": "On considère l’ensemble $X=\\{(g_1,\\dots,g_p)\\in G^p\\mid g_1\\cdots g_p=e\\}$.\n$\\mathrm{Card}(X)=|G|^{p-1}$ est divisible par $p$.\nLe groupe $\\mathbb{Z}/p\\mathbb{Z}$ agit par permutation circulaire. Les orbites ont $1$ ou $p$ éléments.\nIl y a au moins l’orbite des $p$-uplets $(e,\\dots,e)$. Comme $p$ divise le cardinal total, il existe une autre orbite de cardinal 1, correspondant à un élément d’ordre $p$."
+  },
+  {
+   "id": "comparaison-series",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "critere de comparaison des series",
+    "si 0 <= u_n <= v_n et somme v converge alors somme u converge"
+   ],
+   "énoncé": "le critère de comparaison : si $0\\le u_n\\le v_n$ et si $\\sum v_n$ converge, alors $\\sum u_n$ converge",
+   "corps": "Les sommes partielles de $\\sum u_n$ sont croissantes et majorées par celles de $\\sum v_n$ (qui convergent, donc sont bornées).\nUne suite croissante majorée converge, donc $\\sum u_n$ converge."
+  },
+  {
+   "id": "riemann-integral-continu",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "toute fonction continue est integrable",
+    "integrale de riemann d'une fonction continue"
+   ],
+   "énoncé": "que toute fonction continue sur un segment est Riemann-intégrable",
+   "corps": "Soit $f$ continue sur $[a;b]$. Elle est uniformément continue (Heine).\nPour $\\varepsilon>0$ on choisit $\\delta$ tel que, si $|x-y|<\\delta$, alors $|f(x)-f(y)|<\\varepsilon/(b-a)$.\nOn prend une subdivision de pas $<\\delta$. Alors $S(f,\\sigma)-s(f,\\sigma)<\\varepsilon$.\nDonc le critère de Riemann est satisfait."
+  },
+  {
+   "id": "theoreme-fondamental",
+   "niveau": "L1",
+   "raisonnement": "",
+   "clés": [
+    "theoreme fondamental de l'analyse",
+    "derivee de la fonction integrale"
+   ],
+   "énoncé": "le théorème fondamental de l’analyse : si $f$ est continue, alors $F(x)=\\int_a^x f(t)\\,dt$ est dérivable et $F'=f$",
+   "corps": "On écrit $\\frac{F(x+h)-F(x)}{h}-f(x)=\\frac{1}{h}\\int_x^{x+h}(f(t)-f(x))\\,dt$.\nPar continuité de $f$ en $x$, pour $\\varepsilon>0$ il existe $\\delta$ tel que, si $|t-x|<\\delta$, alors $|f(t)-f(x)|<\\varepsilon$.\nAinsi pour $0<|h|<\\delta$ la valeur absolue du quotient est $<\\varepsilon$."
+  },
+  {
+   "id": "diagonal-cantor",
+   "niveau": "L1",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "argument diagonal de cantor",
+    "R non denombrable",
+    "non denombrabilite de R"
+   ],
+   "énoncé": "que $\\mathbb{R}$ (ou $[0;1]$) n’est pas dénombrable",
+   "corps": "absurde{\nOn suppose $[0;1]$ dénombrable : on numérote tous ses éléments $x_1,x_2,\\dots$ avec leurs développements décimaux $0,a_{n1}a_{n2}\\dots$\n}\nOn construit $y=0,b_1b_2\\dots$ en posant $b_n=1$ si $a_{nn}\\neq 1$ et $b_n=2$ sinon.\nAlors $y$ diffère de chaque $x_n$ à la $n$-ième place, donc $y$ n’est pas dans la liste : contradiction.\ncontradiction{\n$[0;1]$ (et donc $\\mathbb{R}$) n’est pas dénombrable.\n}"
+  },
+  {
+   "id": "heine-borel",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme de heine-borel",
+    "compact de R = ferme borne"
+   ],
+   "énoncé": "le théorème de Heine-Borel : un sous-ensemble de $\\mathbb{R}$ est compact si et seulement s’il est fermé et borné",
+   "corps": "Un compact est toujours fermé et borné (propriétés générales des espaces métriques).\nRéciproquement, soit $K$ fermé borné. Soit $(x_n)$ une suite de $K$. Elle est bornée, donc admet une sous-suite convergente dans $\\mathbb{R}$ (Bolzano-Weierstrass). La limite est dans $K$ car $K$ est fermé. Donc $K$ est séquentiellement compact, donc compact."
+  },
+  {
+   "id": "inegalite-moyenne",
+   "niveau": "lycée",
+   "raisonnement": "",
+   "clés": [
+    "inegalite de la moyenne",
+    "moyenne arithmetico-geometrique",
+    "AM-GM"
+   ],
+   "énoncé": "l’inégalité arithmético-géométrique : pour $x_i\\ge 0$, $\\frac{x_1+\\dots+x_n}{n}\\ge\\sqrt[n]{x_1\\cdots x_n}$",
+   "corps": "On peut procéder par récurrence en utilisant le cas $n=2$ : $(\\sqrt{x}-\\sqrt{y})^2\\ge 0$, d'où $\\frac{x+y}{2}\\ge\\sqrt{xy}$.\nPour passer de $n$ à $2n$ on applique deux fois le résultat, puis on traite les puissances de 2 et on utilise un argument de densité ou de padding avec la moyenne pour les autres $n$."
+  },
+  {
+   "id": "point-fixe-banach",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "theoreme du point fixe de banach",
+    "contraction a un unique point fixe"
+   ],
+   "énoncé": "le théorème du point fixe de Banach : une contraction d’un espace métrique complet admet un unique point fixe",
+   "corps": "Soit $f:E\\to E$ $k$-Lipschitz avec $k<1$, $E$ complet.\nOn pose $x_{n+1}=f(x_n)$. On montre que $(x_n)$ est de Cauchy : $d(x_{n+1},x_n)\\le k^n d(x_1,x_0)$, puis estimation de la série géométrique.\nLa limite $\\ell$ vérifie $f(\\ell)=\\ell$ par continuité.\nUnicité : si $f(a)=a$ et $f(b)=b$, alors $d(a,b)=d(f(a),f(b))\\le k d(a,b)$ implique $d(a,b)=0$."
+  },
+  {
+   "id": "isomorphes-espaces-meme-dimension",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "deux espaces de meme dimension finie sont isomorphes",
+    "isomorphisme entre espaces vectoriels"
+   ],
+   "énoncé": "que deux espaces vectoriels de même dimension finie sont isomorphes",
+   "corps": "Soient $E$ et $F$ de dimension $n$. On choisit une base $\\mathcal{B}$ de $E$ et une base $\\mathcal{C}$ de $F$.\nL’unique application linéaire qui envoie $\\mathcal{B}$ sur $\\mathcal{C}$ est un isomorphisme (elle envoie une base sur une base)."
+  },
+  {
+   "id": "noyau-image-dimension",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "relation noyau image",
+    "dim ker + dim im = dim E"
+   ],
+   "énoncé": "que pour $f\\in\\mathcal{L}(E,F)$ avec $E$ de dimension finie, $\\dim(\\ker f)+\\dim(\\mathrm{Im}f)=\\dim E$",
+   "corps": "C’est exactement le théorème du rang (déjà démontré). On le rappelle ici sous sa forme la plus fréquente."
+  },
+  {
+   "id": "continuite-uniforme-heine",
+   "niveau": "CPGE",
+   "raisonnement": "par l'absurde",
+   "clés": [
+    "continuite uniforme sur un compact",
+    "heine pour les fonctions"
+   ],
+   "énoncé": "qu’une fonction continue sur un compact métrique est uniformément continue",
+   "corps": "absurde{\n$f$ n’est pas uniformément continue : il existe $\\varepsilon>0$ tel que, pour tout $n$, il existe $x_n, y_n$ avec $d(x_n,y_n)<1/n$ et $d(f(x_n),f(y_n))\\ge\\varepsilon$.\n}\nPar compacité on extrait des sous-suites convergentes $x_{\\varphi(n)}\\to x$, $y_{\\varphi(n)}\\to x$.\nPar continuité $f(x_{\\varphi(n)})\\to f(x)$ et $f(y_{\\varphi(n)})\\to f(x)$, contradiction.\ncontradiction{\n$f$ est uniformément continue.\n}"
+  },
+  {
+   "id": "serie-entiere-rayon",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "rayon de convergence",
+    "lemme d'abel"
+   ],
+   "énoncé": "le lemme d’Abel : si la série $\\sum a_n z_0^n$ converge, alors $\\sum a_n z^n$ converge absolument pour tout $|z|<|z_0|$",
+   "corps": "La suite $(a_n z_0^n)$ est bornée : $|a_n z_0^n|\\le M$.\nPour $|z|<|z_0|$ on a $|a_n z^n|=|a_n z_0^n|\\cdot(|z|/|z_0|)^n\\le M r^n$ avec $r<1$.\nLa série géométrique $\\sum r^n$ converge, donc par comparaison $\\sum|a_n z^n|$ converge."
+  },
+  {
+   "id": "derivee-serie-entiere",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "derivation terme a terme des series entieres",
+    "serie derivee"
+   ],
+   "énoncé": "qu’à l’intérieur du disque de convergence, une série entière est dérivable terme à terme et la série dérivée a le même rayon",
+   "corps": "On montre d’abord que le rayon de $\\sum n a_n z^{n-1}$ est le même (critères de comparaison ou de d’Alembert/Cauchy).\nPuis on fixe $r<R$ et on utilise la convergence normale de la série dérivée sur le disque fermé de rayon $r$ pour justifier la dérivation terme à terme."
+  },
+  {
+   "id": "unicite-prolongement",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "unicite du prolongement continu",
+    "densite et continuite"
+   ],
+   "énoncé": "qu’il existe au plus un prolongement continu d’une fonction définie sur une partie dense",
+   "corps": "Soient $f,g$ deux prolongements continus de $h$ définie sur $D$ dense dans $E$.\nL’ensemble $\\{x\\mid f(x)=g(x)\\}$ est fermé (continuité de $f-g$) et contient $D$, donc est égal à $E$."
+  },
+  {
+   "id": "caracterisation-continuite-sequentielle",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "continuite sequentielle",
+    "f continue ssi image de suite convergente"
+   ],
+   "énoncé": "qu’une fonction $f:E\\to F$ entre espaces métriques est continue en $a$ si et seulement si pour toute suite $x_n\\to a$ on a $f(x_n)\\to f(a)$",
+   "corps": "Le sens direct est classique.\nRéciproquement, si $f$ n’est pas continue en $a$, il existe $\\varepsilon>0$ tel que pour tout $n$ on trouve $x_n$ avec $d(x_n,a)<1/n$ et $d(f(x_n),f(a))\\ge\\varepsilon$.\nAlors $x_n\\to a$ mais $f(x_n)\\not\\to f(a)$."
+  },
+  {
+   "id": "fermé-par-suites",
+   "niveau": "CPGE",
+   "raisonnement": "",
+   "clés": [
+    "caracterisation sequentielle des fermes",
+    "un ensemble est ferme ssi il contient les limites de ses suites"
+   ],
+   "énoncé": "qu’une partie $A$ d’un espace métrique est fermée si et seulement si elle contient toutes les limites de ses suites convergentes",
+   "corps": "Si $A$ est fermée et $x_n\\in A\\to x$, alors $x\\in\\overline{A}=A$.\nRéciproquement, si $A$ n’est pas fermée, il existe $x\\in\\overline{A}\\setminus A$. On construit une suite de $A$ qui converge vers $x$ (définition de l’adhérence)."
+  },
+  {
+   "id": "compact-sequentiel",
+   "niveau": "L2",
+   "raisonnement": "",
+   "clés": [
+    "compacite sequentielle",
+    "dans un espace metrique compact = sequentiellement compact"
+   ],
+   "énoncé": "que dans un espace métrique, la compacité équivaut à la compacité séquentielle",
+   "corps": "Un compact est séquentiellement compact (extraction de sous-suite convergente par un argument de recouvrement ou de diamètres).\nRéciproquement, si $E$ est séquentiellement compact, de tout recouvrement ouvert on extrait un sous-recouvrement fini (sinon on construit une suite sans sous-suite convergente en prenant des points hors des réunions finies)."
+  }
+ ],
+ "principe": "La base ne contient que les démonstrations qu'aucun outil de calcul n'atteint : celles qui reposent sur une idée, une construction ou un argument de structure. Tout ce qu'une identité ou une inégalité vérifiable démontre relève de SymPy, SciPy ou d'une crate — pas d'ici."
+}

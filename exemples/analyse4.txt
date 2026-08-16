@@ -1,0 +1,137 @@
+page {
+	orientation: portrait;
+	marges: 2;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Analyse — supérieur
+
+<h2>Opérateurs différentiels
+Le gradient $gradient(f)$, la divergence $divergence(F)$, le rotationnel $rotationnel(F)$, le laplacien $laplacien(f)$ et la dérivée directionnelle $dérivée directionnelle(f; v)$.
+
+<h2>Notation de Landau
+Les comparaisons asymptotiques sont les mots explicites $O(...)$ et $o(...)$ :
+$exp(x) = 1 + x + o(x)$ quand $x to 0$, et
+$somme(k=1;n) k = n^2/2 + O(n)$.
+
+<h2>Transformées intégrales
+Les transformées se nomment : $la transformée de Laplace(f)$ et $la transformée de Fourier(f)$, d'inverses $l'inverse de Laplace(f)$ et $l'inverse de Fourier(f)$, avec $l'inverse de Laplace(la transformée de Laplace(f)) = f$.
+<h2>Calcul formel du supérieur
+<Simplifie>(x^2 - 1)/(x - 1)
+<Décompose>en éléments simples (x+1)/(x^2-1)
+<Résous>dans CC l'équation x^2 + 1 = 0
+<Résous>dans les entiers l'équation 2x = 4
+
+<h2>Sommes et produits en forme close
+<Calcule>la somme de k^2 pour k de 1 à n
+<Calcule>le produit de k pour k de 1 à n
+
+<h2>Équations différentielles et aux dérivées partielles
+<Résous>l'équation différentielle y'' + 4y = 0
+<Résous>l'équation différentielle N' = -0,12N, d'inconnue N(t)
+<Résous>l'équation aux dérivées partielles u_x + u_y = u
+
+<page suivante h2>Intégrales exactes et impropres
+<Soit>une fonction g(x) = x * exp(x)
+<Calcule>l'intégrale de g entre 0 et 1
+<Soit>les fonctions p(x) = 1/x^2 et q(x) = 1/x
+<Détermine>la nature de l'intégrale de p entre 1 et +infini
+<Détermine>la nature de l'intégrale de q entre 1 et +infini
+
+<h2>Équivalents
+<Soit>une fonction m(x) = sin(x) - x
+<Calcule>un équivalent de m en 0
+<Soit>une fonction n(x) = (x^2 + 1) / (x - 3)
+<Calcule>un équivalent de n en +infini
+
+
+<h2>Séries numériques
+<Détermine>la nature de la série de terme général 1/n^2
+<Détermine>la nature de la série de terme général 1/n
+
+<h2>Fonctions de plusieurs variables
+<Soit>une fonction psi(x, y) = x^3 - 3x + y^2
+<Calcule>le gradient de psi
+<Calcule>la matrice hessienne de psi
+<Calcule>la dérivée partielle de psi par rapport à y
+<Détermine>les points critiques de psi
+
+<page suivante h2>Fourier, Laplace et wronskien, calculés
+<Soit>une fonction cr(x) = x
+
+<Calcule>la série de Fourier de cr sur [-pi ; pi] à l'ordre 4
+
+<Soit>une fonction ex(t) = exp(-2t)
+
+<Calcule>la transformée de Laplace de ex
+
+<Soit>une fonction Fp(p) = 1 / (p^2 + 1)
+
+<Calcule>la transformée de Laplace inverse de Fp
+
+<Soit>les fonctions co(x) = cos(x) et si(x) = sin(x)
+
+<Calcule>le wronskien de co et si
+
+<Soit>les fonctions li(x) = x et lj(x) = 2x
+
+<Calcule>le wronskien de li et lj
+
+<h1>Les surfaces
+	Une fonction de deux variables se représente par sa nappe $z = f(x, y)$, en perspective cavalière ombrée :
+<Trace>la surface z = x^2 - y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2]
+<Trace>la surface z = cos(x)*cos(y) pour x dans [-3 ; 3] et y dans [-3 ; 3], avec 32 mailles, en violet
+
+<h1>Les lignes de niveau
+	La même fonction se lit aussi par ses courbes $f(x, y) = c$ :
+<Trace>les lignes de niveau de z = x^2 + y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2], aux niveaux {1 ; 2 ; 3}
+<Trace>les lignes de niveau de z = x*y pour x dans [-2 ; 2] et y dans [-2 ; 2], en vert
+
+<h1>Les extremums
+<h2>Extremums libres
+<Soit>la fonction g(x, y) = x^2 + y^2 - 2*x
+<Détermine>les points critiques de g
+
+<h2>Extremums sous contrainte
+<Soit>la fonction f(x, y) = x*y
+<Détermine>les extremums de f sous la contrainte x^2 + y^2 = 2
+
+<page suivante h1>Les intégrales multiples
+<Calcule>l'intégrale double de x*y sur [0 ; 1] × [0 ; 2]
+<Calcule>l'intégrale double de x^2 + y^2 sur le disque de rayon 2
+<Calcule>l'intégrale triple de x*y*z sur [0 ; 1] × [0 ; 1] × [0 ; 2]
+
+
+<h1>Les transformations du plan complexe
+	L'image d'un quadrillage par $w = f(z)$ montre la géométrie de la transformation — les deux familles de lignes restent orthogonales là où $f$ est holomorphe de dérivée non nulle :
+<Trace>l'image du carré [-1 ; 1] × [-1 ; 1] par w = z^2
+<Trace>l'image du carré [0,2 ; 1,2] × [-1 ; 1] par w = 1/z, en violet
+
+<h2>La transformation de Joukovski
+	L'image du cercle unité par $w = z + 1/z$ est le segment $[-2 ; 2]$ ; celle d'un cercle plus grand, une ellipse :
+<Trace>l'image du cercle unité par w = z + 1/z
+<Trace>l'image du cercle de rayon 1,4 par w = z + 1/z, en vert
+
+<page suivante h1>Les résidus
+<Calcule>les résidus de 1/(z^2 + 1)
+<Calcule>les résidus de 1/(z^2*(z - 1))
+
+<h1>Une nappe à la demande
+soit k = <Saisis>un entier{Quel coefficient pour la selle ?}
+<Trace>la surface z = #k*x*y pour x dans [-1 ; 1] et y dans [-1 ; 1], en orange
+
+<h2>Intégrale exacte
+<Soit>une fonction j(x) = x^2
+<Calcule>l'intégrale de j entre 0 et 1
+
+<h2>Autres variables, autres objets
+	La variable se lit dans la définition — $t$ pour le temps, comme en physique :
+
+<Soit>une fonction g(t) = t^2 + 1
+<Calcule>la dérivée de g
+
+<Soit>un champ de vecteurs F de RR^2 dans RR^2 défini par F(x, y) = (-y, x)

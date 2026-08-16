@@ -1,0 +1,515 @@
+/* Les couleurs de docdg sont celles de la feuille : bleu ciel des interlignes,
+   bleu roi de la ligne d'écriture, rouge de la marge. Aucune n'est décorative —
+   chacune a un emploi, et un seul. Les nommer ici, plutôt que les écrire en dur
+   au fil du fichier, est ce qui rend un thème possible. */
+:root {
+    --zoom: 0.9;
+    --part: 40%;
+    --decalage: 1;
+
+    /* L'encre et les surfaces */
+    --encre: #101418;
+    --ardoise: #16202B;        /* l'éditeur, le châssis */
+    --ardoise-2: #22303F;      /* les panneaux posés dessus */
+    --ardoise-3: #2C3E51;      /* les boutons au repos */
+    --bureau: #E7EDF3;         /* le fond sur lequel la page repose */
+    --papier: #FFFFFF;         /* la page, et elle seule */
+    --bord: #0D141C;
+
+    /* Les trois couleurs de la réglure */
+    --roi: #4169E1;            /* la ligne d'écriture : l'action principale */
+    --ciel: #00BFFF;           /* les interlignes : le focus, l'accompagnement */
+    --marge: #E03127;          /* le trait de marge : l'alerte, et rien d'autre */
+    --craie: #2FA37A;          /* le vert du second crayon : ce qui règle la vue */
+
+    /* Les fonds tamisés des trois accents : un bouton au repos porte sa
+       couleur sans l'imposer, et la prend pleine au survol. */
+    --roi-doux: rgba(65, 105, 225, .26);
+    --ciel-doux: rgba(0, 191, 255, .22);
+    --craie-doux: rgba(47, 163, 122, .26);
+
+    /* Les gris de texte */
+    --texte: #CBD8E4;
+    --texte-fort: #EAF1F7;
+    --texte-faible: #7C8FA2;
+
+    --r: 7px;
+    --ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "SF Mono", Menlo, "DejaVu Sans Mono", monospace;
+}
+
+@media screen {
+    /* Toute la mécanique des volets suppose une hauteur : sans elle, rien ne
+       déborde, donc rien ne défile. La fenêtre fixe la hauteur, les volets se
+       la partagent, et le défilement revient à l'aperçu et à l'éditeur. */
+    html, body { height: 100%; margin: 0; }
+    body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        font-family: var(--ui);
+        background: var(--ardoise-2);
+    }
+    #toolbar {
+        flex: none;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 14px 14px 9px;
+        background: var(--ardoise);
+        color: var(--texte);
+        border-bottom: 1px solid var(--bord);
+    }
+    #toolbar .groupe button {
+        background: var(--accent);
+        border-color: transparent;
+        color: var(--texte-fort);
+    }
+    #toolbar .groupe button:hover:not(:disabled) {
+        background: var(--plein);
+        color: #fff;
+    }
+    #toolbar button {
+        background: var(--ardoise-3);
+        color: var(--texte);
+        border: 1px solid #3B5067;
+        border-radius: var(--r);
+        padding: 6px 11px;
+        font-size: 13px;
+        font-family: inherit;
+        cursor: pointer;
+        transition: background .12s ease, color .12s ease;
+    }
+    #toolbar button:hover { background: #374C63; color: var(--texte-fort); }
+    #toolbar button:disabled { opacity: .42; cursor: not-allowed; }
+    /* Le focus se voit, partout : c'est le bleu ciel des interlignes. */
+    #toolbar button:focus-visible,
+    #settings :focus-visible,
+    #fermeture button:focus-visible {
+        outline: 2px solid var(--ciel);
+        outline-offset: 2px;
+    }
+    /* Une seule action colorée par écran : celle qui produit le document. */
+    #btn-export {
+        background: var(--roi);
+        border-color: var(--roi);
+        color: #fff;
+        font-weight: 500;
+    }
+    #btn-export:hover { background: #3559C7; color: #fff; }
+    /* Les groupes sont des cartouches, comme les fieldset des réglages : un
+       encadré, et son nom posé sur le filet. Chacun porte sa couleur. */
+    .groupe {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid var(--accent);
+        border-radius: var(--r);
+        padding: 6px 8px 5px;
+        --accent: var(--roi-doux);
+        --plein: var(--roi);
+    }
+    #g-fichier { --accent: var(--roi-doux);   --plein: var(--roi); }
+    #g-edition { --accent: var(--ciel-doux);  --plein: var(--ciel); }
+    #g-vue     { --accent: var(--craie-doux); --plein: var(--craie); }
+    .groupe-nom {
+        position: absolute;
+        top: -7px;
+        left: 9px;
+        padding: 0 5px;
+        background: var(--ardoise);
+        font-size: 10px;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--plein);
+    }
+    /* La marque, à gauche de la barre : le mot docdg posé sur sa réglure. */
+    #marque { display: flex; align-items: center; margin-right: 4px; }
+    /* Un SVG en ligne sans dimension propre vaut 100 % de son conteneur, et
+       non son rapport naturel : la marque les porte donc en attributs, et la
+       feuille s'aligne dessus. */
+    #marque svg { width: 41px; height: 26px; display: block; flex: 0 0 auto; }
+    /* Le document a changé et n'est pas enregistré. */
+    #modifie {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: var(--marge);
+        box-shadow: 0 0 0 3px rgba(224, 49, 39, .18);
+    }
+    #modifie.hidden { display: none; }
+    #echeance {
+        font-size: 12px;
+        color: var(--texte-faible);
+        margin-right: 8px;
+        white-space: nowrap;
+    }
+    #echeance.proche { color: var(--marge); font-weight: 600; }
+    #echeance.hidden { display: none; }
+    #spacer { flex: 1; }
+    #status { font-size: 12px; color: var(--texte-faible); }
+    #settings {
+        flex: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: flex-end;
+        padding: 12px 14px;
+        background: var(--ardoise-2);
+        border-bottom: 1px solid var(--bord);
+        color: var(--texte);
+        font-size: 12px;
+    }
+    #settings.hidden { display: none; }
+    #fermeture {
+        position: fixed;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 50;
+        background: var(--ardoise-2);
+        color: var(--texte-fort);
+        border: 1px solid #33455A;
+        border-top: 3px solid var(--marge);
+        border-radius: var(--r);
+        padding: 18px 22px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    }
+    #fermeture.hidden { display: none; }
+    #fermeture p { margin: 0 0 14px; font-size: 15px; }
+    #fermeture button {
+        margin: 0 5px;
+        min-width: 74px;
+        background: var(--ardoise-3);
+        color: var(--texte);
+        border: 1px solid #3B5067;
+        border-radius: var(--r);
+        padding: 6px 14px;
+        font: inherit;
+        cursor: pointer;
+    }
+    #fermeture #btn-quitter { background: var(--marge); border-color: var(--marge); color: #fff; }
+    #settings fieldset {
+        border: 1px solid #33455A;
+        border-radius: var(--r);
+        display: flex;
+        gap: 8px;
+        margin: 0;
+        padding: 4px 8px 6px;
+    }
+    #settings legend {
+        padding: 0 5px;
+        color: var(--texte-faible);
+        font-size: 10px;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    #settings label { display: flex; flex-direction: column; gap: 2px; }
+    #settings input[type="number"] { width: 62px; }
+    #settings input, #settings select {
+        background: var(--ardoise);
+        color: var(--texte);
+        border: 1px solid #3B5067;
+        border-radius: 5px;
+        padding: 4px 6px;
+        font: inherit;
+    }
+    #settings input[type="number"] { font-family: var(--mono); }
+    #settings input:focus, #settings select:focus { border-color: var(--roi); }
+    #btn-apply {
+        background: var(--roi);
+        color: #fff;
+        border: 1px solid var(--roi);
+        border-radius: var(--r);
+        padding: 6px 14px;
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+        align-self: flex-end;
+    }
+    #btn-apply:hover { background: #3559C7; }
+    #diag {
+        flex: none;
+        display: none;
+        padding: 8px 12px;
+        background: #7A1D18;
+        color: #fff;
+        font: 12px/1.5 var(--mono);
+        border-left: 3px solid var(--marge);
+        white-space: pre-wrap;
+    }
+    #diag.on { display: block; }
+    #panneaux {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: row;
+    }
+    #panneaux[data-disposition="verticale"] { flex-direction: column; }
+    #volet-code {
+        flex: 0 0 var(--part, 40%);
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+    }
+    #volet-apercu {
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    #separateur {
+        flex: 0 0 6px;
+        background: var(--bord);
+        cursor: col-resize;
+        transition: background 0.15s;
+    }
+    #panneaux[data-disposition="verticale"] #separateur { cursor: row-resize; }
+    #separateur:hover, #separateur.actif { background: var(--roi); }
+    #panneaux.sans-code #volet-code, #panneaux.sans-code #separateur { display: none; }
+    #panneaux.sans-apercu #volet-apercu, #panneaux.sans-apercu #separateur { display: none; }
+    #panneaux.sans-apercu #volet-code { flex: 1 1 auto; }
+    /* Un volet affiché porte la couleur pleine de son groupe. */
+    #toolbar .groupe button.actif {
+        background: var(--plein);
+        color: #fff;
+        font-weight: 500;
+    }
+    #sep-toolbar { width: 14px; }
+    #editor {
+        flex: 1 1 auto;
+        width: 100%;
+        box-sizing: border-box;
+        font-family: var(--mono);
+        font-size: 13px;
+        line-height: 1.6;
+        tab-size: 4;
+        resize: none;
+        border: none;
+        outline: none;
+        padding: 10px 14px;
+        background: var(--ardoise);
+        color: var(--texte);
+        /* Repli visuel des lignes trop longues : le retour à la ligne est
+           d'affichage seulement, aucun caractère n'est ajouté au source.
+           `pre-wrap` conserve tabulations et espaces significatifs. */
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    /* Aucune barre de défilement : le trackpad suffit, et rien ne vient
+       ronger la page ni l'éditeur. */
+    #preview-wrapper, #editor { scrollbar-width: none; }
+    #preview-wrapper::-webkit-scrollbar,
+    #editor::-webkit-scrollbar { display: none; }
+
+    #preview-wrapper {
+        background: var(--bureau);
+        flex: 1 1 auto;
+        min-height: 0;
+        min-width: 0;
+        overflow: auto;
+        padding: 20px 0 40px;
+    }
+    #pages {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10mm;
+        transform: scale(var(--zoom, 0.9));
+        transform-origin: top center;
+    }
+    #measure {
+        position: absolute;
+        left: -99999px;
+        top: 0;
+        visibility: hidden;
+        background: var(--papier);
+    }
+}
+
+.page {
+    background: var(--papier);
+    position: relative;
+    overflow: hidden;
+    flex: none;
+}
+.pageno {
+    position: absolute;
+    bottom: 4mm;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 9pt;
+    color: #888;
+}
+@media screen {
+    .page { box-shadow: 0 3px 14px rgba(0, 0, 0, 0.45); }
+}
+
+.sheet, #measure {
+    font-family: Georgia, "Times New Roman", serif;
+    box-sizing: border-box;
+}
+.sheet { width: 100%; height: 100%; overflow: hidden; }
+
+.doc p { margin: 0; text-align: justify; }
+.doc p.alinea-coupe { text-align-last: justify; }
+.doc p.alinea-suite { margin-top: 0; }
+.doc .cadre.cadre-coupe { border-bottom-style: dashed; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.doc .cadre.cadre-suite { border-top-style: dashed; border-top-left-radius: 0; border-top-right-radius: 0; }
+.doc table.tab.tab-suite { margin-top: 0; }
+.doc h2.sec, .doc h3.sec, .doc h4.sec { margin: 1.1em 0 0.5em; }
+.doc h1.sec { font-size: 1.7em; margin: 1.4em 0 0.8em; }
+.doc h2.sec { font-size: 1.35em; }
+.doc h3.sec { font-size: 1.15em; }
+.doc h4.sec { font-size: 1.02em; }
+.doc hr.ligne { border: none; border-top: 0.4mm solid #444; margin: 1em 0; }
+.doc .page-de-titre { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 60%; padding: 12mm 0; }
+.doc .titre-doc { font-size: 2em; font-weight: 700; margin-bottom: 10mm; }
+.doc .auteur-doc { font-size: 1.25em; margin-bottom: 4mm; }
+.doc .institution-doc { font-style: italic; margin-bottom: 4mm; }
+.doc .date-doc { margin-top: 6mm; }
+.doc a.renvoi { color: inherit; text-decoration: none; }
+.doc .renvoi-absent { color: #c01c28; font-weight: 700; }
+.doc .bibliographie { margin: 0.5em 0 1em; }
+.doc .bib-entree { margin: 0 0 1.2mm; padding-left: 9mm; text-indent: -9mm; text-align: justify; }
+.doc .bib-num { font-weight: 700; }
+.doc .cite-sep { margin-right: 0.15em; }
+.doc .cadre { margin: 0 0 1em; }
+.doc .cadre-titre { color: #fff; font-weight: 700; padding: 1.2mm 3mm; }
+.doc .cadre-corps { padding: 2.5mm 3.5mm; }
+.doc .cadre-corps p:last-child { margin-bottom: 0; }
+.doc .cadre-sep { margin: 0 3mm; }
+.doc table.tab { margin: 0 0 1em; border-collapse: collapse; width: 100%; }
+.doc table.tab td { overflow-wrap: break-word; }
+.doc ul.liste, .doc ol.liste { margin: 0 0 1em; padding-left: 7mm; }
+.doc .rangee { margin: 0 0 1em; }
+.doc .rangee .cadre { height: 100%; margin: 0; }
+.doc .grille { margin: 0 0 1em; }
+.doc .toc { margin: 1em 0 1.5em; }
+.doc .toc-title { font-weight: 700; font-size: 1.3em; margin-bottom: 0.6em; }
+.doc .toc-e a { display: flex; align-items: baseline; gap: 6px; color: inherit; text-decoration: none; padding: 1px 0; }
+.doc .toc-e.lvl0 { font-weight: 700; }
+.toc-e.lvl2 { padding-left: 6mm; }
+.doc .toc-e.lvl3 { padding-left: 12mm; }
+.doc .toc-num { min-width: 8mm; }
+.doc .toc-dots { flex: 1; border-bottom: 1px dotted #999; }
+.doc img { max-width: 100%; }
+.doc .ligne-vide { height: 1.3em; }
+.doc .saisie { margin: 0 0 1em; }
+.doc .saisie-champ {
+    font: inherit;
+    color: #4682b4;
+    background: transparent;
+    border: none;
+    border-bottom: 0.35mm dotted #666;
+    outline: none;
+    min-width: 40mm;
+    padding: 0 1mm;
+}
+.doc .saisie-erreur {
+    display: block;
+    color: #dc143c;
+    font-size: 0.85em;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.doc .saisie-erreur.on { opacity: 1; }
+.doc .saisie-faite { margin: 0 0 1em; }
+.doc .saisie-valeur { color: #4682b4; font-weight: 700; cursor: pointer; }
+.notes-pied {
+    position: absolute;
+    left: 0; right: 0; bottom: 8mm;
+    padding: 1mm 15mm 0;
+    border-top: 0.2mm solid #444;
+    font-size: 0.8em;
+}
+.note-ref { font-size: 0.7em; }
+.doc sup { vertical-align: baseline; position: relative; font-size: 0.72em; top: calc(-0.38em * var(--decalage, 1)); }
+.doc sub { vertical-align: baseline; position: relative; font-size: 0.72em; top: calc(0.22em * var(--decalage, 1)); }
+
+.doc .calcul { margin: 0.4em 0 1em; overflow: visible; }
+.doc .katex-display {
+    text-align: inherit !important;
+    margin: 0 !important;
+}
+.doc .katex-display > .katex { text-align: inherit !important; }
+.doc .calcul-prose { margin: 0 0 0.8em; }
+.doc .calcul-prose p { margin: 0 0 0.25em; }
+.doc .calcul-absent {
+    margin: 0 0 0.8em;
+    padding: 1mm 2mm;
+    border-left: 0.8mm solid #b00;
+    background: #fff4f4;
+    color: #900;
+    font-size: 0.85em;
+}
+
+@media print {
+    #toolbar, #volet-code, #separateur, #diag, #measure, #settings, #fermeture { display: none !important; }
+    #panneaux { display: block !important; }
+    #volet-apercu { display: block !important; }
+    html, body {
+        background: #fff;
+        height: auto;
+        overflow: visible;
+        margin: 0;
+        padding: 0;
+    }
+    #preview-wrapper { overflow: visible; padding: 0; min-height: 0; }
+    #pages {
+        display: block;
+        transform: none;
+        gap: 0;
+    }
+    .page {
+        box-shadow: none;
+        break-after: page;
+        page-break-after: always;
+        overflow: hidden;
+        position: relative;
+        background: #fff;
+    }
+    .page:last-child { break-after: auto; page-break-after: auto; }
+    .doc .calcul { overflow: visible; }
+    .doc .saisie-erreur { display: none; }
+    .doc .saisie-valeur { cursor: auto; }
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+.doc table.signes {
+    margin: 0.4em 0 1em;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.doc table.signes { border: 0.3mm solid #000; }
+.doc table.signes th, .doc table.signes td { padding: 0.6mm 2.5mm; }
+.doc table.signes th:first-child {
+    text-align: left;
+    padding-right: 4mm;
+    border-right: 0.3mm solid #000;
+}
+.doc table.signes tr { border-bottom: 0.3mm solid #000; }
+.doc table.signes tr:last-child { border-bottom: none; }
+.doc table.avancement { margin: 2mm auto; }
+.doc table.avancement td, .doc table.avancement th { border: 0.2mm solid #000; text-align: center; }
+.doc table.avancement td:first-child { text-align: left; font-style: italic; }
+.doc table.signes td.var { height: 11mm; }
+.doc table.signes td.haut { vertical-align: top; }
+.doc table.signes td.bas { vertical-align: bottom; }
+.doc .trace { margin: 0.4em 0 1em; }
+.doc .trace svg { width: 100%; max-width: 120mm; height: auto; }
+.doc table.signes td.milieu { vertical-align: middle; }
+
+.doc table.signes td.hachure {
+    background-image: repeating-linear-gradient(
+            45deg, #999 0 0.15mm, transparent 0.15mm 1.2mm);
+}

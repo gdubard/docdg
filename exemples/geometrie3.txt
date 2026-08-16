@@ -1,0 +1,188 @@
+page {
+	orientation: portrait;
+	marges: 2;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.2;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Géométrie — lycée
+
+<h2>Angles
+	L'angle géométrique s'écrit $angle(ABC)$, chapeau compris ; un seul point donne $angle(A)$, trois points nomment l'angle par son sommet du milieu. Un angle droit se lit $angle(ABC) = 90°$.
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Un triangle rectangle} {
+	Dans un triangle $ABC$ rectangle en $B$, l'angle $angle(ABC)$ est
+	l'angle droit, $angle(BAC)$ et $angle(BCA)$ les deux angles aigus.
+}
+
+<h2>Parallèles, perpendiculaires
+	Deux droites parallèles$(AB) parallèle (CD)$, perpendiculaires : $(AB) perpendiculaire (CD)$ et la négation : $(AB) !parallèle (CD)$
+	Deux figures : isométriques : $ABC isométrique A'B'C'$, semblables : $ABC semblable A'B'C'$.
+
+<h2>Distance, milieu
+	La distance entre deux points est $distance(A; B)$, le milieu d'un segment $milieu(A; B)$.
+
+<h2>Composantes
+	En ligne $vecteur u(3;5)$ ou en colonne $vecteur colonne u(3;5)$ ; dans l'espace, $vecteur v(1;2;3)$ et $vecteur colonne v(1;2;3)$.
+
+<h2>Tracer une figure
+	L'unité vaut un centimètre ; les côtés égaux et angles droits se codent avec les marques, les longueurs s'affichent avec l'unité.
+	Un triangle équilatéral de côté 5, codé et mesuré :
+<Trace>le triangle ABC équilatéral, de côté 5 cm, avec les marques
+
+	<page suivante>Un losange, par côté et angle :
+<Trace>le losange ABEF, de côté 4 cm, d'angle 60, avec les mesures
+
+	Un carré, un rectangle, un cercle et un disque :
+<Trace>le carré MNOP, de côté 3 cm, avec les marques
+
+<Trace>le cercle C, de centre (0;0) et de rayon 2 cm
+
+<Trace>le disque D, de centre (0;0) et de rayon 1,5 cm, en bleu ciel
+
+<page suivante h2>Figure libre, sans repère
+	Au collège, on construit sur une figure sans coordonnées : la médiatrice, la bissectrice et la marque d'angle se tracent directement à partir des sommets, dans un bloc <<Trace>> sans repère.
+
+<Trace>{
+	le triangle ABC équilatéral, de côté 5 cm
+	la médiatrice de [AB]
+	la bissectrice de l'angle BAC
+	l'angle ABC
+}
+
+<h2>Le repère
+	Un repère se décrit en toutes lettres, les points posés par <<Soit>> s'y placent d'eux-mêmes, et la médiatrice, la bissectrice ou la marque d'angle s'y tracent en une phrase.
+
+	<Soit>les points A(1;1), B(5;3), C(2;4) et D(4 ; -1)
+
+<Trace>dans un repère où l'abscisse appartient à [-1 ; 6] et l'ordonnée à [-1 ; 5] {
+	la droite (AB)
+	la droite (AC)
+	la médiatrice de [AB]
+	la bissectrice de l'angle BAC
+	l'angle BAC
+	le vecteur w (1;1)
+}
+
+
+
+<h2>Droites, demi-droites et segments
+	Trois figures nomment deux points : le segment s'arrête à ses deux extrémités, la demi-droite part de l'une et continue indéfiniment au-delà de l'autre, la droite ne s'arrête nulle part. Le crochet fermé marque l'extrémité fixe, la parenthèse le côté qui se prolonge :
+
+<Trace>dans un repère où l'abscisse appartient à [-2 ; 6] et l'ordonnée à [-2 ; 6] {
+	la demi-droite [AB)
+	la demi-droite (BC]
+	la droite (AC)
+	le segment de droite [CD]
+}
+
+<h2>Le cercle trigonométrique
+<Trace>le cercle trigonométrique, avec les valeurs
+
+
+<h2>Le repère orthogonal : des unités distinctes
+	Pour une grandeur qui varie vite en ordonnée, on compresse l'axe :
+	<Soit>une fonction p(x) = x^2
+<Représente>graphiquement dans un repère orthogonal (O, i, j) pour x appartient à [-3 ; 3] et y à [-1 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées {
+	la courbe de la fonction p
+	le point S(0 ; 0)
+}
+
+<h2>Le cercle, de centre et de rayon
+<Trace>dans un repère où l'abscisse appartient à [-4 ; 4] et l'ordonnée à [-4 ; 4] {
+	le point O(0 ; 0)
+	le cercle C, de centre (0;0) et de rayon 3
+}
+
+<h2>Géométrie dans l'espace
+<Trace>le solide cube, d'arête 3 cm
+<Trace>le solide pyramide, de base 4 cm et de hauteur 3 cm
+
+<h2>Vecteurs : produits
+	Un vecteur est $vecteur(u)$, sa norme $norme(vecteur(u))$. Le produit scalaire s'écrit en infixe, $vecteur(u) . vecteur(v)$, le produit vectoriel de même, $vecteur(u) ^ vecteur(v)$. Seul un vecteur des deux côtés les déclenche : $vecteur(u)^2$ reste un carré.
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {La norme par le produit scalaire} {
+	$norme(vecteur(u))^2 = vecteur(u) . vecteur(u)$, et deux vecteurs
+	sont orthogonaux quand $vecteur(u) . vecteur(v) = 0$.
+}
+La colinéarité se lit $colinéaires(u; v)$, l'orthogonalité
+$vecteur(u) perpendiculaire vecteur(v)$.
+
+<h2>Repères et symboles
+Un repère du plan est $repère(O; i; j)$, de l'espace $repère(O; i; j; k)$ et l'orthonormé $repère orthonormé(O; i; j)$.
+Les symboles se lisent : un triangle $triangle(ABC)$, un arc $arc(AB)$, un angle droit $angle droit$,, un cercle $cercle(O; r)$ par centre et rayon
+
+<page suivante h2>Vecteurs dans un repère : somme et différence
+	La règle du parallélogramme pour la somme, la règle du triangle pour la différence, sur une même figure :
+<Trace>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5] {
+	le vecteur u (3;1)
+	le vecteur v (1;3)
+	le vecteur u depuis la pointe de v
+	le vecteur v depuis la pointe de u
+	le vecteur u + v
+	le vecteur u - v depuis la pointe de v
+}
+
+<h2>Droites remarquables d'un triangle, dans un repère
+	<Soit>3 points A, B et C de coordonnées respectives (0 ; 0), (6 ; 0) et (2 ; 4)
+<Trace>dans un repère où l'abscisse appartient à [-1 ; 7] et l'ordonnée à [-1 ; 5] {
+	la droite (AB)
+	la droite (BC)
+	la droite (AC)
+	la médiatrice de [AB]
+	la médiatrice de [BC]
+}
+
+Les médiatrices concourent au centre du cercle circonscrit.
+
+<h2>Les racines de l'unité, sommets d'un polygone régulier
+	Les racines cinquièmes de l'unité sont les sommets du pentagone régulier inscrit dans le cercle trigonométrique : <Calcule>les racines cinquièmes de l'unité
+<Trace>le cercle trigonométrique, avec les valeurs
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice et un titre {Le lien algèbre-géométrie} {
+	Les solutions de $z^n = 1$ forment un polygone régulier à $n$
+	sommets : l'équation algébrique dessine la figure.
+}
+
+<h2>Produit scalaire et vecteurs, calculés
+	<Soit>les vecteurs a et b de coordonnées respectives (3 ; -2) et (4 ; 6)
+	<Calcule>le produit scalaire de a et b
+	<Calcule>la norme de a
+	<Calcule>l'angle entre a et b
+	<Soit>les vecteurs r et s de coordonnées respectives (1 ; 2 ; -1) et (2 ; 4 ; -2)
+	<Étudie>la colinéarité de r et s
+
+<page suivante h2>Plans de l'espace
+
+	<Soit>le plan P d'équation 2x + y - z = 3
+
+	<Donne>un vecteur normal de P
+
+	<Calcule>la distance du point (1 ; 2 ; 0) au plan P
+<h1>Le repère de l'espace
+	Un point de l'espace se repère par trois coordonnées $(x ; y ; z)$. Le chemin en pointillés rouges suit les coordonnées depuis l'origine.
+<Soit>les points A(1;2;3) et B(3;1;2)
+<Trace>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
+
+<h2>Une figure de l'espace
+<Soit>les points E(2;0;0), F(2;3;0) et G(0;3;2)
+<Trace>dans un repère de l'espace les points E, F et G, les segments [EF] et [FG]
+
+<h1>Géométrie analytique de l'espace
+<Soit>le plan P d'équation 2x + y - z = 3
+<Donne>le vecteur normal du plan P
+<Calcule>la distance du point (1 ; 2 ; 0) au plan P
+
+<h2>Les droites de l'espace
+<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>la droite d' passant par B(0;1;3) et de vecteur directeur v(2;2;-2)
+<Donne>une représentation paramétrique de la droite d
+<Trace>dans un repère de l'espace le point A et la droite d
+
+<page suivante h2>Les positions relatives, rédigées
+<Étudie>la position relative des droites d et d'
+<Soit>le plan R d'équation x - y + z = 0
+<Étudie>la position relative de la droite d et du plan R
+<Soit>le plan Q d'équation 4x + 2y - 2z = 6
+<Étudie>la position relative des plans P et Q
+<Étudie>la position relative des plans P et R
