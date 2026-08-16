@@ -1,0 +1,32 @@
+page {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1.3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Géométrie — supérieur
+
+
+<h2>Vocabulaire du supérieur
+
+Le produit scalaire abstrait est $produit scalaire(u; v)$, l'orthogonal d'un sous-espace $orthogonal(F)$, la projection orthogonale
+$projeté orthogonal(F; x)$ et le produit mixte $produit mixte(u; v; w)$.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {L'inégalité de Cauchy-Schwarz} {
+	$valeur absolue(vecteur(u) . vecteur(v)) <= norme(vecteur(u)) norme(vecteur(v))$,
+	avec égalité exactement quand $colinéaires(u; v)$.
+}
+
+<h2>Espaces préhilbertiens : Gram-Schmidt et projection
+
+<Soit>les vecteurs e et f de coordonnées respectives (1 ; 1 ; 0) et (1 ; 0 ; 1)
+
+<Orthonormalise>la famille e et f
+
+<Soit>les vecteurs g et h de coordonnées respectives (2 ; 1) et (1 ; 1)
+
+<Calcule>le projeté orthogonal de g sur h
