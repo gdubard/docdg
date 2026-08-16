@@ -1075,7 +1075,7 @@ Pour tracer un élément isolé, sans ouvrir un repère complet :
 
 ```docdg
 <Soit>un point A(2;-1,5)
-<Trace>le point A                    % A doit avoir été défini au préalable (ex. via <Soit>)
+<Place>le point A                    % A doit avoir été défini au préalable (ex. via <Soit>)
 <Place>un point B(3 ; 1)             % place B : le déclare et le marque
 <Place>les points A, B et C tels que AB = 5 cm, BC = 4 cm et AC = 3 cm
 <Trace>la droite (AB)
@@ -2920,7 +2920,7 @@ Quand docdg rencontre une faute, il l'annonce **en français**, en désignant la
 
 | **Ce que vous écrivez**              | **Message docdg**                                              |
 | ------------------------------------ | ----------------------------------------------------------------- |
-| `<Trace>le point A` sans avoir défini A | *Le point A n'a pas été défini. Déclarez-le d'abord avec `<Soit>un point A(...)`.* |
+| `<Place>le point A` sans avoir défini A | *Le point A n'a pas été défini. Déclarez-le d'abord avec `<Soit>un point A(...)`.* |
 | `<Représente>graphiquement la fonction f` sans `<Soit>une fonction f` | *La fonction f n'a pas été déclarée.*                     |
 | `Soit titre = ...` (majuscule pour une assignation) | *« Soit » avec majuscule est une action-phrase. Pour une assignation, écrivez `soit` en minuscule.* |
 | `<Affiche>un cadre{...` (accolade non refermée) | *Accolade ouverte à la ligne N jamais refermée.*                  |
