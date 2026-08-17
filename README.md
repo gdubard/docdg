@@ -57,40 +57,41 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 2. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
 3. [Fonctionnalités clés](#-fonctionnalités-clés)
 4. [Pourquoi docdg ?](#-pourquoi-docdg-)
-5. [Ce dont vous avez besoin](#-ce-dont-vous-avez-besoin)
+5. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
 6. [Premiers documents](#-premiers-documents)
 7. [La syntaxe](#-la-syntaxe)
 8. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
-9. [Les actions](#-les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
+9. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
 10. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
-11. [Les saisies interactives](#-les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
+11. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
 12. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
 13. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
 14. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
 15. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
 16. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
 17. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
-18. [Les groupes](#-les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
+18. [Les groupes](#les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
 19. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
 20. [Les mathématiques](#-les-mathématiques)
 21. [La géométrie](#-la-géométrie)
 22. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
 23. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-24. [L'écriture sur des lignes](#-lécriture-sur-des-lignes) — la réglure Seyès et la cursive, pour l'école élémentaire
-24. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
-25. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
-26. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
-27. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-28. [La frise chronologique](#-la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
-29. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
-30. [Les exemples, par niveau](#-les-exemples-par-niveau)
-31. [Les documents complexes](#-les-documents-complexes)
-32. [Référence complète](#-référence-complète) — couleurs et options de classe
-33. [Bonnes pratiques](#-bonnes-pratiques)
+24. [L'écriture sur des lignes](#lecriture-sur-des-lignes) — la réglure Seyès et la cursive, pour l'école élémentaire
+25. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
+26. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
+27. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
+28. [La physique-chimie](#la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+29. [La frise chronologique](#la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
+30. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
+31. [Les exemples, par niveau](#les-exemples-par-niveau)
+32. [Les documents complexes](#-les-documents-complexes)
+33. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
+34. [Référence complète](#-référence-complète) — couleurs et options de classe
+35. [Bonnes pratiques](#-bonnes-pratiques)
+36. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy et SciPy : ce que débloque le second moteur
+37. [Les tournures et le placement](#les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
-
-> 🌱 **docdg couvre le programme de mathématiques du CP à la L3.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes), les classes préparatoires (MPSI/MP) et les deux premières années de licence (surfaces, plan complexe, groupes, probabilités continues) s'écrivent chacun en une phrase — et depuis la 2.0, le document peut interroger son lecteur et se recomposer avec ses réponses. La 2.1 fait entrer **la physique-chimie**, la 2.2 **la publication longue** (chapitres, page de titre, renvois croisés, bibliographie). Le projet reste actif : voir le [Journal des versions](CHANGELOG.md) pour l'historique.
 
 ---
 
@@ -184,6 +185,8 @@ De nombreux utilisateurs rédigent aujourd'hui leurs documents à l'aide de **tr
 
 
 ---
+
+<a id="ce-dont-vous-avez-besoin"></a>
 
 ## **🛠️ Ce dont vous avez besoin**
 
@@ -893,6 +896,8 @@ La base ne contient **que** ce qu'aucun outil ne sait faire : une idée, une con
 
 L'énoncé est reconnu après normalisation — accents, mathématiques et ponctuation n'y font rien. Un raisonnement précisé dans la balise l'emporte sur celui de la fiche, et un énoncé absent fait proposer les plus proches. La base vit dans `transpiler/src/maths/demonstrations.json` et suit les versions du logiciel : chaque fiche porte son identifiant, ses clés, son niveau, son raisonnement et son corps **en docdg**.
 
+<a id="les-actions"></a>
+
 ## **✏️ Les actions**
 
 ### **`<Soit>` — Poser des hypothèses de départ**
@@ -1216,6 +1221,8 @@ Chaque courbe reçoit sa couleur et son nom en étiquette. Trois proses équival
 - **`avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées`** est la forme longue, chaque axe nommé en toutes lettres, de `avec des unités respectives de 1,5 cm et 0,5 cm` — l'ordre des axes peut être inversé, les valeurs se remettent d'elles-mêmes dans le bon ordre.
 
 ---
+
+<a id="les-saisies-interactives"></a>
 
 ## **🖊️ Les saisies interactives**
 
@@ -1890,6 +1897,8 @@ L'image d'un quadrillage montre la géométrie de la transformation — les deux
 
 ---
 
+<a id="les-groupes"></a>
+
 ## **⚙️ Les groupes**
 
 ```docdg
@@ -2338,6 +2347,8 @@ soit notes = {
 
 ---
 
+<a id="lecriture-sur-des-lignes"></a>
+
 ## **✏️ L'écriture sur des lignes**
 
 > La réglure Seyès de l'école élémentaire, et de la vraie cursive dessus — modèles d'écriture, lignes à recopier, fiches de copie.
@@ -2671,6 +2682,8 @@ Le pont vers la physique : séries de Fourier tronquées à l'ordre voulu, trans
 
 ---
 
+<a id="la-physique-chimie"></a>
+
 ## **⚗️ La physique-chimie**
 
 Nouveauté de docdg 2.1, du lycée à la licence. **La chimie se calcule en Rust pur**, sans passer par SymPy — d'où un rendu instantané.
@@ -2736,6 +2749,8 @@ Sans valeurs, seule la formule symbolique est composée.
 Ces formes définissent le champ sur place ; la forme sur fonction déclarée (`<Calcule>le gradient de psi`, après un `<Soit>`) reste disponible.
 
 ---
+
+<a id="la-frise-chronologique"></a>
 
 ## **🕰️ La frise chronologique**
 
@@ -2904,6 +2919,8 @@ Une suite de mots **en majuscules** dans une balise de style désigne une police
 La convention vaut en début de ligne, en milieu de paragraphe, et dans les styles nommés (`soit manuscrit = <SCHOLA italique>`).
 
 ---
+
+<a id="les-exemples-par-niveau"></a>
 
 ## **🗂️ Les exemples, par niveau**
 
@@ -3239,6 +3256,8 @@ matrice n'est pas diagonalisable.
 Les lois reconnues : `normale(m ; s)`, `binomiale(n ; p)`,
 `poisson(l)`, `uniforme(a ; b)`, `exponentielle(l)` (paramètre λ, à la
 française), `student(k)`, `khi-deux(k)`.
+
+<a id="les-tournures-et-le-placement"></a>
 
 ## **🖋️ Les tournures et le placement**
 
