@@ -1,8 +1,8 @@
 page {
 	orientation: portrait;
-	marges: 5;
+	marges: 4;
 	espacements: 2;
-	taille: 11;
+	taille: 10;
 	interligne: 1.4;
 }
 soit h1 = <bleu marine gras section num>

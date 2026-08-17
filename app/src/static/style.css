@@ -12,7 +12,15 @@
     --ardoise: #16202B;        /* l'éditeur, le châssis */
     --ardoise-2: #22303F;      /* les panneaux posés dessus */
     --ardoise-3: #2C3E51;      /* les boutons au repos */
-    --bureau: #E7EDF3;         /* le fond sur lequel la page repose */
+    /* La saisie est une surface, pas un trou : un cran plus sombre que le
+       châssis qui l'entoure, cernée d'un trait franc mais calme. C'est ce
+       qui lui donne un bord — sans elle, l'éditeur et la barre d'outils
+       portaient la même couleur et la frontière disparaissait. */
+    --saisie: #131D28;         /* l'ardoise sur laquelle on écrit */
+    --saisie-bord: #33475D;    /* son cadre au repos */
+    /* Le fond sur lequel la page repose. Sombre, comme la saisie : la page
+       blanche s'y détache seule, et le hors-page cesse de tirer l'œil. */
+    --bureau: #131D28;
     --papier: #FFFFFF;         /* la page, et elle seule */
     --bord: #0D141C;
 
@@ -253,13 +261,46 @@
         min-width: 0;
         min-height: 0;
         display: flex;
+        /* Le volet est le châssis, l'éditeur la surface : le liseré de
+           châssis qui dépasse tout autour donne son bord à la saisie. */
+        position: relative;
+        box-sizing: border-box;
+        background: var(--ardoise-2);
+        padding: 9px;
     }
+    /* L'étiquette d'un volet, à la manière des cartouches de la barre : la
+       zone se nomme, donc elle se repère. */
+    #volet-code > label[for="editor"],
+    #volet-apercu > .volet-nom {
+        position: absolute;
+        top: 2px;
+        left: 18px;
+        padding: 0 5px;
+        background: var(--ardoise-2);
+        font-size: 10px;
+        letter-spacing: .09em;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: var(--texte-faible);
+        pointer-events: none;
+        z-index: 1;
+    }
+    /* L'aperçu porte le même cadre que la saisie : deux zones nommées, de
+       part et d'autre du séparateur. */
     #volet-apercu {
         flex: 1 1 auto;
         min-width: 0;
         min-height: 0;
         display: flex;
         flex-direction: column;
+        position: relative;
+        box-sizing: border-box;
+        background: var(--ardoise-2);
+        padding: 9px;
+    }
+    #preview-wrapper {
+        border: 1px solid var(--saisie-bord);
+        border-radius: var(--r);
     }
     #separateur {
         flex: 0 0 6px;
@@ -288,11 +329,16 @@
         line-height: 1.6;
         tab-size: 4;
         resize: none;
-        border: none;
         outline: none;
-        padding: 10px 14px;
-        background: var(--ardoise);
+        padding: 12px 14px;
+        background: var(--saisie);
         color: var(--texte);
+        border: 1px solid var(--saisie-bord);
+        border-radius: var(--r);
+        /* Le curseur prend la couleur du focus, la sélection celle de
+           l'action : deux repères de plus, aucun bruit en plus. */
+        caret-color: var(--ciel);
+        transition: border-color .15s, box-shadow .15s;
         /* Repli visuel des lignes trop longues : le retour à la ligne est
            d'affichage seulement, aucun caractère n'est ajouté au source.
            `pre-wrap` conserve tabulations et espaces significatifs. */
@@ -301,6 +347,14 @@
         overflow-x: hidden;
         overflow-y: auto;
     }
+    /* La saisie active se signale par son cadre, non par un halo criard :
+       le bleu ciel du focus, doublé d'un liseré tamisé. */
+    #editor:focus {
+        border-color: var(--ciel);
+        box-shadow: 0 0 0 2px var(--ciel-doux);
+    }
+    #editor::selection { background: var(--roi-doux); }
+    #editor::placeholder { color: var(--texte-faible); }
     /* Aucune barre de défilement : le trackpad suffit, et rien ne vient
        ronger la page ni l'éditeur. */
     #preview-wrapper, #editor { scrollbar-width: none; }
@@ -318,10 +372,15 @@
     #pages {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        /* `safe center` : une page plus large que la vue cesse d'être centrée
+           plutôt que de déborder des deux côtés — sans quoi sa partie gauche
+           devient inatteignable au défilement. */
+        align-items: safe center;
         gap: 10mm;
-        transform: scale(var(--zoom, 0.9));
-        transform-origin: top center;
+        /* `zoom` plutôt qu'une transformation d'échelle : il entre dans la
+           mise en page, donc le conteneur grandit avec lui et le défilement
+           suit — horizontalement comme verticalement. */
+        zoom: var(--zoom, 0.9);
     }
     #measure {
         position: absolute;
@@ -461,10 +520,13 @@
         margin: 0;
         padding: 0;
     }
-    #preview-wrapper { overflow: visible; padding: 0; min-height: 0; }
+    #preview-wrapper { overflow: visible; padding: 0; min-height: 0; border: none; border-radius: 0; background: none; }
+    #volet-apercu { padding: 0; background: none; }
+    #volet-apercu > .volet-nom { display: none; }
     #pages {
         display: block;
         transform: none;
+        zoom: 1;
         gap: 0;
     }
     .page {
@@ -507,6 +569,10 @@
 .doc table.signes td.bas { vertical-align: bottom; }
 .doc .trace { margin: 0.4em 0 1em; }
 .doc .trace svg { width: 100%; max-width: 120mm; height: auto; }
+/* La frise n'est pas une figure : elle occupe toute la largeur utile de la
+   page, portrait ou paysage. */
+.doc .trace.frise { margin: 0.6em 0 1.2em; }
+.doc .trace.frise svg { width: 100%; max-width: none; }
 .doc table.signes td.milieu { vertical-align: middle; }
 
 .doc table.signes td.hachure {

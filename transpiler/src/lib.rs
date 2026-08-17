@@ -38,6 +38,9 @@ pub struct Env {
     pub etudiees: std::collections::BTreeSet<String>,
     pub textes: BTreeMap<String, String>,
     pub saisies: BTreeMap<String, String>,
+    /// Les compteurs des environnements numérotés, un par genre
+    /// (« théorème », « définition »…), remis à zéro au chapitre.
+    pub environnements: BTreeMap<String, u32>,
 
     pub conteneurs: Arc<BTreeMap<String, langage::conteneurs::Boite>>,
     pub fonctions: Arc<langage::fonctions::Fonctions>,
@@ -58,6 +61,7 @@ impl Hash for Env {
         self.etudiees.hash(h);
         self.textes.hash(h);
         self.saisies.hash(h);
+        self.environnements.hash(h);
         for (nom, boite) in self.conteneurs.iter() {
             nom.hash(h);
             langage::conteneurs::empreinte_boite(boite, h);
@@ -460,6 +464,10 @@ impl Engine {
                 entree.generation = generation;
             }
         }
+        // Purge générationnelle assumée : au plafond, seuls les segments du
+        // rendu courant survivent. Brutal mais juste — les segments des
+        // documents fermés ne reviendront pas, et ceux du document ouvert
+        // viennent d'être marqués à la génération courante.
         if self.cache.len() > CACHE_MAX {
             self.cache.retain(|_, e| e.generation == generation);
         }
@@ -524,6 +532,10 @@ impl Engine {
             html.insert_str(0, &layout::ecriture::feuille_de_style());
         }
 
+        if html.contains(layout::environnements::CLASSE) {
+            html.insert_str(0, &layout::environnements::feuille_de_style());
+        }
+
         RenderResult { page, html }
     }
 }
@@ -546,6 +558,7 @@ mod invariant {
         ("geometrie3", include_str!("../../exemples/geometrie3.txt")),
         ("geometrie4", include_str!("../../exemples/geometrie4.txt")),
         ("factorisation", include_str!("../../exemples/factorisation.txt")),
+        ("publication4", include_str!("../../exemples/publication4.txt")),
         ("stat2", include_str!("../../exemples/statistiques-probabilites2.txt")),
         ("stat3", include_str!("../../exemples/statistiques-probabilites3.txt")),
         ("stat4", include_str!("../../exemples/statistiques-probabilites4.txt")),
@@ -607,5 +620,30 @@ fn sur_corpus(mut visite: impl FnMut(&str, usize, &str, &mut Env)) {
             "scan_env diverge de render_segment : {:?}",
             fautes
         );
+    }
+
+    #[test]
+    fn le_corps_d_un_enonce_est_une_citation_pour_le_cache_aussi() {
+        // Le piège que le corpus ne tend pas : une déclaration <Soit> et une
+        // preuve à l'intérieur d'un énoncé. Le rendu la voit, le scan non —
+        // l'accord ne tient que si le corps se rend sur une copie.
+        let src = "<Énonce>le théorème {\nUn énoncé avec sa fonction.\n\n<Soit>une fonction f(x) = x^2\n\ndémonstration {\n<Soit>une fonction g(x) = x\nLa preuve déclare aussi.\n}\n}\n\n\tLa suite du document.\n";
+        let pre = preprocess(src);
+        let (_, body) = layout::rendu::parse_page(&pre);
+        let mut env = Env::default();
+        layout::rendu::collecte_donnees(&body, &mut env);
+        for (i, seg) in segments(&body).iter().enumerate() {
+            let mut predit = env.clone();
+            layout::rendu::scan_env(seg, &mut predit);
+            let mut rendu = env.clone();
+            let _ = layout::rendu::render_segment(seg, &mut rendu);
+            assert!(
+                predit == rendu,
+                "scan et rendu divergent au segment {} : {}",
+                i,
+                seg
+            );
+            env = predit;
+        }
     }
 }

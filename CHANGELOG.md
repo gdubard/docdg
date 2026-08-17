@@ -4,6 +4,125 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
+## 2.7 — les énoncés numérotés et l'histoire
+
+### Ajouté
+
+**Les environnements numérotés.** Le théorème, la proposition, la propriété,
+le lemme, le corollaire, la définition, l'exemple et la remarque s'énoncent :
+
+```
+<Énonce>le théorème de Pythagore <étiquette>{pythagore} {
+Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme
+des carrés des deux autres côtés.
+}
+```
+
+Le titre se compose en vedette — « **Théorème 3.2 (Pythagore).** » — et le
+corps le suit, en italique pour les énoncés, en romain pour les définitions,
+les exemples et les remarques. Chaque genre tient son compteur, remis à zéro
+au chapitre, qui préfixe les numéros comme il le fait des sections. Rien
+d'inventé : l'étiquette et le renvoi sont ceux du document long, le style du
+titre se configure comme celui d'une section (`soit théorème = <bleu nuit
+petites capitales>`).
+
+**La preuve loge dans l'énoncé.** Un sous-bloc `démonstration { … }` se
+compose en vedette — *Démonstration.* — en romain sous l'énoncé en italique,
+et se referme d'un tombeau. Avec un raisonnement, c'est la machinerie de
+`<Montre>` qui rédige : `démonstration par récurrence que … {
+initialisation{…} hérédité{…} }` déroule le squelette complet, étapes
+nommées et conclusion comprises, et les dix raisonnements s'écrivent tels
+quels. Quand l'énoncé tient en une phrase, la propriété à démontrer peut se
+taire : la démonstration la lit dans l'énoncé lui-même.
+
+**L'énoncé est une citation.** Ce qui s'y déclare y demeure : un `<Soit>`
+posé dans un théorème n'existe plus après lui. C'est aussi ce qui permet au
+cache incrémental de prédire le rendu sans lire les corps — l'invariant est
+prouvé par un test dédié.
+
+Le document d'exemple `publication4` montre l'ensemble en situation.
+Dix genres s'énoncent : théorème, proposition, propriété, lemme,
+corollaire, axiome, conjecture, définition, exemple, remarque.
+
+**La frise chronologique — l'histoire entre en scène.** Une vraie frise,
+non une ligne du temps : un bandeau gradué en années rondes que referme
+une grande pointe, les périodes à l'intérieur avec leur nom et leurs
+bornes, les événements à l'extérieur en cartouches reliés à leur date.
+Une ligne par événement — la date, deux-points, le titre, et, s'il
+éclaire, le détail entre parenthèses — et la frise prend toute la largeur
+utile de la page, portrait ou paysage.
+
+Les bornes d'une période s'écrivent de quatre façons au choix,
+`de 1789 à 1799` comme `1789 - 1799`, `1789 -- 1799` ou `1789 — 1799`.
+Les périodes qui se suivent se touchent sans se gêner, celles qui se
+chevauchent se partagent la hauteur du bandeau, et celles qui sont trop
+étroites pour se nommer dedans se nomment dans un cartouche.
+
+Les cartouches se rangent d'eux-mêmes dans l'ordre du temps et ne se
+chevauchent jamais : ils se répartissent de part et d'autre du bandeau,
+en alternance le long du temps, et s'étagent sur autant de rangées qu'il
+faut de chaque côté. Rien n'est jamais barré — les traits de rappel se
+tracent tous avant les cartouches, qui sont opaques, et les verticales de
+la graduation s'interrompent devant chaque cartouche comme devant chaque
+bandeau, ne subsistant que dans les espaces libres.
+
+La date se lit en `AAAA`, `MM/AAAA` ou `JJ/MM/AAAA`, l'année négative est
+admise — l'Antiquité s'écrit `-52 : Alésia` — et « vers » dit
+l'incertitude des sources. La date s'imprime telle qu'elle s'est écrite,
+et la légende reprend ce qui suit « la frise chronologique ».
+
+**La frise multilinéaire.** Une bande nommée s'ouvre d'un `politique {`
+— le deux-points se tolère, `Vie politique: {` — et se referme d'une
+accolade seule ; elle porte son nom dans la marge, ses périodes dans son
+bandeau et ses cartouches de part et d'autre, dans sa couleur. Toutes les bandes partagent la même échelle du temps : ce qui
+est simultané se lit dans une même verticale, et deux découpages
+concurrents se confrontent d'un coup d'œil.
+
+Les documents d'exemple suivent les niveaux du programme : `histoire2`
+(collège — frise linéaire, frise par périodes), `histoire3` (lycée —
+frise thématique et multilinéaire, périodisation des régimes) et
+`histoire4` (supérieur — les trois temps de Braudel, deux périodisations
+concurrentes en regard).
+
+### Corrigé
+
+**Le manuel annonçait une durée d'essai périmée.** Il parlait encore de
+quatre-vingt-dix jours quand le moteur en accorde trois cent soixante-cinq
+depuis la 2.6.
+
+**Le document zoomé se laissait mal atteindre.** L'aperçu changeait
+d'échelle par une transformation, qui peint plus grand sans rien changer
+à la boîte de mise en page : une compensation manuelle rattrapait la
+hauteur, rien ne rattrapait la largeur, et le centrage rendait la partie
+gauche d'une page trop large inatteignable. Le zoom passe par la
+propriété du même nom, qui entre dans la mise en page, et le centrage
+cède au bord dès que la page déborde.
+
+**Les deux volets n'avaient pas de bord.** L'éditeur portait exactement
+la couleur de la barre d'outils : il devient une surface encadrée, posée
+sur son châssis, nommée « Source » dans son coin, et son cadre prend la
+couleur du focus quand on y écrit. L'aperçu reçoit le même cadre et le
+même cartouche, « Aperçu » — deux zones nommées de part et d'autre du
+séparateur ; l'impression, elle, n'en garde rien. Le fond de l'aperçu
+passe au sombre, comme celui de la saisie : la page blanche s'y détache
+seule, et le hors-page cesse de tirer l'œil.
+
+**La CI rejouait le banc d'essai sans le regarder.** L'étape de
+non-régression appelait un binaire ambigu — trois binaires, pas de
+`default-run` — et, une fois désambiguïsée, aurait appelé celui qui ne
+vérifie aucun plafond. Elle exécute désormais `froid_chaud`, qui mesure en
+médianes et sort en erreur au dépassement.
+
+**Le calcul formel ne peut plus geler le rendu.** Une requête au moteur
+SymPy est désormais bornée dans le temps — vingt secondes par défaut,
+`DOCDG_DELAI_CAS` pour ajuster. Au-delà, l'ouvrier perdu dans son
+exploration est tué et remplacé, et l'erreur s'affiche dans le document
+comme toute autre.
+
+**La version minimale de Rust est déclarée.** `rust-version = "1.79"`,
+vérifiée : le transpileur compile tel quel avec la 1.79, et les dépendances
+de l'application déclarent toutes un plancher inférieur.
+
 ## 2.6
 
 ### Ajouté

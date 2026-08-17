@@ -1,4 +1,4 @@
-# *docdg 2.6*
+# *docdg 2.7*
 
 **docdg** is a Rust document class built around a French-only prose
 tag language (no anglicisms). Users write a single `.docdg` file where every
@@ -19,7 +19,7 @@ cross-references, bibliography).
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-2.6-2980b9?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.7-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![License](https://img.shields.io/badge/license-GPL_v3+-8e44ad?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
@@ -54,7 +54,7 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 ## **📚 Sommaire détaillé**
 
 1. [Qu'est-ce que docdg ?](#-quest-ce-que-docdg-)
-2. [Ce que la 2.6 apporte](#-ce-que-la-25-apporte) — rédaction du supérieur, démonstrations, terme des versions
+2. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
 3. [Fonctionnalités clés](#-fonctionnalités-clés)
 4. [Pourquoi docdg ?](#-pourquoi-docdg-)
 5. [Ce dont vous avez besoin](#-ce-dont-vous-avez-besoin)
@@ -81,16 +81,16 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 25. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
 26. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
 27. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-28. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
-29. [Les exemples, par niveau](#-les-exemples-par-niveau)
-30. [Les documents complexes](#-les-documents-complexes)
-31. [Référence complète](#-référence-complète) — couleurs et options de classe
-32. [Bonnes pratiques](#-bonnes-pratiques)
-33. [Feuille de route](#-feuille-de-route) — ce que prépare la prochaine version
+28. [La frise chronologique](#-la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
+29. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
+30. [Les exemples, par niveau](#-les-exemples-par-niveau)
+31. [Les documents complexes](#-les-documents-complexes)
+32. [Référence complète](#-référence-complète) — couleurs et options de classe
+33. [Bonnes pratiques](#-bonnes-pratiques)
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
-> 🌱 **docdg couvre le programme de mathématiques du CP à la L3.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes), les classes préparatoires (MPSI/MP) et les deux premières années de licence (surfaces, plan complexe, groupes, probabilités continues) s'écrivent chacun en une phrase — et depuis la 2.0, le document peut interroger son lecteur et se recomposer avec ses réponses. La 2.1 fait entrer **la physique-chimie**, la 2.2 **la publication longue** (chapitres, page de titre, renvois croisés, bibliographie). Le projet reste actif. Voir le chapitre [Feuille de route](#-feuille-de-route) pour le détail, et le [Journal des versions](CHANGELOG.md) pour l'historique.
+> 🌱 **docdg couvre le programme de mathématiques du CP à la L3.** Les rédactions types du collège (Pythagore, Thalès, trigonométrie, proportionnalité, transformations du plan), le programme complet du lycée (spécialité et maths expertes), les classes préparatoires (MPSI/MP) et les deux premières années de licence (surfaces, plan complexe, groupes, probabilités continues) s'écrivent chacun en une phrase — et depuis la 2.0, le document peut interroger son lecteur et se recomposer avec ses réponses. La 2.1 fait entrer **la physique-chimie**, la 2.2 **la publication longue** (chapitres, page de titre, renvois croisés, bibliographie). Le projet reste actif : voir le [Journal des versions](CHANGELOG.md) pour l'historique.
 
 ---
 
@@ -132,13 +132,19 @@ Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C
 
 ---
 
-## **🆕 Ce que la 2.6 apporte**
+## **🆕 Ce que la 2.7 apporte**
+
+**Les environnements numérotés.** Théorème, proposition, propriété, lemme, corollaire, axiome, conjecture, définition, exemple, remarque : dix genres s'énoncent, se numérotent tout seuls, se renvoient l'un à l'autre — et la preuve loge dans l'énoncé, où la machinerie des démonstrations la rédige.
+
+**La frise chronologique.** L'histoire entre dans docdg : un bandeau gradué que referme une grande pointe, les périodes à l'intérieur, les événements à l'extérieur en cartouches reliés à leur date, et des bandes nommées qui partagent la même échelle du temps pour donner à voir la simultanéité. Trois documents suivent les niveaux du programme, du collège au supérieur.
+
+La **2.6** avait apporté ce qui suit, et qui demeure.
 
 **La rédaction du supérieur.** Le vocabulaire et la syntaxe des énoncés ont été repris pour coller à ce qu'attendent les enseignants de mathématiques du supérieur. Le travail ne s'est pas fait au jugé : six ouvrages de référence — 2,1 millions de mots — ont été dépouillés. L'ordre nom-nature de la déclaration y est unanime, 777 occurrences contre 15, chez les six auteurs sans exception. docdg écrit désormais « Soit *f* la fonction définie par *f*(*x*) = … » et non « Soit une fonction *f*(*x*) = … », en phrases plutôt qu'en formules enveloppant du texte.
 
 **Les démonstrations.** Dix raisonnements — direct, contraposée, absurde, récurrence, disjonction de cas, analyse-synthèse, double inclusion, élément quelconque, principe des tiroirs, existence et unicité — chacun avec sa charpente : l'annonce, les étapes étiquetées, la conclusion quand la logique l'exige. Le moteur fournit la charpente, vous écrivez les mathématiques. Et lorsque l'énoncé est à sa portée, il démontre seul : par le **calcul formel** (SymPy, SciPy) quand il s'agit de vérifier une identité ou une inégalité, par une **bibliothèque de plus de cent démonstrations types** quand il s'agit d'une idée que rien ne calcule. Une formule fausse est refusée avec sa raison — le moteur ne démontre pas un mensonge.
 
-**Chaque version a un terme.** docdg reste gratuit, mais une installation est valable 90 jours ; la barre d'outils affiche les jours restants. Vos documents ne sont pas affectés — ce sont vos fichiers, sur votre disque.
+**Chaque version a un terme.** docdg reste gratuit, mais une installation est valable un an ; la barre d'outils affiche les jours restants. Vos documents ne sont pas affectés — ce sont vos fichiers, sur votre disque.
 
 ## **✨ Fonctionnalités clés**
 
@@ -2731,6 +2737,56 @@ Ces formes définissent le champ sur place ; la forme sur fonction déclarée (`
 
 ---
 
+## **🕰️ La frise chronologique**
+
+L'histoire entre en scène — et c'est une vraie frise, non une ligne du temps : un **bandeau** gradué, les **périodes dedans**, les **événements dehors** en cartouches reliés à leur date. Une ligne par événement : la date, deux-points, le titre, et, s'il éclaire, le détail **entre parenthèses** en fin de ligne.
+
+```docdg
+<Construis>la frise chronologique du second XXe siècle {
+09/11/1989 : Chute du mur de Berlin
+20/07/1969 : Premier pas sur la Lune (Neil Armstrong marche sur la Lune.)
+12/07/1998 : Victoire en Coupe du monde (La France remporte sa première étoile.)
+}
+```
+
+**Le bandeau se referme sur une grande pointe** : le temps ne s'arrête pas au bord de la feuille. La frise occupe **toute la largeur utile** de la page, portrait ou paysage.
+
+**L'échelle du temps est graduée** en années rondes, le pas s'ajustant à l'étendue — de l'année au millénaire. Ses verticales descendent d'un bandeau à l'autre : ce qui tombe dans la même colonne est simultané.
+
+Les cartouches **se rangent d'eux-mêmes dans l'ordre du temps**, quelle que soit la saisie, et **ne se chevauchent jamais** : ils se répartissent **de part et d'autre du bandeau**, en alternance le long du temps, et s'étagent sur autant de rangées qu'il faut de chaque côté, un trait de rappel reliant chacun à sa date. **Rien n'est jamais barré** : les traits se tracent tous avant les cartouches, qui sont opaques, et les verticales de la graduation s'interrompent devant chaque cartouche comme devant chaque bandeau — elles ne subsistent que dans les espaces libres, ce qui suffit à faire lire la colonne sans traverser ce qu'on regarde.
+
+La date se lit en `AAAA`, `MM/AAAA` ou `JJ/MM/AAAA` ; **l'année négative est admise** — l'Antiquité s'écrit `-52 : Alésia` — et `vers` dit l'incertitude des sources sans gêner le placement : la date s'imprime toujours telle qu'elle s'est écrite. Ce qui suit « la frise chronologique » dans la description devient la légende, sous la frise. Un long détail se replie de lui-même sur deux ou trois lignes courtes. La parenthèse s'apparie depuis la fin de la ligne : une parenthèse *dans* la description ne trompe pas la lecture, et une ligne entièrement parenthésée reste un titre.
+
+**Une période est un événement qui dure.** Ses deux dates s'écrivent `de 1914 à 1918`, `1789 - 1799`, `1914 -- 1918` ou `1914 — 1918`, au choix — le tiret simple demande seulement de respirer, pour ne pas se confondre avec le signe d'une année négative —, et elle occupe **l'intérieur du bandeau**, avec son nom, ses bornes et sa description si la place le permet. Les périodes qui se suivent se touchent sans se gêner ; celles qui se chevauchent se partagent la hauteur du bandeau ; celles qui sont trop étroites pour se nommer dedans se nomment dans un cartouche, dehors :
+
+```docdg
+<Construis>la frise chronologique du premier XXe siècle {
+de 1914 à 1918 : Grande Guerre (Le premier conflit mondial.)
+1936 -- 1938 : Front populaire
+11/11/1918 : Armistice
+06/02/1934 : Crise du 6 février
+}
+```
+
+**La frise multilinéaire** range ses événements par bandes nommées, qui partagent la même échelle du temps — ce qui met la simultanéité sous les yeux, et permet de confronter deux découpages concurrents :
+
+```docdg
+<Construis>la frise chronologique du premier XXe siècle {
+politique {
+de 1914 à 1918 : Grande Guerre
+06/02/1934 : Crise du 6 février
+}
+économie {
+de 1929 à 1939 : Grande Dépression
+24/10/1929 : Krach de Wall Street
+}
+}
+```
+
+Une bande porte son nom dans la marge, ses périodes dans son bandeau et ses cartouches de part et d'autre, dans sa couleur. Elle s'ouvre d'un nom suivi d'une accolade — `politique {` — et le deux-points se tolère : `Vie politique: {`. Ce qui est simultané se lit dans une même verticale : c'est ce qui rend une frise multilinéaire argumentative et non plus seulement descriptive.
+
+Trois documents suivent les niveaux du programme. **`histoire2`** (collège) : la frise linéaire simple et la frise par périodes — ordonner des événements, se repérer dans le temps. **`histoire3`** (lycée) : la frise thématique et multilinéaire, et la périodisation des régimes français — articuler cause et effet, problématiser un découpage. **`histoire4`** (supérieur) : les trois temps de Braudel en trois bandes d'échelles différentes, et deux périodisations concurrentes posées l'une sous l'autre — mettre en évidence la simultanéité, questionner la pertinence des découpages.
+
 ## **📕 Rédiger un article, une thèse**
 
 Nouveauté de docdg 2.2 : ce qu'exige un document long — une structure au-dessus de la section, une page de titre, des renvois, une bibliographie.
@@ -2783,6 +2839,47 @@ Une étiquette se pose dans un titre ou un paragraphe ; un renvoi s'y remplace p
 
 L'ordre est libre : **un renvoi peut précéder son étiquette**. Un renvoi sans étiquette s'affiche `??` en rouge, à la façon de LaTeX — l'erreur se voit sans casser la composition.
 
+### Les environnements numérotés
+
+Nouveauté de docdg 2.7 : le théorème, la proposition, la propriété, le lemme, le corollaire, l'axiome, la conjecture, la définition, l'exemple et la remarque **s'énoncent** — et se numérotent tout seuls :
+
+```docdg
+soit théorème = <bleu nuit petites capitales>
+
+<Énonce>le théorème de Pythagore <étiquette>{pythagore} {
+Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des carrés des deux autres côtés.
+}
+
+	La démonstration s'appuie sur le théorème <renvoi>{pythagore}.
+```
+
+Le titre se compose en vedette — **Théorème 3.2 (Pythagore).** — et le corps le suit, en italique pour les énoncés, en romain pour les définitions, les exemples et les remarques : la convention des livres. Ce qui suit le nom du genre devient le nom propre de l'énoncé, débarrassé de sa liaison : `le théorème des valeurs intermédiaires` s'imprime « Théorème 3.4 (valeurs intermédiaires) ».
+
+**Chaque genre tient son compteur.** Le théorème 2 succède au théorème 1 sans regarder les définitions ; le chapitre remet tous les compteurs à zéro et préfixe les numéros, comme il le fait des sections. L'étiquette et le renvoi sont ceux du document long — `voir le théorème <renvoi>{pythagore}` se remplace par le numéro, cliquable — et le titre s'habille comme un titre de section : `soit théorème = <bleu nuit petites capitales>`.
+
+**La preuve loge dans l'énoncé.** Un sous-bloc `démonstration { … }` se compose en vedette — *Démonstration.* — et se referme d'un tombeau, en romain quand l'énoncé est en italique. Avec un raisonnement, c'est la machinerie de `<Montre>` qui rédige :
+
+```docdg
+<Énonce>la propriété {
+La somme des $n$ premiers entiers impairs vaut $n^2$.
+
+démonstration par récurrence que pour tout entier $n$ non nul, la somme des $n$ premiers entiers impairs vaut $n^2$ {
+initialisation{
+Au rang 1, la somme vaut $1 = 1^2$.
+}
+hérédité{
+Si la somme des $n$ premiers entiers impairs vaut $n^2$, la suivante lui ajoute $2n + 1$ et vaut $n^2 + 2n + 1 = (n+1)^2$.
+}
+}
+}
+```
+
+Les dix raisonnements de `<Montre>` s'écrivent tels quels — `démonstration par l'absurde`, `par disjonction de cas`, `par contraposée`… — avec leurs étapes nommées et leurs conclusions rédigées. Quand l'énoncé tient en une phrase, la propriété à démontrer peut même se taire : `démonstration par récurrence { … }` la lit dans l'énoncé lui-même.
+
+**L'énoncé est une citation.** Ce qui s'y déclare — un `<Soit>`, une donnée — y demeure et n'existe plus après lui : le théorème cite ses objets, il ne les lègue pas au document.
+
+Le document **`publication4`** montre l'ensemble en situation : deux chapitres, huit énoncés, six renvois croisés, trois démonstrations dont une récurrence rédigée par le moteur.
+
 ### La bibliographie
 
 ```docdg
@@ -2819,7 +2916,7 @@ Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolair
 | **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `basique3`, `statistiques-probabilites3` |
 | **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
 
-S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie) ; la 2.3 y ajoute **`publication3`** (une démonstration typographique — césure, veuves et orphelines, cadre et tableau sécables). La 2.4 réorganise la série algorithmique en trois niveaux, comme toutes les autres : **`algo2`** (déclarer et initialiser, entrer et sortir, décider, répéter — jusqu'à `sortir` et `continuer`), **`algo3`** (les conteneurs, les chaînes de caractères et les fonctions) et **`algo4`** (récursivité, algorithmes classiques du programme — recherche, dichotomie, tris, fusion — et structures de données avancées : pile, file, p-uplet, simulation). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. La 2.6 ajoute **`vitrine4`** (la démonstration de force : étude de fonction complète, récurrence vérifiée et rédigée par le moteur, système au pivot, géométrie de l'espace — chaque ligne source y produit une rédaction entière), **`calcul1`** (l'école élémentaire : les quatre opérations, décomposition, fractions de même dénominateur, division euclidienne, conversions), **`geometrie1`** (les figures planes : points placés, droites et segments, triangles, cercles, repère), **`demonstration3`** et **`demonstration4`** (pas une ligne de mathématiques écrite à la main : chaque énoncé, sans accolades, est démontré et rédigé par le moteur — récurrences et propriétés universelles menées par le calcul formel, le reste appelé dans la bibliothèque des classiques, du lycée aux classes préparatoires). Chaque fichier se clôt sur sa figure à la demande.
+S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie) ; la 2.3 y ajoute **`publication3`** (une démonstration typographique — césure, veuves et orphelines, cadre et tableau sécables). La 2.4 réorganise la série algorithmique en trois niveaux, comme toutes les autres : **`algo2`** (déclarer et initialiser, entrer et sortir, décider, répéter — jusqu'à `sortir` et `continuer`), **`algo3`** (les conteneurs, les chaînes de caractères et les fonctions) et **`algo4`** (récursivité, algorithmes classiques du programme — recherche, dichotomie, tris, fusion — et structures de données avancées : pile, file, p-uplet, simulation). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique3` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. La 2.6 ajoute **`vitrine4`** (la démonstration de force : étude de fonction complète, récurrence vérifiée et rédigée par le moteur, système au pivot, géométrie de l'espace — chaque ligne source y produit une rédaction entière), **`calcul1`** (l'école élémentaire : les quatre opérations, décomposition, fractions de même dénominateur, division euclidienne, conversions), **`geometrie1`** (les figures planes : points placés, droites et segments, triangles, cercles, repère), **`demonstration3`** et **`demonstration4`** (pas une ligne de mathématiques écrite à la main : chaque énoncé, sans accolades, est démontré et rédigé par le moteur — récurrences et propriétés universelles menées par le calcul formel, le reste appelé dans la bibliothèque des classiques, du lycée aux classes préparatoires). La 2.7 ouvre une série d'histoire, réglée elle aussi sur les niveaux : **`histoire2`** (le collège — frise linéaire de la Révolution, grandes périodes de l'histoire : ordonner, se repérer), **`histoire3`** (le lycée — frise thématique et multilinéaire de l'entre-deux-guerres, périodisation des régimes français : articuler cause et effet, problématiser un découpage) et **`histoire4`** (le supérieur — les trois temps de Braudel en trois bandes, deux périodisations concurrentes en regard : la simultanéité, la critique des découpages) ; elle ajoute enfin **`publication4`** (les environnements numérotés : deux chapitres, huit énoncés, six renvois croisés, trois démonstrations dont une récurrence rédigée par le moteur). Chaque fichier se clôt sur sa figure à la demande.
 
 ---
 
@@ -3224,16 +3321,4 @@ soit sondage = {
 
 ---
 
-## **🗺️ Feuille de route**
-
-**docdg couvre le programme de mathématiques de l'école aux classes préparatoires, la physique-chimie du lycée à la licence, et la rédaction de documents longs.** Le document est aussi devenu vivant : saisies typées bloquantes, alternative en bloc et en ligne. Côté mathématiques, la couverture va du CP à la L3 — moteur de projection cavalière (solides, patrons, repère de l'espace), géométrie analytique de l'espace, courbes paramétrées et polaires, coniques rédigées, fonctions de deux variables (surfaces, lignes de niveau, Lagrange, intégrales multiples), transformations du plan complexe et résidus, groupes, lois à densité et théorème central limite. La 2.1 y ajoute la physique-chimie (équations, avancement, unités, constantes, incertitudes, opérateurs de champs), la 2.2 la publication longue (chapitres, page de titre, renvois croisés, bibliographie, polices locales), et la 2.4 un langage algorithmique complet — conteneurs et chaînes passés en argument, primitives, p-uplets, récursivité, tirage aléatoire — couvrant le programme de NSI et l'informatique commune des classes préparatoires. La 2.6, enfin, aligne la rédaction sur l'usage des enseignants du supérieur et introduit les démonstrations : dix raisonnements, la preuve automatique par le calcul formel, et une bibliothèque de démonstrations types du lycée à la L3.
-
-Le projet continue d'évoluer, avec une progression arrêtée :
-
-- **La qualité d'impression, suite.** La césure française, les veuves et orphelines, la scission des cadres et des tableaux sont acquises depuis la 2.3. Restent les grilles, qui ne se coupent pas encore, et la répartition des notes de bas de page sur les fragments d'un bloc scindé.
-- **La physique-chimie, suite.** Le pH et les acides faibles, la cinétique chimique, l'optique géométrique, les bilans de forces.
-- **La programmation orientée objet.** Classes, attributs, méthodes, constructeur : c'est le chapitre du programme de terminale NSI qui manque encore à docdg. Prévu pour la **2.6**.
-- **Les environnements numérotés.** Théorèmes, définitions, démonstrations avec leurs compteurs propres, renvoyables comme les sections.
-
-Ces évolutions se feront sans rien retirer : la syntaxe en prose française et la compatibilité des documents existants restent la priorité à chaque nouvelle version. Les retours d'usage (bugs, tournures manquantes, besoins non couverts) sont les bienvenus sur le dépôt du projet.
-
+Les retours d'usage (bugs, tournures manquantes, besoins non couverts) sont les bienvenus sur le dépôt du projet.

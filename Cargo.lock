@@ -501,7 +501,7 @@ dependencies = [
 
 [[package]]
 name = "docdg"
-version = "2.6.0"
+version = "2.7.0"
 dependencies = [
  "docdg-transpiler",
  "muda",
@@ -516,14 +516,14 @@ dependencies = [
 
 [[package]]
 name = "docdg-bench"
-version = "2.6.0"
+version = "2.7.0"
 dependencies = [
  "docdg-transpiler",
 ]
 
 [[package]]
 name = "docdg-transpiler"
-version = "2.6.0"
+version = "2.7.0"
 dependencies = [
  "hyphenation",
  "rayon",
@@ -3227,7 +3227,7 @@ dependencies = [
 
 [[package]]
 name = "xtask"
-version = "2.6.0"
+version = "2.7.0"
 
 [[package]]
 name = "yoke"

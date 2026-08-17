@@ -1,7 +1,9 @@
 [package]
 name = "docdg-bench"
-version = "2.6.0"
+version = "2.7.0"
 edition = "2021"
+rust-version.workspace = true
+default-run = "docdg-bench"
 
 [dependencies]
 docdg-transpiler = { path = "../transpiler" }

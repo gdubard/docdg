@@ -850,20 +850,16 @@ function setZoom(z) {
 }
 
 /*
- * Une transformation d'échelle ne change pas la boîte de mise en page : elle
- * peint plus grand au même encombrement. Au-delà de 100 %, le bas des pages
- * sortait donc de la zone défilable sans qu'aucune barre n'apparaisse — le
- * document était là, hors d'atteinte. En deçà, l'inverse : un blanc en pied,
- * proportionnel à la réduction. On rend au conteneur la hauteur que la
- * transformation lui prend ou lui donne.
- *
- * `offsetHeight` est la hauteur de mise en page, que la transformation ignore :
- * la mesure ne dépend pas de son propre résultat, et rien ne s'emballe.
+ * Le zoom se fait désormais par la propriété `zoom`, qui entre dans la mise en
+ * page : le conteneur grandit avec elle, et les deux barres de défilement
+ * suivent d'elles-mêmes. La compensation manuelle de hauteur qui rattrapait
+ * une transformation d'échelle n'a plus lieu d'être — et surtout, elle
+ * n'existait pas pour la largeur, si bien qu'une page zoomée ou en paysage se
+ * laissait mal atteindre horizontalement.
  */
 function ajusteBoite() {
     if (!pagesEl) return;
-    const h = pagesEl.offsetHeight;
-    pagesEl.style.marginBottom = h ? `${Math.round(h * (zoom - 1))}px` : '';
+    pagesEl.style.marginBottom = '';
 }
 
 function documentPourImpression() {

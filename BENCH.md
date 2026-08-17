@@ -8,9 +8,14 @@ rédaction complète) et `algo4.txt` (le langage algorithmique au complet).
 Le protocole, à lancer sur une machine au repos :
 
 ```bash
-cargo run --release -p docdg-bench -- exemples/vitrine4.txt 50
-cargo run --release -p docdg-bench -- exemples/algo4.txt 50
+cargo run --release -p docdg-bench --bin froid_chaud -- exemples/vitrine4.txt 50
+cargo run --release -p docdg-bench --bin froid_chaud -- exemples/algo4.txt 50
 ```
+
+`froid_chaud` mesure en médianes et accepte un troisième argument, le plafond
+d'`incr` en millisecondes, au-delà duquel il sort en erreur — c'est lui que la
+CI exécute. Le binaire par défaut `docdg-bench` donne une mesure rapide en
+moyennes, sans plafond.
 
 Quatre temps sortent par document :
 

@@ -1,6 +1,4 @@
-fn echappe(s: &str) -> String {
-    s.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
-}
+use crate::utils::texte::echappe;
 
 pub fn bloc(source: &str, message: &str) -> String {
     let source = source.trim();

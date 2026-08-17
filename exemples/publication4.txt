@@ -1,0 +1,83 @@
+document {
+	titre: Suites réelles et convergence;
+	auteur: Camille MARTIN;
+	institution: Lycée Ampère — Lyon;
+	date: septembre 2026;
+	marges: 25;
+	script: Georgia;
+	taille: 11;
+	interligne: 1,5;
+}
+soit h0 = <bleu nuit gras chapitre num>
+soit h1 = <bleu nuit gras section num>
+soit théorème = <bleu nuit petites capitales>
+soit définition = <bleu nuit petites capitales>
+
+<page de titre>
+
+<table des matières>{Table des matières}
+
+<page suivante h0>Le vocabulaire de la convergence
+
+<h1>Définitions premières
+
+	Une suite approche un nombre quand elle finit par ne plus s'en écarter : tout le chapitre tient dans la mise en forme de cette intuition.
+
+<Énonce>la définition de la convergence <étiquette>{def-convergence} {
+Une suite $(u_n)$ converge vers un réel $l$ si tout intervalle ouvert contenant $l$ contient tous les termes de la suite à partir d'un certain rang. Le réel $l$ est la limite de la suite.
+}
+
+<Énonce>la remarque {
+La définition <renvoi>{def-convergence} ne demande pas de connaître la limite à l'avance — c'est le théorème <renvoi>{limite-monotone} qui donnera son existence sans exiger son calcul.
+}
+
+<Énonce>l'exemple {
+La suite définie pour tout entier $n$ non nul par $u_n = 1/n$ converge vers $0$.
+}
+
+<h1>L'unicité
+
+<Énonce>la proposition <étiquette>{unicite} {
+Si une suite converge, sa limite est unique.
+
+démonstration {
+Soient $l$ et $l'$ deux limites d'une même suite. Deux intervalles ouverts disjoints, l'un contenant $l$, l'autre contenant $l'$, devraient chacun contenir tous les termes à partir d'un certain rang — et aucun terme ne peut appartenir aux deux. Donc $l = l'$.
+}
+}
+
+<page suivante h0>La limite monotone
+
+<h1>L'énoncé et sa preuve
+
+<Énonce>le théorème de la limite monotone <étiquette>{limite-monotone} {
+Toute suite croissante et majorée converge. Toute suite décroissante et minorée converge.
+
+démonstration que toute suite croissante et majorée converge {
+Soit une suite croissante et majorée, et soit $l$ la borne supérieure de l'ensemble de ses termes. Tout intervalle ouvert contenant $l$ contient un terme de la suite, et la croissance y range tous les suivants : la suite converge vers $l$. Le cas décroissant s'en déduit en changeant les signes.
+}
+}
+
+<Énonce>le corollaire <étiquette>{cor-adjacentes} {
+Deux suites adjacentes convergent, et vers la même limite.
+}
+
+	Le corollaire <renvoi>{cor-adjacentes} descend du théorème <renvoi>{limite-monotone} : la suite croissante est majorée par tout terme de la décroissante, et la proposition <renvoi>{unicite} conclut sur la limite commune.
+
+<h1>Une récurrence rédigée par le moteur
+
+<Énonce>la propriété {
+La somme des $n$ premiers entiers impairs vaut $n^2$.
+
+démonstration par récurrence que pour tout entier $n$ non nul, la somme des $n$ premiers entiers impairs vaut $n^2$ {
+initialisation{
+Au rang 1, la somme vaut $1 = 1^2$.
+}
+hérédité{
+Si la somme des $n$ premiers entiers impairs vaut $n^2$, la suivante lui ajoute $2n + 1$ et vaut $n^2 + 2n + 1 = (n+1)^2$.
+}
+}
+}
+
+<Énonce>la remarque {
+La réciproque du théorème <renvoi>{limite-monotone} est fausse : une suite peut converger sans être monotone. Le compteur des remarques, lui, a bien recommencé avec le chapitre.
+}

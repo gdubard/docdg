@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 use std::io::{BufRead, BufReader, Write};
 use std::path::PathBuf;
-use std::process::{Child, ChildStdin, ChildStdout, Command, Stdio};
+use std::process::{Child, ChildStdin, Command, Stdio};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::mpsc::{channel, Receiver, Sender};
+use std::sync::mpsc::{channel, Receiver, RecvTimeoutError, Sender};
 use std::sync::{Mutex, MutexGuard, OnceLock};
 use std::time::Duration;
 
@@ -13,10 +13,27 @@ const ARCHIVE_MAX: u64 = 8 * 1024 * 1024;
 
 const MEMO_MAX: usize = 16 * 1024;
 
+/// Délai de garde d'une requête au calcul formel. Au-delà, l'ouvrier est
+/// réputé perdu dans une exploration sans fin : il est tué et remplacé, et
+/// l'erreur suit le chemin d'affichage habituel plutôt que de geler le rendu.
+/// La valeur laisse large : l'import de SymPy au premier appel sur une
+/// machine lente prend quelques secondes, un calcul légitime aussi.
+/// `DOCDG_DELAI_CAS` (en secondes) permet d'ajuster.
+const DELAI_CAS_S: f64 = 20.0;
+
+fn delai_cas() -> Duration {
+    let secondes = std::env::var("DOCDG_DELAI_CAS")
+        .ok()
+        .and_then(|v| v.parse::<f64>().ok())
+        .filter(|s| *s > 0.0)
+        .unwrap_or(DELAI_CAS_S);
+    Duration::from_secs_f64(secondes)
+}
+
 struct Ouvrier {
     fils: Child,
     entree: ChildStdin,
-    sortie: BufReader<ChildStdout>,
+    lignes: Receiver<String>,
 }
 
 impl Drop for Ouvrier {
@@ -51,11 +68,26 @@ fn seme() -> Option<Ouvrier> {
             .spawn()
         {
             let entree = fils.stdin.take()?;
-            let sortie = BufReader::new(fils.stdout.take()?);
+            let sortie = fils.stdout.take()?;
+            let (envoi_lignes, lignes) = channel();
+            std::thread::spawn(move || {
+                let mut lecteur = BufReader::new(sortie);
+                loop {
+                    let mut ligne = String::new();
+                    match lecteur.read_line(&mut ligne) {
+                        Ok(0) | Err(_) => break,
+                        Ok(_) => {
+                            if envoi_lignes.send(ligne).is_err() {
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
             return Some(Ouvrier {
                 fils,
                 entree,
-                sortie,
+                lignes,
             });
         }
     }
@@ -226,6 +258,10 @@ pub fn ask(request: &str) -> Result<String, String> {
     }
     if let Ok(reponse) = &issue {
         let mut memoire = verrou(memo());
+        // Purge volontairement rustique : au plafond, tout part. Un vrai LRU
+        // coûterait un ordre par accès pour un gain nul ici — l'archive
+        // disque regarnit le mémo au prochain lancement, et 16 384 entrées
+        // couvrent très largement un document.
         if memoire.len() >= MEMO_MAX {
             memoire.clear();
         }
@@ -270,12 +306,21 @@ fn interroge(request: &str) -> Result<String, String> {
         recrute(bassin().envoi.clone());
         return Err("le moteur de calcul s'est interrompu".into());
     }
-    let mut ligne = String::new();
-    if ouvrier.sortie.read_line(&mut ligne).unwrap_or(0) == 0 {
-        VIVANTS.fetch_sub(1, Ordering::SeqCst);
-        recrute(bassin().envoi.clone());
-        return Err("le moteur de calcul n'a pas répondu".into());
-    }
+    let ligne = match ouvrier.lignes.recv_timeout(delai_cas()) {
+        Ok(ligne) => ligne,
+        Err(RecvTimeoutError::Timeout) => {
+            VIVANTS.fetch_sub(1, Ordering::SeqCst);
+            drop(ouvrier);
+            recrute(bassin().envoi.clone());
+            return Err("le calcul a dépassé le délai imparti".into());
+        }
+        Err(RecvTimeoutError::Disconnected) => {
+            VIVANTS.fetch_sub(1, Ordering::SeqCst);
+            drop(ouvrier);
+            recrute(bassin().envoi.clone());
+            return Err("le moteur de calcul n'a pas répondu".into());
+        }
+    };
     let _ = bassin().envoi.send(ouvrier);
     let valeur: serde_json::Value = match serde_json::from_str(&ligne) {
         Ok(v) => v,

@@ -2,6 +2,12 @@
 members = ["transpiler", "app", "bench", "xtask"]
 resolver = "2"
 
+# Plancher vérifié : le transpileur compile tel quel avec la 1.79 (exigée par
+# les thread_local! à bloc const), et les dépendances de l'application
+# déclarent toutes une MSRV inférieure (wry 1.77, tao 1.74, muda 1.73).
+[workspace.package]
+rust-version = "1.79"
+
 [profile.release]
 lto = true
 opt-level = 3

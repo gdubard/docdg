@@ -1,3 +1,10 @@
+/// Les trois caractères qui ne peuvent rester tels quels dans du HTML ou du
+/// SVG. `echappe_html` de la mise en page fait davantage — il protège aussi
+/// le guillemet droit, parce qu'il sert dans des attributs.
+pub(crate) fn echappe(s: &str) -> String {
+    s.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;")
+}
+
 pub(crate) fn apres_cle<'a>(source: &'a str, cle: &str) -> Option<&'a str> {
     let bas = source.to_ascii_lowercase();
     bas.find(cle).map(|i| &source[i + cle.len()..])

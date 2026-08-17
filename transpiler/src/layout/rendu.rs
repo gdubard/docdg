@@ -448,7 +448,7 @@ fn nom_police_at(refs: &[&str]) -> Option<(String, usize)> {
     Some((refs[..n].join(" "), n))
 }
 
-fn style_css(words: &[String]) -> (String, Option<u8>) {
+pub(crate) fn style_css(words: &[String]) -> (String, Option<u8>) {
     let mut css = String::new();
     let mut level = None;
     let mut i = 0;
@@ -523,6 +523,7 @@ fn heading(env: &mut Env, toc: &mut Vec<TocEntry>, level: u8, css: &str, text: &
     if level == 0 {
         env.chapitre += 1;
         env.counters = [0; 3];
+        env.environnements.clear();
         let num = env.chapitre.to_string();
         let id = format!("chap-{}", num);
         let title = render_inline(text.trim(), env, toc);
@@ -567,6 +568,7 @@ fn bump_heading(env: &mut Env, level: u8) {
     if level == 0 {
         env.chapitre += 1;
         env.counters = [0; 3];
+        env.environnements.clear();
         return;
     }
     let l = level as usize;
@@ -936,6 +938,8 @@ pub fn scan_env(seg: &str, env: &mut Env) {
             let tag_t = tag.trim();
             if tag_t == "Soit" || tag_t.starts_with("Soit ") || tag_t.starts_with("On pose") {
                 let _ = declare(tag_t, &after, env);
+            } else if crate::utils::texte::meme_mot(tag_t, "Énonce") {
+                crate::layout::environnements::scan(&after, env);
             } else if tag_t == "Place" {
 
                 crate::maths::geometrie::collecte_place(&after, env);
@@ -1326,7 +1330,7 @@ pub fn render_body_indent(
     out
 }
 
-fn find_body_brace(s: &str) -> Option<(String, String)> {
+pub(crate) fn find_body_brace(s: &str) -> Option<(String, String)> {
     let ferme = s.trim_end();
     if !ferme.ends_with('}') {
         return None;
@@ -1845,6 +1849,9 @@ fn dispatch_command(tag_t: &str, after: &str, env: &mut Env) -> Option<String> {
     if let Some(html) = crate::maths::algebre::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
+    if let Some(html) = crate::layout::frise::commande(verb, &rest, corps.as_deref(), env) {
+        return Some(html);
+    }
     if let Some(html) = crate::maths::analyse::commande(verb, &rest, corps.as_deref(), env) {
         return Some(html);
     }
@@ -2081,6 +2088,9 @@ fn dispatch_chunk(chunk: &str, env: &mut Env, toc: &mut Vec<TocEntry>) -> Option
         return Some(html);
     }
 
+    if crate::utils::texte::meme_mot(tag_t, "Énonce") {
+        return Some(crate::layout::environnements::rend(&after, env, toc));
+    }
     if tag_t == "Montre" || tag_t.starts_with("Montre ") {
         let (verb, modificateur) = verbe_et_reste(tag_t);
         if verb == "Montre" {
@@ -2336,7 +2346,7 @@ fn numero_courant(env: &Env) -> Option<(String, String)> {
     }
 }
 
-fn declare_renvoi(nom: &str, num: &str, id: &str) -> String {
+pub(crate) fn declare_renvoi(nom: &str, num: &str, id: &str) -> String {
     format!("\u{E016}{}|{}|{}\u{E017}", nom, num, id)
 }
 
