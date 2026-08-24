@@ -1,0 +1,54 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,8;
+	niveau: quatrième;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit enonce = <fond bleu Alice>
+soit correction = <fond gris clair>
+
+<h1>Le théorème de Pythagore — classe de quatrième
+
+<h2>Ce qu'il faut savoir avant
+	La démonstration ne tombe pas du ciel : elle mobilise des résultats vus plus tôt. La liste ci-dessous se déduit du corpus, elle n'est pas recopiée à la main.
+<Dresse>les prérequis du théorème de Pythagore
+
+<h2>L'énoncé
+<Énonce>le théorème de Pythagore <étiquette>{pythagore}
+	Le texte, le genre et le numéro viennent du corpus ; la balise ne porte que le nom du résultat.
+
+<h2>La démonstration
+<Démontre>le théorème de Pythagore
+
+<h2>La réciproque et la contraposée
+<Énonce>la réciproque du théorème de Pythagore <étiquette>{reciproque}
+<Démontre>la réciproque du théorème de Pythagore
+
+<Énonce>la contraposée du théorème de Pythagore
+	<remarque>La contraposée sert à montrer qu'un triangle n'est PAS rectangle, la réciproque qu'il l'est. Ce sont deux énoncés distincts : le renvoi <renvoi>{reciproque} ne pointe pas vers le même résultat que <renvoi>{pythagore}.
+<Démontre>la contraposée du théorème de Pythagore
+
+<page suivante h2>Exercices types
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — calculer une longueur} {
+	Le triangle $ABC$ est rectangle en $A$, avec $AB = 3$ cm et $AC = 4$ cm.
+	Calculer la longueur de l'hypoténuse $BC$.
+}
+<correction>Correction. Le triangle est rectangle en $A$, donc le théorème <renvoi>{pythagore} donne $BC^2 = AB^2 + AC^2$, soit $BC^2 = 3^2 + 4^2 = 25$. Une longueur étant positive, $BC = racine(25) = 5$ cm.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — un triangle est-il rectangle ?} {
+	Le triangle $DEF$ vérifie $DE = 6$ cm, $DF = 8$ cm et $EF = 11$ cm.
+	Ce triangle est-il rectangle en $D$ ?
+}
+<correction>Correction. On calcule séparément les deux membres : $EF^2 = 11^2 = 121$ et $DE^2 + DF^2 = 6^2 + 8^2 = 100$. Comme $121 != 100$, la contraposée du théorème de Pythagore permet de conclure : le triangle $DEF$ n'est pas rectangle en $D$.
+	<remarque>C'est bien la contraposée qu'on emploie ici, et non la réciproque : on part d'une inégalité pour nier l'angle droit.
+
+<h2>Un résultat admis à ce niveau
+
+Tout n'est pas démontré en quatrième. Le corpus le sait et le dit.
+<Énonce>le théorème de Thalès
+<Démontre>le théorème de Thalès

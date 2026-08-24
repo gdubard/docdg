@@ -1,0 +1,76 @@
+document {
+	orientation: portrait;
+	marges: 9;
+	taille: 11;
+	interligne: 1,2;
+	niveau: terminale;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+
+<h1>La mole et les quantités de matière — classe de seconde
+
+<h2>Ce qui a été vu au collège
+<Rappelle>l'atome
+<Rappelle>la molécule
+
+<h2>Compter les entités
+<Énonce>l'entité chimique
+<Énonce>la mole et la constante d'Avogadro <étiquette>{mole}
+<Énonce>la masse molaire <étiquette>{molaire}
+<Calcule>la masse molaire de H2SO4
+	<remarque>La masse molaire est calculée à partir de la formule, jamais saisie. Écrire à la main qu'un hydrate comporte neuf atomes d'oxygène, c'est se tromper un jour sans qu'aucune machine puisse le voir.
+
+<h2>Les concentrations
+<Énonce>la concentration en quantité de matière <étiquette>{concentration}
+<Énonce>le lien entre les deux concentrations
+<Démontre>le lien entre les deux concentrations
+	<remarque>La démonstration élimine la quantité de matière entre deux définitions. Sa dernière ligne invoque l'homogénéité comme contrôle, ce qui est aussi ce que fait le compilateur.
+
+<page suivante h2>Diluer une solution
+<Énonce>la conservation de la quantité de matière lors d'une dilution <étiquette>{dilution}
+<Démontre>la conservation de la quantité de matière lors d'une dilution
+
+<h2>Exercice type
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — préparer une solution diluée} {
+	On dispose d'une solution mère de concentration $0,50$ mol/L.
+	Quel volume faut-il prélever pour préparer 100,0 mL d'une solution de concentration $0,020$ mol/L ?
+}
+<correction>Correction. La relation <renvoi>{dilution} donne $V_i = (C_f * V_f) / C_i$, soit $V_i = (0,020 * 100,0) / 0,50 = 4,0$ mL.
+	<remarque>Faire remarquer que le facteur de dilution vaut 25, et que le volume prélevé est 25 fois plus petit que le volume final. Le rapport est le même parce que la quantité de soluté, elle, n'a pas bougé.
+
+<h1>Oxydoréduction et titrage — première, spécialité
+
+<h2>Prérequis du chapitre
+<Dresse>les prérequis de l'équation d'une réaction d'oxydoréduction
+
+<h2>Oxydants et réducteurs
+<Énonce>l'oxydant et le réducteur
+<Énonce>le couple oxydant-réducteur
+<Énonce>la demi-équation électronique <étiquette>{demi}
+	<remarque>L'électron est traité comme une espèce ordinaire : composition vide, charge négative unitaire. Les demi-équations s'équilibrent donc par le même calcul que les réactions complètes, sans aucun cas particulier.
+<Équilibre>MnO4^- + H^+ + e^- -> Mn^2+ + H2O
+
+<h2>Combiner les demi-équations
+<Énonce>l'équation d'une réaction d'oxydoréduction <étiquette>{redox}
+<Équilibre>MnO4^- + Fe^2+ + H^+ -> Mn^2+ + Fe^3+ + H2O
+	<remarque>Les nombres ci-dessus sont calculés. La ligne de charge de la matrice garantit qu'ils conservent aussi l'électroneutralité, ce qu'un ajustement à la main oublie régulièrement.
+
+<h2>Le titrage
+<Énonce>le titrage
+<Énonce>l'équivalence d'un titrage <étiquette>{equivalence}
+<Énonce>la relation à l'équivalence <étiquette>{relation}
+<Démontre>la relation à l'équivalence
+
+<h2>Exercice type
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — doser les ions fer (II)} {
+	On titre 20,0 mL d'une solution d'ions fer (II) par une solution de permanganate de potassium à $2,0 * 10^-2$ mol/L. L'équivalence est repérée pour un volume versé de 12,5 mL.
+	Déterminer la concentration en ions fer (II).
+}
+<correction>Correction. L'équation montre qu'un ion permanganate réagit avec cinq ions fer (II). La relation <renvoi>{relation} donne alors $C_(Fe) * V_(Fe) = 5 * C_(Mn) * V_(Mn)$, d'où $C_(Fe) = 6,3 * 10^-2$ mol/L.
+	<remarque>Le repérage de l'équivalence est colorimétrique : la première goutte en excès colore la solution en rose. C'est le changement de réactif limitant qui se voit, non la fin d'une réaction.

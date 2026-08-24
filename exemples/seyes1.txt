@@ -1,0 +1,33 @@
+document {
+	marges: 15;	
+}
+
+<Écris>sur des lignes{
+	Léa mange une pomme, Lili un abricot et Murielle des fraises des bois. Élodie a vu 3 zèbres et 12 girafes au zoo de Vincennes.
+	L'été est chaud, l'hiver est froid — mais l'automne est doux. Où est-il allé ? Il est parti à 7h30 sans dire au revoir. Ça, c'est une île : Noirmoutier, avec ses 4 ponts et ses phares. Hier, j'ai lu 2 livres et écouté 15 chansons d'Édith Piaf.
+}
+
+<Écris>sur des lignes{
+	Emile et Adèle ont trouvé un vieux château fort à 3 km du village. Ses murs épais de 2 mètres datent du 12è siècle. À l'intérieur, on découvre 47 salles, dont une grande salle de banquet ornée d'une fresque magnifique.
+}
+
+<Écris>sur des lignes{
+				3 × 4 = 12
+				5 + 9 = 14
+				10 − 2 = 8
+	Victor, Inès et Zineb jouent à cache-cache dans le jardin de l'école.
+}
+
+<Écris>sur des lignes{
+Au <TIMES NEW ROMAN italique 24pt>{XXI}<exposant>{è} siècle, il y a 2,2 millions d'habitants et plus de 130 musées.
+	On dit souvent : « Mieux vaut tard que jamais. »
+		Mon frère a 8 ans — il aime les trains, les robots et les étoiles.
+	L'île d'Ouessant est à 20 km des côtes du Finistère.
+Noël arrive : achète 6 bûches, 4 oranges et du chocolat noir.
+}
+
+<Écris>sur des lignes{
+Zéphyr, le chat gris, dort sur 3 coussins empilés près de la fenêtre.
+
+
+}

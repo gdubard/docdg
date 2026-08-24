@@ -1,0 +1,86 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,5;
+	niveau: master 1;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit enonce = <fond bleu Alice>
+soit correction = <fond gris clair>
+
+
+<h1>Leçon de physique — du théorème de Bloch à la conduction
+
+<h2>Ce qui précède
+<Dresse>les prérequis du théorème de Bloch
+	<remarque>Le graphe remonte aux symétries et à leurs générateurs, au réseau réciproque, et de là à l'équation de Schrödinger. Il traverse les matières : la structure de groupe vient du corpus mathématique, sans qu'aucun résultat soit réécrit.
+
+<h2>Le résultat central
+<Énonce>le théorème de Bloch <étiquette>{bloch}
+<Démontre>le théorème de Bloch
+	<remarque>La démonstration ne résout aucune équation : elle diagonalise simultanément le hamiltonien et les translations du réseau, qui commutent. C'est un argument de symétrie, et il donne d'un coup la forme des états et le domaine du vecteur d'onde.
+
+<h2>Ce qui en découle
+<Énonce>la structure de bandes et l'ouverture d'une bande interdite <étiquette>{bandes}
+<Démontre>la structure de bandes et l'ouverture d'une bande interdite
+	<remarque>Le théorème <renvoi>{bloch} fournit les états ; la perturbation dégénérée en bord de zone ouvre l'intervalle. Un potentiel arbitrairement faible suffit : c'est la dégénérescence, non l'intensité, qui produit le gap.
+
+<Énonce>la masse effective et la dynamique des porteurs
+<Démontre>la masse effective et la dynamique des porteurs
+
+<h2>Du modèle au transport
+<Énonce>la surface de Fermi et le caractère métallique
+<Démontre>la surface de Fermi et le caractère métallique
+	<remarque>C'est le remplissage, non la nature chimique, qui décide de la conduction. Un nombre impair d'électrons par maille garantit un métal ; un nombre pair ne garantit rien.
+
+<Énonce>la conductivité de Drude et le temps de relaxation
+<Démontre>la conductivité de Drude et le temps de relaxation
+
+<Énonce>l'effet Hall et le signe des porteurs
+<Démontre>l'effet Hall et le signe des porteurs
+	<remarque>Le béryllium et l'aluminium donnent une constante de Hall positive. Aucun modèle à porteurs négatifs n'en rend compte : c'est la preuve expérimentale que le trou décrit quelque chose de réel.
+
+<h2>Outils mobilisés
+<Rappelle>la distribution de Fermi-Dirac
+
+<Rappelle>les phonons et la relation de dispersion du réseau
+
+<h2>À l'agrégation, rien n'est admis
+	Un même énoncé, un seul identifiant, deux exigences : le master énonce sans preuve ce que le concours demande de démontrer. La voie déclarée en tête de page suffit à basculer le statut.
+
+<Énonce>le modèle de Debye de la capacité thermique
+
+<Démontre>le modèle de Debye de la capacité thermique
+
+<h2>Le contrôle dimensionnel
+
+<Vérifie>l'homogénéité de sigma_e = n * q^2 * tau / m avec sigma_e conductivité, n densité particulaire, q charge électrique, tau temps de relaxation des porteurs, m masse effective
+	<remarque>Les grandeurs sont nommées telles que le corpus les déclare. La masse effective et le temps de relaxation des porteurs sont des grandeurs du master, ajoutées avec le domaine.
+
+<Vérifie>l'homogénéité de E_F = hbar^2 * k_F^2 / m avec E_F énergie de Fermi, hbar constante de Planck réduite, k_F vecteur d'onde de Fermi, m masse
+
+<Vérifie>l'homogénéité de R_H = 1 / (n * q) avec R_H constante de Hall, n densité particulaire, q charge électrique
+	<remarque>La constante de Hall ne dépend ni de la masse effective ni du temps de relaxation : la vérification le montre avant tout calcul.
+
+<page suivante h2>Exercices types
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — vitesse de dérive dans le cuivre} {
+	Le cuivre compte un électron de conduction par atome, pour une masse volumique de $8,96 * 10^3$ kg·m⁻³ et une masse molaire de $63,5$ g·mol⁻¹.
+	Un fil de section $1,0$ mm² est parcouru par un courant de $1,0$ A.
+	Calculer la densité de porteurs, puis la vitesse de dérive. Comparer à la vitesse de Fermi, de l'ordre de $1,6 * 10^6$ m·s⁻¹.
+}
+<correction>Correction. La densité de porteurs vaut le quotient de la masse volumique par la masse molaire, multiplié par le nombre d'Avogadro, soit environ $8,5 * 10^{28}$ m⁻³.
+	La vitesse de dérive se tire de $j = n q v$ : avec $j = 1,0 * 10^6$ A·m⁻², elle vaut environ $7 * 10^{-5}$ m·s⁻¹, soit quelques centièmes de millimètre par seconde.
+	<remarque>Onze ordres de grandeur séparent les deux vitesses. Le signal électrique ne se propage donc pas au rythme des électrons : c'est le champ qui va vite, non les porteurs.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — le régime de basse température} {
+	Dans un métal, la capacité thermique s'écrit $C = \gamma T + A T^3$.
+	Justifier l'origine de chacun des deux termes, puis indiquer quelle représentation graphique permet de les séparer expérimentalement.
+}
+<correction>Correction. Le terme linéaire est la contribution électronique : seuls les électrons situés dans une bande d'énergie thermique autour du niveau de Fermi peuvent être excités, d'où une fraction proportionnelle à la température.
+	Le terme cubique est la contribution des phonons, établie par le modèle de Debye : à basse température, la coupure devient sans effet et l'intégrale sur les modes donne une énergie en puissance quatrième.
+	Tracer $C/T$ en fonction de $T^2$ donne une droite d'ordonnée à l'origine $\gamma$ et de pente $A$.
+	<remarque>La mesure de l'ordonnée à l'origine donne la densité d'états au niveau de Fermi. C'est l'un des rares accès expérimentaux directs à cette grandeur.

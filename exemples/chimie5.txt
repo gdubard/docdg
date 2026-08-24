@@ -1,0 +1,87 @@
+document {
+	orientation: portrait;
+	marges: 14;
+	taille: 11;
+	interligne: 1,2;
+	niveau: master 1;
+}
+soit h1 = <vert foncé gras section num>
+soit h2 = <vert italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+<h1>Leçon de chimie — de l'état de transition à la sélectivité
+
+<h2>Ce qui précède
+<Dresse>les prérequis de la théorie de l'état de transition et de l'équation d'Eyring
+	<remarque>Le graphe converge depuis trois directions : le complexe activé, la loi d'Arrhenius, et la relation entre enthalpie libre standard et constante d'équilibre. La théorie n'est pas un chapitre neuf, c'est la jonction de trois résultats déjà écrits.
+
+<h2>Le résultat central
+<Énonce>la théorie de l'état de transition et l'équation d'Eyring <étiquette>{eyring}
+
+<Démontre>la théorie de l'état de transition et l'équation d'Eyring
+	<remarque>Le gain sur Arrhenius est que le facteur préexponentiel cesse d'être ajusté : c'est le rapport de l'énergie thermique à la constante de Planck, soit six mille milliards par seconde à température ambiante. Aucune réaction ne peut aller plus vite.
+
+<h2>Ce qui en découle
+<Énonce>les grandeurs d'activation et la molécularité
+	<remarque>L'équation <renvoi>{eyring} scinde la barrière en enthalpie et entropie d'activation. Une entropie nettement négative signale un état de transition plus ordonné que les réactifs : la cinétique renseigne sur la géométrie d'une espèce qu'on ne peut pas observer.
+
+<Énonce>le postulat de Hammond
+<Énonce>la relation de Hammett
+
+<h2>De la barrière à la sélectivité
+<Énonce>l'effet isotopique cinétique
+	<remarque>Un rapport voisin de sept désigne la rupture de la liaison à l'étape déterminante ; un rapport très supérieur trahit un effet tunnel, que la théorie de l'état de transition ne prévoit pas.
+<Énonce>la catalyse asymétrique et l'induction chirale
+	<remarque>Deux kilojoules par mole d'écart entre les deux états de transition diastéréoisomères donnent déjà soixante pour cent d'excès énantiomérique. C'est l'exponentielle qui transforme une différence négligeable en une sélectivité exploitable.
+
+<h2>Une lacune assumée
+	Ces trois résultats sont ancrés « démontré » et portent `demonstration_prevue` dans le corpus : la démonstration est attendue à ce niveau mais n'est pas encore rédigée. `<Démontre>` le dit alors franchement, au lieu d'inventer une preuve.
+
+<h2>La photochimie, où le même appareil resert
+<Énonce>le rendement quantique photochimique
+
+<Démontre>le rendement quantique photochimique
+	<remarque>Un état excité est une espèce chimique de plus : l'état quasi stationnaire s'y applique tel quel, et le rendement n'est qu'un partage de flux entre voies concurrentes.
+
+<Énonce>la relation de Stern-Volmer
+<Démontre>la relation de Stern-Volmer
+
+<h2>Outils mobilisés
+<Rappelle>le contrôle cinétique et le contrôle thermodynamique
+<Rappelle>l'étape cinétiquement déterminante
+
+<page suivante h2>Une même forme algébrique, trois systèmes
+<Énonce>l'isotherme de Langmuir
+<Démontre>l'isotherme de Langmuir
+	<remarque>La même expression décrit la saturation d'une surface, celle d'une enzyme par son substrat et celle d'un récepteur par son ligand. Ce n'est pas une analogie : c'est la structure d'un équilibre de fixation à un site unique.
+
+<Énonce>le mécanisme de Langmuir-Hinshelwood
+<Énonce>la performance d'un catalyseur et les grandeurs de rotation
+
+<h2>Le contrôle dimensionnel
+
+<Vérifie>l'homogénéité de theta = K * P / (1 + K * P) avec theta taux de recouvrement d'une surface, K constante d'adsorption de Langmuir, P pression
+	<remarque>Le taux de recouvrement est sans dimension, et la constante d'adsorption est l'inverse d'une pression : la somme au dénominateur n'a de sens qu'à cette condition. La vérification l'impose avant tout calcul.
+
+<Vérifie>l'homogénéité de G_act = H_act - T * S_act avec G_act enthalpie libre standard d'activation, H_act enthalpie standard d'activation, T température, S_act entropie standard d'activation
+
+<Vérifie>l'homogénéité de ee = (n_R - n_S) / (n_R + n_S) avec ee excès énantiomérique, n_R quantité de matière, n_S quantité de matière
+
+<h2>Exercices types
+
+<Affiche>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice 1 — lire une entropie d'activation} {
+	Deux substitutions nucléophiles sur des dérivés halogénés donnent, à $298$ K, des entropies d'activation de $-120$ J·K⁻¹·mol⁻¹ et $+15$ J·K⁻¹·mol⁻¹.
+	Attribuer chaque valeur à un mécanisme, et justifier.
+}
+<correction>Correction. L'entropie fortement négative correspond au mécanisme bimoléculaire : le nucléophile et le substrat se rassemblent en un état de transition unique, plus ordonné que les deux partenaires séparés.
+	L'entropie légèrement positive correspond au mécanisme monomoléculaire : l'étape déterminante est la dissociation en un carbocation et un ion partant, qui crée deux entités là où il n'y en avait qu'une.
+	<remarque>C'est l'argument le plus décisif pour trancher entre les deux mécanismes, plus sûr que l'ordre cinétique apparent, que la solvolyse en solvant en large excès rend trompeur.
+
+<Affiche>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice 2 — un excès énantiomérique à peu de frais} {
+	Un catalyseur chiral conduit aux deux énantiomères par deux états de transition dont les enthalpies libres diffèrent de $\Delta\Delta G = 8,0$ kJ·mol⁻¹, à $298$ K.
+	Estimer l'excès énantiomérique obtenu.
+}
+<correction>Correction. Le rapport des vitesses est l'exponentielle de l'opposé de l'écart divisé par $RT$, soit environ $25$.
+	L'excès énantiomérique vaut la différence des deux proportions rapportée à leur somme, soit $(25 - 1)/(25 + 1)$, c'est-à-dire environ $92$ %.
+	<remarque>Huit kilojoules par mole représentent moins du dixième d'une liaison covalente. Toute la chimie asymétrique tient dans cet écart infime, amplifié par l'exponentielle.

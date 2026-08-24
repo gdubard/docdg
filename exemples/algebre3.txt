@@ -1,0 +1,136 @@
+document {
+	orientation: portrait;
+	marges: 5;
+	espacements: 2;
+	taille: 11;
+	interligne: 1,3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Algèbre — lycée
+
+<h2>Blocs matrices
+	Une matrice est un bloc : une ligne par rangée, le point-virgule sépare les coefficients. Chaque cellule passe par le mini-langage, donc $2x + 1$ ou $1/2$ y vivent. Parenthèses ou crochets servent eux-mêmes de délimiteur — ce que l'on voit à l'écriture est ce que l'on voit au rendu :
+<Affiche>la matrice(
+	1 ; 2 ; 3
+	4 ; 5 ; 6
+)
+<Affiche>la matrice[
+	2x + 1 ; 0
+	0 ; 1/2
+]
+<h2>Matrice augmentée
+	Une barre | dans une rangée trace la barre d'augmentation à cette colonne sur toutes les rangées — la mise en place d'un pivot de Gauss :
+<Affiche>la matrice[
+	2 ; 1 | 7
+	1 ; -1 | 1
+]
+<h2>Systèmes d'équations
+	Un système s'aligne tout seul sur le premier opérateur relationnel, égalités et inégalités mêlées, une équation par ligne :
+
+<Soit>le système s {
+	2x + 3y = 7
+	x - y = 1
+}
+<Résous>le système s
+<Résous>le système s, pas à pas
+
+
+<h2>Déterminant et inverse
+<Soit>la matrice M {
+	2 ; 1
+	1 ; 1
+}
+<Calcule>le déterminant de M
+<Calcule>l'inverse de M
+
+<h2>Second degré
+	Le trinôme se donne tel qu'il s'écrit ; l'étude sort complète : discriminant, racines, forme factorisée et forme canonique, avec des fractions exactes tant que le discriminant est un carré parfait.
+
+<Étudie>le second degré {
+	2x^2 - 3x + 1
+	x^2 - 4x + 4
+	x^2 + x + 1
+}
+
+Un discriminant qui n'est pas un carré parfait garde le radical et donne une valeur approchée :
+
+<Étudie>le second degré {
+	x^2 - 2
+}
+
+<page suivante h2>Vecteurs en colonne
+<Écris>le vecteur u de coordonnées (3 ; -2)
+<Écris>le vecteur v de coordonnées (1/2 ; -3 ; 4)
+
+<h2>Suite par récurrence
+	La suite se définit d'un premier terme et d'une relation ; les termes se calculent ensuite à la demande.
+	<Soit>la suite u, définie par u(0) = 1 et u(n+1) = 2u(n) + 1
+	<Calcule>les 6 premiers termes de u
+
+<h2>Suites arithmétiques et géométriques
+<Étudie>la suite arithmétique de premier terme 3 et de raison 2
+
+<Étudie>la suite u géométrique de premier terme 5 et de raison 1/2
+
+<h2>Congruences
+<Étudie>la congruence 3x ≡ 4 [7]
+
+<Étudie>la congruence 6x ≡ 4 [8]
+
+<h2>Notations de l'algèbre linéaire
+	L'engendré $engendré par(u, v)$, la trace $trace(A)$, le déterminant $déterminant(A)$, la transposée $^t{A}$, l'inverse $A^{-1}$, la comatrice $comatrice(A)$, le spectre $spectre(A)$ et l'adjoint $A^*$ se nomment en clair dans une formule.
+	Le noyau et l'image s'écrivent $noyau(A)$ et $image(A)$, le rang $rang(A)$.
+
+<h2>Le pivot, pas à pas
+<Soit>le système t {
+	x + y + z = 2
+	4x + 2y + z = 3
+	9x + 3y + z = 6
+}
+<Résous>t pas à pas
+
+<h2>Table de Cayley
+	Le groupe se nomme, la table se calcule : addition modulo n pour Z/nZ, multiplication des inversibles pour (Z/nZ)*.
+<Dresse>la table de Cayley du groupe Z/4Z
+<Dresse>la table de Cayley du groupe (Z/8Z)*
+
+<page suivante h2>Dénombrement
+<Dénombre>les combinaisons de 3 parmi 10
+<Dénombre>les arrangements de 3 parmi 10
+<Dénombre>les permutations de 5
+<Dresse>le triangle de Pascal jusqu'à la ligne 5
+
+<h2>Arithmétique
+<Dresse>la décomposition en facteurs premiers de 360
+<Applique>l'algorithme d'Euclide à 84 et 60
+
+<h2>Nombres complexes
+<Écris>le complexe z = 1 + i sous ses trois formes
+
+<Écris>le complexe w = -2i sous ses trois formes
+
+<h2>Puissances de matrices et chaînes de Markov
+<Soit>la matrice M {
+	0,5 ; 0,5
+	0,25 ; 0,75
+}
+<Calcule>la puissance 3 de M
+<Calcule>l'état stable de M
+
+<h2>Graphes
+<Construis>le graphe G {
+	A -> B
+	B -> C
+	C -> A
+	A -> C
+}
+<Dresse>la matrice d'adjacence de G
+<Dénombre>les chemins de longueur 3 de A à B dans G
+
+<h2>Équations diophantiennes
+
+<Résous>l'équation diophantienne 12x + 20y = 8
+
+<Résous>l'équation diophantienne 6x + 9y = 5

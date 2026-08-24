@@ -1,0 +1,97 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	espacements: 2;
+	taille: 11;
+	interligne: 1,3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Physique et chimie — niveau 3
+
+<h2>Incertitudes et lois de probabilité
+Le facteur d'élargissement à 95 pourcent est le quantile de la loi normale centrée réduite :
+
+<Détermine>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<Calcule la probabilité que X <= 1,96 pour la loi normale(0 ; 1)>
+
+Un contrôle de qualité sur 20 pièces, chacune défectueuse avec la probabilité 0,05 :
+
+<Calcule>la probabilité que X = 0 pour la loi binomiale(20 ; 0,05)
+
+<Calcule>l'espérance de la loi binomiale(20 ; 0,05)
+
+<h2>Décroissance radioactive
+La décroissance suit $N'(t) = -k N(t)$ ; avec $k = 0,12$ :
+
+<Résous>l'équation différentielle N' = -0,12N, d'inconnue N(t)
+
+<h2>Travail d'une force
+<Soit>une fonction Ep(x) = 3x^2 + 2
+
+<Calcule>l'intégrale numérique de Ep entre 0 et 2
+
+<h2>Approximation des petits angles
+<Soit>une fonction g(x) = sin(x)
+<Calcule>le développement limité de g en 0 à l'ordre 3
+
+
+<page suivante h2>Chute libre : hauteur et vitesse
+Une bille est lancée vers le haut à $20$ m/s depuis le sol ; hauteur et vitesse au cours du temps :
+
+<Soit>les fonctions h(t) = -4,9t^2 + 20t et v(t) = -9,8t + 20
+
+<Calcule>les dérivées de h et v
+
+<Détermine>les zéros de h et v
+
+<Représente>graphiquement les fonctions h et v pour x dans [0 ; 4,1] et y dans [-25 ; 25]
+
+<h2>Relevé de mesures
+<Dresse>un tableau [mc ; mc ; mc] avec une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine {
+	t (s)	h (m)	v (m/s)
+	[0 ; 0 ; 20]
+	[1 ; 15,1 ; 10,2]
+	[2 ; 20,4 ; 0,4]
+	[3 ; 15,9 ; -9,4]
+	[4 ; 1,6 ; -19,2]
+}
+
+<Affiche>un cadre avec une bordure verte, un fond vert menthe et un titre {À retenir} {
+	La vitesse est la dérivée de la hauteur : $v(t) = h'(t)$. Le sommet
+	de la trajectoire est atteint quand la vitesse s'annule.
+}
+<h2>Équilibrer une équation chimique
+La combustion du propane, coefficients trouvés par conservation des éléments :
+
+<Équilibre>l'équation C3H8 + O2 -> CO2 + H2O
+
+Et une demi-équation redox en milieu acide, charge comprise :
+
+<Équilibre>l'équation Fe^2+ + MnO4^- + H^+ -> Fe^3+ + Mn^2+ + H2O
+
+<h2>Masse molaire et tableau d'avancement
+
+<Calcule>la masse molaire de CaCO3
+
+<Dresse>un tableau d'avancement pour CH4 + O2 -> CO2 + H2O avec n(CH4) = 0,5 et n(O2) = 0,8
+
+<page suivante h2>Conversions et constantes
+
+<Convertis>90 km/h en m/s
+
+<Convertis>25 °C en K
+
+<Convertis>1013 hPa en atm
+
+<Donne>la valeur de la vitesse de la lumière
+
+<Donne>la valeur du nombre d'Avogadro
+
+<h2>Propagation d'incertitudes
+
+La résistance mesurée par la loi d'Ohm, avec les incertitudes-types des deux appareils :
+
+<Propage>l'incertitude sur R = U/I avec u(U) = 0,05, u(I) = 0,002, U = 5,12, I = 0,254
