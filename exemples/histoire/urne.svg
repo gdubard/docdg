@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" role="img">
+  <title>Urne électorale</title>
+  <rect width="120" height="90" fill="#eef2f7"/>
+  <rect x="28" y="38" width="64" height="42" rx="2" fill="#5b6b80" stroke="#33455e" stroke-width="1.5"/>
+  <rect x="46" y="44" width="28" height="3" fill="#2b3a4f"/>
+  <rect x="52" y="16" width="20" height="26" fill="#f7f9fc" stroke="#33455e" stroke-width="1.3" transform="rotate(-12 62 29)"/>
+  <rect x="28" y="72" width="64" height="8" fill="#33455e"/>
+</svg>

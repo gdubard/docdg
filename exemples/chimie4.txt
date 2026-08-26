@@ -1,0 +1,51 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,8;
+	niveau: licence 3;
+}
+soit h1 = <vert foncé gras section num>
+soit h2 = <vert italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+
+<h1>Du potentiel d'électrode au diagramme potentiel-pH — licence 3
+
+<h2>Ce qui précède
+<Dresse>les prérequis du diagramme potentiel-pH
+	<remarque>Le graphe converge depuis quatre directions : la relation de Nernst, le diagramme de prédominance, le produit de solubilité et l'influence du milieu. Le diagramme n'est pas un chapitre neuf mais la superposition de trois familles d'équilibres déjà écrites.
+
+<h2>Le potentiel et sa référence
+<Énonce>le potentiel d'électrode et l'électrode standard à hydrogène <étiquette>{reference}
+	Le potentiel absolu d'une électrode n'a pas de sens physique, exactement comme le potentiel électrostatique n'est défini qu'à une constante près.
+
+<h2>La relation de Nernst
+<Énonce>la relation de Nernst <étiquette>{nernst}
+<Démontre>la relation de Nernst
+	<remarque>La démonstration part de l'enthalpie libre plutôt que de poser la relation. Le contrôle d'homogénéité valide un assemblage peu intuitif : le quotient de la constante des gaz parfaits par celle de Faraday, multiplié par une température, donne bien des volts.
+
+<h2>Ce que le milieu change
+<Énonce>l'influence du milieu sur le potentiel d'un couple
+<Rappelle>le produit de solubilité
+<Rappelle>les constantes de formation d'un complexe
+	<remarque>Précipiter ou complexer l'oxydant abaisse son activité, donc le potentiel. C'est ce qui permet d'inverser le sens d'une réaction par un simple ajout de ligand.
+
+<h2>Le diagramme
+<Énonce>le diagramme potentiel-pH <étiquette>{pourbaix}
+<Énonce>le diagramme potentiel-pH de l'eau <étiquette>{eau}
+<Démontre>le diagramme potentiel-pH de l'eau
+
+<h2>Une application : la corrosion
+<Énonce>la corrosion humide d'un métal
+<Énonce>la protection contre la corrosion
+	<remarque>Le sodium réduit l'eau, comme le diagramme le prévoit. L'aluminium le devrait aussi et ne le fait pas : sa couche d'oxyde l'en empêche. Le diagramme prédit la thermodynamique, jamais la cinétique.
+
+<h2>Exercice type
+
+<Affiche>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice — domaine du fer} {
+	On donne $E°(Fe^{2+}/Fe) = -0,44$ V et $E°(Fe^{3+}/Fe^{2+}) = 0,77$ V, ainsi que les produits de solubilité des deux hydroxydes.
+	Tracer le diagramme potentiel-pH du fer pour une concentration de travail de $1,0 * 10^-2$ mol·L⁻¹.
+	Superposer celui de l'eau et conclure sur la stabilité du fer métallique en milieu aéré.
+}

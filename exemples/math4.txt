@@ -1,0 +1,63 @@
+document {
+	orientation: portrait;
+	marges: 10;
+	taille: 11;
+	interligne: 1,2;
+	niveau: licence 1;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+<h1>Complétude de R et théorèmes fondamentaux — licence 1
+
+<h2>L'axiome qui porte tout
+<Énonce>la propriété de la borne supérieure <étiquette>{bornesup}
+	<remarque>Tout ce qui suit en descend. Le théorème des valeurs intermédiaires, Bolzano-Weierstrass, la convergence monotone et la complétude sont équivalents entre eux : c'est pourquoi il faut désigner explicitement lequel sert d'axiome, sous peine de raisonnement circulaire.
+
+<h2>Premières conséquences
+<Énonce>la propriété d'Archimède
+<Démontre>la propriété d'Archimède
+
+<Énonce>la densité de Q dans R <étiquette>{densite}
+<Démontre>la densité de Q dans R
+
+<h2>Suites
+<Énonce>le théorème de la convergence monotone
+<Démontre>le théorème de la convergence monotone
+
+<Énonce>le théorème de Bolzano-Weierstrass <étiquette>{bw}
+<Démontre>le théorème de Bolzano-Weierstrass
+
+<page suivante h2>Continuité et dérivation
+<Énonce>le théorème des bornes atteintes
+<Démontre>le théorème des bornes atteintes
+
+<Énonce>le théorème de Rolle <étiquette>{rolle}
+<Démontre>le théorème de Rolle
+
+<Énonce>le théorème des accroissements finis
+<Démontre>le théorème des accroissements finis
+	<remarque>Le renvoi <renvoi>{rolle} montre l'enchaînement : la corde retranchée ramène les accroissements finis à Rolle, qui repose lui-même sur les bornes atteintes, donc sur <renvoi>{bw}, donc sur <renvoi>{bornesup}.
+
+<page suivante h2>Exercices types
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — une suite implicite} {
+	Pour $n$ entier supérieur ou égal à $1$, montrer que l'équation $x^n + x = 1$ admet une unique solution $u_n$ dans $[0;1]$, puis étudier la monotonie de la suite $(u_n)$.
+}
+<correction>Correction. La fonction $f_n(x) = x^n + x - 1$ est continue et strictement croissante sur $[0;1]$, avec $f_n(0) = -1$ et $f_n(1) = 1$. Le corollaire du théorème des valeurs intermédiaires donne l'existence et l'unicité de $u_n$.
+	Monotonie : $f_(n+1)(u_n) = u_n^(n+1) + u_n - 1 <= u_n^n + u_n - 1 = 0$ puisque $u_n$ appartient à $[0;1]$. Comme $f_(n+1)$ est croissante et s'annule en $u_(n+1)$, on en déduit $u_n <= u_(n+1)$ : la suite est croissante.
+	<remarque>Croissante et majorée par $1$, elle converge — par le théorème de la convergence monotone, lui-même conséquence de <renvoi>{bornesup}.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — une inégalité par les accroissements finis} {
+	Montrer que pour tout $x$ strictement positif, $x/(1+x) < ln(1+x) < x$.
+}
+<correction>Correction. Appliquons le théorème des accroissements finis à la fonction $ln$ sur l'intervalle $[1; 1+x]$ : il existe $c$ dans $]1; 1+x[$ tel que $ln(1+x) - ln(1) = x/c$, soit $ln(1+x) = x/c$.
+	Or $1 < c < 1+x$, donc $1/(1+x) < 1/c < 1$. En multipliant par $x$, strictement positif, l'ordre est conservé et l'on obtient l'encadrement annoncé.
+
+<h2>Un résultat de densité, en exercice
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 3 — irrationnels denses} {
+	Déduire de <renvoi>{densite} que les irrationnels sont eux aussi denses dans $RR$.
+}
+<correction>Correction. Soient $a < b$ deux réels. Appliquons la densité des rationnels aux réels $a - racine(2)$ et $b - racine(2)$ : il existe un rationnel $r$ tel que $a - racine(2) < r < b - racine(2)$, donc $a < r + racine(2) < b$. Le nombre $r + racine(2)$ est irrationnel, car sinon $racine(2)$ serait la différence de deux rationnels, donc rationnel.

@@ -1,0 +1,118 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 2;
+	niveau: terminale;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit enonce = <fond bleu Alice>
+soit correction = <fond gris clair>
+
+
+<h1>Gravitation et principe d'inertie — classe de seconde
+
+<h2>Ce qui a été vu au collège
+<Rappelle>l'interaction gravitationnelle
+
+	<remarque>La balise reprend l'énoncé tel qu'il était formulé à son niveau d'introduction. On mesure alors exactement ce que la seconde ajoute.
+
+<h2>La loi quantitative
+<Énonce>la loi de la gravitation universelle <étiquette>{gravitation}
+
+	<remarque>Le corpus enregistre que cette loi est un cas limite de la relativité générale, dans le régime des champs faibles. L'information ne s'affiche pas ici, mais elle est disponible : elle explique pourquoi l'avance du périhélie de Mercure y échappe.
+
+<h2>Du poids au champ de pesanteur
+<Énonce>le poids et le champ de pesanteur <étiquette>{pesanteur}
+
+<Démontre>le poids et le champ de pesanteur
+	<remarque>La démonstration regroupe trois quantités qui ne dépendent que de l'astre. C'est l'occasion de montrer qu'un regroupement algébrique fait apparaître une grandeur nouvelle.
+
+<h2>Le principe d'inertie
+<Énonce>le principe d'inertie <étiquette>{inertie}
+	Ce principe reformule, sous une hypothèse plus précise, ce qui avait été admis en troisième.
+<Rappelle>l'équilibre sous deux forces
+
+<page suivante h2>Exercice type
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — attraction Terre-Lune} {
+	La Terre a une masse de $5,97 * 10^24$ kg, la Lune de $7,35 * 10^22$ kg. Leur distance moyenne vaut $3,84 * 10^8$ m.
+	Calculer la valeur de la force d'attraction gravitationnelle entre les deux astres.
+}
+<correction>Correction. La loi <renvoi>{gravitation} donne $F = G * (m_T * m_L) / d^2$. L'application numérique conduit à environ $1,98 * 10^20$ N.
+	<remarque>Faire vérifier l'unité du résultat par l'élève : le newton s'obtient bien à partir de la constante gravitationnelle, de deux masses et du carré d'une distance.
+
+<page suivante h1>Énergie mécanique — première, spécialité
+
+<h2>Prérequis du chapitre
+<Dresse>les prérequis de la conservation de l'énergie mécanique
+	<remarque>Cette liste traverse trois niveaux : le collège pour la conservation de l'énergie, la seconde pour le champ de pesanteur, la première pour le travail. Le corpus étant unique, l'arbre de dépendance ne s'arrête à aucune frontière de classe.
+
+<h2>Le travail d'une force
+<Énonce>le travail d'une force constante <étiquette>{travail}
+
+<Énonce>le travail du poids <étiquette>{poids}
+
+<Démontre>le travail du poids
+
+	<remarque>Le résultat ne fait intervenir que les altitudes des extrémités. C'est ce qui distingue une force conservative d'une force dissipative, et c'est le pivot de tout le chapitre.
+
+<Énonce>le travail d'une force de frottement
+
+<h2>Les deux formes d'énergie
+<Énonce>l'énergie cinétique d'un point matériel
+<Énonce>le théorème de l'énergie cinétique <étiquette>{tec}
+<Énonce>l'énergie potentielle de pesanteur
+<Énonce>l'énergie mécanique
+
+<h2>Le résultat central
+<Énonce>la conservation de l'énergie mécanique <étiquette>{conservation}
+
+<Démontre>la conservation de l'énergie mécanique
+	<remarque>La démonstration combine <renvoi>{tec} et <renvoi>{poids} : les deux variations sont opposées, donc leur somme est nulle. Une fois écrite ainsi, l'hypothèse d'absence de frottement se voit à l'œil nu.
+<Énonce>la dissipation en présence de frottements
+<h2>Exercice type
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — vitesse au bas d'une piste} {
+	Un skieur de 70 kg part sans vitesse initiale d'un point situé 40 m plus haut que l'arrivée.
+	Calculer sa vitesse à l'arrivée en négligeant les frottements, puis commenter l'écart avec les 20 m/s effectivement mesurés.
+}
+<correction>Correction. Le résultat <renvoi>{conservation} donne $1/2 * m * v^2 = m * g * h$, d'où $v = racine(2 * g * h)$, soit environ 28 m/s. La masse se simplifie : le résultat ne dépend pas du skieur. L'écart avec la mesure vient des frottements, dont le travail résistant a dissipé une partie de l'énergie mécanique.
+	<remarque>L'exercice vaut surtout par sa dernière question : l'écart n'est pas une erreur de mesure, c'est la trace de l'hypothèse qu'on a faite.
+
+<h1>Mouvement des satellites — terminale, spécialité
+<h2>Prérequis de la leçon
+<Dresse>les prérequis de la troisième loi de Kepler
+
+<h2>Les outils de la cinématique
+<Énonce>le vecteur position
+<Énonce>le vecteur vitesse instantanée
+
+<Énonce>le vecteur accélération
+	<remarque>Trois définitions enchaînées par dérivation. Le corpus les relie aux énoncés d'analyse : le nombre dérivé figure parmi les dépendances déclarées, ce qui rend visible la solidarité entre les deux disciplines.
+
+<h2>La loi fondamentale
+<Énonce>la deuxième loi de Newton <étiquette>{pfd}
+	<remarque>Le principe d'inertie, admis en seconde, en est le cas particulier où la somme des forces est nulle. Le corpus enregistre cette filiation.
+<Énonce>l'accélération dans un mouvement circulaire uniforme <étiquette>{centripete}
+
+<h2>Application aux satellites
+<Énonce>la vitesse d'un satellite en orbite circulaire <étiquette>{vitesse}
+
+<page suivante>
+<Démontre>la vitesse d'un satellite en orbite circulaire
+	<remarque>La masse du satellite se simplifie. C'est le même phénomène qu'en chute libre, et il mérite d'être signalé comme tel.
+
+<Énonce>la troisième loi de Kepler <étiquette>{kepler}
+
+<Démontre>la troisième loi de Kepler
+
+<page suivante h2>Exercice type
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — l'orbite géostationnaire} {
+	Un satellite géostationnaire reste à la verticale du même point de l'équateur.
+	Déterminer le rayon de son orbite, sachant que $G * M_T = 3,99 * 10^14$ en unités du système international.
+}
+<correction>Correction. La période vaut un jour sidéral, soit $86 164$ s. La relation <renvoi>{kepler} donne $r^3 = (G * M_T * T^2) / (4 * pi^2)$, d'où $r = 4,22 * 10^7$ m, soit environ 36 000 km d'altitude.
+	<remarque>Faire vérifier l'homogénéité avant l'application numérique : c'est le seul garde-fou contre une erreur d'exposant, et le corpus fait le même contrôle à la compilation.

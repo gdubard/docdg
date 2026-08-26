@@ -1,0 +1,135 @@
+document {
+	marges: 25;
+	script: Georgia;
+	taille: 11;
+	interligne: 1,6;
+	césure: oui;
+	orphelines: 2;
+	veuves: 2;
+}
+soit h0 = <bleu nuit gras chapitre num>
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section num>
+soit h3 = <sous-sous-section num>
+
+soit nature = <petites capitales grand au centre>
+soit ouvrage = <gras 26pt au centre>
+soit complement = <16pt italique au centre>
+soit mention = <14pt au centre>
+soit maison = <au centre>
+
+<nature>{Essai}
+
+<ouvrage>{De la division des ouvrages}
+
+<complement>{Du volume antique à la table des matières}
+
+<mention>{Aurélien BASTIDE}
+
+<maison>{Éditions du Quinconce — Collection « Le Cahier cousu », n° 7}
+
+<mention>{août 2026}
+
+<page suivante>
+
+<table des matières>{Table des matières}
+
+<tome>Ce que la matière imposait
+
+<livre>Du rouleau au codex
+
+<partie>La longueur qu'un support autorise <étiquette>{support}
+
+<h0>Le volume antique
+
+<h1>Une longueur qui ne se discutait pas
+
+	Le rouleau antique ne se divisait pas par goût : il se divisait parce qu'un rouleau plus long qu'une dizaine de mètres devenait impossible à dérouler d'une main et à enrouler de l'autre. L'unité de division la plus ancienne est donc une unité de manutention, et le mot qui la désigne — tome, du grec qui dit la coupure — avoue franchement qu'il nomme un morceau avant de nommer une idée.
+
+	Les ouvrages que l'Antiquité nous a laissés portent encore la trace de cette contrainte. Un livre d'Hérodote, un chant d'Homère, un livre des Confessions : chacun tient dans un rouleau, et chacun s'achève là où le support s'achevait. La division n'était pas une commodité de lecture ajoutée après coup — elle était la condition matérielle de l'existence du texte.
+
+<h2>Le tome comme unité physique
+
+	Ce que le tome désigne aujourd'hui n'a pas changé de nature : c'est toujours le volume que la main tient. Un ouvrage en trois tomes est un ouvrage qui pèse trop pour un seul dos de reliure, et l'éditeur qui le coupe le fait pour la même raison que le copiste alexandrin.
+
+<h3>Un mot qui reste un poids
+
+	La preuve en est qu'on ne dit jamais d'une idée qu'elle occupe deux tomes : on le dit d'un texte. Le tome se compte en pages, non en arguments, et c'est le seul niveau de division dont la frontière puisse tomber au milieu d'une phrase sans que personne s'en offusque.
+
+<h1>Le codex et la reliure
+
+	Le passage au codex change la contrainte sans la supprimer. Un cahier cousu peut contenir bien davantage qu'un rouleau, mais la couture a sa limite, le dos a son épaisseur, et la reliure du grand ouvrage impose de nouveau la coupure. Le tome survit à son support parce que la raison qui l'a fait naître lui survit aussi.
+
+<page suivante h0>Ce que l'imprimerie a figé
+
+<h1>La page comme nouvelle unité
+
+	L'imprimerie ajoute une division que le manuscrit ignorait : la page numérotée, identique d'un exemplaire à l'autre <cite>{febvre}. C'est elle qui rend possible la table des matières telle que nous l'entendons — un renvoi à un numéro, et non plus à un incipit.
+
+<h1>Ce que la table des matières suppose
+
+	Une table ne peut renvoyer qu'à ce qui porte un numéro stable. La partie <renvoi>{support} n'existe comme cible que parce qu'une numérotation la désigne : c'est la leçon que tout système de composition doit retenir avant d'inventer ses divisions.
+
+<partie>Les divisions que l'usage a retenues
+
+<h0>Le livre, la partie, le chapitre
+
+<h1>Trois mots pour trois natures
+
+<Énonce>la définition <étiquette>{def-division} {
+Une division est <italique>{majeure} lorsqu'elle occupe une page à elle seule et ne se numérote que pour elle-même ; elle est <italique>{courante} lorsqu'elle s'insère dans le flux du texte et se numérote au regard de celle qui la contient.
+}
+
+	Le tome, le livre et la partie sont majeurs ; le chapitre, la section et ses subdivisions sont courants. La définition <renvoi>{def-division} tient tout entière dans une différence de conduite typographique, ce qui est le signe qu'elle est juste : une division se reconnaît à la façon dont elle est composée, non à ce qu'elle contient.
+
+<h2>Le livre
+
+	Le livre est la division majeure du sens, comme le tome est celle de la matière. Les Confessions comptent treize livres et un seul tome ; les Misérables comptent cinq parties et autant de tomes que l'éditeur en décide. Les deux échelles sont indépendantes, et c'est pourquoi aucune ne remet l'autre à zéro.
+
+<h2>La partie
+
+	La partie est la division majeure la plus fine, celle qui regroupe des chapitres sans prétendre former un ouvrage. Elle se numérote en chiffres romains depuis toujours, et la tradition n'a jamais eu de raison d'en changer.
+
+<h1>Le chapitre et ce qui descend de lui
+
+	Le chapitre est la première division qui se prête à la référence courante : on renvoie à un chapitre comme on renvoie à une section, par un numéro composé. Sa numérotation court d'un bout à l'autre de l'ouvrage, sans recommencer à chaque partie — un chapitre 17 dans une troisième partie n'a jamais gêné personne, et il évite l'ambiguïté de deux chapitres premiers.
+
+<h2>La section et ses subdivisions
+
+	La section, la sous-section et la sous-sous-section se numérotent en préfixant le chapitre : la troisième section du deuxième chapitre est la section 2.3, et son numéro dit à lui seul où elle se trouve. Trois niveaux suffisent — au-delà, la numérotation devient une adresse postale, et le lecteur cesse de la lire.
+
+<tome>Ce que le texte impose
+
+<livre>La numérotation
+
+<partie>Ce que LaTeX numérote, et comment
+
+<h0>Deux commandes pour six divisions
+
+<h1>Le compte des commandes
+
+	La classe <italique>{book} n'offre que deux commandes de division majeure, et il faut en tirer six niveaux. Le tome et la partie se composent avec la même commande, le livre et le chapitre avec l'autre ; seul le nom imprimé les distingue, et ce nom se change d'une ligne.
+
+<h1>Deux traditions de chiffres
+
+	De cette économie découle une règle que rien d'autre n'explique : les divisions bâties sur la première commande comptent en chiffres romains, celles qui viennent de la seconde comptent en chiffres arabes. Tome I et Partie II d'un côté, Livre 1 et Chapitre 2 de l'autre. La règle est arbitraire dans son origine et parfaitement stable dans son usage — les deux conditions d'une bonne convention.
+
+<page suivante h0>Ce qu'une division majeure ne fait pas
+
+<h1>Elle ne remet rien à zéro
+
+	Une partie n'interrompt pas le compte des chapitres, et un tome n'interrompt pas celui des livres. Chaque échelle court sur l'ouvrage entier. La conséquence est qu'aucun numéro n'apparaît deux fois, et qu'un renvoi n'a jamais besoin de dire dans quelle partie chercher.
+
+<h1>Elle ne se mêle pas au texte
+
+	Une division majeure prend sa page et ne la partage pas. Rien ne la suit sur cette page — ni le premier paragraphe du premier chapitre, ni l'épigraphe qu'on serait tenté d'y glisser. C'est le seul blanc de l'ouvrage que la typographie exige au lieu de le tolérer, et il vaut annonce : le lecteur qui tourne la page sait qu'il change d'ordre de grandeur.
+
+<h1>Elle ne se numérote pas deux fois
+
+	Le nom précède le numéro sur la page de division et dans la table des matières — Tome II, Partie IV —, mais un renvoi ne rend que le numéro seul. Renvoyer à la partie <renvoi>{support} donne un chiffre, et celui qui écrit la phrase choisit le mot qui l'introduit. Le nom appartient à la division ; la phrase appartient à l'auteur.
+
+<Dresse>une bibliographie {
+	[febvre] L. Febvre et H.-J. Martin, L'Apparition du livre, Albin Michel, 1958.
+	[dain] A. Dain, Les Manuscrits, Les Belles Lettres, 1949.
+	[bringhurst] R. Bringhurst, The Elements of Typographic Style, Hartley et Marks, 2012.
+}

@@ -1,0 +1,44 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,8;
+	niveau: quatrième;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+<h1>Poids et masse — classe de quatrième
+
+<h2>Ce qu'il faut savoir avant
+	La liste se déduit du corpus : elle suit les arêtes de dépendance, elle n'est pas recopiée à la main. Si un prérequis change de niveau, cette liste change toute seule.
+<Dresse>les prérequis du poids d'un corps
+
+<h2>L'énoncé
+<Énonce>l'interaction gravitationnelle
+	<remarque>À ce niveau la loi reste qualitative : on dit que l'attraction augmente avec les masses et diminue avec la distance, sans l'écrire. L'expression quantitative viendra en seconde, et c'est le corpus qui le sait.
+<Énonce>le poids d'un corps <étiquette>{poids}
+
+<h2>Ce qui se confond souvent
+<Énonce>la distinction de la masse et du poids
+	<remarque>C'est la confusion la plus tenace du cycle 4. La formuler comme un énoncé à part entière, et non comme une remarque au fil du texte, permet de la convoquer partout où elle sert.
+
+<page suivante h2>Exercices types
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — calculer un poids} {
+	Un sac de ciment a une masse de 25 kg.
+	Calculer son poids sur la Terre, où l'intensité de la pesanteur vaut 9,8 N/kg.
+}
+<correction>Correction. La relation <renvoi>{poids} donne $P = m * g$, soit $P = 25 * 9,8 = 245$ N.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — sur la Lune} {
+	Le même sac est emporté sur la Lune, où l'intensité de la pesanteur vaut 1,6 N/kg.
+	Sa masse a-t-elle changé ? Et son poids ?
+}
+<correction>Correction. La masse ne dépend pas du lieu : elle vaut toujours 25 kg. Le poids, lui, devient $P = 25 * 1,6 = 40$ N, soit environ six fois moins que sur la Terre.
+	<remarque>Faire calculer les deux dans le même exercice vaut mieux que toute explication : l'élève voit que l'un des deux nombres bouge et pas l'autre.
+
+<h2>Vérification automatique
+	Toutes les formules de cette page ont été contrôlées en homogénéité à la compilation. Une masse ajoutée à une force, ou un poids écrit en kilogrammes, aurait fait échouer la construction du document avant l'impression.

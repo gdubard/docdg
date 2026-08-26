@@ -1,0 +1,185 @@
+document {
+	marges: 25;
+	script: Georgia;
+	taille: 11;
+	interligne: 1,7;
+	césure: oui;
+	orphelines: 2;
+	veuves: 2;
+}
+soit h0 = <bleu nuit gras chapitre num>
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section num>
+soit resume = <italique 10pt>
+soit motcle = <petites capitales>
+
+soit nature = <petites capitales grand au centre>
+soit maison = <14pt au centre>
+soit filiere = <italique au centre>
+soit ouvrage = <gras 18pt au centre>
+soit complement = <16pt au centre>
+soit mention = <14pt au centre>
+
+<au centre>{<Insère l'image IMAGES/institut.svg avec une largeur de 30 mm>}
+
+<nature>{Thèse de doctorat}
+
+<maison>{Université de Vaubertier}
+
+<filiere>{École doctorale de mathématiques — Spécialité : analyse numérique}
+
+<Affiche>un filet de 0,35 mm et d'une largeur de 155 mm au centre
+<ouvrage>{Points fixes attractifs et vitesse de convergence}
+
+<complement>{Étude locale des suites récurrentes du premier ordre}
+<Affiche>un filet de 0,35 mm et d'une largeur de 155 mm au centre
+
+<mention>{Théodore MARSAN}
+
+<mention>{septembre 2026}
+
+
+
+
+
+<12pt italique>{
+Devant le jury composé de :
+madame le professeur Hélène VIRECOURT, présidente
+monsieur le professeur Bastien QUÉRAND, directeur de thèse
+}
+
+<page suivante>
+<resume>{Résumé — On étudie les suites définies par une relation de récurrence du premier ordre au voisinage d'un point fixe. Le théorème du point fixe attractif donne la convergence locale ; l'ordre de la première dérivée non nulle en donne la vitesse. Le mémoire établit les deux résultats, en déduit la convergence quadratique de la méthode de Newton, et discute le cas neutre, où la dérivée vaut un et où l'étude locale ne conclut plus.}
+
+<motcle>{Mots-clés} : suite récurrente, point fixe, convergence linéaire, convergence quadratique, méthode de Newton.
+
+<page suivante>
+<table des matières>{Table des matières}
+
+<page suivante h0>Le cadre et ses définitions
+
+<h1>La récurrence du premier ordre
+
+	Une suite définie par $u_(n+1) = f(u_n)$ ne se laisse pas décrire par une formule close, sauf coïncidence. Ce que l'on peut en dire tient dans une question de position : où la suite s'installe-t-elle, et à quelle vitesse ? La réponse locale se lit tout entière dans le comportement de $f$ au voisinage de ses points fixes.
+
+<Énonce>la définition du point fixe <étiquette>{def-point-fixe} {
+Soit $f$ une fonction définie sur un intervalle $I$ à valeurs dans $I$. Un réel $a$ de $I$ est un <italique>{point fixe} de $f$ lorsque $f(a) = a$.
+}
+
+<Énonce>la remarque {
+Si la suite définie par $u_(n+1) = f(u_n)$ converge vers un réel $a$ de $I$ et si $f$ est continue en $a$, alors $a$ est un point fixe de $f$. La limite d'une suite récurrente convergente ne peut donc être cherchée ailleurs que parmi les points fixes — c'est le seul usage universel de la définition <renvoi>{def-point-fixe}.
+}
+
+<h1>Attractivité et répulsivité
+
+<Énonce>la définition du point fixe attractif <étiquette>{def-attractif} {
+Un point fixe $a$ de $f$ est dit <italique>{attractif} lorsqu'il existe un voisinage de $a$ dans lequel toute suite récurrente issue d'un point converge vers $a$. Il est dit <italique>{répulsif} lorsque toute suite issue d'un point distinct de $a$ finit par en sortir.
+}
+
+<Énonce>l'exemple {
+La fonction cosinus applique l'intervalle $[0 ; 1]$ dans lui-même et y admet un unique point fixe, voisin de $0,739$. La dérivée y vaut environ $-0,674$, de valeur absolue strictement inférieure à $1$ : le théorème <renvoi>{thm-attractif} en fera un point fixe attractif.
+}
+
+<page suivante h0>Le théorème du point fixe attractif
+
+<h1>L'énoncé et sa preuve
+
+<Énonce>le théorème du point fixe attractif <étiquette>{thm-attractif} {
+Soit $f$ de classe $C^1$ au voisinage d'un point fixe $a$. Si $|f'(a)| < 1$, le point fixe $a$ est attractif. Si $|f'(a)| > 1$, il est répulsif.
+
+démonstration que le point fixe est attractif lorsque la dérivée y est de valeur absolue strictement inférieure à un {
+Posons $k$ un réel strictement compris entre $|f'(a)|$ et $1$. La continuité de $f'$ en $a$ fournit un intervalle $J$ centré en $a$ sur lequel $|f'| <= k$. L'inégalité des accroissements finis donne alors, pour tout $x$ de $J$, la majoration $|f(x) - a| = |f(x) - f(a)| <= k|x - a|$, ce qui montre au passage que $J$ est stable par $f$. Une récurrence immédiate établit $|u_n - a| <= k^n |u_0 - a|$ pour toute suite issue de $J$, et la convergence suit de $k < 1$. Le cas répulsif s'obtient en échangeant les rôles des inégalités.
+}
+}
+
+<Énonce>le corollaire <étiquette>{cor-vitesse} {
+Sous les hypothèses du théorème <renvoi>{thm-attractif}, si de plus $f'(a) != 0$, la convergence est <italique>{linéaire} : le rapport des écarts successifs tend vers $|f'(a)|$, et le nombre de décimales exactes croît d'une quantité constante à chaque itération.
+}
+
+<h1>Le cas où la dérivée s'annule
+
+<Énonce>la proposition <étiquette>{prop-ordre} {
+Soit $f$ de classe $C^p$ au voisinage d'un point fixe $a$, avec $p$ supérieur ou égal à $2$. Si les dérivées de $f$ en $a$ s'annulent jusqu'à l'ordre $p-1$ et si la dérivée d'ordre $p$ ne s'annule pas, alors l'écart au rang $n+1$ est équivalent à $C|u_n - a|^p$. La convergence est dite d'ordre $p$.
+}
+
+	La formule de Taylor à l'ordre $p$ donne directement la constante $C$ : la valeur absolue de la dérivée d'ordre $p$ en $a$, divisée par $p!$. Le cas $p = 2$ est celui qui intéresse le calcul numérique : le nombre de décimales exactes y double à chaque itération, là où le corollaire <renvoi>{cor-vitesse} n'en promettait qu'un gain constant.
+
+<page suivante h0>Application à la méthode de Newton
+
+<h1>La fonction d'itération
+
+	La méthode de Newton cherche un zéro $a$ d'une fonction $g$ en itérant la fonction $f$ définie par $f(x) = x - g(x)/g'(x)$. Un zéro de $g$ est un point fixe de $f$, et la dérivée de $f$ en ce point s'écrit $f'(a) = g(a)g''(a)/g'(a)^2$.
+
+<Énonce>le théorème de convergence quadratique <étiquette>{thm-newton} {
+Soit $g$ de classe $C^2$ au voisinage d'un zéro simple $a$. La méthode de Newton converge localement vers $a$, et sa convergence est d'ordre au moins $2$.
+
+démonstration {
+Le zéro étant simple, $g(a) = 0$ et $g'(a) != 0$ : la formule ci-dessus donne $f'(a) = 0$. Le théorème <renvoi>{thm-attractif} s'applique et fournit la convergence locale ; la proposition <renvoi>{prop-ordre}, appliquée avec $p = 2$, donne l'ordre.
+}
+}
+
+<h1>Le contrôle de l'erreur
+
+<Énonce>la propriété {
+Notons $e_n$ l'écart au rang $n$ et posons $v_n = Ce_n$. La relation quadratique s'écrit alors $v_(n+1) <= v_n^2$, et l'écart au rang $n$ se majore par $v_n <= v_0^p$, où $p$ désigne la puissance $2^n$.
+
+démonstration par récurrence que pour tout entier naturel $n$, la quantité $v_n$ est majorée par $v_0$ élevé à la puissance $2^n$ {
+initialisation{
+Au rang $0$, la puissance vaut $1$ et la majoration se réduit à l'égalité $v_0 = v_0$.
+}
+hérédité{
+Si $v_n <= v_0^p$ avec $p$ égal à $2^n$, la relation quadratique donne $v_(n+1) <= v_n^2 <= v_0^q$ où $q$ vaut $2p$, c'est-à-dire $2^(n+1)$.
+}
+}
+}
+
+	La conclusion pratique tient en une phrase : la méthode ne converge que si $v_0 < 1$, c'est-à-dire si l'écart initial est inférieur à l'inverse de la constante — et alors elle converge très vite. C'est la raison pour laquelle Newton se fait toujours précéder d'une méthode lente mais sûre, chargée de fournir un $u_0$ assez proche.
+
+<h0>Le cas neutre
+
+<h1>Ce que l'étude locale ne dit pas
+
+<Énonce>l'exemple {
+La fonction définie par $f(x) = x - x^3$ admet $0$ pour point fixe, avec $f'(0) = 1$. Le théorème <renvoi>{thm-attractif} ne s'applique pas. La suite issue d'un réel strictement compris entre $0$ et $1$ converge pourtant vers $0$, mais lentement : l'écart décroît comme l'inverse de la racine carrée du rang.
+}
+
+<Énonce>la remarque {
+Le cas neutre n'est pas une lacune de la théorie : c'est le lieu où la dérivée première cesse d'être informative et où le signe des termes suivants du développement décide seul. L'exemple ci-dessus et son symétrique $f(x) = x + x^3$, répulsif, ont la même dérivée en $0$ et des comportements opposés.
+}
+
+<h1>Les trois genres qui restent
+
+	Aux sept genres déjà employés — définition, remarque, exemple, théorème, corollaire, proposition, propriété — s'ajoutent les trois derniers. Les dix se numérotent ensemble, se renvoient l'un à l'autre, et se composent en italique lorsqu'ils énoncent, en romain lorsqu'ils commentent.
+
+<Énonce>l'axiome <étiquette>{axiome-borne} {
+Toute partie non vide et majorée de $RR$ admet une borne supérieure.
+}
+
+<Énonce>le lemme <étiquette>{lemme-ecart} {
+Si une suite vérifie $|u_(n+1) - a| <= k|u_n - a|$ avec $0 <= k < 1$, alors $|u_n - a| <= k^n |u_0 - a|$ pour tout entier naturel $n$.
+
+démonstration par récurrence que pour tout entier naturel $n$, $|u_n - a| <= k^n |u_0 - a|$ {
+initialisation{
+Au rang $0$, l'inégalité s'écrit $|u_0 - a| <= |u_0 - a|$, qui est une égalité.
+}
+hérédité{
+Si $|u_n - a| <= k^n |u_0 - a|$, l'hypothèse donne $|u_(n+1) - a| <= k|u_n - a| <= k^(n+1) |u_0 - a|$.
+}
+}
+}
+
+	Le lemme <renvoi>{lemme-ecart} est la brique que la démonstration du théorème <renvoi>{thm-attractif} employait sans la nommer ; l'axiome <renvoi>{axiome-borne} fonde la complétude dont dépend la convergence.
+
+<Énonce>la conjecture {
+Pour une fonction de plusieurs variables, la convergence locale de Newton serait gouvernée par le rayon spectral de la jacobienne au zéro, et l'ordre deux subsisterait dès que ce rayon est nul. La démonstration en dimension quelconque n'est pas donnée ici.
+}
+
+<h1>Perspectives
+
+	Trois directions restent ouvertes. La première étend l'étude aux systèmes de plusieurs variables, où la dérivée devient une matrice jacobienne et où le rayon spectral remplace la valeur absolue. La deuxième traite le zéro multiple, pour lequel la méthode de Newton perd son ordre deux et redevient linéaire. La troisième, la plus délicate, concerne le cas neutre en dimension quelconque, où la conclusion dépend de la direction considérée.
+
+<Dresse>une bibliographie {
+	[demailly] J.-P. Demailly, Analyse numérique et équations différentielles, EDP Sciences, 2016.
+	[quarteroni] A. Quarteroni, R. Sacco et F. Saleri, Méthodes numériques, Springer, 2007.
+	[rudin] W. Rudin, Principes d'analyse mathématique, Ediscience, 1995.
+}

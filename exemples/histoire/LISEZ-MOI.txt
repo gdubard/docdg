@@ -1,0 +1,16 @@
+Vignettes de frise chronologique — exemples/histoire
+
+Ces cinq pictogrammes ont été dessinés directement en SVG pour docdg. Ils ne
+reprennent aucune œuvre existante et ne sont la copie d'aucune photographie :
+ce sont des dessins originaux, distribués sous la même licence que docdg.
+
+Le format SVG a été retenu à dessein. Une frise inscrit ses vignettes en
+base64 dans le document ; en matriciel, quinze événements illustrés
+pèseraient plusieurs mégaoctets, là où ces fichiers tiennent en quelques
+kilo-octets et restent nets à toute échelle.
+
+Le registre est celui du pictogramme, non de l'illustration documentaire. Une
+frise de cours gagnera à leur substituer de vraies sources — Gallica, les
+collections de la BnF ou Wikimedia Commons offrent quantité de documents dans
+le domaine public. Le format matriciel y est la règle : penser alors au poids
+du document.

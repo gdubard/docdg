@@ -1,0 +1,124 @@
+document {
+	orientation: portrait;
+	marges: 16;
+	espacements: 0;
+	script: Georgia;
+	taille: 11;
+	interligne: 2;
+}
+soit h1 = <bleu nuit gras section num>
+soit h2 = <bleu nuit italique sous-section num>
+soit chapo = <italique 10pt>
+soit motcle = <petites capitales>
+soit remarque = <gris foncé italique 10pt>
+
+soit nature = <petites capitales grand au centre>
+soit ouvrage = <gras 24pt au centre>
+soit complement = <16pt au centre>
+soit mention = <au centre>
+soit maison = <italique au centre>
+
+<nature>{Exposé d'histoire}
+
+<ouvrage>{De la Bastille aux urnes}
+
+<complement>{Comment la République s'est imposée en France}
+
+<mention>{Noémie BRUCHET}
+
+<maison>{Lycée des Quatre-Vents — Classe de première, groupe 3}
+
+<mention>{12 mars 2026}
+
+<page suivante>
+
+<chapo>{Une frise, deux siècles, et trois façons de lire le même intervalle : les régimes, les conquêtes du droit de vote, et ce que la presse et le rail ont rendu possible.}
+
+<motcle>{Problématique} : pourquoi a-t-il fallu quatre-vingts ans, entre 1789 et 1870, pour qu'un régime né en quelques semaines devienne durable ?
+
+
+<page suivante>
+<table des matières>{Plan de l'exposé}
+
+<page suivante h1>Ordonner : ce qui s'est passé <étiquette>{ordonner}
+
+	Avant d'expliquer, il faut situer. La première frise ne fait que cela : poser les dates dans l'ordre du temps, sans les commenter. Les six repères ci-dessous sont ceux que le manuel retient ; chacun marque une rupture que la suite de l'exposé devra justifier.
+
+<Construis>la frise chronologique de la Révolution et de ses suites {
+14/07/1789 : Prise de la Bastille (Le peuple de Paris s'empare de la forteresse.) avec l'image histoire/bastille.svg
+26/08/1789 : Déclaration des droits de l'homme et du citoyen avec l'image histoire/ecriture.svg
+21/09/1792 : Proclamation de la République avec l'image histoire/tricolore.svg
+02/12/1804 : Sacre de Napoléon Ier
+1848 : Suffrage universel masculin (Deux millions d'électeurs deviennent neuf millions.) avec l'image histoire/urne.svg
+04/09/1870 : Proclamation de la Troisième République avec l'image histoire/tricolore.svg
+}
+
+	<remarque>Ces vignettes sont des pictogrammes dessinés pour docdg, non des documents d'époque. Un exposé rendu à un professeur gagnerait à leur substituer une gravure de Gallica ou des collections de la BnF.
+
+<page suivante h1>Périodiser : trois lectures d'un même intervalle
+
+	Une frise à une seule bande raconte une histoire ; trois bandes en confrontent trois. Ce qui est simultané se lit dans la même verticale, et c'est là que l'explication commence : le suffrage universel de 1848 tombe la même année que la Deuxième République, mais le chemin de fer et la presse à bon marché, eux, l'ont précédé d'une dizaine d'années.
+
+<Construis>la frise chronologique des trois chemins vers la République {
+régimes {
+de 1792 à 1804 : Première République
+de 1804 à 1814 : Premier Empire
+de 1814 à 1848 : Monarchies constitutionnelles
+de 1848 à 1852 : Deuxième République
+de 1852 à 1870 : Second Empire
+de 1870 à 1940 : Troisième République
+}
+droit de vote {
+1791 : Suffrage censitaire (Seuls votent ceux qui paient un impôt suffisant.)
+1848 : Suffrage universel masculin
+1850 : Restriction du corps électoral (Trois millions d'électeurs écartés par la loi.)
+1852 : Rétablissement du suffrage universel masculin
+}
+presse et transports {
+de 1837 à 1870 : Essor du chemin de fer
+1836 : Naissance de la presse à bon marché (Le premier quotidien vendu à quarante francs l'an.)
+1857 : Paris relié à Marseille par le rail avec l'image histoire/locomotive.svg
+1881 : Loi sur la liberté de la presse
+}
+}
+
+<page suivante h2>Ce que la frise fait voir
+
+	Trois observations que le texte seul aurait laissées dans l'ombre.
+
+<Dresse>un tableau [mc ; md ; md] avec une bordure bleu marine et des entêtes en blanc sur fond bleu marine{
+	Colonne	Ce qu'on lit	Ce qu'on en tire
+	[1848 ; Suffrage universel et Deuxième République ; Le droit de vote naît d'une révolution, non d'une réforme.]
+	[1850-1852 ; Restriction puis rétablissement ; Un droit acquis n'est pas un droit garanti.]
+	[1836-1857 ; Presse à bon marché et chemin de fer ; L'opinion nationale précède les institutions qui la représentent.]
+}
+
+<h1>Expliquer : pourquoi quatre-vingts ans ?
+
+<h2>Une République sans républicains
+
+	La Première République est proclamée en 1792 par une assemblée élue au suffrage universel, mais dans un pays qui n'a jamais voté<note>{Les élections de septembre 1792 rassemblent moins d'un électeur inscrit sur dix : la Convention naît d'une abstention massive, ce que l'exposé ne peut passer sous silence.}. Le régime tombe en douze ans. La leçon vaut pour toute la période : un régime ne dure que si la société qui le porte s'est formée avant lui.
+
+<h2>L'apprentissage du vote
+
+	C'est le point que la frise de la section <renvoi>{ordonner} laissait deviner. Entre 1815 et 1848, le corps électoral censitaire ne dépasse jamais deux cent cinquante mille hommes sur trente millions d'habitants <cite>{rosanvallon} — moins d'un pour cent. Le suffrage universel masculin de 1848 multiplie ce chiffre par quarante en quelques semaines, et le Second Empire, loin de le supprimer, s'en sert : le plébiscite devient l'instrument du pouvoir personnel.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 3 mm et un titre {Le mot du jury}{
+	Ne pas confondre <italique>{suffrage universel} et <italique>{démocratie}. De 1852 à 1870, tous les hommes votent, et le régime n'en est pas moins autoritaire : le corps électoral est large, le choix ne l'est pas. C'est la distinction que l'exposé doit tenir jusqu'au bout.
+}
+
+<h2>Ce que les techniques ont changé
+
+	Un journal tiré à cent mille exemplaires et distribué par chemin de fer crée quelque chose qui n'existait pas : un débat que l'on suit le même jour à Lille et à Marseille <cite>{martin}. La loi de 1881 sur la liberté de la presse ne fonde pas l'opinion publique — elle reconnaît une réalité qui l'a précédée d'un demi-siècle.
+
+<h1>Conclusion
+
+	Quatre-vingts ans, donc, parce qu'un régime politique ne s'installe pas par décret. La République de 1870 tient là où celles de 1792 et de 1848 avaient cédé, non parce que son texte constitutionnel serait meilleur — il est bien plus court —, mais parce que le pays qui la reçoit sait lire, voter et discuter. Reste une question que cet exposé n'a pas traitée, et qu'il faut poser pour finir : ce corps électoral reste exclusivement masculin jusqu'en 1944.
+
+<h1>Sources
+
+<Dresse>une bibliographie {
+	[rosanvallon] P. Rosanvallon, Le Sacre du citoyen, Gallimard, 1992.
+	[martin] M. Martin, Médias et journalistes de la République, Odile Jacob, 1997.
+	[manuel] Manuel d'histoire de première, chapitre 2, édition 2019.
+}

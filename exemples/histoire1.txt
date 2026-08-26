@@ -1,0 +1,48 @@
+document {
+	orientation: paysage;
+	marges: 4;
+	espacements: 0;
+	taille: 11;
+	interligne: 1,3;
+}
+
+soit titre = <bleu nuit gras grand au centre>
+soit h1 = <bleu nuit gras section num>
+soit remarque = <gris foncé italique>
+
+<titre>Les grandes périodes de l'histoire
+
+<h1>Une frise illustrée
+Cinq périodes, quatre repères : chaque grande période s'ouvre et se referme sur un événement qui a changé la vie des hommes. Une image accompagne chaque repère — « avec l'image » en fin de ligne, le chemin écrit en entier depuis le dossier du document.
+<Construis>la frise chronologique des grandes périodes {
+	de -3300 à 476 : Antiquité (L'écriture ouvre la période, la chute de Rome la referme.)
+	de 476 à 1492 : Moyen Âge
+	de 1492 à 1789 : Temps modernes
+	de 1789 à 2025 : Époque contemporaine
+	-3300 : Invention de l'écriture (On commence à écrire sur des tablettes d'argile.) avec l'image histoire/ecriture.svg
+	476 : Chute de l'Empire romain avec l'image histoire/temple.svg
+	1492 : Voyage de Christophe Colomb avec l'image histoire/caravelle.svg
+	1789 : Révolution française (Le peuple prend la Bastille le 14 juillet.) avec l'image histoire/bastille.svg
+}
+
+<h1>Le Moyen Âge de plus près
+	La même frise se resserre sur une période : l'échelle s'ajuste toute seule, et les cartouches se rangent de part et d'autre du bandeau sans jamais se recouvrir.
+
+<Construis>la frise chronologique du Moyen Âge {
+	de 476 à 987 : Haut Moyen Âge
+	de 987 à 1492 : Moyen Âge central et final
+	496 : Baptême de Clovis
+	800 : Charlemagne empereur avec l'image histoire/temple.svg
+	987 : Hugues Capet roi des Francs avec l'image histoire/chateau.svg
+	1337 : Début de la guerre de Cent Ans
+	1431 : Mort de Jeanne d'Arc
+}
+
+<page suivante h1>Une image dans le fil du texte
+	Le chemin se nomme dans la balise, de la même façon que pour une vignette de frise : une seule forme à retenir. Un nom comportant des espaces s'accolade — <<l'image {histoire/mon dessin.svg}>>.
+
+<Insère l'image histoire/chateau.svg avec une largeur de 45 mm et la légende {Un château fort, dessiné en pictogramme}>
+
+	Elle s'emploie aussi au milieu d'une phrase : les seigneurs bâtissaient des châteaux <Insère l'image histoire/chateau.svg avec une largeur de 12 mm> pour protéger leurs terres, et les marins partaient sur des caravelles <Insère l'image histoire/caravelle.svg avec une largeur de 12 mm> vers des continents inconnus.
+
+	<remarque>Ces vignettes sont des pictogrammes dessinés pour docdg, non des documents d'époque. Pour un vrai cours, on leur préférera une gravure ou une photographie du domaine public — en veillant alors au poids du fichier, chaque image étant inscrite dans le document.

@@ -1,0 +1,153 @@
+document {
+	orientation: portrait;
+	marges: 12;
+	espacements: 2;
+	taille: 11;
+	interligne: 1,2;
+}
+
+soit titre = <bleu marine gras 18pt au centre>
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<titre>La palette de docdg
+
+<h1>Le nuancier
+	Les 148 couleurs, une par nom. Chaque pastille porte la teinte qu'elle nomme :
+	deux pastilles voisines de même valeur signaleraient un doublet, une pastille
+	de la couleur de son groupe une locution tronquée.
+
+<h2>Noirs, gris et blancs
+<Dresse>un tableau avec une bordure gris clair {
+	<noir gras>{███} noir	<blanc gras>{███} blanc	<gris gras>{███} gris
+	<gris clair gras>{███} gris clair	<gris foncé gras>{███} gris foncé	<gris perle gras>{███} gris perle
+	<gris anthracite gras>{███} gris anthracite	<gris souris gras>{███} gris souris	<gris souris clair gras>{███} gris souris clair
+	<gris souris foncé gras>{███} gris souris foncé	<gris ardoise gras>{███} gris ardoise	<gris ardoise clair gras>{███} gris ardoise clair
+	<gris tourterelle gras>{███} gris tourterelle	<argent gras>{███} argent	<blanc fumé gras>{███} blanc fumé
+	<blanc antique gras>{███} blanc antique	<blanc fantôme gras>{███} blanc fantôme	<ivoire gras>{███} ivoire
+	<neige gras>{███} neige	<lin gras>{███} lin	<coquillage gras>{███} coquillage
+	<vieille dentelle gras>{███} vieille dentelle	<blanc navajo gras>{███} blanc navajo	<biscuit gras>{███} biscuit
+	<blé gras>{███} blé	<mocassin gras>{███} mocassin	<soie de maïs gras>{███} soie de maïs
+	<fouet de papaye gras>{███} fouet de papaye	<pêche duveteuse gras>{███} pêche duveteuse	<beige gras>{███} beige
+}
+
+<h2>Rouges
+<Dresse>un tableau avec une bordure gris clair {
+	<rouge gras>{███} rouge	<rouge clair gras>{███} rouge clair	<rouge foncé gras>{███} rouge foncé
+	<rouge sang gras>{███} rouge sang	<rouge brique gras>{███} rouge brique	<rouge tomate gras>{███} rouge tomate
+	<rouge indien gras>{███} rouge indien	<rouge orangé gras>{███} rouge orangé	<cramoisi gras>{███} cramoisi
+	<corail gras>{███} corail	<corail clair gras>{███} corail clair	<saumon gras>{███} saumon
+	<saumon foncé gras>{███} saumon foncé	<rose brumeux gras>{███} rose brumeux	
+}
+
+<h2>Bleus
+<Dresse>un tableau avec une bordure gris clair {
+	<bleu gras>{███} bleu	<bleu clair gras>{███} bleu clair	<bleu foncé gras>{███} bleu foncé
+	<bleu marine gras>{███} bleu marine	<bleu nuit gras>{███} bleu nuit	<bleu ciel gras>{███} bleu ciel
+	<bleu ciel profond gras>{███} bleu ciel profond	<bleu roi gras>{███} bleu roi	<bleu acier gras>{███} bleu acier
+	<bleu acier clair gras>{███} bleu acier clair	<bleu dodger gras>{███} bleu dodger	<bleu canard gras>{███} bleu canard
+	<bleu Alice gras>{███} bleu Alice	<bleu bleuet gras>{███} bleu bleuet	<bleu poudre gras>{███} bleu poudre
+	<bleu pâle gras>{███} bleu pâle	<bleu ardoise gras>{███} bleu ardoise	<bleu ardoise foncé gras>{███} bleu ardoise foncé
+	<bleu ardoise moyen gras>{███} bleu ardoise moyen	<bleu moyen gras>{███} bleu moyen	<bleu outremer gras>{███} bleu outremer
+	<indigo gras>{███} indigo	<lavande gras>{███} lavande	<lavande rosée gras>{███} lavande rosée
+	<azur gras>{███} azur	<cyan gras>{███} cyan	<cyan clair gras>{███} cyan clair
+	<cyan foncé gras>{███} cyan foncé	<turquoise gras>{███} turquoise	<turquoise clair gras>{███} turquoise clair
+	<turquoise foncé gras>{███} turquoise foncé	<turquoise moyen gras>{███} turquoise moyen	<aigue-marine gras>{███} aigue-marine
+	<aigue-marine moyenne gras>{███} aigue-marine moyenne	<sarcelle gras>{███} sarcelle	<cadet gras>{███} cadet
+}
+
+<h2>Verts
+<Dresse>un tableau avec une bordure gris clair {
+	<vert gras>{███} vert	<vert clair gras>{███} vert clair	<vert foncé gras>{███} vert foncé
+	<vert forêt gras>{███} vert forêt	<vert menthe gras>{███} vert menthe	<vert olive gras>{███} vert olive
+	<vert olive terne gras>{███} vert olive terne	<vert olive clair gras>{███} vert olive clair	<vert printemps gras>{███} vert printemps
+	<vert printemps moyen gras>{███} vert printemps moyen	<vert de mer gras>{███} vert de mer	<vert de mer clair gras>{███} vert de mer clair
+	<vert de mer foncé gras>{███} vert de mer foncé	<vert de mer moyen gras>{███} vert de mer moyen	<vert pâle gras>{███} vert pâle
+	<vert prairie gras>{███} vert prairie	<vert citron gras>{███} vert citron	<vert lime gras>{███} vert lime
+	<vert chartreuse gras>{███} vert chartreuse	<vert jaune gras>{███} vert jaune	<vert jaune pâle gras>{███} vert jaune pâle
+	<vert bouteille gras>{███} vert bouteille	<vert d'eau gras>{███} vert d'eau	<vert menthe glacée gras>{███} vert menthe glacée
+}
+
+<h2>Jaunes et oranges
+<Dresse>un tableau avec une bordure gris clair {
+	<jaune gras>{███} jaune	<jaune clair gras>{███} jaune clair	<jaune foncé gras>{███} jaune foncé
+	<jaune paille gras>{███} jaune paille	<jaune paille foncé gras>{███} jaune paille foncé	<jaune citron gras>{███} jaune citron
+	<jaune vif gras>{███} jaune vif	<or gras>{███} or	<verge d'or gras>{███} verge d'or
+	<verge d'or pâle gras>{███} verge d'or pâle	<verge d'or claire gras>{███} verge d'or claire	<orange gras>{███} orange
+	<orange foncé gras>{███} orange foncé	<orange sable gras>{███} orange sable	<orange mandarine gras>{███} orange mandarine
+}
+
+<h2>Violets et magentas
+<Dresse>un tableau avec une bordure gris clair {
+	<violet gras>{███} violet	<violet clair gras>{███} violet clair	<violet foncé gras>{███} violet foncé
+	<violet moyen gras>{███} violet moyen	<violet bleu gras>{███} violet bleu	<pourpre gras>{███} pourpre
+	<pourpre foncé gras>{███} pourpre foncé	<magenta gras>{███} magenta	<magenta moyen gras>{███} magenta moyen
+	<orchidée gras>{███} orchidée	<orchidée foncée gras>{███} orchidée foncée	<chardon gras>{███} chardon
+	<prune gras>{███} prune	<mauve gras>{███} mauve	
+}
+
+<h2>Roses
+<Dresse>un tableau avec une bordure gris clair {
+	<rose gras>{███} rose	<rose clair gras>{███} rose clair	<rose vif gras>{███} rose vif
+	<rose profond gras>{███} rose profond	<rose ancien gras>{███} rose ancien	<rose fuchsia gras>{███} rose fuchsia
+}
+
+<h2>Marrons et terres
+<Dresse>un tableau avec une bordure gris clair {
+	<marron gras>{███} marron	<brun gras>{███} brun	<brun clair gras>{███} brun clair
+	<brun foncé gras>{███} brun foncé	<brun chocolat gras>{███} brun chocolat	<terre de Sienne gras>{███} terre de Sienne
+	<terre cuite gras>{███} terre cuite	<tan gras>{███} tan	<bronze gras>{███} bronze
+}
+
+<page suivante h1>L'accord des couleurs
+
+<h2>L'adjectif simple s'accorde en genre et en nombre
+	Ils sont 8. Les quatre formes valent la même couleur :
+<Affiche>un cadre avec un fond vert menthe, une bordure vert foncé et des coins arrondis de 2 mm {
+	un trait <noir gras>{noir}, une ligne <noire gras>{noire}, des traits <noirs gras>{noirs}, des lignes <noires gras>{noires}
+	un trait <blanc gras>{blanc}, une ligne <blanche gras>{blanche}, des traits <blancs gras>{blancs}, des lignes <blanches gras>{blanches}
+	un trait <gris gras>{gris}, une ligne <grise gras>{grise}, des traits <gris gras>{gris}, des lignes <grises gras>{grises}
+	un trait <cramoisi gras>{cramoisi}, une ligne <cramoisie gras>{cramoisie}, des traits <cramoisis gras>{cramoisis}, des lignes <cramoisies gras>{cramoisies}
+	un trait <bleu gras>{bleu}, une ligne <bleue gras>{bleue}, des traits <bleus gras>{bleus}, des lignes <bleues gras>{bleues}
+	un trait <vert gras>{vert}, une ligne <verte gras>{verte}, des traits <verts gras>{verts}, des lignes <vertes gras>{vertes}
+	un trait <violet gras>{violet}, une ligne <violette gras>{violette}, des traits <violets gras>{violets}, des lignes <violettes gras>{violettes}
+	un trait <brun gras>{brun}, une ligne <brune gras>{brune}, des traits <bruns gras>{bruns}, des lignes <brunes gras>{brunes}
+}
+
+<h2>L'adjectif en -e s'accorde en nombre seulement
+<Affiche>un cadre avec un fond vert menthe, une bordure vert foncé et des coins arrondis de 2 mm {
+	un trait <beige gras>{beige}, des traits <beiges gras>{beiges}
+	un trait <rouge gras>{rouge}, des traits <rouges gras>{rouges}
+	un trait <jaune gras>{jaune}, des traits <jaunes gras>{jaunes}
+	un trait <pourpre gras>{pourpre}, des traits <pourpres gras>{pourpres}
+	un trait <mauve gras>{mauve}, des traits <mauves gras>{mauves}
+	un trait <rose gras>{rose}, des traits <roses gras>{roses}
+}
+
+<h2>La couleur composée est invariable
+	Un adjectif de couleur composé ne s'accorde jamais — ni en genre, ni en
+	nombre. docdg ne l'accepte pas : il le dit, et rappelle la règle.
+<Affiche>un cadre avec un fond rose brumeux, une bordure cramoisie et des coins arrondis de 2 mm {
+	Ces quatre balises sont fautives, et docdg les refuse en nommant la faute :
+	<bleue marine>{bleue marine}
+	<verte menthe>{verte menthe}
+	<grise perle>{grise perle}
+	<orange foncée>{orange foncée}
+}
+
+<h2>Le nom de chose employé comme couleur est invariable
+<Affiche>un cadre avec un fond rose brumeux, une bordure cramoisie et des coins arrondis de 2 mm {
+	On écrit des cadres <marron gras>{marron}, et non « marrons » ; des filets
+	<orange gras>{orange}, et non « oranges ». Font exception les quatre noms
+	que l'usage a faits adjectifs : <rose gras>{rose}, <mauve gras>{mauve},
+	<pourpre gras>{pourpre}, <beige gras>{beige}.
+}
+
+<h2>La teinte tronquée se dit
+	Une locution qui commence par une teinte connue mais que la table ignore
+	entière s'imprimait jadis en teinte nue, sans rien dire. Elle se dit :
+<Affiche>un cadre avec un fond rose brumeux, une bordure cramoisie et des coins arrondis de 2 mm {
+	<vert sapin>{vert sapin}
+	<rouge grenat>{rouge grenat}
+}
+

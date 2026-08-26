@@ -1,0 +1,246 @@
+document {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 1,7;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Démonstrations — la bibliothèque du supérieur
+
+	Comme demonstration3, ce document ne contient aucune mathématique écrite à la main : chaque énoncé appelle une fiche, et le moteur rédige. La bibliothèque couvre le premier cycle universitaire et les classes préparatoires — analyse, algèbre linéaire, théorie des groupes, arithmétique, topologie —, et ce document l'appelle en entier : les 101 fiches y passent. Les fiches traversent la même charpente que les démonstrations écrites par l'auteur : même annonce, mêmes étapes nommées, même conclusion.
+
+<h2>Suites et limites
+
+<Montre>l'unicité de la limite d'une suite
+
+<Montre>toute suite convergente est bornée
+
+<Montre>le théorème des gendarmes
+
+<Montre>toute suite bornée admet une sous-suite convergente
+
+<h2>Fonctions et dérivation
+
+<Montre>toute fonction dérivable est continue
+
+<Montre>théorème de Rolle
+
+<Montre>théorème des accroissements finis
+
+<h2>Séries
+
+<Montre>le terme général d'une série convergente tend vers zéro
+
+<Montre>la série harmonique diverge
+
+<h2>Ensembles et applications
+
+<Montre>les lois de De Morgan
+
+<page suivante>
+<Montre>la distributivité de l'intersection sur la réunion
+
+<Montre>la composée de deux injections est injective
+
+<Montre>un ensemble à n éléments admet 2^n parties
+
+<page suivante>
+<Montre>il n'existe pas de surjection d'un ensemble sur l'ensemble de ses parties
+
+<Montre>argument diagonal de Cantor
+
+<h2>Structures algébriques
+
+<Montre>l'unicité de l'élément neutre d'un groupe
+
+<Montre>l'unicité de l'inverse dans un groupe
+
+<page suivante>
+<Montre>l'inverse d'un produit est le produit des inverses dans l'ordre inverse
+
+<Montre>l'intersection de deux sous-groupes est un sous-groupe
+
+<Montre>tout groupe d'ordre premier est cyclique
+
+<Montre>théorème de Lagrange
+
+<h2>Algèbre linéaire
+
+<Montre>le noyau d'une application linéaire est un sous-espace vectoriel
+
+<page suivante>
+<Montre>l'image d'une application linéaire est un sous-espace vectoriel
+
+<Montre>une famille orthogonale de vecteurs non nuls est libre
+
+<Montre>théorème du rang
+
+<Montre>procédé de Gram-Schmidt
+
+<page suivante h2>Arithmétique
+
+<Montre>l'existence et l'unicité de la division euclidienne
+
+<Montre>le lemme d'Euclide
+
+<Montre>petit théorème de Fermat
+
+<Montre>parmi cinq entiers deux ont le même reste modulo quatre
+
+<h2>Analyse et topologie
+
+<Montre>l'inégalité triangulaire
+
+<Montre>toute fonction se décompose en somme d'une fonction paire et d'une fonction impaire
+
+<Montre>théorème du point fixe de Banach
+
+<h1>Le reste de la bibliothèque
+
+	Les sections précédentes n'en appelaient qu'une partie. Celles-ci épuisent la bibliothèque : chacune des 101 démonstrations classiques du dépôt est désormais composée au moins une fois, et se lit dans ce document. C'est le seul contrôle qui vaille — une fiche que rien n'appelle est une fiche que rien n'éprouve.
+
+<h2>Suites
+
+<Montre>le théorème de convergence monotone
+
+<Montre>que deux suites adjacentes convergent vers la même limite
+
+<Montre>que toute suite extraite d'une suite convergente converge vers la même limite
+
+<page suivante>
+<Montre>que toute suite croissante non majorée tend vers plus l'infini
+
+<Montre>que le produit d'une suite bornée par une suite tendant vers zéro tend vers zéro
+
+<Montre>qu'une suite non bornée ne converge pas
+
+<Montre>que toute suite de Cauchy est bornée
+
+<page suivante>
+<Montre>le critère de Cauchy pour les suites
+
+<Montre>le théorème de Cesàro
+
+<h2>Fonctions, continuité, dérivation
+
+<Montre>que la composée de deux fonctions continues est continue
+
+<Montre>qu'une fonction de dérivée nulle sur un intervalle est constante
+
+<page suivante>
+<Montre>qu'une fonction de dérivée positive est croissante
+
+<Montre>l'unicité de la limite d'une fonction en un point
+
+<Montre>que toute fonction continue sur un segment est uniformément continue
+
+<Montre>le théorème de Darboux
+
+<page suivante>
+<Montre>la formule de Taylor-Lagrange
+
+<Montre>le théorème de Weierstrass
+
+<Montre>l'unicité du prolongement continu
+
+<Montre>la continuité séquentielle
+
+<Montre>la continuité uniforme sur un compact
+
+<h2>Intégration et séries
+
+<Montre>que toute fonction continue est intégrable
+
+<Montre>le théorème fondamental de l'analyse
+
+<Montre>qu'une série absolument convergente converge
+
+<Montre>le critère de comparaison des séries
+
+<Montre>le rayon de convergence
+
+<Montre>la dérivation terme à terme des séries entières
+
+<page suivante h2>Ensembles et applications
+
+<Montre>que la composée de deux surjections est surjective
+
+<Montre>que si la composée g rond f est injective alors f est injective
+
+<Montre>qu'une application d'un ensemble fini dans lui-même est injective si et seulement si elle est surjective
+
+<Montre>le théorème de Cantor-Bernstein
+
+<page suivante h2>Nombres et arithmétique
+
+<Montre>que la racine carrée d'un nombre premier est irrationnelle
+
+<Montre>que l'inverse d'un irrationnel est irrationnel
+
+<Montre>qu'il existe deux irrationnels dont la puissance est rationnelle
+
+<Montre>qu'entre deux rationnels distincts il existe un rationnel
+
+<Montre>que tout entier supérieur ou égal à 2 admet un diviseur premier
+
+<Montre>que tout entier supérieur ou égal à 2 est un produit de nombres premiers
+
+<Montre>le théorème de Wilson
+
+<Montre>le théorème d'Euler
+
+<page suivante h2>Structures algébriques
+
+<Montre>la caractérisation d'un sous-groupe
+
+<Montre>les sous-groupes d'un groupe cyclique
+
+<Montre>le théorème de Cauchy pour les groupes
+
+<h2>Algèbre linéaire
+
+<Montre>que l'intersection de deux sous-espaces vectoriels est un sous-espace vectoriel
+
+<page suivante>
+<Montre>qu'une application linéaire est injective si et seulement si son noyau est nul
+
+<Montre>l'existence d'une base
+
+<Montre>le théorème de la base incomplète
+
+<Montre>le lemme de Steinitz
+
+
+<Montre>la formule de dimension
+
+<Montre>que deux espaces de même dimension finie sont isomorphes
+
+<Montre>existence et unicité de la projection orthogonale
+
+<h2>Topologie
+
+<Montre>le théorème de Heine-Borel
+
+
+<Montre>la compacité séquentielle
+
+<Montre>la caractérisation séquentielle des fermés
+
+<h2>Inégalités
+
+<Montre>l'inégalité de la moyenne
+
+<Montre>l'inégalité de Cauchy-Schwarz
+
+<h2>Les grands théorèmes de l'analyse réelle
+
+<Montre>la propriété d'Archimède
+
+
+<Montre>le théorème des valeurs intermédiaires
+
+<Montre>le théorème des bornes atteintes
+

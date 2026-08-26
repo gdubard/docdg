@@ -1,0 +1,37 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	espacements: 2;
+	taille: 11;
+	interligne: 1,8;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Analyse — collège
+
+<h2>Images par un programme de calcul
+
+<Applique>le programme de calcul à 3 {
+	choisir un nombre
+	multiplier par 2
+	ajouter 1
+}
+
+<Exprime>le programme de calcul en fonction de x {
+	choisir un nombre
+	multiplier par 2
+	ajouter 1
+}
+
+<h2>Fonctions linéaires et affines
+
+<Soit>une fonction f(x) = 2x + 1
+
+<Calcule>l'image de 3 par f
+
+<Résous>l'équation 2x + 1 = 7
+
+<Soit>une fonction g(x) = -3x
+
+<Calcule>l'image de 5 par g

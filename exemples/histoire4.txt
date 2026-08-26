@@ -1,0 +1,53 @@
+document {
+	orientation: paysage;
+	marges: 5;
+	espacements: 0;
+	taille: 11;
+	interligne: 1,3;
+}
+
+soit titre = <bleu nuit gras grand au centre>
+soit h1 = <bleu nuit gras section num>
+
+<titre>La frise chronologique dans le supérieur
+
+<h1>Les échelles du temps
+	Braudel distingue trois temps : celui, presque immobile, des structures ; celui, cyclique, des conjonctures ; celui, bref, de l'événement. Trois bandes sur une même échelle donnent à voir ce que chacune retient — et ce qu'elle laisse échapper.
+
+<Construis>la frise chronologique des trois temps de Braudel {
+	longue durée {
+		de 1450 à 1850 : Économie-monde européenne
+		de 1500 à 1800 : Régime démographique ancien (Fortes mortalités, natalité élevée.)
+	}
+	conjoncture {
+		de 1660 à 1690 : Dépression
+		de 1730 à 1770 : Expansion
+		de 1817 à 1851 : Crise économique
+	}
+	événement {
+		1492 : Voyage de Colomb
+		1789 : Prise de la Bastille
+		1848 : Printemps des peuples
+	}
+}
+
+<h1>Deux découpages en regard
+	Le découpage scolaire fait commencer l'époque contemporaine en 1789 et le XXe siècle en 1901. Hobsbawm propose tout autre chose : un long XIXe siècle qui court de la Révolution à Sarajevo, un court XXe siècle qui va de Sarajevo à la chute de l'URSS. Poser les deux découpages l'un sous l'autre, c'est rendre discutable ce que chacun tient pour évident.
+
+<Construis>la frise chronologique de deux périodisations concurrentes {
+	découpage scolaire {
+		de 1789 à 1900 : XIXe siècle
+		de 1901 à 2000 : XXe siècle
+	}
+	découpage de Hobsbawm {
+		de 1789 à 1914 : Long XIXe siècle
+		de 1914 à 1991 : Court XXe siècle
+	}
+	repères {
+		1789 : Révolution française
+		1914 : Attentat de Sarajevo
+		1991 : Dissolution de l'URSS
+	}
+}
+
+	Les bornes ne coïncident pas, et c'est l'objet du débat : une périodisation n'est pas un fait mais une hypothèse sur ce qui fait rupture.

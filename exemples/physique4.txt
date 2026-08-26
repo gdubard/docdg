@@ -1,0 +1,64 @@
+document {
+	orientation: portrait;
+	marges: 12;
+	taille: 10;
+	interligne: 1,8;
+	niveau: licence 3;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit enonce = <fond bleu Alice>
+soit correction = <fond gris clair>
+
+
+<h1>Des équations de Maxwell à l'onde électromagnétique — licence 3
+
+<h2>Ce qui précède
+<Dresse>les prérequis de l'équation de propagation dans le vide
+	<remarque>Le graphe remonte aux quatre équations de Maxwell, puis au théorème de Gauss et à la loi de Biot et Savart. Rien n'est réécrit : chaque énoncé est servi depuis le corpus.
+
+<h2>Les quatre équations
+<Énonce>l'équation de Maxwell-Gauss <étiquette>{gauss}
+<Énonce>l'équation de Maxwell-Thomson <étiquette>{thomson}
+<Énonce>l'équation de Maxwell-Faraday <étiquette>{faraday}
+<Énonce>l'équation de Maxwell-Ampère <étiquette>{ampere}
+	<remarque>Chaque énoncé affiche désormais sa formule, ses hypothèses et son domaine de validité. Les relations sont vérifiées en homogénéité à la compilation : `rot(B) = mu_0 * j + mu_0 * epsilon_0 * d_dt(E)` a passé le contrôle.
+
+<h2>Le terme que Maxwell a ajouté
+<Démontre>l'équation de Maxwell-Ampère
+	<remarque>La démonstration procède par contradiction : le théorème d'Ampère stationnaire imposerait une divergence de courant nulle, ce que la charge d'un condensateur dément. Le courant de déplacement n'est donc pas un ajout expérimental mais une nécessité de cohérence.
+
+<h2>La propagation
+<Énonce>l'équation de propagation dans le vide <étiquette>{alembert}
+
+<Démontre>l'équation de propagation dans le vide
+	<remarque>Le double rotationnel élimine le champ magnétique. Le facteur qui apparaît a la dimension de l'inverse du carré d'une vitesse — l'analyse dimensionnelle seule l'impose — et son évaluation numérique identifie la lumière à une onde électromagnétique.
+
+<h2>La structure de l'onde
+<Énonce>la structure de l'onde électromagnétique plane <étiquette>{structure}
+<Démontre>la structure de l'onde électromagnétique plane
+
+<h2>Le transport d'énergie
+<Énonce>le vecteur de Poynting
+<Énonce>le bilan local d'énergie électromagnétique
+
+<page suivante>
+<Démontre>le bilan local d'énergie électromagnétique
+	<remarque>Le bilan a la structure de la conservation de la charge : une divergence de flux, une dérivée temporelle de densité, un terme source. C'est ce qui autorise à parler d'une énergie qui se transporte.
+
+<h2>Le contrôle dimensionnel
+
+<Vérifie>l'homogénéité de div(E) = rho / epsilon_0 avec E champ électrostatique, rho densité volumique de charge, epsilon_0 permittivité du vide
+	<remarque>La relation s'écrit dans la même syntaxe que le champ vérifié à la compilation, opérateurs compris : `div` divise par une longueur, et c'est ce facteur qui fait l'homogénéité. Écrire `div_E` comme un simple symbole, et le déclarer champ électrostatique, donnerait une relation fausse d'un facteur de longueur — le moteur le dirait.
+
+<Vérifie>l'homogénéité de E = m * c avec E énergie, m masse, c célérité
+	<remarque>Celle-ci est fausse : le moteur indique laquelle des deux dimensions diffère, sans dire laquelle est la bonne.
+
+<page suivante h2>Exercice type
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — pression de radiation} {
+	Une onde plane progressive monochromatique se propage dans le vide selon l'axe $Ox$, d'amplitude $E_0 = 1,0 * 10^3$ V·m⁻¹.
+	Calculer la valeur moyenne du vecteur de Poynting, puis l'énergie reçue par un mètre carré en une heure.
+	Vérifier l'homogénéité de chaque expression avant l'application numérique.
+}
