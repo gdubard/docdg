@@ -4,228 +4,348 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
-## 3.3 — l'école élémentaire et les deux dépendances
+## 3.4 — la vitesse et la mémoire
 
-### Ajouté
+### La vitesse
 
-**Le corpus descend au cours préparatoire.** Cinq niveaux nouveaux — `CP`,
-`CE1`, `CE2`, `CM1`, `CM2` —, des niveaux annuels comme les autres, parce que
-c'est ainsi que les enseignants raisonnent : on prépare pour un CE2, pas pour
-un cycle. Quarante énoncés neufs couvrent les trois domaines du programme —
-nombres et calculs, grandeurs et mesures, espace et géométrie —, et douze
-énoncés qui relevaient déjà du cours moyen y sont maintenant ancrés : les
-propriétés du rectangle, du losange et du carré, la symétrie axiale, l'aire du
-rectangle, le volume du pavé, les multiples, les fractions, la
-proportionnalité, le pourcentage. Tout y est `admis` : l'école n'est pas le
-lieu de la preuve rédigée, et le corpus ne prétend pas le contraire.
+**L'environnement sortant de chaque segment est mémorisé avec son entrée de
+cache.** Le cache ne retenait que le HTML : à chaque frappe, tout le langage
+du document — chaque boucle, chaque fonction, chaque conteneur — était
+réinterprété par `scan_env` pour recalculer les clés, y compris sur les
+segments dont le rendu était déjà en cache. La frappe coûtait le document,
+pas l'édition. Un segment déjà vu dans le même environnement entrant produit
+le même environnement sortant : il se relit, il ne se rejoue plus. Sur le
+banc du conteneur d'audit, l'`incr` d'`algo4.txt` passe de 3,63 à 0,34 ms,
+celui de `demonstration4.txt` de 4,52 à 0,36 ms, celui de `vitrine4.txt` de
+0,73 à 0,05 ms.
 
-Le principe qui gouverne ces énoncés est celui de tout le corpus, tenu cette
-fois de bout en bout : **la difficulté s'adapte, le vocabulaire non**.
-L'addition nomme ses termes et sa somme dès le CP, la division son quotient et
-son reste dès le CE2, et un terme juste appris au cours élémentaire n'aura pas
-à être désappris en licence.
+**La césure se compose par segment et voyage dans le cache.** Elle était
+appliquée par l'application sur le document assemblé, après chaque rendu :
+le document entier se recésurait à chaque frappe, cache ou pas. Elle vit
+désormais dans le moteur, derrière `Engine::cesure` — les tests et le banc,
+qui ne la demandent pas, mesurent exactement ce qu'ils mesuraient. Un trait
+conditionnel posé dans le nom ou la cible d'un renvoi est retiré à la
+résolution : un renvoi se résout sur le texte nu. Seule la table des
+matières n'est plus césurée — ses lignes sont courtes, elles ne se coupaient
+jamais.
 
-**La glose : le mot juste, expliqué au niveau qui en a besoin.** Le corpus
-n'écrit jamais qu'un terme, le bon ; aux niveaux où ce terme est neuf, une note
-de vocabulaire l'explique après l'énoncé, et cette note disparaît au-delà. En
-cinquième : « *Vocabulaire : isométriques — on dit aussi superposables ;
-homologues — ils se correspondent d'une figure à l'autre.* » ; en quatrième,
-rien. C'est l'inverse de ce que font les manuels, qui enseignent un vocabulaire
-à désapprendre.
+**`finalise` ne recopie plus le document que deux fois au lieu de quatre.**
+La résolution des renvois et le remplacement des marques se faisaient en
+deux passes séparées, chacune recopiant tout ; elles n'en font plus qu'une.
+Les feuilles de style s'assemblent en tête puis se collent une fois :
+chaque `insert_str(0, …)` déplaçait le document entier, et ils étaient
+trois.
 
-### L'audit du corpus
+**Le bassin de calcul formel se sème à l'ouverture de l'application.**
+`prechauffe()` existait — le banc l'appelait, l'application jamais.
+L'import de SymPy, plusieurs secondes, se payait au premier `<Calcule>`
+du document plutôt que derrière l'apparition de la fenêtre.
 
-**Un anachronisme lexical au cours moyen.** Les propriétés du rectangle et du
-losange, descendues au CM1 lors de l'extension à l'école, définissaient leur
-figure *par le parallélogramme* — notion de cinquième. Le validateur ne pouvait
-rien voir : la dépendance avait été rangée en `se_fonde_sur`, ce qui satisfait la
-monotonie tout en laissant le texte illisible à son niveau. C'était le mauvais
-remède : les deux énoncés retournent à la cinquième, et c'est `carre_proprietes`
-— lisible au CM1, lui — qui se fonde sur eux au lieu d'en dépendre.
+**La Marelle ne voyage plus dans chaque document composé.** Ses cent
+vingt-deux kilooctets de base64 étaient rembarqués dans le HTML à chaque
+rendu et retraversaient le pont vers l'affichage à chaque frappe. La
+coquille de l'application la déclare une fois ; le document la nomme, et
+c'est tout — `seyes1.txt` passe de 137 à 12 kilooctets. L'export par
+impression clone la page entière, coquille comprise : la face y voyage
+d'elle-même. Toute autre cursive — nommée ou jointe — voyage avec le
+document, comme avant, et hors de l'application rien ne change.
 
-**Une définition qui contenait deux résultats.** `espace_quotient` énonçait, sous
-couvert de définition, la formule de dimension et la propriété universelle de
-factorisation — deux théorèmes logés dans une définition, où ils échappaient au
-contrôle de couverture. Elle est scindée en trois : la définition du quotient, la
-**proposition** sur sa dimension, le **théorème** de factorisation. Deux lacunes
-apparaissent au compteur : elles y étaient déjà, invisibles.
+**Les primitives du langage consomment leurs arguments au lieu de les
+recopier.** « ajoute » recopiait la liste entière pour y pousser un
+élément : bâtir une liste de n éléments coûtait n copies de listes — un
+carré là où l'auteur écrit une droite. Une des deux copies par tour
+demeure, celle de la lecture de la variable ; elle relève des portées de
+l'interpréteur, chantier à part.
 
-**Un type corrigé.** `cristaux_covalents_et_moleculaires`, annoncé « propriété »,
-définit deux espèces de cristaux ; il devient une définition.
+**Le balayage des primitives s'arrête à la première occurrence valide.**
+Il parcourait tout le texte restant pour chacun des trente-deux noms,
+alors que seule la plus à gauche est retenue. Et la table des couleurs ne
+replie plus chaque essai dans une chaîne neuve : la locution se plie une
+fois, dans le tampon qui la porte déjà.
 
-**Trois démonstrations s'achevaient sur une formule nue.** Dans l'usage du
-supérieur, une démonstration conclut ; elle ne s'arrête pas sur une égalité.
-Somme de fractions, double distributivité et somme des termes d'une suite
-géométrique portent désormais leur phrase de conclusion.
+### La mémoire
 
-**Ce que l'audit n'a PAS trouvé.** Aucune faute de typographie française sur les
-3 850 champs de texte du corpus — pas un point décimal, pas un guillemet droit,
-pas une espace manquante devant une ponctuation double. Et aucun doublon : les
-treize paires d'énoncés proches sont des **parallélismes délibérés** — sinus et
-cosinus, suites arithmétiques et géométriques, hauteur et médiane d'un triangle,
-aire du triangle et du parallélogramme. Les maintenir parallèles est ce qui fait
-voir leur différence.
+**Le cache des segments est plafonné en octets, plus seulement en
+entrées.** Quatre mille quatre-vingt-seize entrées dont chacune peut porter
+une image de huit mébioctets encodée en base64 — près de onze mébioctets de
+HTML — faisaient un plafond qui n'en était pas un. Soixante-quatre mébioctets de
+HTML au plus ; au-delà, la purge générationnelle habituelle.
 
-**L'entête d'un énoncé numéroté ne porte plus son nom entre parenthèses.**
-« Définition 1 (Nombre relatif). Un nombre relatif est… » devient
-« Définition 1. Un nombre relatif est… ». La parenthèse redisait le plus souvent
-les premiers mots de l'énoncé ; elle disparaît à tous les niveaux, y compris
-dans les documents où le nom est écrit à la main.
+**Une image ne se relit et ne se réencode que si elle a changé sur le
+disque.** La recomposition d'un segment relisait le fichier et refaisait
+l'encodage entier à chaque fois. La taille et la date du fichier suffisent
+à savoir que rien n'a bougé ; le mémo est plafonné à trente-deux
+mébioctets. L'encodeur base64 écrit des octets et convertit une fois, au
+lieu de pousser le document caractère par caractère.
 
-**La note est à côté de l'énoncé, jamais dedans.** Une apposition entre
-parenthèses glissée dans le texte en aurait fait une phrase différente selon le
-lecteur, et le corpus aurait cessé d'être la source. L'énoncé se cite tel quel à
-tous les niveaux ; la glose l'accompagne comme les hypothèses et le domaine de
-validité l'accompagnent déjà.
+### La base
 
-Cinq règles la gouvernent : la première occurrence seulement, rien entre deux
-`$`, jamais le mot que l'énoncé définit, le **domaine** décide — le côté
-*opposé* d'un triangle n'a rien de commun avec l'*opposé* d'un nombre, et sans
-ce champ la hauteur d'un triangle se composait « perpendiculaire au côté opposé
-(le nombre de signe contraire) » —, et la matière décide aussi —
-« superposable » est un mot d'écolier en géométrie et le terme canonique en
-stéréochimie, où la chiralité se définit par la non-superposabilité à l'image
-dans un miroir. Sans ce dernier point, la règle qui purge la géométrie cassait
-la chimie organique.
+**Quinze énoncés et deux démonstrations de collège entrent au corpus**
+(fichiers `mathematiques-college.toml`) : demi-droite graduée, nombres
+relatifs et leurs somme et différence, priorités opératoires, écriture
+fractionnaire, réduction d'une expression littérale, test d'une égalité,
+repère du plan, augmentation et diminution en pourcentage — démontrée en
+quatrième par la distributivité —, échelle d'un plan, hauteur et médiane
+d'un triangle, et la propriété, démontrée en cinquième comme le demande le
+programme du cycle 4, qu'une médiane partage le triangle en deux triangles
+de même aire. Les quatorze appels de `nombres2.txt` qui restaient sans
+réponse se résolvent tous ; aucun autre document ne change d'un octet.
 
-**Le collège rattrape ses absences.** Le corpus n'avait aucun énoncé sur les
-**nombres relatifs** — ni somme, ni différence, ni produit, ni quotient —,
-aucun sur les priorités opératoires, les puissances, le calcul littéral, le
-repère du plan, l'échelle, l'effectif et la fréquence, l'équation du premier
-degré, l'image et l'antécédent, la représentation graphique ou l'arbre de
-probabilités. Vingt-six ancrages neufs les comblent, et le collège passe de 181
-à 207. Trois notions que je croyais absentes existaient déjà sous un autre nom —
-la quatrième proportionnelle est un alias de l'égalité des produits en croix,
-l'équation produit nul un alias du produit nul — et le validateur les a
-refusées en doublon avant qu'elles n'entrent.
+**La physique du master est rédigée** — vingt-six démonstrations, qui
+soldent les cinquante-et-un ancrages restants, chaque énoncé en portant un
+général et un d'agrégation externe. En mécanique quantique : relation de
+fermeture, symétries et générateurs — le théorème de Noether lu comme un
+développement au premier ordre d'un opérateur unitaire —, perturbations
+dégénérées, règles de sélection par parité, approximation semi-classique
+et condition de quantification avec sa correction de Maslov, couplage
+spin-orbite, effet Zeeman dans ses deux régimes, intégrale d'échange et
+règle de Hund, trou de Fermi, ondes partielles et théorème optique. En
+matière condensée : liaisons fortes, loi d'action de masse. En physique
+nucléaire : goutte liquide, intégrale de Gamow qui donne la loi de
+Geiger-Nuttall sur vingt-quatre ordres de grandeur, pic de Gamow et
+critère de Lawson. En physique statistique : densité d'états, théorème H
+et sa réponse au paradoxe de Loschmidt, Fokker-Planck par Kramers-Moyal,
+algorithme de Metropolis. En relativité : géodésiques par extrémalisation
+du temps propre, limite newtonienne qui fixe la constante des équations
+d'Einstein, équations de Friedmann, limite de Chandrasekhar par
+comparaison d'exposants. En électrodynamique covariante : transformation
+des champs et leurs deux invariants, diffusions Thomson et Rayleigh.
 
-**`exemples/nombres2.txt`** compose au niveau cinquième : c'est le premier
-document du dépôt qui montre la glose à l'œuvre.
+**Les mathématiques du master sont achevées** — vingt-neuf démonstrations
+de plus, et la matière ne déclare plus aucune dette, du collège à
+l'agrégation. Neuves : séries de Fourier comme base hilbertienne,
+théorème de Fejér par le noyau positif, théorème d'Abel angulaire par
+transformation d'Abel, méthode de Laplace — qui donne Stirling —,
+théorème d'inversion locale par point fixe à paramètre, théorèmes de Baire
+et de Brouwer, Ascoli par extraction diagonale, Stone-Weierstrass par le
+treillis, Riesz-Fischer, formule sommatoire de Poisson, théorème spectral
+des opérateurs compacts, théorèmes des résidus et de Runge, loi forte des
+grands nombres et théorème central limite. Secondes rédactions :
+Bolzano-Weierstrass par dichotomie, Rolle par l'extremum sur un compact,
+Taylor-Lagrange par Rolle itéré, Heine par recouvrement fini,
+Cauchy-Lipschitz par Gronwall — qui donne l'unicité globale et la
+dépendance aux conditions initiales —, Newton avec son ordre quadratique,
+Liouville par les inégalités de Cauchy, convergence dominée par Fatou
+appliqué deux fois, Hölder par Jensen, projection hilbertienne par
+inéquation variationnelle, Banach-Steinhaus par Baire, point fixe de
+Banach avec ses deux estimations d'erreur.
 
-**`lexique.toml` déclare aussi ce qui se refuse.** Une forme fautive n'est pas un
-mot d'enfant, c'est une erreur : elle n'a pas de glose, elle fait échouer la
-compilation en nommant la forme à écrire et la raison. « positif ou nul » —
-« positif » vaut déjà supérieur ou égal à zéro —, « côtés égaux » — un côté est
-un segment, ce sont les longueurs qui sont égales —, « triangles égaux » —
-l'égalité est celle des ensembles de points. Deux violations dormaient dans le
-corpus et sont corrigées : une figure « superposable » en géométrie, un
-« négatif ou nul » dans une démonstration.
+**L'algèbre linéaire et l'arithmétique du master sont rédigées** —
+dix-huit démonstrations. Trois théorèmes n'en avaient aucune : Cayley-
+Hamilton par la comatrice, décomposition de Dunford et réduction de
+Jordan, Perron-Frobenius par le point fixe de Brouwer sur le simplexe,
+loi de réciprocité quadratique par les sommes de Gauss. Les autres
+doublent une rédaction antérieure par une seconde, d'esprit agrégation :
+théorème du rang comme premier théorème d'isomorphisme, lemme des noyaux
+par Bézout polynomial — qui donne les projecteurs comme polynômes en
+l'endomorphisme —, théorème spectral par voie variationnelle, décomposition
+polaire par la racine carrée symétrique, Gram-Schmidt par les déterminants
+de Gram, Cauchy-Schwarz par le discriminant, Bézout par les idéaux de
+$\mathbb{Z}$, décomposition en facteurs premiers par noethérianité,
+Fermat par Lagrange, infinité des premiers par la divergence d'Euler,
+irrationalité de $\sqrt{2}$ par la valuation $2$-adique, corps
+$\mathbb{Z}/n\mathbb{Z}$ par les idéaux maximaux, théorème des deux carrés
+par les entiers de Gauss.
 
-**`se_fonde_sur` — la seconde dépendance.** Un énoncé portait une seule liste,
-`depend_de`, qui confondait deux relations : ce que le lecteur doit avoir vu
-pour lire l'énoncé, et ce sur quoi l'énoncé repose en droit. L'existence de la
-racine carrée s'admet en troisième et se fonde sur la borne supérieure, établie
-en licence — la première relation descend le cursus, la seconde peut le
-remonter. Elles ont désormais chacune leur champ : `depend_de` est la
-dépendance pédagogique, `se_fonde_sur` la dépendance épistémique. La règle
-pratique : si retirer le résultat cité rend l'énoncé illisible, c'est un
-`depend_de` ; s'il le rend seulement non démontré, c'est un `se_fonde_sur`.
+**L'algèbre du master est rédigée** — onze démonstrations, et le
+mécanisme des DEUX rédactions d'un même énoncé entre enfin en service.
+Six sont neuves : théorèmes de Sylow par actions de groupe, théorème de
+Wedderburn par l'équation aux classes et les polynômes cyclotomiques,
+correspondance de Galois par le lemme d'Artin, résolubilité par radicaux,
+loi d'inertie de Sylvester, théorème de d'Alembert-Gauss par le principe
+du minimum. Cinq autres doublent une rédaction de licence par une seconde,
+d'esprit agrégation, qui explique là où la première vérifiait : Lagrange
+par l'action de translation, Burnside par le caractère de la
+représentation de permutation, structure des groupes abéliens finis par
+les modules sur un anneau principal, corps finis par le morphisme de
+Frobenius et la théorie de Galois, Maschke par unitarisation du produit
+scalaire. Un document servi en master 2 reçoit désormais la seconde
+rédaction ; les niveaux inférieurs gardent la première.
 
-**La monotonie des énoncés entre au validateur.** Un `depend_de` ne peut plus
-citer un énoncé disponible seulement à un niveau supérieur — la règle que les
-démonstrations subissaient déjà, et que la documentation signalait comme
-manquante pour les énoncés. L'audit en recensait soixante-dix violations :
-soixante-huit étaient des dépendances épistémiques et sont requalifiées en
-`se_fonde_sur` ; une était fausse — la décomposition LU n'invoque pas la
-décomposition polaire — et disparaît ; quatre venaient d'une dépendance ancrée
-trop haut, corrigée — l'atome et la molécule sont au programme dès la
-quatrième, les propriétés du rectangle et du losange dès la sixième.
+**La licence 3 ne déclare plus aucune dette** — trente-huit
+démonstrations, et la licence entière est ainsi close. En algèbre :
+noyau et image d'un morphisme, groupe quotient et premier théorème
+d'isomorphisme, intersection de sous-groupes, groupes d'ordre premier,
+critère d'Eisenstein, multiplicativité des degrés, théorème chinois,
+théorème de Wantzel et l'impossibilité des trois problèmes antiques. En
+algèbre linéaire numérique : disques de Gershgorin, rayon spectral,
+méthodes itératives, décompositions LU et en valeurs singulières,
+moindres carrés. En analyse : Cauchy-Lipschitz par le point fixe de
+Banach, lemme de Gronwall, théorème de Dini, dichotomie, quadratures,
+schéma d'Euler, inégalité de Jensen. En intégration et analyse
+fonctionnelle : lemme de Fatou, inégalité de Hölder par celle de Young,
+projection sur un convexe fermé, représentation de Riesz, inégalité de
+Bessel, bases hilbertiennes et Parseval, lemme de Riemann-Lebesgue. En
+géométrie : barycentre et son associativité, groupe affine, isométries
+du plan, similitudes en écriture complexe, angle inscrit. Ailleurs :
+compacité de Riesz, équations de Cauchy-Riemann, inégalité de Markov,
+hiérarchie des modes de convergence.
 
-**Le test des manuels couvre les sept manuels.** `readme.rs` devient
-`manuels.rs` : les blocs de `Ecole.md`, `College.md`, `Lycee.md`, `Licence.md`,
-`MasterAgregation.md` et `Redaction.md` — quarante-deux blocs qu'aucun test ne
-confrontait au moteur — rendent désormais sous le même juge que les cent
-trente-trois du README.
+**La licence 2 ne déclare plus aucune dette** — trente démonstrations.
+En analyse : condition nécessaire de convergence, séries géométrique,
+harmonique et de Riemann, critère de comparaison, comparaison
+série-intégrale, règle de d'Alembert, convergence absolue, convergence
+simple et uniforme, continuité de la limite uniforme par la coupure en
+trois, lemme d'Abel, unicité des coefficients d'une série entière,
+caractérisations de la convexité, gradient et extremum, équations
+différentielles linéaires du second ordre. En algèbre linéaire :
+inégalité de Minkowski, famille orthogonale libre, projection
+orthogonale, déterminant et inversibilité, pivot de Gauss, polynôme
+caractéristique, critères de diagonalisabilité et de trigonalisation,
+sous-espaces caractéristiques, déterminant de Vandermonde, base duale.
+Ailleurs : caractérisation séquentielle des fermés, variance d'une somme
+de variables indépendantes, corps $\mathbb{Z}/n\mathbb{Z}$, loi de Stokes.
 
-### L'étude d'une fonction se restreint
+**La licence 1 ne déclare plus aucune dette** — trente-quatre
+démonstrations s'ajoutent au socle. En analyse : unicité et opérations sur
+les limites, caractérisation séquentielle, composée de continues,
+dérivabilité et continuité, dérivée d'une composée par prolongement du
+taux, partie entière, caractérisation de la borne supérieure, complétude
+de $\mathbb{R}$ par Bolzano-Weierstrass, théorème de la bijection,
+dérivée nulle et fonctions constantes, inégalité des accroissements finis,
+Taylor-Lagrange par fonction auxiliaire et Rolle, développements limités
+usuels, convexité et dérivée seconde, formule de Leibniz, intégration par
+parties, changement de variable, inégalité de la moyenne. En algèbre :
+produit de fractions, unicité du neutre et du symétrique, inverse d'un
+produit, caractérisation d'un sous-groupe, intégrité des corps, degré
+d'un produit, division euclidienne et factorisation des polynômes. En
+algèbre linéaire : critères de sous-espace, noyau et image, intersection
+de sous-espaces, formule de Grassmann, isomorphie à dimension égale,
+décomposition en parties paire et impaire.
 
-**Une fonction périodique n'est plus un cas particulier.** `<Dresse>le tableau
-de signes de f` et `<Dresse>le tableau de variations de f` reconnaissent la
-période fondamentale, restreignent l'étude à un intervalle de cette longueur, et
-le disent. La forme bloc n'était pas une syntaxe rivale, c'était un
-contournement — et le tableau que le moteur produisait sans elle était **faux** :
-sur \(\cos\), il posait les bornes \(-\infty\), \(\frac{\pi}{2}\),
-\(\frac{3\pi}{2}\), \(+\infty\) et affirmait un signe constant sur deux
-demi-droites infinies.
+**Le socle de la licence 1 est rédigé** — quinze démonstrations de
+logique, d'ensembles, de dénombrement et d'arithmétique, sur lesquelles
+s'appuie tout le reste du supérieur : négation des propositions
+quantifiées, implication et contraposée, récurrence forte, lois de De
+Morgan, distributivité des opérations ensemblistes, composée de bijections
+et d'injections, équivalence entre injectivité et surjectivité en cardinal
+fini, nombre de parties d'un ensemble fini — par codage binaire —,
+principe des tiroirs, division euclidienne dans $\mathbb{Z}$, lemme
+d'Euclide, plus petit diviseur premier, irrationalité de la racine d'un
+entier non carré.
 
-**L'intervalle suit l'usage du supérieur** : longueur d'une période, centré sur
-l'origine lorsque la fonction est paire ou impaire — celui sur lequel la
-symétrie se voit au lieu d'être affirmée. La tangente y retrouve
-\(\left]-\frac{\pi}{2}\,;\,\frac{\pi}{2}\right[\), sa détermination
-principale ; le cosinus et le sinus \([-\pi\,;\,\pi]\). La période retenue
-est la période fondamentale : \(\sin^2\) s'étudie sur une longueur \(\pi\),
-non \(2\pi\).
+**Les trente démonstrations de première et de terminale manquantes sont
+rédigées.** En première : termes généraux des suites arithmétique et
+géométrique par télescopage, équation de la tangente, dérivées usuelles,
+dérivée d'un quotient, extremum et dérivée nulle, croissance de
+l'exponentielle, linéarité de l'espérance, produit scalaire en coordonnées
+et caractérisation de l'orthogonalité, équation d'un cercle, factorisation
+et signe du trinôme, somme et produit des racines. En terminale : critères
+de divisibilité, compatibilité des congruences, théorèmes de Bézout et de
+Fermat, linéarité, Chasles et positivité de l'intégrale, inégalité de
+concentration, formule de Bayes, aires et volumes du disque, de la
+pyramide et de la boule, orthogonalité d'une droite et d'un plan,
+propriétés du conjugué, formule de Moivre. Le lycée ne déclare plus aucune
+dette.
 
-**La restriction est toujours signalée**, jamais silencieuse — la même doctrine
-que le repli d'une démonstration. Un tableau restreint qui tairait sa
-restriction serait un tableau trompeur.
+**Les quatorze démonstrations de seconde manquantes sont rédigées** :
+variations des fonctions affine, inverse et racine carrée, signe d'une
+fonction affine ; théorème de Thalès dans la configuration du triangle —
+par les aires — et sa réciproque, effet d'une homothétie sur les longueurs
+et les angles, parallélisme par vecteurs directeurs, équation cartésienne
+d'une droite ; stabilité de $\mathbb{Q}$, somme d'un rationnel et d'un
+irrationnel, inverse d'un irrationnel, maximum et minimum par la valeur
+absolue, absence de plus grand entier naturel. La seconde ne déclare plus
+aucune dette.
 
-**L'intervalle s'impose quand on le veut**, périodique ou non : le complément
-`sur [a ; b]` vaut pour les deux tableaux et pour leur forme plurielle. Les
-crochets suivent l'usage français, et l'intervalle demandé est intersecté avec le
-domaine de définition — c'est l'intervalle réellement étudié qui est annoncé. Un
-intervalle mal formé est ignoré plutôt que de faire échouer la balise.
-
-**La tangente et la cotangente montrent enfin leurs pôles.** `<Dresse>le tableau
-de signes de t` sur \(\tan\) ne voyait aucune valeur interdite : la mise au
-même dénominateur laissait \(\tan(x)\) intact. Elles sont désormais réécrites
-en sinus et cosinus avant l'étude, et la double barre paraît où elle doit.
-
-**Un facteur à exposant portait le signe de sa base.** La ligne étiquetée
-\(\sin^{2}(x)\) affichait le signe de \(\sin(x)\) — négatif là où le carré
-est positif. L'étiquette prenait `morceau ** exposant`, le calcul prenait
-`morceau` : le tableau se contredisait d'une colonne à l'autre. Le défaut
-touchait tout facteur d'exposant pair.
-
-**Une ligne de facteur redondante disparaît.** Une fonction à facteur unique
-donnait deux lignes identiques, celle du facteur et celle de la fonction. La
-ligne n'est retirée que si la constante est positive : sur \(-(x-1)^2\), le
-facteur et la fonction ont des signes opposés, et les deux lignes restent.
-
-**La forme bloc disparaît.** `<Dresse>le tableau de signes x:{…} { … }` était le
-dernier endroit de docdg où un fait mathématique se tapait au lieu de
-s'établir : rien ne vérifiait les signes saisis, et la seule trace qu'en gardait
-le manuel était une exception taillée dans la règle « tout se dit en prose ». Une
-balise qui la reprend est refusée en nommant la forme à écrire. Le manuel perd du
-même coup une syntaxe morte qui y traînait — un `<Dresse le tableau de variations
-de f, x:{…}, dérivée:{…}, variations:{…}>` qui n'était plus compris depuis
-longtemps et fuyait en prose sans que rien le signale.
+**Huit démonstrations de licence 1 sur les suites entrent au fichier
+`analyse.toml`** : toute suite convergente est bornée, toute suite extraite
+converge vers la même limite, le produit d'une bornée par une limite nulle,
+la divergence des suites non bornées — par contraposée —, le théorème
+d'encadrement, les suites adjacentes, la bornitude des suites de Cauchy et
+le lemme de Cesàro. Chacune déclare ses appuis (`depend_de`) et ses
+citations (`mentions`), et les huit ancrages perdent leur
+`demonstration_prevue` : il reste trois cents démonstrations à rédiger.
 
 ### Corrigé
 
-**La section « Les exemples, par niveau » du README disait la 3.1.** Quinze
-fichiers livrés n'y figuraient pas — toute la série `math`, `physique` et
-`chimie`, `histoire1`, `seyes1` et `seyes2` —, le suffixe **5** n'y existait
-pas, et une phrase y paraissait deux fois. La section est réécrite : cinq
-suffixes, les cinquante et un fichiers, chacun à sa place. `Ecole.md` décrit
-enfin le corpus élémentaire et les sept exemples de l'école.
+**Le garde-fou des exemples ne gardait pas `couleurs1`.** Le fichier enseigne
+la règle d'accord des couleurs, et porte pour cela six balises fautives —
+quatre accords interdits, deux locutions que la table ignore entières. Six
+refus voulus, que la table des comptes attendus ne déclarait pas : le contrôle
+les lisait comme six régressions. `couleurs1` y figure désormais à côté
+d'`algo3`, `algo4` et `physique4`. Le défaut ne s'était jamais vu parce que le
+contrôle d'écriture, qui passe avant par ordre alphabétique, arrêtait la série
+avant lui.
 
-**La bibliothèque des classiques disait « CPGE ».** Le manifeste du corpus
-avait tranché : « CPGE » désigne des établissements, non un contenu, et
-l'étiquette promise était « MPSI-MP ». Les trente-cinq fiches la portent
-désormais, dans `demonstrations.json` comme au catalogue.
+**Les deux contrôles dimensionnels de `physique4` se disent maintenant par leur
+sens.** Un compte de triangles ne dit pas lequel des deux a parlé : celui de la
+relation juste ou celui de la relation fausse. Un contrôle nommé vérifie
+désormais que `div(E) = rho / epsilon_0` passe en le disant, et que `E = m * c`
+échoue en le disant.
 
-**Le crate `corpus` déclarait encore la GPL.** Sa licence suit maintenant celle
-de l'application.
+**L'écriture mordait le carreau incomplet du bord droit.** La colonne de
+206 mm ne contient pas un nombre entier de carreaux de 8 mm : la réglure,
+coupée par le bloc comme une feuille l'est par le massicot, laisse un reste
+de 6 mm — et le texte s'y écrivait. La main s'arrête désormais au dernier
+carreau entier : le bloc porte ce reste en garniture droite, calculé pour
+tout pas et toute largeur, et nul quand la colonne tombe juste.
 
-### L'atelier
+**Les fonctions périodiques ne se dressaient pas.** Le domaine de la
+tangente n'est pas une réunion d'intervalles mais un complémentaire
+portant sur une infinité de pôles : le découpage n'y voyait aucun
+intervalle et l'étude échouait, alors que la prose du manuel promet
+depuis longtemps que le moteur reconnaît la période. Il la reconnaît
+désormais : l'étude se restreint à un intervalle d'une période, centré
+sur l'origine quand la parité s'y prête, et les pôles de cette fenêtre
+— en nombre fini — la découpent en intervalles ouverts à leurs bornes,
+de sorte que les limites se prennent du bon côté. Le tableau de la
+tangente monte donc de $-\infty$ à $+\infty$ sur $\left]-\frac{\pi}{2}
+\,;\frac{\pi}{2}\right[$, et celui du cosinus décrit une période au lieu
+de prétendre décrire $\mathbb{R}$ d'un seul trait. La convexité passe par
+le même chemin. Les douze appels `<Dresse>` de `analyse3.txt` se dressent
+maintenant tous, contre sept auparavant.
 
-**Les manifestes ne portent plus que des données.** La doctrine qui vivait en
-commentaires dans `corpus.toml` et `niveaux.toml` — conventions de rédaction,
-politique de repli, alignement du supérieur, la question des CPGE — est
-rassemblée dans `docs/REGLES-CORPUS.md`, refondu, avec les deux dépendances et
-la règle de monotonie des énoncés. Rien n'est perdu, et un manifeste se lit
-d'un coup d'œil.
+**Le nom de la fonction étudiée se lisait de deux façons.** Devant
+`<Dresse>le tableau de variations de q sur [-1 ; 1]`, le scan de
+l'environnement retenait « q sur [-1 ; 1] » comme nom de fonction, tandis
+que le rendu n'en gardait que le dernier mot, « 1] » : ni l'un ni l'autre
+ne nommait $q$, et les deux divergeaient — l'invariant qui veut que le scan
+prédise exactement le rendu était en défaut, et le tableau ne se dressait
+pas. Les deux chemins lisent désormais le nom par la même fonction, qui
+rogne la restriction de domaine. La branche des tableaux de signes, qui
+souffrait du même défaut, est unifiée avec eux. La restriction elle-même
+n'est pas encore honorée : le tableau porte sur le domaine naturel de la
+fonction.
 
-**`Redaction.md` est extrait du corpus, cellule par cellule.** Les tables de
-tête sont recalculées, quatorze cellules d'ancrages qui avaient dérivé sont
-remises au vrai, et les cinq niveaux de l'école ont leurs sections.
+**Les trous de justification en bas de page.** Quand un paragraphe se
+scindait au bas d'une page, sa dernière ligne recevait `text-align-last:
+justify` — le geste juste pour une ligne de milieu de paragraphe. Mais
+l'analyse des lignes mesurait les rectangles des mots À L'INTÉRIEUR des
+mathématiques, où exposants et fractions vivent à des hauteurs propres :
+chacun pouvait fabriquer une fausse ligne, la coupe tombait en travers
+d'une vraie, et trois mots s'étiraient sur toute la mesure. Deux gardes :
+une formule compte désormais pour sa boîte entière, une par ligne, jamais
+pour ses morceaux ; et la justification forcée ne se pose plus que si la
+dernière ligne du fragment est effectivement pleine — à défaut, elle reste
+au fer à gauche, un défaut discret plutôt qu'un trou.
 
-**`corpus/fusion/` quitte l'archive.** C'était l'établi, pas le produit.
+**Le numéro de version était faux partout.** La 3.3 a été publiée — dépôt,
+documentation, exemples, PDF — alors que les cinq manifestes portaient encore
+`3.2.0`, que le manuel s'ouvrait sur « docdg 3.2 » et que le paquet macOS
+annonçait `2.6.0`, resté tel depuis la 2.6. Comme l'échéance d'une
+installation se calcule à partir de `CARGO_PKG_VERSION`, une version publiée
+sous le numéro de la précédente partageait son compteur : ce n'était pas une
+coquette d'affichage.
+
+**La version ne s'écrit plus qu'à un seul endroit.** Elle était répétée dans
+les cinq manifestes, et c'est cette répétition qui l'avait laissée diverger.
+`[workspace.package] version` la porte désormais seule ; les cinq membres la
+reprennent par `version.workspace = true`. Le manifeste du corpus, le paquet
+macOS et le titre du manuel suivent le même numéro.
 
 ## 3.2 — les divisions de l'ouvrage et l'atelier
 
 ### Ajouté
+
+**`cargo app recensement` : l'état du corpus se mesure au lieu de se déclarer.**
+La commande dénombre les ancrages niveau par niveau, les énoncés domaine par
+domaine, et nomme les creux — les niveaux sous trente ancrages, les domaines
+qui tiennent en moins de trois énoncés. Avec `--redaction`, elle réécrit
+`Redaction.md` depuis `corpus/donnees/` : le catalogue ne peut plus diverger
+de la base, comme il l'avait fait en annonçant 1 310 énoncés pour 1 373 et en
+ignorant l'école élémentaire. Elle lit le corpus par le chargeur qui le valide,
+non par une seconde lecture des fichiers.
 
 **Trois divisions majeures au-dessus du chapitre : `tome`, `livre`, `partie`.**
 docdg savait composer un article et un mémoire ; il sait désormais composer un
@@ -648,12 +768,6 @@ titre lui-même.
 échappée et visible. Une étiquette est une marque de renvoi posée dans le
 titre, pas un mot du titre : elle en est retirée avant que la table ne le
 reçoive.
-
-## 3.1
-
-Version intermédiaire, publiée entre la 3.0 et la 3.2 — le banc la mentionne,
-le journal l'avait omise. Son apport, la remise d'aplomb de la série de
-publication, est décrit avec les notes de la 3.2, qui l'avaient consolidé.
 
 ## 3.0 — le master et l'agrégation en physique-chimie
 

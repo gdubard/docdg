@@ -9,8 +9,6 @@ La licence 1 à la licence 3, PCSI, PC, MPSI et MP : les outils du supérieur et
 
 ---
 
-<a id="-le-supérieur-cpge"></a>
-
 ## **🎓 Le supérieur (CPGE)**
 
 > Le registre des classes préparatoires s'écrit tel quel. Les résultats sont exacts ; les impossibilités renvoient honnêtement au raisonnement à rédiger.
@@ -77,7 +75,7 @@ Le pont vers la physique : séries de Fourier tronquées à l'ordre voulu, trans
 
 ---
 
-<a id="-les-courbes-et-les-coniques"></a>
+<a id="la-physique-chimie"></a>
 
 ## **➰ Les courbes et les coniques**
 
@@ -110,8 +108,6 @@ Le repère est isotrope (un cercle reste un cercle), les couleurs sont celles du
 La rédaction suit la méthode : discriminant \\(AC - B^2/4\\), rotation d'angle \\(\\theta\\) et valeurs propres si le terme croisé est présent, centre \\(\\Omega\\), équation réduite, puis les éléments caractéristiques — demi-axes, \\(c\\), excentricité et foyers pour l'ellipse et l'hyperbole (asymptotes comprises), sommet, paramètre \\(p\\), foyer et directrice pour la parabole. Les cas dégénérés (point, droites, ensemble vide) concluent proprement. Le cercle est reconnu comme tel.
 
 ---
-
-<a id="-les-fonctions-de-deux-variables"></a>
 
 ## **🗻 Les fonctions de deux variables**
 
@@ -150,8 +146,6 @@ Doubles et triples sur un pavé (Fubini, variable par variable), doubles sur un 
 
 ---
 
-<a id="-le-plan-complexe-et-les-résidus"></a>
-
 ## **🌀 Le plan complexe et les résidus**
 
 Dernier étage de docdg 2.0, avec un évaluateur complexe intégré (opérations, puissances, `i`, `exp`, `ln`, `sin`, `cos`, `sqrt`) :
@@ -166,7 +160,7 @@ L'image d'un quadrillage montre la géométrie de la transformation — les deux
 
 ---
 
-<a id="-les-lois-à-densité"></a>
+<a id="les-groupes"></a>
 
 ## **🎲 Les lois à densité**
 
@@ -182,8 +176,6 @@ L'image d'un quadrillage montre la géométrie de la transformation — les deux
 
 ---
 
-
-<a id="la-physique-chimie-en-licence"></a>
 
 ## La physique-chimie en licence
 

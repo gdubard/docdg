@@ -1,7 +1,7 @@
-# *docdg 3.3*
+# *docdg 3.4*
 
 **docdg** is a Rust document class built around a French-only prose
-tag language (no anglicisms). Users write a single `.txt` file where every
+tag language (no anglicisms). Users write a single `.docdg` file where every
 command reads as a natural French sentence; the Rust engine compiles it
 directly to HTML and PDF, with professional typographic quality. It covers
 layout frames and grids, tables, images, a math mini-language, function
@@ -9,8 +9,8 @@ plotting, plane and solid geometry, statistics/probability diagrams,
 physics and chemistry, and long-form publishing (chapters, title page,
 cross-references, bibliography).
 
-**Author / Maintainer:** Gérard Dubard — gerarddubard@gmail.com
-**License:** Proprietary freeware — binaries free for personal and educational use, source closed. See [CLUF.md](CLUF.md).
+**Author / Maintainer:** Gérard Dubard — docdg69@gmail.com
+**License:** proprietary freeware — see [CLUF.md](CLUF.md)
 **Repository:** https://github.com/gdubard/docdg
 
 ---
@@ -19,10 +19,10 @@ cross-references, bibliography).
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-3.3-2980b9?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.4-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
-[![License](https://img.shields.io/badge/license-Freeware-8e44ad?style=flat-square)](CLUF.md)
+[![Licence](https://img.shields.io/badge/licence-propriétaire_freeware-8e44ad?style=flat-square)](CLUF.md)
 
 **[Journal des versions](CHANGELOG.md)**
 
@@ -31,27 +31,25 @@ cross-references, bibliography).
 
 ## Avant de commencer : installation
 
-**docdg est une application autonome** — aucune distribution TeX, aucun éditeur spécialisé n'est requis. Une seule chose à télécharger et à lancer.
+**docdg est une application autonome** — aucune distribution TeX, aucun éditeur spécialisé n'est requis. Néanmoins, pour exploiter tout son potentiel, l'installation de Python et de la bibliothèque SymPy est requise. En effet, ce moteur externe prend en charge l'ensemble des calculs automatiques avancés (tableau de variations, dérivées, primitives, zéros de fonctions, lois de probabilité).
 
-Néanmoins, pour exploiter tout son potentiel, l'installation de Python ainsi que de la bibliothèque SymPy est fortement recommandée. Ce moteur externe prend en charge les calculs formels avancés — tableau de variations, tableau de signes, dérivées, primitives, limites, développements limités, zéros de fonctions, équations différentielles. Les lois de probabilité, elles, sont calculées nativement par docdg et ne demandent rien.
+**Télécharger docdg.** Récupérer le binaire correspondant à votre système sur la page des versions du dépôt :
 
-**1. Installer Python 3**
+```
+https://github.com/gdubard/docdg/releases
+```
 
-Téléchargez l'installeur sur [python.org](https://www.python.org/downloads/).
+Sous Windows, l'installeur configure le `PATH` automatiquement. Sous macOS/Linux, rendre le binaire exécutable (`chmod +x docdg`) et le placer dans un dossier du `PATH`.
 
-Sous Windows : veillez à bien cocher la case « Add Python to PATH » lors de l'installation.
+**Installer Python (facultatif, pour les calculs formels).** Le calcul formel et numérique avancé repose sur **Python 3 avec SymPy**. docdg l'appelle automatiquement dès qu'il le détecte — aucune option à activer. Récupérer l'installeur sur **[python.org](https://www.python.org/downloads/)** (sous Windows, cocher **« Add Python to PATH »**), puis dans un terminal :
 
-**2. Installer SymPy**
-
-Exécutez la commande suivante dans votre terminal :
-
-```bash
+```
 python3 -m pip install sympy
 ```
 
-Sous Windows : utilisez plutôt `py -m pip install sympy`.
+Sous Windows : `py -m pip install sympy`. docdg essaie dans l'ordre `python3`, `python` puis `py`, et garde la première qui répond.
 
-docdg détecte automatiquement l'environnement Python au lancement (en testant successivement python3, python puis py) sans aucune configuration manuelle de votre part.
+Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne — seuls les calculs automatiques (variations, dérivées, zéros, primitives, lois de probabilité) demandent le moteur externe.
 
 ## **📚 Sommaire détaillé**
 
@@ -69,16 +67,17 @@ docdg détecte automatiquement l'environnement Python au lancement (en testant s
 
 | document | contenu |
 |---|---|
-| [Redaction.md](Redaction.md) | les 1378 énoncés et les 299 démonstrations du corpus, par matière et par niveau, avec la phrase qui les appelle — plus les 101 démonstrations classiques servies par `<Montre>` |
+| [Redaction.md](Redaction.md) | les 1373 énoncés et les 569 démonstrations du corpus, par matière et par niveau, avec la phrase qui les appelle — plus les 101 démonstrations classiques servies par `<Montre>` |
 
 ### Les contrôles
 
-Trois commandes tiennent le dépôt d'aplomb, et la CI les rejoue à chaque poussée. `cargo app` est un alias déclaré dans `.cargo/config.toml` : il appelle le crate `xtask`, qui porte les commandes de service. Sur un dépôt où ce fichier manque, la forme longue reste `cargo run -p xtask -- <commande>`.
+Quatre commandes tiennent le dépôt d'aplomb, et la CI les rejoue à chaque poussée :
 
 | commande | ce qu'elle vérifie |
 |---|---|
 | `cargo app corpus` | le corpus : références, cycles, monotonie des niveaux, homogénéité des relations |
-| `cargo app couverture` | que le moteur, les manuels et les exemples disent la même chose — neuf tables du moteur confrontées, entrée par entrée |
+| `cargo app couverture` | que le moteur, les manuels et les exemples disent la même chose — 278 entrées confrontées, table par table |
+| `cargo app recensement` | l'état du corpus : ancrages par niveau, énoncés par domaine, et les creux qui restent à nourrir — `--redaction` réécrit [Redaction.md](Redaction.md) |
 | `cargo run -p docdg-bench --bin exemples` | que les 52 exemples composent, et que le compte de marques d'erreur voulues n'a pas bougé |
 
 `couverture` lit les tables du moteur dans le code source, puis cherche chaque
@@ -96,53 +95,45 @@ fois pour tous les niveaux.
 ### La référence
 
 1. [Qu'est-ce que docdg ?](#-quest-ce-que-docdg-)
-2. [Ce que la 3.3 apporte](#-ce-que-la-33-apporte)
-3. [Ce que la 3.2 apporte](#-ce-que-la-32-apporte)
-4. [Ce que la 3.0 apporte](#-ce-que-la-30-apporte)
-5. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
-6. [Fonctionnalités clés](#-fonctionnalités-clés)
-7. [Pourquoi docdg ?](#-pourquoi-docdg-)
-8. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
-9. [Premiers documents](#-premiers-documents)
-10. [La syntaxe](#-la-syntaxe)
-11. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
-12. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
-13. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
-14. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
-15. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
-16. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
-17. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
-18. [Les mathématiques](#-les-mathématiques)
-19. [La géométrie](#-la-géométrie)
-20. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
-21. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-22. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-23. [La frise chronologique](#-la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
-24. [Les exemples, par niveau](#-les-exemples-par-niveau)
-25. [Les documents complexes](#-les-documents-complexes)
-26. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
-27. [Référence complète](#-référence-complète) — couleurs et options de classe
-28. [Bonnes pratiques](#-bonnes-pratiques)
-29. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
-30. [Les tournures et le placement](#les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
-
-### Ce qui est traité dans les guides par niveau
-
-Le présent document ne redit pas ce qui appartient à un niveau. Les
-constructions ci-dessous ont leur chapitre dans le guide correspondant :
-
-| chapitre | guide |
-|---|---|
-| [L'écriture sur des lignes](Ecole.md#-lécriture-sur-des-lignes) — la réglure Seyès et la cursive | [Ecole.md](Ecole.md) |
-| [Le collège, rédigé](College.md#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations | [College.md](College.md) |
-| [Le lycée, couvert](Lycee.md#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes | [Lycee.md](Lycee.md) |
-| [Le supérieur (CPGE)](Licence.md#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace | [Licence.md](Licence.md) |
-| [Les courbes et les coniques](Licence.md#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées | [Licence.md](Licence.md) |
-| [Les fonctions de deux variables](Licence.md#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples | [Licence.md](Licence.md) |
-| [Le plan complexe et les résidus](Licence.md#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus | [Licence.md](Licence.md) |
-| [Les lois à densité](Licence.md#-les-lois-à-densité) — densités, loi normale, théorème central limite | [Licence.md](Licence.md) |
-| [Les groupes](MasterAgregation.md#-les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature | [MasterAgregation.md](MasterAgregation.md) |
-| [Rédiger un article, une thèse](MasterAgregation.md#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie | [MasterAgregation.md](MasterAgregation.md) |
+2. [Ce que la 3.4 apporte](#-ce-que-la-34-apporte) — le corpus complet, l'école élémentaire, la vitesse
+2. [Ce que la 2.9 apporte](#-ce-que-la-29-apporte) — le corpus de physique-chimie et l'analyse dimensionnelle
+3. [Ce que la 2.8 apporte](#-ce-que-la-28-apporte) — le corpus mathématique, de la sixième à l'agrégation
+3. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
+3. [Fonctionnalités clés](#-fonctionnalités-clés)
+4. [Pourquoi docdg ?](#-pourquoi-docdg-)
+5. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
+6. [Premiers documents](#-premiers-documents)
+7. [La syntaxe](#-la-syntaxe)
+8. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
+9. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
+10. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
+11. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
+12. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
+13. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
+14. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
+15. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
+16. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
+17. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
+18. [Les groupes](#les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
+19. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
+20. [Les mathématiques](#-les-mathématiques)
+21. [La géométrie](#-la-géométrie)
+22. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
+23. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
+24. [L'écriture sur des lignes](#lecriture-sur-des-lignes) — la réglure Seyès et la cursive, pour l'école élémentaire
+25. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
+26. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
+27. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
+28. [La physique-chimie](#la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+29. [La frise chronologique](#la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
+30. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
+31. [Les exemples, par niveau](#les-exemples-par-niveau)
+32. [Les documents complexes](#-les-documents-complexes)
+33. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
+34. [Référence complète](#-référence-complète) — couleurs et options de classe
+35. [Bonnes pratiques](#-bonnes-pratiques)
+36. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
+37. [Les tournures et le placement](#les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
@@ -186,29 +177,46 @@ Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C
 
 ---
 
-## **🆕 Ce que la 3.3 apporte**
+## **🆕 Ce que la 3.4 apporte**
 
-**Le corpus descend à l'école élémentaire.** Cinq niveaux nouveaux — `CP`,
-`CE1`, `CE2`, `CM1`, `CM2` — et cinquante-deux énoncés au programme de l'école,
-des quatre opérations aux patrons de solides, avec le vocabulaire du supérieur
-tenu de bout en bout : termes et somme dès le CP, quotient et reste dès le CE2,
-« de même longueur » et jamais « égaux ». `niveau: CM2;` dans l'entête, et
-`<Énonce>` répond.
+**Le corpus ne déclare plus aucune dette.** 1 373 énoncés et 569 démonstrations,
+et pas une seule promesse en attente : chaque énoncé annoncé démontré porte sa
+démonstration, rédigée au niveau exact où il est exigible. Les trois cent huit
+lacunes que la 3.0 assumait sont soldées — la seconde, la première et la
+terminale, les trois années de licence, puis le master et l'agrégation en
+mathématiques, en physique et en chimie.
 
-**La glose : le mot juste, expliqué.** Le corpus n'écrit jamais qu'un terme, le bon — mais aux niveaux où il est neuf, une note de vocabulaire le suit, et disparaît au-delà : en cinquième, « *Vocabulaire : isométriques — on dit aussi superposables.* » ; en quatrième, rien. La note est **à côté** de l'énoncé, jamais dedans : le texte se cite tel quel à tous les niveaux. C'est l'inverse de ce que font les manuels, qui enseignent un vocabulaire à désapprendre. Rien à demander : la glose vient du `niveau:` déclaré dans l'entête.
+**L'école élémentaire entre dans le corpus.** Du CP au CM2, en mathématiques
+comme en sciences : numération de position, compléments à dix, tables de
+multiplication, fractions et écriture décimale, aires par pavage, symétrie
+axiale, circuits électriques, états de l'eau. Rien ne s'y démontre — à l'école,
+tout est admis, et le corpus le dit ainsi. Le collège s'enrichit du même
+mouvement de quinze énoncés et deux démonstrations : nombres relatifs,
+priorités opératoires, repère du plan, et la propriété qu'une médiane partage
+le triangle en deux triangles de même aire, démontrée en cinquième comme le
+demande le programme du cycle 4.
 
-**Les tableaux de signes et de variations connaissent la période.** Une fonction périodique n'est plus un cas particulier : `<Dresse>le tableau de signes de f` reconnaît sa période fondamentale, restreint l'étude à un intervalle de cette longueur — centré sur l'origine si la parité s'y prête — et le dit. Sur \(\cos\), le tableau produit jusqu'ici était faux. L'intervalle s'impose aussi à la main, périodique ou non : `<Dresse>le tableau de variations de f sur [-2 ; 2]`.
+**`cargo app recensement`.** L'état du corpus se mesure au lieu de se déclarer :
+les ancrages niveau par niveau, les énoncés domaine par domaine, et les creux
+nommés — les niveaux les moins fournis, les domaines qui tiennent en moins de
+trois énoncés. Avec `--redaction`, la commande réécrit `Redaction.md` depuis les
+données : le catalogue ne peut plus diverger de la base.
 
-**Les deux dépendances.** `depend_de` dit ce que le lecteur doit déjà savoir et
-ne remonte jamais le cursus — le validateur le refuse désormais ;
-`se_fonde_sur` dit ce sur quoi l'énoncé repose en droit, et peut pointer vers la
-licence depuis la troisième. Soixante-dix arêtes du corpus ont été triées entre
-les deux, une était fausse et a disparu.
+**La vitesse et la mémoire.** Le cache des segments retient l'environnement
+sortant de chacun et la césure déjà composée, si bien qu'une frappe ne
+recompose plus que ce qu'elle touche ; `finalise` ne recopie plus le document
+que deux fois au lieu de quatre ; le bassin de calcul formel se sème à
+l'ouverture de l'application plutôt qu'au premier calcul ; la cursive Marelle
+ne voyage plus dans chaque document composé ; et une image ne se relit que si
+elle a changé sur le disque.
 
-**Le test des manuels couvre les sept manuels** — cent soixante-quinze blocs
-sous le même juge. Le catalogue `Redaction.md` est extrait du corpus cellule par
-cellule, la doctrine éditoriale vit dans `docs/REGLES-CORPUS.md`, et la
-bibliothèque des classiques dit « MPSI-MP » là où elle disait « CPGE ».
+**SymPy seul.** SciPy n'est plus employé ni requis : le calcul formel comme le
+calcul numérique avancé passent par SymPy, et l'installation se réduit à
+`python3 -m pip install sympy`.
+
+**L'écriture s'arrête au dernier carreau entier.** Sur la réglure Seyès, la
+colonne ne contient pas un nombre entier de carreaux : le reste du bord droit
+était mordu par le texte. Il ne l'est plus.
 
 ---
 
@@ -241,7 +249,7 @@ cartouche Fichier, et des dialogues qui proposent `nomdufichier.txt` et
 ## **🆕 Ce que la 3.0 apporte**
 
 **Le master et l'agrégation en physique-chimie.** 163 énoncés et 55
-démonstrations portent le corpus à **1378 énoncés et 299 démonstrations**, de la
+démonstrations portent le corpus à **1310 énoncés et 299 démonstrations**, de la
 cinquième à l'agrégation, dans une base unique aux trois matières. Neuf domaines
 neufs : mécanique quantique avancée, physique statistique du master, matière
 condensée, électrodynamique covariante, physique nucléaire et des particules,
@@ -361,7 +369,7 @@ docdg --version
 | ------------- | --------------------- | --------------------------------------------------------------------- |
 | **docdg**     | Windows, macOS, Linux | ✅ Interface intégrée, prévisualisation en direct, export PDF en un clic |
 | VS Code       | Toutes                | Éditeur de texte polyvalent, extension de coloration disponible         |
-| Tout éditeur  | Toutes                | Un fichier `.txt` est du texte brut — n'importe quel éditeur convient |
+| Tout éditeur  | Toutes                | Un fichier `.docdg` est du texte brut — n'importe quel éditeur convient |
 
 ---
 
@@ -375,7 +383,7 @@ docdg --version
 Bonjour le monde !
 ```
 
-> C'est vraiment tout. Enregistrez ce texte dans un fichier `.txt`, ouvrez-le avec docdg — le PDF est prêt.
+> C'est vraiment tout. Enregistrez ce texte dans un fichier `.docdg`, ouvrez-le avec docdg — le PDF est prêt.
 ### **⚙️ Le bloc document**
 
 Tout ce qui décrit le **corps physique** du document — son format, ses polices, sa conduite — s'écrit dans un bloc `document { }` en tête du fichier. Il est entièrement facultatif : sans lui, des valeurs par défaut raisonnables s'appliquent.
@@ -493,7 +501,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 | **Propriétés** | Personnalisation     | `rouge`, `gras`, `14pt`, `au centre` |
 | **Valeurs**    | Paramètres           | `oui`, `non`, `30`, `bleu foncé`  |
 
-**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Affiche>un cadre avec ...{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (une matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>la matrice M{...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise commence par un **verbe d'action à l'impératif présent** — jamais par l'objet nu (règle n°12). Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus. Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresse>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
+**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Affiche>un cadre avec ...{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (une matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>la matrice M{...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise commence par un **verbe d'action à l'impératif présent** — jamais par l'objet nu (règle n°12). Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresse>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
 
 ### **📌 Les règles de base**
 
@@ -597,8 +605,6 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
   Dans un triangle rectangle...
 }
 ```
-
-<a id="les-objets-le-tableau"></a>
 
 ### **2️⃣ `<Dresse>un tableau` — Tableaux simplifiés**
 
@@ -858,7 +864,7 @@ Les fractions restent exactes tant que le discriminant est un carré parfait ; s
 
 ### **3️⃣ `<Insère>une image` — Insertion d'images**
 
-**Syntaxe :** `<Insère l'image CHEMIN avec ATTRIBUTS>` — le chemin s'écrit **en entier dans la balise**, relatif au fichier `.txt` ; rien ne reste à accoler après. Un nom comportant des espaces s'accolade : `l'image {mon chat.png}`. Les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. docdg ne cherche jamais dans un dossier par défaut : omettre le chemin est refusé avec un message qui rappelle la forme.
+**Syntaxe :** `<Insère l'image CHEMIN avec ATTRIBUTS>` — le chemin s'écrit **en entier dans la balise**, relatif au fichier `.docdg` ; rien ne reste à accoler après. Un nom comportant des espaces s'accolade : `l'image {mon chat.png}`. Les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. docdg ne cherche jamais dans un dossier par défaut : omettre le chemin est refusé avec un message qui rappelle la forme.
 
 - `avec une largeur de 30 mm` — 30 mm de large, hauteur proportionnelle ;
 - `avec une hauteur de 20 mm` — 20 mm de haut, largeur proportionnelle ;
@@ -1433,7 +1439,7 @@ deux autres — laissent le triangle introuvable, et docdg le dit.
 
 La même prose (`la droite (AB)`, `la demi-droite [AB)`, `le segment de droite [AB]`) fonctionne aussi bien **dans un repère**, dès que les points portent des coordonnées connues (posés par `<Soit>`, ou placés dans le même bloc) : la droite et la demi-droite s'arrêtent alors au bord du repère plutôt qu'à une longueur fixe, et le segment relie exactement les deux points. C'est la même phrase, seul le contexte — avec ou sans repère ouvert — décide de l'échelle.
 
-**Construction avec longueur imposée.** Le geste de base au collège — tracer un segment ou une demi-droite d'une longueur donnée — s'écrit avec la clause `tel que` — au féminin `telle que`, au pluriel `tels que` et `telles que` —, suivie de la longueur avec son unité :
+**Construction avec longueur imposée.** Le geste de base au collège — tracer un segment ou une demi-droite d'une longueur donnée — s'écrit avec la clause `tel que` (ou `telle que`), suivie de la longueur avec son unité :
 
 ```docdg
 <Trace>le segment de droite [AB] tel que AB = 4 cm
@@ -1642,7 +1648,7 @@ La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / 
 
 **Horizontal :** `à gauche`, `au centre`, `à droite`, `justifié`
 
-**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#les-objets-le-tableau))
+**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#2-dresse-un-tableau--tableaux-simplifiés))
 
 ### **📄 Tabulations et sauts**
 
@@ -2138,38 +2144,6 @@ Les compagnons du calcul formel s'écrivent tous par une **action** — un verbe
 <Dresse>le tableau de signes de f
 ```
 
-Une ligne par facteur, une ligne pour la fonction, la valeur interdite marquée d'une double barre. Quand la fonction n'a qu'un facteur, la ligne intermédiaire disparaît : elle ne dirait rien de plus.
-
-### **L'intervalle d'étude**
-
-**Une fonction périodique n'est pas un cas particulier.** docdg reconnaît sa période fondamentale, restreint l'étude à un intervalle de cette longueur et le **dit** — un tableau restreint qui tairait sa restriction serait un tableau trompeur.
-
-```docdg
-<Soit>une fonction c(x) = cos(x)
-<Dresse>le tableau de signes de c
-<Dresse>le tableau de variations de c
-```
-
-> \(c\) est paire et \(2\pi\)-périodique : son étude sur l'intervalle \([-\pi\,;\,\pi]\), de longueur une période et centré sur l'origine, la détermine sur \(\mathbb{R}\).
-
-**Le choix de l'intervalle suit l'usage du supérieur.** Il a la longueur d'une période, et il est **centré sur l'origine** lorsque la fonction est paire ou impaire — c'est sur celui-là que la symétrie se voit au lieu d'être affirmée. La tangente y trouve $\left]-\frac{\pi}{2}\,;\,\frac{\pi}{2}\right[$, sa détermination principale, celle qui définit l'arc tangente ; le cosinus et le sinus $[-\pi\,;\,\pi]$ ; $\cos(2x)$ et $\sin(x)\cos(x)$ leur demi-période. Une fonction sans parité est étudiée sur $[0\,;\,T]$.
-
-La période retenue est la **période fondamentale**, pas la première venue : $\sin^2$ est étudié sur une longueur $\pi$, non $2\pi$.
-
-**L'intervalle s'impose quand on le veut**, à une fonction périodique comme à n'importe quelle autre — c'est le complément `sur [a ; b]` :
-
-```docdg
-<Soit>une fonction c(x) = cos(x)
-<Dresse>le tableau de signes de c sur [0 ; 2pi]
-
-<Soit>une fonction f(x) = x^3 - 3x
-<Dresse>le tableau de variations de f sur [-2 ; 2]
-```
-
-Les crochets suivent l'usage français : `[0 ; 1]` est fermé, `]0 ; 1[` ouvert, `]0 ; 1]` semi-ouvert. L'intervalle demandé est intersecté avec le domaine de définition, et c'est l'intervalle **réellement étudié** qui est annoncé : `<Dresse>le tableau de variations de f sur [-1 ; 1]` sur une fonction définie à partir de $-\frac{1}{3}$ annonce $\left]-\frac{1}{3}\,;\,1\right]$. Le complément vaut aussi au pluriel : `<Dresse>les tableaux de variations de f, g et h sur [0 ; 1]`.
-
-Un intervalle mal formé n'interrompt rien : il est ignoré, et l'étude se fait sur le domaine entier.
-
 ---
 
 ## **🔢 Les mathématiques**
@@ -2648,10 +2622,12 @@ citation ne se coupe pas en morceaux.
 
 ---
 
+<a id="lecriture-sur-des-lignes"></a>
+
 ## **⚗️ La physique-chimie**
 
-Le corpus couvre la physique et la chimie de la cinquième à l'agrégation :
-742 énoncés et 173 démonstrations de physique-chimie, 243 grandeurs et 122 cadres
+Le corpus couvre la physique et la chimie du CE2 à l'agrégation :
+751 énoncés et 215 démonstrations de physique-chimie, 243 grandeurs et 122 cadres
 d'hypothèses, répartis en 102 domaines — le catalogue complet, par matière et par
 niveau, est dans [Redaction.md](Redaction.md). Les relations y sont vérifiées en homogénéité
 au moment de la compilation.
@@ -2728,40 +2704,16 @@ Trois documents suivent les niveaux du programme. **`histoire2`** (collège) : l
 
 ## **🗂️ Les exemples, par niveau**
 
-Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau
-scolaire, porté par le suffixe du nom de fichier. Chaque fichier a son PDF de
-référence dans `pdf/`.
+Les documents d'exemples, dans le dossier `exemples/`, suivent le niveau scolaire, porté par le suffixe du nom de fichier :
 
 | Suffixe | Niveau | Fichiers |
 |---|---|---|
-| **1** | école élémentaire | `basique1`, `calcul1`, `couleurs1`, `geometrie1`, `histoire1`, `seyes1`, `seyes2` |
-| **2** | collège | `algebre2`, `algo2`, `analyse2`, `basique2`, `chimie2`, `demonstration2`, `geometrie2`, `histoire2`, `math2`, `nombres2`, `physique2`, `statistiques-probabilites2` |
-| **3** | lycée | `algebre3`, `algo3`, `analyse3`, `basique3`, `chimie3`, `demonstration3`, `geometrie3`, `histoire3`, `math3`, `physique3`, `physique-chimie3`, `statistiques-probabilites3` |
-| **4** | licence | `algebre4`, `algo4`, `analyse4`, `chimie4`, `demonstration4`, `geometrie4`, `histoire4`, `math4`, `physique4`, `physique-chimie4`, `statistiques-probabilites4`, `vitrine4` |
-| **5** | master et agrégation | `chimie5`, `math5`, `physique5` |
+| **1** | la langue et la mise en forme | `basique1` |
+| **2** | collège | `algebre2`, `analyse2`, `basique2`, `geometrie2`, `statistiques-probabilites2` |
+| **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `basique3`, `statistiques-probabilites3` |
+| **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
 
-Cinq fichiers échappent à la numérotation par niveau, parce qu'ils exercent une
-capacité et non un programme : **`factorisation`** (une étude complète menée
-d'un bout à l'autre) et la série de publication : **`publication1`** l'article
-court, **`publication2`** l'exposé d'élève en histoire, **`publication3`** la
-démonstration typographique, **`publication4`** la mini-thèse et
-**`publication5`** l'essai aux sept divisions.
-
-**Ce que chaque série montre.** Le suffixe **1** tient l'école : `seyes1` et
-`seyes2` composent la réglure Seyès et la cursive, `calcul1` les quatre
-opérations et les conversions, `geometrie1` les figures planes, `histoire1` les
-grandes périodes, `couleurs1` le nuancier des 148 teintes et les trois régimes
-d'accord. La série **`algo`** couvre le langage algorithmique en trois niveaux —
-déclarer et répéter, puis les conteneurs et les fonctions, puis la récursivité,
-les tris et les structures de données. La série **`demonstration`** montre les
-trois régimes du raisonnement : écrit par l'auteur en `demonstration2`, servi
-par le corpus et rédigé par le moteur en `demonstration3` et `demonstration4`.
-**`nombres2`** compose au niveau cinquième et montre la **glose** à l'œuvre : les termes du supérieur y paraissent accompagnés de leur apposition, qui s'efface d'elle-même au-dessus du niveau déclaré. La série **`histoire`** règle la frise sur les niveaux : linéaire, thématique,
-puis les trois temps de Braudel en trois bandes. `vitrine4` est la démonstration
-de force — étude de fonction complète, récurrence rédigée par le moteur, système
-au pivot, géométrie de l'espace.
-
-Chaque fichier se clôt sur sa figure à la demande.
+S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie) ; la 2.3 y ajoute **`publication3`** (une démonstration typographique — césure, veuves et orphelines, cadre et tableau sécables). La 2.4 réorganise la série algorithmique en trois niveaux, comme toutes les autres : **`algo2`** (déclarer et initialiser, entrer et sortir, décider, répéter — jusqu'à `sortir` et `continuer`), **`algo3`** (les conteneurs, les chaînes de caractères et les fonctions) et **`algo4`** (récursivité, algorithmes classiques du programme — recherche, dichotomie, tris, fusion — et structures de données avancées : pile, file, p-uplet, simulation). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique2` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. La 2.6 ajoute **`vitrine4`** (la démonstration de force : étude de fonction complète, récurrence vérifiée et rédigée par le moteur, système au pivot, géométrie de l'espace — chaque ligne source y produit une rédaction entière), **`calcul1`** (l'école élémentaire : les quatre opérations, décomposition, fractions de même dénominateur, division euclidienne, conversions), **`geometrie1`** (les figures planes : points placés, droites et segments, triangles, cercles, repère), **`demonstration3`** et **`demonstration4`** (pas une ligne de mathématiques écrite à la main : chaque énoncé, sans accolades, est démontré et rédigé par le moteur — récurrences et propriétés universelles menées par le calcul formel, le reste appelé dans la bibliothèque des classiques, du lycée aux classes préparatoires). La 2.7 ouvre une série d'histoire, réglée elle aussi sur les niveaux : **`histoire2`** (le collège — frise linéaire de la Révolution, grandes périodes de l'histoire : ordonner, se repérer), **`histoire3`** (le lycée — frise thématique et multilinéaire de l'entre-deux-guerres, périodisation des régimes français : articuler cause et effet, problématiser un découpage) et **`histoire4`** (le supérieur — les trois temps de Braudel en trois bandes, deux périodisations concurrentes en regard : la simultanéité, la critique des découpages) ; elle ajoute enfin **`publication4`** (les environnements numérotés : deux chapitres, huit énoncés, six renvois croisés, trois démonstrations dont une récurrence rédigée par le moteur). La 3.1 remet la série de publication d'aplomb, un document par usage réel : **`publication1`** reste l'article court, **`publication2`** devient l'**exposé d'élève en histoire** (deux frises — une linéaire illustrée, une multilinéaire à trois bandes —, un tableau de lecture, un cadre de méthode, une note, une bibliographie), **`publication3`** reste la démonstration typographique, **`publication4`** devient la **mini-thèse** (page de titre à emblème, résumé et mots-clés, quatorze environnements numérotés couvrant les dix genres, neuf renvois croisés, quatre démonstrations dont deux récurrences rédigées par le moteur) et **`publication5`** l'**essai** (les sept divisions : deux tomes, deux livres, trois parties, des chapitres sectionnés jusqu'à la sous-sous-section, un renvoi à une partie et une bibliographie). Chaque fichier se clôt sur sa figure à la demande. La 3.2 ajoute **`couleurs1`** — le nuancier des 148 teintes, une par nom, suivi des trois régimes d'accord et des formes fautives que le moteur refuse en nommant la règle — et **`demonstration2`**, le pendant de `demonstration3` et `demonstration4` : les onze raisonnements **écrits par l'auteur**, du raisonnement direct à la double implication, plus la preuve logée dans l'énoncé. La 3.2 ajoute **`couleurs1`** — le nuancier des 148 teintes, une par nom, suivi des trois régimes d'accord et des formes fautives que le moteur refuse en nommant la règle.
 
 ---
 
@@ -2833,7 +2785,8 @@ soit indication = <italique bleu>
 <Affiche>un cadre-ex{
   <Soit>une fonction f(x) = x^2 - 4x + 3
   
-  <Dresse>le tableau de variations de f
+  <Dresse le tableau de variations de f, x:{-infini | 2 | +infini},
+      dérivée:{- | +}, variations:{+infini \ -1 / +infini}>
   <Représente>graphiquement la fonction f pour x appartient à [-1 ; 5] et y à [-2 ; 4], en bleu, avec 200 échantillons  % Courbe
 }
 
@@ -3045,14 +2998,10 @@ est présenté dans
 couvre l'arithmétique exacte, les systèmes linéaires et l'évaluation
 numérique `#{...}`.
 
-Dès que Python 3 et SymPy sont installés, docdg lui confie automatiquement
-les calculs symboliques — aucune option à activer, les phrases de calcul
-formel appellent le moteur externe d'elles-mêmes. Chaque résultat s'affiche
-en notation française, virgule décimale comprise.
-
-Les lois de probabilité, en revanche, sont calculées **nativement par
-docdg** : densité, répartition, quantile, espérance et écart type ne
-dépendent d'aucune bibliothèque externe et fonctionnent sans Python.
+Dès que Python 3 et SymPy sont installés, docdg confie automatiquement les
+calculs symboliques et numériques avancés à SymPy — aucune option à activer, les phrases de calcul formel appellent le
+moteur externe d'elles-mêmes. Chaque résultat s'affiche en notation
+française, virgule décimale comprise.
 
 ### Le calcul formel (SymPy)
 
@@ -3109,23 +3058,15 @@ Les valeurs propres s'affichent avec leurs multiplicités ; la
 diagonalisation donne P et D avec M = P D P⁻¹, ou explique pourquoi la
 matrice n'est pas diagonalisable.
 
-### Le calcul numérique
-
-Deux phrases demandent SymPy, parce qu'elles reposent sur la dérivation
-formelle du modèle :
+### Le calcul numérique (SymPy)
 
 | Phrase | Effet |
 |---|---|
-| `<Résous>numériquement l'équation EXPR = EXPR sur [a ; b]` | Racine par la méthode de Newton, amorcée au milieu de l'intervalle |
-| `<Ajuste f(x) = a*exp(b*x) aux données {(0;1) (1;2,7) ...}>` | Moindres carrés non linéaires par Levenberg-Marquardt ; paramètres libres a, b, c, d — le tout dans la balise, les données comprises |
-
-Les suivantes sont **natives** et fonctionnent sans Python :
-
-| Phrase | Effet |
-|---|---|
+| `<Résous>numériquement l'équation EXPR = EXPR sur [a ; b]` | Racine numérique, cherchée à partir du milieu de l'intervalle — l'intervalle guide le point de départ |
 | `<Calcule>la probabilité que X <= a pour la loi normale(m ; s)` | Probabilité ; opérateurs `<=`, `>=`, `=`, `<`, `>` |
 | `<Calcule>le quantile d'ordre p de la loi ...` | Quantile |
 | `<Calcule>l'espérance de la loi ...` / `<Calcule>l'écart type de la loi ...` | Moments |
+| `<Ajuste f(x) = a*exp(b*x) aux données {(0;1) (1;2,7) ...}>` | Moindres carrés non linéaires ; paramètres libres a, b, c, d — le tout dans la balise, les données comprises |
 
 Les lois reconnues : `normale(m ; s)`, `binomiale(n ; p)`,
 `poisson(l)`, `uniforme(a ; b)`, `exponentielle(l)` (paramètre λ, à la

@@ -9,8 +9,6 @@ La seconde à la terminale : tronc commun, spécialité et enseignement scientif
 
 ---
 
-<a id="-le-lycée-couvert"></a>
-
 ## **🎓 Le lycée, couvert**
 
 > De la seconde aux maths expertes : chaque chapitre a sa phrase, en registre de la classe.

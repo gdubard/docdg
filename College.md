@@ -9,8 +9,6 @@ La sixième à la troisième : la rédaction des énoncés, les figures, le corp
 
 ---
 
-<a id="-le-collège-rédigé"></a>
-
 ## **🏫 Le collège, rédigé**
 
 > Les rédactions les plus tapées de France, chacune en une phrase — calcul exact, justification comprise, tracé quand il le faut.
@@ -151,35 +149,3 @@ minimaux — la conservation des atomes, appliquée plutôt que récitée :
 
 **Les exemples** `physique2.txt` et `chimie2.txt` montrent un cours rédigé à ce
 niveau.
-
----
-
-## **📚 Ce que le corpus couvre au collège**
-
-Le corpus porte **207 ancrages** répartis sur les quatre années — mathématiques,
-physique et chimie confondues. La 3.3 y a comblé des absences centrales :
-
-| Domaine | Ce qui est entré en 3.3 |
-|---|---|
-| **Nombres relatifs** | le nombre relatif, la somme, la différence (cinquième), le produit, le quotient (quatrième) |
-| **Calcul** | les priorités opératoires, l'écriture fractionnaire (sixième), la réduction d'une expression littérale, le test d'une égalité (cinquième) |
-| **Puissances** | la puissance d'exposant entier relatif et ses règles de calcul (quatrième) |
-| **Algèbre** | développer et factoriser, l'équation du premier degré (quatrième) |
-| **Fonctions** | image et antécédent, la représentation graphique (troisième) |
-| **Repérage** | la demi-droite graduée (sixième), le repère du plan (cinquième) |
-| **Proportionnalité** | l'échelle d'un plan (sixième), l'augmentation et la diminution en pourcentage (cinquième) |
-| **Géométrie** | rayon, diamètre et corde, la distance d'un point à une droite (sixième), la hauteur et la médiane d'un triangle (cinquième) |
-| **Statistiques** | l'effectif et la fréquence (sixième) |
-| **Probabilités** | l'arbre de probabilités (troisième) |
-
-**Le vocabulaire reste celui du supérieur, avec sa glose.** Un document composé
-au niveau cinquième compose « deux triangles isométriques (on dit aussi :
-superposables) » ; le même énoncé lu en quatrième dit « isométriques », sans
-apposition. Le terme écrit dans le corpus n'a jamais changé. Voir
-[Ecole.md](Ecole.md) pour le mécanisme, et
-[docs/REGLES-CORPUS.md](docs/REGLES-CORPUS.md) pour le lexique complet.
-
-**`exemples/nombres2.txt`** compose au niveau cinquième et montre la glose à
-l'œuvre sur une vingtaine d'énoncés.
-
----

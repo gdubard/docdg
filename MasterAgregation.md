@@ -9,8 +9,6 @@ Le master 1 et 2, l'agrégation externe et interne : la rédaction longue, la pu
 
 ---
 
-<a id="-les-groupes"></a>
-
 ## **⚙️ Les groupes**
 
 ```docdg
@@ -23,8 +21,6 @@ Le master 1 et 2, l'agrégation externe et interne : la rédaction longue, la pu
 Les tables de \\(\\mathbb{Z}/n\\mathbb{Z}\\) se dressent pour l'addition et la multiplication ; les générateurs sortent avec l'indicatrice d'Euler \\(\\varphi(n)\\) ; une permutation, donnée par la liste des images, se décompose en cycles à supports disjoints, avec ses points fixes, sa signature \\((-1)^{n-c}\\) (paire ou impaire) et son ordre (ppcm des longueurs).
 
 ---
-
-<a id="-rédiger-un-article-une-thèse"></a>
 
 ## **📕 Rédiger un article, une thèse**
 
@@ -80,7 +76,7 @@ L'ordre est libre : **un renvoi peut précéder son étiquette**. Un renvoi sans
 
 ### Le corpus
 
-Nouveauté de docdg 2.8, étendu à la physique et à la chimie en 2.9 puis porté au master en 3.0 : **1378 énoncés et 299 démonstrations**, de la sixième à l'agrégation, embarqués dans le binaire. `<Énonce>` **sans accolades** y puise ; avec accolades, il garde son comportement de la 2.7 — l'auteur écrit son énoncé lui-même.
+Nouveauté de docdg 2.8, étendu à la physique et à la chimie en 2.9 puis porté au master en 3.0 : **1310 énoncés et 299 démonstrations**, de la sixième à l'agrégation, embarqués dans le binaire. `<Énonce>` **sans accolades** y puise ; avec accolades, il garde son comportement de la 2.7 — l'auteur écrit son énoncé lui-même.
 
 ```docdg
 page { niveau: quatrième; }
@@ -196,3 +192,4 @@ La convention vaut en début de ligne, en milieu de paragraphe, et dans les styl
 
 ---
 
+<a id="les-exemples-par-niveau"></a>

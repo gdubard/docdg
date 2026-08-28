@@ -9,8 +9,6 @@ La classe, les lignes Seyès, l'écriture cursive et les premiers calculs.
 
 ---
 
-<a id="-lécriture-sur-des-lignes"></a>
-
 ## **✏️ L'écriture sur des lignes**
 
 > La réglure Seyès de l'école élémentaire, et de la vraie cursive dessus — modèles d'écriture, lignes à recopier, fiches de copie.
@@ -109,97 +107,5 @@ pour prenom dans {Léa ; Hugo ; Anaïs} {
 La feuille est véritable : trois interlignes fins au-dessus de la première ligne forte — la hauteur d'une majuscule —, deux au-dessous de la dernière — la profondeur d'un jambage —, la réglure qui traverse la marge rouge et continue jusqu'au bord, les carreaux verticaux au bleu des lignes fortes, qui ne commencent qu'à la marge.
 
 > **Ce que le bloc ne fait pas.** Un mot ne se coupe **jamais** en fin de ligne : sur un cahier, la césure n'existe pas, et elle est désactivée dans le bloc même quand le document la demande partout ailleurs. Le mode mathématique ne s'y ouvre pas non plus — `3 × 4 = 12` est une ligne que l'enfant trace, non une formule à composer.
-
----
-
-## **📚 Le corpus de l'école élémentaire**
-
-> Ce que docdg **énonce** du CP au CM2 — et le fait avec les mots qui serviront jusqu'en licence.
-
-Le corpus descend désormais jusqu'au cours préparatoire. Les cinq niveaux de
-l'école y sont des niveaux comme les autres — `CP`, `CE1`, `CE2`, `CM1`, `CM2` —
-et s'écrivent dans l'entête du document :
-
-```docdg
-document {
-	niveau: CM2;
-}
-
-<Énonce>Comparaison de deux nombres décimaux
-<Énonce>Somme de deux fractions de même dénominateur
-```
-
-**Le principe qui gouverne tout ce corpus : la difficulté s'adapte, le
-vocabulaire non.** Un terme juste appris au cours élémentaire n'aura pas à être
-désappris en licence. C'est pourquoi l'addition nomme ses **termes** et sa
-**somme** dès le CP, la division son **quotient** et son **reste** dès le CE2,
-et pourquoi deux segments n'y sont jamais « égaux » : ce sont leurs **longueurs**
-qui sont de même mesure. La virgule décimale est la seule séparation admise, à
-l'école comme à l'agrégation.
-
-Quarante énoncés couvrent les trois domaines du programme : **nombres et
-calculs** — chiffre et nombre, unité, dizaine, centaine, millier, les quatre
-opérations et leurs propriétés, quotient et reste, unités fractionnaires,
-fractions, fractions décimales, nombres décimaux, comparaison ; **grandeurs et
-mesures** — longueurs, masses, contenances, aires, volumes, conversions ;
-**espace et géométrie** — segment et droite, angle droit, perpendiculaires,
-parallèles, polygones, périmètre, polyèdres, patrons, agrandissement et
-réduction.
-
-S'y ajoutent les résultats déjà présents dans le corpus qui relèvent du cours
-moyen et qui y sont maintenant ancrés : les propriétés du rectangle, du losange
-et du carré, la symétrie axiale, l'aire du rectangle, le volume du pavé droit,
-les multiples et les critères de divisibilité, l'égalité et la comparaison de
-fractions, la proportionnalité et le pourcentage.
-
-### **La glose : le mot juste, expliqué**
-
-Le corpus n'écrit jamais qu'un terme, le bon. Mais aux niveaux où ce terme est
-neuf, il paraît accompagné d'une **apposition** qui l'explique — et cette
-apposition s'efface d'elle-même dès que le terme est acquis.
-
-| niveau du document | ce que compose `<Énonce>` |
-|---|---|
-| CP | l'énoncé, puis *Vocabulaire : successeur — le nombre juste après.* |
-| CE1 et au-delà | l'énoncé seul |
-| cinquième | l'énoncé, puis *Vocabulaire : isométriques — on dit aussi superposables.* |
-| quatrième et au-delà | l'énoncé seul |
-
-**La note est à côté, jamais dedans.** L'énoncé se cite tel quel à tous les
-niveaux — c'est lui, la source.
-
-C'est l'inverse de ce que font les manuels, qui enseignent « superposables » en
-cinquième et le font désapprendre en seconde. Ici l'élève lit le mot exact dès le
-premier jour, avec l'aide dont il a besoin ce jour-là — et rien à défaire
-ensuite.
-
-La glose ne se demande pas : elle vient du niveau déclaré dans l'entête du
-document. Le lexique complet est dans
-[docs/REGLES-CORPUS.md](docs/REGLES-CORPUS.md).
-
-**Tout y est `admis`.** Aucune démonstration n'est ancrée à l'école : ce n'est
-pas le lieu de la preuve rédigée, et le corpus ne prétend pas le contraire. Un
-énoncé consulté à un niveau où il est admis le dit, plutôt que de servir la
-preuve d'un niveau supérieur.
-
-Le catalogue complet, niveau par niveau, se lit dans
-[Redaction.md](Redaction.md) ; les règles qui le gouvernent dans
-[docs/REGLES-CORPUS.md](docs/REGLES-CORPUS.md).
-
----
-
-## **🗂️ Les exemples de l'école**
-
-| Fichier | Ce qu'il montre |
-|---|---|
-| `seyes1` | la réglure Seyès et la cursive — modèles d'écriture, lignes à recopier |
-| `seyes2` | la réglure sur du texte long — justification, styles, tabulations |
-| `calcul1` | les quatre opérations, décomposition, fractions de même dénominateur, division euclidienne, conversions |
-| `geometrie1` | les figures planes — points placés, droites et segments, triangles, cercles, repère |
-| `histoire1` | les grandes périodes de l'histoire, en frise |
-| `basique1` | la langue et la mise en forme |
-| `couleurs1` | le nuancier des 148 teintes et les trois régimes d'accord |
-
-Chacun a son PDF de référence dans `pdf/`.
 
 ---
