@@ -34,7 +34,6 @@ soit h2 = <bleu italique sous-section>
 	x - y = 1
 }
 <Résous>le système s
-<Résous>le système s, pas à pas
 
 
 <h2>Déterminant et inverse
@@ -83,13 +82,13 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 	L'engendré $engendré par(u, v)$, la trace $trace(A)$, le déterminant $déterminant(A)$, la transposée $^t{A}$, l'inverse $A^{-1}$, la comatrice $comatrice(A)$, le spectre $spectre(A)$ et l'adjoint $A^*$ se nomment en clair dans une formule.
 	Le noyau et l'image s'écrivent $noyau(A)$ et $image(A)$, le rang $rang(A)$.
 
-<h2>Le pivot, pas à pas
+<h2>Le pivot à trois inconnues
 <Soit>le système t {
 	x + y + z = 2
 	4x + 2y + z = 3
 	9x + 3y + z = 6
 }
-<Résous>t pas à pas
+<Résous>le système t
 
 <h2>Table de Cayley
 	Le groupe se nomme, la table se calcule : addition modulo n pour Z/nZ, multiplication des inversibles pour (Z/nZ)*.

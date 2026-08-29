@@ -30,7 +30,7 @@ soit h2 = <bleu italique sous-section>
 	3x + 2y + z = 10
 }
 <page suivante>
-<Résous>le système s, pas à pas
+<Résous>le système s
 
 <h2>La géométrie rédigée et tracée
 <Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)

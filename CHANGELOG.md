@@ -4,6 +4,73 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
+## 3.5 — le chargement et l'atelier
+
+La 3.4 chargeait plus lentement que la 3.3 ; la 3.5 corrige cela et donne à
+l'atelier un comportement que l'on attendait depuis longtemps. Aucune
+nouveauté dans le langage, une forme retirée.
+
+### Le chargement
+
+**Le bassin de calcul formel se sème après la fenêtre, un ouvrier à la fois.**
+Il se semait en première ligne de `main` : quatre Python important SymPy en
+même temps que la vue web se lançait, c'était la régression de la 3.4. Un
+seul ouvrier part maintenant, une fois la fenêtre affichée ; les autres se
+recrutent à la demande ; tous tournent en priorité basse (`nice` sur Unix,
+classe « inférieure à la normale » sous Windows). L'archive du mémo se lit
+sur son propre fil, et un calcul déjà connu se sert sans attendre qu'un
+ouvrier soit prêt : un document dont les calculs sont en mémoire s'ouvre
+sans que SymPy ait fini de se charger. L'attente d'un ouvrier n'est plus
+une boucle qui dort par milliseconde.
+
+**KaTeX ne recompose que les formules qu'il n'a jamais vues.** Un mémo tient
+la source LaTeX et son rendu ; à la frappe, seules les formules du segment
+modifié coûtent encore.
+
+**La pagination se fait par paquets, et la première page paraît avant les
+autres.** Les blocs se mesurent en une seule passe dans le gabarit, se posent
+par paquets prédits sûrs, et seuls ceux qui approchent le bas de page se
+mesurent un à un. La composition rend la main au navigateur après la
+première page, puis toutes les quatre : la page un s'affiche pendant que
+les suivantes se composent, et une frappe survenue entre-temps abandonne la
+composition en cours.
+
+**La césure n'alloue plus par balise.** Le nom de chaque balise se lisait
+dans une chaîne neuve ; il se lit en place.
+
+**La vue mesure ce que le banc ne voit pas.** La barre d'état affiche, après
+chaque composition, le temps du moteur puis celui de la vue — arbre, maths,
+pages —, et au premier rendu l'âge du processus à la fenêtre prête. Ce sont
+les trois chiffres qui manquaient au relevé de `BENCH.md`.
+
+### L'atelier
+
+**Le code et l'aperçu défilent ensemble, calés sur la ligne.** Le moteur
+marque le premier bloc de chaque segment de sa ligne source (`data-ligne`,
+sur demande de l'application seulement : tests et banc composent le même
+HTML qu'avant). La ligne qui affleure en haut du code amène son bloc en haut
+de l'aperçu, et inversement, avec interpolation entre deux blocs ; tant que
+l'en-tête `document { … }` occupe le haut du code, l'aperçu reste sur le haut
+de sa première page. L'aperçu, plus haut que le code, défile donc plus vite.
+Les deux volets gardent en bas une réserve de course d'une fenêtre, pour que
+la dernière ligne comme le dernier bloc puissent monter jusqu'en haut : une
+seule règle, le haut sur le haut, et rien ne la débraye.
+
+**À l'ouverture, le code se cale sur l'aperçu.** Un document sans entrée
+s'ouvre au début des deux côtés. Un document qui attend une réponse s'ouvre
+sur son entrée : l'aperçu place le bloc de la saisie en haut, le champ prend
+le focus, et le code amène la ligne correspondante à la même hauteur. Chaque
+fois qu'une composition redonne le focus à une entrée — réponse validée,
+entrée suivante —, le code suit à nouveau l'aperçu. Quand on tape dans le
+code, rien ne le déplace.
+
+### Retiré
+
+**« pas à pas ».** La rédaction pas à pas étant le comportement, le suffixe
+ne servait à rien et laissait croire à une option : `<Résous>le système s,
+pas à pas` est maintenant refusé, et les exemples comme la documentation
+n'emploient plus que `<Résous>le système s`.
+
 ## 3.4 — la vitesse et la mémoire
 
 ### La vitesse

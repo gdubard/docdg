@@ -30,6 +30,16 @@ Un chiffre qui se dégrade d'une version à l'autre sans raison assumée est un
 bug de performance : la CI rejoue le banc à chaque poussée pour que la
 dégradation se voie au commit fautif, pas à la publication.
 
+Depuis la 3.5, la barre d'état de l'application ajoute trois chiffres que le
+banc ne mesure pas, à relever à la main sur les mêmes documents :
+
+- **ouverture** — âge du processus à la fenêtre prête, affiché au premier
+  rendu ;
+- **vue** — temps de composition dans la vue web, décomposé en *arbre*
+  (`innerHTML`), *maths* (KaTeX) et *pages* (pagination), à relever en froid
+  (ouverture du fichier) puis en chaud (une frappe) ;
+- le premier `<Calcule>` d'un document ouvert à froid, chronomètre en main.
+
 ## Relevés
 
 | Version | Machine | Document | froid (ms) | froid_seq (ms) | chaud (ms) | incr (ms) | html (Ko) |

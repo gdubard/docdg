@@ -1,4 +1,4 @@
-# *docdg 3.4*
+# *docdg 3.5*
 
 **docdg** is a Rust document class built around a French-only prose
 tag language (no anglicisms). Users write a single `.docdg` file where every
@@ -9,7 +9,7 @@ plotting, plane and solid geometry, statistics/probability diagrams,
 physics and chemistry, and long-form publishing (chapters, title page,
 cross-references, bibliography).
 
-**Author / Maintainer:** Gérard Dubard — docdg69@gmail.com
+**Author / Maintainer:** Gérard Dubard — gerarddubard@gmail.com
 **License:** proprietary freeware — see [CLUF.md](CLUF.md)
 **Repository:** https://github.com/gdubard/docdg
 
@@ -174,6 +174,28 @@ Ce manuel suit une **progression logique** :
 ### **📜 Une convention de lecture**
 
 Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg génère le HTML et le PDF pour vous, en coulisse.
+
+---
+
+## **🆕 Ce que la 3.5 apporte**
+
+**Le chargement redevient rapide.** La 3.4 semait quatre calculateurs
+Python avant même d'ouvrir sa fenêtre ; la 3.5 n'en lance qu'un, après la
+fenêtre, en priorité basse, et recrute les autres à la demande. Un calcul
+déjà en mémoire se sert sans attendre SymPy, KaTeX ne recompose que les
+formules nouvelles, la pagination mesure ses blocs en une passe, et la
+première page s'affiche pendant que les suivantes se composent.
+
+**Le code et l'aperçu défilent ensemble.** La ligne qui affleure en haut du
+code amène son bloc en haut de l'aperçu, et inversement — l'aperçu, plus
+haut, défile plus vite. À l'ouverture d'un document, le code se cale sur
+l'aperçu : au début s'il n'attend rien, sur l'entrée s'il attend une réponse,
+et il suit ensuite chaque entrée qui prend le focus. Une seule règle, le haut
+sur le haut, jusqu'à la dernière ligne des deux côtés, et rien ne la débraye.
+
+**« pas à pas » disparaît.** La rédaction détaillée étant le comportement,
+le suffixe est retiré : `<Résous>le système s` déroule le pivot, et
+`<Résous>le système s, pas à pas` est refusé.
 
 ---
 
@@ -2111,9 +2133,7 @@ Le système se pose par `<Soit>`, qui l'affiche et le mémorise, puis se résout
     9a + 3b + c = 6
 }
 
-<Résous>s              % La solution du système est (1, -2, 3).
-
-<Résous>s, pas à pas    % ... déroulé au pivot de Gauss, étape par étape.
+<Résous>le système s    % Le pivot de Gauss déroulé étape par étape, jusqu'à (1, -2, 3).
 ```
 
 > **Les deux moteurs de calcul.** docdg calcule à deux niveaux, sans option à régler : le **moteur interne** — arithmétique exacte et Gauss-Jordan embarqués en Rust pur, rien à installer, `<Résous>` et `#{...}` fonctionnent partout — et **SymPy**, sollicité automatiquement par les constructions de calcul formel (dérivées, zéros exacts, variations automatiques, [sympy.org](https://www.sympy.org)). SymPy nécessite Python 3 installé (`python3 -m pip install sympy`) ; docdg le détecte et l'appelle automatiquement — aucune option à activer, aucune ligne de commande à modifier. docdg trouve la commande Python tout seul (`python3`, `python` puis `py`). Chaque requête passe par un fichier temporaire (jamais par la ligne de commande : pas d'injection), est mise en cache (l'expression répétée est gratuite), et remonte ses erreurs en français — rien n'est avalé.
