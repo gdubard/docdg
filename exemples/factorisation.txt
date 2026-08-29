@@ -1,9 +1,9 @@
 document {
 	orientation: portrait;
-	marges: 30;
+	marges: 10;
 	espacements: 2;
 	taille: 11;
-	interligne: 1,8;
+	interligne: 2,1;
 }
 soit h1 = <bleu marine gras section num>
 
@@ -21,4 +21,5 @@ soit h1 = <bleu marine gras section num>
 
 <Détermine>les zéros de f, g et h
 
+<page suivante>
 <Représente>graphiquement les fonctions f, g et h pour x dans [-5 ; 5] et y dans [-5 ; 5], avec 200 échantillons
