@@ -9,7 +9,7 @@ plotting, plane and solid geometry, statistics/probability diagrams,
 physics and chemistry, and long-form publishing (chapters, title page,
 cross-references, bibliography).
 
-**Author / Maintainer:** Gérard Dubard — gerarddubard@gmail.com
+**Author / Maintainer:** Gérard Dubard — docdg69@gmail.com
 **License:** proprietary freeware — see [CLUF.md](CLUF.md)
 **Repository:** https://github.com/gdubard/docdg
 
@@ -2215,14 +2215,25 @@ $HH$ ou $quaternions$   % ℍ
 
 ```docdg
 $pour tout x dans RR$           % ∀x ∈ ℝ
+$pour tout x appartenant à RR$  % ∀x ∈ ℝ
+$pour tout x n'appartenant pas à RR$  % ∀x ∉ ℝ
 $il existe x$                   % ∃x
 $il n'existe pas de x$          % ∄x
 $x appartient à NN$             % x ∈ ℕ
 $x n'appartient pas à NN$       % x ∉ ℕ
+$tel que x appartient à RR$     % | x ∈ ℝ
 $(P et Q) ou négation de P$     % (P ∧ Q) ∨ ¬P
+$(P et Q) ou non P$             % (P ∧ Q) ∨ ¬P
 ```
 
-Dans une zone mathématique, `et` et `ou` sont les connecteurs logiques (∧, ∨) ; `négation de` donne ¬. Le mot `non` sert au **complémentaire** d'un ensemble ou d'un événement : `non(A)` s'affiche $\overline{A}$.
+L'appartenance se dit de trois façons, au choix de la rédaction : `dans` — la
+plus brève —, `appartient à` pour le verbe conjugué, et `appartenant à` pour
+le participe présent, tournure la plus fréquente dans le supérieur (« pour
+tout x appartenant à ℝ »). Chacune se nie en insérant `n'` et `pas` :
+`n'appartient pas à`, `n'appartenant pas à`. Le mot `tel que` pose la barre de
+condition (∣), la même qu'en probabilités conditionnelles.
+
+Dans une zone mathématique, `et` et `ou` sont les connecteurs logiques (∧, ∨) ; `négation de` et `non` donnent tous deux ¬. Suivi d'une parenthèse, en revanche, `non` désigne le **complémentaire** d'un ensemble ou d'un événement : `non(A)` s'affiche $\overline{A}$.
 
 ### **Opérations sur les ensembles**
 
