@@ -2,7 +2,7 @@ document {
 	orientation: portrait;
 	marges: 15;
 	taille: 11;
-	interligne: 2;
+	interligne: 1,9;
 	niveau: terminale;
 }
 soit h1 = <bleu marine gras section num>
@@ -100,7 +100,6 @@ soit correction = <fond gris clair>
 <h2>Application aux satellites
 <Énonce>la vitesse d'un satellite en orbite circulaire <étiquette>{vitesse}
 
-<page suivante>
 <Démontre>la vitesse d'un satellite en orbite circulaire
 	<remarque>La masse du satellite se simplifie. C'est le même phénomène qu'en chute libre, et il mérite d'être signalé comme tel.
 
