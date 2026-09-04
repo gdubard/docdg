@@ -1,7 +1,7 @@
-# *docdg 3.5*
+# *docdg 3.6*
 
 **docdg** is a Rust document class built around a French-only prose
-tag language (no anglicisms). Users write a single `.docdg` file where every
+tag language (no anglicisms). Users write a single plain-text file where every
 command reads as a natural French sentence; the Rust engine compiles it
 directly to HTML and PDF, with professional typographic quality. It covers
 layout frames and grids, tables, images, a math mini-language, function
@@ -19,7 +19,7 @@ cross-references, bibliography).
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-3.4-2980b9?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-3.6-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![Licence](https://img.shields.io/badge/licence-propriétaire_freeware-8e44ad?style=flat-square)](CLUF.md)
@@ -95,45 +95,49 @@ fois pour tous les niveaux.
 ### La référence
 
 1. [Qu'est-ce que docdg ?](#-quest-ce-que-docdg-)
-2. [Ce que la 3.4 apporte](#-ce-que-la-34-apporte) — le corpus complet, l'école élémentaire, la vitesse
-2. [Ce que la 2.9 apporte](#-ce-que-la-29-apporte) — le corpus de physique-chimie et l'analyse dimensionnelle
-3. [Ce que la 2.8 apporte](#-ce-que-la-28-apporte) — le corpus mathématique, de la sixième à l'agrégation
-3. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
-3. [Fonctionnalités clés](#-fonctionnalités-clés)
-4. [Pourquoi docdg ?](#-pourquoi-docdg-)
-5. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
-6. [Premiers documents](#-premiers-documents)
-7. [La syntaxe](#-la-syntaxe)
-8. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
-9. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
-10. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
-11. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
-12. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
-13. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
-14. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
-15. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
-16. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
-17. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
-18. [Les groupes](#les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
-19. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
-20. [Les mathématiques](#-les-mathématiques)
-21. [La géométrie](#-la-géométrie)
-22. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
-23. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-24. [L'écriture sur des lignes](#lecriture-sur-des-lignes) — la réglure Seyès et la cursive, pour l'école élémentaire
-25. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
-26. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
-27. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
-28. [La physique-chimie](#la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-29. [La frise chronologique](#la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
-30. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
-31. [Les exemples, par niveau](#les-exemples-par-niveau)
-32. [Les documents complexes](#-les-documents-complexes)
-33. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
-34. [Référence complète](#-référence-complète) — couleurs et options de classe
-35. [Bonnes pratiques](#-bonnes-pratiques)
-36. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
-37. [Les tournures et le placement](#les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
+2. [Ce que la 3.6 apporte](#-ce-que-la-36-apporte) — le corpus en base de données, l'onglet Édition, le titre des frises
+3. [Ce que la 3.4 apporte](#-ce-que-la-34-apporte) — le corpus complet, l'école élémentaire, la vitesse
+4. [Ce que la 2.9 apporte](#-ce-que-la-29-apporte) — le corpus de physique-chimie et l'analyse dimensionnelle
+5. [Ce que la 2.8 apporte](#-ce-que-la-28-apporte) — le corpus mathématique, de la sixième à l'agrégation
+6. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
+7. [Ce que la 3.2 apporte](#-ce-que-la-32-apporte)
+8. [Ce que la 3.0 apporte](#-ce-que-la-30-apporte)
+9. [Fonctionnalités clés](#-fonctionnalités-clés)
+10. [Pourquoi docdg ?](#-pourquoi-docdg-)
+11. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
+12. [Premiers documents](#-premiers-documents)
+13. [La syntaxe](#-la-syntaxe)
+14. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
+15. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
+16. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
+17. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
+18. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
+19. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
+20. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
+21. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
+22. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
+23. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
+24. [Les groupes](#les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
+25. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
+26. [Les mathématiques](#-les-mathématiques)
+27. [La géométrie](#-la-géométrie)
+28. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
+29. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
+30. [L'écriture sur des lignes](#lecriture-sur-des-lignes) — la réglure Seyès et la cursive, pour l'école élémentaire
+31. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
+32. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
+33. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
+34. [La physique-chimie](#la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+35. [La frise chronologique](#la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
+36. [Le corpus : le personnaliser, l'emprunter](#-le-corpus--le-personnaliser-lemprunter) — l'onglet Édition, le journal, la base d'un établissement
+37. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
+38. [Les exemples, par niveau](#les-exemples-par-niveau)
+39. [Les documents complexes](#-les-documents-complexes)
+40. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
+41. [Référence complète](#-référence-complète) — couleurs et options de classe
+42. [Bonnes pratiques](#-bonnes-pratiques)
+43. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
+44. [Les tournures et le placement](#les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
@@ -177,25 +181,93 @@ Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C
 
 ---
 
-## **🆕 Ce que la 3.5 apporte**
+## **🆕 Ce que la 3.6 apporte**
 
-**Le chargement redevient rapide.** La 3.4 semait quatre calculateurs
-Python avant même d'ouvrir sa fenêtre ; la 3.5 n'en lance qu'un, après la
-fenêtre, en priorité basse, et recrute les autres à la demande. Un calcul
-déjà en mémoire se sert sans attendre SymPy, KaTeX ne recompose que les
-formules nouvelles, la pagination mesure ses blocs en une passe, et la
-première page s'affiche pendant que les suivantes se composent.
+Trois chantiers : **le corpus passe en base de données**, **l'enseignant peut
+enfin l'amender depuis docdg et revenir en arrière**, et **la frise
+chronologique cesse de redire son propre nom**.
 
-**Le code et l'aperçu défilent ensemble.** La ligne qui affleure en haut du
-code amène son bloc en haut de l'aperçu, et inversement — l'aperçu, plus
-haut, défile plus vite. À l'ouverture d'un document, le code se cale sur
-l'aperçu : au début s'il n'attend rien, sur l'entrée s'il attend une réponse,
-et il suit ensuite chaque entrée qui prend le focus. Une seule règle, le haut
-sur le haut, jusqu'à la dernière ligne des deux côtés, et rien ne la débraye.
+### Le corpus quitte le TOML pour SQLite
 
-**« pas à pas » disparaît.** La rédaction détaillée étant le comportement,
-le suffixe est retiré : `<Résous>le système s` déroule le pivot, et
-`<Résous>le système s, pas à pas` est refusé.
+Jusqu'à la 3.5, le corpus vivait dans une centaine de fichiers TOML relus et
+assemblés à la compilation. La formule a tenu de la 2.8 à la 3.5 ; elle ne
+tenait plus la route pour la suite, et pour trois raisons.
+
+**La base grandit.** 1 373 énoncés, 569 démonstrations, 243 grandeurs,
+122 cadres — et elle continuera de grandir, matière après matière. Un
+répertoire de fichiers texte se relit mal, se cherche mal et se recoupe mal
+passé une certaine taille.
+
+**L'intégrité ne se vérifiait qu'après coup.** Un identifiant mal orthographié
+dans un prérequis, une démonstration rattachée à un énoncé disparu : le TOML
+acceptait tout, et il fallait un contrôle séparé pour le découvrir. Le schéma
+SQLite refuse la faute au moment où on l'écrit — clés étrangères, contraintes
+de domaine, unicité. Ce qui entre dans la base est cohérent par construction.
+
+**Le contenu devait pouvoir être encapsulé.** Une base unique se scelle ;
+cent fichiers ouverts ne se scellent pas. `corpus.db` est vérifiée à la
+compilation, puis scellée dans l'exécutable, qui n'en embarque qu'une seule
+copie.
+
+Pour vous qui composez des documents, **rien ne change** : les mêmes
+`<Démontre>`, les mêmes `<Rappelle>`, les mêmes énoncés appelés par leur nom.
+Le changement porte sur ce que la base permet désormais — l'édition.
+
+### L'onglet Édition, et le droit à l'erreur
+
+La fenêtre de docdg a maintenant **deux onglets**. **Saisie** est l'interface
+que vous connaissez : le source à gauche, le rendu à droite. **Édition** ouvre
+le corpus lui-même.
+
+On y **consulte**, on y **crée**, on y **modifie** et on y **masque** un
+énoncé ou une démonstration. Deux listes déroulantes — la matière, le niveau —
+mènent vite au contenu voulu, sans faire défiler treize cents entrées.
+
+La base publiée, elle, n'est jamais touchée. Votre travail va dans un fichier
+à vous, dans vos **Documents**, chargé tout seul au lancement suivant et
+fusionné à la base de la version installée. Changer de version de docdg ne
+vous fait donc rien perdre : la nouvelle base arrive, vos ajouts s'y
+réappliquent.
+
+**Et l'on peut se tromper.** docdg tient le **journal** de vos opérations —
+chaque création, chaque modification, chaque masquage, avec sa date, son heure
+et son libellé. Deux flèches, dans l'onglet Édition, vous y promènent comme
+l'annulation et la répétition d'un traitement de texte, et le libellé affiché
+à droite vous dit exactement où vous êtes :
+
+```
+03/09 14:02 — modifié l'énoncé « Angle droit »
+```
+
+**◀** revient à l'état d'avant l'opération affichée, **▶** la refait. On peut
+remonter jusqu'avant tout, c'est-à-dire à une personnalisation vide, et rien
+n'est effacé au passage : on peut toujours réavancer. Seule exception, celle
+de tous les éditeurs : si vous **enregistrez** après avoir reculé, les
+opérations que vous aviez devant vous disparaissent — docdg vous le demande
+avant, en vous disant combien.
+
+Le journal sert aussi tout seul. À chaque démarrage, docdg contrôle votre
+personnalisation avant de s'en servir. Si elle ne passe plus — fichier abîmé,
+ou entrée qui dépendait d'un énoncé que la nouvelle version a retiré — il
+**remonte le journal jusqu'au dernier point qui s'accorde encore** avec la
+base de cette version, et vous dit à quel point il est revenu. Le fichier
+refusé n'est jamais effacé : il est conservé à côté, sous un nom horodaté.
+
+Le détail complet est dans `corpus/PERSONNALISATION.md`.
+
+### Le titre d'une frise se lit dans sa description
+
+Une frise ne s'annonce plus « Frise chronologique … » : le lecteur voit bien
+qu'il en regarde une. Ce qui suit « la frise chronologique » devient le titre,
+**l'article accordé à la préposition** :
+
+| ce que vous écrivez | le titre affiché |
+|---|---|
+| `la frise chronologique des grandes périodes` | **Les grandes périodes** |
+| `la frise chronologique du Moyen Âge` | **Le Moyen Âge** |
+| `la frise chronologique de la Révolution française` | **La Révolution française** |
+| `la frise chronologique de l'Antiquité` | **L'Antiquité** |
+| `la frise chronologique de Napoléon` | **Napoléon** |
 
 ---
 
@@ -391,7 +463,13 @@ docdg --version
 | ------------- | --------------------- | --------------------------------------------------------------------- |
 | **docdg**     | Windows, macOS, Linux | ✅ Interface intégrée, prévisualisation en direct, export PDF en un clic |
 | VS Code       | Toutes                | Éditeur de texte polyvalent, extension de coloration disponible         |
-| Tout éditeur  | Toutes                | Un fichier `.docdg` est du texte brut — n'importe quel éditeur convient |
+| Tout éditeur  | Toutes                | Un document docdg est du texte brut — n'importe quel éditeur convient |
+
+> **📄 L'extension.** docdg n'en impose aucune qui lui soit propre : un document
+> est un fichier texte ordinaire. L'application ouvre les `.txt`, les `.md` et
+> les `.eco`, et enregistre en `.txt`. C'est délibéré — votre travail reste
+> lisible et modifiable par n'importe quel outil, aujourd'hui comme dans dix
+> ans, sans dépendre de docdg pour y accéder.
 
 ---
 
@@ -405,7 +483,7 @@ docdg --version
 Bonjour le monde !
 ```
 
-> C'est vraiment tout. Enregistrez ce texte dans un fichier `.docdg`, ouvrez-le avec docdg — le PDF est prêt.
+> C'est vraiment tout. Enregistrez ce texte dans un fichier `.txt`, ouvrez-le avec docdg — le PDF est prêt.
 ### **⚙️ Le bloc document**
 
 Tout ce qui décrit le **corps physique** du document — son format, ses polices, sa conduite — s'écrit dans un bloc `document { }` en tête du fichier. Il est entièrement facultatif : sans lui, des valeurs par défaut raisonnables s'appliquent.
@@ -464,7 +542,7 @@ document {
 | `tabulation` | nombre             | `8`         | Largeur tabulation (mm) — le carreau de la Seyès |
 | `hauteur`    | nombre             | `8`         | Hauteur saut de ligne (mm) — l'interligne de la Seyès |
 | `décalage`   | nombre             | `100`       | Décalage exposants/indices (%) |
-| `césure`     | `oui`/`non`        | `oui`       | Coupure des mots en fin de ligne, selon les motifs français |
+| `césure`     | `oui`/`non`/nombre | `oui`       | Coupure des mots en fin de ligne, selon les motifs français — un nombre relève le seuil : `césure: 8;` épargne tout mot de moins de huit lettres |
 | `orphelines` | nombre             | `2`         | Lignes minimales laissées en bas de page |
 | `numérotation` | `composée`, `simple` ou `sans` | `composée` | Numéros de page : `1 / 3`, `1` seul, ou aucun |
 | `veuves`     | nombre             | `2`         | Lignes minimales reportées en haut de page |
@@ -474,7 +552,7 @@ document {
 
 > **↦ L'alinéa partout.** Une tabulation en tête de ligne creuse un alinéa de la largeur réglée par `tabulation`, **au fil du texte comme à l'intérieur d'un cadre, d'une grille ou d'un bloc**. La règle est la même partout : une tabulation, un alinéa ; deux tabulations, deux alinéas. Dans un tableau en revanche, la tabulation reste le séparateur de colonnes — elle y garde son rôle de structure.
 
-> **✂️ La césure et les lignes isolées.** Trois réglages, actifs par défaut, tiennent la qualité du gris typographique. La **césure** coupe les mots longs en fin de ligne selon les motifs français de TeX (deux lettres au moins avant la coupure, trois après) : les blancs interlettres d'un texte justifié s'en trouvent régularisés. Elle épargne les mots composés, les sigles, les noms propres, les titres et tout ce qui relève des mathématiques. Les **orphelines** sont les lignes esseulées en bas de page, les **veuves** celles qui échouent seules en haut de la suivante : docdg coupe désormais un paragraphe à une frontière de ligne plutôt que de le reporter en bloc, en garantissant le nombre de lignes demandé de chaque côté. Le réglage `césure: non` rend le texte tel quel, sans coupure.
+> **✂️ La césure et les lignes isolées.** Trois réglages, actifs par défaut, tiennent la qualité du gris typographique. La **césure** coupe les mots longs en fin de ligne selon les motifs français de TeX (deux lettres au moins avant la coupure, trois après) : les blancs interlettres d'un texte justifié s'en trouvent régularisés. Elle épargne déjà, par défaut, tout mot de moins de six lettres, les mots composés, les sigles, les noms propres, les titres et tout ce qui relève des mathématiques. Si six lettres restent trop court à votre goût, un nombre à la place de `oui`/`non` relève ce seuil : `césure: 10;` n'autorise plus la coupure qu'à partir de dix lettres, sans rien changer aux autres exceptions. Les **orphelines** sont les lignes esseulées en bas de page, les **veuves** celles qui échouent seules en haut de la suivante : docdg coupe désormais un paragraphe à une frontière de ligne plutôt que de le reporter en bloc, en garantissant le nombre de lignes demandé de chaque côté. Le réglage `césure: non` rend le texte tel quel, sans coupure.
 
 > **📄 Les blocs qui se coupent.** Un cadre et un tableau sont **insécables par défaut** : un théorème, un énoncé bref, un petit tableau doivent rester d'un seul tenant, et passent entiers à la page suivante s'ils n'y tiennent pas. L'adjectif `sécable` les autorise à se poursuivre d'une page à l'autre — indispensable dès qu'un cadre de démonstration ou un tableau de données dépasse la page. Le filet du cadre devient tireté au point de rupture et son titre ne se répète pas ; la **rangée d'entête du tableau, elle, reparaît en tête de chaque fragment**, sans qu'il y ait rien à écrire pour l'exiger. Un tableau se coupe dès qu'une rangée tient dans la place restante : les règles de veuve et d'orpheline valent pour la prose, non pour les rangées, et continuent de s'appliquer à l'intérieur d'un cadre scindé. L'exemple `publication3.txt` met les cinq réglages à l'épreuve sur un même document.
 
@@ -886,7 +964,7 @@ Les fractions restent exactes tant que le discriminant est un carré parfait ; s
 
 ### **3️⃣ `<Insère>une image` — Insertion d'images**
 
-**Syntaxe :** `<Insère l'image CHEMIN avec ATTRIBUTS>` — le chemin s'écrit **en entier dans la balise**, relatif au fichier `.docdg` ; rien ne reste à accoler après. Un nom comportant des espaces s'accolade : `l'image {mon chat.png}`. Les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. docdg ne cherche jamais dans un dossier par défaut : omettre le chemin est refusé avec un message qui rappelle la forme.
+**Syntaxe :** `<Insère l'image CHEMIN avec ATTRIBUTS>` — le chemin s'écrit **en entier dans la balise**, relatif au fichier du document ; rien ne reste à accoler après. Un nom comportant des espaces s'accolade : `l'image {mon chat.png}`. Les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. docdg ne cherche jamais dans un dossier par défaut : omettre le chemin est refusé avec un message qui rappelle la forme.
 
 - `avec une largeur de 30 mm` — 30 mm de large, hauteur proportionnelle ;
 - `avec une hauteur de 20 mm` — 20 mm de haut, largeur proportionnelle ;
@@ -2242,6 +2320,8 @@ Chaque opération se dit en toutes lettres, en français :
 ```docdg
 $A inclus dans B$               % A ⊂ B
 $A inclus dans ou égal à B$     % A ⊆ B
+$A non inclus dans B$           % A ⊄ B
+$A non inclus dans ou égal à B$ % A ⊈ B
 $A union B$                     % A ∪ B
 $A inter B$                     % A ∩ B
 $A privé de B$                  % A \ B
@@ -2701,7 +2781,9 @@ L'histoire entre en scène — et c'est une vraie frise, non une ligne du temps 
 
 Les cartouches **se rangent d'eux-mêmes dans l'ordre du temps**, quelle que soit la saisie, et **ne se chevauchent jamais** : ils se répartissent **de part et d'autre du bandeau**, en alternance le long du temps, et s'étagent sur autant de rangées qu'il faut de chaque côté, un trait de rappel reliant chacun à sa date. **Rien n'est jamais barré** : les traits se tracent tous avant les cartouches, qui sont opaques, et les verticales de la graduation s'interrompent devant chaque cartouche comme devant chaque bandeau — elles ne subsistent que dans les espaces libres, ce qui suffit à faire lire la colonne sans traverser ce qu'on regarde.
 
-La date se lit en `AAAA`, `MM/AAAA` ou `JJ/MM/AAAA` ; **l'année négative est admise** — l'Antiquité s'écrit `-52 : Alésia` — et `vers` dit l'incertitude des sources sans gêner le placement : la date s'imprime toujours telle qu'elle s'est écrite. Ce qui suit « la frise chronologique » dans la description devient la légende, sous la frise. Un long détail se replie de lui-même sur deux ou trois lignes courtes. La parenthèse s'apparie depuis la fin de la ligne : une parenthèse *dans* la description ne trompe pas la lecture, et une ligne entièrement parenthésée reste un titre.
+La date se lit en `AAAA`, `MM/AAAA` ou `JJ/MM/AAAA` ; **l'année négative est admise** — l'Antiquité s'écrit `-52 : Alésia` — et `vers` dit l'incertitude des sources sans gêner le placement : la date s'imprime toujours telle qu'elle s'est écrite.
+
+**Ce qui suit « la frise chronologique » devient le titre**, sous la frise, avec l'article accordé à la préposition : `des grandes périodes` donne **Les grandes périodes**, `du Moyen Âge` donne **Le Moyen Âge**, `de la Révolution française` donne **La Révolution française**, `de l'Antiquité` donne **L'Antiquité**. Devant un nom propre, la préposition tombe et rien ne la remplace : `de Napoléon` donne **Napoléon**. La frise ne redit donc jamais qu'elle est une frise — vous l'aviez vue. Un long détail se replie de lui-même sur deux ou trois lignes courtes. La parenthèse s'apparie depuis la fin de la ligne : une parenthèse *dans* la description ne trompe pas la lecture, et une ligne entièrement parenthésée reste un titre.
 
 **Une période est un événement qui dure.** Ses deux dates s'écrivent `de 1914 à 1918`, `1789 - 1799`, `1914 -- 1918` ou `1914 — 1918`, au choix — le tiret simple demande seulement de respirer, pour ne pas se confondre avec le signe d'une année négative —, et elle occupe **l'intérieur du bandeau**, avec son nom, ses bornes et sa description si la place le permet. Les périodes qui se suivent se touchent sans se gêner ; celles qui se chevauchent se partagent la hauteur du bandeau ; celles qui sont trop étroites pour se nommer dedans se nomment dans un cartouche, dehors :
 
@@ -2732,6 +2814,83 @@ de 1929 à 1939 : Grande Dépression
 Une bande porte son nom dans la marge, ses périodes dans son bandeau et ses cartouches de part et d'autre, dans sa couleur. Elle s'ouvre d'un nom suivi d'une accolade — `politique {` — et le deux-points se tolère : `Vie politique: {`. Ce qui est simultané se lit dans une même verticale : c'est ce qui rend une frise multilinéaire argumentative et non plus seulement descriptive.
 
 Trois documents suivent les niveaux du programme. **`histoire2`** (collège) : la frise linéaire simple et la frise par périodes — ordonner des événements, se repérer dans le temps. **`histoire3`** (lycée) : la frise thématique et multilinéaire, et la périodisation des régimes français — articuler cause et effet, problématiser un découpage. **`histoire4`** (supérieur) : les trois temps de Braudel en trois bandes d'échelles différentes, et deux périodisations concurrentes posées l'une sous l'autre — mettre en évidence la simultanéité, questionner la pertinence des découpages.
+
+## **🗄️ Le corpus : le personnaliser, l'emprunter**
+
+Le corpus est la bibliothèque d'énoncés et de démonstrations dans laquelle
+`<Démontre>` et `<Rappelle>` puisent. Depuis la 3.6, il ne se contente plus
+d'être consulté : il s'amende.
+
+### Ce que fait l'onglet Édition
+
+**Consulter.** Deux listes déroulantes, la matière et le niveau, mènent à
+l'entrée voulue. Un énoncé montre son texte, son genre, ses ancrages — le
+niveau où il est exigible, et s'il y est admis ou démontré — ses prérequis et
+ses symboles.
+
+**Créer.** Un énoncé neuf se déclare comme les autres : un genre, un titre, un
+texte, une matière, au moins un ancrage de niveau. Un prérequis se choisit
+**par son titre**, jamais par son identifiant — vous écrivez « Nombre dérivé »,
+docdg inscrit ce qu'il faut.
+
+**Modifier.** Toute entrée, publiée ou personnelle, se reprend. La vôtre
+remplace celle de la base pour vos documents ; celle de la base reste intacte
+pour tout le monde.
+
+**Masquer.** Rien ne se supprime de la base publiée — on la masque. L'entrée
+cesse d'exister pour vos documents, et le masque se lève d'un retour en
+arrière.
+
+Chaque enregistrement est **contrôlé avant d'être accepté** : un prérequis
+qui n'existe pas, une démonstration rattachée à un énoncé absent, une
+définition qu'on prétendrait démontrer — docdg refuse et nomme la règle,
+plutôt que d'accepter une base incohérente qu'un document révélerait plus
+tard.
+
+### Revenir en arrière
+
+Le **journal** retient chaque opération avec sa date, son heure et son
+libellé. Les deux flèches de l'onglet Édition s'y déplacent : **◀** défait,
+**▶** refait, et le libellé affiché dit où vous êtes. On remonte aussi loin
+qu'on veut, jusqu'à la personnalisation vide.
+
+Rien n'est effacé en reculant. La seule opération irréversible est
+d'**enregistrer** après avoir reculé : les opérations que vous aviez devant
+vous tombent, et docdg vous demande confirmation en vous disant combien.
+
+### Emprunter la base d'un établissement
+
+La clé `corpus` du bloc `document` fait composer un document sur une **autre**
+base que la vôtre — celle qu'un établissement ou un collègue a partagée :
+
+```
+document {
+    niveau: première;
+    corpus: college.docdgc;
+}
+```
+
+Le chemin se lit depuis le dossier du document, comme celui des images. Cette
+base **remplace** entièrement celle de docdg : elle n'est pas fusionnée à
+votre travail personnel, afin que le document rende exactement ce que son
+auteur voyait. Si le fichier manque ou n'est pas lisible, docdg le dit et
+compose sur sa base à lui plutôt que de s'arrêter.
+
+### Où vivent vos fichiers
+
+```
+Documents/
+    docdg/
+        personnel.docdgp    votre travail
+        journal.docdgp      vos opérations, datées
+```
+
+Un dossier visible, deux fichiers ordinaires : pour les mettre à l'abri ou les
+emporter sur un autre poste, copiez-les comme n'importe quel fichier. Ils sont
+scellés — docdg seul les relit, ce qui garantit qu'aucune manipulation
+extérieure ne les abîme à votre insu — et contrôlés au démarrage suivant.
+
+---
 
 ## **🗂️ Les exemples, par niveau**
 
