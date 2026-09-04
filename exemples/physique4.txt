@@ -43,7 +43,6 @@ soit correction = <fond gris clair>
 <Énonce>le vecteur de Poynting
 <Énonce>le bilan local d'énergie électromagnétique
 
-<page suivante>
 <Démontre>le bilan local d'énergie électromagnétique
 	<remarque>Le bilan a la structure de la conservation de la charge : une divergence de flux, une dérivée temporelle de densité, un terme source. C'est ce qui autorise à parler d'une énergie qui se transporte.
 

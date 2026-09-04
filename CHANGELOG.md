@@ -4,6 +4,193 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
+## 3.6 — le corpus en base de données
+
+**Le seuil de la césure se règle.** `césure` acceptait `oui`/`non` ; il
+accepte maintenant aussi un entier, qui devient le nombre minimal de lettres
+d'un mot pour qu'il soit coupé — `césure: 10;` épargne tout mot de moins de
+dix lettres, sans toucher aux autres exceptions (mots composés, sigles, noms
+propres, mathématiques). Le seuil par défaut reste six, comme avant ce
+réglage. Le panneau Paramétrer gagne le champ correspondant, à côté de la
+case à cocher.
+
+**L'onglet Édition, lisible.** Le genre d'une entrée était rejeté au bord droit
+de sa ligne par un `space-between` : le titre d'un côté, « théorème » de
+l'autre, et rien pour les rattacher — copiés ensemble, ils se collaient. Le
+genre revient dans le fil du texte, entre parenthèses : « Décomposition
+polaire (théorème) ».
+
+**Les volets de l'onglet Édition sont encadrés comme ceux de Saisie.**
+Recherche, Résultats et Fiche ne se distinguaient que par une nuance de fond.
+Chacun reprend maintenant la construction de Source et Aperçu : un cadre
+intérieur qui porte le trait et le défilement, le nom du volet posé sur le
+fond au-dessus de ce trait. Le nom de la fiche vire au vert et son cadre avec
+lui dès qu'on entre en création ou en modification.
+
+**L'onglet Édition reprend le code couleur de Saisie.** Tout y était de la
+même teinte sous la barre. Chaque partie porte maintenant sa couleur, par le
+même mécanisme que les groupes de la barre d'outils : Entrée en bleu roi
+comme Fichier, puisque l'un et l'autre agissent sur l'objet ; Restauration en
+bleu ciel comme Texte, dont elle reprend l'annulation et le rétablissement ;
+Recherche en vert comme Vue, puisqu'elle gouverne ce qui s'affiche. Les
+volets suivent : Résultats en bleu roi, Fiche en bleu ciel, qui passe au vert
+quand on entre en création ou en modification. Le fond des cadres est creusé
+sous celui des volets, comme l'éditeur l'est sous son panneau.
+
+**Les noms de volets et de groupes ne crient plus.** SOURCE, APERÇU,
+RECHERCHE, FICHIER, RESTAURATION : la capitalisation forcée est abandonnée
+partout dans le châssis de l'interface au profit d'une simple majuscule
+initiale, un corps un peu plus grand et un interlettrage normal.
+
+**Le titre d'une frise s'affiche comme un titre.** Un tiers plus grand, en
+gras, et l'italique abandonné : ce n'est plus une légende de bas de figure.
+
+**Documentation revue avant publication.** Le manuel expliquait la 3.6 en
+deux paragraphes qui renvoyaient au journal pour le détail ; il l'explique
+maintenant : pourquoi le TOML a cédé la place à SQLite, ce que fait l'onglet
+Édition, comment le journal rend l'erreur réversible. Un chapitre « Le
+corpus : le personnaliser, l'emprunter » est ajouté, et la clé `corpus` d'un
+document — qui n'avait jamais été documentée — l'est enfin. Le sommaire
+mentionnait la 3.4 comme dernière version et sa numérotation était rompue :
+les deux sont corrigés. Trois erreurs de fait sont réparées — le chapitre de
+la frise décrivait encore l'ancienne légende, `PERSONNALISATION.md` annonçait
+un dossier `copies/` qui n'existe pas et une extension `.docdgp` là où il faut
+`.docdgc`, et le protocole d'essai faisait manipuler un bouton Exporter et un
+dossier de copies supprimés depuis — remplacés par les épreuves du journal et
+du retour en arrière, qu'aucun test ne couvrait.
+
+**Le titre d'une frise se lit dans sa description.** « la frise chronologique
+des grandes périodes » donne « Les grandes périodes », « du Moyen Âge » donne
+« Le Moyen Âge », « de la Révolution française » donne « La Révolution
+française ». L'article s'accorde à la préposition ; plus de « Frise
+chronologique » redit sous chaque frise, puisque le lecteur voit déjà qu'il
+en regarde une.
+
+**La version s'affiche 3.6.** Cargo exige trois nombres au manifeste, mais
+l'interface et le menu « À propos » laissent tomber le zéro final.
+
+**Sources sans commentaires.** Les 91 fichiers Rust sont livrés nus,
+43 687 lignes ramenées à 42 194, et 118 remarques de clippy appliquées.
+
+**Données étrangères refusées au lieu de faire paniquer.** `basedonnees::lit`
+décodait les niveaux, les matières et les dimensions par `panic!`, sur la foi
+qu'elles venaient toujours de l'atelier. Elle lit aussi la base personnelle de
+l'enseignant et les bases externes désignées par la clef `corpus` d'un
+document : une valeur inconnue — un niveau renuméroté, une matière renommée
+par une version antérieure — emportait docdg au démarrage, et le filet de
+`reprend_depuis_journal` ne se déclenchait jamais. Ces cinq sites remontent
+désormais une erreur.
+
+**Identité d'une base par numéro de génération.** L'empreinte d'un corpus
+était son adresse en mémoire. Le sceau du cache de rendu et l'index des noms
+du transpileur la retiennent longtemps : libérer une génération aurait permis
+à une base neuve d'hériter de l'adresse d'une ancienne et de se voir servir
+ses entrées. Un compteur monotone ferme la porte à ce défaut.
+
+**Les générations abandonnées sont libérées.** Chaque enregistrement de
+l'onglet Édition reconstruisait le corpus et abandonnait le précédent —
+3,9 Mo par enregistrement, sans plafond, plus une table d'index par
+génération. Le corpus passe de `Box::leak` à `Arc` ; l'index du transpileur
+possède ses identifiants au lieu d'emprunter à sa base, et se borne aux deux
+dernières générations. La mémoire plafonne désormais au lieu de croître.
+
+**Documentation.** `corpus/PERSONNALISATION.md` dit ce que « scellé » veut
+dire et ne veut pas dire : la clef est la même pour tous les docdg, le sceau
+répond du rangement et non du secret.
+
+**Banc.** Deux programmes de mesure, `mesure_generations` et
+`mesure_fuite_rendu`, gardent le corpus contre un retour de la fuite.
+
+La 3.5 et les précédentes rangeaient le corpus en une centaine de fichiers
+TOML, embarqués deux fois dans l'exécutable — une fois sérialisés pour le
+moteur, une fois en clair pour la personnalisation. La 3.6 retire le TOML du
+corpus entièrement : un seul format, SQLite, du poste de l'auteur jusqu'à
+l'ordinateur de l'enseignant.
+
+### Le stockage
+
+**Le corpus s'édite dans `corpus.db`, une base SQLite unique.** Les 101
+fichiers TOML ont disparu ; `corpus.db` — l'atelier — les remplace, un fichier
+que `sqlite3` ou DB Browser ouvrent directement. `build.rs` le valide à la
+compilation, exactement comme il validait le TOML : un corpus incohérent fait
+toujours échouer `cargo build`, jamais le rendu d'un document.
+
+**Le contrôle des dépendances tues ne balaie plus le corpus entier à chaque
+titre.** Il comparait, pour chaque démonstration, le corps replié à chacun
+des 1 373 titres d'énoncés — de l'ordre du gigaoctet parcouru par
+vérification. Un automate d'Aho-Corasick, construit une fois sur les titres,
+ramène ce balayage à un seul passage sur chaque corps.
+
+### La base embarquée
+
+**L'exécutable n'embarque plus qu'une seule copie du corpus, scellée.** Les
+deux copies de la 3.5 — le binaire sérialisé pour le moteur, l'archive TOML
+comprimée pour la personnalisation — cèdent la place à un unique blob chiffré
+(XChaCha20-Poly1305), désérialisé en mémoire au premier appel. Le chiffrement
+n'est pas un secret défendable — quiconque possède l'exécutable possède la
+clé — c'est une frontière : la représentation interne du corpus n'est plus un
+contrat que quiconque peut lire, donc plus une contrainte qui empêche de la
+faire évoluer.
+
+### L'onglet Édition
+
+**La base personnelle se charge automatiquement.** Un fichier `.docdgp`
+scellé, dans `Documents/docdg/`, fusionné à la base publiée à chaque
+lancement. Les boutons Ouvrir et Exporter (au sens de la 3.5 — écrire une
+base personnalisable neuve) disparaissent : il n'y a plus de dossier à
+choisir. L'emplacement est délibérément **visible** : un dossier de
+configuration masqué serait techniquement correct et pratiquement
+introuvable pour un enseignant qui veut retrouver son fichier. Une base
+laissée par une 3.6 précoce dans `~/.config` est déménagée au premier
+lancement, sans rien perdre.
+
+**Un journal, et deux flèches pour le parcourir.** Chaque opération est
+consignée avec sa date et ce qu'elle a fait — « 03/09 14:02 — modifié
+l'énoncé “Angle droit” ». Deux flèches dans l'onglet Édition font reculer et
+avancer dans cet historique, comme l'annulation d'un traitement de texte, et
+le libellé affiché dit où l'on se trouve. On peut remonter jusqu'à une
+personnalisation vide, et réavancer : rien n'est effacé en chemin.
+Enregistrer après avoir reculé abandonne la branche en avant, et docdg le
+demande avant, en disant combien d'opérations sont en jeu.
+
+**Exporter et Importer disparaissent.** Les copies intégrales qu'ils
+manipulaient étaient nommées par un horodatage en millisecondes : personne ne
+pouvait choisir en connaissance de cause. Le journal dit ce qu'il contient,
+pèse ce que pèse l'entrée touchée plutôt que la base entière, et conserve
+tout l'historique. Pour emporter son travail, deux fichiers visibles se
+copient dans le Finder — aucun bouton n'y ajoutait rien.
+
+**La personnalisation est vérifiée à chaque démarrage.** La 3.6 initiale
+avalait l'échec : un fichier illisible, et docdg repartait d'une base vide
+sans un mot, laissant croire que le travail était perdu. Il est désormais
+descellé, fusionné et validé comme à l'enregistrement ; en cas de problème,
+docdg remonte tout seul le journal jusqu'au dernier point qui s'accorde
+encore avec cette version — un état validé hier pouvant ne plus l'être contre
+la base d'aujourd'hui — et dit lequel. Le
+fichier refusé est mis de côté sous `personnel-ecarte-<horodatage>.docdgp`,
+jamais effacé : le travail qu'il contient reste récupérable. Si aucun point ne
+convient, docdg démarre sur sa base seule sans rien toucher. Ce
+contrôle vaut aussi pour un fichier déposé à la main dans le dossier, ce que
+rien n'empêche maintenant qu'il est visible.
+
+**Fusionner disparaît, parce qu'il n'a plus de raison d'être.** La base
+personnelle ne contenait, dès la 3.5, que les ajouts et remplacements de
+l'enseignant — jamais une copie de la base publiée. Une nouvelle version de
+docdg apporte sa propre base ; les deltas personnels s'y appliquent au
+lancement suivant, sans geste à faire. Les conflits — une suppression qui
+visait une entrée que la base a fait disparaître — s'écrivent dans le journal
+système plutôt que d'exiger une décision.
+
+**Exporter et Importer échangent un unique fichier `.docdgp` scellé.** Le
+même format que celui que docdg charge automatiquement : on le garde en lieu
+sûr, on le transmet à un collègue, on le reprend sur un autre poste.
+
+**Masquer.** Un bouton retire une entrée de ce que la base sert, sans toucher
+à la base de docdg — utile pour un énoncé qu'on juge mal formulé ou hors de
+propos, sans vouloir le corriger soi-même. Refusé si l'entrée est encore
+requise par une autre : la validation qui protège la base publiée protège
+aussi ce geste.
+
 ## 3.5 — le chargement et l'atelier
 
 La 3.4 chargeait plus lentement que la 3.3 ; la 3.5 corrige cela et donne à

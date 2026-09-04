@@ -73,6 +73,7 @@ soit premiers: une liste d'entiers = {2 ; 3 ; 5 ; 7 ; 11 ; 13 ; 17 ; 19}
 
 11 occupe la position #{dichotomie(premiers ; 11)} ; recherche(premiers ; 4) ne le trouve pas : #{recherche(premiers ; 4)}.
 
+
 <h2>Trier
 
 soit tri_par_insertion(v: une liste d'entiers): une liste d'entiers = {
