@@ -14,7 +14,7 @@ La licence 1 à la licence 3, PCSI, PC, MPSI et MP : les outils du supérieur et
 > Le registre des classes préparatoires s'écrit tel quel. Les résultats sont exacts ; les impossibilités renvoient honnêtement au raisonnement à rédiger.
 
 ```docdg
-<Soit>les fonctions f(x) = x^2, g(x) = 1/x^2 et s(x) = sin(x)
+<Soient>les fonctions f(x) = x^2, g(x) = 1/x^2 et s(x) = sin(x)
 <Calcule>l'intégrale de f entre 0 et 1
 <Détermine>la nature de l'intégrale de g entre 1 et +infini
 <Calcule>un équivalent de s en 0
@@ -28,7 +28,7 @@ Intégrales en forme close, impropres avec nature et valeur, équivalents en un 
 	2 ; 1
 	1 ; 1
 }
-<Soit>les vecteurs u(1;0;1), v(0;1;1), a(1;2;0) et b(1;0;0)
+<Soient>les vecteurs u(1;0;1), v(0;1;1), a(1;2;0) et b(1;0;0)
 <Calcule>le rang de M
 <Détermine>le noyau de M
 <Détermine>l'image de M
@@ -62,7 +62,7 @@ Les polynômes formels parlent la langue du chapitre : quotient et reste, PGCD u
 Les fonctions de plusieurs variables se posent naturellement ; les points critiques viennent avec leur nature par la hessienne (minimum, maximum, point col).
 
 ```docdg
-<Soit>les fonctions f(x) = x^2, g(x) = x et F(p) = 1/(p^2 + 1)
+<Soient>les fonctions f(x) = x^2, g(x) = x et F(p) = 1/(p^2 + 1)
 <Calcule>la série de Fourier de f sur [-pi ; pi] à l'ordre 4
 <Calcule>la transformée de Laplace de f
 <Calcule>la transformée de Laplace inverse de F
@@ -92,7 +92,7 @@ Une courbe paramétrée se donne par ses deux coordonnées, une polaire par son 
 <Trace>la courbe polaire r = cos(3*t), en vert
 ```
 
-Le repère est isotrope (un cercle reste un cercle), les couleurs sont celles du traceur, et les expressions interpolent les `#` — une rosace peut donc dépendre d'une saisie du lecteur : `r = cos(#n*t)`.
+Le repère est isotrope (un cercle reste un cercle), les couleurs sont celles du traceur, et les expressions interpolent les `#` — une rosace peut donc dépendre d'une saisie du lecteur : `<Trace>la rosace à #n pétales`. Écrire `r = cos(#n*t)` à la place donnerait deux fois trop de pétales dès que la saisie est paire — c'est le moteur qui doit choisir le coefficient.
 
 ### Les coniques, rédigées
 

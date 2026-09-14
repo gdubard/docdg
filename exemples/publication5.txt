@@ -13,9 +13,9 @@ soit h2 = <bleu nuit italique sous-section num>
 soit h3 = <sous-sous-section num>
 
 soit nature = <petites capitales grand au centre>
-soit ouvrage = <gras 26pt au centre>
-soit complement = <16pt italique au centre>
-soit mention = <14pt au centre>
+soit ouvrage = <gras 26 pt au centre>
+soit complement = <16 pt italique au centre>
+soit mention = <14 pt au centre>
 soit maison = <au centre>
 
 <nature>{Essai}

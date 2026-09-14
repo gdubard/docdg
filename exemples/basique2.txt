@@ -6,7 +6,7 @@ document {
 	interligne: 1,8;
 }
 
-soit titre = <rouge gras 18pt au centre>
+soit titre = <rouge gras 18 pt au centre>
 soit h1 = <bleu marine gras section num>
 
 <titre>docdg — les bases, niveau 2 : les saisies interactives

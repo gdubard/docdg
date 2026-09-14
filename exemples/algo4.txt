@@ -29,10 +29,11 @@ soit fib(n: entier): entier = si n moins de 2 { n } sinon { fib(n - 1) + fib(n -
 
 Les douze premiers termes, dressés par une boucle qui appelle la fonction à chaque rang :
 
-<Dresse>un tableau [mc ; md]{
+<Dresse>un tableau {
+	<mc>	<md>
 	Rang	Terme
 	pour n de 0 à 11 {
-		[#n ; #{fib(n)}]
+		[#n]	[#{fib(n)}]
 	}
 }
 
@@ -108,11 +109,12 @@ soit tri_par_sélection(v: une liste d'entiers): une liste d'entiers = {
 
 soit désordre: une liste d'entiers = {5 ; 2 ; 9 ; 1 ; 5 ; 6}
 
-<Dresse>un tableau [mg ; mg]{
+<Dresse>un tableau {
+	<mg>	<mg>
 	Méthode	Résultat
-	[Insertion ; #{tri_par_insertion(désordre)}]
-	[Sélection ; #{tri_par_sélection(désordre)}]
-	[Série d'origine ; #désordre]
+	[Insertion]	[#{tri_par_insertion(désordre)}]
+	[Sélection]	[#{tri_par_sélection(désordre)}]
+	[Série d'origine]	[#désordre]
 }
 
 La série de départ n'a pas bougé : une fonction rend une valeur, elle ne modifie rien à distance. La primitive tri(désordre) donne le même résultat — #{tri(désordre)} — mais on n'apprend pas à trier en l'appelant.

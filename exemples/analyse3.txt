@@ -123,7 +123,7 @@ L'aire entre les courbes de $u$ et $v$ sur $[0 ; 3]$ :
 <h2>Dérivées en ligne
 $f'(x)$, $f''(x)$, la forme de Leibniz $dd(f)/dd(x)$ et la dérivée partielle $partielle(f)/partielle(x)$.
 
-<page suivante h2>Suites récurrentes
+<h2>Suites récurrentes
 <Soit>une fonction h(x) = racine(2x+3)
 L'escalier de $p_(n+1) = h(p_n)$ depuis $p_0 = 0,2$, convergeant vers le point fixe $l = 3$ :
 <Représente>graphiquement la fonction h sur [0 ; 4] en abscisse et [0 ; 4] en ordonnée, avec le diagramme en escalier depuis 0,2 sur 10 termes

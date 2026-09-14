@@ -10,12 +10,11 @@ document {
 	précision: 3;
 }
 soit h1 = <bleu nuit gras section num>
-soit h2 = <bleu nuit italique sous-section>
-soit resume = <italique 10pt>
+soit resume = <italique 10 pt>
 soit motcle = <petites capitales>
 
-soit ouvrage = <gras 22pt au centre>
-soit mention = <14pt au centre>
+soit ouvrage = <gras 22 pt au centre>
+soit mention = <14 pt au centre>
 soit maison = <italique au centre>
 
 <ouvrage>{De la mesure du pendule simple}
@@ -46,10 +45,11 @@ soit maison = <italique au centre>
 
 	La longueur est mesurée au réglet, la période au chronomètre sur vingt oscillations :
 
-<Dresse>un tableau [mc ; mc ; mc] {
+<Dresse>un tableau {
+	<mc>	<mc>	<mc>
 	Grandeur	Valeur	Incertitude-type
-	[$L$ (m) ; 0,995 ; 0,001]
-	[$T$ (s) ; 2,004 ; 0,010]
+	[$L$ (m)]	[0,995]	[0,001]
+	[$T$ (s)]	[2,004]	[0,010]
 }
 
 

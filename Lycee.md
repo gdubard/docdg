@@ -24,7 +24,7 @@ La seconde à la terminale : tronc commun, spécialité et enseignement scientif
 La convexité donne $f''$, son tableau de signes en intervalles, les points d'inflexion ; les asymptotes horizontales, obliques et verticales sont énoncées avec leurs équations ; les équations trigonométriques résolues sur $\mathbb{R}$ par les valeurs remarquables.
 
 ```docdg
-<Soit>les vecteurs u et v de coordonnées respectives (3 ; -2) et (4 ; 6)
+<Soient>les vecteurs u et v de coordonnées respectives (3 ; -2) et (4 ; 6)
 <Soit>le plan P d'équation 2x + y - z = 3
 
 <Calcule>le produit scalaire de u et v

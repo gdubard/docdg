@@ -3,7 +3,7 @@ document {
 	marges: 15;
 	espacements: 2;
 	taille: 11;
-	interligne: 2;
+	interligne: 2,1;
 }
 
 soit h1 = <bleu marine gras section num>

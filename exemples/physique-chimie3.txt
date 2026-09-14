@@ -41,7 +41,7 @@ La décroissance suit $N'(t) = -k N(t)$ ; avec $k = 0,12$ :
 <page suivante h2>Chute libre : hauteur et vitesse
 Une bille est lancée vers le haut à $20$ m/s depuis le sol ; hauteur et vitesse au cours du temps :
 
-<Soit>les fonctions h(t) = -4,9t^2 + 20t et v(t) = -9,8t + 20
+<Soient>les fonctions h(t) = -4,9t^2 + 20t et v(t) = -9,8t + 20
 
 <Calcule>les dérivées de h et v
 
@@ -50,13 +50,14 @@ Une bille est lancée vers le haut à $20$ m/s depuis le sol ; hauteur et vitess
 <Représente>graphiquement les fonctions h et v pour x dans [0 ; 4,1] et y dans [-25 ; 25]
 
 <h2>Relevé de mesures
-<Dresse>un tableau [mc ; mc ; mc] avec une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine {
+<Dresse>un tableau avec une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine {
+	<mc>	<mc>	<mc>
 	t (s)	h (m)	v (m/s)
-	[0 ; 0 ; 20]
-	[1 ; 15,1 ; 10,2]
-	[2 ; 20,4 ; 0,4]
-	[3 ; 15,9 ; -9,4]
-	[4 ; 1,6 ; -19,2]
+	[0]	[0]	[20]
+	[1]	[15,1]	[10,2]
+	[2]	[20,4]	[0,4]
+	[3]	[15,9]	[-9,4]
+	[4]	[1,6]	[-19,2]
 }
 
 <Affiche>un cadre avec une bordure verte, un fond vert menthe et un titre {À retenir} {

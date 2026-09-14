@@ -1,12 +1,12 @@
 document {
 	orientation: portrait;
 	marges: 5;
-	espacements: 2;
+	espacements: {2;3;2;3};
 	taille: 11;
 	interligne: 1,2;
 }
 
-soit titre = <rouge gras 18pt au centre>
+soit titre = <rouge gras 18 pt au centre>
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>
 
@@ -128,7 +128,14 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 <Affiche>un filet gris anthracite en tirets, de largeur 60 mm au centre
 
-<h1>Listes imbriquées
+<h1>Le passage en colonnes
+	Un passage se compose sur deux à cinq colonnes. La gouttière vient des espacements du document, un filet peut les séparer, et ce qui suit l'accolade fermante retrouve la pleine largeur.
+
+<Compose>sur trois colonnes avec un filet gris clair {
+	Trois colonnes conviennent à un lexique ou à une liste de mots courts : la ligne est brève, l'œil en saisit plusieurs d'un seul coup. Les colonnes s'équilibrent d'elles-mêmes. On ne dit pas où couper : on dit combien de colonnes, et le moteur répartit. Un passage plus haut qu'une page se poursuit sur la suivante, en colonnes de même, sans qu'on ait rien à déclarer.
+}
+
+<page suivante h1>Listes imbriquées
 	Une liste écrite sous un élément devient sa sous-liste :
 
 <Dresse>une liste à puces{
@@ -154,58 +161,82 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	Premier acte
 	Deuxième acte
 }
+
 <h1>Tableaux avancés
 <h2>Fusions déduites de la forme
 	Aucune fusion ne se déclare. Une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit : le titre, seul sur sa rangée, couvre les quatre colonnes. Une entête suivie de plusieurs rangées de données descend sur autant de lignes : Lundi porte deux crochets, il couvre deux rangées.
 
-<Dresse>un tableau [mc ; mg ; mc ; mc] {
-	Bulletin trimestriel
-	Jour	Matière	Note	Coef.
-	Lundi :	[Maths ; 15 ; 4]
-				  [Français ; 12 ; 3]
-	Mardi :	[EPS ; 16 ; 2]
-	Moyenne :	[13,7]
+<Dresse>un tableau {
+	<mc>		<mg>		<mc>		<mc>
+				Bulletin trimestriel
+	Jour		Matière		Note		Coef.
+	Lundi :		[Maths]		[15]		[4]
+				[Français]	[12]		[3]
+	Mardi :		[EPS]		[16]		[2]
+	Moyenne :	[								  13,7]
 }
 
 <h2>Entêtes emboîtées
 	Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil — le tableau a la forme qu'on lui voit.
-<Dresse>un tableau [mc ; mc ; mg ; md] {
-	Semaine	Jour	Matière	Note
-	S1 :	 Lundi :	[Maths ; 15]
-						[Français ; 12]
-			Mardi :	[EPS ; 16]
-	S2 :	Lundi :	[Maths ; 18]
+<Dresse>un tableau {
+	<mc>		<mc>		<mg>		<md>
+	Semaine		Jour		Matière		Note
+	S1 :	 	Lundi :		[Maths]		[15]
+							[Français]	[12]
+				Mardi :		[EPS]		[16]
+	S2 :		Lundi :		[Maths]		[18]
+}
+
+<h2>Entêtes fusionnées sur plusieurs colonnes
+	Un tiret après une entête la fait couvrir une colonne de plus, deux tirets deux colonnes. L'espacement autour du tiret ne compte pas : « Identité - », « Identité-» ou un tiret seul dans sa colonne disent la même chose. Un nom composé ne risque rien, le tiret de fusion n'étant jamais suivi d'une lettre.
+<Dresse>un tableau avec des bordures {
+	<mc>		<mc>		<mc>		<mc>
+	Sous-total--						Reste
+	Janvier		Février		Mars		Avril
+	[12]		[15]		[9]			[14]
+}
+
+	Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau.
+<Dresse>un tableau avec des bordures {
+	<mc>		<mc>		<mc>			<mc>
+	Identité 	-			Coordonnées 	-
+	Nom			Prénom		Ville			Téléphone
+	[Dupont]	[Iris]		[Lyon]			[06 12 34 56 78]
+	[Martin]	[Noé]		[Vaise]			[06 98 76 54 32]
 }
 
 <h2>Une image dans une cellule
 	Une cellule de tableau accueille une formule ou une image, pas seulement du texte — chaque colonne garde son placement propre.
-<Dresse>un tableau [mc ; hg ; bd] {
+<Dresse>un tableau {
+	<mc>	<hg>	<bd>
 	Animal	Formule	Valeur
-	[<Insère l'image IMAGES/chat.png avec une largeur de 18 mm> ; $1/2 + 1/3$ ; $5/6$]
-	[<Insère l'image IMAGES/chien.png avec une largeur de 18 mm> ; $racine(2)$ ; $1,41$]
+	[<Insère l'image IMAGES/chat.png avec une largeur de 18 mm>]	[$1/2 + 1/3$]	[$5/6$]
+	[<Insère l'image IMAGES/chien.png avec une largeur de 18 mm>]	[$racine(2)$]	[$1,41$]
 }
 
 <h2>Couleurs du tableau
 	fond colore le corps, la bordure prend sa couleur, l'entête les siennes — sans cadre autour. Les couleurs d'entête habillent toutes les cellules d'entête, la rangée du haut comme la colonne de gauche.
-<Dresse>un tableau [mc ; mg ; mc] avec un écart de 3 mm, un fond bleu Alice, une bordure bleu marine et une entête en blanc sur fond bleu {
+<Dresse>un tableau avec un écart de 3 mm, un fond bleu Alice, une bordure bleu marine et une entête en blanc sur fond bleu {
+	<mc>	<mg>	<mc>
 	Jour	Matière	Note
-	Lundi :	[Maths ; 15]
-	Mardi :	[Français ; 12]
+	Lundi :	[Maths]	[15]
+	Mardi :	[Français]	[12]
 }
 
-<page suivante>
 <h2>Rangées dynamiques
 	Le nombre de colonnes est vérifié à chaque rangée, donc boucles et interpolation vivent dans un tableau.
-<Dresse un tableau [mc ; mg ; mc]>{
+<Dresse un tableau > {
+	<mc>	<mg>	<mc>
 	Table des carrés
 	n	Légende	Carré
 	pour n de 1 à 3 {
-		[ligne #n; #n ;	$#n^2$]
+		[ligne #n]	[#n]	[$#n^2$]
 	}
 }
 <h2>Cellules multilignes
 	La balise <<nouvelle ligne>> empile un contenu dans une seule cellule.
-<Dresse>un tableau [mg ; mg] {
+<Dresse>un tableau {
+	<mg>	<mg>
 	Champ		Saisie
 	Nom : 		[Nom :]
 				[Prénom :]
@@ -213,7 +244,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 				[Ville et code postal :]
 }
 
-<h1>Cadres avancés
+<page suivante h1>Cadres avancés
 <h2>Énoncé et solution
 	Une ligne ne portant que --- coupe le cadre en deux parties.
 <Affiche>un cadre de largeur 15 cm au centre avec un fond blanc fumé, une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Problème} {
@@ -241,7 +272,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	}
 }
 
-<page suivante h2>Un composant réutilisable
+<h2>Un composant réutilisable
 soit carte{n} = <Affiche un cadre avec un titre {Exercice #n} et une bordure grise>
 pour n de 1 à 2 {
 	<carte #n>{
@@ -249,23 +280,28 @@ pour n de 1 à 2 {
 	}
 }
 
-<h1>Grilles : la maquette en zones nommées
+<page suivante h1>Grilles : la maquette en zones nommées
 	La grille dispose des zones à la façon d'une maquette : le plan dessine la page avec un mot par case, un nom répété fusionne ses cases, un point marque une case vide. Chaque zone se place et s'habille en langage naturel — [nom : en haut, à gauche] ou le code court [nom hg].
 
-<Affiche>une grille avec des zones:["titre titre date", "consigne corps corps", "logo corps corps"], des bordures et un écart de 3 mm {
-	[titre : en haut, à gauche, avec un fond bleu Alice et une bordure bleu marine]{
-		<bleu marine gras 14pt>Contrôle de mathématiques
+<Affiche>une grille avec des bordures et un écart de 3 mm {
+	<max>	<max>	<max>
+	<min>	titre	titre	date
+	<min>	consigne	corps	corps
+	<min>	logo	corps	corps
+
+	titre : en haut, à gauche, avec un fond bleu Alice et une bordure bleu marine {
+		<bleu marine gras 14 pt>Contrôle de mathématiques
 	}
-	[date : en haut, à droite]{
+	date : en haut, à droite {
 		Le 12 mai
 	}
-	[consigne: au milieu, au centre, avec un fond gris perle]{
+	consigne : au milieu, au centre, avec un fond gris perle {
 		Calculatrice autorisée.
 	}
-	[logo : au milieu, au centre]{
+	logo : au milieu, au centre {
 		<Insère l'image IMAGES/oiseau.png avec une largeur de 20 mm>
 	}
-	[corps: en mc]{
+	corps : en mc {
 		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
 	}
 }

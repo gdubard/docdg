@@ -3,7 +3,7 @@ document {
 	marges: 10;
 	espacements: 2;
 	taille: 11;
-	interligne: 1,3;
+	interligne: 1,8;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>

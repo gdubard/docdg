@@ -8,6 +8,7 @@ document {
 
 soit titre = <bleu nuit gras grand au centre>
 soit h1 = <bleu nuit gras section num>
+soit h2 = <gras au centre>
 
 <titre>La frise chronologique au collège
 
@@ -15,18 +16,24 @@ soit h1 = <bleu nuit gras section num>
 
 	Une ligne par événement : la date, deux-points, le titre — et, s'il éclaire, le détail entre parenthèses. Les événements se rangent d'eux-mêmes dans l'ordre du temps, quelle que soit la saisie : c'est la frise qui ordonne, l'élève qui repère.
 
-<Construis>la frise chronologique de la Révolution française {
+	La frise s'annonce « la frise chronologique » et rien d'autre. Son titre, s'il en faut un, s'écrit à part — au-dessus ou en dessous, selon ce que la page demande.
+
+<Construis>la frise chronologique {
 	14/07/1789 : Prise de la Bastille
 	05/05/1789 : Ouverture des États généraux (Louis XVI convoque les trois ordres à Versailles.)
 	26/08/1789 : Déclaration des droits de l'homme et du citoyen
 	21/09/1792 : Proclamation de la République
 }
 
+<h2>La Révolution française
+
 <page suivante h1>Se repérer dans le temps
 
 	Une période est un événement qui dure : ses deux dates s'écrivent « de 476 à 1492 », « 476 - 1492 », « 476 -- 1492 » ou « 476 — 1492 », au choix, et elle occupe l'intérieur du bandeau. Les quatre grandes périodes de l'histoire tiennent ainsi en quatre lignes — la Préhistoire les précède, avant que l'écriture ne commence à tout consigner.
 
-<Construis>la frise chronologique des grandes périodes {
+<h2>Les grandes périodes de l'histoire
+
+<Construis>la frise chronologique {
 	de -3300 à 476 : Antiquité (L'écriture ouvre la période, la chute de Rome la referme.)
 	de 476 à 1492 : Moyen Âge
 	de 1492 à 1789 : Temps modernes

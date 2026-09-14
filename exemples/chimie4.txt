@@ -2,13 +2,12 @@ document {
 	orientation: portrait;
 	marges: 15;
 	taille: 11;
-	interligne: 1,8;
+	interligne: 1,7;
 	niveau: licence 3;
 }
 soit h1 = <vert foncé gras section num>
 soit h2 = <vert italique sous-section>
 soit remarque = <gris foncé italique>
-soit correction = <fond gris clair>
 
 
 <h1>Du potentiel d'électrode au diagramme potentiel-pH — licence 3

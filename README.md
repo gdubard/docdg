@@ -1,4 +1,4 @@
-# *docdg 3.6*
+# *docdg 3.7*
 
 **docdg** is a Rust document class built around a French-only prose
 tag language (no anglicisms). Users write a single plain-text file where every
@@ -71,12 +71,12 @@ Sans SymPy, docdg fonctionne intégralement avec son moteur de calcul interne �
 
 ### Les contrôles
 
-Quatre commandes tiennent le dépôt d'aplomb, et la CI les rejoue à chaque poussée :
+Quatre commandes tiennent le dépôt d'aplomb. Elles se lancent à la main : le dépôt n'a pas d'intégration continue, son unique workflow GitHub ne fabrique que les paquets, à la demande.
 
 | commande | ce qu'elle vérifie |
 |---|---|
 | `cargo app corpus` | le corpus : références, cycles, monotonie des niveaux, homogénéité des relations |
-| `cargo app couverture` | que le moteur, les manuels et les exemples disent la même chose — 278 entrées confrontées, table par table |
+| `cargo app couverture` | que le moteur, les manuels et les exemples disent la même chose — 279 entrées confrontées, table par table |
 | `cargo app recensement` | l'état du corpus : ancrages par niveau, énoncés par domaine, et les creux qui restent à nourrir — `--redaction` réécrit [Redaction.md](Redaction.md) |
 | `cargo run -p docdg-bench --bin exemples` | que les 52 exemples composent, et que le compte de marques d'erreur voulues n'a pas bougé |
 
@@ -95,49 +95,40 @@ fois pour tous les niveaux.
 ### La référence
 
 1. [Qu'est-ce que docdg ?](#-quest-ce-que-docdg-)
-2. [Ce que la 3.6 apporte](#-ce-que-la-36-apporte) — le corpus en base de données, l'onglet Édition, le titre des frises
-3. [Ce que la 3.4 apporte](#-ce-que-la-34-apporte) — le corpus complet, l'école élémentaire, la vitesse
-4. [Ce que la 2.9 apporte](#-ce-que-la-29-apporte) — le corpus de physique-chimie et l'analyse dimensionnelle
-5. [Ce que la 2.8 apporte](#-ce-que-la-28-apporte) — le corpus mathématique, de la sixième à l'agrégation
-6. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
-7. [Ce que la 3.2 apporte](#-ce-que-la-32-apporte)
-8. [Ce que la 3.0 apporte](#-ce-que-la-30-apporte)
-9. [Fonctionnalités clés](#-fonctionnalités-clés)
-10. [Pourquoi docdg ?](#-pourquoi-docdg-)
-11. [Ce dont vous avez besoin](#ce-dont-vous-avez-besoin)
-12. [Premiers documents](#-premiers-documents)
-13. [La syntaxe](#-la-syntaxe)
-14. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
-15. [Les actions](#les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
+2. [Ce que la 3.7 apporte](#-ce-que-la-37-apporte) — la frise chronologique sans titre
+3. [Ce que la 3.6 apporte](#-ce-que-la-36-apporte) — le corpus en base de données, l'onglet Édition
+4. [Ce que la 3.4 apporte](#-ce-que-la-34-apporte) — le corpus complet, l'école élémentaire, la vitesse
+5. [Ce que la 3.2 apporte](#-ce-que-la-32-apporte)
+6. [Ce que la 3.0 apporte](#-ce-que-la-30-apporte)
+7. [Ce que la 2.7 apporte](#-ce-que-la-27-apporte) — environnements numérotés, frise chronologique
+8. [Fonctionnalités clés](#-fonctionnalités-clés)
+9. [Pourquoi docdg ?](#-pourquoi-docdg-)
+10. [Ce dont vous avez besoin](#-ce-dont-vous-avez-besoin)
+11. [Premiers documents](#-premiers-documents)
+12. [La syntaxe](#-la-syntaxe)
+13. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
+14. [La mise en colonnes](#-la-mise-en-colonnes) — un passage sur une à cinq colonnes, le reste en pleine largeur
+15. [Les actions](#-les-actions) — `Soit`, `Trace` : figures, repère, solides, mode analytique
 16. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
-17. [Les saisies interactives](#les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
+17. [Les saisies interactives](#-les-saisies-interactives) — `<Saisis>`, blocage typé, alternative `si … sinon`, le document vivant
 18. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
 19. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
 20. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
-21. [Les courbes et les coniques](#-les-courbes-et-les-coniques) — paramétrées, polaires, coniques rédigées et tracées
-22. [Les fonctions de deux variables](#-les-fonctions-de-deux-variables) — surfaces, lignes de niveau, Lagrange, intégrales multiples
-23. [Le plan complexe et les résidus](#-le-plan-complexe-et-les-résidus) — images de domaines, transformations holomorphes, pôles et résidus
-24. [Les groupes](#les-groupes) — tables de ℤ/nℤ, générateurs, cycles et signature
-25. [Les lois à densité](#-les-lois-à-densité) — densités, loi normale, théorème central limite
-26. [Les mathématiques](#-les-mathématiques)
-27. [La géométrie](#-la-géométrie)
-28. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
-29. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-30. [L'écriture sur des lignes](#lecriture-sur-des-lignes) — la réglure Seyès et la cursive, pour l'école élémentaire
-31. [Le collège, rédigé](#-le-collège-rédigé) — Pythagore, Thalès, trigonométrie, proportionnalité, transformations
-32. [Le lycée, couvert](#-le-lycée-couvert) — convexité, asymptotes, espace, graphes, Markov, diophantiennes
-33. [Le supérieur (CPGE)](#-le-supérieur-cpge) — séries, réduction, Gram-Schmidt, polynômes formels, Fourier, Laplace
-34. [La physique-chimie](#la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-35. [La frise chronologique](#la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
-36. [Le corpus : le personnaliser, l'emprunter](#-le-corpus--le-personnaliser-lemprunter) — l'onglet Édition, le journal, la base d'un établissement
-37. [Rédiger un article, une thèse](#-rédiger-un-article-une-thèse) — chapitres, page de titre, renvois, bibliographie
-38. [Les exemples, par niveau](#les-exemples-par-niveau)
-39. [Les documents complexes](#-les-documents-complexes)
-40. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
-41. [Référence complète](#-référence-complète) — couleurs et options de classe
-42. [Bonnes pratiques](#-bonnes-pratiques)
-43. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
-44. [Les tournures et le placement](#les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
+21. [Les mathématiques](#-les-mathématiques)
+22. [La géométrie](#-la-géométrie)
+23. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
+24. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
+25. [L'écriture en réglure](#-lécriture-en-réglure) — la réglure Seyès, la cursive, les styles et les mathématiques sur les lignes
+26. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+27. [La frise chronologique](#-la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
+28. [Le corpus : le personnaliser, l'emprunter](#-le-corpus--le-personnaliser-lemprunter) — l'onglet Édition, le journal, la base d'un établissement
+29. [Les exemples, par niveau](#-les-exemples-par-niveau)
+30. [Les documents complexes](#-les-documents-complexes)
+31. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
+32. [Référence complète](#-référence-complète) — couleurs et options de classe
+33. [Bonnes pratiques](#-bonnes-pratiques)
+34. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
+35. [Les tournures et le placement](#-les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
@@ -181,11 +172,111 @@ Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C
 
 ---
 
+## **🆕 Ce que la 3.7 apporte**
+
+Trois chantiers de mise en page : **la frise chronologique se simplifie**,
+**un passage se compose en colonnes** et **la réglure se nomme, et se borne à
+l'écriture**.
+
+### La frise chronologique se dépouille de son titre
+
+Jusqu'à la 3.6, ce qui suivait « la frise chronologique » devenait un titre
+posé sous la figure. Une frise n'a pas plus besoin de porter son titre qu'un
+tableau ou une image : celui qui en veut un l'écrit lui-même, et le place où
+sa page le demande — au-dessus, en dessous, ou nulle part.
+
+La description ne porte donc plus aucun complément :
+
+```docdg
+soit h2 = <gras au centre>
+
+<h2>Les grandes périodes de l'histoire
+
+<Construis>la frise chronologique {
+de -3300 à 476 : Antiquité
+de 476 à 1492 : Moyen Âge
+1492 : Voyage de Christophe Colomb
+}
+```
+
+L'ancienne écriture n'est pas conservée : `la frise chronologique du Moyen Âge`
+est refusée, et le message dit quoi écrire à la place. Les fichiers d'exemples
+`histoire1` à `histoire4` et `publication2` sont écrits dans la nouvelle
+forme, avec leur titre à part.
+
+### Le passage en colonnes
+
+Les colonnes ne sont pas un réglage du document : toutes les pages n'en ont pas
+besoin, et une frise ou un tableau large réclament au contraire la pleine
+mesure. Le verbe `<Compose>` met **un passage** en colonnes, entre deux
+accolades, et rend la pleine largeur après :
+
+```docdg
+<Compose>sur deux colonnes avec un filet gris clair {
+	Un passage se compose sur une à cinq colonnes, qui s'équilibrent d'elles-mêmes.
+	La gouttière vient des espacements du document ; le filet se demande.
+
+	Un passage plus haut qu'une page se poursuit sur la suivante, en colonnes de
+	même : le texte courant n'a aucune raison de rester d'un seul tenant.
+}
+```
+
+Les espacements ne se disent plus sur la composition : ils appartiennent au
+bloc `document {…}`, où `espacements: {haut;droite;bas;gauche}` règle le blanc
+laissé au bord de la page. **La gouttière entre deux colonnes est la somme de
+l'espacement droit et de l'espacement gauche** — le même mot sert au blanc du
+bord et à celui du milieu, et il ne se dit qu'une fois, à l'endroit où se règle
+déjà la géométrie de la page. Sans espacement, les colonnes se touchent.
+
+### La réglure se nomme
+
+`<Écris>sur des lignes` disait la ligne sans nommer la réglure. La désignation
+du papier réglé est plus juste : `<Écris>en réglure Seyès` pour les grands
+carreaux de l'école élémentaire. L'ancienne écriture n'est pas conservée : elle
+est refusée, et le message donne la forme à écrire.
+
+**Une réglure ne se pose pas dans une autre** — une page de cahier n'a qu'une
+réglure. C'est la colonne qui porte la réglure, jamais l'inverse.
+
+### Le cahier prend l'écriture, et rien qu'elle
+
+`<Écris>en réglure Seyès { … }` accepte le texte, **les styles et les couleurs**
+— un alignement, un style nommé, une mise en forme au fil de la ligne — et **les
+mathématiques entre `$` et `$`**, qui s'écrivent sur la ligne réglée comme le
+reste. Un objet, en revanche, ne s'y pose pas : un tableau, une figure, une
+image, un calcul sont refusés avec le message qui dit où les écrire. Une page
+réglée est faite de lignes à écrire ; le reste se compose hors du bloc, où la
+pleine mesure lui est acquise. Une colonne acceptant la réglure, le cahier
+d'écolier en paysage s'écrit toujours en six lignes.
+
+Le chapitre [L'écriture en réglure](#-lécriture-en-réglure), que le
+sommaire annonçait sans qu'il existe, est écrit.
+
+Le chapitre [La mise en colonnes](#-la-mise-en-colonnes) donne la règle
+complète. `basique3` en montre la forme, `publication3` la coupure d'un passage
+sur deux pages.
+
+### La composition, une notion pour toute la page
+
+Le corps d'un document **est** une composition à une colonne : ce qu'on n'écrit
+pas, docdg le fait. `<Compose>sur une colonne { … }` est donc accepté et rend
+exactement ce que rend le même texte hors de toute balise — la composition
+n'est pas un mode à part, c'est la mise en page ordinaire, dont la pleine
+largeur n'est qu'un cas. De là suit qu'un objet qui se compose dans le corps du
+document se compose dans une colonne, sans exception à retenir : textes,
+formules, tableaux, repères, figures, solides, matrices, systèmes.
+
+La règle qui veut qu'une réglure remplisse la composition entière ne vaut donc
+que **de deux colonnes à cinq** — c'est la nappe réglée qui ne saurait
+cohabiter avec autre chose sous plusieurs colonnes. Sur une seule, le cahier se
+pose au milieu du texte exactement comme il le fait hors de toute balise.
+
+---
+
 ## **🆕 Ce que la 3.6 apporte**
 
-Trois chantiers : **le corpus passe en base de données**, **l'enseignant peut
-enfin l'amender depuis docdg et revenir en arrière**, et **la frise
-chronologique cesse de redire son propre nom**.
+Deux chantiers : **le corpus passe en base de données** et **l'enseignant peut
+enfin l'amender depuis docdg et revenir en arrière**.
 
 ### Le corpus quitte le TOML pour SQLite
 
@@ -254,20 +345,6 @@ base de cette version, et vous dit à quel point il est revenu. Le fichier
 refusé n'est jamais effacé : il est conservé à côté, sous un nom horodaté.
 
 Le détail complet est dans `corpus/PERSONNALISATION.md`.
-
-### Le titre d'une frise se lit dans sa description
-
-Une frise ne s'annonce plus « Frise chronologique … » : le lecteur voit bien
-qu'il en regarde une. Ce qui suit « la frise chronologique » devient le titre,
-**l'article accordé à la préposition** :
-
-| ce que vous écrivez | le titre affiché |
-|---|---|
-| `la frise chronologique des grandes périodes` | **Les grandes périodes** |
-| `la frise chronologique du Moyen Âge` | **Le Moyen Âge** |
-| `la frise chronologique de la Révolution française` | **La Révolution française** |
-| `la frise chronologique de l'Antiquité` | **L'Antiquité** |
-| `la frise chronologique de Napoléon` | **Napoléon** |
 
 ---
 
@@ -396,12 +473,12 @@ La **2.6** avait apporté ce qui suit, et qui demeure.
 
 | **Fonctionnalité**                  | **Description**                                                                                                           | **Exemples**                                       |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **🏷️ Une seule syntaxe de balise** | `<attributs>{contenu}` couvre texte, tableaux, images, maths, cadres, listes et mises en page pleine page                 | `<Affiche>un cadre avec une bordure bleue{Texte}`, `<Dresse>un tableau [mc]{...}` |
+| **🏷️ Une seule syntaxe de balise** | `<attributs>{contenu}` couvre texte, tableaux, images, maths, cadres, listes et mises en page pleine page                 | `<Affiche>un cadre avec une bordure bleue{Texte}`, `<Dresse>un tableau {<mc>...}` |
 | **🎨 148 couleurs nommées**         | Une palette en **français**, une couleur par nom, accordée selon l'orthographe | `rouge`, `bleu nuit`, `vert forêt` |
 | **📐 Un mini-langage mathématique** | Fractions, racines, sommes, produits, intégrales, dérivées, trigonométrie, matrices et systèmes, **le tout dans `$...$`** | `$somme(k=1;n) k^2$`, `$intégrale(x=a;b) f(x)$`    |
-| **📦 Cadres et grilles**            | Panneaux `<Affiche>un cadre` colorés et mises en page à zones nommées **façon CSS Grid**                                            | `<Affiche>une grille avec les zones:[...]`, `<Affiche>un cadre avec des coins arrondis de 5 mm`       |
-| **📊 Des tableaux sans douleur**    | Placement de cellule en **deux lettres**, fusions, en-têtes, bordures, **aucun `&` à compter**                            | `<Dresse>un tableau [mc ; mg] bordures entête`                |
-| **♻️ Alias et macros**              | Factorisez un style **une fois**, nommez-le partout ; **une seule retouche restyle tout le document**                     | `soit titre = <gras 18pt>`, `soit exercice{n} = ...` |
+| **📦 Cadres et grilles**            | Panneaux `<Affiche>un cadre` colorés et mises en page à zones nommées **façon CSS Grid**                                            | `<Affiche>une grille`, `<Affiche>un cadre avec des coins arrondis de 5 mm`       |
+| **📊 Des tableaux sans douleur**    | Placement de cellule en **deux lettres**, fusions, en-têtes, bordures, **aucun `&` à compter**                            | `<Dresse>un tableau avec des bordures`                        |
+| **♻️ Alias et macros**              | Factorisez un style **une fois**, nommez-le partout ; **une seule retouche restyle tout le document**                     | `soit titre = <gras 18 pt>`, `soit exercice{n} = ...` |
 | **🔁 Structures de contrôle**       | Boucles, conditionnelles et interpolation **`#{...}`** dans le corps du document                                          | `pour n de 1 à 5`, `si note >= 10`                 |
 
 
@@ -535,7 +612,7 @@ document {
 | `orientation`| `portrait`/`paysage` | `portrait` | Orientation de la page       |
 | `marges`     | nombre ou 4 valeurs | `20`       | Marges externes (mm) — `20` ou `25;20;25;20` (haut;droite;bas;gauche) |
 | `espacements`| nombre ou 4 valeurs | `2`        | Espacements internes des cadres, tableaux et zones (mm) |
-| `script`     | texte              | *(celle du système)* | Police du texte imprimé — les lettres scriptes |
+| `script`     | texte              | `Georgia`   | Police du texte imprimé — les lettres scriptes ; Georgia, Times New Roman et Arial voyagent avec le document, tout autre nom est cherché sur la machine |
 | `seyès`      | texte              | `Marelle`   | Cursive des lignes réglées — seule la `Marelle` est embarquée ; un fichier `.ttf` voisin est lu et joint au document |
 | `taille`     | nombre             | `11`        | Taille de base (pt)            |
 | `interligne` | nombre             | `1,3`       | Coefficient d'interligne       |
@@ -572,7 +649,7 @@ Deuxième paragraphe.
 **docdg**
 
 ```docdg
-soit titre = <rouge gras 18pt au centre>
+soit titre = <rouge gras 18 pt au centre>
 
 <titre>Ma feuille d'exercices
 ```
@@ -598,7 +675,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 | -------------- | -------------------- | --------------------------------- |
 | **Actions**    | Opérations           | `<Trace>`, `<Soit>`, `<Affiche>`, `<Dresse>`  |
 | **Objets**     | Éléments du document | `un cadre`, `un tableau`, `une image`      |
-| **Propriétés** | Personnalisation     | `rouge`, `gras`, `14pt`, `au centre` |
+| **Propriétés** | Personnalisation     | `rouge`, `gras`, `14 pt`, `au centre` |
 | **Valeurs**    | Paramètres           | `oui`, `non`, `30`, `bleu foncé`  |
 
 **Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Affiche>un cadre avec ...{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (une matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>la matrice M{...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise commence par un **verbe d'action à l'impératif présent** — jamais par l'objet nu (règle n°12). Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresse>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
@@ -608,7 +685,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 1. **Les balises** sont entre **chevrons** et commencent par un **verbe** : `<Affiche>un cadre`, `<Dresse>un tableau`, `<Insère l'image IMAGES/photo.png avec une largeur de 30 mm>`  (règle n°12)
 2. **Le contenu** est entre **accolades** : `<Affiche>un cadre{Du texte ici}`
 3. **Les noms composés** utilisent des **espaces** : `<table des matières>`
-4. **Les propriétés** s'écrivent **en français** : `<bleu foncé centre 14pt>{Titre}`
+4. **Les propriétés** s'écrivent **en français** : `<bleu foncé centre 14 pt>{Titre}`
 5. **Les couleurs** : `rouge`, `bleu foncé` (français)
 6. **Les polices** : en **MAJUSCULES** : `<ARIAL>`
 7. **Échappement** : doublez les caractères spéciaux pour les afficher littéralement : `<<` → `<`, `>>` → `>`, `{{` → `{`, `}}` → `}`, `##` → `#`, `$$` → `$`.
@@ -617,7 +694,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 9. **Majuscule de phrase** : **Seules** les actions dont l'écriture se lit comme une phrase française (`<Soit>`, `<Trace>`, etc.) commencent par une majuscule. Les **mots-clés techniques** (`soit`, `pour`, `si`, `fonction`) restent en minuscules.
 10. **Article + prose** : toute action-phrase (`<Soit>`, `<Trace>`) désigne ses objets avec un article et décrit leurs attributs en prose. En détail :
 
-   - **L'article porte l'intention.** `<Soit>` introduit du nouveau : article **indéfini** (`un point A(2;7)`). Au pluriel, l'article **factorise** : `<Soit>les points A(-1,5;3), B(2;5) et C(0;-4,3)` — une seule phrase pour trois points. Un **nombre** peut tenir lieu d'article pluriel (`<Soit>3 points A(1;2), B(-1;2) et C(-1;-2)`) : docdg vérifie alors que le compte annoncé correspond au nombre de points décrits. Enfin, la **distribution respective** — l'idiome des énoncés du secondaire et du supérieur (« de coordonnées respectives », « d'unités respectives ») — sépare les noms des valeurs et les apparie dans l'ordre : `<Soit>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)`. `<Trace>` prend l'article **défini** pour un objet déjà posé (`le point A`) et l'**indéfini** quand il crée la figure au moment du tracé (`un triangle ABC équilatéral, de côté 5 cm`). Les deux formes produisent le même tracé. L'article se met devant chaque nom — objets compris : `<un cadre avec une bordure rouge...>`, `<une grille...>`.
+   - **L'article porte l'intention.** `<Soit>` introduit du nouveau : article **indéfini** (`un point A(2;7)`). Au pluriel, l'impératif s'accorde — `<Soient>` — et l'article **factorise** : `<Soient>les points A(-1,5;3), B(2;5) et C(0;-4,3)` — une seule phrase pour trois points. Un **nombre** peut tenir lieu d'article pluriel (`<Soient>3 points A(1;2), B(-1;2) et C(-1;-2)`) : docdg vérifie alors que le compte annoncé correspond au nombre de points décrits. Enfin, la **distribution respective** — l'idiome des énoncés du secondaire et du supérieur (« de coordonnées respectives », « d'unités respectives ») — sépare les noms des valeurs et les apparie dans l'ordre : `<Soient>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)`. `<Trace>` prend l'article **défini** pour un objet déjà posé (`le point A`) et l'**indéfini** quand il crée la figure au moment du tracé (`un triangle ABC équilatéral, de côté 5 cm`). Les deux formes produisent le même tracé. L'article se met devant chaque nom — objets compris : `<un cadre avec une bordure rouge...>`, `<une grille...>`.
    - **Les qualificatifs** restent accolés au nom sans « de » : `équilatéral`, `rectangle en A`.
    - **Les propriétés à antonyme court** se disent en prose : `avec les marques` / `sans marques`, `avec les valeurs` / `sans valeurs`. `avec` prend l'article, `sans` ne le prend pas — comme en français (`avec du sucre` / `sans sucre`). `avec` sert aussi à introduire un groupe d'attributs : `<un tableau [...] avec entête>`, `avec un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}`.
    - **La couleur** se dit avec `en` : `en bleu`, `en rouge foncé`.
@@ -630,12 +707,12 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
         des coins arrondis de 3 mm et un titre {Théorème}>{ ... }
     ```
 
-    L'adjectif `bordé de` n'existe plus : la couleur de bordure se dit `une bordure bleu canard`, comme le fond se dit `un fond vert menthe` — le nom précédé de son article (`une bordure`, `un fond`) se lit mieux que l'adjectif, et docdg ne garde qu'une forme canonique par concept. Les qualificatifs qui font corps avec l'objet restent des adjectifs (`un triangle rectangle`, `un triangle équilatéral`). Un objet **sans** attribut s'écrit nu (`<Affiche>un cadre{...}`), et un placement seul entre crochets (`<Dresse>un tableau [mc ; mg]{...}`) ne demande pas de `avec`.
+    L'adjectif `bordé de` n'existe plus : la couleur de bordure se dit `une bordure bleu canard`, comme le fond se dit `un fond vert menthe` — le nom précédé de son article (`une bordure`, `un fond`) se lit mieux que l'adjectif, et docdg ne garde qu'une forme canonique par concept. Les qualificatifs qui font corps avec l'objet restent des adjectifs (`un triangle rectangle`, `un triangle équilatéral`). Un objet **sans** attribut s'écrit nu (`<Affiche>un cadre{...}`, `<Dresse>un tableau{...}`).
    - **Le connecteur est obligatoire** entre deux attributs de prose : une virgule entre fragments, ou `et` au sein d'un fragment — `en rouge et de trait 0,5 mm`, jamais la juxtaposition nue. Seule la charnière vers un réglage `clé:valeur` s'accroche sans connecteur.
    - **Les unités de longueur** (`cm`, `mm`) sont **obligatoires** : `de côté 5,3 cm`, jamais `de côté 5,3`. Une longueur sans unité est une erreur, dite en français. *Seule exception :* dans un repère, les longueurs se comptent en **graduations** et s'écrivent sans unité.
    - **Le clé:valeur** ne garde que les réglages purement techniques sans tournure française courante. Chaque fois qu'un nom français existe, la prose gagne : `avec 200 échantillons` plutôt qu'un réglage abstrait, `un pas de $pi/6$` plutôt qu'un `step:`.
 
-12. **Une balise commence toujours par un verbe d'action à l'impératif présent** — `<Dresse>un tableau ...`, `<Affiche>un cadre ...`, `<Insère l'image ...>`, `<Construis>un arbre ...`, `<Trace>...`, `<Soit>` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Affiche>un cadre` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Trois familles seulement échappent au verbe, parce qu'elles ne posent aucun objet dans le document : les **styles** (`<gras rouge 14pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Affiche>un cadre avec ...`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Affiche`, `Dresse`, `Construis` et `Insère` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
+12. **Une balise commence toujours par un verbe d'action à l'impératif présent** — `<Dresse>un tableau ...`, `<Affiche>un cadre ...`, `<Insère l'image ...>`, `<Construis>un arbre ...`, `<Trace>...`, `<Soit>` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Affiche>un cadre` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Trois familles seulement échappent au verbe, parce qu'elles ne posent aucun objet dans le document : les **styles** (`<gras rouge 14 pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Affiche>un cadre avec ...`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Affiche`, `Dresse`, `Construis` et `Insère` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
 
 
 ### **🔹 Structure d'une balise**
@@ -650,7 +727,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 
 ```docdg
 <un cadre avec une bordure rouge, un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}>{
-  <gras 14pt>{Exercice important !}
+  <gras 14 pt>{Exercice important !}
 }
 ```
 
@@ -671,8 +748,8 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 | Couleur du texte / fond   | `texte <couleur>`, `fond <couleur>`  | `texte noir, fond blanc` | Couleur du texte et du fond du cadre |
 | Coins arrondis            | `coins arrondis de <N>mm`            | pas d'arrondi       | Rayon des coins                           |
 | Largeur                   | `large de <N>mm` / `large de N%`     | auto                | Largeur du cadre                          |
-| Épaisseur de la bordure   | `bordure épaisse de <N>mm`           | `0,4mm`             | Épaisseur du trait                        |
-| Marge intérieure          | `marge de <N>mm`                     | `3mm`               | Marge intérieure                          |
+| Épaisseur de la bordure   | `bordure épaisse de <N>mm`           | `0,4 mm`             | Épaisseur du trait                        |
+| Marge intérieure          | `marge de <N>mm`                     | `3 mm`               | Marge intérieure                          |
 | Titre                     | `avec un titre {...}`                        | pas de titre        | Titre affiché en haut du cadre            |
 | Couleur du titre          | `titre en <couleur texte> sur fond <couleur fond>` | -      | Couleur du texte et du fond du titre      |
 | Coupure entre pages       | `sécable` / `insécable`              | `insécable`         | Autorise le cadre à se poursuivre d'une page à l'autre |
@@ -695,7 +772,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 ```docdg
 % Cadre simple
 <Affiche>un cadre avec une bordure bleue, un fond bleu Alice et des coins arrondis de 4 mm{
-  <gras 14pt au centre>{Exercice 1}
+  <gras 14 pt au centre>{Exercice 1}
   Résoudre $x^2 - 5x + 6 = 0$.
 }
 
@@ -708,62 +785,85 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 
 ### **2️⃣ `<Dresse>un tableau` — Tableaux simplifiés**
 
-**Trois règles suffisent :**
-
-1. **Hors des crochets, tout est entête** — la rangée du haut comme la colonne de gauche. Rien à déclarer.
-2. **Entre crochets, tout est donnée** : `[a ; b ; c]` est une rangée, les cellules séparées par un point-virgule.
-3. **Les fusions se déduisent de la forme** : une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit ; une entête suivie de plusieurs rangées descend sur autant de lignes.
+**Le tableau commence toujours par sa ligne de pistes** : une piste par colonne, entre chevrons, séparées par des tabulations. Une piste porte un code de placement à deux lettres (obligatoire), et peut y ajouter une largeur avec `en` :
 
 ```docdg
-<Dresse>un tableau [mc ; mg ; md]{
+<Dresse>un tableau {
+	<35 mm en mg>	<mg>
+	Champ	Saisie
+	Nom :	[Nom :]
+	[Prénom :]
+	Adresse :	[Rue et numéro :]
+	[Ville et code postal :]
+}
+```
+
+- `<35 mm en mg>` : largeur fixée à 35 mm, aligné au milieu à gauche.
+- `<mg>` : pas de largeur déclarée — cette colonne, comme toute colonne sans largeur, reçoit une part égale de ce qu'il reste, jusqu'à occuper toute la largeur disponible (celle de la page si le tableau n'a pas de largeur propre).
+- Il n'y a pas de hauteur de cellule : une cellule prend la hauteur qu'exige son contenu.
+
+**Trois règles suffisent, après la ligne de pistes :**
+
+1. **Hors des crochets, tout est entête** — la rangée du haut comme la colonne de gauche.
+2. **Chaque donnée est entre crochets**, une paire par cellule, séparées par une ou plusieurs tabulations : `[Nom]	[15]`, jamais de point-virgule à l'intérieur.
+3. **Les fusions se lisent dans l'entête** : un tiret en fin de mot fusionne horizontalement, un deux-points fusionne verticalement — voir plus bas.
+
+```docdg
+<Dresse>un tableau {
+	<mc>	<mg>	<md>
 	Jour	Matière	Note
-	[Lundi ; Maths ; 15]
-	[Mardi ; EPS ; 16]
+	[Lundi]	[Maths]	[15]
+	[Mardi]	[EPS]	[16]
 }
 ```
 
-La première rangée est hors crochets : c'est l'entête, en gras, sans que le mot `entête` figure nulle part.
+La première rangée, hors crochets, est l'entête, en gras, sans que le mot `entête` figure nulle part.
 
-**Entêtes verticales et fusions.** Une entête suivie d'un deux-points porte les rangées qui la suivent. Écrite seule sur sa ligne, elle ouvre un groupe que l'indentation dessine :
+**Fusion verticale : le deux-points.** Une entête suivie d'un deux-points porte les rangées de données qui suivent immédiatement sur la même ligne — un seul deux-points suffit, quel que soit le nombre de rangées couvertes ; sa portée se lit à ce qui la suit, pas à un décompte :
 
 ```docdg
-<Dresse>un tableau [mc ; mg ; md]{
-	Jour	Matière	Note
-	Lundi :
-		[Maths ; 15]
-		[Français ; 12]
-	Mardi :
-		[EPS ; 16]
+<Dresse>un tableau {
+	<mc>	<mc>	<mg>
+	Semaine	Jour	Matière
+	S1 :	Lundi :	[Maths]
+	[Français]
+	Mardi :	[EPS]
+	S2 :	Lundi :	[Maths]
 }
 ```
 
-« Lundi » couvre deux rangées parce qu'il en porte deux. Le deux-points est consommé, jamais imprimé. La forme **aplatie** donne exactement le même tableau quand la place le permet :
+« S1 » couvre trois rangées, « Lundi » deux : chacun couvre ce qu'il porte. Le deux-points est consommé, jamais imprimé — mais un deux-points **à l'intérieur d'une donnée** (`[Nom :]`) n'est que du texte : la grammaire ne regarde le deux-points qu'en dehors des crochets.
+
+**Fusion horizontale : le tiret après l'entête.** Un ou plusieurs tirets après une entête la font couvrir une colonne de plus par tiret. L'espacement ne compte pas — `Identité-`, `Identité -` et un tiret seul dans sa colonne disent la même chose, les tabulations ne servant qu'à aligner la source à l'œil. Sans risque pour un mot composé : le tiret de fusion n'est jamais suivi d'une lettre, si bien que « Sous-total » reste un seul mot :
 
 ```docdg
-	Lundi :	[Maths ; 15] [Français ; 12]
-```
-
-**Entêtes emboîtées.** Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil, si bien que la source a la forme du tableau :
-
-```docdg
-<Dresse>un tableau [mc ; mc ; mg ; md]{
-	Semaine	Jour	Matière	Note
-	S1 :	Lundi :	[Maths ; 15]
-					[Français ; 12]
-			Mardi :	[EPS ; 16]
-	S2 :	Lundi :	[Maths ; 18]
+<Dresse>un tableau {
+	<mc>	<mc>	<mc>	<mc>
+	Identité -	Coordonnées
+	Nom	Prénom	Ville	Téléphone
+	[Dupont]	[Iris]	[Lyon]	[06 12 34 56 78]
 }
 ```
 
-« S1 » couvre trois rangées, « Lundi » deux : chacun couvre ce qu'il porte. La forme en plan, où chaque entête s'écrit seule sur sa ligne et s'indente sous la précédente, donne le même tableau et reste acceptée.
-
-**Fusion horizontale.** Une rangée à qui il manque des cellules étend la dernière jusqu'au bord droit — un titre seul couvre toute la largeur :
+« Identité - » couvre 2 colonnes ; « Coordonnées », dernier mot de la rangée, s'étend jusqu'au bord par la règle qui suit — inutile d'y ajouter un tiret. Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau :
 
 ```docdg
-<Dresse>un tableau [mc ; mg ; md]{
+<Dresse>un tableau {
+	<mc>	<mc>	<mc>	<mc>
+	Sous-total	-	-	Reste
+	Janvier	Février	Mars	Avril
+	[12]	[15]	[9]	[14]
+}
+```
+
+**Fusion horizontale implicite : la rangée courte.** Une rangée d'entête plus courte que le tableau, et qui ne se termine ni par un tiret ni par un deux-points, étend sa dernière cellule jusqu'au bord droit — un titre seul couvre toute la largeur :
+
+```docdg
+<Dresse>un tableau {
+	<mc>	<mg>	<md>
 	Bulletin du premier trimestre
 	Jour	Matière	Note
-	Lundi :	[Maths ; 15]
+	Lundi :	[Maths]	[15]
 	Moyenne :	[13,7]
 }
 ```
@@ -785,44 +885,46 @@ La première rangée est hors crochets : c'est l'entête, en gras, sans que le m
 | `bc` | `en bas au centre`  |
 | `bd` | `en bas à droite`   |
 
-La forme en toutes lettres n'est jamais moins correcte que le code à deux lettres — c'est un raccourci, pas une syntaxe distincte :
+Employé seul, sans piste vertical/horizontal explicite, `au centre` vaut `mc`, `à gauche` vaut `mg`, `à droite` vaut `md` — la forme en toutes lettres n'est jamais moins correcte que le code à deux lettres, c'est un raccourci, pas une syntaxe distincte : `<au milieu à gauche>` et `<mg>` sont la même piste.
 
-```docdg
-<Dresse>un tableau [au milieu au centre, au milieu à gauche, au milieu au centre] bordures{
-	Jour	Matière	Note
-	[Lundi ; Mathématiques ; 15]
-}
-```
-
-Le nombre de colonnes est celui de la rangée la plus large. S'il dépasse le nombre de codes annoncés, le dernier code vaut pour les colonnes suivantes ; une rangée plus large que le tableau reste une erreur signalée.
-
-**Options :**
+**Options, dans la description de la balise :**
 
 | **Option**              | **S'écrit**                          | **Défaut**    | **Description**                              |
-| ----------------------- | -------------------------------------- | ------------- | ---------------------------------------------- |
-| `[codes]`               | `[mc ; mc ; ...]`                     | `[mc ; mc ; ...]` | Placement des colonnes (formes longues admises : `[au centre ; en bas, à droite]`) |
+| ----------------------- | --------------------------------------- | ------------- | ---------------------------------------------- |
 | Couleur de la bordure    | `une bordure <couleur>`               | `gris`        | Couleur des bordures                            |
 | Couleur des cellules     | `texte <couleur>`, `fond <couleur>`   | -             | Couleur du texte et du fond des cellules        |
 | Couleur des entêtes      | `des entêtes en <couleur texte> sur fond <couleur fond>` | -   | Couleur de toutes les cellules d'entête         |
-| Écart entre cellules     | `écart de <N>mm`                      | `0mm`         | Espacement entre cellules                       |
+| Écart entre cellules     | `écart de <N> mm`                     | `0 mm`        | Espacement entre cellules                       |
 | Coupure entre pages      | `sécable` / `insécable`               | `insécable`   | Autorise le tableau à se poursuivre d'une page à l'autre ; la rangée d'entête se répète en tête de chaque fragment |
 
-Même convention que pour `<Affiche>un cadre` : `texte <couleur>` / `fond <couleur>`, chaque partie facultative. Les couleurs d'entête habillent toutes les cellules d'entête, la rangée du haut comme la colonne de gauche.
+Mêmes conventions que pour `<Affiche>un cadre` : `texte <couleur>` / `fond <couleur>`, chaque partie facultative.
 
 **Exemple complet :**
 
 ```docdg
-<Dresse un tableau [mc ; mg ; mc] avec un écart de 3 mm,
+<Dresse un tableau avec un écart de 3 mm,
   une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine>{
+	<mc>	<mg>	<mc>
 	Jour	Matière	Note
-	Lundi :	[Mathématiques ; 15]
-	Mardi :	[Français ; 12]
+	Lundi :	[Mathématiques]	[15]
+	Mardi :	[Français]	[12]
+}
+```
+
+**Boucles et variables dans une cellule.** Une cellule accepte tout ce qu'accepte le corps du document, `#variable` et boucle `pour` comprises — un tableau peut donc se construire depuis un conteneur :
+
+```docdg
+<Dresse>un tableau {
+	<mg>	<md>
+	Jour	Note
+	pour j dans {Lundi ; Mardi ; Mercredi} {
+		[#j]	[#{tirage(0;20)}]
+	}
 }
 ```
 
 Pour écrire des crochets littéraux dans une cellule, les protéger par des dollars : `$[AB]$`.
 
-> **Documents écrits avant la grammaire des crochets.** Un tableau qui ne contient aucun crochet conserve exactement l'ancienne sémantique : les tabulations séparent les cellules, `entête` met la première rangée en gras, `<2 colonnes mc>` et `<2 lignes mc>` déclarent les fusions, un point seul marque une cellule absorbée. Aucun document existant ne bouge. La grammaire des crochets est la seule enseignée depuis.
 
 ### **3️⃣ Dénombrement, arithmétique, complexes**
 
@@ -1015,7 +1117,7 @@ poires
 <gras>{cerises}
 }
 
-<Dresse>une liste numérotée Rouge 14pt{
+<Dresse>une liste numérotée Rouge 14 pt{
 Premier point
 Deuxième point
 }
@@ -1023,133 +1125,70 @@ Deuxième point
 
 ### **5️⃣ `<Affiche>une grille` — Mise en page avancée**
 
-**Syntaxe :**
+**La grille s'ouvre par son plan** : une ligne de largeurs au-dessus des colonnes, puis une ligne par rangée, qui commence par sa hauteur et nomme ses zones. Le plan se lit à l'œil, comme un croquis tracé à la main, et une ligne vide le sépare des zones :
 
 ```docdg
-<Affiche>une grille avec les zones:[DISPOSITION], les colonnes: ..., les lignes: ... et OPTIONS{
-  [NOM PROPRIÉTÉS]{CONTENU}
+<Affiche>une grille avec un écart de 3 mm {
+	<24 mm>	<max>	<20 mm>
+	<min>	titre	titre	date
+	<10 cm>	consigne	corps	corps
+	<min>	logo	corps	corps
+
+	titre : en haut à gauche, avec un fond bleu Alice et une bordure bleu marine {
+		<bleu marine gras 14 pt>Contrôle de mathématiques
+	}
+	date : en haut à droite {
+		Le 12 mai
+	}
+	consigne : au centre, avec une bordure bleue et un fond gris perle {
+		Calculatrice autorisée.
+	}
+	logo : au centre {
+		<Insère l'image IMAGES/oiseau.png avec une largeur de 20 mm>
+	}
+	corps : au centre {
+		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
+	}
 }
 ```
 
-**Propriétés :**
+**Les pistes**, entre chevrons, disent la place :
 
+| S'écrit   | Signifie                                                    |
+| --------- | ----------------------------------------------------------- |
+| `<min>`   | au plus juste : la zone prend ce qu'exige son contenu        |
+| `<max>`   | le reste de la place, partagé à parts égales entre les `max` |
+| `<24 mm>` | une largeur ou une hauteur fixée (`mm`, `cm`)                |
+
+La hauteur d'une rangée est facultative : sans elle, la rangée vaut `<min>`.
+
+**Un nom de zone par case, un point pour une case vide.** Une zone qui occupe plusieurs cases répète son nom — « titre » sur deux colonnes, « corps » sur un carré de deux colonnes et deux rangées. Le point laisse une case vide :
+
+```docdg
+<Affiche>une grille avec un écart de 4 mm {
+	<max>	<10 mm>	<max>
+	<min>	nom	.	date
+	<15 cm>	corps	corps	corps
+
+	nom : à gauche { Nom : }
+	date : à droite { Date : }
+	corps : au centre { ... }
+}
+```
+
+**Le plan se vérifie.** Une zone doit dessiner un rectangle plein ; une zone décrite mais absente du plan, ou annoncée dans le plan mais jamais décrite, est signalée à l'endroit même de la grille.
+
+**Chaque zone se décrit ensuite** : son nom, un deux-points, son **placement** (`au centre`, `en haut à gauche`, ou le code à deux lettres `mc`, `hg`…), puis ses **attributs** après `avec`, séparés par des virgules, `et` avant le dernier — la même convention que `<Affiche>un cadre` et `<Dresse>un tableau` (règle n°11). Employé seul, `au centre` vaut `mc`, `à gauche` vaut `mg`, `à droite` vaut `md`. Une zone peut ainsi surcharger `une bordure <couleur>` et ajouter `un texte <couleur>, un fond <couleur>`.
+
+**Options de la balise :**
 
 | **Propriété**            | **S'écrit**                          | **Défaut** | **Description**                                                  |
 | ------------------------- | --------------------------------------| ---------- | ------------------------------------------------------------------|
-| Zones                      | `zones:[DISPOSITION]` ou bloc visuel  | -          | Disposition des zones (technique — voir plus bas)                  |
-| Colonnes                   | `colonnes: ...`                      | `max`      | Largeur de chaque colonne, séparées par des virgules : `min`, `max`, ou valeur fixe (`3cm`) |
-| Lignes                     | `lignes: ...`                        | `max`      | Hauteur de chaque ligne, séparées par des virgules : `min`, `max`, ou valeur fixe (`15cm`) |
-| Bordures                   | `bordures` (flag, sans valeur)       | absentes   | Affiche une bordure autour de chaque zone                          |
+| Bordures                   | `bordures` (sans valeur)             | absentes   | Affiche une bordure autour de chaque zone                          |
 | Couleur de la bordure      | `une bordure <couleur>`              | `gris`     | Couleur des bordures (par défaut, surchargeable par zone)          |
 | Couleur du contenu         | `texte <couleur>`, `fond <couleur>`  | `texte noir, fond blanc` | Couleur du contenu (par défaut, surchargeable par zone) |
-| Écart                      | `écart de <N>mm`                     | `0mm`      | Espacement entre zones                                              |
-| Largeur totale             | `large de <N>mm`                     | auto       | Largeur totale                                                     |
-| Hauteur totale             | `haut de <N>mm`                      | auto       | Hauteur totale                                                     |
+| Écart                      | `écart de <N> mm`                    | `3 mm`     | Espacement entre zones                                              |
 
-
-`zones:`, `colonnes:` et `lignes:` décrivent le plan de la grille (un peu comme des coordonnées) : ce sont des données de structure, pas des réglages de style, elles restent donc en clé:valeur. `colonnes:` et `lignes:` mélangent des mots-clés (`min`, `max`) et des longueurs (`3cm`) — ce n'est pas une liste purement numérique, donc la règle n°8 impose la **virgule** comme séparateur, et les crochets ne sont pas nécessaires : `colonnes: 3cm, auto`, `lignes: min, 15cm, min`. Les crochets `[...]` restent réservés à `zones:`, seule donnée réellement bidimensionnelle de la grille.
-
-Chaque zone s'écrit `[nom en mc avec attributs]` : le **placement** s'introduit par `en` (`en mc`, `en j` pour justifié, ou en toutes lettres : `en haut, à gauche`), puis les **attributs** par `avec`, séparés par des virgules, `et` avant le dernier — la même convention que `<Affiche>un cadre` et `<Dresse>un tableau` (règle n°11). Une zone peut ainsi surcharger `une bordure <couleur>` et ajouter `un texte <couleur>, un fond <couleur>`.
-
-**Exemple simple :**
-
-```docdg
-<Affiche>une grille avec les zones:["titre titre logo", "info info logo", "corps corps corps"], des bordures et un écart de 5 mm{
-  [titre en mc avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 2mm]{
-    <bleu marine gras 20pt au centre>Devoir de Maths
-  }
-  [logo en mc]{
-    <Insère l'image IMAGES/logo.png avec une largeur de 40 mm>
-  }
-  [info]{
-    Nom: _______ Prénom: _______
-  }
-  [corps en j]{
-    <section>Exercice 1
-    Résoudre $x^2 = 4$.
-  }
-}
-```
-
-**Exemple avec largeurs et hauteurs fixées (`min` / `max` / valeur fixe), et `zones:` en bloc visuel :**
-
-Pour une disposition à plat, `zones:` accepte un **bloc indenté**, sans guillemets ni virgules ni crochets : chaque ligne du bloc est une ligne de la grille, chaque mot séparé par des espaces est une zone — la disposition se lit à l'œil, exactement comme un plan tracé à la main.
-
-```docdg
-<Affiche>une grille avec les zones:
-          haut haut
-          nav  corps
-          bas  bas
-        les colonnes: 3cm, max
-        les lignes: min, 15cm, min
-        une hauteur de 20cm et un écart de 5mm{
-
-  [haut]{
-    % Contenu du header (prendra sa hauteur minimale : min)
-  }
-
-  [nav]{
-    % Menu / Navigation (largeur fixe : 3cm)
-  }
-
-  [corps]{
-    % Zone principale (prend tout l'espace restant : max)
-  }
-
-  [bas]{
-    % Pied de page
-  }
-}
-```
-
-La forme équivalente en tableau de chaînes reste valable, utile quand la grille est écrite en une seule ligne plutôt qu'en bloc :
-
-```docdg
-<Affiche>une grille avec les zones:["haut haut", "nav corps", "bas bas"], les colonnes: 3cm, max et les lignes: min, 15cm, min{ ... }
-```
-
-### **5️⃣bis La page de titre**
-
-Il n'y a **pas de balise spéciale** : une couverture se compose avec les outils de tout le monde — des styles nommés, une image, un saut de page. C'est le même geste qu'ailleurs, et il compose aussi bien la première de couverture d'un essai que la page de titre d'une thèse :
-
-```docdg
-soit nature = <petites capitales grand au centre>
-soit ouvrage = <gras 24pt au centre>
-soit mention = <14pt au centre>
-
-<au centre>{<Insère l'image IMAGES/institut.svg avec une largeur de 30 mm>}
-
-<nature>{Thèse de doctorat}
-
-<mention>{Université de Vaubertier}
-
-<ouvrage>{Points fixes attractifs et vitesse de convergence}
-
-<mention>{Théodore MARSAN}
-
-<mention>{septembre 2026}
-
-<page suivante>
-```
-
-**Entre accolades, une ligne est une ligne.** Hors des accolades, la prose se
-recompose : des lignes qui se suivent font un paragraphe. Entre les accolades
-d'un style, c'est l'auteur qui dispose, et docdg compose tel quel — comme dans
-tous les corps accolés de docdg, du tableau à la frise. Un jury, une adresse,
-une épigraphe s'écrivent donc d'un seul style, sans le répéter ni lui inventer
-un nom ; pour plus d'air, on saute une ligne.
-
-```docdg
-<12pt italique au centre>{
-Devant le jury composé de :
-madame le professeur Hélène VIRECOURT, présidente
-monsieur le professeur Bastien QUÉRAND, directeur de thèse
-}
-```
-
-Le `<page suivante>` final referme la couverture ; s'il précède une division majeure — qui ouvre sa propre page —, les deux sauts n'en font qu'un, et aucune page blanche ne s'intercale. Les cinq documents de la série `publication` composent chacun la leur : l'article sobre, l'exposé, la thèse à emblème, l'essai.
-
----
 
 ### **6️⃣ Divisions — Structuration du document**
 
@@ -1201,6 +1240,52 @@ soit h1 = <bleu gras section num>
 ```
 
 Une division se déclare aussi bien par un style nommé — `soit p = <bleu nuit partie>` — que par son mot nu, comme ci-dessus.
+
+---
+
+## **🧱 La mise en colonnes**
+
+Toutes les pages n'ont pas besoin d'être en colonnes, et c'est pourquoi la colonne n'est pas un réglage du document : **un passage se compose en colonnes, entre deux accolades**, et le reste garde la pleine largeur.
+
+```docdg
+<Compose>sur deux colonnes {
+	La colonne étroite est la respiration de la page savante : l'œil y saisit
+	la ligne entière sans balayer, et la césure y trouve son plein emploi.
+
+	Les colonnes s'équilibrent d'elles-mêmes : on ne dit pas où couper, on dit
+	combien de colonnes, et le moteur répartit.
+}
+```
+
+**D'une à cinq colonnes**, en toutes lettres ou en chiffres — `sur deux colonnes` ou `sur 2 colonnes`, au choix. Deux pour un article, trois pour un lexique ou une liste de mots courts.
+
+Le corps est du docdg ordinaire : des paragraphes, des listes, des cadres, des formules. **Ce qui suit l'accolade fermante retrouve la pleine largeur** — un tableau large, une frise, une figure se posent donc entre deux passages en colonnes, sans syntaxe d'échappement.
+
+**L'espacement se règle dans le bloc `document {…}`**, et nulle part ailleurs : `espacements: {haut;droite;bas;gauche}` donne le blanc laissé au bord de la page, en millimètres. Ce blanc vaut pour le bord d'une colonne comme pour le bord de la page, si bien que **la gouttière entre deux colonnes est la somme de l'espacement droit et de l'espacement gauche**. Il n'y a pas de mot pour la gouttière — elle se déduit. Sans espacement, les colonnes se touchent ; avec deux valeurs différentes, on obtient la marge d'un cahier, large à gauche et presque nulle à droite :
+
+```docdg
+document {
+	orientation: paysage;
+	marges: {15;5;15;0};
+	espacements: {0;0;0;25};
+}
+```
+
+**Un filet se demande** et se décrit comme tous les traits de docdg — une couleur, un dessin, une épaisseur :
+
+```docdg
+<Compose>sur trois colonnes avec un filet gris clair {
+	Trois colonnes conviennent à un lexique : la ligne est brève, l'œil en
+	saisit plusieurs d'un seul coup.
+
+	Le filet n'est jamais obligatoire — l'écart suffit le plus souvent —, mais
+	il rend service quand la gouttière est étroite.
+}
+```
+
+**Un passage plus haut qu'une page se poursuit sur la suivante**, en colonnes de même, sans qu'on ait rien à déclarer : à la différence du cadre, qui est insécable tant qu'on ne le déclare pas sécable, le passage en colonnes se coupe toujours — un texte courant n'a aucune raison de rester d'un seul tenant.
+
+`basique3` montre la forme, `publication3` la démonstration typographique : un passage de quatre paragraphes qui traverse une page, filet compris. Une colonne accueille tout ce qu'accueille la page, [réglure Seyès comprise](#-lécriture-en-réglure).
 
 ---
 
@@ -1363,12 +1448,12 @@ Soit A le point de coordonnées (2 ; -1,5).
 Soit B le point de coordonnées (-4,1 ; 3,4).
 ```
 
-**L'ordre suit l'usage du supérieur : le nom, puis la nature.** « Soit A le point de coordonnées (2 ; 3) », et non « Soit le point A(2 ; 3) ». Le pluriel accorde l'impératif — « Soient A et B les points de coordonnées … ». Chaque déclaration est une **phrase**, non une formule affichée :
+**L'ordre suit l'usage du supérieur : le nom, puis la nature.** « Soit A le point de coordonnées (2 ; 3) », et non « Soit le point A(2 ; 3) ». Le pluriel accorde l'impératif, à la balise comme dans la phrase rendue — `<Soient>les points A et B de coordonnées respectives …` donne « Soient A et B les points de coordonnées … ». Chaque déclaration est une **phrase**, non une formule affichée :
 
 | Déclaration | Rendu |
 |---|---|
 | `<Soit>une fonction f(x) = x^2 - 2` | Soit *f* la fonction définie par *f*(*x*) = *x*² − 2. |
-| `<Soit>les fonctions f(x) = x^2 et g(x) = -x^2` | Soient *f* et *g* les fonctions définies par … |
+| `<Soient>les fonctions f(x) = x^2 et g(x) = -x^2` | Soient *f* et *g* les fonctions définies par … |
 | `<Soit>un vecteur u(3;-2)` | Soit *u⃗* le vecteur de coordonnées (3 ; −2). |
 | `<Soit>la matrice M{…}` | Soit *M* la matrice définie par : puis la matrice hors texte |
 | `<Soit>le système s{…}` | Soit (*s*) le système : puis le système hors texte |
@@ -1380,16 +1465,16 @@ Les points ainsi déclarés peuvent ensuite être repris par `<Trace>` (voir plu
 **La factorisation plurielle, sous quatre formes équivalentes.** Une seule phrase déclare plusieurs points ; l'article pluriel (`les`, `des`) ou un **nombre** ouvre la liste, et les coordonnées se donnent soit accolées à chaque nom, soit regroupées en fin de phrase par la **distribution respective** — la tournure des énoncés de collège, de lycée et du supérieur (« de coordonnées respectives », « de rayons respectifs », « de probabilités respectives ») :
 
 ```docdg
-<Soit>les points A(1;2), B(-1;2) et C(-1;-2)
-<Soit>3 points A(1;2), B(-1;2) et C(-1;-2)
-<Soit>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
-<Soit>3 points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
+<Soient>les points A(1;2), B(-1;2) et C(-1;-2)
+<Soient>3 points A(1;2), B(-1;2) et C(-1;-2)
+<Soient>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
+<Soient>3 points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
 ```
 
 Les quatre phrases posent exactement les trois mêmes points. Deux garde-fous, dits en français : le **compte** annoncé par le nombre doit correspondre au nombre de points décrits, et la distribution respective exige **autant de couples de coordonnées que de noms**, appariés dans l'ordre. La factorisation vaut aussi pour les **fonctions** — une seule phrase les pose toutes :
 
 ```docdg
-<Soit>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
+<Soient>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
 ```
 
 et chacune est enregistrée comme si elle avait été posée seule (tableaux de variations, dérivées, zéros, tracé : tout suit). Les coefficients décimaux s'écrivent à la française (`-4,9t^2 + 20t`) : la virgule décimale, encadrée de chiffres, n'est jamais confondue avec la virgule qui sépare les fonctions. Elle vaut de même pour les **phrases calculantes** — `<Calcule>la dérivée de f, g et h` vaut trois calculs, un par fonction, et de même pour la dérivée seconde, la primitive, les zéros... — et pour le **tracé** : `<Représente>graphiquement les fonctions f, g et h pour x dans [-2 ; 2] et y dans [-3 ; 3]` dessine les trois courbes dans le même repère, chacune avec sa couleur et sa légende. La distribution respective sert aussi au repère (`avec des unités respectives de 2 cm et 0,5 cm`, voir `<Trace>`) ; son extension aux autres objets (sphères, événements) suivra au fil des versions.
@@ -1443,7 +1528,7 @@ en clé:valeur (le seul réglage technique restant à ce niveau) — `rotation:N
 
 ```docdg
 <Trace>le cercle O, de rayon 3 cm                 % rayon en cm
-<Soit>les points A(0;0) et B(3;0)
+<Soient>les points A(0;0) et B(3;0)
 <Trace>le cercle O, de rayon AB                  % rayon = longueur du segment AB
 <Trace>le cercle O, de diamètre 6 cm             % via le diamètre plutôt que le rayon
 <Trace>le cercle, de centre O et de rayon 4 cm   % centre nommé, sans coordonnées
@@ -1615,7 +1700,7 @@ Pour construire une figure complète dans une partie (ou un cadre) — plusieurs
 **Le repère est un objet : il accueille des courbes de fonctions.** Une fonction posée par `<Soit>` se trace *dans* un repère qui contient aussi des points, des droites ou des vecteurs — la courbe est un habitant du repère parmi les autres :
 
 ```docdg
-<Soit>les fonctions f(x) = x^2 - 2 et g(x) = -x^2 + 3
+<Soient>les fonctions f(x) = x^2 - 2 et g(x) = -x^2 + 3
 
 <Représente>graphiquement un repère où l'abscisse appartient à [-3 ; 3] et l'ordonnée à [-4 ; 4]{
     les courbes des fonctions f et g
@@ -1740,15 +1825,15 @@ La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / 
 
 **Filet de sécurité — teinte absente de la palette française :** les 148 noms français couvrent l'intégralité de la palette CSS usuelle ; il ne devrait donc jamais être nécessaire d'en sortir. Aucun exemple de ce guide n'utilise de nom anglais — docdg se lit et s'écrit intégralement en français.
 
-**Tailles :** `12pt`, `14pt`
+**Tailles :** `12 pt`, `14 pt`
 
-**Polices :** `<ARIAL>`, `<TIMES NEW ROMAN 12pt>`
+**Polices :** `<ARIAL>`, `<TIMES NEW ROMAN 12 pt>` — Georgia, Times New Roman et Arial voyagent avec le document et s'affichent à l'identique sur toutes les machines ; tout autre nom est cherché sur le système qui compose.
 
 ### **📏 Alignements**
 
 **Horizontal :** `à gauche`, `au centre`, `à droite`, `justifié`
 
-**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#2-dresse-un-tableau--tableaux-simplifiés))
+**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#2-dresseun-tableau--tableaux-simplifiés))
 
 ### **📄 Tabulations et sauts**
 
@@ -1769,10 +1854,10 @@ comme il dit le texte.
 x<exposant>{2}      % x² (décalage par défaut de la classe)
 y<indice>{1}        % y₁
 H<indice>{2}O       % H₂O
-x<exposant 4mm>{2}  % x² avec exposant relevé de 4 mm (mesure explicite)
+x<exposant 4 mm>{2}  % x² avec exposant relevé de 4 mm (mesure explicite)
 ```
 
-> **Nombre collé ou séparé ?** Deux familles, deux conventions, une seule logique. Quand le nombre **compte des objets** (une multiplicité), il est **collé** au mot : `<4 colonnes>` (voir « Fusion de cellules »). Quand le nombre est une **mesure** avec une unité (mm), il est **séparé** et porte son unité : `<exposant 4mm>`. Sans nombre, `<exposant>` et `<indice>` prennent le décalage par défaut fixé par l'option de classe `décalage` — c'est la forme courante, le nombre n'étant utile que pour un ajustement ponctuel.
+> **Nombre collé ou séparé ?** Deux familles, deux conventions, une seule logique. Quand le nombre **compte des objets** (une multiplicité), il est **collé** au mot : `<4 colonnes>` (voir « Fusion de cellules »). Quand le nombre est une **mesure** avec une unité (mm), il est **séparé** et porte son unité : `<exposant 4 mm>`. Sans nombre, `<exposant>` et `<indice>` prennent le décalage par défaut fixé par l'option de classe `décalage` — c'est la forme courante, le nombre n'étant utile que pour un ajustement ponctuel.
 
 ### **📎 `<note>` — Notes de bas de page**
 
@@ -1805,17 +1890,17 @@ Trois points d'usage, hérités de la typographie française :
 **Mauvaise et bonne pratiques**
 ```docdg
 -- ❌ MAUVAIS : "Soit" en majuscule pour une assignation
-Soit titre = <gras 18pt au centre>  % → Erreur : ce n'est pas une action-phrase !
+Soit titre = <gras 18 pt au centre>  % → Erreur : ce n'est pas une action-phrase !
 
 -- ✅ BON : majuscule uniquement pour l'action
-soit titre = <gras 18pt au centre>
+soit titre = <gras 18 pt au centre>
 <Soit>un point A(2;3)  % → Correct : action-phrase
 ```
 
 **Définir un style :**
 
 ```docdg
-soit titre = <bleu marine gras 18pt au centre>
+soit titre = <bleu marine gras 18 pt au centre>
 soit important = <gras souligné rouge>
 ```
 
@@ -1841,7 +1926,7 @@ soit carre{x} = #{x^2}
 **Exemple complet**
 ```docdg
 -- Assignation silencieuse (mot-clé technique)
-soit titre = <gras 18pt au centre>
+soit titre = <gras 18 pt au centre>
 soit pi = 3,14159
 soit bonjour{nom} = Bonjour #nom !
 
@@ -2539,7 +2624,7 @@ Les génératrices du cône sont les tangentes exactes à l'ellipse de base depu
 Les points déclarés se placent dans un repère (O ; x, y, z) gradué, avec le chemin de coordonnées en pointillés rouges depuis l'origine — le dessin canonique de Terminale :
 
 ```docdg
-<Soit>les points A(1;2;3) et B(3;1;2)
+<Soient>les points A(1;2;3) et B(3;1;2)
 <Trace>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
 ```
 
@@ -2733,7 +2818,91 @@ citation ne se coupe pas en morceaux.
 
 ---
 
-<a id="lecriture-sur-des-lignes"></a>
+<a id="lecriture-en-reglure"></a>
+
+## **✒️ L'écriture en réglure**
+
+`<Écris>en réglure Seyès { … }` pose une **vraie réglure Seyès** — traits forts au pas de l'interligne, trois interlignes fins entre eux, carreaux verticaux, marge rouge — et y écrit **en cursive**. C'est la page de cahier de l'école élémentaire, au millimètre, à l'écran comme au PDF.
+
+```docdg
+<Écris>en réglure Seyès{
+	Léa mange une pomme, Lili un abricot et Murielle des fraises des bois.
+	L'été est chaud, l'hiver est froid — mais l'automne est doux.
+
+}
+```
+
+**La réglure se nomme.** `en réglure Seyès` donne les grands carreaux de l'école élémentaire, avec leurs interlignes fins et leur marge rouge. C'est la désignation du papier réglé, et c'est la seule annonce que la balise accepte.
+
+```docdg
+<Écris>en réglure Seyès{
+	Pose et effectue :
+			47 × 6
+
+}
+```
+
+**Une ligne de source est une ligne réglée** : ce qui est écrit sur une ligne s'écrit sur une ligne, et **une ligne vide est une ligne à remplir** — c'est ainsi qu'on prépare un modèle à recopier. **Une tabulation vaut un carreau** : trois tabulations rentrent de trois carreaux, ce qui pose les opérations en colonne sans compter les espaces.
+
+Trois clés du bloc `document {…}` règlent le cahier : `seyès` nomme la cursive (seule la **Marelle** voyage avec le document ; une autre est cherchée sur le système ou lue dans un `.ttf` voisin), `hauteur` donne l'interligne en millimètres, `tabulation` la largeur du carreau. La taille de l'écriture s'en déduit : elle n'est pas à régler, elle est **imposée par la réglure**, montantes et jambages compris.
+
+**Un objet ne se pose pas sur le cahier.** Un tableau, une figure, une image, un calcul : ces balises sont refusées dans le corps du bloc, et le message le dit. Une page réglée est faite de lignes à écrire ; ce qui n'est pas de l'écriture se compose hors du bloc, où la pleine mesure lui est acquise.
+
+**Ce qui vit sur le cahier, ce sont les lignes, les styles et les mathématiques en ligne.** Un alignement (`<au centre>`), un style nommé (`<consigne>`), une mise en forme au fil de la ligne, et le mode mathématique entre `$` et `$` : une formule courte s'écrit sur la ligne réglée comme le reste.
+
+Une fraction écrite entre `$` et `$` se compose **en style de texte** : à la taille de la phrase, comme le ferait LaTeX. Le style d'affichage — numérateur et dénominateur pleine taille — est réservé aux formules détachées. Sur la réglure, elle **pose sa barre sur le trait**, numérateur au-dessus et dénominateur dans le haut du carreau d'en dessous, **sans décaler la ligne suivante** : aucune ligne n'est réservée sous elle, et tout ce qui suit reste sur les traits. Dans une opération, les signes `+` et `=` se posent sur la barre, et un entier ou une lettre voisins se tiennent sur la ligne, comme au cahier : `$2/5 + 4 = 22/5$`. Il en va de même d'un exposant, d'un indice, d'un radical ou d'une somme en ligne.
+
+```docdg
+soit consigne = <rouge gras>
+
+<Écris>en réglure Seyès{
+	<consigne>Le carré et le cube.
+	On écrit $x^2$ pour le carré de $x$, et $x^3$ pour son cube.
+	Pour $x = 3$ : $3^2 = 9$ et $3^3 = 27$.
+
+}
+```
+
+**La police, la graisse, l'italique et la couleur se disent dans l'annonce**, avec les mots de style ordinaires — la cursive du document est le défaut, et c'est ainsi qu'on écrit en script sur la réglure :
+
+```docdg
+<Écris>en réglure Seyès en ARIAL bleu nuit{
+	Pose et effectue :
+			47 × 6
+
+}
+```
+
+**La taille et l'interligne, en revanche, ne se règlent pas** : ils se déduisent des carreaux, sans quoi l'écriture quitterait les lignes. `14 pt` ou `grand` dans l'annonce sont refusés, et le message le dit. Pour écrire plus grand, c'est `hauteur` qu'on change dans le bloc `document {…}` — la réglure grandit, et l'écriture avec elle.
+
+**Un objet posé sur le cahier n'est pas écrit en cursive** : il reprend la police du document, comme partout ailleurs. Un tableau de variations reste un tableau de variations, sur la réglure comme en pleine page.
+
+**Une réglure ne se pose pas dans une autre.** Une page de cahier n'a qu'une réglure, et le moteur refuse l'imbrication en le disant. C'est **la composition qui porte la réglure**, jamais l'inverse.
+
+**Le cahier d'écolier, en paysage.** Une réglure posée dans une composition **remplit la composition entière** : la nappe réglée court sous toutes les colonnes, chacune avec sa marge rouge et ses carreaux, et le texte passe d'une colonne à la suivante sans quitter les lignes. C'est la double page du petit cahier — marge intérieure large, marge extérieure quasi nulle.
+
+```docdg
+document {
+	orientation: paysage;
+	marges: {15;5;15;0};
+	espacements: {0;0;0;25};
+}
+
+<Compose>sur deux colonnes {
+<Écris>en réglure Seyès{
+	Lundi 8 septembre
+
+	Mardi 9 septembre
+
+}
+}
+```
+
+La réglure doit être **le seul contenu de la composition**, sans rien avant ni après : une nappe réglée ne se partage pas avec des colonnes de texte imprimé. Un mélange est refusé, et le message le dit.
+
+Le nombre de carreaux et de lignes n'est jamais à déclarer : **il se déduit** de la disposition, des quatre marges, des quatre espacements et du nombre de colonnes. Le moteur pose le plus grand nombre entier de carreaux et de lignes qui tienne dans la place et laisse le reliquat en blanc : aucun carreau, aucune ligne n'est jamais tronqué, quel que soit le réglage. `docs/CAHIERS.md` donne la règle et les réglages exacts du cahier A4, du petit cahier 17 × 22 et du cahier d'écolier en paysage.
+
+`seyes1` montre les usages de classe — phrases modèles, opérations posées, un dessin à légender, une étude de fonction posée sur les lignes — et `seyes2` la tenue du texte long sur la réglure.
 
 ## **⚗️ La physique-chimie**
 
@@ -2768,7 +2937,7 @@ Le détail est donné dans les guides par niveau : [Collège](College.md),
 L'histoire entre en scène — et c'est une vraie frise, non une ligne du temps : un **bandeau** gradué, les **périodes dedans**, les **événements dehors** en cartouches reliés à leur date. Une ligne par événement : la date, deux-points, le titre, et, s'il éclaire, le détail **entre parenthèses** en fin de ligne.
 
 ```docdg
-<Construis>la frise chronologique du second XXe siècle {
+<Construis>la frise chronologique {
 09/11/1989 : Chute du mur de Berlin
 20/07/1969 : Premier pas sur la Lune (Neil Armstrong marche sur la Lune.)
 12/07/1998 : Victoire en Coupe du monde (La France remporte sa première étoile.)
@@ -2783,12 +2952,25 @@ Les cartouches **se rangent d'eux-mêmes dans l'ordre du temps**, quelle que soi
 
 La date se lit en `AAAA`, `MM/AAAA` ou `JJ/MM/AAAA` ; **l'année négative est admise** — l'Antiquité s'écrit `-52 : Alésia` — et `vers` dit l'incertitude des sources sans gêner le placement : la date s'imprime toujours telle qu'elle s'est écrite.
 
-**Ce qui suit « la frise chronologique » devient le titre**, sous la frise, avec l'article accordé à la préposition : `des grandes périodes` donne **Les grandes périodes**, `du Moyen Âge` donne **Le Moyen Âge**, `de la Révolution française` donne **La Révolution française**, `de l'Antiquité` donne **L'Antiquité**. Devant un nom propre, la préposition tombe et rien ne la remplace : `de Napoléon` donne **Napoléon**. La frise ne redit donc jamais qu'elle est une frise — vous l'aviez vue. Un long détail se replie de lui-même sur deux ou trois lignes courtes. La parenthèse s'apparie depuis la fin de la ligne : une parenthèse *dans* la description ne trompe pas la lecture, et une ligne entièrement parenthésée reste un titre.
+**La frise s'annonce « la frise chronologique » et rien d'autre** : la description ne porte aucun complément, et le moteur refuse celui qu'on lui donnerait. La frise ne porte donc pas de titre — celui qui en veut un l'écrit lui-même, au-dessus ou en dessous, comme tout autre titre du document, et le place où sa page le demande :
+
+```docdg
+soit h2 = <gras au centre>
+
+<h2>La Révolution française
+
+<Construis>la frise chronologique {
+14/07/1789 : Prise de la Bastille
+21/09/1792 : Proclamation de la République
+}
+```
+
+Un long détail se replie de lui-même sur deux ou trois lignes courtes. La parenthèse s'apparie depuis la fin de la ligne : une parenthèse *dans* la description ne trompe pas la lecture, et une ligne entièrement parenthésée reste un titre.
 
 **Une période est un événement qui dure.** Ses deux dates s'écrivent `de 1914 à 1918`, `1789 - 1799`, `1914 -- 1918` ou `1914 — 1918`, au choix — le tiret simple demande seulement de respirer, pour ne pas se confondre avec le signe d'une année négative —, et elle occupe **l'intérieur du bandeau**, avec son nom, ses bornes et sa description si la place le permet. Les périodes qui se suivent se touchent sans se gêner ; celles qui se chevauchent se partagent la hauteur du bandeau ; celles qui sont trop étroites pour se nommer dedans se nomment dans un cartouche, dehors :
 
 ```docdg
-<Construis>la frise chronologique du premier XXe siècle {
+<Construis>la frise chronologique {
 de 1914 à 1918 : Grande Guerre (Le premier conflit mondial.)
 1936 -- 1938 : Front populaire
 11/11/1918 : Armistice
@@ -2799,7 +2981,7 @@ de 1914 à 1918 : Grande Guerre (Le premier conflit mondial.)
 **La frise multilinéaire** range ses événements par bandes nommées, qui partagent la même échelle du temps — ce qui met la simultanéité sous les yeux, et permet de confronter deux découpages concurrents :
 
 ```docdg
-<Construis>la frise chronologique du premier XXe siècle {
+<Construis>la frise chronologique {
 politique {
 de 1914 à 1918 : Grande Guerre
 06/02/1934 : Crise du 6 février
@@ -2919,26 +3101,30 @@ document {
 }
 
 % ===== Styles réutilisables =====
-soit titre = <bleu marine gras 18pt au centre>
-soit sous-titre = <bleu marine gras 14pt>
+soit titre = <bleu marine gras 18 pt au centre>
+soit sous-titre = <bleu marine gras 14 pt>
 soit exercice = <bleu marine gras sous-section>
-soit cadre-ex = <cadre avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 4mm>
+soit cadre-ex = <cadre avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 4 mm>
 soit important = <gras rouge souligné>
 soit indication = <italique bleu>
 
 % ===== En-tête =====
-<Affiche>une grille avec les zones:["titre titre logo", "info info logo"] et un écart de 5 mm{
-  [titre en mc]{
-    <titre>Fiche d'Exercices - Équations et Fonctions
-  }
-  [logo en mc]{
-    <Insère l'image IMAGES/logo.png avec une largeur de 40 mm>
-  }
-  [info]{
-    Nom: _______________ Prénom: _______________
+<Affiche>une grille avec un écart de 5 mm{
+	<max>	<max>	<50 mm>
+	<min>	titre	titre	logo
+	<min>	info	info	logo
 
-    Classe: _______ Date: ___________
-  }
+	titre : au centre {
+		<titre>Fiche d'Exercices - Équations et Fonctions
+	}
+	logo : au centre {
+		<Insère l'image IMAGES/logo.png avec une largeur de 40 mm>
+	}
+	info : à gauche {
+		Nom: _______________ Prénom: _______________
+
+		Classe: _______ Date: ___________
+	}
 }
 
 % ===== Table des matières =====
@@ -3158,7 +3344,7 @@ Toutes s'écrivent dans le bloc `document { }` en tête du fichier — voir [Le 
 | `orientation`| `portrait`/`paysage` | `portrait` | Orientation de la page       |
 | `marges`     | nombre ou 4 valeurs | `20`       | Marges externes (mm)           |
 | `espacements`| nombre ou 4 valeurs | `2`        | Espacements internes (mm)      |
-| `police`     | texte              | *(système)* | Police du texte                |
+| `script`     | texte              | `Georgia`   | Police du texte imprimé        |
 | `taille`     | nombre             | `11`        | Taille de base (pt)            |
 | `interligne` | nombre             | `1,3`       | Coefficient d'interligne       |
 | `tabulation` | nombre             | `8`         | Largeur tabulation (mm) — le carreau de la Seyès |
@@ -3281,7 +3467,7 @@ tout objet, article compris.
 
 ### Les verbes non encore illustrés
 
-Sept verbes du moteur ne paraissaient nulle part dans ce manuel. Ils sont
+Six verbes du moteur ne paraissaient nulle part dans ce manuel. Ils sont
 pourtant éprouvés par les tests et employés dans les exemples livrés :
 
 | verbe | ce qu'il fait | forme |
@@ -3292,7 +3478,6 @@ pourtant éprouvés par les tests et employés dans les exemples livrés :
 | `<Exprime>` | met en formule un énoncé en prose | `<Exprime>le programme de calcul en fonction de x {…}` |
 | `<Orthonormalise>` | applique le procédé de Gram-Schmidt | `<Orthonormalise>la famille u et v` |
 | `<Trigonalise>` | réduit une matrice à sa forme triangulaire | `<Trigonalise>D` |
-| `<Compose>` | compose une page entière | `<Compose>la page de titre {…}` |
 
 ### Les tournures du supérieur
 
@@ -3303,7 +3488,7 @@ tableau de variations.
 ### La factorisation des points
 
 Les points se regroupent sous un article pluriel :
-`<Soit>les points A(2;3) et B(-1;4)` — la forme « un point... et un
+`<Soient>les points A(2;3) et B(-1;4)` — la forme « un point... et un
 point... » est refusée avec un rappel de la règle.
 
 ### Les bornes naturelles
@@ -3329,13 +3514,19 @@ paragraphe s'aligne par `<à gauche>`, `<au centre>`, `<à droite>`.
 
 ### Les zones de grille
 
-Le plan `zones:["titre titre logo", "corps corps logo"]` nomme les
-zones ; chaque zone s'écrit `[nom, propriétés]{contenu}` ou
-`[nom : propriétés]{contenu}`, les propriétés en toutes lettres :
+Le plan se dessine dans le corps de la grille : une ligne de largeurs
+au-dessus des colonnes, puis une ligne par rangée qui commence par sa
+hauteur et nomme ses zones. Chaque zone se décrit ensuite par
+`nom : placement, avec propriétés {contenu}`, les propriétés en toutes
+lettres :
 
 ```
-[titre : en haut, à gauche, une bordure bleu marine, un fond bleu Alice]{ ... }
-[corps en mc]{ ... }
+<max>	<max>	<40 mm>
+<min>	titre	titre	logo
+<15 cm>	corps	corps	logo
+
+titre : en haut à gauche, avec une bordure bleu marine et un fond bleu Alice { ... }
+corps : au centre { ... }
 ```
 
 Au niveau de la grille, `bordures`, `une bordure <couleur>`,

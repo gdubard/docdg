@@ -19,6 +19,7 @@ soit h2 = <bleu italique sous-section>
 
 <Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k^2 = (n(n+1)(2n+1))/6$
 
+
 <Montre>par récurrence que pour tout entier $n$, $somme(k=0;n) k^3 = (n^2(n+1)^2)/4$
 
 	Une propriété universelle se traite de même, par forme canonique :
@@ -47,7 +48,6 @@ soit h2 = <bleu italique sous-section>
 
 <Montre>que dans un groupe de $13$ personnes, deux au moins sont nées le même mois
 
-<page suivante>
 <Montre>que max(a,b) = (a+b+|a-b|)/2
 
 <Montre>que toute suite croissante et majorée converge vers la borne supérieure de ses termes

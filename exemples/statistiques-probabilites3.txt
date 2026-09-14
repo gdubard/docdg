@@ -101,12 +101,13 @@ $répartition de(X; x) = PP(X <= x)$ et, pour une loi continue,
 $répartition de(X; x) = intégrale(t=-infini;x) densité de(X; t)$.
 
 <h2>Espérances et écarts types, en tableau
-<Dresse>un tableau [ml, mc, mc] avec une bordure bleu marine {
+<Dresse>un tableau avec une bordure bleu marine {
+	<mc>	<mc>	<mc>
 	Loi	Espérance	Écart-type
-	[binomiale(n, p) ; $n p$ ; $racine(n p (1-p))$]
-	[poisson(lambda) ; $lambda$ ; $racine(lambda)$]
-	[exponentielle(lambda) ; $1/lambda$ ; $1/lambda$]
-	[uniforme(a, b) ; $(a+b)/2$ ; $(b-a)/racine(12)$]
+	[binomiale(n, p)]	[$n p$]	[$racine(n p (1-p))$]
+	[poisson(lambda)]	[$lambda$]	[$racine(lambda)$]
+	[exponentielle(lambda)]	[$1/lambda$]	[$1/lambda$]
+	[uniforme(a, b)]	[$(a+b)/2$]	[$(b-a)/racine(12)$]
 }
 
 <h2>Échantillonnage et concentration

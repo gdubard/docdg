@@ -8,13 +8,16 @@ document {
 
 soit titre = <bleu nuit gras grand au centre>
 soit h1 = <bleu nuit gras section num>
+soit h2 = <gras au centre>
 
 <titre>La frise chronologique dans le supérieur
 
 <h1>Les échelles du temps
 	Braudel distingue trois temps : celui, presque immobile, des structures ; celui, cyclique, des conjonctures ; celui, bref, de l'événement. Trois bandes sur une même échelle donnent à voir ce que chacune retient — et ce qu'elle laisse échapper.
 
-<Construis>la frise chronologique des trois temps de Braudel {
+<h2>Les trois temps de Braudel
+
+<Construis>la frise chronologique {
 	longue durée {
 		de 1450 à 1850 : Économie-monde européenne
 		de 1500 à 1800 : Régime démographique ancien (Fortes mortalités, natalité élevée.)
@@ -34,7 +37,9 @@ soit h1 = <bleu nuit gras section num>
 <h1>Deux découpages en regard
 	Le découpage scolaire fait commencer l'époque contemporaine en 1789 et le XXe siècle en 1901. Hobsbawm propose tout autre chose : un long XIXe siècle qui court de la Révolution à Sarajevo, un court XXe siècle qui va de Sarajevo à la chute de l'URSS. Poser les deux découpages l'un sous l'autre, c'est rendre discutable ce que chacun tient pour évident.
 
-<Construis>la frise chronologique de deux périodisations concurrentes {
+<h2>Deux périodisations concurrentes
+
+<Construis>la frise chronologique {
 	découpage scolaire {
 		de 1789 à 1900 : XIXe siècle
 		de 1901 à 2000 : XXe siècle

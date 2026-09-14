@@ -1,6 +1,6 @@
 document {
 	orientation: portrait;
-	marges: 14;
+	marges: 12;
 	taille: 11;
 	interligne: 1,2;
 	niveau: master 1;
@@ -58,7 +58,6 @@ soit correction = <fond gris clair>
 
 <Énonce>le mécanisme de Langmuir-Hinshelwood
 <Énonce>la performance d'un catalyseur et les grandeurs de rotation
-
 
 <h2>Le contrôle dimensionnel
 

@@ -8,13 +8,16 @@ document {
 
 soit titre = <bleu nuit gras grand au centre>
 soit h1 = <bleu nuit gras section num>
+soit h2 = <gras au centre>
 
 <titre>La frise chronologique au lycée
 
 <h1>La frise thématique et multilinéaire
 	Une bande nommée porte son nom dans la marge, ses périodes dans son bandeau et ses cartouches de part et d'autre. Toutes les bandes partagent la même échelle du temps : ce qui est simultané se lit dans une même verticale, et la cause s'articule à l'effet.
 
-<Construis>la frise chronologique du premier XXe siècle {
+<h2>Le premier XXe siècle
+
+<Construis>la frise chronologique {
 	politique {
 		de 1914 à 1918 : Grande Guerre
 		06/02/1934 : Crise du 6 février
@@ -32,7 +35,9 @@ soit h1 = <bleu nuit gras section num>
 <h1>Périodiser
 	Un découpage n'est pas donné : il se construit. Poser les régimes dans le bandeau, c'est déjà proposer une lecture — et rendre visibles les ruptures qui la fondent.
 
-<Construis>la frise chronologique des régimes français depuis 1789 {
+<h2>Les régimes français depuis 1789
+
+<Construis>la frise chronologique {
 	de 1792 à 1804 : Première République
 	de 1804 à 1814 : Premier Empire
 	de 1814 à 1848 : Monarchies constitutionnelles

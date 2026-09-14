@@ -131,7 +131,8 @@ l'on peut vous signaler un défaut.
 docdg embarque des composants qui ne lui appartiennent pas et qui conservent
 leurs licences respectives :
 
-* la cursive **Marelle**, sous *SIL Open Font License 1.1* — voir
+* la cursive **Marelle** et les polices de texte **Gelasio**, **Tinos** et
+  **Arimo**, sous *SIL Open Font License 1.1* — voir
   [LICENCES-FONTES.md](LICENCES-FONTES.md) ;
 * la bibliothèque de composition mathématique **KaTeX**, sous licence *MIT*.
 

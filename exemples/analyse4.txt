@@ -36,14 +36,14 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Résous>l'équation différentielle N' = -0,12N, d'inconnue N(t)
 <Résous>l'équation aux dérivées partielles u_x + u_y = u
 
-<page suivante h2>Intégrales exactes et impropres
+<h2>Intégrales exactes et impropres
 <Soit>une fonction g(x) = x * exp(x)
 <Calcule>l'intégrale de g entre 0 et 1
-<Soit>les fonctions p(x) = 1/x^2 et q(x) = 1/x
+<Soient>les fonctions p(x) = 1/x^2 et q(x) = 1/x
 <Détermine>la nature de l'intégrale de p entre 1 et +infini
 <Détermine>la nature de l'intégrale de q entre 1 et +infini
 
-<h2>Équivalents
+<page suivante h2>Équivalents
 <Soit>une fonction m(x) = sin(x) - x
 <Calcule>un équivalent de m en 0
 <Soit>une fonction n(x) = (x^2 + 1) / (x - 3)
@@ -61,33 +61,28 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Calcule>la dérivée partielle de psi par rapport à y
 <Détermine>les points critiques de psi
 
-<page suivante h2>Fourier, Laplace et wronskien, calculés
+<h2>Fourier, Laplace et wronskien, calculés
 <Soit>une fonction cr(x) = x
-
 <Calcule>la série de Fourier de cr sur [-pi ; pi] à l'ordre 4
 
 <Soit>une fonction ex(t) = exp(-2t)
-
 <Calcule>la transformée de Laplace de ex
 
 <Soit>une fonction Fp(p) = 1 / (p^2 + 1)
-
 <Calcule>la transformée de Laplace inverse de Fp
 
-<Soit>les fonctions co(x) = cos(x) et si(x) = sin(x)
-
+<Soient>les fonctions co(x) = cos(x) et si(x) = sin(x)
 <Calcule>le wronskien de co et si
 
-<Soit>les fonctions li(x) = x et lj(x) = 2x
-
+<Soient>les fonctions li(x) = x et lj(x) = 2x
 <Calcule>le wronskien de li et lj
 
-<h1>Les surfaces
+<page suivante h1>Les surfaces
 	Une fonction de deux variables se représente par sa nappe $z = f(x, y)$, en perspective cavalière ombrée :
 <Trace>la surface z = x^2 - y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2]
 <Trace>la surface z = cos(x)*cos(y) pour x dans [-3 ; 3] et y dans [-3 ; 3], avec 32 mailles, en violet
 
-<h1>Les lignes de niveau
+<page suivante h1>Les lignes de niveau
 	La même fonction se lit aussi par ses courbes $f(x, y) = c$ :
 <Trace>les lignes de niveau de z = x^2 + y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2], aux niveaux {1 ; 2 ; 3}
 <Trace>les lignes de niveau de z = x*y pour x dans [-2 ; 2] et y dans [-2 ; 2], en vert
@@ -101,7 +96,7 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Soit>la fonction f(x, y) = x*y
 <Détermine>les extremums de f sous la contrainte x^2 + y^2 = 2
 
-<page suivante h1>Les intégrales multiples
+<h1>Les intégrales multiples
 <Calcule>l'intégrale double de x*y sur [0 ; 1] × [0 ; 2]
 <Calcule>l'intégrale double de x^2 + y^2 sur le disque de rayon 2
 <Calcule>l'intégrale triple de x*y*z sur [0 ; 1] × [0 ; 1] × [0 ; 2]
@@ -117,7 +112,7 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Trace>l'image du cercle unité par w = z + 1/z
 <Trace>l'image du cercle de rayon 1,4 par w = z + 1/z, en vert
 
-<page suivante h1>Les résidus
+<h1>Les résidus
 <Calcule>les résidus de 1/(z^2 + 1)
 <Calcule>les résidus de 1/(z^2*(z - 1))
 

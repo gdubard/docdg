@@ -55,7 +55,7 @@ soit h2 = <bleu italique sous-section>
 <h2>Le repère
 	Un repère se décrit en toutes lettres, les points posés par <<Soit>> s'y placent d'eux-mêmes, et la médiatrice, la bissectrice ou la marque d'angle s'y tracent en une phrase.
 
-	<Soit>les points A(1;1), B(5;3), C(2;4) et D(4 ; -1)
+	<Soient>les points A(1;1), B(5;3), C(2;4) et D(4 ; -1)
 
 <Trace>dans un repère où l'abscisse appartient à [-1 ; 6] et l'ordonnée à [-1 ; 5] {
 	la droite (AB)
@@ -131,7 +131,7 @@ Les symboles se lisent : un triangle $triangle(ABC)$, un arc $arc(AB)$, un angle
 }
 
 <page suivante h2>Droites remarquables d'un triangle, dans un repère
-	<Soit>3 points A, B et C de coordonnées respectives (0 ; 0), (6 ; 0) et (2 ; 4)
+	<Soient>3 points A, B et C de coordonnées respectives (0 ; 0), (6 ; 0) et (2 ; 4)
 <Trace>dans un repère où l'abscisse appartient à [-1 ; 7] et l'ordonnée à [-1 ; 5] {
 	la droite (AB)
 	la droite (BC)
@@ -151,11 +151,11 @@ Les médiatrices concourent au centre du cercle circonscrit.
 }
 
 <h2>Produit scalaire et vecteurs, calculés
-	<Soit>les vecteurs a et b de coordonnées respectives (3 ; -2) et (4 ; 6)
+	<Soient>les vecteurs a et b de coordonnées respectives (3 ; -2) et (4 ; 6)
 	<Calcule>le produit scalaire de a et b
 	<Calcule>la norme de a
 	<Calcule>l'angle entre a et b
-	<Soit>les vecteurs r et s de coordonnées respectives (1 ; 2 ; -1) et (2 ; 4 ; -2)
+	<Soient>les vecteurs r et s de coordonnées respectives (1 ; 2 ; -1) et (2 ; 4 ; -2)
 	<Étudie>la colinéarité de r et s
 
 <h2>Plans de l'espace
@@ -167,11 +167,11 @@ Les médiatrices concourent au centre du cercle circonscrit.
 	<Calcule>la distance du point (1 ; 2 ; 0) au plan P
 <page suivante h1>Le repère de l'espace
 	Un point de l'espace se repère par trois coordonnées $(x ; y ; z)$. Le chemin en pointillés rouges suit les coordonnées depuis l'origine.
-<Soit>les points A(1;2;3) et B(3;1;2)
+<Soient>les points A(1;2;3) et B(3;1;2)
 <Trace>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
 
 <h2>Une figure de l'espace
-<Soit>les points E(2;0;0), F(2;3;0) et G(0;3;2)
+<Soient>les points E(2;0;0), F(2;3;0) et G(0;3;2)
 <Trace>dans un repère de l'espace les points E, F et G, les segments [EF] et [FG]
 
 <h1>Géométrie analytique de l'espace

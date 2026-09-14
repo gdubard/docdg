@@ -185,7 +185,7 @@ Une entrée par ligne, numérotée dans l'ordre, ancrée par sa clé. `<cite>{cl
 Une suite de mots **en majuscules** dans une balise de style désigne une police :
 
 ```docdg
-<au centre italique 14pt>Je suis<TIMES NEW ROMAN gras>{très}fatigué.
+<au centre italique 14 pt>Je suis<TIMES NEW ROMAN gras>{très}fatigué.
 ```
 
 La convention vaut en début de ligne, en milieu de paragraphe, et dans les styles nommés (`soit manuscrit = <SCHOLA italique>`).

@@ -108,7 +108,7 @@ Mise au même dénominateur, inverse pour la division, simplification par le PGC
 ### **Transformations du plan**
 
 ```docdg
-<Soit>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+<Soient>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
 <Soit>un vecteur u(2;1)
 
 <Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses

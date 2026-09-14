@@ -1,9 +1,9 @@
 document {
 	orientation: portrait;
-	marges: 14;
+	marges: 5;
 	espacements: 2;
 	taille: 11;
-	interligne: 1,2;
+	interligne: 1,5;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>
@@ -45,7 +45,7 @@ soit h2 = <bleu italique sous-section>
 <Convertis>1250 g en kg
 
 <h2>Transformations du plan
-<Soit>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+<Soient>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
 <Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
 
 <page suivante>
@@ -59,7 +59,7 @@ soit h2 = <bleu italique sous-section>
 <Construis>l'image du triangle ABC par l'homothétie de centre O et de rapport 2
 
 <page suivante>
-<Soit>les points P et Q de coordonnées respectives (0 ; 0) et (1 ; 1)
+<Soient>les points P et Q de coordonnées respectives (0 ; 0) et (1 ; 1)
 <Construis>l'image du segment [AB] par la symétrie axiale d'axe (PQ)
 <h1>Les solides en perspective cavalière
 

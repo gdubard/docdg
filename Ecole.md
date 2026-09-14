@@ -9,16 +9,16 @@ La classe, les lignes Seyès, l'écriture cursive et les premiers calculs.
 
 ---
 
-## **✏️ L'écriture sur des lignes**
+## **✏️ L'écriture en réglure**
 
 > La réglure Seyès de l'école élémentaire, et de la vraie cursive dessus — modèles d'écriture, lignes à recopier, fiches de copie.
 
-**Syntaxe :** `<Écris>sur des lignes{CONTENU}`
+**Syntaxe :** `<Écris>en réglure Seyès{CONTENU}`
 
 Le verbe seul dans la balise, le support en complément, le texte entre accolades — la règle n°12, sans exception. **Rien ne se déclare** : docdg porte ses cursives et écrit avec la sienne.
 
 ```docdg
-<Écris>sur des lignes{
+<Écris>en réglure Seyès{
 Léa mange une pomme, Lili un abricot et Murielle des fraises des bois.
 Élodie a vu 3 zèbres et 12 girafes au zoo de Vincennes.
 }
@@ -41,7 +41,7 @@ Nommée par son **fichier**, la fonte est jointe au document et docdg **y lit se
 **Ce qui vit sur les lignes, et ce qui n'y vit pas.** Le corps du bloc est du docdg ordinaire — styles en ligne, alignements, interpolations, tabulations. Deux précisions :
 
 ```docdg
-<Écris>sur des lignes{
+<Écris>en réglure Seyès{
 Le 21<exposant>{è} siècle, H<indice>{2}O, x<exposant>{2}.
 3 × 4 = 12 s'écrit tel quel : sur un cahier, c'est une ligne qu'on trace.
 }
@@ -53,14 +53,14 @@ Le **mode mathématique ne s'ouvre pas** : entre les accolades, `$` est un carac
 
 **Les marges ne dérangent rien.** Le carreau mesure 8 mm quelles que soient `marges` et `espacements` : la feuille se déplace avec la zone d'écriture, elle ne s'étire pas. Le trait rouge se cale contre le bord gauche du contenu — marge plus espacement — et la première ligne d'écriture reste sur son trait.
 
-**Ce que `taille` et `interligne` ne règlent pas.** Ils gouvernent les scriptes du document — le texte imprimé — et n'ont aucune prise sur le cahier : sur des lignes réglées, le corps et l'interligne ne se choisissent pas, ils se déduisent de la réglure. C'est `hauteur` qui commande, et elle seule.
+**Ce que `taille` et `interligne` ne règlent pas.** Ils gouvernent les scriptes du document — le texte imprimé — et n'ont aucune prise sur le cahier : en réglure, le corps et l'interligne ne se choisissent pas, ils se déduisent de la réglure. C'est `hauteur` qui commande, et elle seule.
 
 ### **Une ligne de source est une ligne écrite**
 
 Le retour à la ligne du fichier est celui du cahier. Une **ligne vide** est une ligne réglée qu'on laisse à remplir : c'est ainsi qu'on prépare un modèle à recopier.
 
 ```docdg
-<Écris>sur des lignes{
+<Écris>en réglure Seyès{
 Zéphyr, le chat gris, dort près de la fenêtre.
 
 
@@ -74,7 +74,7 @@ Trois lignes réglées : le modèle, puis deux vides.
 Le retrait se dessine dans la source même — l'enseignant qui dit « saute deux carreaux » écrit deux tabulations, et voit sa fiche dans son fichier avant de l'imprimer. Seul le début de la ligne compte : un retour automatique revient à la marge, comme sur un vrai cahier.
 
 ```docdg
-<Écris>sur des lignes{
+<Écris>en réglure Seyès{
 				3 × 4 = 12
 				5 + 9 = 14
 	Victor, Inès et Zineb jouent à cache-cache dans le jardin de l'école.
@@ -86,7 +86,7 @@ Le retrait se dessine dans la source même — l'enseignant qui dit « saute deu
 Styles en ligne, interpolations, calculs : le corps du bloc est du docdg ordinaire. Un mot écrit en scriptes ou plus gros **ne décroche pas la réglure** — l'interligne est posé en millimètres, non en coefficient, si bien qu'un mot plus grand déborde de son interligne, comme le ferait une main, sans que la ligne de base bouge.
 
 ```docdg
-<Écris>sur des lignes{
+<Écris>en réglure Seyès{
 À <ARIAL gras>{Paris}, il y a 2,2 millions d'habitants et plus de 130 musées.
 	On dit souvent : « Mieux vaut tard que jamais. »
 }
@@ -96,7 +96,7 @@ Et comme l'interpolation vaut là comme ailleurs, un jeu de modèles nominatifs 
 
 ```docdg
 pour prenom dans {Léa ; Hugo ; Anaïs} {
-	<Écris>sur des lignes{
+	<Écris>en réglure Seyès{
 #prenom mange une pomme.
 
 

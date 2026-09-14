@@ -86,14 +86,16 @@ soit n = <Saisis>un entier{Quel module pour la table d'addition ?}
 	0 ; 2
 }
 <Trigonalise>T
-<Soit>les vecteurs u(1;0;1) et v(0;1;1)
+<Soient>les vecteurs u(1;0;1) et v(0;1;1)
 <Orthonormalise>la famille u et v
 
 <h2>L'article pluriel
 
-	`<Soit>` accepte le pluriel pour les matrices comme pour les points et les vecteurs. La tournure nomme la matrice de la même façon que le singulier :
+	L'article pluriel factorise une déclaration : une seule phrase pose plusieurs objets, et l'impératif s'accorde — `<Soient>`. Il ne vaut que pour les objets qui tiennent sur la ligne, points, vecteurs et fonctions. Une matrice porte son tableau entre accolades : elle se déclare seule, au singulier.
 
-<Soit>les matrices P {
+<Soient>les vecteurs w(2;1;0) et z(0;1;2)
+
+<Soit>la matrice P {
 	1 ; 1
 	0 ; 1
 }

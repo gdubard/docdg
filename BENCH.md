@@ -13,9 +13,9 @@ cargo run --release -p docdg-bench --bin froid_chaud -- exemples/algo4.txt 50
 ```
 
 `froid_chaud` mesure en médianes et accepte un troisième argument, le plafond
-d'`incr` en millisecondes, au-delà duquel il sort en erreur — c'est lui que la
-CI exécute. Le binaire par défaut `docdg-bench` donne une mesure rapide en
-moyennes, sans plafond.
+d'`incr` en millisecondes, au-delà duquel il sort en erreur — c'est la forme à
+lancer avant une publication. Le binaire par défaut `docdg-bench` donne une
+mesure rapide en moyennes, sans plafond.
 
 Quatre temps sortent par document :
 
@@ -27,8 +27,11 @@ Quatre temps sortent par document :
   l'auteur à chaque frappe, le chiffre qui compte.
 
 Un chiffre qui se dégrade d'une version à l'autre sans raison assumée est un
-bug de performance : la CI rejoue le banc à chaque poussée pour que la
-dégradation se voie au commit fautif, pas à la publication.
+bug de performance. Le banc se lance à la main : le dépôt n'a pas
+d'intégration continue, son unique workflow ne fabrique que les paquets, à la
+demande. La dégradation se voit donc à la publication et non au commit
+fautif — c'est le prix de ce choix, et il faut le savoir plutôt que de
+croire qu'une machine veille.
 
 Depuis la 3.5, la barre d'état de l'application ajoute trois chiffres que le
 banc ne mesure pas, à relever à la main sur les mêmes documents :
@@ -118,7 +121,7 @@ qui comptent — chaud et incr, le ressenti de la frappe — restent
 significatifs. Un relevé sur une machine de développement multicœur fait
 référence.
 
-² L'écriture sur des lignes est le bloc le plus léger du dépôt à composer —
+² L'écriture en réglure est le bloc le plus léger du dépôt à composer —
 la réglure est un motif déclaré une fois, que chaque bloc référence — mais le
 plus lourd à transporter : les 133 Ko sont pour l'essentiel la Marelle jointe
 au document, une fois, et non le balisage (~12 Ko, réglure comprise).

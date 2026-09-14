@@ -71,11 +71,12 @@ pour k de 2 à 0 avec un pas de -0,25 {
 
 Aucune ligne n'est écrite pour les tours silencieux — ils n'existent simplement pas dans le résultat. Chaque tour retenu forme sa propre ligne : c'est la boucle elle-même qui écrit le document, tour après tour.
 
-<Dresse>un tableau [mc ; mc]{
+<Dresse>un tableau {
+	<mc>	<mc>
 	n	Multiple de 3 ?
 	pour n de 1 à 20 {
 		si n % 3 vaut 0 {
-			[#n ; oui]
+			[#n]	[oui]
 		}
 	}
 }
@@ -84,11 +85,12 @@ Aucune ligne n'est écrite pour les tours silencieux — ils n'existent simpleme
 
 Un entier \(d\) divise \(n\) lorsque le reste de la division de \(n\) par \(d\) est nul. Balayer tous les diviseurs candidats de 1 à \(n\), et ne retenir que ceux qui divisent effectivement, donne la liste complète des diviseurs — la première brique, sur le papier comme ici, de tout test de primalité.
 
-<Dresse>un tableau sécable [mc ; mc]{
+<Dresse>un tableau sécable {
+	<mc>	<mc>
 	Diviseur	de 84
 	pour d de 1 à 84 {
 		si 84 % d vaut 0 {
-			[#d ; convient]
+			[#d]	[convient]
 		}
 	}
 }
@@ -99,11 +101,12 @@ Un nombre premier n'a, par définition, aucun diviseur strictement compris entre
 
 `appartient à` et sa négation `n'appartient pas à` filtrent un intervalle aussi simplement qu'un test de divisibilité — utile chaque fois que l'algorithme cherche « à partir de quel rang » une grandeur franchit un seuil.
 
-<Dresse>un tableau [mc ; mc ; mc]{
+<Dresse>un tableau {
+	<mc>	<mc>	<mc>
 	Rang	Terme	Écart
 	pour n de 0 à 20 {
 		si (n appartient à [16;20]) {
-			[#n ; #{2^(n+1) - 1} ; #{2^n}]
+			[#n]	[#{2^(n+1) - 1}]	[#{2^n}]
 		}
 	}
 }
@@ -120,11 +123,12 @@ soit parité = si n % 2 vaut 0 { pair } sinon { impair }
 
 `et` comme `ou` combinent deux conditions dans le même test ; les parenthèses en précisent l'ordre quand les deux se mêlent.
 
-<Dresse>un tableau [mc ; mc]{
+<Dresse>un tableau {
+	<mc>	<mc>
 	n	Retenu
 	pour n de 1 à 30 {
 		si n % 3 vaut 0 et n % 5 vaut 0 {
-			[#n ; multiple de 15]
+			[#n]	[multiple de 15]
 		}
 	}
 }

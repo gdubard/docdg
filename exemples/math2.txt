@@ -2,13 +2,12 @@ document {
 	orientation: portrait;
 	marges: 15;
 	taille: 11;
-	interligne: 1,8;
+	interligne: 1,9;
 	niveau: quatrième;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>
 soit remarque = <gris foncé italique>
-soit enonce = <fond bleu Alice>
 soit correction = <fond gris clair>
 
 <h1>Le théorème de Pythagore — classe de quatrième

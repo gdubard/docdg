@@ -4,6 +4,847 @@ Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
+## 3.7
+
+**`<Soient>` existe enfin, et le pluriel des matrices disparaît.** La phrase
+rendue accordait déjà l'impératif — docdg écrit « Soient A et B les points
+de coordonnées … » depuis toujours — mais la balise, elle, refusait
+`<Soient>` : il fallait écrire `<Soit>les points A et B`, du français fautif
+dans un langage qui se veut du français. Le verbe accepte maintenant sa forme
+plurielle, et les trente-quatre déclarations plurielles des exemples et des
+manuels sont accordées.
+
+Dans le même passage d'`algebre4`, l'article pluriel était appliqué à une
+matrice : `<Soit>les matrices P { … }` n'en déclarait pourtant qu'une, le
+moteur ne retenant que le premier nom et l'unique tableau entre accolades. Une
+matrice porte son tableau : elle se déclare seule. Le préfixe pluriel est
+retiré, et la forme est refusée en nommant celle qu'il faut écrire. L'exemple
+montre désormais ce que sa section annonce — le pluriel sur des vecteurs, qui
+tiennent sur la ligne, et la matrice au singulier.
+
+**Un filet de colonnes sur deux manquait à l'écran.** `basique3` compose sur
+trois colonnes avec un filet gris clair : celui de droite se voyait, celui de
+gauche non. Le filet par défaut mesure 0,2 mm, soit 0,756 pixel CSS, que
+l'aperçu réduit encore au zoom — 0,68 pixel à 90 %. Un trait plus mince qu'un
+pixel n'est pas dessiné : il est fondu dans les pixels qu'il touche, d'autant
+plus pâle qu'il tombe à cheval sur deux d'entre eux. Les deux gouttières d'un
+passage à trois colonnes ne tombent pas au même endroit d'un pixel : l'une a
+pu être nette, l'autre se diluer jusqu'à disparaître, sur un gris déjà clair.
+Le hasard du calage décidait lequel se voyait.
+
+À l'écran seulement, le filet ne descend plus sous un pixel physique — le
+zoom compris dans le calcul, de sorte que le plancher tienne à toutes les
+échelles. L'épaisseur demandée est exposée en variable pour que la feuille de
+style puisse la relever sans la connaître, et la valeur en millimètres reste
+seule à l'impression : le PDF garde le filet exact que l'auteur a demandé.
+
+**Deux régimes pour l'aperçu, selon ce qui l'a déclenché.** La pagination n'en
+connaissait qu'un : vider `#pages`, puis le remplir page après page en rendant
+la main au navigateur toutes les quatre pages. À l'ouverture d'un fichier,
+c'est exactement ce qu'il faut — la première page paraît avant que les
+suivantes soient composées. Mais la même chose se produisait à chaque
+composition déclenchée par la frappe, soit toutes les 250 millisecondes de
+répit : l'aperçu passait au blanc et se reconstruisait sous les yeux, alors
+qu'il n'y avait aucune raison de montrer le travail.
+
+Les deux régimes sont maintenant distincts. À l'ouverture, rien ne change de
+ce qui était voulu : composition dans l'aperçu, page par page, la main rendue
+dès la première ; et dès que la page portant une saisie interactive existe, la
+vue s'y cale sans attendre la fin — la première page utile n'est pas toujours
+la page 1. À la frappe, les pages se composent dans une scène hors écran de
+même géométrie et n'entrent qu'une fois toutes prêtes, d'un seul
+remplacement : ce qui est affiché reste affiché jusqu'à ce que la suite le
+soit. Dans ce régime, la pause cesse de forcer `scrollTop` à chaque reprise de
+main, l'aperçu visible ne bougeant plus pendant la composition.
+
+**Le défilement lié, remis d'aplomb.** Trois défauts se cumulaient.
+
+*Le décalage constant.* Les deux volets ne comptaient pas depuis le même
+point. La carte du source ramène la ligne 0 à l'origine — chaque hauteur est
+mesurée moins celle de la première ligne. La carte du rendu, elle, gardait les
+hauteurs brutes : la première marque de ligne se trouve sous la marge haute de
+la page, donc à cent et quelques pixels. Pour rattraper l'écart, `synchronise`
+retranchait `baseSource`, c'est-à-dire le rembourrage haut de la zone de
+saisie — une grandeur du source employée dans l'espace du rendu, qui n'avait
+aucune raison de valoir la marge d'une page. Les deux cartes ramènent
+maintenant la ligne 0 à zéro, chacune dans son espace, et la correction
+croisée disparaît avec le mal qu'elle prétendait soigner.
+
+*Les à-coups.* Chaque événement de défilement écrivait `scrollTop` sur l'autre
+volet dans le corps même du gestionnaire, et un défilement en produit des
+dizaines par seconde. Le travail est maintenant groupé par trame : un seul
+calcul et une seule écriture entre deux images.
+
+*Le renvoi d'écho.* Écrire `scrollTop` déclenche un défilement sur l'autre
+volet, qui voudrait à son tour piloter le premier. Cela se réglait par un
+verrou de 150 millisecondes posé sur le volet d'origine — d'où l'impression de
+lourdeur quand on passait d'un volet à l'autre, et les sursauts quand le
+verrou tombait au milieu d'une inertie de pavé tactile. Le pilote est
+désormais désigné par le geste : le volet où l'on agit — molette, doigt,
+pointeur, touche — prend la main, l'autre suit, et l'écho d'une écriture est
+ignoré le temps d'une trame. Aucun compte à rebours n'arbitre plus.
+
+Les deux cartes se dressent en fin de composition et non au premier
+défilement : la mesure de toutes les marques ne tombe plus au milieu d'un
+geste. La zone morte de deux pixels, qui laissait un reliquat visible, descend
+à un demi-pixel.
+
+**Un alias nommé `legende` doublait un mot du langage.** Les quatre exemples
+d'histoire et `publication2` déclaraient `soit legende = <gras au centre>`
+pour écrire à la main le titre d'une frise — la frise n'en portant plus
+depuis que sa description a été réduite. Ce n'est pas une balise du moteur :
+aucun code ne connaît ce mot, c'est un alias de style comme `titre` ou
+`remarque`. Mais `légende` désigne déjà autre chose dans le langage, la
+légende d'une image (`<Insère … et la légende {…}>`), et un lecteur des
+exemples pouvait croire à un verbe. L'alias prend le nom de niveau libre dans
+chaque document — `h2` dans les quatre histoires, `h3` dans `publication2` où
+`h2` sert déjà aux sous-sections. Le rendu ne bouge pas d'un pixel.
+
+Huit exemples déclaraient par ailleurs un alias dont ils ne se servaient
+jamais : `h2` dans `basique1`, `publication1` et `publication4`, `enonce` dans
+`math2`, `physique3`, `physique4` et `physique5`, `correction` dans `chimie4`
+et `physique4`. Ces déclarations sont retirées.
+
+**La rosace d'un exemple doublait ses pétales.** `geometrie4` demandait le
+nombre de pétales au lecteur, puis traçait `r = cos(#n*t)` — la courbe polaire
+brute, où la saisie sert directement de coefficient. Or une rosace `cos(k·t)`
+compte `k` pétales pour `k` impair et `2k` pour `k` pair : quatre demandés,
+huit dessinés. Le verbe `la rosace à N pétales`, lui, choisit le coefficient
+d'après la parité depuis la 3.4 ; c'est l'exemple qui court-circuitait le
+moteur, et le manuel de licence qui enseignait ce raccourci. Les deux passent
+à `<Trace>la rosace à #n pétales`.
+
+La parité ne suffisait d'ailleurs pas. `n / 2` pour `n` pair ne donne `n`
+pétales que si `n` est multiple de quatre : six pétales demandés traçaient
+`cos(3t)`, donc trois — l'erreur inverse, une moitié au lieu d'un double. Un
+nombre de pétales congru à deux modulo quatre ne s'obtient d'aucun `cos(k·t)` ;
+il est maintenant refusé, en nommant les deux nombres voisins qui, eux, se
+tracent.
+
+**Le bandeau rouge est rendu aux seules fautes.** Il annonçait la mise en page
+elle-même : tableau non scindé, colonnes non scindées, paragraphe non coupé,
+blancs resserrés à 95 %, bloc réduit, avec des classes CSS dans le texte. Rien
+de tout cela n'appelle un geste de l'auteur — ce sont des décisions que docdg
+prend et assume, et les annoncer en rouge au-dessus de la saisie n'apprenait
+rien à personne. Pire : le bandeau s'allumait en cours de composition et
+s'éteignait à la fin du rendu, donc à chaque frappe, et son apparition
+décalait les deux volets d'autant. C'est ce scintillement que l'on voyait,
+`analyse3` et `algebre3` en tête. Les dix messages de mise en page sont
+retirés. Le bandeau ne parle plus que de ce qui empêche docdg de travailler :
+erreur JavaScript, pont IPC absent, composition mathématique impossible, rendu
+impossible, export sans document. Une faute de balise continue de se dire là
+où elle est, dans le rendu, à sa place.
+
+**Une composition qui échouait en chemin coupait le défilement lié.** La
+chaîne de promesses du rendu n'avait pas de `catch` terminal : une exception
+levée après la mise en page des mathématiques laissait `compositionEnCours` à
+vrai, et `synchronise` refuse de travailler tant que ce témoin est levé. Le
+défilement du source et de l'aperçu restait donc désolidarisé jusqu'au
+prochain rendu mené à terme, sans que rien ne le dise — la promesse rejetée
+partait dans le vide. La chaîne se termine maintenant par un `catch` qui
+rabaisse le témoin et nomme l'interruption.
+
+**L'invite de la zone de saisie renvoyait à un bouton « Charger »** que la
+barre d'outils nomme « Ouvrir » depuis longtemps.
+
+**Un énoncé n'a qu'un statut par niveau.** Le corpus portait 184 ancrages
+doublés : le même énoncé, au même rang, avec le même statut, une fois muet et
+une fois assorti d'une voie — « admis en master 1 » et « admis en master 1,
+agrégation externe ». Le doublon muet passait le premier, si bien que la voie
+n'était jamais lue et qu'un même énoncé pouvait paraître deux fois au
+programme d'un niveau. Les 184 sont retirés, la voie conservée. Le compte le
+vérifie mieux qu'un test : la base tient désormais 569 ancrages « démontré »
+pour 569 démonstrations, et l'appariement (énoncé, rang) est exact dans les
+deux sens. Le validateur refuse maintenant deux ancrages au même niveau, de
+sorte que le défaut ne puisse pas revenir par la base d'un enseignant.
+
+**Une rangée ne déborde plus de sa ligne de pistes.** Un tableau dont une
+rangée portait plus de cellules que de colonnes déclarées les émettait quand
+même : le `<tr>` devenait plus long que le `colgroup`, et ces colonnes sans
+largeur sous `table-layout: fixed` ramenaient la divergence entre WebKit et
+Chromium que la 3.7 s'emploie à supprimer. La rangée fautive est maintenant
+nommée, avec le nombre de colonnes attendu ; aucune cellule n'est émise au
+delà, ni en entête ni en données.
+
+**Le placement dans la balise est refusé, non ignoré.** `<Dresse>un tableau
+[mc ; mg] { … }` passait sans un mot dès lors que le corps portait sa ligne de
+pistes : l'ancienne grammaire était donc à moitié retirée. Tout crochet dans
+la balise d'un tableau est désormais signalé, avec la forme à écrire.
+`statistiques-probabilites3`, dont le corps était converti mais la balise
+oubliée, est corrigé ; c'était le dernier des 52 exemples à porter la forme
+ancienne, et le manuel en gardait un en tête de sa table des fonctionnalités.
+
+**Une base de corpus refusée se disait à personne.** `document { corpus: … }`
+qui ne s'ouvre pas — fichier absent, scellé illisible, base qui ne passe pas
+la validation — rangeait son motif dans un tiroir que rien ne lisait : docdg
+reprenait le corpus embarqué sans un mot, et l'enseignant croyait travailler
+sur sa base. Le motif paraît maintenant dans le document, par le canal
+d'erreur ordinaire. Le tiroir — un verrou global partagé par tous les rendus —
+disparaît avec le défaut : `choisit_corpus` rend son diagnostic à l'appelant.
+
+**Quatre fonctions mortes et trois accesseurs pour un seul geste.**
+`diagnostic_corpus`, `journal::tronque_apres` — la troncature se fait en ligne
+dans `ajoute`, c'était un doublon —, `journal::efface` et `corpus::oublie`
+n'étaient appelées de nulle part. Dans l'atelier, `controle`, `coche` et
+`cpEl` rendaient tous trois `document.getElementById`, sous trois noms : un
+seul subsiste, `parId`, et les 167 appels y passent.
+
+**Le manuel comptait les colonnes à partir de deux** quand le moteur en
+accepte une — ce que le même manuel expliquait trente lignes plus haut, et ce
+que dit le message d'erreur de `<Compose>`. Les trois passages s'accordent.
+
+**Deux messages mal composés.** Dix-huit espaces au milieu de l'avis de reprise
+du journal, une espace de trop avant le guillemet fermant de « doit être un
+nombre entier ».
+
+**Le tableau se lit comme il s'affiche.** Une ligne de pistes ouvre désormais
+tout tableau : une piste par colonne, entre chevrons, au-dessus de la colonne
+qu'elle régit. Elle porte un code de placement (`<mg>`) et, avec « en », une
+largeur (`<35 mm en mg>`). Le placement se déclarait jusqu'ici dans la balise,
+loin des colonnes (`<Dresse>un tableau [mc ; mg ; md]`), et aucune largeur ne
+pouvait s'exprimer. Une colonne sans largeur déclarée prend une part égale de
+ce qu'il reste, jusqu'à remplir la largeur disponible ; il n'y a pas de hauteur
+de cellule, une cellule prend la hauteur qu'exige son contenu. Les largeurs
+partent en `colgroup` avec `table-layout: fixed` : les deux moteurs répartissent
+l'espace à l'identique, là où la largeur automatique des tableaux HTML les
+faisait diverger.
+
+**Une donnée, une paire de crochets.** `[Maths ; 15]` groupait toute une rangée
+dans un seul crochet, points-virgules compris — contraire à la règle n° 8, qui
+réserve le point-virgule aux données numériques. Chaque donnée s'écrit
+maintenant dans ses propres crochets, séparées par une ou plusieurs
+tabulations : `[Maths]	[15]`. Les tabulations n'alignent que la source, elles
+ne comptent pas. Une cellule accepte tout ce qu'accepte le corps du document,
+`#variable` et boucle `pour` comprises : un tableau se construit depuis un
+conteneur.
+
+**Les fusions se lisent dans l'entête.** Verticalement, le deux-points garde son
+rôle : une entête qui le porte couvre les rangées qu'elle précède, un seul
+suffit quel que soit leur nombre. Horizontalement, un ou plusieurs tirets après une
+entête la font couvrir une colonne de plus par tiret — « Identité - » sur deux
+colonnes. L'espacement ne compte pas : `Identité-`, `Identité -` et un tiret
+seul dans sa colonne disent la même chose, comme partout où les tabulations
+n'alignent que la source. Le tiret de fusion n'est jamais suivi d'une lettre :
+« Sous-total » reste un seul mot. La règle de la rangée courte, qui étend la
+dernière entête jusqu'au bord, est inchangée.
+
+**La grille s'ouvre par son plan.** `zones:[...]`, `colonnes:` et `lignes:`
+demandaient trois listes séparées, à garder d'accord à la main, et formaient la
+dernière exception « clé : valeur » à la prose de docdg. Le plan se dessine
+maintenant comme un croquis : une ligne de largeurs au-dessus des colonnes, puis
+une ligne par rangée qui commence par sa hauteur et nomme ses zones. Une zone
+qui occupe plusieurs cases répète son nom, un point laisse une case vide. Le
+plan se vérifie : une zone doit dessiner un rectangle plein, une zone décrite
+hors du plan ou annoncée sans être décrite est signalée à l'endroit de la
+grille. Les pistes acceptent `min` (au plus juste), `max` (le reste, partagé)
+ou une longueur.
+
+**Une espace avant l'unité, partout.** docdg écrivait `14pt` dans les styles,
+par emprunt au CSS, et `20 mm` ailleurs. Le français veut l'espace : l'analyseur
+des styles lit désormais `14 pt` comme `14pt`, la virgule décimale comprise
+(`10,5 pt`). Les deux formes restent équivalentes — aucun document existant ne
+bouge — mais le manuel, les exemples et la documentation sont passés à la forme
+espacée, seule enseignée désormais.
+
+**Les grammaires anciennes sont retirées, pas dépréciées.** docdg ne garde
+qu'une forme par notion : le placement dans la balise (`[mc ; mg ; md]`), les
+données groupées dans un crochet unique (`[Maths ; 15]`), le `zones:` des
+grilles avec ses `colonnes:` et ses `lignes:`, les fusions par
+`<4 colonnes mc>` et par point — tout cela a disparu du moteur, du manuel et
+des exemples. Un document écrit dans l'ancienne forme est signalé, jamais
+interprété de travers. Les 52 exemples et le manuel sont convertis ; deux
+formes pour un même effet ne survivent nulle part.
+
+**Le PDF est l'aperçu, figé.** L'export imprime une copie de l'aperçu tel que
+l'utilisateur le voit : mêmes pages, mêmes coupures, même calage. La copie est
+figée avant de partir : chaque bloc y reçoit la hauteur mesurée dans l'aperçu,
+si bien que Chrome ne peut ni déplacer un bloc ni déborder d'une page ; il
+peint ce que l'aperçu a composé. Sur le banc, les 52 exemples donnent un PDF
+aux pages identiques à celles de l'aperçu WebKit, sans aucun débordement ; ligne
+à ligne, l'écart médian est de 0,99 pixel, 46 exemples restent sous 2 pixels.
+Imprimer avec le moteur de l'aperçu lui-même a été essayé et écarté : le mode
+impression de WebKit perd les colonnes et une partie de la réglure.
+
+**Le texte justifié le reste sur la réglure.** Le découpage d'une ligne en
+traits, ci-dessous, donnait à chaque trait son propre bloc : chacun devenait
+donc une dernière ligne, et une dernière ligne ne se justifie pas. Les traits
+qui ouvrent ou poursuivent une ligne portent maintenant `text-align-last`,
+comme le fait déjà un paragraphe coupé entre deux pages ; seule la fin d'un
+paragraphe reste au fer à gauche, comme il se doit.
+
+**Chaque ligne de la réglure est un trait de 8 mm.** WebKit tronque
+l'interligne au pixel : les lignes qui suivent un retour automatique y
+remontaient de 0,24 pixel par ligne au-dessus du trait. Le calage découpe
+désormais chaque ligne du source en autant de lignes que de traits occupés,
+chacune calée à 8 mm exactement, dans tous les moteurs.
+
+**Un entier voisin d'une fraction se tient sur la ligne.** Dans
+`$2/5 + 4 = 22/5$` ou `$3 + 1/2 = 7/2$`, la barre, le + et le = se posent sur
+le trait ; l'entier, que KaTeX met sur la ligne de base, s'enfonçait d'autant
+sous le trait. Les entiers, les lettres et la ponctuation d'une formule à
+fraction montent de la hauteur de l'axe (0,25 em) et s'y posent, comme on
+l'écrit au cahier.
+
+**Les colonnes des tableaux sont calculées par docdg.** WebKit et Chromium ne
+répartissent pas de la même façon la largeur automatique des colonnes : un
+tableau de `publication2` y différait de 29 pixels. docdg mesure les largeurs
+de contenu, identiques dans les deux moteurs, les répartit lui-même et fixe
+les colonnes (`table-layout: fixed`) ; la suite d'un tableau coupé garde les
+mêmes.
+
+**Georgia, Times New Roman et Arial voyagent avec le document.** Ce sont les
+trois noms que docdg emploie ou documente ; la police qui les porte était celle
+de la machine, absente de la plupart des Linux, et chaque moteur en choisissait
+alors une autre — sur la même machine, un même paragraphe faisait 20 lignes
+dans WebKit et 16 dans Chromium. docdg joint sous ces noms Gelasio, Tinos et
+Arimo, trois polices libres (OFL) dessinées sur les chasses des originales, en
+WOFF2 réduites au latin : 205 Ko pour les douze styles. Voir
+`LICENCES-FONTES.md`.
+
+**Les interlignages tombent sur le pixel entier.** WebKit tronque toute hauteur
+de ligne à un nombre entier de pixels — 8 mm, soit 30,24 px, y devient 30 px, et
+1,3 × 11 pt, soit 19,07 px, devient 19 —, quand Chromium garde les fractions. La
+feuille arrondit désormais au pixel le plus proche chaque interlignage du
+document et celui de la racine des formules : les deux moteurs empilent les
+lignes au même endroit. KaTeX garde sa géométrie — le banc vérifie que ses
+empilements ne bougent pas d'un millième —, et la réglure ses millimètres, que
+le calage tient déjà ligne à ligne.
+
+**Une fraction ne remonte plus sur la réglure dans l'aperçu du Mac.** KaTeX
+place dans chaque empilement une cellule `vlist-s`, qui ne contient qu'une
+espace de largeur nulle : c'est par elle que WebKit trouve la ligne de base.
+`docdg-lignes span{line-height:0}` lui retirait sa ligne ; WebKit posait alors
+le pied de la fraction sur la ligne de base, la fraction montait de toute sa
+profondeur, et le + et le = tombaient au niveau des dénominateurs. Chromium,
+qui fait le PDF, se passe de cette cellule : le PDF était juste, l'aperçu faux.
+`docdg-lignes .katex .vlist-s{line-height:1.2}` lui rend sa ligne ; indices,
+racines, sommes et matrices en profitent de même.
+
+**Les colonnes s'équilibrent au pixel, par docdg.** L'équilibrage des colonnes
+CSS est propre à chaque moteur, et WebKit et Chromium ne tombaient pas sur la
+même hauteur : une composition en colonnes pouvait changer de page de l'un à
+l'autre. docdg cherche lui-même, par dichotomie sur des pixels entiers, la plus
+petite hauteur qui loge tout le texte.
+
+**Sous Linux, la fenêtre ne lisse plus les polices.** WebKitGTK arrondissait au
+pixel la chasse de chaque lettre, si bien que la Marelle y était de 1,5 à 2,3 %
+plus large que dans Chromium : une ligne presque pleine passait à la ligne dans
+l'aperçu et pas dans le PDF. docdg coupe ce lissage pour sa fenêtre ; les
+chasses rejoignent celles de Chromium au millième.
+
+**Un banc inter-moteurs garde l'ensemble.** `cargo run -p docdg-bench --bin
+moteurs -- <dossier>` assemble pour chaque exemple la page de l'application, et
+`bench/moteurs.py` la compose dans WebKit et dans Chromium, puis fait imprimer
+par Chromium la copie figée de l'aperçu WebKit, et compare ligne à ligne. Le
+workflow « moteurs » le rejoue à chaque envoi et échoue si le PDF d'un exemple
+n'a pas les pages de son aperçu, s'il déborde, si une ligne s'y écarte de plus
+de 2 pixels de l'aperçu, si une composition en colonnes perd ses colonnes ou si
+les deux moteurs ne coupent pas les pages au même endroit. Restent six
+exemples au-delà de 2 pixels — les colonnes de texte (`basique3`,
+`publication3`, `seyes1`), où WebKit ouvre ses colonnes 12 pixels plus bas que
+Chromium, et les figures de `geometrie1` à `geometrie3` — et `demonstration4`,
+dont une ligne vide change de page d'un moteur à l'autre.
+
+**Nettoyage.** `dans_un_script`, orpheline depuis le passage à `\frac`, est
+retirée. Le README connaissait deux clés pour la police du texte, `script` et
+`police`, dont une seule existe : il n'en connaît plus qu'une, `script`.
+
+**Un dollar sans partenaire se signale.** Un `$` que rien ne referme ouvrait un
+mode mathématique qui ne se fermait jamais : le caractère ressortait tel quel
+au milieu de la page, sans un mot, et l'auteur cherchait pourquoi sa formule
+n'avait pas pris. Il est maintenant marqué à sa place, et le message rappelle
+qu'un dollar qui doit s'écrire se double — `$$`, comme `<<`, `>>` et `##`.
+
+**Une formule ne gonfle plus la ligne réglée.** KaTeX se donne
+`.katex{line-height:1.2}`, et une classe l'emporte sur `docdg-lignes span` :
+la règle de la réglure qui aplatit les `span` ne l'atteignait pas. Toute ligne
+portant une formule mesurait donc 1,452 em au lieu du pas — 9,65 mm pour
+8 —, sa ligne de base descendait d'un demi-excès sous le trait, et tout ce qui
+suivait dérivait d'autant. Mesuré sur une page rendue : 105 pixels entre deux
+lignes de base au lieu de 94,5, exactement la moitié de l'excès. La feuille
+reprend la main avec `docdg-lignes .katex{line-height:0}`, qui a la
+spécificité qu'il faut.
+
+**Le LaTeX en ligne était mal formé, et c'est de là que tout venait.**
+`to_latex` produisait `\dfrac` — du style d'affichage — à l'intérieur d'un
+`\( \)`, qui est un contexte en ligne. Une fraction se composait donc au
+milieu d'une phrase comme au milieu d'une équation détachée : deux fois trop
+haute, débordant au-dessus et au-dessous de sa ligne. Sur la réglure, elle
+écrasait la ligne suivante ; en prose, elle disloquait l'interlignage.
+
+Le moteur n'écrit plus que `\frac`, dans le mini-langage comme dans les
+phrases construites par les modules de mathématiques et par le pont Python.
+Le style se déduit du contexte, ce qui est la règle : texte entre `\( \)`,
+affichage entre `\[ \]`. La distinction que faisait `dans_un_script` — `\frac`
+dans un exposant, `\dfrac` ailleurs — disparaît avec elle : LaTeX réduit déjà
+la taille dans un script.
+
+La graduation des classes `sous-1` à `sous-3` et l'épaisseur imposée à la barre
+s'en vont avec l'erreur : une fraction en style de texte tient dans un
+interligne, quelle que soit son imbrication, et sa barre a le poids que KaTeX
+lui donne.
+
+**Une fraction pose sa barre sur la ligne, sans décaler la suivante.**
+Composée en style de texte, elle reste à la taille de la phrase ; sa barre se
+mesure au rendu et se pose sur le trait le plus proche, si bien que le
+numérateur occupe le dessus du trait et le dénominateur le haut du carreau
+d'en dessous. Aucune ligne n'est réservée sous elle : la ligne suivante reste
+sur son trait, comme après un exposant, un indice ou une racine. La classe
+`sous-1` et sa marge d'un interligne, qui dégageaient la ligne d'après, sont
+retirées.
+
+**Une formule ne décale plus les lignes qui la suivent.** KaTeX compose ses
+empilements avec `.vlist-t{display:inline-table}` : une table en ligne a une
+hauteur réelle, que `line-height:0` ne réduit pas. Le calage mesure donc la
+hauteur de chaque ligne et la ramène au multiple entier d'interligne le plus
+proche, la ligne de base restant où elle est. Le bloc reste en phase quoi
+qu'on y écrive.
+
+**La réglure 5x5 est retirée.** Elle avait été ajoutée comme seconde réglure à
+côté du Seyès ; elle n'apportait rien à qui s'en sert. Le quadrillage à petits
+carreaux disparaît donc du moteur, des tests, des exemples et des manuels :
+`<Écris>` ne connaît plus qu'une annonce, `en réglure Seyès`, et le genre de
+réglure disparaît avec elle — la structure `Reglure` n'a plus de variante, la
+feuille de style plus de bloc conditionnel, `cahier_en_colonnes` plus de
+paramètre. Le bloc de `seyes1` qui montrait le quadrillage passe au Seyès : ce
+qu'il démontrait — une étude de fonction complète posée sur les lignes — n'y
+perd rien. L'ancienne annonce `en réglure 5x5` est refusée comme l'était
+`sur des lignes`, avec le message qui donne la forme à écrire.
+
+**Le corps du document est une composition à une colonne.** `<Compose>sur une
+colonne { … }` est désormais accepté et ne pose aucun `column-count` : il rend
+exactement ce que rend le même texte hors de toute balise. La composition
+cesse d'être un mode à part pour devenir la mise en page ordinaire, dont la
+pleine largeur est le cas à une colonne — d'où il suit, sans règle
+supplémentaire à retenir, que tout objet qui se compose dans le corps du
+document se compose dans une colonne. La seule restriction qui subsistait — une
+réglure doit être le contenu unique d'une composition — est ramenée à son
+motif : elle ne vaut que de deux colonnes à cinq, parce que la nappe réglée
+court alors sous toutes les colonnes. Sur une colonne, `<Écris>` se pose au
+milieu du texte comme il le fait dans le corps du document.
+
+**Audit de publication.** La suite de tests était rouge : quatre échecs sur 714.
+Trois tenaient à des assertions figées qui n'avaient pas suivi le code — deux
+tests d'`ecriture.rs` se contredisaient même l'un l'autre sur la déclaration de
+`docdg-objet`, et un troisième attendait une nappe de 310 mm là où la géométrie
+en donne 282,68. Le quatrième était réel : en posant les objets sur la réglure,
+la 3.7 écrivait `margin-top` en ligne dans la balise, ce qu'interdit la règle
+tenue depuis la 3.0 — la feuille de style est seule propriétaire des marges
+verticales. La valeur émise valait exactement `--assise-mm`, que la feuille
+publie déjà ; `docdg-objet` la lit désormais par `calc(var(--assise-mm,0) *
+1 mm)` et la balise ne garde en ligne que son décalage horizontal, qui, lui,
+varie avec la tabulation. La valeur cesse au passage d'être calculée deux fois.
+
+**Une majuscule accentuée faisait paniquer le rendu.** `vecteurs_cites` testait
+la longueur d'un nom en octets avant d'en tirer deux caractères : `É` et `Ω`
+pèsent deux octets pour une seule lettre, et « vecteur Ω » traversait le test
+pour se briser sur le second caractère absent. La lecture se fait maintenant
+sur les caractères eux-mêmes, et le cas se referme sans panique. Même confusion
+corrigée dans `cible`, où elle prenait une lettre accentuée pour deux.
+
+**Le manuel promettait onze chapitres qui n'existaient pas.** Le sommaire en
+annonçait quarante-six pour trente-cinq écrits, et dix de ses ancres ne
+résolvaient pas — l'émoji d'un titre engendre un tiret initial que les liens
+n'avaient pas. Les entrées sans chapitre sont retirées, les ancres recollées,
+l'ordre remis sur celui du document. Le README annonçait par ailleurs une
+intégration continue qui rejouait les contrôles à chaque poussée, et `BENCH.md`
+un banc rejoué de même : il n'y en a pas, l'unique workflow ne fabrique que les
+paquets, à la demande. Les deux passages le disent maintenant.
+
+**Les objets d'un cahier tiennent sur les lignes, et un paragraphe change de ligne
+tous les 1 cm.** Le calage posait chaque objet indépendamment : il le glissait
+jusqu'à la ligne la plus proche, puis annulait ce glissement par une marge
+négative au bas, si bien que l'objet suivant repartait de la position naturelle du
+flux — et la hauteur naturelle d'une formule, d'un tableau ou d'une image n'est
+jamais un multiple du carreau. L'écart s'accumulait d'objet en objet : dans
+`seyes1`, la dérivée seconde et les zéros de `q` finissaient sous la ligne. De
+plus, la remontée « au plus proche » autorisait un objet à chevaucher le
+précédent, et le calage refait à la mise en page lisait des positions réduites
+par le zoom de l'aperçu contre une grille non réduite. Désormais chaque enfant
+d'un cahier reçoit une hauteur explicite, arrondie vers le haut au multiple de
+la grille, de sorte que le suivant commence toujours sur une ligne : l'écart ne
+s'accumule plus, et le PDF, composé par Chrome à partir des mêmes hauteurs,
+ne dépend plus des hauteurs naturelles du moteur de l'aperçu. Un objet est
+glissé vers l'avant (jamais par-dessus le précédent), à une tolérance de
+0,35 mm près ; une ligne de texte se cale au plus proche. Toutes les mesures
+sont ramenées en millimètres réels, quel que soit le zoom. Dans un
+`docdg-objet`, l'interligne devient le pas de la réglure : un paragraphe passe
+à la ligne une ligne sur deux, comme demandé ; les
+tableaux gardent l'interligne du document, et leurs rangées se calent
+maintenant sur des multiples exacts de la grille, bordures fusionnées comprises.
+Une ligne dont une formule en ligne est plus haute que le pas descend d'une
+ligne pour trouver la place qu'il lui faut.
+
+**Le calage se rejoue dans Chrome au moment d'imprimer.** L'aperçu (WebKit sous
+macOS, WebView2 sous Windows) calait, puis Chrome imprimait avec ses propres
+métriques de fonte : la ligne de base d'une formule s'y trouvait un demi-
+millimètre plus bas, et « les zéros de q » passaient sous le trait. Le calage
+vit désormais dans `calage.js`, module autonome chargé par l'aperçu et conservé
+dans le document d'impression, où il se rejoue une fois les fontes prêtes ;
+l'export attend ce signal avant de tirer le PDF. Dans le même mouvement, le
+tracé de la réglure est recalé sur la ligne de base réellement mesurée (les
+navigateurs arrondissent les métriques au pixel, ce qui décalait le texte de
+0,17 mm au-dessus des traits), et les cases d'un tableau de signes ou
+de variations posent leur ligne de base sur un trait : au milieu de la rangée
+pour les cases centrées, sur le premier trait sous le filet pour les cases en
+haut, sur le dernier trait avant le filet pour les cases en bas — par un
+coussin de remplissage, sans toucher aux hauteurs de rangées. Ce calage des
+cases se fait une fois le tableau posé sur la grille, pas avant : mesuré avant
+le glissement, il reportait ce glissement sur chaque case. Le rejeu dans Chrome
+ne mesure qu'à l'événement `load` — les fontes embarquées ne sont pas encore
+décodées quand le script s'exécute, et une mesure prise à ce moment-là
+reposerait sur la fonte de secours — puis une seconde fois quand
+`document.fonts` se déclare prêt ; l'export tient un échec du sondage pour
+« pas encore prêt », jamais pour un feu vert.
+
+**La ligne de base d'une formule était lue sur une ligne fantôme.** KaTeX 0.18 a
+renommé `.strut` en `.katex-strut` et enveloppe chaque formule affichée dans un
+`<span>` sans classe : l'étai n'était plus jamais trouvé, et la sonde de
+secours, posée devant cette enveloppe en ligne, créait un bloc anonyme
+au-dessus de la formule et mesurait *sa* ligne de base — 0,7 mm de travers
+pour les zéros de `q`, 4,9 mm pour un système d'accolades, et différemment
+selon le moteur. L'étai est cherché sous ses deux noms, sa hauteur mesurée
+compense l'échelle du zoom, et la sonde ne s'arrête plus sur un élément en
+ligne qui porte un bloc. Les rangées d'un environnement (`cases`, `aligned`,
+`array`, matrices) se posent elles aussi sur les lignes : l'aperçu mesure
+l'écart naturel des rangées et leur décalage par rapport à la ligne de base de
+la formule, puis recompose la formule avec `\\[…]` entre les rangées et un
+`\rule` invisible en tête ou en queue — KaTeX traite ces valeurs comme des
+minima, à la manière de `\@xargarraycr`, d'où une correction par mesures
+successives jusqu'à 0,05 mm. La source d'origine est conservée sur
+l'enveloppe, de sorte que chaque passe repart d'elle. Sur réglure Seyès, la
+hauteur d'un objet s'arrondit au multiple du pas (`--retour-mm`), pas de
+l'interligne fin : le texte qui suit une image ou un tableau retombe sur une
+grande ligne. Les cahiers échappent au resserrement des blancs
+(`--conduite` fixé), qui déplaçait l'intérieur des objets après leur pose.
+Le document d'impression consigne l'issue du rejeu dans son titre, que
+l'export relit et affiche à la suite de « PDF écrit ».
+
+**Le passage en colonnes sautait entièrement à la page suivante dès qu'il ne
+tenait pas en entier, même s'il restait de la place.** `<Compose>sur n
+colonnes { … }` (hors réglure) repose sur les vraies colonnes CSS du
+navigateur, qui répartissent le texte à l'œil (`column-fill: balance`) sans
+égard pour la page ; le découpage ne savait déplacer que des paragraphes
+entiers d'une colonne à l'autre, et dès qu'aucun paragraphe entier ne
+tenait dans la place restante, il renonçait et renvoyait tout le bloc à la
+page suivante. Le découpage bascule maintenant, le temps de la mesure,
+sur une seule colonne à la largeur d'une vraie colonne, et y réutilise le
+même repérage ligne à ligne qu'un paragraphe ordinaire (`coupeParagraphe`)
+pour trouver où couper dans le texte, à hauteur de ligne près plutôt que de
+paragraphe entier ; le budget de recherche est la place restante multipliée
+par le nombre de colonnes, exactement ce que ces colonnes peuvent contenir.
+Le bloc qui reste sur la page reçoit une hauteur explicite et
+`column-fill: auto`, pour qu'il remplisse ses colonnes dans l'ordre plutôt
+que de les équilibrer ; la suite, sur la page qui vient, retrouve
+l'équilibrage naturel.
+
+**Scintillement pendant la frappe.** Chaque cahier de réglure signalait sa
+pose sur un bandeau rouge plein écran (`#diag`), y compris quand tout est
+bien posé — pour un document de plusieurs pages, ce bandeau clignotait donc
+à chaque cahier réaligné, à chaque frappe. Ce journal, qui ne servait qu'au
+diagnostic en cours de mise au point, est retiré : le bandeau ne s'allume
+plus que pour les vrais problèmes (bloc trop grand pour la page, tableau ou
+colonnes non sécables), comme partout ailleurs dans le moteur. Au passage,
+la pose d'un objet ne mesure plus deux fois sa ligne de base — une mesure
+en fin de pose faisait doublon avec celle qui venait de faire converger sa
+marge, sans jamais rien y changer.
+
+**Un cahier empile ses lignes, il ne les fait plus fusionner.** Le calage suppose
+que la marge qu'on donne à un élément s'ajoute à celle du précédent. En flux
+normal, deux marges verticales voisines ne s'ajoutent pas : elles fusionnent, et
+seule la plus grande subsiste. Un objet précédé d'un titre lui-même remonté ne
+pouvait donc plus descendre : la correction était calculée, écrite, et sans
+effet ; la boucle la recalculait à l'identique cinq fois de suite, puis rendait
+au bas une compensation qui, elle, s'appliquait. Un cahier est maintenant une
+colonne flexible, où les marges des enfants s'ajoutent comme le calcul le
+suppose. La boucle abandonne par ailleurs son glissement dès qu'une reprise ne
+déplace rien, plutôt que d'insister contre une mise en page qui ne cède pas.
+
+**Une formule se pose par sa ligne de base, jamais par une boîte.** La règle qui
+choisit l'ancre cherchait, dans les quatre premiers niveaux de l'objet, un
+tableau, une image ou un `svg` — et se posait sur le haut de ce qu'elle trouvait.
+Or KaTeX dessine le radical avec un `svg`, et une formule en display enferme ses
+boîtes dans une cascade de blocs : selon la formule, la recherche tombait sur une
+boîte différente, d'où des écarts qui variaient d'une ligne à l'autre au lieu
+d'être constants. La règle est maintenant explicite : un objet qui porte un
+tableau se pose sur son filet haut, un objet qui porte une formule se pose sur sa
+ligne de base, et la recherche de boîte ne s'applique qu'à ce qui n'est ni l'un
+ni l'autre.
+
+**La ligne de base d'une formule se lit sur son étai.** Chercher la ligne de base
+d'une formule en sondant le flux d'une boîte donnait un résultat proche mais
+jamais exact, et différent d'une formule à l'autre. KaTeX la déclare pourtant
+lui-même : chaque `.base` porte un étai dont le style dit la profondeur sous la
+ligne de base. Le bas de l'étai moins cette profondeur donne la ligne de base
+exacte, sans mesure indirecte. C'est un calcul, non plus une sonde — et c'est,
+sur cette réglure, la dernière ancre qui restait mesurée.
+
+**`<page suivante>` s'écrit aussi dans une réglure.** La balise n'y produisait
+rien : la coupe d'un cahier ne connaissait que le débordement. Le moteur pose
+maintenant la marque de saut dans le cahier, invisible, et la composition y
+tranche avant même de regarder si la page est pleine — ce qui évite de compter
+les lignes vides pour forcer un changement de page.
+
+**La ligne de base d'une formule se lit dans son socle.** La sonde se posait dans
+`.katex-html`, le bloc qui enveloppe une formule composée en display. La ligne de
+base qu'on y lit est celle de la ligne entière, où viennent s'aligner des boîtes
+que KaTeX déplace ensuite par ses propres décalages verticaux ; ce n'est pas tout
+à fait celle que l'œil voit. Elle se pose maintenant dans le premier `.base`, la
+boîte où KaTeX cale son étai et sur laquelle la formule est réellement assise.
+
+**Le filet d'un tableau n'est pas son bord.** L'ancre d'un tableau était le haut
+de sa boîte, alors que le trait qui doit tomber sur la ligne est dessiné à
+l'intérieur : le tableau se posait un demi-filet trop haut, uniformément. La
+moitié de l'épaisseur du trait entre désormais dans l'ancre.
+
+**Les rangées d'un tableau se comptent en carreaux, elles aussi.** Elles étaient
+calées par tâtonnement : mesurer le filet, corriger, recommencer. Deux défauts en
+sont sortis. Le tâtonnement n'effaçait jamais les hauteurs de la passe précédente,
+si bien qu'à chaque nouvelle composition il repartait des hauteurs déjà corrigées
+et les gonflait — une rangée de 10 mm avait atteint 25. Et il ne pouvait pas
+resserrer une rangée sous la hauteur de son contenu, alors que le tiers de
+millimètre à reprendre n'était pas du contenu mais le filet lui-même. Les rangées
+suivent maintenant la voie des colonnes : hauteurs remises à zéro, mesure de la
+hauteur naturelle, puis hauteur imposée en nombre entier de carreaux, cellules en
+`border-box` pour que le filet entre dans le compte. Un calcul au lieu d'une
+poursuite.
+
+**On glisse un objet, on ne l'écarte plus.** Poser revenait à pousser jusqu'à la
+ligne suivante, puis à combler le bas jusqu'à l'interligne d'après : un objet
+pouvait ainsi gagner près de deux interlignes de blanc, et six objets à la suite
+une page entière. La pose choisit maintenant la ligne la plus proche, au-dessus
+comme au-dessous, et rend au bas ce qu'elle prend au haut — la marge basse vaut
+l'opposé de la marge haute. L'objet glisse dans sa place au lieu de l'agrandir :
+le blanc entre les éléments est celui que l'auteur a écrit, pas celui que le
+calage ajoute.
+
+L'ordre des trois calages comptait aussi. Les largeurs de colonne changent le
+retour à la ligne, donc la hauteur des rangées : les colonnes se règlent
+maintenant avant la pose, et les rangées après, sur une grille qui ne bouge plus.
+
+**Les colonnes d'un tableau se comptent en carreaux.** Ajuster les largeurs une
+à une ne pouvait pas aboutir : en disposition automatique, fixer une colonne
+redistribue les autres, et la précédente se déréglait. Le tableau passe donc en
+disposition fixe, sa largeur totale et celle de chaque colonne étant arrêtées
+d'avance en nombre entier de carreaux. Les cellules passent en `border-box`, sans
+quoi la largeur demandée s'entend hors marges intérieures et hors filet : la
+première colonne, qui porte 6,5 mm de blanc et son trait, débordait d'autant et
+poussait le deuxième filet à un millimètre de sa verticale.
+
+**Le calage se rend visible.** Après avoir posé un cahier, l'atelier remesure
+chaque ancre et signale au diagnostic le plus grand écart résiduel dès qu'il
+dépasse cinq centièmes de millimètre. Un désaccord entre ce que l'atelier mesure
+et ce que la page imprime ne se lit pas sur le PDF : il fallait pouvoir le lire
+à la source.
+
+**Toute ligne d'un cahier se pose, pas seulement les objets.** Une ligne écrite
+au corps de la réglure tombe juste d'elle-même : c'est sur ses métriques qu'est
+calculée la position de la ligne de base dans l'interligne. Il suffit d'y glisser
+un titre en 11 pt, ou n'importe quoi qui change de corps, pour que la ligne de
+base se déplace dans son interligne et flotte à mi-carreau. La pose s'applique
+donc maintenant à tous les enfants d'un cahier, la nappe exceptée, et non aux
+seuls objets ; une ligne déjà juste ne bouge pas, le premier calcul suffisant à
+le constater. Une ligne d'écriture se cale sur l'interligne plein, un objet sur
+le pas de pose, plus fin.
+
+**Un tableau se cale aussi sur les verticales.** Les rangées tombaient sur le
+quadrillage mais les colonnes le traversaient. Les largeurs de la première rangée
+sont désormais ajustées, colonne par colonne, jusqu'à ce que chaque filet
+vertical rejoigne une ligne — le navigateur refusant de descendre sous la largeur
+du contenu, une colonne trop étroite reste simplement où elle est. Et l'ancre
+d'une boîte n'est plus le haut de l'objet mais le haut de la boîte elle-même :
+un tableau enveloppé dans un conteneur à marge se posait sinon un demi-millimètre
+trop bas, uniformément.
+
+**L'écran et l'impression partagent la même géométrie.** La réglure avait deux
+mesures : des millimètres pour l'impression, et sous `@media screen` un interligne
+arrondi au pixel entier — 38 px pour 10 mm, 30 px pour 8 — afin que ses traits
+restent nets à l'écran. Or l'atelier mesure à l'écran et pose des marges qui
+valent pour les deux médias. Un pixel arrondi, c'est 0,054 mm par interligne ; sur
+huit interlignes, presque un demi-millimètre, et voilà l'axe des abscisses à côté
+de sa ligne. Aucune marge ne pouvait convenir aux deux grilles à la fois. Les
+longueurs en pixels sont donc supprimées : tout est en millimètres, l'écran montre
+exactement ce que le papier recevra, au prix d'un lissage des traits à l'écran.
+
+Le calage des rangées d'un tableau visait par ailleurs la hauteur de la rangée,
+quand ce qui doit tomber sur le quadrillage est le **filet** — la hauteur plus le
+trait. Il vise maintenant la position mesurée du filet suivant, et se reprend
+jusqu'à ce qu'elle tombe juste.
+
+**La pose se corrige d'elle-même.** Poser un objet supposait de savoir prédire
+où tomberait son ancre. Trois choses démentaient la prédiction. La sonde qui
+cherche la ligne de base descendait dans `.katex-mathml`, ce doublon MathML que
+KaTeX rend invisible et sort du flux : sur une formule composée en display, elle
+mesurait donc la ligne de base d'un fantôme d'un pixel, et la formule se posait à
+plus d'un millimètre. Les rangées d'un tableau de signes valent 10 mm de contenu
+plus le filet qui les sépare, soit 10,3 : deux carreaux et un tiers, et le bas du
+tableau dérivait d'un millimètre sur quatre filets. Enfin, un cahier coupé entre
+deux pages emportait dans sa suite des marges calculées pour sa place d'avant la
+coupe.
+
+Aux trois, la même réponse : ne plus prédire, mesurer et recommencer. La sonde
+ignore ce qui n'est pas dans le flux ; la pose mesure l'ancre, corrige, remesure,
+jusqu'à quatre fois — ce qui la rend indifférente à toute erreur de modèle ; les
+rangées d'un tableau sont ramenées au nombre entier de carreaux le plus proche en
+ajustant la hauteur des cases ; et la suite d'un cahier coupé est reposée dès
+qu'elle rejoint sa page. L'accord du repère suit la même règle : l'échelle et
+l'origine sont reprises jusqu'à ce que la mesure tombe juste.
+
+**Un objet posé sur une réglure garde sa typographie.** La réglure imposait aux
+objets qu'elle porte son corps d'écriture et son interligne : un tableau de
+variations composé pour un cahier de 5 mm héritait d'un corps de 5,2 mm, tandis
+que ses rangées gardaient les 10 et 20 mm que leur donne la feuille de style. Le
+contenu ne tenait plus dans la case et venait toucher les filets, quand la même
+étude hors cahier restait parfaitement aérée. Pire, la règle qui met à zéro
+l'interligne des `span` — indispensable pour que l'écriture cursive garde son
+rythme — s'appliquait aussi à l'intérieur des objets, où elle écrasait le blanc
+que KaTeX réserve au-dessus et au-dessous de ses lignes. Un objet reçoit
+désormais le corps et l'interligne du document, comme partout ailleurs, et la
+réglure ne gouverne plus que sa **place**. Le tableau de signes étant bâti sur un
+module de 10 mm, soit deux carreaux, ses filets intérieurs tombent d'eux-mêmes
+sur le quadrillage dès que son bord haut y est posé.
+
+**Un objet posé sur une réglure y pose sa première ligne.** Le calage d'un
+tableau, d'une formule ou d'une figure sur le cahier était fait à l'aveugle :
+le moteur décalait le haut de l'objet d'une valeur calculée pour l'écriture
+cursive, puis l'atelier comblait le bas jusqu'au prochain interligne. Le résultat
+tombait à un demi-millimètre près — assez pour que l'œil voie que rien ne repose
+sur les lignes. L'atelier mesure maintenant l'ancre qui convient à la nature
+de l'objet — le bord haut d'une boîte (tableau, image, figure), la ligne de base
+d'une écriture (prose, formule), l'origine d'un repère — et la pose exactement
+sur une ligne de la réglure ; le bas continue d'être comblé
+jusqu'au prochain interligne, de sorte que l'écriture qui suit retrouve ses
+lignes. La clé `--pose-mm` porte le pas de pose, l'interligne fin de la réglure
+Seyès. Le repère va plus loin : `axes()` publie deux
+points invisibles, l'origine et l'unité, dont l'atelier tire le facteur d'échelle
+qui donne à l'unité un nombre entier de carreaux, puis amène l'origine sur une
+intersection — verticale comme horizontale.
+
+**La réglure se déduit de la place, jusqu'au dernier carreau.** Le nombre de
+carreaux en largeur et de lignes en hauteur n'est plus une constante à laquelle
+il fallait accorder ses marges : il découle de la disposition, des quatre
+marges, des quatre espacements et, en composition, du nombre de colonnes. La
+nappe était jusqu'ici dessinée sur trois cents millimètres de côté puis rognée
+par le bloc, ce qui laissait au bord un carreau ouvert et obligeait à choisir
+des marges « qui tombent juste » — `docs/CAHIERS.md` en donnait la liste. Elle
+est maintenant taillée à la mesure exacte : le plus grand nombre entier de
+carreaux et de lignes qui tienne dans la place, le reliquat laissé en blanc.
+Aucun réglage n'est plus interdit, et aucun ne tronque plus rien. La
+documentation garde les réglages remarquables — le cahier A4, le petit cahier
+17 × 22, le cahier d'écolier en paysage sur deux colonnes — non plus comme une
+contrainte mais comme des repères.
+
+**Le corpus n'a plus qu'une source.** Les 2,3 Mo de TOML de `corpus/donnees/` et
+le bac à sable `corpus/fusion/` dataient d'avant le passage à SQLite ; plus une
+ligne de code ne les lisait depuis la 3.6. Ils sont supprimés : la base
+`corpus/corpus.db` est la seule source, comme annoncé.
+
+**La réglure d'une composition est celle de la composition.** Une réglure
+placée dans un passage en colonnes était un bloc comme un autre : les colonnes
+le fragmentaient, et comme la nappe réglée est posée derrière le bloc, elle ne
+se peignait que dans le premier fragment — le reste du texte partait en
+colonnes de débordement, sans lignes, hors de la feuille. La réglure est
+maintenant hissée sur la composition elle-même : une seule nappe, dessinée
+bande par bande à la largeur exacte d'une colonne, court derrière toutes les
+colonnes, chacune avec sa marge rouge et ses carreaux, et le texte passe d'une
+colonne à la suivante sans quitter les lignes. C'est le cahier d'écolier en
+paysage, et il tient. La réglure doit être le seul contenu de la composition —
+une nappe réglée ne se partage pas avec des colonnes de texte imprimé —, faute
+de quoi le mélange est refusé avec son message.
+
+**La réglure se nomme.** `<Écris>sur des lignes` disait la ligne sans nommer la
+réglure : la désignation du papier réglé est plus juste. On écrit maintenant
+`<Écris>en réglure Seyès { … }` pour les grands carreaux. L'ancienne écriture
+n'est pas conservée : elle est refusée, et le message donne la forme à écrire.
+Le motif SVG de la réglure ne voyage avec le document que s'il sert.
+
+**L'annonce de la réglure porte la parure.** La police, la graisse, l'italique
+et la couleur se disent dans la description, avec les mots de style ordinaires
+— `<Écris>en réglure Seyès en ARIAL bleu nuit { … }` —, la cursive du document
+restant le défaut : c'est ainsi qu'on écrit en script sur la réglure, où la
+main n'est pas toujours de mise. La taille et l'interligne, eux, sont refusés
+avec leur message : ils se déduisent des carreaux, sans quoi l'écriture
+quitterait les lignes ; c'est `hauteur` qui les commande, dans le bloc
+`document`. Un objet posé sur le cahier ne prend plus la cursive : il reprend
+la police du document, ce qu'un tableau de variations avait toujours mérité.
+
+**Le calage des objets sur la réglure se fait au millimètre.** La compensation
+était calculée et posée en pixels d'écran, puis imprimée dans une page réglée
+en millimètres : l'écart se voyait dès le premier objet, et toutes les lignes
+suivantes le portaient. Elle est maintenant mesurée au sous-pixel près
+(`getBoundingClientRect` plutôt que `offsetHeight`) et posée en millimètres,
+donc identique à l'écran et au PDF. L'objet forme en outre son propre contexte
+de bloc, ce qui empêche les marges de ses enfants — un tableau, une figure — de
+s'échapper sans être comptées : c'est ce qui décrochait les tableaux de
+variations.
+
+**Une réglure ne se pose pas dans une autre.** Une page de cahier n'a qu'une
+réglure. L'imbrication est refusée avec son message, à l'endroit même où elle
+est écrite ; c'est la colonne qui porte la réglure, jamais l'inverse.
+
+**Le cahier accueille tous les objets.** `<Écris>en réglure Seyès { … }` ne
+prenait que du texte : une image, un cadre, un tableau, une figure lui étaient
+interdits, ce qui condamnait la réglure à l'exercice de copie. Toute balise qui
+ouvre un objet — reconnue à son verbe — s'écrit maintenant sur sa propre ligne
+dans le corps du bloc et s'insère entre deux lignes réglées. L'objet échappe à
+l'interligne du cahier, mais sa hauteur est arrondie à un nombre entier
+d'interlignes au moment de la composition, de sorte que la réglure reste en
+phase : les lignes suivantes retombent sur les traits forts. Une tabulation
+devant la balise décale l'objet comme elle décale une ligne. Ce qui n'ouvre pas
+un objet — un alignement, un style nommé, une mise en forme au fil de la ligne
+— reste du texte réglé, et le mode mathématique ne s'ouvre toujours pas sur le
+cahier.
+
+**Le chapitre de l'écriture en réglure existe enfin.** Le sommaire du
+manuel l'annonçait depuis la 2.6 et l'ancre était posée, mais la place était
+vide : la réglure, la cursive, les trois clés du bloc `document`, la ligne
+vide comme ligne à remplir, la tabulation comme carreau, les objets sur le
+cahier et le cahier d'écolier en paysage y sont maintenant décrits.
+
+**L'espacement des colonnes se règle dans le bloc `document`.** L'option
+« espacées de … mm », puis « avec un espacement à gauche de … et à droite
+de … », disaient sur la composition ce que la clé `espacements` du bloc
+`document` disait déjà pour la page : deux syntaxes pour une seule notion, le
+blanc laissé au bord de la zone d'écriture. Il n'en reste qu'une.
+`espacements: {haut;droite;bas;gauche}` vaut pour le bord d'une colonne comme
+pour le bord de la feuille, et **la gouttière entre deux colonnes est la somme
+de l'espacement droit et de l'espacement gauche** — elle se déduit au lieu de
+se déclarer, et la composition ne porte plus que le nombre de colonnes et le
+filet. Le cahier d'écolier tient donc dans son en-tête : `espacements:
+{0;5;0;15}` en paysage donne la marge intérieure large et la marge extérieure
+presque nulle, à toutes les colonnes de toutes les pages. Sans espacement, les
+colonnes se touchent. L'ancienne écriture est refusée, et le message renvoie au
+bloc `document`.
+
+**Un passage se compose en colonnes.** `<Compose>sur deux colonnes { … }` met
+en colonnes ce qu'il contient, et rien d'autre : le reste du document garde la
+pleine largeur, ce qui évite le défaut d'un réglage global — une frise, un
+tableau large ou une figure n'ont pas à s'échapper d'un régime qu'ils n'ont
+jamais demandé. De deux à cinq colonnes, en toutes lettres ou en chiffres ; la
+gouttière vient des espacements du document ; un filet se demande et se décrit
+comme tous les traits de docdg (« avec un filet gris clair en pointillés de
+0,3 mm »). Les colonnes s'équilibrent d'elles-mêmes, et
+un passage plus haut qu'une page se poursuit sur la suivante, en colonnes de
+même — à la différence du cadre, il n'a pas à se déclarer sécable : un texte
+courant n'a aucune raison de rester d'un seul tenant. Le verbe `<Compose>`,
+retiré avec la page de titre, reprend ainsi du service dans le seul emploi qui
+lui reste — composer la page —, et l'ancienne écriture continue d'être
+refusée par son message propre. `basique3` en montre la forme, `publication3`
+la coupure d'un passage de quatre paragraphes sur deux pages.
+
+**La frise chronologique n'a plus de titre.** La 3.6 tirait un titre du
+complément de la description — « la frise chronologique du Moyen Âge » donnait
+« Le Moyen Âge », posé sous la figure. Une frise n'a pas plus à porter son
+titre qu'un tableau ou une image : celui qui en veut un l'écrit lui-même, avec
+les styles du document, et le place où sa page le demande — au-dessus, en
+dessous, ou nulle part. La frise s'annonce donc « la frise chronologique » et
+rien d'autre. L'ancienne écriture n'est pas conservée : un complément est
+refusé, et le message dit quoi écrire à la place. Le calcul de l'article
+accordé à la préposition, la ligne de légende du SVG et la hauteur qu'elle
+réservait disparaissent ; `histoire1` à `histoire4` et `publication2` sont
+récrits dans la nouvelle forme, chacun avec son titre à part — au-dessus dans
+les uns, en dessous dans les autres.
+
 ## 3.6 — le corpus en base de données
 
 **Le seuil de la césure se règle.** `césure` acceptait `oui`/`non` ; il
@@ -980,7 +1821,7 @@ faisait recalculer aux dessins en largeur 100 % une hauteur × 1/k que le
 facteur k ramenait à la hauteur de départ — réduction annulée, frise enfoncée
 dans la marge basse. Le bloc réduit est plus étroit que la colonne, et centré.
 
-**Entre accolades, une ligne est une ligne.** `<12pt italique>{ … }`
+**Entre accolades, une ligne est une ligne.** `<12 pt italique>{ … }`
 recomposait tout sur une seule ligne, quel que soit le découpage du source.
 Désormais les accolades d'un style se comportent comme tous les corps accolés
 de docdg — tableau, liste, frise, arbre : ce que l'auteur dispose est composé
@@ -1556,7 +2397,7 @@ de l'application déclarent toutes un plancher inférieur.
 
 ### Ajouté
 
-**L'écriture sur des lignes réglées.** `<Écris>sur des lignes{ … }` pose la
+**L'écriture en réglure réglées.** `<Écris>en réglure Seyès{ … }` pose la
 Seyès de l'école élémentaire et y écrit en cursive. C'est le geste qui
 manquait au niveau que docdg servait le moins : le modèle d'écriture, la
 ligne à recopier, la fiche de copie du cahier du jour.
@@ -1566,7 +2407,7 @@ page {
 	seyès: Schola;
 }
 
-<Écris>sur des lignes{
+<Écris>en réglure Seyès{
 Léa mange une pomme, Lili un abricot et Murielle des fraises des bois.
 }
 ```
@@ -1586,7 +2427,7 @@ qu'aucun calcul soit demandé à l'auteur. Un cahier plus large se dit
 `hauteur: 12;`, et tout suit.
 
 **L'interligne est une longueur, non un coefficient.** C'est ce qui permet à
-`<ARIAL gras 14pt>{Paris}` de traverser une ligne sans la décrocher : le mot
+`<ARIAL gras 14 pt>{Paris}` de traverser une ligne sans la décrocher : le mot
 écrit plus gros déborde de son interligne — ce que fait une main — sans que
 la ligne de base bouge d'un dixième de millimètre. Un `line-height` sans
 unité s'hérite comme nombre et se recalcule sur la taille de chaque mot ; la
@@ -1609,7 +2450,7 @@ Il en distingue maintenant trois, une par écriture : `script:` pour le texte
 imprimé, `seyès:` pour le manuscrit, `math:` pour les mathématiques. Les deux
 premières ont leur défaut ; la cursive n'en a pas — personne ne peut deviner
 celle qui est installée, et une cursive de remplacement ne serait pas une
-cursive. Sans elle, `<Écris>sur des lignes` le dit plutôt que d'écrire en
+cursive. Sans elle, `<Écris>en réglure Seyès` le dit plutôt que d'écrire en
 Times sur des lignes.
 
 *Ce que cela demande aux documents existants :* `police:` devient `script:`.
@@ -1673,7 +2514,7 @@ deux graphies sont admises.
 Marelle — la cursive du ministère de l'Éducation nationale, publiée sous
 licence SIL Open Font License 1.1, qui en permet expressément
 l'incorporation — est embarquée au binaire et devient la cursive par défaut.
-`<Écris>sur des lignes` fonctionne donc sans que le bloc `page` déclare quoi
+`<Écris>en réglure Seyès` fonctionne donc sans que le bloc `page` déclare quoi
 que ce soit, et la fiche s'imprime sur une machine où rien n'est installé. La
 Schola reste la seconde cursive embarquée, et se demande par son nom.
 

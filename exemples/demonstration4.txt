@@ -236,9 +236,7 @@ soit h2 = <bleu italique sous-section>
 <Montre>l'inégalité de Cauchy-Schwarz
 
 <h2>Les grands théorèmes de l'analyse réelle
-
 <Montre>la propriété d'Archimède
-
 
 <Montre>le théorème des valeurs intermédiaires
 

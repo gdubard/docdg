@@ -30,7 +30,7 @@ soit correction = <fond gris clair>
 <Énonce>le théorème de Bolzano-Weierstrass <étiquette>{bw}
 <Démontre>le théorème de Bolzano-Weierstrass
 
-<page suivante h2>Continuité et dérivation
+<h2>Continuité et dérivation
 <Énonce>le théorème des bornes atteintes
 <Démontre>le théorème des bornes atteintes
 

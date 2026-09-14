@@ -9,16 +9,15 @@ document {
 }
 soit h0 = <bleu nuit gras chapitre num>
 soit h1 = <bleu nuit gras section num>
-soit h2 = <bleu nuit italique sous-section num>
-soit resume = <italique 10pt>
+soit resume = <italique 10 pt>
 soit motcle = <petites capitales>
 
 soit nature = <petites capitales grand au centre>
-soit maison = <14pt au centre>
+soit maison = <14 pt au centre>
 soit filiere = <italique au centre>
-soit ouvrage = <gras 18pt au centre>
-soit complement = <16pt au centre>
-soit mention = <14pt au centre>
+soit ouvrage = <gras 18 pt au centre>
+soit complement = <16 pt au centre>
+soit mention = <14 pt au centre>
 
 <au centre>{<Insère l'image IMAGES/institut.svg avec une largeur de 30 mm>}
 
@@ -42,7 +41,7 @@ soit mention = <14pt au centre>
 
 
 
-<12pt italique>{
+<12 pt italique>{
 Devant le jury composé de :
 madame le professeur Hélène VIRECOURT, présidente
 monsieur le professeur Bastien QUÉRAND, directeur de thèse

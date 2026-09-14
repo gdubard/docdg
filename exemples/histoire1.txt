@@ -1,22 +1,28 @@
 document {
 	orientation: portrait;
-	marges: 5;
+	marges: 10;
 	espacements: 0;
 	taille: 12;
-	interligne: 1,4;
+	interligne: 1,8;
 	césure: 10;
 	numérotation: sans;
 }
 
 soit titre = <bleu nuit gras grand au centre>
 soit h1 = <bleu nuit gras section num>
+soit h2 = <rouge italique gras au centre>
 soit remarque = <gris foncé italique>
 
 <titre>Les grandes périodes de l'histoire
 
 <h1>Une frise illustrée
 	Cinq périodes, quatre repères : chaque grande période s'ouvre et se referme sur un événement qui a changé la vie des hommes. Une image accompagne chaque repère — « avec l'image » en fin de ligne, le chemin écrit en entier depuis le dossier du document.
-<Construis>la frise chronologique des grandes périodes {
+
+	La frise ne porte pas de titre : elle n'en impose pas. Celui qui la veut l'écrit lui-même, au-dessus comme ici, ou en dessous.
+
+<h2>De l'invention de l'écriture à nos jours
+
+<Construis>la frise chronologique {
 	de -3300 à 476 : Antiquité (L'écriture ouvre la période, la chute de Rome la referme.)
 	de 476 à 1492 : Moyen Âge
 	de 1492 à 1789 : Temps modernes
@@ -27,10 +33,10 @@ soit remarque = <gris foncé italique>
 	1789 : Révolution française (Le peuple prend la Bastille le 14 juillet.) avec l'image histoire/bastille.svg
 }
 
-<h1>Le Moyen Âge de plus près
-	La même frise se resserre sur une période : l'échelle s'ajuste toute seule, et les cartouches se rangent de part et d'autre du bandeau sans jamais se recouvrir.
+<page suivante h1>Le Moyen Âge de plus près
+	La même frise se resserre sur une période : l'échelle s'ajuste toute seule, et les cartouches se rangent de part et d'autre du bandeau sans jamais se recouvrir. Le titre, cette fois, se place en dessous.
 
-<Construis>la frise chronologique du Moyen Âge {
+<Construis>la frise chronologique {
 	de 476 à 987 : Haut Moyen Âge
 	de 987 à 1492 : Moyen Âge central et final
 	496 : Baptême de Clovis
@@ -39,6 +45,9 @@ soit remarque = <gris foncé italique>
 	1337 : Début de la guerre de Cent Ans
 	1431 : Mort de Jeanne d'Arc
 }
+
+<h2>Le Moyen Âge
+
 <h1>Une image dans le fil du texte
 	Le chemin se nomme dans la balise, de la même façon que pour une vignette de frise : une seule forme à retenir. Un nom comportant des espaces s'accolade — <<l'image {histoire/mon dessin.svg}>>.
 

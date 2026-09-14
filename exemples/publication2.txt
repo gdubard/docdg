@@ -8,15 +8,16 @@ document {
 }
 soit h1 = <bleu nuit gras section num>
 soit h2 = <bleu nuit italique sous-section num>
-soit chapo = <italique 10pt>
+soit chapo = <italique 10 pt>
 soit motcle = <petites capitales>
-soit remarque = <gris foncé italique 10pt>
+soit remarque = <gris foncé italique 10 pt>
 
 soit nature = <petites capitales grand au centre>
-soit ouvrage = <gras 24pt au centre>
-soit complement = <16pt au centre>
+soit ouvrage = <gras 24 pt au centre>
+soit complement = <16 pt au centre>
 soit mention = <au centre>
 soit maison = <italique au centre>
+soit h3 = <gras au centre>
 
 <nature>{Exposé d'histoire}
 
@@ -44,7 +45,7 @@ soit maison = <italique au centre>
 
 	Avant d'expliquer, il faut situer. La première frise ne fait que cela : poser les dates dans l'ordre du temps, sans les commenter. Les six repères ci-dessous sont ceux que le manuel retient ; chacun marque une rupture que la suite de l'exposé devra justifier.
 
-<Construis>la frise chronologique de la Révolution et de ses suites {
+<Construis>la frise chronologique {
 14/07/1789 : Prise de la Bastille (Le peuple de Paris s'empare de la forteresse.) avec l'image histoire/bastille.svg
 26/08/1789 : Déclaration des droits de l'homme et du citoyen avec l'image histoire/ecriture.svg
 21/09/1792 : Proclamation de la République avec l'image histoire/tricolore.svg
@@ -53,13 +54,17 @@ soit maison = <italique au centre>
 04/09/1870 : Proclamation de la Troisième République avec l'image histoire/tricolore.svg
 }
 
+<h3>{La Révolution et ses suites}
+
 	<remarque>Ces vignettes sont des pictogrammes dessinés pour docdg, non des documents d'époque. Un exposé rendu à un professeur gagnerait à leur substituer une gravure de Gallica ou des collections de la BnF.
 
 <page suivante h1>Périodiser : trois lectures d'un même intervalle
 
 	Une frise à une seule bande raconte une histoire ; trois bandes en confrontent trois. Ce qui est simultané se lit dans la même verticale, et c'est là que l'explication commence : le suffrage universel de 1848 tombe la même année que la Deuxième République, mais le chemin de fer et la presse à bon marché, eux, l'ont précédé d'une dizaine d'années.
 
-<Construis>la frise chronologique des trois chemins vers la République {
+<h3>{Trois chemins vers la République}
+
+<Construis>la frise chronologique {
 régimes {
 de 1792 à 1804 : Première République
 de 1804 à 1814 : Premier Empire
@@ -86,11 +91,12 @@ de 1837 à 1870 : Essor du chemin de fer
 
 	Trois observations que le texte seul aurait laissées dans l'ombre.
 
-<Dresse>un tableau [mc ; md ; md] avec une bordure bleu marine et des entêtes en blanc sur fond bleu marine{
+<Dresse>un tableau avec une bordure bleu marine et des entêtes en blanc sur fond bleu marine {
+	<mc>	<md>	<md>
 	Colonne	Ce qu'on lit	Ce qu'on en tire
-	[1848 ; Suffrage universel et Deuxième République ; Le droit de vote naît d'une révolution, non d'une réforme.]
-	[1850-1852 ; Restriction puis rétablissement ; Un droit acquis n'est pas un droit garanti.]
-	[1836-1857 ; Presse à bon marché et chemin de fer ; L'opinion nationale précède les institutions qui la représentent.]
+	[1848]	[Suffrage universel et Deuxième République]	[Le droit de vote naît d'une révolution, non d'une réforme.]
+	[1850-1852]	[Restriction puis rétablissement]	[Un droit acquis n'est pas un droit garanti.]
+	[1836-1857]	[Presse à bon marché et chemin de fer]	[L'opinion nationale précède les institutions qui la représentent.]
 }
 
 <h1>Expliquer : pourquoi quatre-vingts ans ?
