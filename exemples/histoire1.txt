@@ -1,16 +1,16 @@
 document {
 	orientation: portrait;
-	marges: 10;
+	marges: 5;
 	espacements: 0;
 	taille: 12;
-	interligne: 1,8;
+	interligne: 1,4;
 	césure: 10;
 	numérotation: sans;
 }
 
 soit titre = <bleu nuit gras grand au centre>
 soit h1 = <bleu nuit gras section num>
-soit h2 = <rouge italique gras au centre>
+soit h2 = <gras au centre>
 soit remarque = <gris foncé italique>
 
 <titre>Les grandes périodes de l'histoire

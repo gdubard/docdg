@@ -1,9 +1,9 @@
 document {
 	orientation: portrait;
-	marges: 5;
+	marges: 10;
 	espacements: 2;
 	taille: 11;
-	interligne: 1,5;
+	interligne: 1,2;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>
@@ -21,7 +21,7 @@ soit h2 = <bleu italique sous-section>
 <Calcule>MN par le théorème de Thalès, avec AM = 3, AB = 6 et BC = 10
 <Vérifie>si les droites (MN) et (BC) sont parallèles, avec AM = 3, AB = 6, AN = 4 et AC = 8
 
-<page suivante h2>Trigonométrie du triangle rectangle
+<h2>Trigonométrie du triangle rectangle
 <Calcule>BC dans le triangle ABC rectangle en B, avec l'angle A = 30 degrés et AC = 8
 <Calcule>AB dans le triangle ABC rectangle en B, avec l'angle A = 40 degrés et AC = 10
 <Calcule>l'angle A dans le triangle ABC rectangle en B, avec AB = 3 et AC = 6
@@ -44,7 +44,7 @@ soit h2 = <bleu italique sous-section>
 <Convertis>3 L en cm^3
 <Convertis>1250 g en kg
 
-<h2>Transformations du plan
+<page suivante h2>Transformations du plan
 <Soient>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
 <Construis>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
 

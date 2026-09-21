@@ -184,6 +184,7 @@ soit h2 = <bleu italique sous-section>
 
 <Montre>qu'entre deux rationnels distincts il existe un rationnel
 
+
 <Montre>que tout entier supérieur ou égal à 2 admet un diviseur premier
 
 <Montre>que tout entier supérieur ou égal à 2 est un produit de nombres premiers
@@ -213,7 +214,6 @@ soit h2 = <bleu italique sous-section>
 
 <Montre>le lemme de Steinitz
 
-
 <Montre>la formule de dimension
 
 <Montre>que deux espaces de même dimension finie sont isomorphes
@@ -223,7 +223,6 @@ soit h2 = <bleu italique sous-section>
 <h2>Topologie
 
 <Montre>le théorème de Heine-Borel
-
 
 <Montre>la compacité séquentielle
 
@@ -236,7 +235,9 @@ soit h2 = <bleu italique sous-section>
 <Montre>l'inégalité de Cauchy-Schwarz
 
 <h2>Les grands théorèmes de l'analyse réelle
+
 <Montre>la propriété d'Archimède
+
 
 <Montre>le théorème des valeurs intermédiaires
 

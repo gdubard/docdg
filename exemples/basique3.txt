@@ -97,7 +97,6 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 }
 
 
-
 	Dans un cadre, un retour à la ligne génère un nouveau paragraphe :
 <Affiche un cadre avec un fond bleu lavande, une bordure pourpre et des coins arrondis de 3 mm>{
 	Première ligne d'une adresse
@@ -132,7 +131,11 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	Un passage se compose sur deux à cinq colonnes. La gouttière vient des espacements du document, un filet peut les séparer, et ce qui suit l'accolade fermante retrouve la pleine largeur.
 
 <Compose>sur trois colonnes avec un filet gris clair {
-	Trois colonnes conviennent à un lexique ou à une liste de mots courts : la ligne est brève, l'œil en saisit plusieurs d'un seul coup. Les colonnes s'équilibrent d'elles-mêmes. On ne dit pas où couper : on dit combien de colonnes, et le moteur répartit. Un passage plus haut qu'une page se poursuit sur la suivante, en colonnes de même, sans qu'on ait rien à déclarer.
+	Trois colonnes conviennent à un lexique ou à une liste de mots courts : la ligne est brève, l'œil en saisit plusieurs d'un seul coup.
+
+	Les colonnes s'équilibrent d'elles-mêmes. On ne dit pas où couper : on dit combien de colonnes, et le moteur répartit.
+
+	Un passage plus haut qu'une page se poursuit sur la suivante, en colonnes de même, sans qu'on ait rien à déclarer.
 }
 
 <page suivante h1>Listes imbriquées
@@ -161,48 +164,47 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	Premier acte
 	Deuxième acte
 }
-
 <h1>Tableaux avancés
 <h2>Fusions déduites de la forme
 	Aucune fusion ne se déclare. Une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit : le titre, seul sur sa rangée, couvre les quatre colonnes. Une entête suivie de plusieurs rangées de données descend sur autant de lignes : Lundi porte deux crochets, il couvre deux rangées.
 
 <Dresse>un tableau {
-	<mc>		<mg>		<mc>		<mc>
-				Bulletin trimestriel
-	Jour		Matière		Note		Coef.
-	Lundi :		[Maths]		[15]		[4]
-				[Français]	[12]		[3]
-	Mardi :		[EPS]		[16]		[2]
-	Moyenne :	[								  13,7]
+	<mc>	<mg>	<mc>	<mc>
+	Bulletin trimestriel
+	Jour	Matière	Note	Coef.
+	Lundi :	[Maths]	[15]	[4]
+				  [Français]	[12]	[3]
+	Mardi :	[EPS]	[16]	[2]
+	Moyenne :	[13,7]
 }
 
 <h2>Entêtes emboîtées
 	Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil — le tableau a la forme qu'on lui voit.
 <Dresse>un tableau {
-	<mc>		<mc>		<mg>		<md>
-	Semaine		Jour		Matière		Note
-	S1 :	 	Lundi :		[Maths]		[15]
-							[Français]	[12]
-				Mardi :		[EPS]		[16]
-	S2 :		Lundi :		[Maths]		[18]
+	<mc>	<mc>	<mg>	<md>
+	Semaine	Jour	Matière	Note
+	S1 :	 Lundi :	[Maths]	[15]
+						[Français]	[12]
+			Mardi :	[EPS]	[16]
+	S2 :	Lundi :	[Maths]	[18]
 }
 
 <h2>Entêtes fusionnées sur plusieurs colonnes
 	Un tiret après une entête la fait couvrir une colonne de plus, deux tirets deux colonnes. L'espacement autour du tiret ne compte pas : « Identité - », « Identité-» ou un tiret seul dans sa colonne disent la même chose. Un nom composé ne risque rien, le tiret de fusion n'étant jamais suivi d'une lettre.
 <Dresse>un tableau avec des bordures {
-	<mc>		<mc>		<mc>		<mc>
-	Sous-total--						Reste
-	Janvier		Février		Mars		Avril
-	[12]		[15]		[9]			[14]
+	<mc>	<mc>	<mc>	<mc>
+	Identité -	Coordonnées -
+	Nom	Prénom	Ville	Téléphone
+	[Dupont]	[Iris]	[Lyon]	[06 12 34 56 78]
+	[Martin]	[Noé]	[Vaise]	[06 98 76 54 32]
 }
 
 	Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau.
 <Dresse>un tableau avec des bordures {
-	<mc>		<mc>		<mc>			<mc>
-	Identité 	-			Coordonnées 	-
-	Nom			Prénom		Ville			Téléphone
-	[Dupont]	[Iris]		[Lyon]			[06 12 34 56 78]
-	[Martin]	[Noé]		[Vaise]			[06 98 76 54 32]
+	<mc>	<mc>	<mc>	<mc>
+	Sous-total	-	-	Reste
+	Janvier	Février	Mars	Avril
+	[12]	[15]	[9]	[14]
 }
 
 <h2>Une image dans une cellule

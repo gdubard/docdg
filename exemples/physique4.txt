@@ -2,7 +2,7 @@ document {
 	orientation: portrait;
 	marges: 12;
 	taille: 10;
-	interligne: 1,8;
+	interligne: 1,6;
 	niveau: licence 3;
 }
 soit h1 = <bleu marine gras section num>
@@ -52,7 +52,7 @@ soit remarque = <gris foncé italique>
 <Vérifie>l'homogénéité de E = m * c avec E énergie, m masse, c célérité
 	<remarque>Celle-ci est fausse : le moteur indique laquelle des deux dimensions diffère, sans dire laquelle est la bonne.
 
-<page suivante h2>Exercice type
+<h2>Exercice type
 
 <Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — pression de radiation} {
 	Une onde plane progressive monochromatique se propage dans le vide selon l'axe $Ox$, d'amplitude $E_0 = 1,0 * 10^3$ V·m⁻¹.

@@ -1,10 +1,136 @@
+## Correctif expérimental 3.8 — domaines et composition en colonnes
+
+- Ajout de `<Détermine>le domaine de définition de f` pour une fonction réelle d'une variable déjà définie ; prise en charge des intervalles, de leurs bornes ouvertes ou fermées et des unions.
+- Ajout de l'action correspondante dans le classeur et de tests de non-régression.
+- Correction de la recomposition des colonnes lors de l'impression pour les passages qui tiennent entièrement sur une page, sans altérer les passages répartis sur plusieurs pages.
+
 # Journal des versions
 
 Ce projet suit un versionnage simple : le premier chiffre marque un changement
 de nature (ce qu'on peut faire avec docdg), le second une extension dans le
 même esprit.
 
-## 3.7
+## 3.8 — le classeur de saisie
+
+**Correctif des tableaux de signes.** Le moteur tient compte du domaine réel des fonctions comportant des racines carrées et des valeurs absolues. Les intervalles hors domaine sont hachurés, les bornes exclues sont indiquées et les zéros sont préservés. `vitrine.txt` présente désormais la syntaxe actuelle et plusieurs possibilités scientifiques et typographiques de docdg.
+
+**Le bouton Enregistrer disparaît.** L'enregistrement automatique réécrit le
+document une seconde après la dernière frappe : un bouton qui fait la même
+chose n'a plus lieu d'être. Le ruban Fichier garde Ouvrir, Enregistrer sous et
+Exporter, et Ctrl+S (⌘S sur Mac) reste disponible — il enregistre aussitôt, et
+c'est lui qui confirme le remplacement d'un fichier par un document vide, que
+l'enregistrement automatique ne fait jamais de lui-même.
+
+**La saisie devient un classeur.** La barre d'outils et le panneau « Paramétrer »
+laissent place à six sous-onglets disposés comme les intercalaires d'un
+classeur au format paysage : Fichier, Document, Styles, Actions, Corpus,
+Programmation. Chacun tient sur un seul rang de commandes, et le bandeau garde
+une hauteur constante quel que soit l'onglet ouvert : les volets Source et
+Aperçu ne bougent plus quand on passe de l'un à l'autre. Dès qu'une famille
+compte plus de quatre éléments, elle devient une liste déroulante groupée
+plutôt qu'une rangée de boutons — c'est ce qui permet aux trente-huit verbes
+d'action de tenir dans la place d'un seul.
+
+Rien ne s'insère plus par un bouton « Insérer » ou « Appliquer » : le choix
+fait dans une liste écrit aussitôt dans la source, et continuer à composer
+remplace ce qui vient d'être écrit au lieu d'en ajouter. Une balise de style
+s'écrit avec ses accolades, curseur placé entre elles ; le texte tapé dedans
+survit à toutes les retouches de la balise, qui reste modifiable tant que le
+curseur n'en est pas sorti. La liste des actions se lit en deux temps, la
+catégorie puis le verbe, au lieu d'une seule liste où les trente-huit verbes
+se suivaient. Une balise de style
+s'écrit avec ses accolades et le curseur entre elles, prêt pour le texte à
+mettre en forme. Les réglages du
+document réécrivent de même le bloc `document { }` à chaque changement.
+
+**Les objets s'insèrent avec un exemple complet.** Un tableau, une grille, une
+matrice, un système, un graphe, une loi de probabilité ne s'écrivent plus comme
+une amorce vide : le classeur pose un exemple générique entièrement formé, avec
+sa ligne de pistes, ses fusions par tiret, ses entêtes à deux points et ses
+données entre crochets pour un tableau, son plan et ses blocs de zones placés et
+colorés pour une grille. Il ne reste qu'à remplacer les mots.
+
+**Le choix d'une action se fait en deux temps.** Une seule liste de trente-huit
+verbes était longue à parcourir : une liste de catégories — poser, rédiger,
+calculer, démontrer, représenter, disposer — précède maintenant la liste des
+verbes, qui ne montre que ceux de la catégorie retenue.
+
+**Le corpus s'appelle depuis la saisie.** Écrire `<Énonce>` supposait de
+connaître le titre exact de l'entrée, ou d'ouvrir l'onglet Édition pour aller le
+chercher puis de revenir. L'intercalaire Corpus filtre la base par matière,
+niveau, domaine et type — théorème, définition, propriété, loi, règle, modèle,
+principe, postulat, corollaire, relation, axiome — et écrit `<Énonce>` ou
+`<Démontre>` suivi du titre retenu.
+
+**Le point d'insertion ne se perd plus.** Le classeur écrit là où se trouve le
+curseur, mais dès qu'on va chercher une commande, le curseur quitte la source et
+plus rien n'indique où l'insertion tombera. Un témoin reste maintenant affiché à
+l'endroit exact, et le bandeau en rappelle la ligne et la colonne.
+
+**L'exemple `publication5` compose son plan à la française.** Le texte qui
+traite des divisions de l'ouvrage les montre maintenant à l'œuvre : chapitres
+en chiffres romains, sections en lettres capitales, sous-sections en chiffres
+arabes, sous-sous-sections en lettres minuscules — le plan I, A, 1, a de
+l'enseignement supérieur.
+
+**Le booléen s'écrit en quatre mots.** `vrai` et `oui`, `faux` et `non`, la
+casse étant indifférente. La lecture était éclatée en quatre endroits du moteur
+qui ne connaissaient que `vrai` et `faux` — la condition, l'opérande, la valeur
+typée et la saisie ; elle est maintenant unique, dans `booleen_de_mot`, ce qui
+garantit que les quatre se comportent de même.
+
+**La répétition se dit comme en Logo.** `répéter 4 fois { … }` exécute son corps quatre fois sans introduire de variable de boucle. `pour k de 1 à 4` obligeait à nommer un rang dont on n'avait que faire, et à le laisser traîner dans le source. Le nombre de tours accepte une expression, la forme `répète` est acceptée de même, et les boucles s'imbriquent — chacune reçoit son propre compteur interne, qui ne paraît jamais dans le rendu. La structure ne se reconnaît qu'à l'accolade ouvrante sur la même ligne : une phrase qui contient le verbe reste du texte.
+
+**Six formes de numérotation.** Le mot `num`, qui ne faisait rien, devient le
+premier d'une famille : `num` numérote en chiffres arabes composés (1.2.3),
+`Num` en chiffres arabes du seul rang courant, `roman` et `Roman` en chiffres
+romains, `alpha` et `Alpha` en lettres. La forme s'écrit dans la balise de
+titre, à côté du niveau — `<section Roman>`. Les ancres et les renvois
+continuent de reposer sur la numérotation composée : changer la forme change ce
+qui s'imprime, jamais où mènent les liens.
+
+**Enregistrement automatique.** Une fois qu'un document a été ouvert ou
+enregistré une première fois, docdg écrit tout seul dans ce fichier, une
+seconde environ après la dernière frappe. Tant qu'aucun chemin n'est connu, le
+ruban Fichier le dit : la saisie directe dans la source reste possible, mais
+elle n'est gardée nulle part avant un premier Enregistrer.
+
+**Rendre la main à la source.** Une liste déroulante garde le clavier tant
+qu'on n'en est pas sorti : après une insertion, il faut cliquer dans la source
+pour taper. Ce clic clôt aussi l'élément inséré, tant qu'il reste ouvert un
+nouveau choix le réécrit au lieu d'en ajouter un second — c'est ce qui permet
+de composer une balise en plusieurs touches. Le manuel le dit à l'endroit où
+il décrit l'insertion directe.
+
+**Les actions proposent leur antécédent.** Dresser le tableau de signes d'une
+fonction suppose que cette fonction soit déclarée. Le classeur écrit désormais
+les deux lignes ensemble — `<Soit>la fonction f(x) = …` puis
+`<Dresse>le tableau de signes de f` — partout où la consigne exige une
+déclaration préalable. Les objets qui demandent une structure, tableaux,
+grilles, listes, cadres et rangées, se paramètrent dans le ruban et s'insèrent
+avec leur squelette complet : ligne de pistes, plan de zones, items.
+
+**Le corps d'un bloc commence à la ligne suivante.** Un bloc acceptait du
+contenu à droite de l'accolade ouvrante et le composait comme première ligne :
+la source cessait alors d'avoir la forme de ce qu'elle produit. Sur la réglure
+Seyès et sur un passage en colonnes, c'était la propriété la plus utile qui se
+perdait — l'auteur ne voyait plus dans son fichier ce que le cahier allait
+montrer. Mais la règle vaut au-delà du seul rendu fidèle : dans tout langage, le
+corps d'un bloc s'ouvre à la ligne. Elle s'applique donc à tous les blocs de
+verbe — cadres, tableaux, grilles, listes, colonnes, réglure, énoncés et
+démonstrations.
+
+Ce qui est écrit à droite d'une accolade ouvrante est signalé, en nommant la
+règle. Trois choses n'y comptent pas pour du contenu : les espaces et
+tabulations, un commentaire `%`, et une construction qui tient tout entière sur
+une ligne — `<Affiche>un cadre{Du texte}` ou `<Saisis>un entier{Combien ?}`
+restent ce qu'ils sont. Le contrôle est écrit une fois, `commence_a_la_ligne`,
+et appelé aux quatre portes par lesquelles un corps de bloc entre dans le
+moteur.
+
+Le corpus a été mesuré avant d'être touché : sur 479 accolades suivies de
+contenu dans les 53 exemples, toutes sont des constructions d'une seule ligne,
+sauf trois — deux dans `seyes2`, une dans `seyes1` — qui passent à la ligne.
 
 **`<Soient>` existe enfin, et le pluriel des matrices disparaît.** La phrase
 rendue accordait déjà l'impératif — docdg écrit « Soient A et B les points
@@ -162,7 +288,7 @@ sorte que le défaut ne puisse pas revenir par la base d'un enseignant.
 rangée portait plus de cellules que de colonnes déclarées les émettait quand
 même : le `<tr>` devenait plus long que le `colgroup`, et ces colonnes sans
 largeur sous `table-layout: fixed` ramenaient la divergence entre WebKit et
-Chromium que la 3.7 s'emploie à supprimer. La rangée fautive est maintenant
+Chromium que la 3.8 s’emploie à supprimer. La rangée fautive est maintenant
 nommée, avec le nombre de colonnes attendu ; aucune cellule n'est émise au
 delà, ni en entête ni en données.
 
@@ -428,7 +554,7 @@ Trois tenaient à des assertions figées qui n'avaient pas suivi le code — deu
 tests d'`ecriture.rs` se contredisaient même l'un l'autre sur la déclaration de
 `docdg-objet`, et un troisième attendait une nappe de 310 mm là où la géométrie
 en donne 282,68. Le quatrième était réel : en posant les objets sur la réglure,
-la 3.7 écrivait `margin-top` en ligne dans la balise, ce qu'interdit la règle
+la 3.6 écrivait `margin-top` en ligne dans la balise, ce qu'interdit la règle
 tenue depuis la 3.0 — la feuille de style est seule propriétaire des marges
 verticales. La valeur émise valait exactement `--assise-mm`, que la feuille
 publie déjà ; `docdg-objet` la lit désormais par `calc(var(--assise-mm,0) *

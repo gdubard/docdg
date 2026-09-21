@@ -2,13 +2,13 @@
 
 Chaque version consigne ici les temps de rendu de référence, mesurés par le
 crate `bench/` sur les deux documents les plus exigeants du dépôt :
-`vitrine4.txt` (la démonstration de force — chaque ligne source produit une
+`vitrine.txt` (la démonstration de force — chaque ligne source produit une
 rédaction complète) et `algo4.txt` (le langage algorithmique au complet).
 
 Le protocole, à lancer sur une machine au repos :
 
 ```bash
-cargo run --release -p docdg-bench --bin froid_chaud -- exemples/vitrine4.txt 50
+cargo run --release -p docdg-bench --bin froid_chaud -- exemples/vitrine.txt 50
 cargo run --release -p docdg-bench --bin froid_chaud -- exemples/algo4.txt 50
 ```
 
@@ -43,6 +43,8 @@ banc ne mesure pas, à relever à la main sur les mêmes documents :
   (ouverture du fichier) puis en chaud (une frappe) ;
 - le premier `<Calcule>` d'un document ouvert à froid, chronomètre en main.
 
+Les chiffres historiques de « vitrine4.txt » ne sont **pas comparables** avec le nouveau document « vitrine.txt », plus complet. Un nouveau relevé est indispensable pour la version 3.8.
+
 ## Relevés
 
 | Version | Machine | Document | froid (ms) | froid_seq (ms) | chaud (ms) | incr (ms) | html (Ko) |
@@ -56,6 +58,11 @@ banc ne mesure pas, à relever à la main sur les mêmes documents :
 | 3.2.0 | MacBook Air M5⁵ | algo4.txt | 8,44 | 8,83 | 0,712 | 0,695 | 18 |
 | 3.2.0 | MacBook Air M5⁵ | demonstration4.txt³ | 4,16 | 12,81 | 0,298 | 0,295 | 68 |
 | 3.2.0 | MacBook Air M5⁵ | couleurs1.txt⁴ | 1,22 | 1,80 | 0,387 | 0,314 | 40 |
+| 3.8.0 | conteneur d'audit, 1 vCPU¹ | vitrine.txt⁶ | 8,50 | 8,41 | 0,594 | 0,601 | 226 |
+| 3.8.0 | conteneur d'audit, 1 vCPU¹ | algo4.txt | 27,18 | 20,27 | 0,308 | 0,297 | 18 |
+
+⁶ `vitrine.txt` de la 3.8 couvre treize pages et toutes les matières : ses
+chiffres ne se comparent à aucune ligne antérieure.
 
 **Six versions manquent à cette table.** Le protocole exige un relevé par
 version ; de la 2.7 à la 3.1, aucun n'a été consigné. Les lignes vides

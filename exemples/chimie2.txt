@@ -1,6 +1,6 @@
 document {
 	orientation: portrait;
-	marges: 20;
+	marges: 15;
 	taille: 11;
 	interligne: 2;
 	niveau: quatrième;

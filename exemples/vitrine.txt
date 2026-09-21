@@ -1,0 +1,365 @@
+document {
+	orientation: portrait;
+	marges: 10;
+	espacements: {0;0;0;5};
+	taille: 11;
+	interligne: 1,4;
+}
+soit h1 = <rouge gras italique 19pt au centre>
+soit h2 = <rouge 11pt section num>
+soit h3 = <bleu italique sous-section Roman>
+
+<h1>Réglure Séyès
+
+<Écris>en réglure Seyès{
+	<h2>Le carré et le cube.
+	On écrit $x^2$ pour le carré de $x$, et $x^3$ pour son cube.
+	Pour $x = 3$ : $3^2 = 9$ et $3^3 = 27$.
+
+	<h2>Une fraction.
+	La moitié de $x$ s'écrit $x/2$
+	$3/2 + 4/3 = 17/6$
+	$2/5 + 4 = 22/5$
+	$3 + 1/2 = 7/2 $
+	Recopie et complète :
+	la moitié de 8 est 
+	la moitié de 14 est 
+}
+
+<Écris>en réglure Seyès{
+Au <TIMES NEW ROMAN italique 24 pt>{XXI}<exposant>{è} siècle, il y a 2,2 millions d'habitants et plus de 130 musées.
+	On dit souvent : « Mieux vaut tard que jamais. »
+		Mon frère a 8 ans — il aime les trains, les robots et les étoiles.
+	L'île d'Ouessant est à 20 km des côtes du Finistère.
+Noël arrive : achète 6 bûches, 4 oranges et du chocolat noir.
+}
+
+<Compose>sur 3 colonnes avec un filet gris {
+	Sed et mi ut est rutrum aliquam ornare eget tortor. Curabitur tristique faucibus orci, ac placerat massa ornare ac. Nulla facilisi. Donec ultrices turpis erat, sit amet sagittis turpis eleifend vel. Nam auctor enim nec porttitor luctus. Praesent hendrerit et libero at tincidunt. Nullam mattis eros at felis ullamcorper feugiat. Etiam iaculis id purus sit amet fermentum. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+	Proin fringilla rhoncus velit vitae vestibulum. Integer magna enim, faucibus ac euismod eget, eleifend vel metus. Vivamus finibus tincidunt aliquam. Sed in porta erat. Morbi maximus ex augue. Quisque dapibus tincidunt fermentum. Etiam eleifend a ligula in euismod.
+	Donec cursus a mauris molestie dictum. Curabitur eget molestie nibh. Donec a luctus lectus. Pellentesque bibendum eleifend bibendum. Duis ut urna fermentum ipsum tristique volutpat. Mauris at lorem dictum, bibendum ex eu, mattis enim. Morbi sodales ante sem, at accumsan turpis ornare ac. Donec vel leo purus. In commodo dictum massa in suscipit. Nulla tempor, sapien quis consequat pharetra, lorem tellus fringilla dolor, sed scelerisque eros turpis sed lectus. Donec tristique massa nec varius molestie. Vivamus sagittis, lorem at bibendum auctor, sapien augue lacinia ex, et finibus tortor nisi ut sapien. Quisque sit amet urna congue neque varius imperdiet.
+}
+
+<page suivante h1>Algèbre
+
+<h3>Systèmes d'équations
+	Un système s'aligne tout seul sur le premier opérateur relationnel, égalités et inégalités mêlées, une équation par ligne :
+
+<Soit>le système s {
+	2x + 3y = 7
+	x - y = 1
+}
+<Résous>le système s
+
+<h3>Déterminant et inverse
+<Soit>la matrice M {
+	2 ; 1
+	1 ; 1
+}
+<Calcule>le déterminant de M
+<Calcule>l'inverse de M
+
+<h3>Nombres complexes
+<Écris>le complexe z = 1 + i sous ses trois formes
+
+<h3>Graphes
+<Construis>le graphe G {
+	A -> B
+	B -> C
+	C -> A
+	A -> C
+}
+
+<page suivante h1>Analyse
+
+<Soit>une fonction q(x) = |x|racine((1-x)/(1+3x))
+
+<Calcule>la dérivée de q
+
+<Calcule>la dérivée seconde de q
+
+<Détermine>les zéros de q
+
+<Dresse>le tableau de signes de q
+
+<Dresse>le tableau de variations de q sur [-1 ; 1]
+
+<Représente>graphiquement la fonction q sur [-2 ; 2] en abscisse et [-2 ; 2] en ordonnée, en bleu, avec 200 échantillons
+<page suivante h1>Géométrie
+
+<h3>Les figures se disent, elles ne se dessinent pas
+	Une phrase décrit la figure, docdg la construit à l'échelle, code les côtés égaux et pose les mesures.
+
+<Trace>le triangle ABC rectangle en A, de côté AB 3 cm et de côté AC 4 cm, avec les marques
+
+<h3>Une construction sans repère, comme au tableau
+	Médiatrice, bissectrice et marque d'angle se posent à partir des sommets, sans coordonnées.
+
+<Trace>{
+	le triangle ABC équilatéral, de côté 5 cm
+	la médiatrice de [AB]
+	la bissectrice de l'angle BAC
+}
+
+<h3>Le solide, en perspective
+<Trace>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+
+<page suivante h1>Algorithmique
+
+<h3>Une fonction, son type, sa récursion
+	Depuis la 3.8, le type se déclare à la première apparition d'un nom : le document dit ce qu'il manipule.
+
+soit factorielle(n: entier): entier = si n vaut 0 { 1 } sinon { n * factorielle(n - 1) }
+
+	Les six premières factorielles : #{factorielle(1)}, #{factorielle(2)}, #{factorielle(3)}, #{factorielle(4)}, #{factorielle(5)}, #{factorielle(6)}.
+
+<h3>Une boucle qui remplit un tableau
+<Dresse>un tableau {
+	<mc>	<md>	<md>
+	Rang	Carré	Cube
+	pour n de 1 à 6 {
+		[#n]	[#{n * n}]	[#{n * n * n}]
+	}
+}
+
+<h3>Répéter, à la façon de Logo
+répéter 4 fois {
+	Un côté, puis un quart de tour.
+}
+
+<h3>Chercher dans une série
+soit recherche(v: une liste d'entiers ; x: entier): un entier = {
+	pour i de 0 à longueur(v) - 1 {
+		si v[i] vaut x {
+			retourne i
+		}
+	}
+	retourne -1
+}
+
+soit serie: une liste d'entiers = {5 ; 3 ; 8 ; 1 ; 9 ; 2}
+	La série #serie contient #{longueur(serie)} termes ; le 8 s'y trouve au rang #{recherche(serie ; 8)}, et une fois triée elle devient #{tri(serie)}.
+
+<h3>Une boucle à condition
+soit terme: un entier = 1
+tant que terme moins de 200 {
+	Le terme vaut #terme.
+	terme = terme * 3
+}
+
+<h3>Un graphe
+<Construis>le graphe G {
+	A -> B
+	B -> C
+	C -> A
+}
+
+<page suivante h1>Nombres et calcul
+
+<h3>Le corpus parle, le document ne recopie rien
+	Chaque énoncé est tiré de la base embarquée : 1 373 énoncés et 569 démonstrations, du CP à l'agrégation. On le nomme, il s'écrit.
+
+<Énonce>les priorités opératoires
+
+<Énonce>l'écriture fractionnaire
+
+<h3>Le calcul se fait dans la phrase
+	Les fractions s'additionnent sans quitter le texte : $3/2 + 4/3 = 17/6$, et le calcul vaut #{3/2 + 4/3} en écriture décimale.
+
+<Calcule>le PGCD de 252 et 198
+
+<Dresse>la décomposition en facteurs premiers de 2520
+
+<h3>Les conversions gardent leurs unités
+<Convertis>3,5 km en m
+
+<Convertis>90 km/h en m/s
+
+<Convertis>2500 cm^2 en m^2
+
+<h3>Une droite graduée
+<Représente>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2, 3)} et de points {1}, en rouge
+
+<page suivante h1>Statistiques et probabilités
+
+<h3>Une série, ses indicateurs
+	La série ${7 ; 1 ; 5 ; 3 ; 9}$ totalise #{somme({7 ; 1 ; 5 ; 3 ; 9})} pour #{longueur({7 ; 1 ; 5 ; 3 ; 9})} valeurs, soit une moyenne de #{somme({7 ; 1 ; 5 ; 3 ; 9}) / longueur({7 ; 1 ; 5 ; 3 ; 9})}.
+
+<h3>Les lois, calculées et non tabulées
+<Calcule>la probabilité que X = 0 pour la loi binomiale(20 ; 0,05)
+
+<Calcule>l'espérance de la loi binomiale(20 ; 0,05)
+
+<Calcule>la probabilité que X >= 1 pour la loi exponentielle(2)
+
+<Détermine>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<Détermine>le quantile d'ordre 0,975 de la loi student(9)
+
+<Étudie>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+
+<h3>La densité, tracée
+<Trace>la densité de la loi normale d'espérance 0 et d'écart type 1
+
+<h3>La loi des grands nombres, montrée par une boucle
+pour n dans [100, 400, 1600, 6400] {
+	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2*racine(n)) ; 4)}.
+}
+
+
+<h1>Physique
+
+<h3>L'énoncé vient du corpus, la démonstration aussi
+<Énonce>la loi de la gravitation universelle <étiquette>{gravitation}
+
+<Énonce>le poids et le champ de pesanteur
+
+<h3>Le rappel reprend la formulation du niveau où la notion fut introduite
+<Rappelle>l'interaction gravitationnelle
+
+<h3>L'homogénéité se vérifie, elle ne se suppose pas
+<Vérifie>l'homogénéité de E = m * c avec E énergie, m masse, c célérité
+
+<Vérifie>l'homogénéité de div(E) = rho / epsilon_0 avec E champ électrostatique, rho densité volumique de charge, epsilon_0 permittivité du vide
+
+	La première relation est fausse d'une puissance de célérité, et docdg le dit avant l'impression. C'est le même contrôle qui valide la base à la compilation.
+
+<h3>Les unités se convertissent avec leur dimension
+<Convertis>13,6 eV en J
+
+<Convertis>25 °C en K
+
+<page suivante h1>Chimie
+
+<h3>Une équation se pose, docdg l'ajuste
+<Équilibre>CH4 + O2 -> CO2 + H2O
+
+<Équilibre>MnO4^- + Fe^2+ + H^+ -> Mn^2+ + Fe^3+ + H2O
+
+<h3>Les masses molaires se lisent dans la formule
+<Calcule>la masse molaire de H2SO4
+
+<Calcule>la masse molaire de CaCO3
+
+<h3>Ce que le corpus sait de la matière
+<Énonce>la conservation des atomes
+
+<Énonce>l'équation de réaction
+
+<Énonce>la relation de Nernst
+
+<page suivante h1>La démonstration
+
+<h3>Ce qu'il faut savoir avant
+	docdg tient le graphe des dépendances du corpus : il sait de quoi un résultat dépend, et le dit.
+
+<Dresse>les prérequis du théorème de Pythagore
+
+<h3>L'énoncé, puis sa preuve
+<Énonce>le théorème de Pythagore <étiquette>{pythagore}
+
+<Énonce>la réciproque du théorème de Pythagore <étiquette>{reciproque}
+
+<Démontre>la réciproque du théorème de Pythagore
+
+	La preuve ci-dessus s'appuie sur le <renvoi>{pythagore} : le renvoi porte le numéro que la composition lui a donné, et suit l'énoncé s'il change de page.
+
+<h3>Un énoncé écrit à la main, numéroté comme les autres
+<Énonce>le théorème <étiquette>{carre-impair} {
+	Si $n$ est un entier impair, alors $n^2$ est impair.
+}
+
+
+<page suivante h1>Histoire
+
+<h3>La frise se déclare, elle s'ordonne d'elle-même
+	Une ligne par événement : la date, deux-points, le titre. L'ordre de saisie n'a pas d'importance — c'est la frise qui range.
+
+<Construis>la frise chronologique {
+	1789 : Prise de la Bastille (14 juillet)
+	1792 : Proclamation de la République
+	1804 : Sacre de Napoléon
+	1799 : Coup d'État du 18 Brumaire
+	1791 : Première Constitution
+}
+
+<h3>Les longues durées gardent une échelle lisible
+<Construis>la frise chronologique {
+	-3000 : Naissance de l'écriture
+	-800 : Cité grecque
+	476 : Chute de Rome
+	1492 : Voyage de Colomb
+	1789 : Révolution française
+	2025 : Aujourd'hui
+}
+
+<page suivante h1>Tableaux et grilles
+
+<h3>Le tableau : une piste par colonne, une donnée par crochets
+<Dresse>un tableau {
+	<25 mm en mg>	<mc>	<mc>	<md>
+	Classe	Effectif	Moyenne	Absences
+	[CE1 A]	[24]	[14,2]	[3]
+	[CE1 B]	[26]	[13,8]	[5]
+	[CE2 A]	[25]	[15,1]	[2]
+}
+
+<h3>Les fusions se lisent dans l'entête
+<Dresse>un tableau {
+	<mc>	<mc>	<mc>
+	Trimestre	Écrit -	
+	[Premier]	[12]	[14]
+	[Deuxième]	[13]	[15]
+}
+
+	La ligne de pistes ouvre le tableau : un code de placement à deux lettres par colonne, une largeur si elle doit être imposée. Le reste se partage à parts égales.
+
+<h3>La grille : un plan dessiné, puis ses zones
+	La grille ne range pas des données mais des blocs : le plan se lit à l'œil, chaque case porte le nom de sa zone, et une zone qui s'étend répète son nom.
+
+<Affiche>une grille avec un écart de 3 mm {
+	<28 mm>	<max>	<24 mm>
+	<min>	titre	titre	date
+	<28 mm>	consigne	corps	corps
+
+	titre : en haut à gauche, avec un fond bleu Alice et une bordure bleu marine {
+		<bleu marine gras 14 pt>Contrôle de mathématiques
+	}
+	date : en haut à droite {
+		Le 12 mai
+	}
+	consigne : au centre, avec une bordure bleue et un fond gris perle {
+		Calculatrice autorisée.
+	}
+	corps : au centre {
+		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
+	}
+}
+
+<page suivante h1>Publication
+
+<h3>La citation, la note, le gris du texte
+<Affiche>une citation bleu nuit avec un fond bleu clair en tirets de 1,8 mm{
+	Le gris d'un texte est ce qui reste quand on cesse de lire : une teinte uniforme, où ni les blancs ni les noirs ne se remarquent.
+}
+
+	La césure et la justification travaillent ensemble<note>{La césure suit les motifs français ; elle s'active dans le bloc document.} : c'est ce qui donne au pavé sa teinte régulière, sans rivière ni lézarde.
+
+<h3>Les styles se composent, les couleurs se nomment
+	Un mot <rouge gras>{rouge et gras}, un autre <vert foncé italique>{vert foncé et italique}, un troisième <bleu marine souligné>{souligné}, et une <gris foncé 14 pt>{taille choisie}.
+
+	Les indices et les exposants suivent la prose : H<indice>{2}O, le XXI<exposant>{e} siècle, $10^{-3}$ en mathématiques.
+
+<h3>Deux colonnes, quand le sujet s'y prête
+<Compose>sur deux colonnes avec un filet gris clair {
+	Le texte coule d'une colonne à l'autre sans que rien ne soit découpé à la main : c'est la composition qui répartit, et l'espacement se règle une fois pour toutes dans le bloc document.
+	Une balise absente vaut une colonne unique : en l'absence de <<Compose>>, tout le document est comme enfermé dans une colonne qui occupe la justification.
+}
+
+<h3>Ce que la page sait faire d'elle-même
+	Les marges, l'interligne, les espacements de colonne, l'orphelines et les veuves se règlent une fois dans le bloc document, en tête de fichier. Le reste du document n'en parle plus jamais.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Ce que vous venez de voir} {
+	Un seul fichier de prose, aucune balise de mise en forme dans le texte, et un rendu identique à l'écran, à l'impression et dans le PDF.
+	Le corpus embarqué a fourni les énoncés et les démonstrations ; le moteur a fait le reste.
+}

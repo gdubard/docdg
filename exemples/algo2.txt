@@ -45,6 +45,14 @@ pour k de 1 à 3 {
 	Ligne #k : le carré de #k vaut #{k*k}.
 }
 
+<h1>Une répétition sans compteur
+
+`répéter ... fois` répète un bloc quand le rang n'a pas à paraître — la répétition du Logo, sans variable à nommer.
+
+répéter 3 fois {
+	Une ligne de plus, à l'identique.
+}
+
 <h1>Une condition simple
 
 `si ... sinon` choisit entre deux issues, une fois, sans répétition.

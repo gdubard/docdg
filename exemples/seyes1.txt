@@ -1,5 +1,5 @@
 document {
-	marges: 15;
+	marges: 10;
 	espacements: 4;
 }
 
@@ -26,8 +26,6 @@ soit q1 = <rouge 11 pt section roman>
 				10 − 2 = 8
 	Victor, Inès et Zineb jouent à cache-cache dans le jardin de l'école.
 }
-
-<page suivante>
 <Écris>en réglure Seyès{
 	<q1>Le carré et le cube.
 	On écrit $x^2$ pour le carré de $x$, et $x^3$ pour son cube.
@@ -55,7 +53,8 @@ Noël arrive : achète 6 bûches, 4 oranges et du chocolat noir.
 Zéphyr, le chat gris, dort sur 3 coussins empilés près de la fenêtre.
 }
 
-<Compose>sur 3 colonnes avec un filet gris {	Sed et mi ut est rutrum aliquam ornare eget tortor. Curabitur tristique faucibus orci, ac placerat massa ornare ac. Nulla facilisi. Donec ultrices turpis erat, sit amet sagittis turpis eleifend vel. Nam auctor enim nec porttitor luctus. Praesent hendrerit et libero at tincidunt. Nullam mattis eros at felis ullamcorper feugiat. Etiam iaculis id purus sit amet fermentum. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+<Compose>sur 3 colonnes avec un filet gris {
+	Sed et mi ut est rutrum aliquam ornare eget tortor. Curabitur tristique faucibus orci, ac placerat massa ornare ac. Nulla facilisi. Donec ultrices turpis erat, sit amet sagittis turpis eleifend vel. Nam auctor enim nec porttitor luctus. Praesent hendrerit et libero at tincidunt. Nullam mattis eros at felis ullamcorper feugiat. Etiam iaculis id purus sit amet fermentum. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 	Proin fringilla rhoncus velit vitae vestibulum. Integer magna enim, faucibus ac euismod eget, eleifend vel metus. Vivamus finibus tincidunt aliquam. Sed in porta erat. Morbi maximus ex augue. Quisque dapibus tincidunt fermentum. Etiam eleifend a ligula in euismod.
 	Donec cursus a mauris molestie dictum. Curabitur eget molestie nibh. Donec a luctus lectus. Pellentesque bibendum eleifend bibendum. Duis ut urna fermentum ipsum tristique volutpat. Mauris at lorem dictum, bibendum ex eu, mattis enim. Morbi sodales ante sem, at accumsan turpis ornare ac. Donec vel leo purus. In commodo dictum massa in suscipit. Nulla tempor, sapien quis consequat pharetra, lorem tellus fringilla dolor, sed scelerisque eros turpis sed lectus. Donec tristique massa nec varius molestie. Vivamus sagittis, lorem at bibendum auctor, sapien augue lacinia ex, et finibus tortor nisi ut sapien. Quisque sit amet urna congue neque varius imperdiet.
 }

@@ -3,13 +3,12 @@ document {
 	marges: 12;
 	espacements: 2;
 	taille: 11;
-	interligne: 1,3;
+	interligne: 1,2;
 }
 soit h1 = <bleu marine gras section num>
 soit h2 = <bleu italique sous-section>
 
 <h1>Analyse — lycée
-
 
 <h2>Opérateurs indexés
 
@@ -37,7 +36,7 @@ $sinh(x)$, $tanh(x)$.
 
 <Dresse>le tableau de signes de g
 
-Une fonction périodique n'a pas besoin d'être traitée à part : le moteur reconnaît sa période, restreint l'étude à un intervalle de cette longueur — centré sur l'origine si la parité s'y prête — et le dit.
+Pour une fonction périodique, le moteur étudie automatiquement une période. Il centre l'intervalle d'étude sur l'origine lorsque la fonction est paire ou impaire.
 
 <Soit>une fonction c(x) = cos(x)
 
@@ -79,7 +78,7 @@ L'intervalle d'étude s'impose quand on le veut, périodique ou non :
 <On pose>une fonction v(x) = x/2
 L'aire sous la courbe de $p$ entre 1 et 3 :
 <Représente>graphiquement la fonction p sur [-1 ; 4] en abscisse et [-1 ; 4] en ordonnée, avec l'aire entre 1 et 3
-L'aire entre les courbes de $u$ et $v$ sur $[0 ; 3]$ :
+L'aire entre les courbes de $p$ et $v$ sur $[0 ; 3]$ :
 <Représente>graphiquement la fonction p sur [-1 ; 4] en abscisse et [-1 ; 4] en ordonnée, avec l'aire jusqu'à v et area:{0, 3}
 
 
@@ -100,7 +99,7 @@ L'aire entre les courbes de $u$ et $v$ sur $[0 ; 3]$ :
 <Soit>une fonction d(x) = exp(x) / x
 <Étudie>la convexité de d
 
-<h2>Asymptotes
+<page suivante h2>Asymptotes
 <Soit>une fonction e(x) = (2x^2 + 1) / (x - 1)
 
 <Détermine>les asymptotes de e
@@ -143,7 +142,7 @@ L'escalier de $p_(n+1) = h(p_n)$ depuis $p_0 = 0,2$, convergeant vers le point f
 <Calcule>le développement limité de s en 0 à l'ordre 4
 
 <page suivante h2>Valeur absolue et partie entière
-La valeur absolue s'écrit entre barres, la partie entière $E(x)$ ; toutes deux se posent, s'évaluent et se dérivent à gauche comme à droite :
+La valeur absolue s'écrit entre barres et la partie entière se note $E(x)$. Attention : la valeur absolue n'est pas dérivable à son point anguleux, et la partie entière est discontinue aux entiers.
 
 <Soit>une fonction k2(x) = |x - 2|
 

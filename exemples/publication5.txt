@@ -7,10 +7,10 @@ document {
 	orphelines: 2;
 	veuves: 2;
 }
-soit h0 = <bleu nuit gras chapitre num>
-soit h1 = <bleu nuit gras section num>
-soit h2 = <bleu nuit italique sous-section num>
-soit h3 = <sous-sous-section num>
+soit h0 = <bleu nuit gras chapitre Roman>
+soit h1 = <bleu nuit gras section Alpha>
+soit h2 = <bleu nuit italique sous-section Num>
+soit h3 = <sous-sous-section alpha>
 
 soit nature = <petites capitales grand au centre>
 soit ouvrage = <gras 26 pt au centre>

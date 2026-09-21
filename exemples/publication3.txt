@@ -4,7 +4,7 @@ document {
 	espacements: {0;3;0;3};
 	script: Georgia;
 	taille: 12;
-	interligne: 2;
+	interligne: 1,9;
 	tabulation: 8;
 	hauteur: 6;
 	césure: oui;
