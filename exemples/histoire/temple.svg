@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" role="img">
+  <title>Temple antique</title>
+  <rect width="120" height="90" fill="#eef2f7"/>
+  <path d="M60 12 L104 34 H16 Z" fill="#d6dde6" stroke="#33455e" stroke-width="1.5"/>
+  <rect x="16" y="34" width="88" height="6" fill="#c2cbd7" stroke="#33455e" stroke-width="1.2"/>
+  <g fill="#e6ebf1" stroke="#33455e" stroke-width="1.2">
+    <rect x="24" y="40" width="10" height="32"/><rect x="42" y="40" width="10" height="32"/>
+    <rect x="60" y="40" width="10" height="32"/><rect x="78" y="40" width="10" height="32"/>
+  </g>
+  <rect x="14" y="72" width="92" height="8" fill="#c2cbd7" stroke="#33455e" stroke-width="1.2"/>
+</svg>

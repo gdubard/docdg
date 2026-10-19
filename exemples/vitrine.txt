@@ -1,0 +1,433 @@
+document {
+	orientation: portrait;
+	marges: 8;
+	espacements: {0;0;0;5};
+	taille: 11;
+	interligne: 1,4;
+}
+soit h1: un style = <rouge gras italique 19 pt au centre>
+soit h2: un style = <rouge 11 pt section num>
+soit h3: un style = <bleu italique sous-section num>
+
+<h1>La réglure Seyès
+
+
+<Écrire>en réglure Seyès{
+	<h2>Le carré et le cube.
+	On écrit $x^2$ pour le carré de $x$, et $x^3$ pour son cube.
+	Pour $x = 3$ : $3^2 = 9$ et $3^3 = 27$.
+
+	<h2>Une fraction.
+	La moitié de $x$ s'écrit $x/2$
+	$3/2 + 4/3 = 17/6$
+	$2/5 + 4 = 22/5$
+	$3 + 1/2 = 7/2 $
+	Recopie et complète :
+	la moitié de 8 est 
+	la moitié de 14 est 
+}
+
+<Écrire>en réglure Seyès{
+Au <TIMES NEW ROMAN italique 24 pt>{XXI}<exposant>{è} siècle, il y a 2,2 millions d'habitants et plus de 130 musées.
+	On dit souvent : « Mieux vaut tard que jamais. »
+		Mon frère a 8 ans — il aime les trains, les robots et les étoiles.
+	L'île d'Ouessant est à 20 km des côtes du Finistère.
+Noël arrive : achète 6 bûches, 4 oranges et du chocolat noir.
+}
+
+
+<page suivante h1>Le mini-langage mathématique
+
+La notation mathématique de docdg s'écrit entre deux signes dollar. Voici un aperçu de ses écritures, du collège à l'enseignement supérieur. Le recueil mathlang.txt présente les notations par catégories.
+
+<h3>Calcul et analyse
+	Fractions : $1/2 + 1/3$ ; racines : $racine(2)$ et $racine[3](8)$.
+	Exposants et indices : $x^(a+b)$ et $u_(n-1)$.
+	Sommes : $somme(k=1;n) k^2$ ; produits : $produit(k=1;n) k$.
+	Limites : $lim(x->0) sin(x)/x = 1$.
+	Intégrales : $intégrale(x=a;b) f(x)$ ; dérivées partielles : $partielle(f)/partielle(x)$.
+
+<h3>Fonctions et algèbre
+	Trigonométrie : $sin(x)$, $arcsin(x)$, $arctan(x)$.
+	Fonctions hyperboliques : $sinh(x)$, $cosh(x)$, $argsh(x)$.
+	Matrices : $déterminant(A)$ ; vecteurs : $produit scalaire(u; v)$.
+
+<h3>Ensembles, logique et probabilités
+	Appartenance : $x appartient à NN$ ; inclusion : $NN inclus dans ZZ$.
+	Quantificateurs :
+
+	$pour tout x dans RR$
+
+	$il existe x dans RR$
+
+	Opérations ensemblistes : $A union B$ ; $A inter B$.
+	Probabilité : $PP(A)$ ; conditionnelle : $PP(A sachant B)$.
+	Statistiques : $EE(X)$, $variance(X)$ et $écart type(X)$.
+
+<page suivante h1>La grammaire vectorielle
+
+Le type porte la forme, la valeur porte le contenu. Le cardinal et les dimensions se disent une fois, à gauche du signe égal ; le membre de droite ne dit plus que ce que les cases valent. Le vecteur nul et la matrice identité n'ont donc pas à redire leur taille — elle est déjà écrite. Le corollaire vaut contrôle : un vecteur déclaré de quatre qui en reçoit cinq est refusé, et c'est l'inversion de dimensions, la faute la plus banale de l'algèbre linéaire, qui se trouve attrapée avant l'impression.
+
+soit u: un vecteur de 4 rationnels = {2 ; 2 ; 2 ; 2}
+soit v: un vecteur de 4 rationnels = {1 ; 2 ; 3 ; 4}
+soit moy: un rationnel = la moyenne de v
+soit ps: un rationnel = le produit scalaire de u et v
+soit nv: un réel = la norme de v
+
+<h2>Les grandeurs se disent en prose, et restent exactes
+
+<Dresser>un tableau {
+	<mg>	<mc>
+	Écriture	Résultat
+	[la moyenne de v]	[#moy]
+	[le produit scalaire de u et v]	[#ps]
+	[la norme de v]	[#nv]
+}
+
+La moyenne d'entiers est une fraction, jamais un flottant arrondi ; la norme garde son radical tant qu'elle n'est pas rationnelle. C'est le type déclaré qui décide de l'écriture.
+
+soit A: une matrice 2×2 de rationnels = {{2 ; 1} ; {1 ; 3}}
+soit B: une matrice 2×2 de rationnels = {{1 ; 0} ; {2 ; 1}}
+soit c: un vecteur de 2 rationnels = {5 ; 6}
+soit det: un rationnel = le déterminant de A
+soit iA: une matrice 2×2 de rationnels = l'inverse de A
+soit AB: une matrice 2×2 de rationnels = A × B
+soit x: un vecteur de 2 rationnels = la solution de l'équation A × x = c
+
+<h2>Les matrices et les systèmes s'écrivent comme au tableau
+
+<Dresser>un tableau {
+	<mg>	<mc>
+	Écriture	Résultat
+	[le déterminant de A]	[#det]
+	[l'inverse de A]	[#iA]
+	[A × B]	[#AB]
+	[la solution de A × x = c]	[#x]
+}
+
+L'inverse est exact, et le produit vérifie les dimensions avant de se faire : une matrice 2×3 multipliée par une 2×2 ne donne pas un résultat approché, elle donne une phrase qui dit pourquoi c'est impossible. Quand le système n'a pas de solution unique, docdg ne se tait pas davantage : il nomme les moindres carrés.
+
+<page suivante h1>Les sciences de l'ingénieur
+
+Un asservissement se décrit par sa fonction de transfert, et rien d'autre. docdg intègre, mesure et trace : le dépassement, le temps de montée et le temps de réponse à 5 % sortent du calcul, et non d'un commentaire ajouté à la main.
+
+<Tracer>la réponse indicielle de H(p) = 1/(1 + 2ξp/ω0 + p^2/ω0^2), avec ξ = 0,2 et ω0 = 10
+
+La consigne est celle du cours de PTSI, écrite telle qu'on l'énonce au tableau. Changer le seul amortissement ξ fait passer la même phrase du régime oscillant au régime apériodique, et l'élève lit sur la courbe ce que la valeur numérique annonçait.
+
+<page suivante h1>Algèbre
+
+<h3>Systèmes d'équations
+	Un système s'aligne tout seul sur le premier opérateur relationnel, égalités et inégalités mêlées, une équation par ligne :
+
+<Soit>le système s {
+	2x + 3y = 7
+	x - y = 1
+}
+<Résoudre>le système s
+
+<h3>Déterminant et inverse
+<Soit>la matrice M {
+	2 ; 1
+	1 ; 1
+}
+<Calculer>le déterminant de M
+<Calculer>l'inverse de M
+
+<h3>Nombres complexes
+<Écrire>le complexe z = 1 + i sous ses trois formes
+
+<h3>Graphes
+<Construire>le graphe G {
+	A -> B
+	B -> C
+	C -> A
+	A -> C
+}
+
+<h1>Analyse
+
+<Soit>une fonction q(x) = |x|racine((1-x)/(1+3x))
+
+<Calculer>la dérivée de q
+
+<Calculer>la dérivée seconde de q
+
+<Déterminer>les zéros de q
+
+<Dresser>le tableau de signes de q
+
+<Dresser>le tableau de variations de q sur [-1 ; 1]
+
+<Représenter>graphiquement la fonction q sur [-2 ; 2] en abscisse et [-2 ; 2] en ordonnée, en bleu, avec 200 échantillons
+<page suivante h1>Géométrie
+
+<h3>Les figures se disent, elles ne se dessinent pas
+	Une phrase décrit la figure, docdg la construit à l'échelle, code les côtés égaux et pose les mesures.
+
+<Tracer>le triangle ABC rectangle en A, de côté AB 3 cm et de côté AC 4 cm, avec les marques
+
+<h3>Une construction sans repère, comme au tableau
+	Médiatrice, bissectrice et marque d'angle se posent à partir des sommets, sans coordonnées.
+
+<Tracer>{
+	le triangle ABC équilatéral, de côté 5 cm
+	la médiatrice de [AB]
+	la bissectrice de l'angle BAC
+}
+
+<h3>Le solide, en perspective
+<Tracer>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+
+<page suivante h1>Algorithmique
+
+<h3>Une fonction, son type, sa récursion
+	Depuis la 3.8, le type se déclare à la première apparition d'un nom : le document dit ce qu'il manipule.
+
+soit factorielle(n: un entier): un entier = si n vaut 0 { 1 } sinon { n * factorielle(n - 1) }
+
+	Les six premières factorielles : #{factorielle(1)}, #{factorielle(2)}, #{factorielle(3)}, #{factorielle(4)}, #{factorielle(5)}, #{factorielle(6)}.
+
+<h3>Une boucle qui remplit un tableau
+<Dresser>un tableau {
+	<mc>	<md>	<md>
+	Rang	Carré	Cube
+	pour n: un entier naturel de 1 à 6 {
+		[#n]	[#{n * n}]	[#{n * n * n}]
+	}
+}
+
+<h3>Répéter, à la façon de Logo
+répéter 4 fois {
+	Un côté, puis un quart de tour.
+}
+
+<h3>Chercher dans une série
+soit recherche(v: une liste d'entiers ; x: un entier): un entier = {
+	pour i: un entier naturel de 0 à longueur(v) - 1 {
+		si v[i] vaut x {
+			retourne i
+		}
+	}
+	retourne -1
+}
+
+soit serie: une liste d'entiers = {5 ; 3 ; 8 ; 1 ; 9 ; 2}
+	La série #serie contient #{longueur(serie)} termes ; le 8 s'y trouve au rang #{recherche(serie ; 8)}, et une fois triée elle devient #{trier(serie)}.
+
+<h3>Une boucle à condition
+soit terme: un entier = 1
+tant que terme moins de 200 {
+	Le terme vaut #terme.
+	terme = terme * 3
+}
+
+<page suivante h1>Nombres et calcul
+
+<h3>Le corpus parle, le document ne recopie rien
+	Chaque énoncé est tiré de la base embarquée : 1 606 énoncés et 602 démonstrations, du CP à l'agrégation. On le nomme, il s'écrit.
+
+<Énoncer>les priorités opératoires
+
+<Énoncer>l'écriture fractionnaire
+
+<h3>Le calcul se fait dans la phrase
+	Les fractions s'additionnent sans quitter le texte : $3/2 + 4/3 = 17/6$, et le calcul vaut exactement #{3/2 + 4/3}, avec un développement décimal illimité.
+
+<Calculer>le PGCD de 252 et 198
+
+<Dresser>la décomposition en facteurs premiers de 2520
+
+<h3>Les conversions gardent leurs unités
+<Convertir>3,5 km en m
+
+<Convertir>90 km/h en m/s
+
+<Convertir>2500 cm^2 en m^2
+
+<h3>Une droite graduée
+<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2, 3)} et de points {1}, en rouge
+
+<page suivante h1>Statistiques et probabilités
+
+<h3>Une série, ses indicateurs
+	La série ${7 ; 1 ; 5 ; 3 ; 9}$ totalise #{somme({7 ; 1 ; 5 ; 3 ; 9})} pour #{longueur({7 ; 1 ; 5 ; 3 ; 9})} valeurs, soit une moyenne de #{somme({7 ; 1 ; 5 ; 3 ; 9}) / longueur({7 ; 1 ; 5 ; 3 ; 9})}.
+
+<h3>Les lois, calculées et non tabulées
+<Calculer>la probabilité que X = 0 pour la loi binomiale(20 ; 0,05)
+
+<Calculer>l'espérance de la loi binomiale(20 ; 0,05)
+
+<Calculer>la probabilité que X >= 1 pour la loi exponentielle(2)
+
+<Déterminer>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<Déterminer>le quantile d'ordre 0,975 de la loi student(9)
+
+<Étudier>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+
+<h3>La densité, tracée
+<Tracer>la densité de la loi normale d'espérance 0 et d'écart type 1
+
+<h3>La loi des grands nombres, montrée par une boucle
+pour n: un entier naturel dans [100, 400, 1600, 6400] {
+	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2*racine(n)) ; 4)}.
+}
+
+
+<h1>Physique
+
+<h3>L'énoncé vient du corpus, la démonstration aussi
+<Énoncer>la loi de la gravitation universelle <étiquette>{gravitation}
+
+<Énoncer>le poids et le champ de pesanteur
+
+<h3>Le rappel reprend la formulation du niveau où la notion fut introduite
+<Rappeler>l'interaction gravitationnelle
+
+<h3>L'homogénéité se vérifie, elle ne se suppose pas
+<Vérifier>l'homogénéité de E = m * c avec E énergie, m masse, c célérité
+
+<Vérifier>l'homogénéité de div(E) = rho / epsilon_0 avec E champ électrostatique, rho densité volumique de charge, epsilon_0 permittivité du vide
+
+	La première relation est fausse d'une puissance de célérité, et docdg le dit avant l'impression. C'est le même contrôle qui valide la base à la compilation.
+
+<h3>Les unités se convertissent avec leur dimension
+<Convertir>13,6 eV en J
+
+<Convertir>25 °C en K
+
+<page suivante h1>Chimie
+
+<h3>Une équation se pose, docdg l'ajuste
+<Équilibrer>CH4 + O2 -> CO2 + H2O
+
+<Équilibrer>MnO4^- + Fe^2+ + H^+ -> Mn^2+ + Fe^3+ + H2O
+
+<h3>Les masses molaires se lisent dans la formule
+<Calculer>la masse molaire de H2SO4
+
+<Calculer>la masse molaire de CaCO3
+
+<h3>Ce que le corpus sait de la matière
+<Énoncer>la conservation des atomes
+
+<Énoncer>l'équation de réaction
+
+<Énoncer>la relation de Nernst
+
+<page suivante h1>La démonstration
+
+<h3>Ce qu'il faut savoir avant
+	docdg tient le graphe des dépendances du corpus : il sait de quoi un résultat dépend, et le dit.
+
+<Dresser>les prérequis du théorème de Pythagore
+
+<h3>L'énoncé, puis sa preuve
+<Énoncer>le théorème de Pythagore <étiquette>{pythagore}
+
+<Énoncer>la réciproque du théorème de Pythagore <étiquette>{reciproque}
+
+<Démontrer>la réciproque du théorème de Pythagore
+
+	La preuve ci-dessus s'appuie sur le <renvoi>{pythagore} : le renvoi porte le numéro que la composition lui a donné, et suit l'énoncé s'il change de page.
+
+<h3>Un énoncé écrit à la main, numéroté comme les autres
+<Énoncer>le théorème <étiquette>{carre-impair} {
+	Si $n$ est un entier impair, alors $n^2$ est impair.
+}
+
+
+<page suivante h1>Histoire
+
+<h3>La frise se déclare, elle s'ordonne d'elle-même
+	Une ligne par événement : la date, deux-points, le titre. L'ordre de saisie n'a pas d'importance — c'est la frise qui range.
+
+<Construire>la frise chronologique {
+	1789 : Prise de la Bastille (14 juillet)
+	1792 : Proclamation de la République
+	1804 : Sacre de Napoléon
+	1799 : Coup d'État du 18 Brumaire
+	1791 : Première Constitution
+}
+
+<h3>Les longues durées gardent une échelle lisible
+<Construire>la frise chronologique {
+	-3000 : Naissance de l'écriture
+	-800 : Cité grecque
+	476 : Chute de Rome
+	1492 : Voyage de Colomb
+	1789 : Révolution française
+	2025 : Aujourd'hui
+}
+
+<page suivante h1>Tableaux et grilles
+
+<h3>Le tableau : une piste par colonne, une donnée par crochets
+<Dresser>un tableau {
+	<25 mm en mg>	<mc>	<mc>	<md>
+	Classe	Effectif	Moyenne	Absences
+	[CE1 A]	[24]	[14,2]	[3]
+	[CE1 B]	[26]	[13,8]	[5]
+	[CE2 A]	[25]	[15,1]	[2]
+}
+
+<h3>Les fusions se lisent dans l'entête
+<Dresser>un tableau {
+	<mc>	<mc>	<mc>
+	Trimestre	Écrit -	
+	[Premier]	[12]	[14]
+	[Deuxième]	[13]	[15]
+}
+
+	La ligne de pistes ouvre le tableau : un code de placement à deux lettres par colonne, une largeur si elle doit être imposée. Le reste se partage à parts égales.
+
+<h3>La grille : un plan dessiné, puis ses zones
+	La grille ne range pas des données mais des blocs : le plan se lit à l'œil, chaque case porte le nom de sa zone, et une zone qui s'étend répète son nom.
+
+<Afficher>une grille avec un écart de 3 mm {
+	<28 mm>	<max>	<24 mm>
+	<min>	titre	titre	date
+	<28 mm>	consigne	corps	corps
+
+	titre : en haut à gauche, avec un fond bleu Alice et une bordure bleu marine {
+		<bleu marine gras 14 pt>Contrôle de mathématiques
+	}
+	date : en haut à droite {
+		Le 12 mai
+	}
+	consigne : au centre, avec une bordure bleue et un fond gris perle {
+		Calculatrice autorisée.
+	}
+	corps : au centre {
+		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
+	}
+}
+
+<page suivante h1>Publication
+
+<h3>La citation, la note, le gris du texte
+<Afficher>une citation bleu nuit avec un fond bleu clair en tirets de 1,8 mm{
+	Le gris d'un texte est ce qui reste quand on cesse de lire : une teinte uniforme, où ni les blancs ni les noirs ne se remarquent.
+}
+
+	La césure et la justification travaillent ensemble<note>{La césure suit les motifs français ; elle s'active dans le bloc document.} : c'est ce qui donne au pavé sa teinte régulière, sans rivière ni lézarde.
+
+<h3>Les styles se composent, les couleurs se nomment
+	Un mot <rouge gras>{rouge et gras}, un autre <vert foncé italique>{vert foncé et italique}, un troisième <bleu marine souligné>{souligné}, et une <gris foncé 14 pt>{taille choisie}.
+
+	Les indices et les exposants suivent la prose : H<indice>{2}O, le XXI<exposant>{e} siècle, $10^{-3}$ en mathématiques.
+
+<h3>Deux colonnes, quand le sujet s'y prête
+<Composer>sur deux colonnes avec un filet gris clair {
+	Le texte coule d'une colonne à l'autre sans que rien ne soit découpé à la main : c'est la composition qui répartit, et l'espacement se règle une fois pour toutes dans le bloc document.
+	Une balise absente vaut une colonne unique : en l'absence de <<Composer>>, tout le document est comme enfermé dans une colonne qui occupe la justification.
+}
+
+<h3>Ce que la page sait faire d'elle-même
+	Les marges, l'interligne, les espacements de colonne, l'orphelines et les veuves se règlent une fois dans le bloc document, en tête de fichier. Le reste du document n'en parle plus jamais.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Ce que vous venez de voir} {
+	Un seul fichier de prose, aucune balise de mise en forme dans le texte, et un rendu identique à l'écran, à l'impression et dans le PDF.
+	Le corpus embarqué a fourni les énoncés et les démonstrations ; le moteur a fait le reste.
+}

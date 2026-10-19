@@ -1,0 +1,465 @@
+document {
+    orientation: portrait;
+    marges: 5;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,4;
+}
+
+soit titre: un style = <bleu marine gras 19 pt au centre>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+
+<titre>Mathlang — mini-langage mathématique de docdg
+
+Ce recueil réunit les notations mathématiques saisies entre deux signes dollar. Chaque ligne montre la syntaxe docdg employée dans une formule. Il contient tous les modèles de la palette Mathématiques de docdg 3.9, complétés par les notations reconnues par le traducteur et attestées dans les exemples ou les tests du moteur.
+
+Les lettres sont des symboles de présentation, pas des variables à déclarer. Les formules de probabilité qui supposent des événements indépendants sont des exemples de notation et non des identités universelles.
+
+<page suivante>
+<table des matières>{Sommaire}
+
+<page suivante>
+<h1>Calculs et comparaisons
+
+	Addition : $a + b$
+	Soustraction : $a - b$
+	Multiplication explicite : $a * b$
+	Plus ou moins : $x +- y$
+	Égalité : $a = b$
+	Différence : $a != b$
+	Inégalité large inférieure : $a <= b$
+	Inégalité large supérieure : $a >= b$
+	Infériorité stricte : $a < b$
+	Supériorité stricte : $a > b$
+	Fractions associées à gauche : $a/b/c$
+	Convention du moteur : en l’absence de parenthèses, les divisions successives sont associées à gauche. Cette convention se distingue du quotient d’un quotient par un autre quotient.
+	Quatre quotients successifs : $a/b/c/d$
+	Quotient de quotients : $(a/b)/(c/d)$
+	Dénominateur fractionnaire : $a/(b/c)$
+	Exposant sur le numérateur : $a^2/b$
+	Exposant sur le dénominateur : $a/b^2$
+	Carré d’une fraction : $(a/b)^2$
+	Produit remarquable : $(a+b)^2 = a^2 + 2*a*b + b^2$
+
+	Multiplication de deux parenthèses : $(a+b)(c+d)$
+	Nombres décimaux : $1,5 + 2,75 = 4,25$
+
+<h1>Fractions et racines
+
+	Fraction : $1/2 + 1/3$
+	Racine carrée : $racine(2)$
+	Racine n-ième : $racine[3](8)$
+	Valeur absolue : $|x - 2|$
+	Partie entière : $partie entière(x)$
+	Racine n-ième symbolique : $racine[n](x)$
+	Plafond : $excès(x)$
+
+<h1>Puissances et indices
+
+	Carré : $x^2$
+	Exposant composé : $x^(a+b)$
+	Terme d'une suite : $u_n$
+	Indice composé : $u_(n-1)$
+
+<h1>Sommes et produits
+
+	Somme : $somme(k=1;n) k^2$
+	Produit : $produit(k=1;n) k$
+	Somme sur un intervalle : $somme(k=0;n) (k+1)$
+
+<page suivante h1>Lettres grecques minuscules
+
+	Alpha : $alpha$
+	Beta : $beta$
+	Gamma : $gamma$
+	Delta : $delta$
+	Epsilon : $epsilon$
+	Zeta : $zeta$
+	Eta : $eta$
+	Theta : $theta$
+	Iota : $iota$
+	Kappa : $kappa$
+	Lambda : $lambda$
+	Mu : $mu$
+	Nu : $nu$
+	Xi : $xi$
+	Rho : $rho$
+	Sigma : $sigma$
+	Tau : $tau$
+	Phi : $phi$
+	Chi : $chi$
+	Psi : $psi$
+	Omega : $omega$
+	Varphi : $varphi$
+	Pi : $pi$
+
+<h1>Lettres grecques majuscules
+
+	Gamma : $Gamma$
+	Delta : $Delta$
+	Theta : $Theta$
+	Lambda : $Lambda$
+	Xi : $Xi$
+	Sigma : $Sigma$
+	Phi : $Phi$
+	Psi : $Psi$
+	Omega : $Omega$
+
+<h1>Fonctions usuelles
+
+	Exponentielle : $exp(1) = e$
+	Logarithme : $ln(e) = 1$
+	Sinus : $sin(x)$
+	Sinus en degrés : $sin(30°) = 1/2$
+	Norme d'un vecteur : $norme(vecteur(AB))$
+	Logarithme décimal : $log(100) = 2$
+	Valeur absolue nommée : $valeur absolue(x)$
+
+<h1>Fonctions trigonométriques
+
+	Cosinus : $cos(x)$
+	Tangente : $tan(x)$
+	Identité fondamentale : $cos(x)^2 + sin(x)^2 = 1$
+
+<h1>Fonctions circulaires inverses
+
+	Arcsinus : $arcsin(x)$
+	Arccosinus : $arccos(x)$
+	Arctangente : $arctan(x)$
+
+<h1>Fonctions hyperboliques
+
+	Sinus hyperbolique : $sinh(x)$
+	Cosinus hyperbolique : $cosh(x)$
+	Tangente hyperbolique : $tanh(x)$
+	Sinus hyperbolique (notation française) : $sh(x)$
+	Cosinus hyperbolique (notation française) : $ch(x)$
+	Tangente hyperbolique (notation française) : $th(x)$
+	Identité fondamentale : $cosh(x)^2 - sinh(x)^2 = 1$
+
+<h1>Fonctions hyperboliques inverses
+
+	Argument sinus hyperbolique : $argsh(x)$
+	Argument cosinus hyperbolique : $argch(x)$
+	Argument tangente hyperbolique : $argth(x)$
+	Sinus hyperbolique inverse (notation internationale) : $asinh(x)$
+	Cosinus hyperbolique inverse (notation internationale) : $acosh(x)$
+	Tangente hyperbolique inverse (notation internationale) : $atanh(x)$
+
+<page suivante h1>Fonctions circulaires et hyperboliques supplémentaires
+
+	Arc cotangente : $arccot(x)$
+	Argument sinus hyperbolique long : $arsinh(x)$
+	Argument cosinus hyperbolique long : $arcosh(x)$
+	Argument tangente hyperbolique long : $artanh(x)$
+
+<h1>Limites et intégrales
+
+	Limite : $lim(x->0) sin(x)/x = 1$
+	Intégrale définie : $intégrale(x=a;b) f(x)$
+	Primitive : $intégrale(x) f(x)$
+	Intégrale double : $intégrale(x=a;b ; y=c;d) f(x;y)$
+	Intégrale sur un contour : $intégrale contour(C; z) f(z)$
+	Limite à l'infini : $lim(x->infini) 1/x = 0$
+	Intégrale triple : $intégrale(x=a;b ; y=c;d ; z=e;f) g(x;y;z)$
+
+<h1>Calcul différentiel supplémentaire
+
+	Différentielle ordinaire : $dd(f)/dd(x)$
+	Dérivée partielle selon y : $partielle(f)/partielle(y)$
+	Dérivée directionnelle (autre fonction) : $dérivée directionnelle(g; u)$
+	Gradient et produit scalaire : $produit scalaire(gradient(f); v)$
+
+<page suivante h1>Analyse vectorielle
+
+	Gradient : $gradient(f)$
+	Divergence : $divergence(F)$
+	Rotationnel : $rotationnel(F)$
+	Laplacien : $laplacien(f)$
+	Dérivée partielle : $partielle(f)/partielle(x)$
+	Nabla : $nabla f$
+	Dérivée directionnelle : $dérivée directionnelle(f; v)$
+
+<h1>Quatre transformées intégrales
+
+	Transformée de Laplace : $la transformée de Laplace(f)$
+	Transformée de Fourier : $la transformée de Fourier(f)$
+	Transformée de Laplace inverse : $l'inverse de Laplace(F)$
+	Transformée de Fourier inverse : $l'inverse de Fourier(G)$
+
+<h1>Suites et notations complémentaires
+
+	Suite décalée : $u_(n+1)$
+	Indice grec : $lambda_1$
+	Variable indicée par une lettre grecque : $x_lambda$
+	Flèche vers l’infini : $n -> infini$
+	Suite des termes : $u_0, u_1, ..., u_n$
+	Somme de série : $somme(n=1;infini) 1/n^2$
+	Composition : $f rond g$
+
+<page suivante h1>Ensembles de nombres
+
+	Chaîne des ensembles : $NN inclus dans ZZ inclus dans DD inclus dans QQ inclus dans RR inclus dans CC$
+	Naturels : $NN$
+	Entiers relatifs : $ZZ$
+	Décimaux : $DD$
+	Rationnels : $QQ$
+	Réels : $RR$
+	Complexes : $CC$
+	Corps : $KK$
+	Quaternions : $HH$
+	Inclusion et appartenance : $x appartient à RR et RR inclus dans CC$
+
+<h1>Ensembles et intervalles supplémentaires
+
+	Intervalle fermé : $[0; 1]$
+	Intervalle ouvert : $]0; 1[$
+	Intervalle semi-ouvert : $[0; 1[$
+	Intervalle non borné : $]-infini; +infini[$
+
+	Quantificateur restreint :
+
+	$pour tout x dans [0; 1]$
+
+	Différence à elle-même : $A privé de A = vide$
+	Ensemble des réels non nuls : $RR^*$
+
+<page suivante h1>Ensembles et logique
+
+	Appartenance : $x appartient à NN$
+
+	Quantificateur universel :
+
+	$pour tout x dans RR$
+
+
+	Quantificateur existentiel :
+
+	$il existe x dans RR$
+
+
+<h1>Logique et quantificateurs
+
+
+	Pour tout et il existe :
+
+	$pour tout x dans RR, il existe y dans RR, y > x$
+
+
+	Absence de quantificateur existentiel :
+
+	$il n'existe pas de m dans NN$
+
+
+	Implication :
+
+	$P => Q$
+
+
+	Équivalence :
+
+	$P <=> Q$
+
+	Conjonction : $P et Q$
+	Disjonction : $P ou Q$
+	Négation : $négation de P$
+	Formule logique composée : $(P et Q) ou négation de P$
+
+	Quantificateurs imbriqués :
+
+	$pour tout x dans RR, il existe y dans RR, y > x$
+
+
+	Inégalité et équivalence :
+
+	$abs(x) <= 1 <=> -1 <= x <= 1$
+
+
+<h1>Ensembles et logique complémentaires
+
+	Application dans un ensemble : $x dans RR$
+	Restriction sous condition : $x tel que x > 0$
+	Négation explicite : $non P$
+	Opérations booléennes : $P et Q ou R$
+	Attention aux priorités : la notation `P et Q ou R` ne démontre aucune équivalence et ne doit pas être interprétée sans convention logique. Pour lever toute ambiguïté dans les assertions, écrire les parenthèses de la structure voulue.
+
+<h1>Relations ensemblistes
+	Non-appartenance : $x n'appartient pas à QQ$
+	Inclusion : $A inclus dans B$
+	Inclusion large : $A inclus dans ou égal à B$
+	Non-inclusion : $A non inclus dans B$
+	Non-inclusion large : $A non inclus dans ou égal à B$
+
+	Appartenance et implication :
+
+	$x appartient à A => x appartient à B$
+
+	Appartenance à un ensemble de nombres : $racine(2) appartient à RR$
+
+<h1>Opérations ensemblistes
+
+	Réunion : $A union B$
+	Intersection : $A inter B$
+	Différence : $A privé de B$
+	Ensemble vide : $vide$
+	Complémentaire de A : $non(A)$
+	Convention de notation : `non(A)` avec parenthèses désigne le complémentaire dans un univers fixé ; `non P` sans parenthèses est une négation propositionnelle. Ces écritures sont distinctes du calcul effectif sur des ensembles typés.
+	Complémentaire d’une réunion : $non(A union B)$
+	Loi de De Morgan : $non(A union B) = non(A) inter non(B)$
+	Ces identités concernent les complémentaires relatifs à un même univers de référence, fixé au préalable.
+	Loi de De Morgan pour intersection : $non(A inter B) = non(A) union non(B)$
+	Ensemble des parties : $parties de(A)$
+	Cardinal : $card(A)$
+	Intervalle entier : $intervalle entier(1; n)$
+	Réunion indexée : $réunion de(i=1; n) A_i$
+	Intersection indexée : $intersection de(i=1; n) A_i$
+
+<h1>Arithmétique et dénombrement
+	Factorielle : $factorielle(n)$
+	Coefficient binomial : $C(n; k)$
+	Arrangement : $A(n; k)$
+	Formule de Pascal : $C(n; k) = C(n-1; k-1) + C(n-1; k)$
+	Formule du binôme : $(a+b)^n = somme(k=0;n) C(n; k) a^k b^(n-k)$
+
+	Congruence : $a congru à b modulo n$
+	Signe : $signe(x)$
+
+<h1>Conjugaison et topologie
+
+	Nombre complexe : $z = a + i*b$
+	Conjugué : $conjugué(z)$
+	Module : $|z|$
+	Unité imaginaire : $i^2 = -1$
+	Égalité d’Euler : $exp(i*pi) + 1 = 0$
+	Adhérence : $adhérence(A)$
+	Composée : $g rond f$
+
+<h1>Notations géométriques
+
+	Angle à trois points : $angle(ABC)$
+	Angle à un point : $angle(A)$
+	Angle droit : $angle droit$
+	Angle en degrés : $angle(ABC) = 90°$
+	Triangle : $triangle(ABC)$
+	Arc de cercle : $arc(AB)$
+	Cercle : $cercle(O; r)$
+	Distance : $distance(A; B)$
+	Milieu : $milieu(A; B)$
+	Parallélisme : $(AB) parallèle (CD)$
+	Perpendicularité : $(AB) perpendiculaire (CD)$
+	Non parallélisme : $(AB) !parallèle (CD)$
+	Figures isométriques : $ABC isométrique A'B'C'$
+	Figures semblables : $ABC semblable A'B'C'$
+
+<h1>Vecteurs et repères
+
+	Vecteur : $vecteur(AB)$
+	Vecteur nommé en ligne : $vecteur u(3;5)$
+	Vecteur colonne : $vecteur colonne u(3;5)$
+	Vecteur de l’espace : $vecteur v(1;2;3)$
+	Colonne de l’espace : $vecteur colonne v(1;2;3)$
+	Somme de vecteurs : $vecteur(AB) + vecteur(BC) = vecteur(AC)$
+	Produit scalaire infixe : $vecteur(u) . vecteur(v)$
+	Produit vectoriel infixe : $vecteur(u) ^ vecteur(v)$
+	Orthogonalité vectorielle : $vecteur(u) perpendiculaire vecteur(v)$
+	Colinéarité : $colinéaires(u; v)$
+	Repère du plan : $repère(O; i; j)$
+	Repère de l’espace : $repère(O; i; j; k)$
+	Repère orthonormé : $repère orthonormé(O; i; j)$
+	Norme et produit scalaire : $norme(vecteur(u))^2 = vecteur(u) . vecteur(u)$
+
+<page suivante h1>Algèbre linéaire
+
+	Déterminant : $déterminant(A)$
+	Trace : $trace(A)$
+	Rang : $rang(A)$
+	Noyau : $noyau(A)$
+	Produit scalaire : $produit scalaire(u; v)$
+
+<h1>Fonctions et opérations linéaires supplémentaires
+
+	Comatrice : $comatrice(A)$
+	Spectre : $spectre(A)$
+	Image : $image(A)$
+	Sous-espace engendré : $engendré par(u; v)$
+	Orthogonal d’un espace : $orthogonal(F)$
+	Projection orthogonale : $projeté orthogonal(F; x)$
+	Produit mixte : $produit mixte(u; v; w)$
+	Matrice inverse : $A^(-1)$
+	Adjoint : $A^*$
+
+<h1>Probabilités et statistiques
+
+	Variance : $variance(X)$
+	Covariance : $covariance(X; Y)$
+	Écart type : $écart type(X)$
+
+<page suivante h1>Probabilités : événements
+
+	Probabilité d’un événement : $PP(A)$
+	Probabilité du contraire : $PP(non(A))$
+	Probabilité d’intersection : $PP(A inter B)$
+	Probabilité de réunion : $PP(A union B)$
+	Union et intersection : $PP(A union B) = PP(A) + PP(B) - PP(A inter B)$
+	Probabilité nulle : $PP(vide) = 0$
+	Indépendance : $PP(A inter B) = PP(A) PP(B)$
+	Cette égalité caractérise l’indépendance de A et B ; ce n’est pas une règle de calcul applicable à deux événements quelconques.
+	Probabilité d’une valeur : $PP(X = k)$
+	Probabilité cumulée : $PP(X <= x)$
+
+<h1>Probabilités : conditionnement
+
+	Probabilité conditionnelle : $PP(A sachant B)$
+	Probabilité conditionnelle réciproque : $PP(B sachant A)$
+	Produit des probabilités : $PP(A inter B) = PP(A sachant B) PP(B)$
+	Probabilités totales : $PP(A) = PP(A sachant B) PP(B) + PP(A sachant non(B)) PP(non(B))$
+	La formule affichée suppose que B et son complémentaire ont tous deux une probabilité strictement positive ; dans le cas contraire, une conditionnelle écrite sur un événement de probabilité nulle n’est pas définie au sens élémentaire.
+	Formule de Bayes : $PP(A sachant B) = (PP(B sachant A) PP(A))/PP(B)$
+	La formule de Bayes exige une probabilité de B strictement positive ; l’écriture de la conditionnelle réciproque exige également une probabilité de A strictement positive.
+
+<page suivante h1>Probabilités complémentaires
+
+	Espérance du produit : $EE(X*Y)$
+	Conditionnement et complémentaire : $PP(non(A) sachant B)$
+	Probabilité conjointe : $PP(A inter B sachant C)$
+	Borne supérieure de l’écart-type d’une fréquence de Bernoulli : $1/(2 racine(n))$
+	Pour n tirages de Bernoulli indépendants et de même paramètre, avec n entier naturel strictement positif, l’écart-type de la fréquence vaut la racine de p fois (1 moins p) divisé par n ; il est au plus égal à la borne affichée. Ce n’est pas l’énoncé général de la loi des grands nombres.
+
+<h1>Statistiques : paramètres
+
+	Espérance : $EE(X)$
+	Espérance du carré : $EE(X^2)$
+	Identité de König-Huygens : $variance(X) = EE(X^2) - EE(X)^2$
+	Moyenne avec barre : $moyenne(x)$
+	Variance de X et Y : $variance(X) + variance(Y)$
+	Covariance nulle : $covariance(X; Y) = 0$
+	Écart-type et variance : $écart type(X) = racine(variance(X))$
+
+<h1>Statistiques : fonctions
+
+	Fonction de répartition : $répartition de(X; x)$
+	Densité de probabilité : $densité de(X; x)$
+	Répartition et probabilité : $répartition de(X; x) = PP(X <= x)$
+	Répartition par intégration : $répartition de(X; x) = intégrale(t=-infini;x) densité de(X; t)$
+	Cette représentation intégrale suppose que la loi de X admet une densité ; elle ne convient pas telle quelle à une variable aléatoire purement discrète.
+
+<page suivante h1>Lois de probabilité
+
+	Loi normale centrée réduite : $normal(0; 1)$
+	Loi normale générale : $normal(mu; sigma)$
+	Pour cette notation, sigma désigne l’écart-type, strictement positif ; la variance vaut son carré.
+	Loi binomiale : $binomiale(n; p)$
+	Paramètres : n est un entier naturel ; p est une probabilité comprise entre zéro et un. La loi décrit notamment la somme de n épreuves de Bernoulli indépendantes de même paramètre.
+	Loi de Poisson : $poisson(lambda)$
+	Paramètre de la loi de Poisson : lambda est strictement positif dans le modèle usuel présenté ici.
+	Loi uniforme : $uniforme(a; b)$
+	La loi uniforme continue sur un intervalle exige que la borne a soit strictement inférieure à la borne b.
+	Loi exponentielle : $exponentielle(lambda)$
+	Le paramètre de taux lambda est strictement positif.
+	Probabilité d’une binomiale : $PP(X = k) = C(n; k) p^k (1-p)^(n-k)$
+	Cette formule suppose que X suit une loi binomiale de paramètres n et p, et que k est un entier entre zéro et n inclus.
+	Probabilité d’une Poisson : $PP(X = k) = exp(-lambda) lambda^k / factorielle(k)$
+	Cette formule suppose que X suit une loi de Poisson de paramètre lambda strictement positif et que k est un entier naturel.
+	Espérance d’une binomiale : $EE(X) = n p$
+	Variance d’une binomiale : $variance(X) = n p (1-p)$

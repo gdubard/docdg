@@ -1,0 +1,139 @@
+document {
+    orientation: portrait;
+    marges: 10;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,5;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Sciences de l'ingénieur — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Lycée — terminale
+
+soit remarque: un style = <gris foncé italique>
+
+Un système se modélise par une fonction de transfert H(p) : son comportement temporel se lit sur la réponse à un échelon, son comportement fréquentiel sur le diagramme de Bode. docdg calcule les deux à partir de la fonction de transfert.
+
+<h1>La chaîne d'énergie : un moteur à courant continu
+<Énoncer>la chaîne d'énergie
+La vitesse d'un moteur alimenté sous une tension constante s'établit comme celle d'un système du premier ordre, de gain statique K et de constante de temps τ.
+<Énoncer>le modèle du moteur à courant continu
+<Tracer>la réponse indicielle de H(p) = K/(1 + τp), avec K = 2 et τ = 0,05
+	<remarque>Pour un premier ordre, le temps de réponse à 5 % vaut 3τ : ici 0,15 s. La réponse ne dépasse jamais sa valeur finale.
+
+<page suivante h1>Une suspension : le second ordre
+Une suspension de véhicule se modélise par un second ordre, de pulsation propre ω0 et de coefficient d'amortissement ξ. Peu amortie, elle oscille avant de se stabiliser.
+<Tracer>la réponse indicielle de H(p) = 1/(1 + 2ξp/ω0 + p^2/ω0^2), avec ξ = 0,3 et ω0 = 10
+
+<h1>Filtrer et numériser
+
+<h2>Le filtre RC, premier ordre
+<Tracer>le diagramme de Bode de H(p) = 1/(1 + RCp), avec R = 1000 et C = 1e-6
+	<remarque>Au-delà de la pulsation de coupure 1/RC, le gain chute de 20 dB par décade : le filtre laisse passer les basses fréquences.
+
+<h2>Le spectre d'un signal numérisé
+Un capteur délivre une composante utile à 50 Hz et un parasite à 150 Hz. Échantillonné à 1000 Hz, soit au-delà de deux fois la plus haute fréquence, le signal garde toute son information (théorème de Shannon).
+<Tracer>le spectre du signal s(t) = sin(2π·50t) + 0,3sin(2π·150t), échantillonné à 1000 Hz sur [0 ; 1], jusqu'à 300 Hz
+
+<page suivante h2>Lisser des mesures
+<Énoncer>la sensibilité d'un capteur
+Relevés d'un capteur de température toutes les minutes, entachés de bruit : une spline de lissage en dégage la tendance.
+<Tracer>l'interpolation de T en fonction de t des données {(0;20,1) (1;24,8) (2;28,2) (3;32,9) (4;35,1) (5;39,3) (6;41,0) (7;44,6) (8;45,8) (9;48,9) (10;49,7)} par une spline de lissage, en t = 5,5
+
+<page suivante h0>Classes préparatoires et supérieur
+
+<h1>Systèmes asservis — PTSI, PT et licence
+
+Les performances d'un système se lisent sur sa réponse indicielle : valeur finale, premier dépassement, temps de montée, temps de réponse à 5 %. docdg les calcule sur la réponse indicielle et les relève selon les définitions normalisées.
+
+<h2>Le premier ordre
+<Énoncer>le système du premier ordre
+<Tracer>la réponse indicielle de H(p) = K/(1 + τp), avec K = 5 et τ = 0,2
+	<remarque>Temps de montée τ ln 9, temps de réponse τ ln 20 ≈ 3τ : les valeurs relevées les retrouvent.
+
+<h2>Le second ordre et l'amortissement
+<Énoncer>le premier dépassement d'un second ordre
+Le premier dépassement ne dépend que de ξ : D₁ = exp(−πξ/√(1 − ξ²)).
+<Tracer>la réponse indicielle de H(p) = 1/(1 + 2ξp/ω0 + p^2/ω0^2), avec ξ = 0,2 et ω0 = 10
+<Tracer>la réponse indicielle de H(p) = 1/(1 + 2ξp/ω0 + p^2/ω0^2), avec ξ = 0,7 et ω0 = 10
+<Tracer>la réponse indicielle de H(p) = 1/(1 + 2ξp/ω0 + p^2/ω0^2), avec ξ = 1,5 et ω0 = 10
+	<remarque>Pour ξ ≈ 0,7, le temps de réponse est minimal avec un dépassement de 5 % à peine : c'est le réglage de référence. Au-delà de 1, la réponse devient apériodique et lente.
+
+<h1>Analyse fréquentielle et stabilité
+
+<h2>Le diagramme de Bode du second ordre
+<Tracer>le diagramme de Bode de H(p) = K/(1 + 2ξp/ω0 + p^2/ω0^2), avec K = 2, ξ = 0,2 et ω0 = 100
+
+<h2>La stabilité d'un système bouclé
+<Énoncer>la stabilité d'un système linéaire
+La fonction de transfert en boucle ouverte comporte une intégration et deux constantes de temps. Les marges de gain et de phase se lisent sur les lieux de Nyquist et de Black.
+<Tracer>le diagramme de Nyquist de T(p) = K/(p(1 + 0,1p)(1 + 0,01p)), avec K = 20, entre 0,1 et 1000 rad/s
+<Tracer>le diagramme de Black de T(p) = K/(p(1 + 0,1p)(1 + 0,01p)), avec K = 20, entre 0,1 et 1000 rad/s
+	<remarque>Le cahier des charges usuel demande une marge de phase d'au moins 45° et une marge de gain d'au moins 10 dB : diminuer K les augmente, au prix de la rapidité.
+
+<h1>Mécanique et mesure
+
+<h2>L'oscillateur mécanique amorti
+Une masse m suspendue à un ressort de raideur k, freinée par un amortisseur de coefficient c :
+<Résoudre>numériquement l'équation différentielle m x'' + c x' + k x = 0, avec m = 1, c = 0,8, k = 16, x(0) = 0,05 et x'(0) = 0, sur [0 ; 10], le portrait de phase
+
+<h2>Filtrer la mesure d'un capteur
+<Tracer>le filtrage du signal s(t) = sin(2π·2t) + 0,3sin(2π·60t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 10 Hz, avec un bruit d'écart type 0,1
+
+<page suivante h0>Approfondissements en sciences de l’ingénieur
+
+<h1>Mécanique des structures
+
+<h2>Les modes propres d'un système à deux degrés de liberté
+<Énoncer>les modes propres d'un système à plusieurs degrés de liberté
+Deux masses égales m reliées par trois ressorts de raideur k : les pulsations propres au carré sont, en unités de k/m, les valeurs propres de la matrice de raideur réduite.
+<Soit>la matrice D {
+	2 ; -1
+	-1 ; 2
+}
+<Déterminer>numériquement les valeurs propres de D
+	<remarque>ω₁² = k/m pour le mode en phase, ω₂² = 3k/m pour le mode en opposition de phase.
+
+<h2>La flèche d'une poutre en console
+<Énoncer>la flèche d'une poutre en console
+<Énoncer>le flambement d'Euler
+<Vérifier>l'homogénéité de F = E * I / L^2 avec F force, E module d'Young, I moment quadratique, L longueur
+	<remarque>La charge critique se contrôle comme toute relation du corpus : docdg nomme la dimension commune aux deux membres, et refuserait un carré oublié.
+
+Une poutre encastrée en x = 0, libre en x = L = 1, sous une charge répartie uniforme : l'équation d'Euler-Bernoulli EI y'''' = q est du quatrième ordre, avec deux conditions à chaque extrémité (encastrement : y = y' = 0 ; bord libre : moment et effort tranchant nuls, y'' = y''' = 0).
+<Résoudre>numériquement l'équation différentielle y'''' = q/EI, d'inconnue y(x), avec q = 1, EI = 1, y(0) = 0, y'(0) = 0, y''(1) = 0 et y'''(1) = 0, sur [0 ; 1]
+	<remarque>La théorie donne la flèche au bout qL⁴/(8EI) = 0,125 et la rotation qL³/(6EI) ≈ 0,1667.
+
+<h1>Électronique
+
+<h2>Le filtre actif de Sallen-Key
+Réglé en Butterworth du second ordre, soit ξ = √2/2, il ne présente aucune résonance et coupe à −3 dB exactement à sa pulsation propre.
+<Tracer>le diagramme de Bode de H(p) = 1/(1 + 2ξp/ωc + p^2/ωc^2), avec ξ = 0,7071, ωc = 6283
+<Tracer>la réponse indicielle de H(p) = 1/(1 + 2ξp/ωc + p^2/ωc^2), avec ξ = 0,7071, ωc = 6283
+
+<page suivante h2>Le spectre d'une modulation d'amplitude
+<Énoncer>la modulation d'amplitude
+<Tracer>le spectre du signal u(t) = (1 + m cos(2π fm t)) cos(2π fp t), échantillonné à 10 kHz sur [0 ; 0,5], avec m = 0,5, fm = 100, fp = 1000, jusqu'à 1500 Hz
+
+<h2>Un signal carré et ses harmoniques
+<Tracer>le spectre du signal s(t) = 4/π (sin(2π f t) + sin(6π f t)/3 + sin(10π f t)/5 + sin(14π f t)/7), échantillonné à 2 kHz sur [0 ; 1], avec f = 50, jusqu'à 500 Hz
+
+<h1>Vibrations d'une membrane circulaire
+
+Une membrane circulaire de rayon a, tendue et fixée sur son bord, vibre selon des modes dont le profil radial est une fonction de Bessel. Les pulsations des modes à symétrie de révolution sont proportionnelles aux zéros de J₀ : ω = c j₀,ₙ / a.
+<Tracer>les fonctions de Bessel J_0, J_1 et J_2 sur [0 ; 20]
+<Calculer>les 5 premiers zéros de la fonction de Bessel J_0
+	<remarque>Les zéros ne sont pas équidistants : les harmoniques d'un tambour ne sont pas multiples du fondamental, d'où un son sans hauteur bien définie, à la différence d'une corde vibrante.
+

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" role="img">
+  <title>Locomotive à vapeur</title>
+  <rect width="120" height="90" fill="#eef2f7"/>
+  <g fill="#5b6b80" stroke="#33455e" stroke-width="1.5">
+    <rect x="18" y="40" width="52" height="24" rx="2"/>
+    <rect x="70" y="28" width="26" height="36" rx="2"/>
+    <rect x="26" y="26" width="12" height="14"/>
+  </g>
+  <path d="M32 26 q-4 -10 4 -14 q8 -4 4 -8" fill="none" stroke="#8496ab" stroke-width="2.5" stroke-linecap="round"/>
+  <g fill="#2b3a4f"><circle cx="32" cy="70" r="8"/><circle cx="58" cy="70" r="8"/><circle cx="86" cy="70" r="6"/></g>
+  <g fill="#c9d3e0"><circle cx="32" cy="70" r="3"/><circle cx="58" cy="70" r="3"/><circle cx="86" cy="70" r="2"/></g>
+  <rect x="8" y="78" width="104" height="3" fill="#8496ab"/>
+</svg>

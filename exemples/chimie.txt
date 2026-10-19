@@ -1,0 +1,295 @@
+document {
+    orientation: portrait;
+    marges: 10;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,5;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Chimie — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Collège
+
+soit remarque: un style = <gris foncé italique>
+soit correction: un style = <fond gris clair>
+
+<h1>La transformation chimique — classe de quatrième
+
+<h2>Ce qu'il faut savoir avant
+<Dresser>les prérequis de la conservation de la masse au cours d'une réaction
+
+<h2>Les énoncés du chapitre
+<Énoncer>la transformation chimique <étiquette>{transformation}
+	<remarque>La distinction avec le changement d'état est déclarée comme une dépendance : l'énoncé du changement d'état est convoqué, non paraphrasé.
+<Énoncer>la conservation des atomes <étiquette>{atomes}
+<Énoncer>la conservation de la masse au cours d'une réaction <étiquette>{masse}
+	<remarque>Le corpus enregistre que cette loi cesse d'être exacte pour les transformations nucléaires. L'information ne s'affiche pas en quatrième, mais elle est là, et elle ressortira en terminale.
+
+<h2>Écrire une équation
+<Énoncer>l'équation de réaction
+	L'ajustement des nombres n'est pas une devinette : il découle de <renvoi>{atomes}.
+<Équilibrer>CH4 + O2 -> CO2 + H2O
+	<remarque>Les nombres stœchiométriques ci-dessus sont CALCULÉS, non saisis. Ils sont obtenus par le noyau de la matrice de composition, augmentée d'une ligne de charge. Une équation impossible serait signalée comme telle.
+
+<h2>Les tests d'identification
+<Énoncer>le test du dioxygène
+<Énoncer>le test du dioxyde de carbone
+<Énoncer>le test de l'eau
+
+<h2>Exercice type
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — la combustion du carbone} {
+	On brûle 3 g de carbone dans un flacon fermé contenant 8 g de dioxygène.
+	Écrire l'équation de la réaction, puis déterminer la masse de dioxyde de carbone formé.
+}
+<correction>Correction. L'équation s'écrit <Équilibrer>C + O2 -> CO2. Le flacon étant fermé, <renvoi>{masse} impose que la masse totale se conserve : la masse de dioxyde de carbone formé vaut $3 + 8 = 11$ g.
+	<remarque>Le système fermé n'est pas un détail de l'énoncé : c'est l'hypothèse déclarée de la loi. Un flacon ouvert donnerait un résultat apparemment contradictoire, et c'est un bon sujet de discussion.
+
+<page suivante h0>Lycée
+
+
+
+<h1>La mole et les quantités de matière — classe de seconde
+
+<h2>Ce qui a été vu au collège
+<Rappeler>l'atome
+<Rappeler>la molécule
+
+<h2>Compter les entités
+<Énoncer>l'entité chimique
+<Énoncer>la mole et la constante d'Avogadro <étiquette>{mole}
+<Énoncer>la masse molaire <étiquette>{molaire}
+<Calculer>la masse molaire de H2SO4
+	<remarque>La masse molaire est calculée à partir de la formule, jamais saisie. Écrire à la main qu'un hydrate comporte neuf atomes d'oxygène, c'est se tromper un jour sans qu'aucune machine puisse le voir.
+
+<page suivante h2>Les concentrations
+<Énoncer>la concentration en quantité de matière <étiquette>{concentration}
+<Énoncer>le lien entre les deux concentrations
+<Démontrer>le lien entre les deux concentrations
+	<remarque>La démonstration élimine la quantité de matière entre deux définitions. Sa dernière ligne invoque l'homogénéité comme contrôle, ce qui est aussi ce que fait le compilateur.
+
+<h2>Diluer une solution
+<Énoncer>la conservation de la quantité de matière lors d'une dilution <étiquette>{dilution}
+<Démontrer>la conservation de la quantité de matière lors d'une dilution
+
+<h2>Exercice type
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — préparer une solution diluée} {
+	On dispose d'une solution mère de concentration $0,50$ mol/L.
+	Quel volume faut-il prélever pour préparer 100,0 mL d'une solution de concentration $0,020$ mol/L ?
+}
+<correction>Correction. La relation <renvoi>{dilution} donne $V_i = (C_f * V_f) / C_i$, soit $V_i = (0,020 * 100,0) / 0,50 = 4,0$ mL.
+	<remarque>Faire remarquer que le facteur de dilution vaut 25, et que le volume prélevé est 25 fois plus petit que le volume final. Le rapport est le même parce que la quantité de soluté, elle, n'a pas bougé.
+
+<h1>Oxydoréduction et titrage — première, spécialité
+
+<h2>Prérequis du chapitre
+<Dresser>les prérequis de l'équation d'une réaction d'oxydoréduction
+
+<h2>Oxydants et réducteurs
+<Énoncer>l'oxydant et le réducteur
+<Énoncer>le couple oxydant-réducteur
+<Énoncer>la demi-équation électronique <étiquette>{demi}
+	<remarque>L'électron est traité comme une espèce ordinaire : composition vide, charge négative unitaire. Les demi-équations s'équilibrent donc par le même calcul que les réactions complètes, sans aucun cas particulier.
+<Équilibrer>MnO4^- + H^+ + e^- -> Mn^2+ + H2O
+
+<h2>Combiner les demi-équations
+<Énoncer>l'équation d'une réaction d'oxydoréduction <étiquette>{redox}
+<Équilibrer>MnO4^- + Fe^2+ + H^+ -> Mn^2+ + Fe^3+ + H2O
+	<remarque>Les nombres ci-dessus sont calculés. La ligne de charge de la matrice garantit qu'ils conservent aussi l'électroneutralité, ce qu'un ajustement à la main oublie régulièrement.
+
+<h2>Le titrage
+<Énoncer>le titrage
+<Énoncer>l'équivalence d'un titrage <étiquette>{equivalence}
+<Énoncer>la relation à l'équivalence <étiquette>{relation}
+<Démontrer>la relation à l'équivalence
+
+<h2>Exercice type
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — doser les ions fer (II)} {
+	On titre 20,0 mL d'une solution d'ions fer (II) par une solution de permanganate de potassium à $2,0 * 10^-2$ mol/L. L'équivalence est repérée pour un volume versé de 12,5 mL.
+	Déterminer la concentration en ions fer (II).
+}
+<correction>Correction. L'équation montre qu'un ion permanganate réagit avec cinq ions fer (II). La relation <renvoi>{relation} donne alors $C_(Fe) * V_(Fe) = 5 * C_(Mn) * V_(Mn)$, d'où $C_(Fe) = 6,3 * 10^-2$ mol/L.
+	<remarque>Le repérage de l'équivalence est colorimétrique : la première goutte en excès colore la solution en rose. C'est le changement de réactif limitant qui se voit, non la fin d'une réaction.
+
+<h1>Cinétique : suivre une concentration pas à pas
+
+La loi de vitesse d'une réaction est une équation différentielle. Pour l'ordre 1, la solution est une exponentielle ; pour l'ordre 2, la décroissance est plus lente. docdg l'intègre numériquement par une méthode de Runge-Kutta adaptative.
+
+<h2>Cinétique d'ordre 2
+Pour une réaction d'ordre 2, la concentration du réactif vérifie a' = -k a².
+<Résoudre>numériquement l'équation différentielle a' = -k a^2, avec k = 0,5 et a(0) = 0,1, sur [0 ; 200]
+	<remarque>Contrairement à l'ordre 1, la décroissance ralentit fortement : le temps de demi-réaction 1/(k a(0)) = 20 s double à chaque fois que la concentration de départ est divisée par deux.
+
+<page suivante h1>Exploiter des mesures : le titrage pH-métrique
+
+On verse une solution de soude dans une solution d'acide et l'on relève le pH à chaque ajout. L'équivalence se lit au point d'inflexion de la courbe, là où le pH varie le plus vite : docdg interpole les mesures par une spline, la dérive et en repère le maximum.
+
+<h2>Repérer l'équivalence par la dérivée
+<Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une spline cubique, avec sa dérivée
+	<remarque>Le volume équivalent se lit au pic de la dérivée. Juste après le saut, la spline cubique oscille légèrement : elle impose une courbure continue, que les mesures ne justifient pas.
+
+<h2>Une interpolation sans dépassement
+L'interpolation monotone PCHIP ne crée aucune oscillation entre deux mesures : la courbe reste croissante là où les mesures le sont.
+<Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une interpolation monotone, avec sa dérivée
+	<remarque>Les deux méthodes s'accordent sur le volume équivalent à un vingtième de millilitre près, bien en deçà de la précision de la burette.
+
+<page suivante h0>Enseignement supérieur
+
+soit h1vert: un style = <vert foncé gras section num>
+soit h2vert: un style = <vert italique sous-section>
+
+
+<h1vert>Du potentiel d'électrode au diagramme potentiel-pH — licence 3
+
+<h2vert>Ce qui précède
+<Dresser>les prérequis du diagramme potentiel-pH
+	<remarque>Le graphe converge depuis quatre directions : la relation de Nernst, le diagramme de prédominance, le produit de solubilité et l'influence du milieu. Le diagramme n'est pas un chapitre neuf mais la superposition de trois familles d'équilibres déjà écrites.
+
+<h2vert>Le potentiel et sa référence
+<Énoncer>le potentiel d'électrode et l'électrode standard à hydrogène <étiquette>{reference}
+	Le potentiel absolu d'une électrode n'a pas de sens physique, exactement comme le potentiel électrostatique n'est défini qu'à une constante près.
+
+<h2vert>La relation de Nernst
+<Énoncer>la relation de Nernst <étiquette>{nernst}
+<Démontrer>la relation de Nernst
+	<remarque>La démonstration part de l'enthalpie libre plutôt que de poser la relation. Le contrôle d'homogénéité valide un assemblage peu intuitif : le quotient de la constante des gaz parfaits par celle de Faraday, multiplié par une température, donne bien des volts.
+
+<h2vert>Ce que le milieu change
+<Énoncer>l'influence du milieu sur le potentiel d'un couple
+<Rappeler>le produit de solubilité
+<Rappeler>les constantes de formation d'un complexe
+	<remarque>Précipiter ou complexer l'oxydant abaisse son activité, donc le potentiel. C'est ce qui permet d'inverser le sens d'une réaction par un simple ajout de ligand.
+
+<h2vert>Le diagramme
+<Énoncer>le diagramme potentiel-pH <étiquette>{pourbaix}
+<Énoncer>le diagramme potentiel-pH de l'eau <étiquette>{eau}
+<Démontrer>le diagramme potentiel-pH de l'eau
+
+<h2vert>Une application : la corrosion
+<Énoncer>la corrosion humide d'un métal
+<Énoncer>la protection contre la corrosion
+	<remarque>Le sodium réduit l'eau, comme le diagramme le prévoit. L'aluminium le devrait aussi et ne le fait pas : sa couche d'oxyde l'en empêche. Le diagramme prédit la thermodynamique, jamais la cinétique.
+
+<page suivante h2vert>Exercice type
+
+<Afficher>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice — domaine du fer} {
+	On donne $E°(Fe^{2+}/Fe) = -0,44$ V et $E°(Fe^{3+}/Fe^{2+}) = 0,77$ V, ainsi que les produits de solubilité des deux hydroxydes.
+	Tracer le diagramme potentiel-pH du fer pour une concentration de travail de $1,0 * 10^-2$ mol·L⁻¹.
+	Superposer celui de l'eau et conclure sur la stabilité du fer métallique en milieu aéré.
+}
+
+<h1vert>Cinétique des réactions complexes : intégration numérique
+
+Dès que plusieurs réactions s'enchaînent, les lois de vitesse forment un système différentiel ; docdg l'intègre par une méthode de Runge-Kutta adaptative, avec une méthode implicite quand le système est raide.
+
+<h2vert>Réactions successives A → B → C
+Pour deux réactions d'ordre 1 de constantes k1 et k2, l'intermédiaire B passe par un maximum.
+<Résoudre>numériquement le système différentiel, avec k1 = 1, k2 = 0,5, a(0) = 0,01, b(0) = 0 et c(0) = 0, sur [0 ; 10] {
+	a' = -k1 a
+	b' = k1 a - k2 b
+	c' = k2 b
+}
+	<remarque>Le maximum de B est atteint en t = ln(k1/k2)/(k1 - k2) ≈ 1,39 s, ce que la courbe permet de vérifier.
+
+<page suivante h2vert>Une cinétique raide : le problème de Robertson
+Trois constantes de vitesse s'étalent sur neuf ordres de grandeur : les méthodes explicites y épuisent leur pas. Une méthode implicite, celle de Radau, traverse le problème en quelques dizaines de pas.
+<Résoudre>numériquement le système différentiel, avec a(0) = 1, b(0) = 0 et c(0) = 0, sur [0 ; 40], par la méthode de Radau, rtol = 1e-6, atol = 1e-10 {
+	a' = -0,04a + 1e4 b c
+	b' = 0,04a - 1e4 b c - 3e7 b^2
+	c' = 3e7 b^2
+}
+	<remarque>L'espèce B reste à l'état de traces, de l'ordre de 10⁻⁵ : c'est l'intermédiaire réactionnel très réactif qui rend le système raide.
+
+<page suivante h0>Approfondissements
+
+
+<h1vert>Leçon de chimie — de l'état de transition à la sélectivité
+
+<h2vert>Ce qui précède
+<Dresser>les prérequis de la théorie de l'état de transition et de l'équation d'Eyring
+	<remarque>Le graphe converge depuis trois directions : le complexe activé, la loi d'Arrhenius, et la relation entre enthalpie libre standard et constante d'équilibre. La théorie n'est pas un chapitre neuf, c'est la jonction de trois résultats déjà écrits.
+
+<h2vert>Le résultat central
+<Énoncer>la théorie de l'état de transition et l'équation d'Eyring <étiquette>{eyring}
+
+<Démontrer>la théorie de l'état de transition et l'équation d'Eyring
+	<remarque>Le gain sur Arrhenius est que le facteur préexponentiel cesse d'être ajusté : c'est le rapport de l'énergie thermique à la constante de Planck, soit six mille milliards par seconde à température ambiante. Aucune réaction ne peut aller plus vite.
+
+<h2vert>Ce qui en découle
+<Énoncer>les grandeurs d'activation et la molécularité
+	<remarque>L'équation <renvoi>{eyring} scinde la barrière en enthalpie et entropie d'activation. Une entropie nettement négative signale un état de transition plus ordonné que les réactifs : la cinétique renseigne sur la géométrie d'une espèce qu'on ne peut pas observer.
+
+<Énoncer>le postulat de Hammond
+<Énoncer>la relation de Hammett
+
+<h2vert>De la barrière à la sélectivité
+<Énoncer>l'effet isotopique cinétique
+	<remarque>Un rapport voisin de sept désigne la rupture de la liaison à l'étape déterminante ; un rapport très supérieur trahit un effet tunnel, que la théorie de l'état de transition ne prévoit pas.
+<Énoncer>la catalyse asymétrique et l'induction chirale
+	<remarque>Deux kilojoules par mole d'écart entre les deux états de transition diastéréoisomères donnent déjà soixante pour cent d'excès énantiomérique. C'est l'exponentielle qui transforme une différence négligeable en une sélectivité exploitable.
+
+<h2vert>Une lacune assumée
+	Ces trois résultats sont ancrés « démontré » et portent `demonstration_prevue` dans le corpus : la démonstration est attendue à ce niveau mais n'est pas encore rédigée. `<Démontrer>` le dit alors franchement, au lieu d'inventer une preuve.
+
+<h2vert>La photochimie, où le même appareil resert
+<Énoncer>le rendement quantique photochimique
+
+<Démontrer>le rendement quantique photochimique
+	<remarque>Un état excité est une espèce chimique de plus : l'état quasi stationnaire s'y applique tel quel, et le rendement n'est qu'un partage de flux entre voies concurrentes.
+
+<Énoncer>la relation de Stern-Volmer
+<Démontrer>la relation de Stern-Volmer
+
+<h2vert>Outils mobilisés
+<Rappeler>le contrôle cinétique et le contrôle thermodynamique
+<Rappeler>l'étape cinétiquement déterminante
+
+<h2vert>Une même forme algébrique, trois systèmes
+<Énoncer>l'isotherme de Langmuir
+<Démontrer>l'isotherme de Langmuir
+	<remarque>La même expression décrit la saturation d'une surface, celle d'une enzyme par son substrat et celle d'un récepteur par son ligand. Ce n'est pas une analogie : c'est la structure d'un équilibre de fixation à un site unique.
+
+<Énoncer>le mécanisme de Langmuir-Hinshelwood
+<Énoncer>la performance d'un catalyseur et les grandeurs de rotation
+
+<h2vert>Le contrôle dimensionnel
+
+<Vérifier>l'homogénéité de theta = K * P / (1 + K * P) avec theta taux de recouvrement d'une surface, K constante d'adsorption de Langmuir, P pression
+	<remarque>Le taux de recouvrement est sans dimension, et la constante d'adsorption est l'inverse d'une pression : la somme au dénominateur n'a de sens qu'à cette condition. La vérification l'impose avant tout calcul.
+
+<Vérifier>l'homogénéité de G_act = H_act - T * S_act avec G_act enthalpie libre standard d'activation, H_act enthalpie standard d'activation, T température, S_act entropie standard d'activation
+
+<Vérifier>l'homogénéité de ee = (n_R - n_S) / (n_R + n_S) avec ee excès énantiomérique, n_R quantité de matière, n_S quantité de matière
+
+<h2vert>Exercices types
+
+<Afficher>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice 1 — lire une entropie d'activation} {
+	Deux substitutions nucléophiles sur des dérivés halogénés donnent, à $298$ K, des entropies d'activation de $-120$ J·K⁻¹·mol⁻¹ et $+15$ J·K⁻¹·mol⁻¹.
+	Attribuer chaque valeur à un mécanisme, et justifier.
+}
+<correction>Correction. L'entropie fortement négative correspond au mécanisme bimoléculaire : le nucléophile et le substrat se rassemblent en un état de transition unique, plus ordonné que les deux partenaires séparés.
+	L'entropie légèrement positive correspond au mécanisme monomoléculaire : l'étape déterminante est la dissociation en un carbocation et un ion partant, qui crée deux entités là où il n'y en avait qu'une.
+	<remarque>C'est l'argument le plus décisif pour trancher entre les deux mécanismes, plus sûr que l'ordre cinétique apparent, que la solvolyse en solvant en large excès rend trompeur.
+
+<Afficher>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice 2 — un excès énantiomérique à peu de frais} {
+	Un catalyseur chiral conduit aux deux énantiomères par deux états de transition dont les enthalpies libres diffèrent de $\Delta\Delta G = 8,0$ kJ·mol⁻¹, à $298$ K.
+	Estimer l'excès énantiomérique obtenu.
+}
+<correction>Correction. Le rapport des vitesses est l'exponentielle de l'opposé de l'écart divisé par $RT$, soit environ $25$.
+	L'excès énantiomérique vaut la différence des deux proportions rapportée à leur somme, soit $(25 - 1)/(25 + 1)$, c'est-à-dire environ $92$ %.
+	<remarque>Huit kilojoules par mole représentent moins du dixième d'une liaison covalente. Toute la chimie asymétrique tient dans cet écart infime, amplifié par l'exponentielle.
+

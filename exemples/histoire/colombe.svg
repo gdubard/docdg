@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" role="img">
+  <title>Colombe de la paix</title>
+  <rect width="120" height="90" fill="#eef2f7"/>
+  <path d="M28 56 q10 -22 34 -22 q16 0 24 10 l12 -4 l-8 10 q2 12 -10 18 q-18 8 -36 2 z"
+        fill="#f7f9fc" stroke="#33455e" stroke-width="1.5"/>
+  <path d="M52 44 q14 -14 30 -8 q-12 10 -26 14 z" fill="#c9d3e0" stroke="#33455e" stroke-width="1.2"/>
+  <circle cx="84" cy="42" r="1.8" fill="#2b3a4f"/>
+  <path d="M52 68 q6 10 16 12" fill="none" stroke="#5b8a4a" stroke-width="2"/>
+  <ellipse cx="70" cy="82" rx="5" ry="2.5" fill="#5b8a4a"/>
+</svg>

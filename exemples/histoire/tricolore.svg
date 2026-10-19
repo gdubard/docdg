@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" role="img">
+  <title>Drapeau tricolore</title>
+  <rect width="120" height="90" fill="#eef2f7"/>
+  <rect x="20" y="18" width="24" height="48" fill="#0b3d91"/>
+  <rect x="44" y="18" width="24" height="48" fill="#f5f7fa"/>
+  <rect x="68" y="18" width="24" height="48" fill="#b12a2a"/>
+  <rect x="20" y="18" width="72" height="48" fill="none" stroke="#33455e" stroke-width="1.2"/>
+  <rect x="16" y="14" width="4" height="66" fill="#6b5330"/>
+</svg>

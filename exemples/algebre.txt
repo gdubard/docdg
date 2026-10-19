@@ -1,0 +1,488 @@
+document {
+    orientation: portrait;
+    marges: 5;
+    espacements: 2;
+    taille: 11;
+    interligne: 2,1;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Algèbre — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Collège
+
+<h1>Fractions, pas à pas
+<Calculer>1/2 + 1/3
+<Calculer>7/6 - 3/4
+<Calculer>3/4 * 2/5
+<Calculer>1/2 : 3/4
+<Simplifier>la fraction 84/60
+
+<h1>Puissances de dix et notation scientifique
+<Écrire>le nombre 45 600 en notation scientifique
+<Écrire>le nombre 0,00032 en notation scientifique
+
+<h1>Divisibilité et division euclidienne
+<Vérifier>si 456 est divisible par 3
+<Vérifier>si 4567 est divisible par 9
+<Vérifier>si 1234 est divisible par 4
+<Effectuer>la division euclidienne de 47 par 5
+<Calculer>le PGCD de 84 et 60
+
+<h1>Pourcentages
+<Calculer>30 % de 250
+<Appliquer>une augmentation de 5 % à 240
+<Appliquer>une diminution de 12 % à 150
+
+<page suivante h1>Programmes de calcul
+<Appliquer>le programme de calcul à 5 {
+	choisir un nombre
+	ajouter 3
+	multiplier par 2
+	soustraire 4
+}
+<Appliquer>le programme de calcul à -2 {
+	choisir un nombre
+	élever au carré
+	ajouter 1
+}
+<Appliquer>le programme de calcul à 12 {
+	choisir un nombre
+	diviser par 4
+	élever au cube
+	soustraire 1/2
+}
+<Exprimer>le programme de calcul en fonction de x {
+	choisir un nombre
+	ajouter 3
+	multiplier par 2
+	soustraire 4
+}
+	Les six étapes admises sont : ajouter, soustraire, multiplier par, diviser par, élever au carré et élever au cube. Une ligne que la table ne connaît pas arrête le programme entier — le verbe ne rend rien plutôt que de sauter une étape en silence.
+
+<h1>Équations du premier degré
+La solution de l'équation 3X +5 = 17 est : <Résoudre>l'équation 3x + 5 = 17
+La solution de l'équation 2(x - 1) = x + 4 est : <Résoudre>l'équation 2(x - 1) = x + 4
+
+<page suivante h0>Lycée
+
+<h1>Blocs matrices
+	Une matrice est un bloc : une ligne par rangée, le point-virgule sépare les coefficients. Chaque cellule passe par le mini-langage, donc $2x + 1$ ou $1/2$ y vivent. Parenthèses ou crochets servent eux-mêmes de délimiteur — ce que l'on voit à l'écriture est ce que l'on voit au rendu :
+<Afficher>la matrice(
+	1 ; 2 ; 3
+	4 ; 5 ; 6
+)
+<Afficher>la matrice[
+	2x + 1 ; 0
+	0 ; 1/2
+]
+<h1>Matrice augmentée
+	Une barre | dans une rangée trace la barre d'augmentation à cette colonne sur toutes les rangées — la mise en place d'un pivot de Gauss :
+<Afficher>la matrice[
+	2 ; 1 | 7
+	1 ; -1 | 1
+]
+<h1>Systèmes d'équations
+	Un système s'aligne tout seul sur le premier opérateur relationnel, égalités et inégalités mêlées, une équation par ligne :
+<Soit>le système s {
+	2x + 3y = 7
+	x - y = 1
+}
+<Résoudre>le système s
+
+<h1>Déterminant et inverse
+<Soit>la matrice M {
+	2 ; 1
+	1 ; 1
+}
+<Calculer>le déterminant de M
+<Calculer>l'inverse de M
+
+<h1>Second degré
+	Le trinôme se donne tel qu'il s'écrit ; l'étude sort complète : discriminant, racines, forme factorisée et forme canonique, avec des fractions exactes tant que le discriminant est un carré parfait.
+
+<Étudier>le second degré {
+	2x^2 - 3x + 1
+	x^2 - 4x + 4
+	x^2 + x + 1
+}
+
+Un discriminant qui n'est pas un carré parfait garde le radical et donne une valeur approchée :
+
+<Étudier>le second degré {
+	x^2 - 2
+}
+
+<h1>Vecteurs en colonne
+<Écrire>le vecteur u de coordonnées (3 ; -2)
+<Écrire>le vecteur v de coordonnées (1/2 ; -3 ; 4)
+
+<h1>Suite par récurrence
+	La suite se définit d'un premier terme et d'une relation ; les termes se calculent ensuite à la demande.
+	<Soit>la suite u, définie par u(0) = 1 et u(n+1) = 2u(n) + 1
+	<Calculer>les 6 premiers termes de u
+
+<h2>Suites arithmétiques et géométriques
+<Étudier>la suite arithmétique de premier terme 3 et de raison 2
+
+<Étudier>la suite u géométrique de premier terme 5 et de raison 1/2
+
+<page suivante h1>Congruences
+<Étudier>la congruence 3x ≡ 4 [7]
+
+<Étudier>la congruence 6x ≡ 4 [8]
+
+<h1>Notations de l'algèbre linéaire
+	L'engendré $engendré par(u, v)$, la trace $trace(A)$, le déterminant $déterminant(A)$, la transposée $^t{A}$, l'inverse $A^{-1}$, la comatrice $comatrice(A)$, le spectre $spectre(A)$ et l'adjoint $A^*$ se nomment en clair dans une formule.
+	Le noyau et l'image s'écrivent $noyau(A)$ et $image(A)$, le rang $rang(A)$.
+
+<h1>Le pivot à trois inconnues
+<Soit>le système t {
+	x + y + z = 2
+	4x + 2y + z = 3
+	9x + 3y + z = 6
+}
+
+
+<Résoudre>le système t
+
+<h1>Table de Cayley
+	Le groupe se nomme, la table se calcule : addition modulo n pour Z/nZ, multiplication des inversibles pour (Z/nZ)*.
+<Dresser>la table de Cayley du groupe Z/4Z
+<Dresser>la table de Cayley du groupe (Z/8Z)*
+
+<page suivante h1>Dénombrement
+<Dénombrer>les combinaisons de 3 parmi 10
+<Dénombrer>les arrangements de 3 parmi 10
+<Dénombrer>les permutations de 5
+<Dresser>le triangle de Pascal jusqu'à la ligne 5
+
+<h1>Arithmétique
+<Dresser>la décomposition en facteurs premiers de 360
+<Appliquer>l'algorithme d'Euclide à 84 et 60
+
+<h1>Nombres complexes
+<Écrire>le complexe z = 1 + i sous ses trois formes
+
+<Écrire>le complexe w = -2i sous ses trois formes
+
+<h1>Puissances de matrices et chaînes de Markov
+<Soit>la matrice M {
+	0,5 ; 0,5
+	0,25 ; 0,75
+}
+<Calculer>la puissance 3 de M
+<Calculer>l'état stable de M
+
+<h1>Graphes
+<Construire>le graphe G {
+	A -> B
+	B -> C
+	C -> A
+	A -> C
+}
+<Dresser>la matrice d'adjacence de G
+<Dénombrer>les chemins de longueur 3 de A à B dans G
+
+<h1>Équations diophantiennes
+
+<Résoudre>l'équation diophantienne 12x + 20y = 8
+
+<Résoudre>l'équation diophantienne 6x + 9y = 5
+
+<page suivante h0>Enseignement supérieur
+
+soit remarque: un style = <gris foncé italique>
+<h1>Valeurs propres et diagonalisation
+<Soit>la matrice A {
+	2 ; 1
+	1 ; 2
+}
+<Déterminer>les valeurs propres de A
+<Diagonaliser A>
+Une matrice à valeur propre double :
+
+<Soit>la matrice B {
+	3 ; 0
+	0 ; 3
+}
+<Déterminer>les valeurs propres de B
+
+<h1>Polynômes et fractions rationnelles
+<Décomposer>en éléments simples (3x+1)/(x^2 - x)
+<Calculer>la somme de k^3 pour k de 1 à n
+
+<h1>Rang, noyau, image
+<Soit>la matrice C {
+	1 ; 2 ; 3
+	2 ; 4 ; 6
+	1 ; 0 ; 1
+}
+<Calculer>le rang de C
+<Déterminer>le noyau de C
+<Déterminer>l'image de C
+
+<h2>Réduction : polynômes caractéristique et minimal, trigonalisation
+<Soit>la matrice D {
+	3 ; 1 ; 0
+	0 ; 3 ; 0
+	0 ; 0 ; 2
+}
+<Calculer>le polynôme caractéristique de D
+<Calculer>le polynôme minimal de D
+<Trigonaliser>D
+
+<h1>Polynômes formels
+<Effectuer>la division euclidienne de X^3 + 2X - 1 par X^2 + 1
+<Calculer>le PGCD de X^3 - 1 et X^2 - 1
+<Factoriser>X^4 - 1 dans R[X]
+<Factoriser>X^4 - 1 dans C[X]
+<Factoriser>X^4 - 1 dans les complexes
+<Factoriser>X^2 + 1 dans Q[X]
+	Les quatre anneaux se disent de deux façons : `dans C[X]` et `dans les complexes` sont la même demande, et l'absence de complément vaut `dans R[X]`. `dans Q[X]` refuse ce qui ne se factorise pas sur les rationnels.
+
+<page suivante h1>Le groupe Z/nZ
+<h2>Les tables
+<Dresser>la table de Z/5Z pour l'addition
+<Dresser>la table de Z/5Z pour la multiplication
+
+<h2>Les générateurs
+<Déterminer>les générateurs de Z/12Z
+<Déterminer>les générateurs de Z/7Z
+
+<h1>Le groupe symétrique
+	Une permutation se donne par la liste des images de $1, 2, \dots, n$ :
+<Décomposer>la permutation (2 5 4 1 3) en cycles
+<Décomposer>la permutation (2 1 4 3 6 5) en cycles
+<Décomposer>la permutation (3 1 2 5 4) en cycles
+
+<h1>Programmation linéaire
+
+Optimiser une fonction linéaire sous des contraintes linéaires : le maximum, s'il existe, est atteint en un sommet du polygone des contraintes. docdg résout le programme par la méthode du simplexe révisé et, à deux variables, trace le domaine et la droite de niveau optimale.
+
+<h2>Un problème de production
+Un atelier fabrique deux produits en quantités x et y ; chacun rapporte 3 et 2 euros par unité. Les heures de machine et de main-d'œuvre imposent deux contraintes.
+<Résoudre>le programme linéaire : maximiser z = 3x + 2y sous les contraintes x + y ≤ 4, x + 3y ≤ 6, x ≥ 0 et y ≥ 0
+	<remarque>La droite de niveau 3x + 2y = 12 ne touche le polygone qu'en son sommet (4 ; 0) : l'optimum est unique.
+
+<page suivante h2>Un problème de coût
+<Résoudre>le programme linéaire : minimiser C = 2a + 3b sous les contraintes a + b ≥ 5, a - b ≤ 1, b ≤ 4, a ≥ 0 et b ≥ 0
+
+<h2>Trois variables
+Au-delà de deux variables, la figure disparaît mais la méthode demeure ; les valeurs exactes restent affichées quand elles sont rationnelles.
+<Résoudre>le programme linéaire : maximiser 3x1 + 5x2 + 4x3 sous les contraintes 2x1 + 3x2 ≤ 8 ; 2x2 + 5x3 ≤ 10 ; 3x1 + 2x2 + 4x3 ≤ 15 ; x1 ≥ 0 ; x2 ≥ 0 ; x3 ≥ 0
+
+<h1>Algèbre linéaire numérique
+
+Au-delà du calcul exact, les méthodes numériques de l'algèbre linéaire décomposent une matrice, en mesurent le conditionnement ou en calculent l'exponentielle. Les coefficients s'affichent en fractions quand ils en sont, en décimales sinon.
+
+<h2>Les décompositions LU et QR
+Le premier pivot de A est nul : la décomposition LU exige une permutation des lignes.
+<Soit>la matrice A {
+	0 ; 2 ; 1
+	1 ; 1 ; 1
+	2 ; 1 ; 3
+}
+<Calculer>la décomposition LU de A
+<Calculer>la décomposition QR de A
+
+<h2>La décomposition de Cholesky
+Une matrice symétrique définie positive s'écrit LLᵀ, avec L triangulaire inférieure : c'est la méthode de choix pour résoudre les systèmes normaux des moindres carrés.
+<Soit>la matrice S {
+	4 ; 2
+	2 ; 3
+}
+<Calculer>la décomposition de Cholesky de S
+
+<h2>Valeurs singulières et conditionnement
+<Soit>la matrice R {
+	1 ; 2
+	2 ; 4
+	3 ; 6
+}
+<Calculer>les valeurs singulières de R
+	<remarque>Une seule valeur singulière non nulle : les colonnes de R sont proportionnelles, la matrice est de rang 1.
+
+La matrice de Hilbert, symétrique et inversible, est pourtant redoutable pour le calcul numérique :
+<Soit>la matrice H {
+	1 ; 1/2 ; 1/3 ; 1/4
+	1/2 ; 1/3 ; 1/4 ; 1/5
+	1/3 ; 1/4 ; 1/5 ; 1/6
+	1/4 ; 1/5 ; 1/6 ; 1/7
+}
+<Calculer>le conditionnement de H
+
+<h2>L'exponentielle de matrice
+Le système X' = JX décrit une rotation uniforme ; sa solution s'écrit avec l'exponentielle de J.
+<Soit>la matrice J {
+	0 ; -1
+	1 ; 0
+}
+<Calculer>l'exponentielle de J
+	<remarque>On reconnaît la matrice de la rotation d'angle 1 radian : cos 1 ≈ 0,5403 et sin 1 ≈ 0,8415.
+
+<h2>Des valeurs propres hors de portée du calcul exact
+Au-delà du degré 4, les racines d'un polynôme caractéristique n'ont en général pas d'expression par radicaux : le calcul numérique prend le relais.
+<Soit>la matrice C {
+	0 ; 1 ; 0 ; 0 ; 0
+	0 ; 0 ; 1 ; 0 ; 0
+	0 ; 0 ; 0 ; 1 ; 0
+	0 ; 0 ; 0 ; 0 ; 1
+	1 ; 0 ; 0 ; 0 ; 0
+}
+<Déterminer>numériquement les valeurs propres de C
+	<remarque>Ce sont les cinq racines cinquièmes de l'unité : la matrice de permutation circulaire vérifie C⁵ = I.
+
+<page suivante h1>Une table à la demande
+soit n: un entier = 5
+La valeur choisie est n = #n. Voici la table pour Z/5Z :
+<Dresser>la table de Z/5Z pour l'addition
+
+<h2>Racines complexes et réduction
+<Calculer>les racines cinquièmes de l'unité
+<Calculer>les racines cubiques de 8i
+
+<Soit>la matrice T {
+	2 ; 1
+	0 ; 2
+}
+<Trigonaliser>T
+<Soient>les vecteurs u(1;0;1) et v(0;1;1)
+<Orthonormaliser>la famille u et v
+
+
+<h2>L'article pluriel
+
+	L'article pluriel factorise une déclaration : une seule phrase pose plusieurs objets, et le subjonctif s'accorde — `<Soient>`. Il ne vaut que pour les objets qui tiennent sur la ligne, points, vecteurs et fonctions. Une matrice porte son tableau entre accolades : elle se déclare seule, au singulier.
+
+<Soient>les vecteurs w(2;1;0) et z(0;1;2)
+
+<Soit>la matrice P {
+	1 ; 1
+	0 ; 1
+}
+<Déterminer>les valeurs propres de P
+
+<page suivante h0>Approfondissements
+
+<h1>Algèbre linéaire exacte — supérieur
+
+<h2>Déclarer un vecteur et une matrice
+
+soit V: un vecteur de 4 rationnels = {1 ; 2 ; 3 ; 4}
+soit W: un vecteur de 4 rationnels = {2 ; 2 ; 2 ; 2}
+soit A: une matrice 2×2 de rationnels = {{2 ; 1} ; {1 ; 3}}
+soit M: une matrice 2×3 de rationnels = {{1 ; 2 ; 3} ; {4 ; 5 ; 6}}
+
+Le type porte la forme, la valeur porte le contenu : la taille se dit une fois, à gauche du signe égal, et le membre de droite ne dit plus que ce que les cases valent.
+
+soit Z: un vecteur de 4 rationnels = le vecteur nul
+soit U: un vecteur de 4 rationnels = le vecteur unité
+soit I: une matrice 2×2 d'entiers naturels = la matrice identité
+
+<h2>Les réductions
+
+soit S: un rationnel = la somme de V
+soit P: un rationnel = le produit de V
+soit moy: un rationnel = la moyenne de V
+soit med: un rationnel = la médiane de V
+soit mx: un rationnel = le maximum de V
+soit mn: un rationnel = le minimum de V
+
+La somme vaut #{S}, le produit #{P}, le maximum #{mx} et le minimum #{mn}.
+
+La moyenne de V vaut #{moy} et sa médiane #{med} : ce sont des fractions, pas des approximations décimales.
+
+<h2>Les normes
+
+soit T: un vecteur de 2 rationnels = {3 ; 4}
+soit N: un réel = la norme de T
+soit N1: un rationnel = la norme 1 de T
+soit Ninf: un rationnel = la norme infinie de T
+
+La norme euclidienne vaut #{N}, la norme 1 vaut #{N1} et la norme infinie #{Ninf}.
+
+<h2>Les opérateurs
+
+soit C: une matrice 2×2 de rationnels = A × I
+soit D: une matrice 2×2 de rationnels = 2 × A
+soit E: une matrice 2×2 de rationnels = A + I
+soit Y: une liste de rationnels = le produit terme à terme de V et W
+soit Q: une liste de rationnels = le quotient terme à terme de V par W
+soit G: une liste de rationnels = V augmenté de 2
+
+<remarque>Le signe × garde son sens mathématique : entre deux matrices c'est le produit matriciel, entre un nombre et une matrice la loi externe. Le produit terme à terme, qui n'est pas une opération des mathématiques, se dit en toutes lettres.
+
+<h2>L'algèbre de la matrice carrée
+
+soit Tr: un rationnel = la trace de A
+soit Det: un rationnel = le déterminant de A
+soit Rg: un entier naturel = le rang de A
+soit At: une matrice 2×2 de rationnels = la transposée de A
+soit Ai: une matrice 2×2 de rationnels = l'inverse de A
+
+La trace de A vaut #{Tr}, son déterminant #{Det} et son rang #{Rg}.
+
+L'inverse se calcule exactement : ses coefficients sont des fractions, et le produit de A par son inverse redonne l'identité.
+
+soit Verif: une matrice 2×2 de rationnels = A × Ai
+
+<h2>Résoudre un système
+
+soit B: un vecteur de 2 rationnels = {5 ; 6}
+soit X: un vecteur de 2 rationnels = la solution de l'équation A × X = B
+
+La solution vaut #{X[0]} et #{X[1]} : deux fractions exactes, et non deux décimaux approchés.
+
+<h2>Le rectangulaire et ses refus
+
+soit RgM: un entier naturel = le rang de M
+soit Mt: une matrice 3×2 de rationnels = la transposée de M
+
+Le rang de M vaut #{RgM}, et sa transposée est de taille 3 sur 2.
+
+<remarque>La trace, le déterminant et l'inverse d'une matrice 2 sur 3 n'existent pas : docdg les refuse en nommant les dimensions, au lieu de rendre un résultat qui n'aurait pas de sens.
+
+<h2>Extraire
+
+soit L: une liste de rationnels = la ligne 0 de M
+soit K: une liste de rationnels = la colonne 2 de M
+soit Sm: une matrice 2×2 de rationnels = la sous-matrice de M des lignes 0 à 1 et des colonnes 1 à 2
+
+La première ligne de M commence par #{L[0]}, et sa dernière colonne par #{K[0]}.
+
+<h2>Géométrie et statistique
+
+soit O: un vecteur de 2 rationnels = {0 ; 0}
+soit Pt: un vecteur de 2 rationnels = {3 ; 4}
+soit ps: un rationnel = le produit scalaire de V et W
+soit dist: un réel = la distance de O à Pt
+soit Pr: une liste de rationnels = la projection orthogonale de T sur Pt
+soit cov: un rationnel = la covariance de V et W
+soit frq: un rationnel = la proportion des éléments de V strictement supérieurs à 2
+
+Le produit scalaire de V et W vaut #{ps}, la distance de O à Pt vaut #{dist}.
+
+La covariance de V et W vaut #{cov}, et la proportion des éléments de V strictement supérieurs à 2 vaut #{frq}.
+
+<h2>Les tirages au hasard
+
+soit De: un vecteur d'entiers naturels = 20 tirages au hasard entre 1 et 6 selon la loi uniforme
+soit Moy: un rationnel = la moyenne de De
+soit Six: un rationnel = la proportion des éléments de De supérieurs ou égaux à 6
+
+La moyenne des vingt lancers vaut #{Moy}, et la fréquence des six #{Six}.
+
+<remarque>La clé graine du bloc document fixe le tirage : le même document rend le même résultat, ce qui permet de composer un énoncé et son corrigé sans qu'ils divergent. Le compte se dit une seule fois, devant le mot tirages : le type se contente alors de nommer l'ensemble.
+

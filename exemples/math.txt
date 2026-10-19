@@ -1,0 +1,225 @@
+document {
+    orientation: portrait;
+    marges: 15;
+    taille: 11;
+    interligne: 1,4;
+    niveau: quatrième;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit remarque: un style = <gris foncé italique>
+soit correction: un style = <fond gris clair>
+
+<volume>Mathématiques — du collège au master
+
+Quatre parcours progressifs, avec un niveau de démonstration explicite pour chaque parcours.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Collège — quatrième
+
+<h1>Le théorème de Pythagore — classe de quatrième
+
+<h2>Ce qu'il faut savoir avant
+	La démonstration ne tombe pas du ciel : elle mobilise des résultats vus plus tôt. La liste ci-dessous se déduit du corpus, elle n'est pas recopiée à la main.
+<Dresser>les prérequis du théorème de Pythagore
+
+<h2>L'énoncé
+<Énoncer>le théorème de Pythagore <étiquette>{pythagore}
+	Le texte, le genre et le numéro viennent du corpus ; la balise ne porte que le nom du résultat.
+
+<h2>La démonstration
+<Démontrer>le théorème de Pythagore
+
+<h2>La réciproque et la contraposée
+<Énoncer>la réciproque du théorème de Pythagore <étiquette>{reciproque}
+<Démontrer>la réciproque du théorème de Pythagore
+
+<Énoncer>la contraposée du théorème de Pythagore
+	<remarque>La contraposée sert à montrer qu'un triangle n'est PAS rectangle, la réciproque qu'il l'est. Ce sont deux énoncés distincts : le renvoi <renvoi>{reciproque} ne pointe pas vers le même résultat que <renvoi>{pythagore}.
+<Démontrer>la contraposée du théorème de Pythagore
+
+<h2>Exercices types
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — calculer une longueur} {
+	Le triangle $ABC$ est rectangle en $A$, avec $AB = 3$ cm et $AC = 4$ cm.
+	Calculer la longueur de l'hypoténuse $BC$.
+}
+<correction>Correction. Le triangle est rectangle en $A$, donc le théorème <renvoi>{pythagore} donne $BC^2 = AB^2 + AC^2$, soit $BC^2 = 3^2 + 4^2 = 25$. Une longueur étant positive, $BC = racine(25) = 5$ cm.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — un triangle est-il rectangle ?} {
+	Le triangle $DEF$ vérifie $DE = 6$ cm, $DF = 8$ cm et $EF = 11$ cm.
+	Ce triangle est-il rectangle en $D$ ?
+}
+<correction>Correction. On calcule séparément les deux membres : $EF^2 = 11^2 = 121$ et $DE^2 + DF^2 = 6^2 + 8^2 = 100$. Comme $121 != 100$, la contraposée du théorème de Pythagore permet de conclure : le triangle $DEF$ n'est pas rectangle en $D$.
+	<remarque>C'est bien la contraposée qu'on emploie ici, et non la réciproque : on part d'une inégalité pour nier l'angle droit.
+
+<page suivante h2>Un résultat admis à ce niveau
+
+Tout n'est pas démontré en quatrième. Le corpus le sait et le dit.
+<Énoncer>le théorème de Thalès
+<Démontrer>le théorème de Thalès
+
+<page suivante h0>Lycée — terminale
+
+<h1>Exponentielle et logarithme — terminale, spécialité
+
+<h2>Ce qui a été vu avant
+<Rappeler>le lien entre signe de la dérivée et variations
+
+<h2>L'exponentielle
+<Énoncer>la fonction exponentielle <étiquette>{exp}
+	<remarque>L'existence est admise ; c'est l'unicité qui se démontre.
+
+<h2>Elle ne s'annule jamais, elle est strictement positive
+<Énoncer>l'exponentielle ne s'annule jamais <étiquette>{nonnul}
+<Démontrer>l'exponentielle ne s'annule jamais, au niveau terminale
+
+<Énoncer>la stricte positivité de l'exponentielle
+
+<page suivante>
+<Démontrer>la stricte positivité de l'exponentielle, au niveau terminale
+	<remarque>L'ordre compte : le lemme <renvoi>{nonnul} précède la relation fonctionnelle, qui précède la positivité. Cet enchaînement évite le théorème des valeurs intermédiaires, hors programme de première où l'exponentielle est introduite.
+
+<h2>La relation fonctionnelle
+<Énoncer>la relation fonctionnelle de l'exponentielle <étiquette>{relfonc}
+<Démontrer>la relation fonctionnelle de l'exponentielle, au niveau terminale
+
+<h2>Le logarithme
+<Énoncer>la fonction logarithme népérien <étiquette>{ln}
+	<remarque>L'existence de la réciproque repose sur la stricte croissance de l'exponentielle et sur le corollaire du théorème des valeurs intermédiaires.
+
+<Énoncer>la relation fonctionnelle du logarithme
+<Démontrer>la relation fonctionnelle du logarithme, au niveau terminale
+
+<Énoncer>la dérivée du logarithme
+
+<page suivante>
+<Démontrer>la dérivée du logarithme, au niveau terminale
+
+<h2>Croissances comparées
+<Énoncer>les croissances comparées
+
+<Démontrer>les croissances comparées, au niveau terminale
+
+<h2>Exercices types
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — résoudre une équation} {
+	Résoudre dans $RR$ l'équation $e^(2x) - 3e^x + 2 = 0$.
+}
+<correction>Correction. Posons $X = e^x$, qui est strictement positif d'après la stricte positivité de l'exponentielle. L'équation devient $X^2 - 3X + 2 = 0$, de discriminant $9 - 8 = 1$, donc de racines $X = 1$ et $X = 2$. Toutes deux sont strictement positives, donc admissibles. La stricte croissance de l'exponentielle donne alors $x = 0$ et $x = ln(2)$.
+	<remarque>Le changement d'inconnue n'est licite que parce que l'exponentielle ne prend que des valeurs strictement positives : il faut le dire, et écarter d'emblée une racine négative si elle apparaissait.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — une limite} {
+	Déterminer la limite en $+infini$ de $f(x) = (e^x - x^3)/(e^x + x)$.
+}
+<correction>Correction. On factorise $e^x$ au numérateur et au dénominateur : $f(x) = (1 - x^3/e^x)/(1 + x/e^x)$. D'après les croissances comparées, $x^3/e^x$ et $x/e^x$ tendent vers $0$. La limite vaut donc $1$.
+
+<page suivante h2>Pour aller plus loin
+	Le lien entre signe de la dérivée et variations est admis au lycée ; sa démonstration relève de la licence. docdg la sert et le signale.
+<Démontrer>le lien entre signe de la dérivée et variations, au niveau licence 1
+
+<page suivante h0>Supérieur — licence 1
+
+<h1>Complétude de R et théorèmes fondamentaux — licence 1
+
+<h2>L'axiome qui porte tout
+<Énoncer>la propriété de la borne supérieure <étiquette>{bornesup}
+	<remarque>Tout ce qui suit en descend. Le théorème des valeurs intermédiaires, Bolzano-Weierstrass, la convergence monotone et la complétude sont équivalents entre eux : c'est pourquoi il faut désigner explicitement lequel sert d'axiome, sous peine de raisonnement circulaire.
+
+<h2>Premières conséquences
+
+<Énoncer>la propriété d'Archimède
+
+<Démontrer>la propriété d'Archimède, au niveau licence 1
+
+<Énoncer>la densité de Q dans R <étiquette>{densite}
+
+<Démontrer>la densité de Q dans R, au niveau licence 1
+
+<h2>Suites
+<Énoncer>le théorème de la convergence monotone
+<Démontrer>le théorème de la convergence monotone, au niveau licence 1
+
+<Énoncer>le théorème de Bolzano-Weierstrass <étiquette>{bw}
+<Démontrer>le théorème de Bolzano-Weierstrass, au niveau licence 1
+
+<h2>Continuité et dérivation
+<Énoncer>le théorème des bornes atteintes
+<Démontrer>le théorème des bornes atteintes, au niveau licence 1
+
+<Énoncer>le théorème de Rolle <étiquette>{rolle}
+<Démontrer>le théorème de Rolle, au niveau licence 1
+
+<Énoncer>le théorème des accroissements finis
+<Démontrer>le théorème des accroissements finis, au niveau licence 1
+	<remarque>Le renvoi <renvoi>{rolle} montre l'enchaînement : la corde retranchée ramène les accroissements finis à Rolle, qui repose lui-même sur les bornes atteintes, donc sur <renvoi>{bw}, donc sur <renvoi>{bornesup}.
+
+<h2>Exercices types
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — une suite implicite} {
+	Pour $n$ entier supérieur ou égal à $1$, montrer que l'équation $x^n + x = 1$ admet une unique solution $u_n$ dans $[0;1]$, puis étudier la monotonie de la suite $(u_n)$.
+}
+<correction>Correction. La fonction $f_n(x) = x^n + x - 1$ est continue et strictement croissante sur $[0;1]$, avec $f_n(0) = -1$ et $f_n(1) = 1$. Le corollaire du théorème des valeurs intermédiaires donne l'existence et l'unicité de $u_n$.
+	Monotonie : $f_(n+1)(u_n) = u_n^(n+1) + u_n - 1 <= u_n^n + u_n - 1 = 0$ puisque $u_n$ appartient à $[0;1]$. Comme $f_(n+1)$ est croissante et s'annule en $u_(n+1)$, on en déduit $u_n <= u_(n+1)$ : la suite est croissante.
+	<remarque>Croissante et majorée par $1$, elle converge — par le théorème de la convergence monotone, lui-même conséquence de <renvoi>{bornesup}.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — une inégalité par les accroissements finis} {
+	Montrer que pour tout $x$ strictement positif, $x/(1+x) < ln(1+x) < x$.
+}
+<correction>Correction. Appliquons le théorème des accroissements finis à la fonction $ln$ sur l'intervalle $[1; 1+x]$ : il existe $c$ dans $]1; 1+x[$ tel que $ln(1+x) - ln(1) = x/c$, soit $ln(1+x) = x/c$.
+	Or $1 < c < 1+x$, donc $1/(1+x) < 1/c < 1$. En multipliant par $x$, strictement positif, l'ordre est conservé et l'on obtient l'encadrement annoncé.
+
+<h2>Un résultat de densité, en exercice
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 3 — irrationnels denses} {
+	Déduire de <renvoi>{densite} que les irrationnels sont eux aussi denses dans $RR$.
+}
+<correction>Correction. Soient $a < b$ deux réels. Appliquons la densité des rationnels aux réels $a - racine(2)$ et $b - racine(2)$ : il existe un rationnel $r$ tel que $a - racine(2) < r < b - racine(2)$, donc $a < r + racine(2) < b$. Le nombre $r + racine(2)$ est irrationnel, car sinon $racine(2)$ serait la différence de deux rationnels, donc rationnel.
+
+<page suivante h0>Supérieur — master 2
+
+<h1>Leçon d'algèbre — représentations des groupes finis
+
+<h2>Prérequis de la leçon
+
+<Dresser>les prérequis du théorème de Maschke
+
+<h2>Le développement
+<Énoncer>le théorème de Maschke <étiquette>{maschke}
+
+<Démontrer>le théorème de Maschke, au niveau master 2
+
+<h2>Ce qui en découle
+<Énoncer>l'orthogonalité des caractères
+	<remarque>Le théorème <renvoi>{maschke} fournit la semi-simplicité, sans laquelle la théorie des caractères n'aurait pas d'objet.
+
+<h2>À l'agrégation, rien n'est admis
+	Un même énoncé, un seul identifiant, deux exigences : la licence énonce sans preuve ce que le concours demande de démontrer.
+<Énoncer>le théorème de Cayley-Hamilton
+<Énoncer>la décomposition de Dunford
+<Énoncer>les théorèmes de Sylow
+
+<h2>Outils mobilisés
+<Rappeler>la formule orbite-stabilisateur et l'équation aux classes
+<Rappeler>le théorème de Lagrange
+
+<page suivante h2>Exercices types
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — un groupe d'ordre p au carré est abélien} {
+	Soit $p$ un nombre premier et $G$ un groupe d'ordre $p^2$. Montrer que $G$ est abélien.
+}
+<correction>Correction. L'équation aux classes appliquée à l'action de $G$ sur lui-même par conjugaison donne $|G| = |Z(G)| + somme(i=1;r) [G : Stab(x_i)]$, chaque terme de la somme étant un multiple de $p$ strictement supérieur à $1$. Donc $p$ divise $|Z(G)|$, et le centre n'est pas trivial.
+	Si $|Z(G)| = p^2$, le groupe est abélien. Sinon $|Z(G)| = p$, et le quotient $G//Z(G)$ est d'ordre $p$, donc cyclique. Or si $G//Z(G)$ est cyclique, $G$ est abélien — et alors $Z(G) = G$, ce qui contredit $|Z(G)| = p$. Ce second cas est donc impossible.
+	<remarque>L'argument « $G//Z(G)$ cyclique entraîne $G$ abélien » mérite d'être su : c'est un classique de leçon, et il se démontre en trois lignes.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — dénombrer des coloriages} {
+	De combien de façons peut-on colorier les sommets d'un carré avec $k$ couleurs, deux coloriages se déduisant l'un de l'autre par une rotation étant identifiés ?
+}
+<correction>Correction. Le groupe agissant est le groupe cyclique des quatre rotations. La formule de Burnside donne le nombre d'orbites comme moyenne des points fixes : l'identité en fixe $k^4$, les rotations d'un quart et de trois quarts de tour $k$ chacune, et le demi-tour $k^2$.
+	Le nombre de coloriages vaut donc $(k^4 + k^2 + 2k)/4$.
+	<remarque>Pour $k = 2$, on trouve $6$ : on peut les énumérer à la main et vérifier.

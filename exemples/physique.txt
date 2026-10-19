@@ -1,0 +1,402 @@
+document {
+    orientation: portrait;
+    marges: 5;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,4;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Physique — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Collège
+
+soit remarque: un style = <gris foncé italique>
+soit correction: un style = <fond gris clair>
+
+<h1>Poids et masse — classe de quatrième
+
+<h2>Ce qu'il faut savoir avant
+	La liste se déduit du corpus : elle suit les arêtes de dépendance, elle n'est pas recopiée à la main. Si un prérequis change de niveau, cette liste change toute seule.
+<Dresser>les prérequis du poids d'un corps
+
+<h2>L'énoncé
+<Énoncer>l'interaction gravitationnelle
+	<remarque>À ce niveau la loi reste qualitative : on dit que l'attraction augmente avec les masses et diminue avec la distance, sans l'écrire. L'expression quantitative viendra en seconde, et c'est le corpus qui le sait.
+<Énoncer>le poids d'un corps <étiquette>{poids}
+
+<h2>Ce qui se confond souvent
+<Énoncer>la distinction de la masse et du poids
+	<remarque>C'est la confusion la plus tenace du cycle 4. La formuler comme un énoncé à part entière, et non comme une remarque au fil du texte, permet de la convoquer partout où elle sert.
+
+<page suivante h2>Exercices types
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — calculer un poids} {
+	Un sac de ciment a une masse de 25 kg.
+	Calculer son poids sur la Terre, où l'intensité de la pesanteur vaut 9,8 N/kg.
+}
+<correction>Correction. La relation <renvoi>{poids} donne $P = m * g$, soit $P = 25 * 9,8 = 245$ N.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — sur la Lune} {
+	Le même sac est emporté sur la Lune, où l'intensité de la pesanteur vaut 1,6 N/kg.
+	Sa masse a-t-elle changé ? Et son poids ?
+}
+<correction>Correction. La masse ne dépend pas du lieu : elle vaut toujours 25 kg. Le poids, lui, devient $P = 25 * 1,6 = 40$ N, soit environ six fois moins que sur la Terre.
+	<remarque>Faire calculer les deux dans le même exercice vaut mieux que toute explication : l'élève voit que l'un des deux nombres bouge et pas l'autre.
+
+<h2>Vérification automatique
+	Toutes les formules de cette page ont été contrôlées en homogénéité à la compilation. Une masse ajoutée à une force, ou un poids écrit en kilogrammes, aurait fait échouer la construction du document avant l'impression.
+
+<page suivante h0>Lycée
+
+<h1>Gravitation et principe d'inertie — classe de seconde
+
+<h2>Ce qui a été vu au collège
+<Rappeler>l'interaction gravitationnelle
+
+	<remarque>La balise reprend l'énoncé tel qu'il était formulé à son niveau d'introduction. On mesure alors exactement ce que la seconde ajoute.
+
+<h2>La loi quantitative
+<Énoncer>la loi de la gravitation universelle <étiquette>{gravitation}
+
+	<remarque>Le corpus enregistre que cette loi est un cas limite de la relativité générale, dans le régime des champs faibles. L'information ne s'affiche pas ici, mais elle est disponible : elle explique pourquoi l'avance du périhélie de Mercure y échappe.
+
+<h2>Du poids au champ de pesanteur
+<Énoncer>le poids et le champ de pesanteur <étiquette>{pesanteur}
+
+<Démontrer>le poids et le champ de pesanteur
+	<remarque>La démonstration regroupe trois quantités qui ne dépendent que de l'astre. C'est l'occasion de montrer qu'un regroupement algébrique fait apparaître une grandeur nouvelle.
+
+<h2>Le principe d'inertie
+<Énoncer>le principe d'inertie <étiquette>{inertie}
+	Ce principe reformule, sous une hypothèse plus précise, ce qui avait été admis en troisième.
+<Rappeler>l'équilibre sous deux forces
+
+<h2>Exercice type
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — attraction Terre-Lune} {
+	La Terre a une masse de $5,97 * 10^24$ kg, la Lune de $7,35 * 10^22$ kg. Leur distance moyenne vaut $3,84 * 10^8$ m.
+	Calculer la valeur de la force d'attraction gravitationnelle entre les deux astres.
+}
+<correction>Correction. La loi <renvoi>{gravitation} donne $F = G * (m_T * m_L) / d^2$. L'application numérique conduit à environ $1,98 * 10^20$ N.
+	<remarque>Faire vérifier l'unité du résultat par l'élève : le newton s'obtient bien à partir de la constante gravitationnelle, de deux masses et du carré d'une distance.
+
+<h1>Énergie mécanique — première, spécialité
+
+<h2>Prérequis du chapitre
+<Dresser>les prérequis de la conservation de l'énergie mécanique
+	<remarque>Cette liste traverse trois niveaux : le collège pour la conservation de l'énergie, la seconde pour le champ de pesanteur, la première pour le travail. Le corpus étant unique, l'arbre de dépendance ne s'arrête à aucune frontière de classe.
+
+<h2>Le travail d'une force
+<Énoncer>le travail d'une force constante <étiquette>{travail}
+
+<Énoncer>le travail du poids <étiquette>{travail-poids}
+
+<Démontrer>le travail du poids
+
+	<remarque>Le résultat ne fait intervenir que les altitudes des extrémités. C'est ce qui distingue une force conservative d'une force dissipative, et c'est le pivot de tout le chapitre.
+
+<Énoncer>le travail d'une force de frottement
+
+<h2>Les deux formes d'énergie
+<Énoncer>l'énergie cinétique d'un point matériel
+<Énoncer>le théorème de l'énergie cinétique <étiquette>{tec}
+<Énoncer>l'énergie potentielle de pesanteur
+<Énoncer>l'énergie mécanique
+
+<h2>Le résultat central
+
+<Énoncer>la conservation de l'énergie mécanique <étiquette>{conservation}
+
+<Démontrer>la conservation de l'énergie mécanique
+	<remarque>La démonstration combine <renvoi>{tec} et <renvoi>{travail-poids} : les deux variations sont opposées, donc leur somme est nulle. Une fois écrite ainsi, l'hypothèse d'absence de frottement se voit à l'œil nu.
+<Énoncer>la dissipation en présence de frottements
+<h2>Exercice type
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — vitesse au bas d'une piste} {
+	Un skieur de 70 kg part sans vitesse initiale d'un point situé 40 m plus haut que l'arrivée.
+	Calculer sa vitesse à l'arrivée en négligeant les frottements, puis commenter l'écart avec les 20 m/s effectivement mesurés.
+}
+<correction>Correction. Le résultat <renvoi>{conservation} donne $1/2 * m * v^2 = m * g * h$, d'où $v = racine(2 * g * h)$, soit environ 28 m/s. La masse se simplifie : le résultat ne dépend pas du skieur. L'écart avec la mesure vient des frottements, dont le travail résistant a dissipé une partie de l'énergie mécanique.
+	<remarque>L'exercice vaut surtout par sa dernière question : l'écart n'est pas une erreur de mesure, c'est la trace de l'hypothèse qu'on a faite.
+
+<h1>Mouvement des satellites — terminale, spécialité
+<h2>Prérequis de la leçon
+<Dresser>les prérequis de la troisième loi de Kepler
+
+<h2>Les outils de la cinématique
+<Énoncer>le vecteur position
+<Énoncer>le vecteur vitesse instantanée
+
+<Énoncer>le vecteur accélération
+	<remarque>Trois définitions enchaînées par dérivation. Le corpus les relie aux énoncés d'analyse : le nombre dérivé figure parmi les dépendances déclarées, ce qui rend visible la solidarité entre les deux disciplines.
+
+<h2>La loi fondamentale
+<Énoncer>la deuxième loi de Newton <étiquette>{pfd}
+	<remarque>Le principe d'inertie, admis en seconde, en est le cas particulier où la somme des forces est nulle. Le corpus enregistre cette filiation.
+<Énoncer>l'accélération dans un mouvement circulaire uniforme <étiquette>{centripete}
+
+<h2>Application aux satellites
+
+<Énoncer>la vitesse d'un satellite en orbite circulaire <étiquette>{vitesse}
+
+<Démontrer>la vitesse d'un satellite en orbite circulaire
+	<remarque>La masse du satellite se simplifie. C'est le même phénomène qu'en chute libre, et il mérite d'être signalé comme tel.
+
+<Énoncer>la troisième loi de Kepler <étiquette>{kepler}
+
+<page suivante>
+<Démontrer>la troisième loi de Kepler
+
+<h2>Exercice type
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — l'orbite géostationnaire} {
+	Un satellite géostationnaire reste à la verticale du même point de l'équateur.
+	Déterminer le rayon de son orbite, sachant que $G * M_T = 3,99 * 10^14$ en unités du système international.
+}
+<correction>Correction. La période vaut un jour sidéral, soit $86 164$ s. La relation <renvoi>{kepler} donne $r^3 = (G * M_T * T^2) / (4 * pi^2)$, d'où $r = 4,22 * 10^7$ m, soit environ 36 000 km d'altitude.
+	<remarque>Faire vérifier l'homogénéité avant l'application numérique : c'est le seul garde-fou contre une erreur d'exposant, et le corpus fait le même contrôle à la compilation.
+
+<h1>Équations différentielles et signaux, calculés pas à pas
+
+Certaines équations différentielles se résolvent à la main, d'autres non. Dans tous les cas, docdg les intègre numériquement par scipy.integrate.solve_ivp, la fonction des TP Python, avec les mêmes réglages : les valeurs affichées sont celles qu'obtiendrait un élève sur son ordinateur. Le spectre d'un son se calcule de même par scipy.fft.
+
+<h2>Décroissance radioactive du carbone 14
+Le nombre N de noyaux décroît selon N' = -λN, où la constante radioactive vaut λ = ln(2)/T, avec T = 5730 ans la demi-vie.
+<Résoudre>numériquement l'équation différentielle N' = -λN, avec T = 5730, λ = ln(2)/T et N(0) = 1000, sur [0 ; 20000]
+	<remarque>Au bout de 20 000 ans, soit un peu moins de quatre demi-vies, il reste environ 1000/2^3,5 ≈ 89 noyaux sur 1000 : la valeur numérique le confirme.
+
+<h2>Charge d'un condensateur
+Dans un circuit RC soumis à un échelon de tension E, la tension u aux bornes du condensateur vérifie RC u' + u = E.
+<Résoudre>numériquement l'équation différentielle RC u' + u = E, avec R = 1000, C = 1e-6, E = 5 et u(0) = 0, sur [0 ; 0,005]
+	<remarque>L'équation est écrite telle qu'elle sort de la loi des mailles, sans isoler u'. La constante de temps τ = RC vaut 1 ms : après 5τ, le condensateur est chargé à plus de 99 %.
+
+<page suivante h2>Chute d'un parachutiste
+Avec un frottement de l'air proportionnel au carré de la vitesse, la deuxième loi de Newton donne m v' = m g - k v². Cette équation n'a pas de solution simple au programme ; le calcul numérique la traite directement.
+<Résoudre>numériquement l'équation différentielle m v' = m g - k v^2, avec m = 80, g = 9,81, k = 0,25 et v(0) = 0, sur [0 ; 30]
+	<remarque>La vitesse se stabilise vers la vitesse limite, atteinte quand le poids équilibre le frottement : v = √(mg/k) ≈ 56 m/s.
+
+<h2>Le spectre d'une note de musique
+Un son musical n'est pas une sinusoïde pure : à la fréquence fondamentale s'ajoutent des harmoniques, de fréquences multiples, qui font le timbre de l'instrument. Le la du diapason, à 440 Hz, avec deux harmoniques :
+<Tracer>le spectre du signal s(t) = sin(2π·440t) + 0,5sin(2π·880t) + 0,25sin(2π·1320t), échantillonné à 8000 Hz sur [0 ; 0,5], jusqu'à 2000 Hz
+	<remarque>Le spectre montre trois raies, à 440, 880 et 1320 Hz : la hauteur de la note est celle du fondamental, le timbre tient aux amplitudes des harmoniques.
+
+<h2>Lisser des mesures bruitées
+Une sonde relève la température d'un liquide chauffé chaque minute ; les mesures fluctuent autour de la tendance. Une spline de lissage suit la tendance sans passer par chaque point, et permet d'estimer la température entre deux relevés.
+<Tracer>l'interpolation de T en fonction de t des données {(0;20,1) (1;24,8) (2;28,2) (3;32,9) (4;35,1) (5;39,3) (6;41,0) (7;44,6) (8;45,8) (9;48,9) (10;49,7)} par une spline de lissage, en t = 2,5 ; 7,5
+	<remarque>Le degré de lissage est choisi par validation croisée : ni trop, ce qui effacerait la tendance, ni trop peu, ce qui reproduirait le bruit.
+
+<h2>Le temps de vol d'un projectile
+Un projectile est lancé verticalement à 20 m/s. On intègre le mouvement jusqu'à ce qu'il retombe au sol : l'intégration s'arrête d'elle-même à l'instant cherché.
+<Résoudre>numériquement l'équation différentielle y'' = -g, avec g = 9,81, y(0) = 0 et y'(0) = 20, sur [0 ; 10], jusqu'à ce que y = 0
+	<remarque>Le temps de vol vaut 2v₀/g ≈ 4,08 s ; la vitesse au retour est l'opposée de la vitesse de lancement.
+
+L'apogée est l'instant où la vitesse s'annule :
+<Résoudre>numériquement l'équation différentielle y'' = -g, avec g = 9,81, y(0) = 0 et y'(0) = 20, sur [0 ; 10], jusqu'à ce que y' = 0
+
+<h1>Les constantes fondamentales
+
+Depuis 2019, les unités du Système international sont définies en fixant la valeur exacte de sept constantes. Les autres se mesurent : leur valeur est donnée avec son incertitude, selon la compilation internationale CODATA.
+<Calculer>la vitesse de la lumière
+<Calculer>la constante de Planck
+<Calculer>la charge élémentaire
+<Calculer>la constante d'Avogadro
+<Calculer>la constante de Boltzmann
+<Calculer>la constante gravitationnelle
+<Calculer>la masse de l'électron
+	<remarque>G est la constante fondamentale la moins bien connue : son incertitude relative est près de cent mille fois celle de la masse de l'électron.
+
+<page suivante h0>Enseignement supérieur
+
+
+
+<h1>Des équations de Maxwell à l'onde électromagnétique — licence 3
+
+<h2>Ce qui précède
+<Dresser>les prérequis de l'équation de propagation dans le vide
+	<remarque>Le graphe remonte aux quatre équations de Maxwell, puis au théorème de Gauss et à la loi de Biot et Savart. Rien n'est réécrit : chaque énoncé est servi depuis le corpus.
+
+<h2>Les quatre équations
+<Énoncer>l'équation de Maxwell-Gauss <étiquette>{gauss}
+<Énoncer>l'équation de Maxwell-Thomson <étiquette>{thomson}
+<Énoncer>l'équation de Maxwell-Faraday <étiquette>{faraday}
+<Énoncer>l'équation de Maxwell-Ampère <étiquette>{ampere}
+	<remarque>Chaque énoncé affiche désormais sa formule, ses hypothèses et son domaine de validité. Les relations sont vérifiées en homogénéité à la compilation : `rot(B) = mu_0 * j + mu_0 * epsilon_0 * d_dt(E)` a passé le contrôle.
+
+<h2>Le terme que Maxwell a ajouté
+
+<Démontrer>l'équation de Maxwell-Ampère
+	<remarque>La démonstration procède par contradiction : le théorème d'Ampère stationnaire imposerait une divergence de courant nulle, ce que la charge d'un condensateur dément. Le courant de déplacement n'est donc pas un ajout expérimental mais une nécessité de cohérence.
+
+<h2>La propagation
+<Énoncer>l'équation de propagation dans le vide <étiquette>{alembert}
+
+<Démontrer>l'équation de propagation dans le vide
+	<remarque>Le double rotationnel élimine le champ magnétique. Le facteur qui apparaît a la dimension de l'inverse du carré d'une vitesse — l'analyse dimensionnelle seule l'impose — et son évaluation numérique identifie la lumière à une onde électromagnétique.
+
+<h2>La structure de l'onde
+<Énoncer>la structure de l'onde électromagnétique plane <étiquette>{structure}
+<Démontrer>la structure de l'onde électromagnétique plane
+
+<h2>Le transport d'énergie
+<Énoncer>le vecteur de Poynting
+<Énoncer>le bilan local d'énergie électromagnétique
+
+<Démontrer>le bilan local d'énergie électromagnétique
+	<remarque>Le bilan a la structure de la conservation de la charge : une divergence de flux, une dérivée temporelle de densité, un terme source. C'est ce qui autorise à parler d'une énergie qui se transporte.
+
+<h2>Le contrôle dimensionnel
+
+<Vérifier>l'homogénéité de div(E) = rho / epsilon_0 avec E champ électrostatique, rho densité volumique de charge, epsilon_0 permittivité du vide
+	<remarque>La relation s'écrit dans la même syntaxe que le champ vérifié à la compilation, opérateurs compris : `div` divise par une longueur, et c'est ce facteur qui fait l'homogénéité. Écrire `div_E` comme un simple symbole, et le déclarer champ électrostatique, donnerait une relation fausse d'un facteur de longueur — le moteur le dirait.
+
+Une relation écrite sans le carré de la célérité serait rejetée par le contrôle dimensionnel. La vérification négative complète demeure dans le test historique `physique4.txt`.
+<Vérifier>l'homogénéité de E = m * c^2 avec E énergie, m masse, c célérité
+	<remarque>La relation corrigée est homogène : les deux membres ont la dimension d'une énergie.
+
+<page suivante h2>Exercice type
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — pression de radiation} {
+	Une onde plane progressive monochromatique se propage dans le vide selon l'axe $Ox$, d'amplitude $E_0 = 1,0 * 10^3$ V·m⁻¹.
+	Calculer la valeur moyenne du vecteur de Poynting, puis l'énergie reçue par un mètre carré en une heure.
+	Vérifier l'homogénéité de chaque expression avant l'application numérique.
+}
+
+<h1>Oscillateurs, signaux et filtres : le calcul numérique
+
+Les phrases qui suivent confient le calcul à SciPy, embarqué dans docdg : scipy.integrate.solve_ivp pour les équations du mouvement, scipy.fft pour les spectres, scipy.signal pour les filtres et les diagrammes de Bode. Les valeurs sont celles d'un TP Python.
+
+<h2>Le pendule pesant, sans approximation
+L'équation θ'' + (g/L) sin θ = 0 n'est linéarisée que pour les petits angles. Lancé de θ(0) = 2,5 rad, près de la position d'équilibre instable, le pendule a une période nettement plus longue que 2π√(L/g).
+<Résoudre>numériquement l'équation différentielle θ'' + (g/L)sin(θ) = 0, avec g = 9,81, L = 1, θ(0) = 2,5 et θ'(0) = 0, sur [0 ; 12]
+<Résoudre>numériquement l'équation différentielle θ'' + (g/L)sin(θ) = 0, avec g = 9,81, L = 1, θ(0) = 2,5 et θ'(0) = 0, sur [0 ; 12], le portrait de phase
+	<remarque>Le portrait de phase est une courbe fermée : l'énergie mécanique se conserve, le mouvement est périodique.
+
+La période de ce mouvement a une expression exacte, par l'intégrale elliptique complète de première espèce : on peut la confronter à la courbe ci-dessus, dont les oscillations durent environ 3,3 s.
+<Calculer>la période du pendule simple d'amplitude 2,5 rad, avec L = 1 et g = 9,81
+
+<h2>L'oscillateur amorti
+<Résoudre>numériquement l'équation différentielle x'' + 2λx' + ω^2 x = 0, avec λ = 0,3, ω = 3, x(0) = 1 et x'(0) = 0, sur [0 ; 15], le portrait de phase
+	<remarque>En régime pseudo-périodique, la trajectoire spirale vers l'origine, point d'équilibre stable.
+
+<h2>Deux fréquences, une fenêtre
+<Tracer>le spectre du signal s(t) = sin(2π·50t) + 0,5sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], avec une fenêtre de Hann
+	<remarque>La fenêtre de Hann limite les fuites spectrales au prix d'un lobe principal plus large ; l'amplitude affichée est corrigée de son gain.
+
+<h2>Les harmoniques d'un signal carré
+La série de Fourier d'un créneau d'amplitude 1 ne contient que des harmoniques impaires, d'amplitudes 4/(nπ).
+<Tracer>le spectre du signal s(t) = 4/π (sin(2π f t) + sin(6π f t)/3 + sin(10π f t)/5 + sin(14π f t)/7), échantillonné à 2 kHz sur [0 ; 1], avec f = 50, jusqu'à 500 Hz
+
+<page suivante h2>La modulation d'amplitude
+<Tracer>le spectre du signal u(t) = (1 + m cos(2π fm t)) cos(2π fp t), échantillonné à 10 kHz sur [0 ; 0,5], avec m = 0,5, fm = 100, fp = 1000, jusqu'à 1500 Hz
+	<remarque>La porteuse à fp est entourée de deux bandes latérales à fp ± fm, d'amplitude m/2 : la bande occupée vaut 2fm.
+
+<h2>Le filtre RC, premier ordre
+<Tracer>le diagramme de Bode de H(p) = 1/(1 + RCp), avec R = 1000 et C = 1e-6
+	<remarque>La coupure à −3 dB tombe à 1/RC = 1000 rad/s ; au-delà, le gain chute de 20 dB par décade et la phase tend vers −90°.
+
+<h2>Le second ordre et la résonance
+<Tracer>le diagramme de Bode de H(p) = K/(1 + 2ξp/ω0 + p^2/ω0^2), avec K = 2, ξ = 0,2 et ω0 = 100
+	<remarque>Pour un amortissement ξ < 1/√2, le gain passe par un maximum en ω_r = ω0√(1 − 2ξ²), au-dessus du gain statique de 20 log(1/(2ξ√(1 − ξ²))) dB.
+
+<h2>La stabilité d'un asservissement
+<Tracer>le diagramme de Bode de T(p) = 10/(p(1 + p)(1 + 0,1p)), entre 0,01 et 1000 rad/s
+	<remarque>La marge de phase, mesurée à la pulsation où le gain de la boucle ouverte vaut 0 dB, est à peine positive : le système bouclé est stable, mais très mal amorti. Diminuer le gain la ferait croître.
+
+<h2>Débruiter une mesure
+Une mesure lente à 5 Hz est polluée par un parasite à 120 Hz et par un bruit gaussien. Un passe-bas de Butterworth, appliqué en aller-retour, restitue la composante utile sans la déphaser.
+<Tracer>le filtrage du signal s(t) = sin(2π·5t) + 0,3sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 20 Hz, avec un bruit d'écart type 0,2
+
+<h2>Isoler une fréquence
+<Tracer>le filtrage du signal s(t) = sin(2π·10t) + sin(2π·50t) + sin(2π·200t), échantillonné à 2 kHz sur [0 ; 0,5], par un passe-bande de Butterworth d'ordre 3 entre 40 et 60 Hz
+	<remarque>Seule la composante à 50 Hz traverse le filtre : l'écart type du signal filtré approche 1/√2, celui d'une sinusoïde d'amplitude 1.
+
+<h2>Un problème aux limites : l'ailette de refroidissement
+Dans une ailette de longueur unité, l'écart de température θ à l'air ambiant vérifie θ'' = m²θ. La base est maintenue à θ = 1 ; l'extrémité, isolée, impose un flux nul : θ'(1) = 0. Les deux conditions portent sur les deux bouts : docdg reconnaît un problème aux limites et le résout par collocation à maillage adaptatif.
+<Résoudre>numériquement l'équation différentielle θ'' = m^2 θ, d'inconnue θ(x), avec m = 3, θ(0) = 1 et θ'(1) = 0, sur [0 ; 1]
+	<remarque>La solution exacte θ(x) = ch(m(1 − x))/ch(m) donne θ(1) = 1/ch(3) ≈ 0,0993 et θ'(0) = −m th(m) ≈ −2,985 : la pente à la base mesure le flux évacué par l'ailette.
+
+<page suivante h0>Approfondissements
+
+<h1>Leçon de physique — du théorème de Bloch à la conduction
+
+<h2>Ce qui précède
+<Dresser>les prérequis du théorème de Bloch
+	<remarque>Le graphe remonte aux symétries et à leurs générateurs, au réseau réciproque, et de là à l'équation de Schrödinger. Il traverse les matières : la structure de groupe vient du corpus mathématique, sans qu'aucun résultat soit réécrit.
+
+<h2>Le résultat central
+<Énoncer>le théorème de Bloch <étiquette>{bloch}
+<Démontrer>le théorème de Bloch
+	<remarque>La démonstration ne résout aucune équation : elle diagonalise simultanément le hamiltonien et les translations du réseau, qui commutent. C'est un argument de symétrie, et il donne d'un coup la forme des états et le domaine du vecteur d'onde.
+
+<h2>Ce qui en découle
+<Énoncer>la structure de bandes et l'ouverture d'une bande interdite <étiquette>{bandes}
+<Démontrer>la structure de bandes et l'ouverture d'une bande interdite
+	<remarque>Le théorème <renvoi>{bloch} fournit les états ; la perturbation dégénérée en bord de zone ouvre l'intervalle. Un potentiel arbitrairement faible suffit : c'est la dégénérescence, non l'intensité, qui produit le gap.
+
+<Énoncer>la masse effective et la dynamique des porteurs
+<Démontrer>la masse effective et la dynamique des porteurs
+
+<h2>Du modèle au transport
+<Énoncer>la surface de Fermi et le caractère métallique
+<Démontrer>la surface de Fermi et le caractère métallique
+	<remarque>C'est le remplissage, non la nature chimique, qui décide de la conduction. Un nombre impair d'électrons par maille garantit un métal ; un nombre pair ne garantit rien.
+
+<Énoncer>la conductivité de Drude et le temps de relaxation
+<Démontrer>la conductivité de Drude et le temps de relaxation
+
+<Énoncer>l'effet Hall et le signe des porteurs
+<Démontrer>l'effet Hall et le signe des porteurs
+	<remarque>Le béryllium et l'aluminium donnent une constante de Hall positive. Aucun modèle à porteurs négatifs n'en rend compte : c'est la preuve expérimentale que le trou décrit quelque chose de réel.
+
+<h2>Outils mobilisés
+<Rappeler>la distribution de Fermi-Dirac
+
+<Rappeler>les phonons et la relation de dispersion du réseau
+
+<h2>À l'agrégation, rien n'est admis
+	Un même énoncé, un seul identifiant, deux exigences : le master énonce sans preuve ce que le concours demande de démontrer. La voie déclarée en tête de page suffit à basculer le statut.
+
+<Énoncer>le modèle de Debye de la capacité thermique
+
+<Démontrer>le modèle de Debye de la capacité thermique
+
+<h2>Le contrôle dimensionnel
+
+<Vérifier>l'homogénéité de sigma_e = n * q^2 * tau / m avec sigma_e conductivité, n densité particulaire, q charge électrique, tau temps de relaxation des porteurs, m masse effective
+	<remarque>Les grandeurs sont nommées telles que le corpus les déclare. La masse effective et le temps de relaxation des porteurs sont des grandeurs du master, ajoutées avec le domaine.
+
+<Vérifier>l'homogénéité de E_F = hbar^2 * k_F^2 / m avec E_F énergie de Fermi, hbar constante de Planck réduite, k_F vecteur d'onde de Fermi, m masse
+
+<Vérifier>l'homogénéité de R_H = 1 / (n * q) avec R_H constante de Hall, n densité particulaire, q charge électrique
+	<remarque>La constante de Hall ne dépend ni de la masse effective ni du temps de relaxation : la vérification le montre avant tout calcul.
+
+<page suivante h2>Exercices types
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — vitesse de dérive dans le cuivre} {
+	Le cuivre compte un électron de conduction par atome, pour une masse volumique de $8,96 * 10^3$ kg·m⁻³ et une masse molaire de $63,5$ g·mol⁻¹.
+	Un fil de section $1,0$ mm² est parcouru par un courant de $1,0$ A.
+	Calculer la densité de porteurs, puis la vitesse de dérive. Comparer à la vitesse de Fermi, de l'ordre de $1,6 * 10^6$ m·s⁻¹.
+}
+<correction>Correction. La densité de porteurs vaut le quotient de la masse volumique par la masse molaire, multiplié par le nombre d'Avogadro, soit environ $8,5 * 10^{28}$ m⁻³.
+	La vitesse de dérive se tire de $j = n q v$ : avec $j = 1,0 * 10^6$ A·m⁻², elle vaut environ $7 * 10^{-5}$ m·s⁻¹, soit quelques centièmes de millimètre par seconde.
+	<remarque>Onze ordres de grandeur séparent les deux vitesses. Le signal électrique ne se propage donc pas au rythme des électrons : c'est le champ qui va vite, non les porteurs.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — le régime de basse température} {
+	Dans un métal, la capacité thermique s'écrit $C = \gamma T + A T^3$.
+	Justifier l'origine de chacun des deux termes, puis indiquer quelle représentation graphique permet de les séparer expérimentalement.
+}
+<correction>Correction. Le terme linéaire est la contribution électronique : seuls les électrons situés dans une bande d'énergie thermique autour du niveau de Fermi peuvent être excités, d'où une fraction proportionnelle à la température.
+	Le terme cubique est la contribution des phonons, établie par le modèle de Debye : à basse température, la coupure devient sans effet et l'intégrale sur les modes donne une énergie en puissance quatrième.
+	Tracer $C/T$ en fonction de $T^2$ donne une droite d'ordonnée à l'origine $\gamma$ et de pente $A$.
+	<remarque>La mesure de l'ordonnée à l'origine donne la densité d'états au niveau de Fermi. C'est l'un des rares accès expérimentaux directs à cette grandeur.
+

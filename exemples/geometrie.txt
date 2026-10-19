@@ -1,0 +1,385 @@
+document {
+    orientation: portrait;
+    marges: 7;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,3;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Géométrie — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>École élémentaire
+
+<h1>Géométrie — les figures planes
+
+<h2>Points, droites, demi-droites et segments
+	On place un point — le mot est celui du compas posé sur la feuille. En géométrie, un point ne se donne pas par ses coordonnées mais par ses distances aux autres : trois longueurs suffisent à fixer un triangle. Un point placé est déclaré : les figures suivantes peuvent s'y référer.
+	Entre deux points placés, la notation fait la figure : parenthèse pour la droite, crochet pour l'extrémité comprise.
+
+<Placer>les points A, B et C tels que AB = 5 cm, BC = 4 cm et AC = 3 cm
+
+<Tracer>la droite (AB)
+<Tracer>la demi-droite [AB)
+<Tracer>la demi-droite (AB]
+<Tracer>le segment de droite [AB]
+
+	Un segment se donne aussi par sa longueur seule :
+
+<Tracer>le segment [CD] tel que CD = 4 cm
+<Tracer>la demi-droite (EF] telle que EF = 3,5 cm
+
+<page suivante h2>Triangles
+<Tracer>le triangle ABC équilatéral, de côté 5 cm
+<Tracer>le triangle ABC isocèle en A, de côté 5 cm
+<Tracer>le triangle ABC rectangle en A, de côté AB 3 cm et de côté AC 4 cm, avec les marques
+
+<page suivante h2>Quadrilatères
+<Tracer>le carré ABCD, de côté 4 cm, avec les marques
+<Tracer>le losange ABCD, de côté 3 cm et d'angle 60
+
+<h2>Cercles
+	Le rayon se donne en centimètres. Le disque est le cercle et son intérieur :
+
+<Tracer>le cercle O, de rayon 3 cm
+<Tracer>le disque O, de rayon 2 cm
+
+<page suivante h0>Collège
+
+<h1>Le théorème de Pythagore
+<Calculer>AC dans le triangle ABC rectangle en B, avec AB = 3 et BC = 4
+<Calculer>EF dans le triangle DEF rectangle en F, avec DE = 13 et DF = 5
+<Vérifier>si le triangle ABC est rectangle, avec AB = 3, BC = 4 et AC = 5
+<Vérifier>si le triangle RST est rectangle, avec RS = 4, ST = 5 et RT = 6
+
+<h1>Le théorème de Thalès
+<Calculer>AC par le théorème de Thalès, avec AM = 3, AB = 6 et AN = 4
+<Calculer>MN par le théorème de Thalès, avec AM = 3, AB = 6 et BC = 10
+<Vérifier>si les droites (MN) et (BC) sont parallèles, avec AM = 3, AB = 6, AN = 4 et AC = 8
+
+<page suivante h1>Trigonométrie du triangle rectangle
+<Calculer>BC dans le triangle ABC rectangle en B, avec l'angle A = 30 degrés et AC = 8
+<Calculer>AB dans le triangle ABC rectangle en B, avec l'angle A = 40 degrés et AC = 10
+<Calculer>l'angle A dans le triangle ABC rectangle en B, avec AB = 3 et AC = 6
+
+<h1>Périmètres, aires et volumes
+<Calculer>le périmètre du rectangle de longueur 7 et de largeur 4
+<Calculer>le périmètre du cercle de rayon 5
+<Calculer>le périmètre du triangle de côtés 3, 4 et 5
+<Calculer>l'aire du carré de côté 6
+<Calculer>l'aire du triangle de base 6 et de hauteur 4
+<Calculer>l'aire du disque de rayon 3
+<Calculer>le volume du pavé droit de longueur 5, de largeur 3 et de hauteur 2
+<Calculer>le volume du cylindre de rayon 2 et de hauteur 5
+<Calculer>le volume du cône de rayon 3 et de hauteur 4
+<Calculer>le volume de la boule de rayon 3
+
+<page suivante h1>Conversions d'unités
+<Convertir>3,5 km en m
+<Convertir>2500 cm^2 en m^2
+<Convertir>3 L en cm^3
+<Convertir>1250 g en kg
+
+<h2>Transformations du plan
+<Soient>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+<Construire>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
+
+<page suivante>
+<Construire>l'image du triangle ABC par la symétrie centrale de centre O
+
+<Soit>le vecteur u de coordonnées (2 ; -1)
+<Construire>l'image du triangle ABC par la translation de vecteur u
+
+<page suivante>
+<Construire>l'image du triangle ABC par la rotation de centre O et d'angle 90 degrés
+<Construire>l'image du triangle ABC par l'homothétie de centre O et de rapport 2
+
+<page suivante>
+<Soient>les points P et Q de coordonnées respectives (0 ; 0) et (1 ; 1)
+<Construire>l'image du segment [AB] par la symétrie axiale d'axe (PQ)
+<h1>Les solides en perspective cavalière
+
+<h2>Les polyèdres
+	Les arêtes cachées sont dessinées en pointillés, comme dans le cahier.
+<Tracer>le solide cube, d'arête 3 cm
+<Tracer>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Tracer>le solide prisme, de base 3 cm et de longueur 5 cm
+<Tracer>le solide pyramide, de base 4 cm et de hauteur 3 cm
+
+<h2>Les solides de révolution
+<Tracer>le solide cylindre, de rayon 2 cm et de hauteur 5 cm
+<Tracer>le solide cône, de rayon 2 cm et de hauteur 4 cm
+<Tracer>le solide sphère, de rayon 3 cm
+
+<h1>Les patrons
+	Un patron est le solide déplié, prêt à découper et à plier.
+<Tracer>le patron du cube d'arête 3 cm
+<Tracer>le patron du pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Tracer>le patron de la pyramide de base 4 cm et de hauteur 3 cm
+
+<Tracer>le patron du cylindre de rayon 2 cm et de hauteur 5 cm
+<Tracer>le patron du cône de rayon 2 cm et de hauteur 4 cm
+
+<h1>Les volumes
+<Calculer>le volume du pavé de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Calculer>le volume du cylindre de rayon 2 cm et de hauteur 5 cm
+<Calculer>le volume du cône de rayon 2 cm et de hauteur 4 cm
+
+<h1>Un solide à la demande
+	Le document se construit avec le lecteur : la dimension saisie dessine le solide.
+soit a: un entier = 5
+Pour a = #a cm, voici le solide et son volume :
+<Tracer>le solide cube, d'arête 5 cm
+<Calculer>le volume du pavé de longueur 5 cm, de largeur 5 cm et de hauteur 5 cm
+
+<page suivante h0>Lycée
+
+<h1>Angles
+	L'angle géométrique s'écrit $angle(ABC)$, chapeau compris ; un seul point donne $angle(A)$, trois points nomment l'angle par son sommet du milieu. Un angle droit se lit $angle(ABC) = 90°$.
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Un triangle rectangle} {
+	Dans un triangle $ABC$ rectangle en $B$, l'angle $angle(ABC)$ est
+	l'angle droit, $angle(BAC)$ et $angle(BCA)$ les deux angles aigus.
+}
+
+<h1>Parallèles, perpendiculaires
+	Deux droites parallèles$(AB) parallèle (CD)$, perpendiculaires : $(AB) perpendiculaire (CD)$ et la négation : $(AB) !parallèle (CD)$
+	Deux figures : isométriques : $ABC isométrique A'B'C'$, semblables : $ABC semblable A'B'C'$.
+
+<h1>Distance, milieu
+	La distance entre deux points est $distance(A; B)$, le milieu d'un segment $milieu(A; B)$.
+
+<h1>Composantes
+	En ligne $vecteur u(3;5)$ ou en colonne $vecteur colonne u(3;5)$ ; dans l'espace, $vecteur v(1;2;3)$ et $vecteur colonne v(1;2;3)$.
+
+<h1>Tracer une figure
+	L'unité vaut un centimètre ; les côtés égaux et angles droits se codent avec les marques, les longueurs s'affichent avec l'unité.
+	Un triangle équilatéral de côté 5, codé et mesuré :
+<Tracer>le triangle ABC équilatéral, de côté 5 cm, avec les marques
+
+
+ losange, par côté et angle :
+<Tracer>le losange ABEF, de côté 4 cm, d'angle 60, avec les mesures
+
+	Un carré, un rectangle, un cercle et un disque :
+<Tracer>le carré MNOP, de côté 3 cm, avec les marques
+
+<Tracer>le cercle C, de centre (0;0) et de rayon 2 cm
+
+<Tracer>le disque D, de centre (0;0) et de rayon 1,5 cm, en bleu ciel
+
+<page suivante h2>Figure libre, sans repère
+	Au collège, on construit sur une figure sans coordonnées : la médiatrice, la bissectrice et la marque d'angle se tracent directement à partir des sommets, dans un bloc <<Tracer>> sans repère.
+
+<Tracer>{
+	le triangle ABC équilatéral, de côté 5 cm
+	la médiatrice de [AB]
+	la bissectrice de l'angle BAC
+	l'angle ABC
+}
+
+<h1>Le repère
+	Un repère se décrit en toutes lettres, les points posés par <<Soit>> s'y placent d'eux-mêmes, et la médiatrice, la bissectrice ou la marque d'angle s'y tracent en une phrase.
+
+	<Soient>les points A(1;1), B(5;3), C(2;4) et D(4 ; -1)
+
+<Tracer>dans un repère où l'abscisse appartient à [-1 ; 6] et l'ordonnée à [-1 ; 5] {
+	la droite (AB)
+	la droite (AC)
+	la médiatrice de [AB]
+	la bissectrice de l'angle BAC
+	l'angle BAC
+	le vecteur w (1;1)
+}
+
+<page suivante h1>Le demi-plan
+	Une inéquation trace la région qu'elle décrit : le demi-plan est hachuré, sa frontière tracée selon que l'inégalité est large ou stricte.
+
+<Tracer>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5] {
+	la droite y = x + 1
+	la région y > x + 1
+}
+
+<h1>Le cercle trigonométrique
+<Tracer>le cercle trigonométrique, avec les valeurs
+
+<page suivante h1>Droites, demi-droites et segments
+	Trois figures nomment deux points : le segment s'arrête à ses deux extrémités, la demi-droite part de l'une et continue indéfiniment au-delà de l'autre, la droite ne s'arrête nulle part. Le crochet fermé marque l'extrémité fixe, la parenthèse le côté qui se prolonge :
+
+<Tracer>dans un repère où l'abscisse appartient à [-2 ; 6] et l'ordonnée à [-2 ; 6] {
+	la demi-droite [AB)
+	la demi-droite (BC]
+	la droite (AC)
+	le segment de droite [CD]
+}
+
+
+<h1>Le repère orthogonal : des unités distinctes
+	Pour une grandeur qui varie vite en ordonnée, on compresse l'axe :
+	<Soit>une fonction p(x) = x^2
+<Représenter>graphiquement dans un repère orthogonal (O, i, j) pour x appartient à [-3 ; 3] et y à [-1 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées {
+	la courbe de la fonction p
+	le point S(0 ; 0)
+}
+
+<h1>Le cercle, de centre et de rayon
+<Tracer>dans un repère où l'abscisse appartient à [-4 ; 4] et l'ordonnée à [-4 ; 4] {
+	le point O(0 ; 0)
+	le cercle C, de centre (0;0) et de rayon 3
+}
+
+<h1>Géométrie dans l'espace
+<Tracer>le solide cube, d'arête 3 cm
+<Tracer>le solide pyramide, de base 4 cm et de hauteur 3 cm
+
+<page suivante h2>Vecteurs : produits
+	Un vecteur est $vecteur(u)$, sa norme $norme(vecteur(u))$. Le produit scalaire s'écrit en infixe, $vecteur(u) . vecteur(v)$, le produit vectoriel de même, $vecteur(u) ^ vecteur(v)$. Seul un vecteur des deux côtés les déclenche : $vecteur(u)^2$ reste un carré.
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {La norme par le produit scalaire} {
+	$norme(vecteur(u))^2 = vecteur(u) . vecteur(u)$, et deux vecteurs
+	sont orthogonaux quand $vecteur(u) . vecteur(v) = 0$.
+}
+La colinéarité se lit $colinéaires(u; v)$, l'orthogonalité
+$vecteur(u) perpendiculaire vecteur(v)$.
+
+<h1>Repères et symboles
+Un repère du plan est $repère(O; i; j)$, de l'espace $repère(O; i; j; k)$ et l'orthonormé $repère orthonormé(O; i; j)$.
+Les symboles se lisent : un triangle $triangle(ABC)$, un arc $arc(AB)$, un angle droit $angle droit$,, un cercle $cercle(O; r)$ par centre et rayon
+
+<h1>Vecteurs dans un repère : somme et différence
+	La règle du parallélogramme pour la somme, la règle du triangle pour la différence, sur une même figure :
+<Tracer>dans un repère où l'abscisse appartient à [-5 ; 5] et l'ordonnée à [-5 ; 5] {
+	le vecteur u (3;1)
+	le vecteur v (1;3)
+	le vecteur u depuis la pointe de v
+	le vecteur v depuis la pointe de u
+	le vecteur u + v
+	le vecteur u - v depuis la pointe de v
+}
+
+<page suivante h2>Droites remarquables d'un triangle, dans un repère
+	<Soient>3 points A, B et C de coordonnées respectives (0 ; 0), (6 ; 0) et (2 ; 4)
+<Tracer>dans un repère où l'abscisse appartient à [-1 ; 7] et l'ordonnée à [-1 ; 5] {
+	la droite (AB)
+	la droite (BC)
+	la droite (AC)
+	la médiatrice de [AB]
+	la médiatrice de [BC]
+}
+
+Les médiatrices concourent au centre du cercle circonscrit.
+
+<h1>Les racines de l'unité, sommets d'un polygone régulier
+	Les racines cinquièmes de l'unité sont les sommets du pentagone régulier inscrit dans le cercle trigonométrique : <Calculer>les racines cinquièmes de l'unité
+<Tracer>le cercle trigonométrique, avec les valeurs
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice et un titre {Le lien algèbre-géométrie} {
+	Les solutions de $z^n = 1$ forment un polygone régulier à $n$
+	sommets : l'équation algébrique dessine la figure.
+}
+
+<h1>Produit scalaire et vecteurs, calculés
+	<Soient>les vecteurs a et b de coordonnées respectives (3 ; -2) et (4 ; 6)
+	<Calculer>le produit scalaire de a et b
+	<Calculer>la norme de a
+	<Calculer>l'angle entre a et b
+	<Soient>les vecteurs r et s de coordonnées respectives (1 ; 2 ; -1) et (2 ; 4 ; -2)
+	<Étudier>la colinéarité de r et s
+
+<h1>Plans de l'espace
+
+	<Soit>le plan P d'équation 2x + y - z = 3
+
+	<Donner>un vecteur normal de P
+
+	<Calculer>la distance du point (1 ; 2 ; 0) au plan P
+<page suivante h1>Le repère de l'espace
+	Un point de l'espace se repère par trois coordonnées $(x ; y ; z)$. Le chemin en pointillés rouges suit les coordonnées depuis l'origine.
+<Soient>les points A(1;2;3) et B(3;1;2)
+<Tracer>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
+
+<h1>Une figure de l'espace
+<Soient>les points E(2;0;0), F(2;3;0) et G(0;3;2)
+<Tracer>dans un repère de l'espace les points E, F et G, les segments [EF] et [FG]
+
+<h1>Géométrie analytique de l'espace
+<Soit>le plan P d'équation 2x + y - z = 3
+<Donner>le vecteur normal du plan P
+<Calculer>la distance du point (1 ; 2 ; 0) au plan P
+
+<page h2>Les droites de l'espace
+<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>la droite d' passant par B(0;1;3) et de vecteur directeur v(2;2;-2)
+<Donner>une représentation paramétrique de la droite d
+<Tracer>dans un repère de l'espace le point A et la droite d
+
+<h2>Les positions relatives, rédigées
+<Étudier>la position relative des droites d et d'
+<Soit>le plan R d'équation x - y + z = 0
+<Étudier>la position relative de la droite d et du plan R
+<Soit>le plan Q d'équation 4x + 2y - 2z = 6
+<Étudier>la position relative des plans P et Q
+<Étudier>la position relative des plans P et R
+
+<page suivante h0>Enseignement supérieur
+
+
+<italique>{Version de démonstration : les saisies sont préremplies pour permettre la lecture intégrale. Les formulaires interactifs d’origine sont conservés dans archives.}
+
+
+
+
+<h1>Vocabulaire du supérieur
+
+Le produit scalaire abstrait est $produit scalaire(u; v)$, l'orthogonal d'un sous-espace $orthogonal(F)$, la projection orthogonale
+$projeté orthogonal(F; x)$ et le produit mixte $produit mixte(u; v; w)$.
+
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {L'inégalité de Cauchy-Schwarz} {
+	$valeur absolue(vecteur(u) . vecteur(v)) <= norme(vecteur(u)) norme(vecteur(v))$,
+	avec égalité exactement quand $colinéaires(u; v)$.
+}
+
+<h1>Espaces préhilbertiens : Gram-Schmidt et projection
+
+<Soient>les vecteurs e et f de coordonnées respectives (1 ; 1 ; 0) et (1 ; 0 ; 1)
+
+<Orthonormaliser>la famille e et f
+
+<Soient>les vecteurs g et h de coordonnées respectives (2 ; 1) et (1 ; 1)
+
+<Calculer>le projeté orthogonal de g sur h
+<page suivante h1>Les courbes paramétrées
+	Une courbe paramétrée se donne par ses deux coordonnées en fonction de $t$ :
+<Tracer>la courbe paramétrée x = cos(t)^3 et y = sin(t)^3 pour t dans [0 ; 2*pi]
+<Tracer>la courbe paramétrée x = 2*cos(t) et y = sin(2*t) pour t dans [0 ; 2*pi], en violet
+
+<page suivante h1>Les courbes polaires
+	Une courbe polaire se donne par le rayon en fonction de l'angle $t$ :
+<Tracer>la courbe polaire r = 1 + cos(t) pour t dans [0 ; 2*pi], en rouge
+<Tracer>la courbe polaire r = cos(3*t), en vert
+
+<h1>Les coniques, rédigées
+<h2>L'ellipse
+<Étudier>la conique d'équation x^2/9 + y^2/4 = 1
+
+<page suivante h2>L'hyperbole
+<Étudier>la conique d'équation x^2/4 - y^2 = 1
+
+<page suivante h2>La parabole
+<Étudier>la conique d'équation y^2 = 4x
+
+<page suivante h2>Le terme croisé et la rotation
+<Étudier>la conique d'équation x^2 + xy + y^2 = 3
+
+<page suivante h1>Une rosace à la demande
+soit n: un entier = 8
+Pour n = #n, la rosace possède huit pétales :
+<Tracer>la rosace à 8 pétales, en violet

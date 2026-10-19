@@ -1,0 +1,294 @@
+document {
+    orientation: portrait;
+    marges: 10;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,5;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Statistiques et probabilités — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Collège
+
+<h1>Moyenne, médiane, étendue, quartiles
+
+<Calculer>la moyenne de la série 12 ; 15 ; 9 ; 14
+
+<Calculer>la moyenne de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+
+<Calculer>la médiane de la série 9 ; 15 ; 12 ; 14
+
+<Calculer>la médiane de la série 7 ; 3 ; 9 ; 5 ; 11
+
+<Calculer>l'étendue de la série 12 ; 15 ; 9 ; 14
+
+<Calculer>les quartiles de la série 2 ; 4 ; 5 ; 7 ; 8 ; 10 ; 12 ; 15
+
+<h1>Proportionnalité
+
+<Calculer>la quatrième proportionnelle de 3, 5 et 12
+
+<Vérifier>si le tableau est de proportionnalité {
+	2 ; 3 ; 5
+	6 ; 9 ; 15
+}
+
+<Vérifier>si le tableau est de proportionnalité {
+	2 ; 3 ; 5
+	6 ; 9 ; 14
+}
+
+<Compléter>le tableau de proportionnalité {
+	2 ; 3 ; ?
+	6 ; ? ; 15
+}
+
+
+<h1>Pourcentages
+
+<Calculer>30 % de 250
+
+<Appliquer>une augmentation de 5 % à 240
+
+<Appliquer>une diminution de 12 % à 60
+
+<Calculer>le taux d'évolution de 250 à 280
+
+<h1>Échelles et vitesses
+
+<Calculer>l'échelle d'un plan où 2 cm représentent 50 m
+
+<Calculer>la vitesse moyenne pour 150 km en 2 h 30 min
+
+<Calculer>la distance parcourue à 80 km/h pendant 1 h 45 min
+
+<Calculer>la durée du trajet de 210 km à 60 km/h
+
+<page suivante h0>Lycée
+
+soit remarque: un style = <gris foncé italique>
+
+<h1>Notations du dénombrement
+Le coefficient binomial est $C(n; k)$ ; à un seul argument, $C(t)$ reste une fonction ordinaire.
+L'arrangement est $A(n; k)$, la factorielle $factorielle(n)$.
+La règle de Pascal et le binôme :
+
+$C(n; k) = C(n-1; k-1) + C(n-1; k)$
+
+$(a + b)^n = somme(k=0;n) C(n; k) a^k b^(n-k)$
+
+<h1>Probabilité et espérance
+$PP(A)$ est une probabilité, $EE(X)$ une espérance ; le conditionnement se dit « sachant » : $PP(A sachant B)$.
+$PP(A) = PP(A sachant B) PP(B) + PP(A sachant non(B)) PP(non(B))$
+$EE(X) = somme(k=1;n) k PP(X = k)$
+
+<h1>Arbre de probabilités
+Un nœud à branche unique reçoit son complément automatiquement, le produit de chaque chemin s'imprimant à la feuille :
+<Construire>un arbre {
+	Pile 1/2
+	Face 1/2
+}
+<Construire>un arbre {
+	Pile 0,5
+	Face 0,5
+}
+<Construire>un arbre {
+	A 0,3 {
+		B 0,6
+	}
+	!A 0,7 {
+		B 0,1
+	}
+}
+
+<h1>Diagrammes statistiques
+<Représenter>graphiquement une statistique en barres avec les données {1: 4 | 2: 7 | 3: 2 | 4: 5}
+<Représenter>graphiquement une statistique en camembert avec les données {Marche: 5 | Bus: 3 | Vélo: 2}
+Les mêmes données, déclarées une fois et réutilisées par leur nom :
+soit sondage: un dictionnaire de chaînes de caractères et d'entiers = {
+	"Jeudi": 8 ;
+	"Lundi": 5 ;
+	"Mardi": 3
+}
+<Représenter>graphiquement une statistique en barres avec les données sondage et en disposition horizontale
+
+<page suivante>
+Un histogramme à classes, de bornes et d'effectifs déclarés en toutes lettres :
+<Représenter>graphiquement une statistique en histogramme avec les bornes {0 ; 5 ; 10 ; 20} et les effectifs {3 ; 7 ; 2}
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données {2 ; 3 ; 5 ; 7 ; 8 ; 11 ; 13}
+
+Un nuage de points avec sa droite d'ajustement :
+
+<Représenter>graphiquement une statistique en nuage avec ajustement et les données {(1;2) (2;2,8) (3;4,1) (4;4,9)}
+
+<h1>Lois du lycée, calculées
+<Calculer la probabilité que X <= 1,96 pour la loi normale(0 ; 1)>
+<Calculer la probabilité que X >= 3 pour la loi binomiale(10 ; 0,5)>
+<Calculer>la probabilité que X = 2 pour la loi poisson(1,5)
+<Déterminer>le quantile d'ordre 0,95 de la loi normale(0 ; 1)
+<Calculer>l'espérance de la loi binomiale(20 ; 0,05)
+<Calculer>l'écart type de la loi poisson(4)
+
+<h1>Loi de probabilité
+Les valeurs et les probabilités se donnent en deux lignes ; le tableau se dresse tout seul et la somme des probabilités est vérifiée — une loi qui ne totalise pas 1 est refusée avec le total fautif.
+<Dresser>la loi de probabilité de X {
+	valeurs : [1 ; 2 ; 3]
+	probabilités : [1/6 ; 1/3 ; 1/2]
+}
+<Calculer>l'espérance de X
+<Calculer>la variance de X
+<Calculer>l'écart type de X
+
+<h1>Variance, écart type, covariance
+$variance(X)$ est la variance, $écart type(X)$ l'écart type,
+$covariance(X; Y)$ la covariance ; l'identité de König-Huygens :
+$variance(X) = EE(X^2) - EE(X)^2$
+Et sur les séries statistiques, les trois se calculent :
+<Calculer>la variance de la série 12 ; 15 ; 9 ; 14
+<Calculer>l'écart type de la série 12 ; 15 ; 9 ; 14
+<Calculer>la variance de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calculer>la covariance des séries 1 ; 2 ; 3 et 2 ; 4 ; 7
+
+<h1>Lois en notation
+$X$ suit $normal(0; 1)$, la normale centrée réduite ; $N$ suit
+$poisson(lambda)$ avec $PP(N = k) = exp(-lambda) lambda^k / factorielle(k)$ ;
+$S$ suit $binomiale(n; p)$ avec $EE(S) = n p$.
+
+<h1>répartition et densité
+$répartition de(X; x) = PP(X <= x)$ et, pour une loi continue,
+$répartition de(X; x) = intégrale(t=-infini;x) densité de(X; t)$.
+
+<h1>Espérances et écarts types, en tableau
+<Dresser>un tableau avec une bordure bleu marine {
+	<mc>	<mc>	<mc>
+	Loi	Espérance	Écart-type
+	[binomiale(n, p)]	[$n p$]	[$racine(n p (1-p))$]
+	[poisson(lambda)]	[$lambda$]	[$racine(lambda)$]
+	[exponentielle(lambda)]	[$1/lambda$]	[$1/lambda$]
+	[uniforme(a, b)]	[$(a+b)/2$]	[$(b-a)/racine(12)$]
+}
+
+<h1>Échantillonnage et concentration
+<Calculer>l'intervalle de fluctuation pour n = 100 et p = 0,3
+<Appliquer>l'inégalité de Bienaymé-Tchebychev pour une espérance de 5, une variance de 2 et un écart de 3
+
+<h1>Estimer une proportion : l'intervalle de confiance
+Sur 100 personnes interrogées, 42 déclarent utiliser les transports en commun. Que dire de la proportion dans toute la population ?
+<Calculer>l'intervalle de confiance à 95 % de la proportion pour 42 succès sur 100
+	<remarque>L'intervalle ne contient pas « la » proportion avec une probabilité de 95 % : c'est la méthode qui, répétée sur de nombreux échantillons, produit un intervalle contenant la vraie proportion dans 95 % des cas.
+
+<page suivante h0>Enseignement supérieur
+
+
+<italique>{Version de démonstration : les saisies sont préremplies pour permettre la lecture intégrale. Les formulaires interactifs d’origine sont conservés dans archives.}
+
+
+<h1>Lois continues du supérieur, calculées
+<Calculer la probabilité que X <= 0,5 pour la loi uniforme(0 ; 2)>
+
+<Calculer la probabilité que X >= 1 pour la loi exponentielle(2)>
+
+<Calculer la probabilité que X <= 2 pour la loi student(10)>
+
+<Calculer la probabilité que X >= 3,84 pour la loi khi-deux(1)>
+
+<Déterminer>le quantile d'ordre 0,975 de la loi student(9)
+
+<h1>La loi des grands nombres, illustrée par une boucle
+La fréquence théorique de pile vaut $0,5$ ; l'écart type de la fréquence observée sur $n$ lancers vaut $1/(2 racine(n))$ — il fond quand $n$ grandit :
+
+pour n: un entier naturel dans [100, 400, 1600, 6400] {
+	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2*racine(n)) ; 4)}.
+}
+
+<h1>Le théorème central limite, en un cadre
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 3 mm et un titre {Théorème central limite} {
+	Si $X_1, ..., X_n$ sont indépendantes, de même loi, d'espérance
+	$mu$ et d'écart type $sigma$, alors la moyenne centrée réduite
+	converge en loi vers $normal(0; 1)$ : c'est ce qui fait de la loi
+	normale la loi des erreurs de mesure.
+}
+
+Le quantile gaussien et son cousin de Student se rejoignent quand le nombre de mesures grandit :
+
+<Déterminer>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<Déterminer>le quantile d'ordre 0,975 de la loi student(100)
+
+<h1>Les lois à densité
+	Une densité de probabilité est positive et d'intégrale 1 ; l'espérance et la variance s'en déduisent :
+<Étudier>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+<Étudier>la loi de densité f(x) = exp(-x) sur [0 ; +infini]
+
+<h1>L'ajustement par moindres carrés
+	Une décroissance mesurée s'ajuste à un modèle exponentiel — les paramètres sortent avec leur écart :
+<Ajuster N(t) = a*exp(b*t) aux données {(0;100) (1;61) (2;37) (3;22) (4;14)}>
+
+<h1>La loi normale
+<Tracer>la densité de la loi normale d'espérance 0 et d'écart type 1
+<Calculer>la probabilité d'être entre -1 et 1 pour la loi normale d'espérance 0 et d'écart type 1
+<Calculer>la probabilité d'être entre -2 et 2 pour la loi normale d'espérance 0 et d'écart type 1
+
+<page suivante h1>Le théorème central limite
+	La somme de $n$ dés, recentrée, s'approche de la loi normale — la densité limite se superpose à la loi exacte :
+<Tracer>l'illustration du théorème central limite avec la somme de 2 dés
+<Tracer>l'illustration du théorème central limite avec la somme de 8 dés
+
+<h1>Statistique inférentielle
+
+Estimer un paramètre, trancher entre deux hypothèses : docdg énonce les hypothèses, donne la statistique, les degrés de liberté et la p-valeur, puis la décision au seuil choisi. La densité de la loi du test montre la zone de rejet et la valeur observée.
+
+<h2>Estimer une moyenne
+Quatre mesures d'une même grandeur ; l'écart type de la population est inconnu, d'où la loi de Student.
+<Calculer>l'intervalle de confiance à 95 % de la moyenne de la série 12 ; 15 ; 9 ; 14
+
+<h2>Tester une valeur de référence
+Une machine doit remplir des flacons de 12 mL. Sur huit flacons prélevés, le volume est-il conforme ?
+<Calculer>le test de Student de l'hypothèse μ = 12 sur la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7, au seuil de 5 %
+	<remarque>La p-valeur est la probabilité, si H₀ était vraie, d'observer un écart au moins aussi grand. Elle ne mesure pas la probabilité que H₀ soit vraie.
+
+<h2>Comparer deux moyennes
+Deux méthodes de dosage appliquées à des échantillons différents. Le test de Welch ne suppose pas les variances égales.
+<Calculer>le test de Student d'égalité des moyennes des séries 20,1 ; 22,3 ; 19,8 ; 21,5 ; 20,9 et 23,2 ; 24,1 ; 22,8 ; 25 ; 23,7 ; 24,4
+
+<h2>Un dé est-il équilibré ?
+<Calculer>le test du khi-deux d'adéquation des effectifs 18 ; 22 ; 20 ; 25 ; 15 ; 20 à la loi uniforme, au seuil de 5 %
+
+<page suivante h2>Deux caractères sont-ils indépendants ?
+Choix d'une option selon la filière, en effectifs :
+<Calculer>le test du khi-deux d'indépendance du tableau {20 ; 30 ; 25 | 15 ; 25 ; 35}
+
+<h2>Les données sont-elles normales ?
+Le test de Student suppose des données issues d'une loi normale ; le test de Shapiro-Wilk le vérifie.
+<Calculer>le test de normalité de Shapiro-Wilk de la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7
+	<remarque>Ne pas rejeter la normalité n'est pas la démontrer : sur huit valeurs, le test a peu de puissance.
+
+<page suivante h1>Analyse de données : la classification
+
+Regrouper des individus semblables sans classes connues d'avance : c'est la classification non supervisée. docdg la conduit par les k-moyennes et par la classification ascendante hiérarchique.
+
+<h2>Les k-moyennes
+On fixe le nombre de groupes ; l'algorithme alterne l'affectation de chaque point au centre le plus proche et le recalcul des centres, jusqu'à stabilité.
+<Tracer>la classification en 3 groupes des points {(0;0) (1;0,2) (0,3;1) (5;5) (5,5;4,8) (4,9;5,6) (9;0) (9,5;0,4)}
+
+<h2>La classification ascendante hiérarchique
+On part d'autant de groupes que de points, et l'on fusionne à chaque étape les deux groupes dont l'union augmente le moins l'inertie (critère de Ward). Le dendrogramme garde la trace des fusions ; le couper à une hauteur donne une partition.
+<Tracer>le dendrogramme des points {(0;0) (1;0,2) (0,3;1) (5;5) (5,5;4,8) (4,9;5,6) (9;0) (9,5;0,4)} en 3 groupes
+	<remarque>Les deux méthodes retrouvent ici les mêmes groupes ; la grande hauteur de la dernière fusion signale une partition bien marquée.
+
+<h1>Autant de dés que l'on veut
+soit n: un entier = 3
+Pour n = #n, on représente la somme de trois dés :
+<Tracer>l'illustration du théorème central limite avec la somme de 3 dés

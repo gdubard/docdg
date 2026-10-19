@@ -1,0 +1,25 @@
+document {
+	orientation: portrait;
+	marges: 10;
+	espacements: 2;
+	taille: 11;
+	interligne: 2,1;
+}
+soit h1: un style = <bleu marine gras section num>
+
+<h1>Étude d'une fonction
+
+<Soient>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
+
+<Dresser>les tableaux de signes de f, g, et h
+
+<Dresser>les tableaux de variations de f, g, et h
+
+<Calculer>les dérivées de f, g et h
+
+<Calculer>les dérivées secondes de f, g et h
+
+<Déterminer>les zéros de f, g et h
+
+<page suivante>
+<Représenter>graphiquement les fonctions f, g et h pour x dans [-5 ; 5] et y dans [-5 ; 5], avec 200 échantillons

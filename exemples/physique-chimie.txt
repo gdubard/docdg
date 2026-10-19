@@ -1,0 +1,183 @@
+document {
+    orientation: portrait;
+    marges: 10;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,5;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Physique-chimie — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Lycée — niveau 3
+
+<h1>Incertitudes et lois de probabilité
+Le facteur d'élargissement à 95 pourcent est le quantile de la loi normale centrée réduite :
+
+<Déterminer>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+
+<Calculer la probabilité que X <= 1,96 pour la loi normale(0 ; 1)>
+
+Un contrôle de qualité sur 20 pièces, chacune défectueuse avec la probabilité 0,05 :
+
+<Calculer>la probabilité que X = 0 pour la loi binomiale(20 ; 0,05)
+
+<Calculer>l'espérance de la loi binomiale(20 ; 0,05)
+
+<h1>Décroissance radioactive
+La décroissance suit $N'(t) = -k N(t)$ ; avec $k = 0,12$ :
+
+<Résoudre>l'équation différentielle N' = -0,12N, d'inconnue N(t)
+
+<h1>Travail d'une force
+<Soit>une fonction Ep(x) = 3x^2 + 2
+
+<Calculer>l'intégrale numérique de Ep entre 0 et 2
+
+<h1>Approximation des petits angles
+<Soit>une fonction g(x) = sin(x)
+<Calculer>le développement limité de g en 0 à l'ordre 3
+
+
+<page suivante h2>Chute libre : hauteur et vitesse
+Une bille est lancée vers le haut à $20$ m/s depuis le sol ; hauteur et vitesse au cours du temps :
+
+<Soient>les fonctions h(t) = -4,9t^2 + 20t et v(t) = -9,8t + 20
+
+<Calculer>les dérivées de h et v
+
+<Déterminer>les zéros de h et v
+
+<Représenter>graphiquement les fonctions h et v pour x dans [0 ; 4,1] et y dans [-25 ; 25]
+
+<h1>Relevé de mesures
+<Dresser>un tableau avec une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine {
+	<mc>	<mc>	<mc>
+	t (s)	h (m)	v (m/s)
+	[0]	[0]	[20]
+	[1]	[15,1]	[10,2]
+	[2]	[20,4]	[0,4]
+	[3]	[15,9]	[-9,4]
+	[4]	[1,6]	[-19,2]
+}
+
+<Afficher>un cadre avec une bordure verte, un fond vert menthe et un titre {À retenir} {
+	La vitesse est la dérivée de la hauteur : $v(t) = h'(t)$. Le sommet
+	de la trajectoire est atteint quand la vitesse s'annule.
+}
+<h1>Équilibrer une équation chimique
+La combustion du propane, coefficients trouvés par conservation des éléments :
+
+<Équilibrer>l'équation C3H8 + O2 -> CO2 + H2O
+
+Et une demi-équation redox en milieu acide, charge comprise :
+
+<Équilibrer>l'équation Fe^2+ + MnO4^- + H^+ -> Fe^3+ + Mn^2+ + H2O
+
+<h1>Masse molaire et tableau d'avancement
+
+<Calculer>la masse molaire de CaCO3
+
+<Dresser>un tableau d'avancement pour CH4 + O2 -> CO2 + H2O avec n(CH4) = 0,5 et n(O2) = 0,8
+
+<page suivante h2>Conversions et constantes
+
+<Convertir>90 km/h en m/s
+
+<Convertir>25 °C en K
+
+<Convertir>1013 hPa en atm
+
+<Donner>la valeur de la vitesse de la lumière
+
+<Donner>la valeur du nombre d'Avogadro
+
+<h1>Propagation d'incertitudes
+
+La résistance mesurée par la loi d'Ohm, avec les incertitudes-types des deux appareils :
+
+<Propager>l'incertitude sur R = U/I avec u(U) = 0,05, u(I) = 0,002, U = 5,12, I = 0,254
+
+<page suivante h0>Enseignement supérieur — niveau 4
+
+<h1>Résolution numérique
+	En chimie des équilibres, la concentration $x$ d'un acide faible ($C = 0,1$ mol/L, $K_a = 1,8 \cdot 10^{-3}$) vérifie une équation sans solution exacte utile — on la résout numériquement :
+	<Résoudre>numériquement l'équation x^2/(0,1 - x) = 0,0018 sur [0 ; 0,09]
+
+<h1>Ajustement de courbe
+	Cinq mesures d'une population de noyaux au cours du temps, ajustées au modèle exponentiel (paramètres libres $a$ et $b$) :
+
+<Ajuster N(t) = a*exp(b*t) aux données {(0;100) (1;61) (2;37) (3;22) (4;14)}>
+
+<h1>Oscillateur harmonique
+	Un ressort de pulsation $omega = 2$ :
+	<Résoudre>l'équation différentielle y'' + 4y = 0
+
+<h1>Équation aux dérivées partielles
+	Une équation de transport avec terme source, du premier ordre :
+	<Résoudre>l'équation aux dérivées partielles u_x + u_y = u
+
+<h1>Intervalle de confiance de Student
+	Pour neuf mesures, le quantile bilatéral à 95 pourcent :
+	<Déterminer>le quantile d'ordre 0,975 de la loi student(8)
+
+<h1>Pendule simple : au-delà des petits angles
+La période dépend de l'amplitude dès que $sin(theta)$ s'écarte de
+	$theta$ — le développement limité mesure l'écart :
+	<Soit>une fonction s(x) = sin(x)
+	<Calculer>le développement limité de s en 0 à l'ordre 5
+
+<page suivante h1>Racines de l'unité, physique du signal
+	L'échantillonnage à $n$ points d'un signal périodique repose sur les racines n-ièmes de l'unité (transformée de Fourier discrète) :
+	<Calculer>les racines sixièmes de l'unité
+
+<h1>Paquet d'ondes gaussien
+	<Soit>une fonction psi(x) = exp(-x^2/2)
+	<Calculer>les dérivées de psi et s
+	<Calculer>l'intégrale numérique de psi entre -3 et 3
+<Représenter>graphiquement la fonction psi pour x dans [-3 ; 3] et y dans [0 ; 1,1], en bleu, avec 200 échantillons
+<Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice et un titre {Le lien} {
+	La densité de probabilité de présence est $valeur absolue(psi(x))^2$ ;
+	l'intégrale sur tout l'espace vaut $1$ après normalisation.
+}
+<page suivante h2>Opérateurs de l'électromagnétisme
+
+Le potentiel et son champ, reliés par le gradient :
+
+<Calculer>le gradient de V(x, y, z) = x^2 + y^2 - 2z^2
+
+Un champ tournant, sa divergence et son rotationnel :
+
+<Calculer>la divergence du champ F(x, y, z) = (x^2 ; xy ; z)
+
+<Calculer>le rotationnel du champ F(x, y, z) = (y ; -x ; 0)
+
+Le laplacien du potentiel — nul, l'équation de Laplace est vérifiée :
+
+<Calculer>le laplacien de V(x, y, z) = x^2 + y^2 - 2z^2
+
+<h1>Signal en créneau et série de Fourier
+
+<Soit>une fonction f(x) = x
+
+<Calculer>la série de Fourier de f à l'ordre 4 sur [-pi ; pi]
+
+<h1>Incertitude sur la pesanteur au pendule
+
+<Propager>l'incertitude sur g = 4pi^2 L/T^2 avec u(L) = 0,001, u(T) = 0,01, L = 0,995, T = 2,004
+
+<Convertir>13,6 eV en J
+
+<Donner>la valeur de la constante de Planck réduite
+

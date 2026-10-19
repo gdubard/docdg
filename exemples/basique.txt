@@ -1,0 +1,643 @@
+document {
+    orientation: portrait;
+    marges: 5;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,4;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Les bases de docdg — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Bases : écriture et mise en forme
+
+soit titre: un style = <rouge gras 18 pt au centre>
+
+<titre>docdg — les bases, niveau 1
+
+<h1>Paragraphes et caractères spéciaux
+	Un document docdg s'écrit comme du texte ordinaire. Le tiret bas x_1, l'esperluette a & b, le pourcentage 50% et le tilde a ~ b s'écrivent tels quels, comme un chemin C:\Users\Léa\Documents. Les caractères qui pilotent le langage se doublent pour s'afficher : << chevrons >>, {{accolades}} et ##dièse.
+De même, il est nécessaire de doubler le caractère $$ pour qu'un dollar isolé s'affiche tel quel : il reçoit 5 $$ d'argent de poche de ses parents, puis encore 3 $$ de sa tante et enfin 6 $$ de ses grands-parents. Les zones mathématiques s'apparient ligne par ligne.
+
+<h1>Produits, comparaisons
+<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+    $a * b$, $x +- y$, $a <= b$, $c >= d$, $e != f$
+}
+
+<h1>Fractions, puissances et indices
+	Les fractions s'écrivent avec /, les puissances avec ^, les indices avec _. L'exposant se lie à l'atome voisin, jamais à la fraction entière — les parenthèses l'y hissent :
+<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+    $1/2$, $a/b/c$, $x^2 + y^2 = r^2$, $x_1 + x_2$   
+    $a^2/b$ — la puissance reste sur $a$
+    $a/b^2$ — la puissance reste sur $b$
+    $(a/b)^2$ — les parenthèses la hissent sur la fraction
+}
+
+<h1>Racines et lettres grecques
+<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+    $racine(2)$, $racine(x^2 + y^2)$, $alpha + beta != gamma$, $pi >= 3$
+}
+
+<page suivante h1>Calculs et interpolation
+Un calcul s'écrit entre #{ et } — la frontière est exacte, une lettre collée à la valeur n'est jamais avalée :
+soit n: un entier naturel = 7
+<Afficher>un cadre avec un fond vert menthe, une bordure bleu canard et des coins arrondis de 3 mm {
+    $n = #n$, donc $n^2 = #{n*n}$ et $n/2 = #{n/2}$
+    
+    $#{n}x$ vaut sept fois $x$, et $#{n}x^2$ garde sa puissance.
+    
+    La moitié de deux façons : $1/2 = #{1/2}$, à côté du littéral $0,5$.
+    
+    Arrondis : #{arrondi(5/3; 2)}, défaut #{défaut(3,7)}, excès #{excès(3,2)}.
+}
+<h1>Variables, boucles et conditions
+soit tva: un décimal = 0,2
+soit prix: un entier = 150
+Le prix TTC est #{prix * (1 + tva)} euros.
+
+pour k: un entier naturel de 1 à 3 {
+    Ligne #k : le carré de #k vaut #{k*k}.
+}
+
+soit note: un entier = 12
+si note au moins 10 {
+    Admis avec #note.
+} sinon {
+    Ajourné.
+}
+
+pour k: un décimal de 0 à 2 avec un pas de 0.25 {
+    Terme #{defaut(4*k)+1} : #k.
+}
+
+<h1>Styles et couleurs en ligne
+	Du <gras>{gras}, de l'<italique>{italique}, du <souligné>{souligné}, du <barré>{barré}, des <petites capitales>{petites capitales} et du <sans empattements>{sans empattements}. Ils se combinent dans une seule balise : <gras italique rouge>{gras italique rouge}. Un nuancier : <rouge>{rouge}, <bleu>{bleu}, <vert>{vert}, <bleu marine>{bleu marine}, <orange>{orange}, <pourpre>{pourpre}, <bleu canard>{bleu canard}, <rouge tomate>{rouge tomate}, <bleu acier>{bleu acier}, <vert forêt>{vert forêt}, <cramoisi>{cramoisi}, <bleu dodger>{bleu dodger}.
+
+<h1>Tailles
+Des tailles : <8 pt>{tout petit}, <10 pt>{petit}, normal,
+<14 pt>{moyen}, <20 pt>{grand}.
+
+<page suivante h1>Alignements, tabulations et sauts
+<à gauche>Contre la marge de gauche.
+<au centre>Centré.
+<à droite>Contre la marge de droite.
+	Un paragraphe nu est justifié par défaut.
+	Autant de lignes, de tabulations et d'espaces dans le fichier.
+
+<h1>Exposants et indices
+	Le texte monte ou descend sans changer de corps : le 1<exposant>{er} de la classe ; l'eau est H<indice>{2}O ; l'aire est x<exposant>{2}. Un relevé sur mesure : x<exposant 4 mm>{2}.
+
+
+<h1>Notes de bas de page
+Le principe<note>{Une note descend au bas de la page, numérotée toute seule.} s'applique sans compteur à gérer.
+
+<h1>Listes
+	Une liste s'écrit <<Dresser une liste STYLE>> — un élément par ligne, sans balise d'élément. Puces : à puces, à puces vides, à puces carrées, sans puce ;
+numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres romains, en chiffres romains majuscules ; à cocher pour les cases.
+<Dresser>une liste numérotée {
+    Lire l'énoncé
+    Souligner les mots importants
+    Rédiger la réponse
+}
+
+<h1>Un tableau simple
+	Une rangée de données s'écrit entre crochets, les cellules séparées par un point-virgule. Les colonnes se déclarent dans la balise, un code par colonne : la première lettre est verticale (h/m/b), la seconde horizontale (g/c/d) — et le langage naturel fait aussi bien : en haut, à gauche vaut hg.
+<Dresser>un tableau {
+	<mg>	<mc>	<md>
+    [Pomme]	[Poire]	[Prune]
+    [Chat]	[Chien]	[Cheval]
+}
+	Rien ici hors des crochets : le tableau n'a donc aucune entête, ce n'est qu'un jeu de colonnes alignées.
+	bordures trace les filets. Tout ce qui s'écrit hors des crochets est une entête : la rangée du haut le devient sans qu'on ait à le dire.
+<Dresser>un tableau {
+	<mc>	<mg>	<md>
+    Figure	Formule	Valeur
+    [carré]	[$1/2 + 1/3$]	[$5/6$]
+    [cercle]	[$racine(2)$]	[$1,41$]
+}
+
+<h1>Un cadre simple
+<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie et un titre {Identité remarquable} {
+    L'identité $(a + b)^2 = a^2 + 2*a*b + b^2$ vaut pour tous les réels.
+    Le <gras>{double produit} $2*a*b$ est celui que l'on oublie.
+}
+
+<h1>Insérer une image
+	Une image s'insère par <<Insérer l'image ...>> ; le chemin s'écrit en entier dans la balise, relatif au fichier source, et les dimensions se disent en prose comme tout attribut — ici une largeur, ailleurs un côté ou une légende. Un nom comportant des espaces s'accolade : <<l'image {mon chat.png}>>.
+<Insérer l'image IMAGES/chat.png avec une largeur de 30 mm>
+
+	Une légende s'ajoute avec <<et la légende {...}>>, sous l'image :
+<Insérer l'image IMAGES/pommes.png avec une largeur de 30 mm et la légende {Cinq pommes}>
+
+<h1>Une image dans un cadre
+	Un cadre accueille une image comme n'importe quel autre contenu ;
+<<au centre>> la place au milieu de la largeur disponible.
+
+<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et un titre {Combien de billes ?} {
+    <au centre>{<Insérer l'image IMAGES/billes.png avec une largeur de 60 mm>}
+
+    Compte les billes de la photo : il y en a #n.
+}
+
+<page suivante h0>Bases : langage complet
+
+soit cle: un style = <gras cramoisi>
+soit h3canard: un style = <bleu canard italique sous-sous-section>
+
+<h1>Valeur absolue, norme, vecteur
+<Afficher un cadre avec un fond vert menthe et une bordure bleu canard>{
+	$abs(x)$, $norme(v)$, la relation $vecteur(AB) + vecteur(BC) = vecteur(AC)$
+	et la norme d'un vecteur $norme(vecteur(AB))$.
+}
+
+<h1>Ensembles de nombres
+	Une capitale doublée est un ensemble en gras de tableau :
+<Afficher un cadre avec un fond bleu Alice,  une bordure bleue, des coins arrondis de 1 mm et un titre {La chaîne usuelle}>{
+	$NN inclus dans ZZ inclus dans DD inclus dans QQ inclus dans RR inclus dans CC$
+}
+	Les ensembles savants suivent — $PP$ pour la probabilité, $KK$ pour un corps, $HH$ pour les quaternions.
+
+<h1>Quantificateurs et connecteurs
+<Afficher un cadre avec un fond vert menthe, une bordure bleu canard, des coins arrondis de 3 mm et un titre {Un énoncé, posé en mots}>{
+	$pour tout x dans RR, il existe y dans RR, y > x$
+	$(P et Q) ou négation de P$
+}
+
+<h1>Implication et équivalence
+<Afficher un cadre avec un fond vert menthe et une bordure bleu canard>{
+	$x = y => x^2 = y^2$
+	$x^2 = y^2 <=> abs(x) = abs(y)$
+	$abs(x) <= 1 <=> -1 <= x <= 1$
+}
+
+<h1>La négation d'un seul !
+	Un ! devant une relation ou un quantificateur donne sa forme barrée :
+<Afficher un cadre avec un fond bleu lavande, une bordure bleu marine, des coins arrondis de 3 mm et un titre {Énoncer un irrationnel}>{
+	$racine(2) dans RR$ et $racine(2) n'appartient pas à QQ$
+	$il n'existe pas de m dans NN, pour tout n dans NN, n <= m$
+}
+
+<h1>Relations et opérations ensemblistes
+<Afficher un cadre avec un fond vert honeydew, une bordure vert foncé, des coins arrondis de 3 mm et un titre {De Morgan en une ligne}>{
+	$non(A union B) = non(A) inter non(B)$
+	$A inter B inclus dans ou égal à A$	$A privé de A = vide$
+}
+
+<h1>Partie entière
+<Afficher un cadre avec un fond rose brumeux et une bordure cramoisie>{
+	$défaut(3,7) = 3$	$excès(3,2) = 4$	$défaut(n/2)$
+}
+<h1>La barre : conjugué, moyenne, adhérence, négation
+<Afficher un cadre avec un fond vieille dentelle, une bordure orange foncé, des coins arrondis de 3 mm et un titre {Quatre lectures d'une barre}>{
+	Conjugué : $conjugué(z) = a - i*b$ quand $z = a + i*b$.
+
+	Moyenne : $moyenne(x) = 1/n somme(k=1; n) x_k$.
+
+	Adhérence : $adhérence(A)$ est le plus petit fermé contenant $A$.
+
+	Complémentaire : $non(A union B)$ est le complémentaire de $A union B$.
+}
+
+<h1>Arithmétique et ensembles
+<Afficher un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un titre {Une notation qui énonce}>{
+	$parties de(A)$ est l'ensemble des parties, $intervalle entier(1; n)$ l'intervalle
+	entier, $card(A)$ le cardinal, $signe(x)$ le signe et
+	$a congru à b modulo n$ une congruence ; la factorielle $factorielle(5)$.
+}
+
+<h1>La règle des mots
+	Une balise s'écrit <<...>> et ses attributs se lisent d'un coup d'œil :
+un <cle>{mot ou groupe de mots français en minuscules} est un style ou un alignement (gras, au centre) ; une <cle>{couleur} se nomme en français, composés compris (bleu marine, vert forêt) ; une
+<cle>{taille} s'écrit Npt.
+
+<page suivante h1>Échappements
+	Une poignée de caractères pilote le langage ; pour les afficher, on les double — c'est toute la règle.
+<Afficher un cadre avec un fond bleu lavande, une bordure pourpre, des coins arrondis de 3 mm et un titre {Doubler rend littéral}>{
+	Chevrons littéraux : << et >>. Accolades : {{ et }}. Dièse : ##. Dollar : $$.
+
+	Une paire équilibrée s'affiche comme une seule, donc l'ensemble en
+	compréhension {{ x : x > 0 }} et l'ensemble vide {{}} s'écrivent
+	par paires.
+
+	Tiret bas x_1, esperluette a & b, 50% de remise, a ~ b et le chemin
+	C:\Users\Léa\Documents s'écrivent tels quels.
+}
+
+
+	Dans un cadre, un retour à la ligne génère un nouveau paragraphe :
+<Afficher un cadre avec un fond bleu lavande, une bordure pourpre et des coins arrondis de 3 mm>{
+	Première ligne d'une adresse
+	seconde ligne de l'adresse
+}
+
+<h1>Structure et sommaire
+	Les mots-clés section, sous-section et sous-sous-section — repliés dans h1, h2, h3 en tête de fichier — se numérotent seuls et nourrissent le sommaire de la première page.
+
+<h2>Un titre de deuxième niveau
+	Cette sous-section se numérote un cran plus bas et s'indente dans le sommaire.
+
+<h3canard>Un titre de troisième niveau
+	Un cran plus profond encore, avec son propre compteur.
+
+<page suivante h1>Le cadre, la citation, le filet
+	Trois objets, une seule famille d'adjectifs : la couleur d'un trait, son dessin — en tirets, en pointillés, double, sans bordure — et son épaisseur. Le cadre prend une largeur ; sans largeur déclarée, un objet occupe toute la colonne.
+
+<Afficher>un filet bleu marine de 0,4 mm, de largeur 90 mm au centre
+
+<Afficher>une citation bleu canard{
+	La parole d'un autre se marque d'un trait à gauche, non d'une boîte fermée : ce que le Markdown écrit d'un chevron, docdg le nomme.
+}
+
+<Afficher>un cadre de largeur 110 mm au centre avec une bordure pourpre en pointillés de 0,5 mm, un fond bleu lavande et des coins arrondis de 3 mm{
+	Un cadre plus étroit que la colonne se place avec les mots des alignements : au centre, à gauche, à droite.
+}
+
+<Afficher>un filet gris anthracite en tirets, de largeur 60 mm au centre
+
+<h1>Le passage en colonnes
+	Un passage se compose sur deux à cinq colonnes. La gouttière vient des espacements du document, un filet peut les séparer, et ce qui suit l'accolade fermante retrouve la pleine largeur.
+
+<Composer>sur trois colonnes avec un filet gris clair {
+	Trois colonnes conviennent à un lexique ou à une liste de mots courts : la ligne est brève, l'œil en saisit plusieurs d'un seul coup.
+
+	Les colonnes s'équilibrent d'elles-mêmes. On ne dit pas où couper : on dit combien de colonnes, et le moteur répartit.
+
+	Un passage plus haut qu'une page se poursuit sur la suivante, en colonnes de même, sans qu'on ait rien à déclarer.
+}
+
+<h1>Listes imbriquées
+	Une liste écrite sous un élément devient sa sous-liste :
+
+<Dresser>une liste à puces{
+	Fruits
+	<Dresser une liste à puces vides>{
+		pommes
+		poires
+	}
+	Légumes
+	<Dresser une liste à puces carrées>{
+		carottes
+		navets
+	}
+}
+
+<Afficher une liste à cocher>{
+	Apporter une règle
+	Coller la feuille dans le cahier
+	Écrire son nom et la date
+}
+
+<Afficher une liste en chiffres romains>{
+	Premier acte
+	Deuxième acte
+}
+
+<h1>Tableaux avancés
+<h2>Fusions déduites de la forme
+	Aucune fusion ne se déclare. Une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit : le titre, seul sur sa rangée, couvre les quatre colonnes. Une entête suivie de plusieurs rangées de données descend sur autant de lignes : Lundi porte deux crochets, il couvre deux rangées.
+
+<Dresser>un tableau {
+	<mc>	<mg>	<mc>	<mc>
+	Bulletin trimestriel
+	Jour	Matière	Note	Coef.
+	Lundi :	[Maths]	[15]	[4]
+				  [Français]	[12]	[3]
+	Mardi :	[EPS]	[16]	[2]
+	Moyenne :	[13,7]
+}
+
+<h2>Entêtes emboîtées
+	Les entêtes verticales se collent aux données : la dernière touche le crochet, celle d'avant la précède, et ainsi de suite. Les tabulations ne servent plus qu'à aligner la source à l'œil — le tableau a la forme qu'on lui voit.
+<Dresser>un tableau {
+	<mc>	<mc>	<mg>	<md>
+	Semaine	Jour	Matière	Note
+	S1 :	 Lundi :	[Maths]	[15]
+						[Français]	[12]
+			Mardi :	[EPS]	[16]
+	S2 :	Lundi :	[Maths]	[18]
+}
+
+<h2>Entêtes fusionnées sur plusieurs colonnes
+	Un tiret après une entête la fait couvrir une colonne de plus, deux tirets deux colonnes. L'espacement autour du tiret ne compte pas : « Identité - », « Identité-» ou un tiret seul dans sa colonne disent la même chose. Un nom composé ne risque rien, le tiret de fusion n'étant jamais suivi d'une lettre.
+<Dresser>un tableau avec des bordures {
+	<mc>	<mc>	<mc>	<mc>
+	Identité -	Coordonnées -
+	Nom	Prénom	Ville	Téléphone
+	[Dupont]	[Iris]	[Lyon]	[06 12 34 56 78]
+	[Martin]	[Noé]	[Vaise]	[06 98 76 54 32]
+}
+
+	Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau.
+<Dresser>un tableau avec des bordures {
+	<mc>	<mc>	<mc>	<mc>
+	Sous-total	-	-	Reste
+	Janvier	Février	Mars	Avril
+	[12]	[15]	[9]	[14]
+}
+
+<h2>Une image dans une cellule
+	Une cellule de tableau accueille une formule ou une image, pas seulement du texte — chaque colonne garde son placement propre.
+<Dresser>un tableau {
+	<mc>	<hg>	<bd>
+	Animal	Formule	Valeur
+	[<Insérer l'image IMAGES/chat.png avec une largeur de 18 mm>]	[$1/2 + 1/3$]	[$5/6$]
+	[<Insérer l'image IMAGES/chien.png avec une largeur de 18 mm>]	[$racine(2)$]	[$1,41$]
+}
+
+<h2>Couleurs du tableau
+	fond colore le corps, la bordure prend sa couleur, l'entête les siennes — sans cadre autour. Les couleurs d'entête habillent toutes les cellules d'entête, la rangée du haut comme la colonne de gauche.
+<Dresser>un tableau avec un écart de 3 mm, un fond bleu Alice, une bordure bleu marine et une entête en blanc sur fond bleu {
+	<mc>	<mg>	<mc>
+	Jour	Matière	Note
+	Lundi :	[Maths]	[15]
+	Mardi :	[Français]	[12]
+}
+
+<h2>Rangées dynamiques
+	Le nombre de colonnes est vérifié à chaque rangée, donc boucles et interpolation vivent dans un tableau.
+<Dresser un tableau > {
+	<mc>	<mg>	<mc>
+	Table des carrés
+	n	Légende	Carré
+	pour n: un entier naturel de 1 à 3 {
+		[ligne #n]	[#n]	[$#n^2$]
+	}
+}
+<h2>Cellules multilignes
+	La balise <<nouvelle ligne>> empile un contenu dans une seule cellule.
+<Dresser>un tableau {
+	<mg>	<mg>
+	Champ		Saisie
+	Nom : 		[Nom :]
+				[Prénom :]
+	Adresse :	[Rue et numéro :]
+				[Ville et code postal :]
+}
+
+<page suivante h1>Cadres avancés
+<h2>Énoncé et solution
+	Une ligne ne portant que --- coupe le cadre en deux parties.
+<Afficher>un cadre de largeur 15 cm au centre avec un fond blanc fumé, une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Problème} {
+	<au centre>{<Insérer l'image FIGURES/figure1.jpg avec une largeur de 40 mm>}
+	
+	Mesure la hauteur du triangle sur ta figure, à l'échelle 1:10.
+	---
+	<Afficher>une liste numérotée {
+		Lire la hauteur en millimètres.
+		Multiplier par 10.
+		Donner la réponse en centimètres.
+	}
+}
+
+<h2>Cadres côte à côte
+	Une <<Afficher une rangée>> pose ses cadres en colonnes d'égale largeur.
+<Afficher>une rangée avec un écart de 5 mm {
+	<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 2 mm et un titre {Énoncé} {
+		Le périmètre d'un triangle rectangle de côtés 3 et 4 se trouve
+		en calculant d'abord l'hypoténuse par le théorème de Pythagore.
+	}
+	<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine, des coins arrondis de 2 mm et un titre {Résultat} {
+		Hypoténuse : $racine(3^2 + 4^2) = 5$, d'où le périmètre $12$.
+		<au centre>{<Insérer l'image FIGURES/figure1.jpg avec une largeur de 25 mm>}
+	}
+}
+
+<h2>Un composant réutilisable
+soit carte{n} = <Afficher un cadre avec un titre {Exercice #n} et une bordure grise>
+pour n: un entier naturel de 1 à 2 {
+	<carte #n>{
+		Calcule $#n^2 + #n$ et écris le résultat ci-dessous.
+	}
+}
+
+<page suivante h1>Grilles : la maquette en zones nommées
+	La grille dispose des zones à la façon d'une maquette : le plan dessine la page avec un mot par case, un nom répété fusionne ses cases, un point marque une case vide. Chaque zone se place et s'habille en langage naturel — [nom : en haut, à gauche] ou le code court [nom hg].
+
+<Afficher>une grille avec des bordures et un écart de 3 mm {
+	<max>	<max>	<max>
+	<min>	titre	titre	date
+	<min>	consigne	corps	corps
+	<min>	logo	corps	corps
+
+	titre : en haut, à gauche, avec un fond bleu Alice et une bordure bleu marine {
+		<bleu marine gras 14 pt>Contrôle de mathématiques
+	}
+	date : en haut, à droite {
+		Le 12 mai
+	}
+	consigne : au milieu, au centre, avec un fond gris perle {
+		Calculatrice autorisée.
+	}
+	logo : au milieu, au centre {
+		<Insérer l'image IMAGES/oiseau.png avec une largeur de 20 mm>
+	}
+	corps : en mc {
+		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
+	}
+}
+
+<h1>Imbrication et titres longs
+	Un conteneur accueille tout ce qu'un autre accueille : les blocs s'emboîtent aussi profondément que la page le permet.
+<Afficher>un cadre avec un fond blanc fumé,  une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Emboîtement} {
+	<au centre>{<gras>{Centré, gras, encadré : trois accolades fermantes à la suite, sans ambiguïté.}}
+}
+
+	Un titre de cadre est du texte ordinaire : il peut courir sur deux lignes et porter un chevron qui n'a rien d'une balise :
+<Afficher un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un  titre {seuil a> b, vérifié sur deux lignes}>{
+	Le titre a débordé sur une seconde ligne et contenait un $>$ littéral.
+}
+
+<page suivante h0>Styles et couleurs — nuancier complet
+
+<h1>La palette de docdg
+
+<h1>Le nuancier
+	Les 148 couleurs, une par nom. Chaque pastille porte la teinte qu'elle nomme :
+	deux pastilles voisines de même valeur signaleraient un doublet, une pastille
+	de la couleur de son groupe une locution tronquée.
+
+<h2>Noirs, gris et blancs
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<noir gras>{███} noir	<blanc gras>{███} blanc	<gris gras>{███} gris
+	<gris clair gras>{███} gris clair	<gris foncé gras>{███} gris foncé	<gris perle gras>{███} gris perle
+	<gris anthracite gras>{███} gris anthracite	<gris souris gras>{███} gris souris	<gris souris clair gras>{███} gris souris clair
+	<gris souris foncé gras>{███} gris souris foncé	<gris ardoise gras>{███} gris ardoise	<gris ardoise clair gras>{███} gris ardoise clair
+	<gris tourterelle gras>{███} gris tourterelle	<argent gras>{███} argent	<blanc fumé gras>{███} blanc fumé
+	<blanc antique gras>{███} blanc antique	<blanc fantôme gras>{███} blanc fantôme	<ivoire gras>{███} ivoire
+	<neige gras>{███} neige	<lin gras>{███} lin	<coquillage gras>{███} coquillage
+	<vieille dentelle gras>{███} vieille dentelle	<blanc navajo gras>{███} blanc navajo	<biscuit gras>{███} biscuit
+	<blé gras>{███} blé	<mocassin gras>{███} mocassin	<soie de maïs gras>{███} soie de maïs
+	<fouet de papaye gras>{███} fouet de papaye	<pêche duveteuse gras>{███} pêche duveteuse	<beige gras>{███} beige
+}
+
+<h2>Rouges
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<rouge gras>{███} rouge	<rouge clair gras>{███} rouge clair	<rouge foncé gras>{███} rouge foncé
+	<rouge sang gras>{███} rouge sang	<rouge brique gras>{███} rouge brique	<rouge tomate gras>{███} rouge tomate
+	<rouge indien gras>{███} rouge indien	<rouge orangé gras>{███} rouge orangé	<cramoisi gras>{███} cramoisi
+	<corail gras>{███} corail	<corail clair gras>{███} corail clair	<saumon gras>{███} saumon
+	<saumon foncé gras>{███} saumon foncé	<rose brumeux gras>{███} rose brumeux	
+}
+
+<h2>Bleus
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<bleu gras>{███} bleu	<bleu clair gras>{███} bleu clair	<bleu foncé gras>{███} bleu foncé
+	<bleu marine gras>{███} bleu marine	<bleu nuit gras>{███} bleu nuit	<bleu ciel gras>{███} bleu ciel
+	<bleu ciel profond gras>{███} bleu ciel profond	<bleu roi gras>{███} bleu roi	<bleu acier gras>{███} bleu acier
+	<bleu acier clair gras>{███} bleu acier clair	<bleu dodger gras>{███} bleu dodger	<bleu canard gras>{███} bleu canard
+	<bleu Alice gras>{███} bleu Alice	<bleu bleuet gras>{███} bleu bleuet	<bleu poudre gras>{███} bleu poudre
+	<bleu pâle gras>{███} bleu pâle	<bleu ardoise gras>{███} bleu ardoise	<bleu ardoise foncé gras>{███} bleu ardoise foncé
+	<bleu ardoise moyen gras>{███} bleu ardoise moyen	<bleu moyen gras>{███} bleu moyen	<bleu outremer gras>{███} bleu outremer
+	<indigo gras>{███} indigo	<lavande gras>{███} lavande	<lavande rosée gras>{███} lavande rosée
+	<azur gras>{███} azur	<cyan gras>{███} cyan	<cyan clair gras>{███} cyan clair
+	<cyan foncé gras>{███} cyan foncé	<turquoise gras>{███} turquoise	<turquoise clair gras>{███} turquoise clair
+	<turquoise foncé gras>{███} turquoise foncé	<turquoise moyen gras>{███} turquoise moyen	<aigue-marine gras>{███} aigue-marine
+	<aigue-marine moyenne gras>{███} aigue-marine moyenne	<sarcelle gras>{███} sarcelle	<cadet gras>{███} cadet
+}
+
+<h2>Verts
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<vert gras>{███} vert	<vert clair gras>{███} vert clair	<vert foncé gras>{███} vert foncé
+	<vert forêt gras>{███} vert forêt	<vert menthe gras>{███} vert menthe	<vert olive gras>{███} vert olive
+	<vert olive terne gras>{███} vert olive terne	<vert olive clair gras>{███} vert olive clair	<vert printemps gras>{███} vert printemps
+	<vert printemps moyen gras>{███} vert printemps moyen	<vert de mer gras>{███} vert de mer	<vert de mer clair gras>{███} vert de mer clair
+	<vert de mer foncé gras>{███} vert de mer foncé	<vert de mer moyen gras>{███} vert de mer moyen	<vert pâle gras>{███} vert pâle
+	<vert prairie gras>{███} vert prairie	<vert citron gras>{███} vert citron	<vert lime gras>{███} vert lime
+	<vert chartreuse gras>{███} vert chartreuse	<vert jaune gras>{███} vert jaune	<vert jaune pâle gras>{███} vert jaune pâle
+	<vert bouteille gras>{███} vert bouteille	<vert d'eau gras>{███} vert d'eau	<vert menthe glacée gras>{███} vert menthe glacée
+}
+
+<h2>Jaunes et oranges
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<jaune gras>{███} jaune	<jaune clair gras>{███} jaune clair	<jaune foncé gras>{███} jaune foncé
+	<jaune paille gras>{███} jaune paille	<jaune paille foncé gras>{███} jaune paille foncé	<jaune citron gras>{███} jaune citron
+	<jaune vif gras>{███} jaune vif	<or gras>{███} or	<verge d'or gras>{███} verge d'or
+	<verge d'or pâle gras>{███} verge d'or pâle	<verge d'or claire gras>{███} verge d'or claire	<orange gras>{███} orange
+	<orange foncé gras>{███} orange foncé	<orange sable gras>{███} orange sable	<orange mandarine gras>{███} orange mandarine
+}
+
+<h2>Violets et magentas
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<violet gras>{███} violet	<violet clair gras>{███} violet clair	<violet foncé gras>{███} violet foncé
+	<violet moyen gras>{███} violet moyen	<violet bleu gras>{███} violet bleu	<pourpre gras>{███} pourpre
+	<pourpre foncé gras>{███} pourpre foncé	<magenta gras>{███} magenta	<magenta moyen gras>{███} magenta moyen
+	<orchidée gras>{███} orchidée	<orchidée foncée gras>{███} orchidée foncée	<chardon gras>{███} chardon
+	<prune gras>{███} prune	<mauve gras>{███} mauve	
+}
+
+<h2>Roses
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<rose gras>{███} rose	<rose clair gras>{███} rose clair	<rose vif gras>{███} rose vif
+	<rose profond gras>{███} rose profond	<rose ancien gras>{███} rose ancien	<rose fuchsia gras>{███} rose fuchsia
+}
+
+<h2>Marrons et terres
+<Dresser>un tableau avec une bordure gris clair {
+	<mg>	<mg>	<mg>
+	<marron gras>{███} marron	<brun gras>{███} brun	<brun clair gras>{███} brun clair
+	<brun foncé gras>{███} brun foncé	<brun chocolat gras>{███} brun chocolat	<terre de Sienne gras>{███} terre de Sienne
+	<terre cuite gras>{███} terre cuite	<tan gras>{███} tan	<bronze gras>{███} bronze
+}
+
+<h1>L'accord des couleurs
+
+<h2>L'adjectif simple s'accorde en genre et en nombre
+	Ils sont 8. Les quatre formes valent la même couleur :
+<Afficher>un cadre avec un fond vert menthe, une bordure vert foncé et des coins arrondis de 2 mm {
+	un trait <noir gras>{noir}, une ligne <noire gras>{noire}, des traits <noirs gras>{noirs}, des lignes <noires gras>{noires}
+	un trait <blanc gras>{blanc}, une ligne <blanche gras>{blanche}, des traits <blancs gras>{blancs}, des lignes <blanches gras>{blanches}
+	un trait <gris gras>{gris}, une ligne <grise gras>{grise}, des traits <gris gras>{gris}, des lignes <grises gras>{grises}
+	un trait <cramoisi gras>{cramoisi}, une ligne <cramoisie gras>{cramoisie}, des traits <cramoisis gras>{cramoisis}, des lignes <cramoisies gras>{cramoisies}
+	un trait <bleu gras>{bleu}, une ligne <bleue gras>{bleue}, des traits <bleus gras>{bleus}, des lignes <bleues gras>{bleues}
+	un trait <vert gras>{vert}, une ligne <verte gras>{verte}, des traits <verts gras>{verts}, des lignes <vertes gras>{vertes}
+	un trait <violet gras>{violet}, une ligne <violette gras>{violette}, des traits <violets gras>{violets}, des lignes <violettes gras>{violettes}
+	un trait <brun gras>{brun}, une ligne <brune gras>{brune}, des traits <bruns gras>{bruns}, des lignes <brunes gras>{brunes}
+}
+
+<h2>L'adjectif en -e s'accorde en nombre seulement
+<Afficher>un cadre avec un fond vert menthe, une bordure vert foncé et des coins arrondis de 2 mm {
+	un trait <beige gras>{beige}, des traits <beiges gras>{beiges}
+	un trait <rouge gras>{rouge}, des traits <rouges gras>{rouges}
+	un trait <jaune gras>{jaune}, des traits <jaunes gras>{jaunes}
+	un trait <pourpre gras>{pourpre}, des traits <pourpres gras>{pourpres}
+	un trait <mauve gras>{mauve}, des traits <mauves gras>{mauves}
+	un trait <rose gras>{rose}, des traits <roses gras>{roses}
+}
+
+<h2>La couleur composée est invariable
+	Un adjectif de couleur composé ne s'accorde jamais — ni en genre, ni en
+	nombre. docdg ne l'accepte pas : il le dit, et rappelle la règle.
+<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie et des coins arrondis de 2 mm {
+	Ces quatre écritures sont incorrectes (présentées ici littéralement, sans déclencher d’erreur) :
+	<<bleue marine>>{{bleue marine}}
+	<<verte menthe>>{{verte menthe}}
+	<<grise perle>>{{grise perle}}
+	<<orange foncée>>{{orange foncée}}
+}
+
+<h2>Le nom de chose employé comme couleur est invariable
+<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie et des coins arrondis de 2 mm {
+	On écrit des cadres <marron gras>{marron}, et non « marrons » ; des filets
+	<orange gras>{orange}, et non « oranges ». Font exception les quatre noms
+	que l'usage a faits adjectifs : <rose gras>{rose}, <mauve gras>{mauve},
+	<pourpre gras>{pourpre}, <beige gras>{beige}.
+}
+
+<h2>La teinte tronquée se dit
+	Une locution qui commence par une teinte connue mais que la table ignore entière s'imprimait jadis en teinte nue, sans rien dire. Elle se dit :
+<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie et des coins arrondis de 2 mm {
+	<<vert sapin>>{{vert sapin}}
+	<<rouge grenat>>{{rouge grenat}}
+}
+
+<page suivante h0>Atelier interactif — à ouvrir en dernier
+
+
+<italique>{Cette partie utilise volontairement des saisies bloquantes. Elle est placée à la fin du recueil pour ne pas interrompre la lecture des autres exemples.}
+
+
+<titre>docdg — les bases, niveau 2 : les saisies interactives
+<h1>La fiche de l'enseignant
+	Un document docdg peut poser des questions au lecteur. Chaque question bloque la suite du document tant que la réponse ne correspond pas au type attendu : un entier s'écrit sans virgule, un décimal avec une virgule, un booléen se dit vrai ou faux.
+
+soit prénom: une chaîne de caractères = <Saisir>{Quel est le prénom de l'élève ?}
+soit nom: une chaîne de caractères = <Saisir>{Quel est le nom de l'élève ?}
+soit âge: un entier = <Saisir>{Quel est son âge ?}
+soit taille: un décimal = <Saisir>{Quelle est sa taille, en mètres ?}
+soit marié: un booléen = <Saisir>{Est-il marié ?}
+soit initiale: un caractère = <Saisir>{Quelle est sa lettre préférée ?}
+soit statut: une chaîne de caractères = si marié { marié } sinon { célibataire }
+soit tarif: un entier = si âge moins de 18 { 5 } sinon { 9 }
+
+<h1>Le portrait, composé à partir des réponses
+	#prénom #nom a #âge ans.
+	Il est #statut.
+	Il mesure #taille m, soit #{taille * 100} cm.
+	Sa lettre préférée est "#initiale".
+	Son entrée au musée coûte #tarif euros, soit #{tarif * 2} euros pour deux.
+
+<h1>Les réponses se calculent
+	Les valeurs saisies sont des valeurs comme les autres : dans dix ans, #prénom aura #{âge + 10} ans ; s'il grandit de 12 cm, il mesurera #{taille + 0,12} m.
+
+<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
+	$#taille  m = #{taille * 100}  cm = #{taille * 1000}  mm$
+}
+	Pour répondre à nouveau à une question, il suffit de cliquer sur la valeur affichée en bleu : le document se replie jusqu'à cette question et se déroule de nouveau.

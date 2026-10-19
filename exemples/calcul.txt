@@ -1,0 +1,103 @@
+document {
+    orientation: portrait;
+    marges: 10;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,7;
+    niveau: cinquième;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit remarque: un style = <gris foncé italique>
+
+<volume>Calcul et nombres — de l'école au collège
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Calcul — école élémentaire
+
+<h1>Les quatre opérations
+	Le calcul s'écrit, se pose en ligne, se vérifie :
+
+<Calculer>247 + 385
+<Calculer>1 000 - 458
+<Calculer>36 * 24
+
+<h1>Décomposer les nombres
+	Un nombre se lit par ses milliers, ses centaines, ses dizaines et ses unités :
+
+<Décomposer>4 782
+<Décomposer>3095
+
+<h1>Fractions de même dénominateur
+	Des parts d'un même tout s'ajoutent et se retranchent :
+
+<Calculer>2/7 + 3/7
+<Calculer>5/8 - 3/8
+
+<h1>La division euclidienne
+	Partager, et dire ce qui reste :
+
+<Effectuer>la division euclidienne de 152 par 6
+
+<h1>Convertir les unités
+<Convertir>3,5 km en m
+<Convertir>150 min en h
+
+<page suivante h0>Nombres — collège (classe de cinquième)
+
+
+<remarque>Ce document est composé au niveau cinquième : les termes du supérieur y sont suivis d'une note de vocabulaire, qui disparaîtra d'elle-même aux niveaux supérieurs. L'énoncé, lui, ne change jamais.
+
+<h1>Les nombres relatifs
+
+<Énoncer>le nombre relatif
+
+<Énoncer>la somme de deux nombres relatifs
+
+<Énoncer>la différence de deux nombres relatifs
+
+<h1>Le calcul
+
+<Énoncer>les priorités opératoires
+
+<Énoncer>l'écriture fractionnaire
+
+<Énoncer>la réduction d'une expression littérale
+
+<Énoncer>le test d'une égalité
+
+<h1>Le repérage
+
+<Énoncer>la demi-droite graduée
+
+<Énoncer>le repère du plan
+
+<h1>La proportionnalité
+
+<Énoncer>l'égalité des produits en croix
+
+<Énoncer>l'augmentation et diminution en pourcentage
+
+<Énoncer>l'échelle d'un plan
+
+<page suivante h1>La géométrie
+
+<Énoncer>les cas d'isométrie des triangles : trois côtés
+
+<Énoncer>la hauteur d'un triangle
+
+<Énoncer>la médiane d'un triangle
+
+<h1>Les statistiques
+
+<Énoncer>l'effectif et fréquence
+
+<Soit>une fonction f(x) = 2x
+
+<Représenter>graphiquement la fonction f pour x appartient à [-3 ; 3] et y à [-6 ; 6], avec 100 échantillons

@@ -1,0 +1,201 @@
+document {
+    orientation: portrait;
+    marges: 10;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,5;
+}
+
+soit volume: un style = <bleu marine gras 19 pt au centre>
+soit h0: un style = <bleu marine gras chapitre num>
+soit h1: un style = <bleu marine gras section num>
+soit h2: un style = <bleu italique sous-section>
+soit h3: un style = <bleu italique sous-sous-section>
+
+<volume>Histoire — exemples progressifs
+
+Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre dans le sommaire pour y accéder directement.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>École élémentaire
+
+soit titre: un style = <bleu nuit gras grand au centre>
+soit h1histoire: un style = <bleu nuit gras section num>
+soit h2histoire: un style = <gras au centre>
+soit remarque: un style = <gris foncé italique>
+
+<titre>Les grandes périodes de l'histoire
+
+<h1histoire>Une frise illustrée
+	Cinq périodes, quatre repères : chaque grande période s'ouvre et se referme sur un événement qui a changé la vie des hommes. Une image accompagne chaque repère — « avec l'image » en fin de ligne, le chemin écrit en entier depuis le dossier du document.
+
+	La frise ne porte pas de titre : elle n'en impose pas. Celui qui la veut l'écrit lui-même, au-dessus comme ici, ou en dessous.
+
+<h2histoire>De l'invention de l'écriture à nos jours
+
+<Construire>la frise chronologique {
+	de -3300 à 476 : Antiquité (L'écriture ouvre la période, la chute de Rome la referme.)
+	de 476 à 1492 : Moyen Âge
+	de 1492 à 1789 : Temps modernes
+	de 1789 à 2025 : Époque contemporaine
+	-3300 : Invention de l'écriture (On commence à écrire sur des tablettes d'argile.) avec l'image histoire/ecriture.svg
+	476 : Chute de l'Empire romain avec l'image histoire/temple.svg
+	1492 : Voyage de Christophe Colomb avec l'image histoire/caravelle.svg
+	1789 : Révolution française (Le peuple prend la Bastille le 14 juillet.) avec l'image histoire/bastille.svg
+}
+
+<page suivante h1histoire>Le Moyen Âge de plus près
+	La même frise se resserre sur une période : l'échelle s'ajuste toute seule, et les cartouches se rangent de part et d'autre du bandeau sans jamais se recouvrir. Le titre, cette fois, se place en dessous.
+
+<Construire>la frise chronologique {
+	de 476 à 987 : Haut Moyen Âge
+	de 987 à 1492 : Moyen Âge central et final
+	496 : Baptême de Clovis
+	800 : Charlemagne empereur avec l'image histoire/temple.svg
+	987 : Hugues Capet roi des Francs avec l'image histoire/chateau.svg
+	1337 : Début de la guerre de Cent Ans
+	1431 : Mort de Jeanne d'Arc
+}
+
+<h2histoire>Le Moyen Âge
+
+<h1histoire>Une image dans le fil du texte
+	Le chemin se nomme dans la balise, de la même façon que pour une vignette de frise : une seule forme à retenir. Un nom comportant des espaces s'accolade — <<l'image {histoire/mon dessin.svg}>>.
+
+<Insérer l'image histoire/chateau.svg avec une largeur de 45 mm et la légende {Un château fort, dessiné en pictogramme}>
+
+	Elle s'emploie aussi au milieu d'une phrase : les seigneurs bâtissaient des châteaux <Insérer l'image histoire/chateau.svg avec une largeur de 12 mm> pour protéger leurs terres, et les marins partaient sur des caravelles <Insérer l'image histoire/caravelle.svg avec une largeur de 12 mm> vers des continents inconnus.
+
+	<remarque>Ces vignettes sont des pictogrammes dessinés pour docdg, non des documents d'époque. Pour un vrai cours, on leur préférera une gravure ou une photographie du domaine public — en veillant alors au poids du fichier, chaque image étant inscrite dans le document.
+
+<page suivante h0>Collège
+
+
+<titre>La frise chronologique au collège
+
+<h1histoire>Ordonner des événements
+
+	Une ligne par événement : la date, deux-points, le titre — et, s'il éclaire, le détail entre parenthèses. Les événements se rangent d'eux-mêmes dans l'ordre du temps, quelle que soit la saisie : c'est la frise qui ordonne, l'élève qui repère.
+
+	La frise s'annonce « la frise chronologique » et rien d'autre. Son titre, s'il en faut un, s'écrit à part — au-dessus ou en dessous, selon ce que la page demande.
+
+<Construire>la frise chronologique {
+	14/07/1789 : Prise de la Bastille
+	05/05/1789 : Ouverture des États généraux (Louis XVI convoque les trois ordres à Versailles.)
+	26/08/1789 : Déclaration des droits de l'homme et du citoyen
+	21/09/1792 : Proclamation de la République
+}
+
+<h2histoire>La Révolution française
+
+<page suivante h1histoire>Se repérer dans le temps
+
+	Une période est un événement qui dure : ses deux dates s'écrivent « de 476 à 1492 », « 476 - 1492 », « 476 -- 1492 » ou « 476 — 1492 », au choix, et elle occupe l'intérieur du bandeau. Les quatre grandes périodes de l'histoire tiennent ainsi en quatre lignes — la Préhistoire les précède, avant que l'écriture ne commence à tout consigner.
+
+<h2histoire>Les grandes périodes de l'histoire
+
+<Construire>la frise chronologique {
+	de -3300 à 476 : Antiquité (L'écriture ouvre la période, la chute de Rome la referme.)
+	de 476 à 1492 : Moyen Âge
+	de 1492 à 1789 : Temps modernes
+	de 1789 à 2025 : Époque contemporaine
+	-3300 : Invention de l'écriture
+	476 : Chute de l'Empire romain d'Occident
+	1492 : Premier voyage de Christophe Colomb
+	1789 : Révolution française
+}
+
+<page suivante h0>Lycée
+
+
+<titre>La frise chronologique au lycée
+
+<h1histoire>La frise thématique et multilinéaire
+	Une bande nommée porte son nom dans la marge, ses périodes dans son bandeau et ses cartouches de part et d'autre. Toutes les bandes partagent la même échelle du temps : ce qui est simultané se lit dans une même verticale, et la cause s'articule à l'effet.
+
+<h2histoire>Le premier XXe siècle
+
+<Construire>la frise chronologique {
+	politique {
+		de 1914 à 1918 : Grande Guerre
+		06/02/1934 : Crise du 6 février
+		de 1936 à 1938 : Front populaire
+	}
+	économie {
+		de 1929 à 1939 : Grande Dépression
+		24/10/1929 : Krach de Wall Street
+	}
+	société {
+		1936 : Congés payés (Les accords Matignon les instituent.)
+	}
+}
+
+<page suivante h1histoire>Périodiser
+	Un découpage n'est pas donné : il se construit. Poser les régimes dans le bandeau, c'est déjà proposer une lecture — et rendre visibles les ruptures qui la fondent.
+
+<h2histoire>Les régimes français depuis 1789
+
+<Construire>la frise chronologique {
+	de 1792 à 1804 : Première République
+	de 1804 à 1814 : Premier Empire
+	de 1814 à 1848 : Monarchies constitutionnelles
+	de 1848 à 1852 : Deuxième République
+	de 1852 à 1870 : Second Empire
+	de 1870 à 1940 : Troisième République
+	de 1946 à 1958 : Quatrième République
+	de 1958 à 2025 : Cinquième République
+}
+
+<page suivante h0>Enseignement supérieur
+
+
+<titre>La frise chronologique dans le supérieur
+
+<h1histoire>Les échelles du temps
+	Braudel distingue trois temps : celui, presque immobile, des structures ; celui, cyclique, des conjonctures ; celui, bref, de l'événement. Trois bandes sur une même échelle donnent à voir ce que chacune retient — et ce qu'elle laisse échapper.
+
+<h2histoire>Les trois temps de Braudel
+
+<Construire>la frise chronologique {
+	longue durée {
+		de 1450 à 1850 : Économie-monde européenne
+		de 1500 à 1800 : Régime démographique ancien (Fortes mortalités, natalité élevée.)
+	}
+	conjoncture {
+		de 1660 à 1690 : Dépression
+		de 1730 à 1770 : Expansion
+		de 1817 à 1851 : Crise économique
+	}
+	événement {
+		1492 : Voyage de Colomb
+		1789 : Prise de la Bastille
+		1848 : Printemps des peuples
+	}
+}
+
+<page suivante h1histoire>Deux découpages en regard
+	Le découpage scolaire fait commencer l'époque contemporaine en 1789 et le XXe siècle en 1901. Hobsbawm propose tout autre chose : un long XIXe siècle qui court de la Révolution à Sarajevo, un court XXe siècle qui va de Sarajevo à la chute de l'URSS. Poser les deux découpages l'un sous l'autre, c'est rendre discutable ce que chacun tient pour évident.
+
+<h2histoire>Deux périodisations concurrentes
+
+<Construire>la frise chronologique {
+	découpage scolaire {
+		de 1789 à 1900 : XIXe siècle
+		de 1901 à 2000 : XXe siècle
+	}
+	découpage de Hobsbawm {
+		de 1789 à 1914 : Long XIXe siècle
+		de 1914 à 1991 : Court XXe siècle
+	}
+	repères {
+		1789 : Révolution française
+		1914 : Attentat de Sarajevo
+		1991 : Dissolution de l'URSS
+	}
+}
+
+	Les bornes ne coïncident pas, et c'est l'objet du débat : une périodisation n'est pas un fait mais une hypothèse sur ce qui fait rupture.
+
