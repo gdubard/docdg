@@ -1,0 +1,65 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,2;
+	niveau: terminale;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+<h1>Exponentielle et logarithme — terminale, spécialité
+
+<h2>Ce qui a été vu avant
+<Rappelle>le lien entre signe de la dérivée et variations
+
+<h2>L'exponentielle
+<Énonce>la fonction exponentielle <étiquette>{exp}
+	<remarque>L'existence est admise ; c'est l'unicité qui se démontre.
+
+<h2>Elle ne s'annule jamais, elle est strictement positive
+<Énonce>l'exponentielle ne s'annule jamais <étiquette>{nonnul}
+<Démontre>l'exponentielle ne s'annule jamais
+
+<Énonce>la stricte positivité de l'exponentielle
+
+
+<Démontre>la stricte positivité de l'exponentielle
+	<remarque>L'ordre compte : le lemme <renvoi>{nonnul} précède la relation fonctionnelle, qui précède la positivité. Cet enchaînement évite le théorème des valeurs intermédiaires, hors programme de première où l'exponentielle est introduite.
+
+<h2>La relation fonctionnelle
+<Énonce>la relation fonctionnelle de l'exponentielle <étiquette>{relfonc}
+<Démontre>la relation fonctionnelle de l'exponentielle
+
+<page suivante h2>Le logarithme
+<Énonce>la fonction logarithme népérien <étiquette>{ln}
+	<remarque>L'existence de la réciproque repose sur la stricte croissance de l'exponentielle et sur le corollaire du théorème des valeurs intermédiaires.
+
+<Énonce>la relation fonctionnelle du logarithme
+<Démontre>la relation fonctionnelle du logarithme
+
+<Énonce>la dérivée du logarithme
+<Démontre>la dérivée du logarithme
+
+<h2>Croissances comparées
+<Énonce>les croissances comparées
+<Démontre>les croissances comparées
+
+<page suivante h2>Exercices types
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — résoudre une équation} {
+	Résoudre dans $RR$ l'équation $e^(2x) - 3e^x + 2 = 0$.
+}
+<correction>Correction. Posons $X = e^x$, qui est strictement positif d'après la stricte positivité de l'exponentielle. L'équation devient $X^2 - 3X + 2 = 0$, de discriminant $9 - 8 = 1$, donc de racines $X = 1$ et $X = 2$. Toutes deux sont strictement positives, donc admissibles. La stricte croissance de l'exponentielle donne alors $x = 0$ et $x = ln(2)$.
+	<remarque>Le changement d'inconnue n'est licite que parce que l'exponentielle ne prend que des valeurs strictement positives : il faut le dire, et écarter d'emblée une racine négative si elle apparaissait.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — une limite} {
+	Déterminer la limite en $+infini$ de $f(x) = (e^x - x^3)/(e^x + x)$.
+}
+<correction>Correction. On factorise $e^x$ au numérateur et au dénominateur : $f(x) = (1 - x^3/e^x)/(1 + x/e^x)$. D'après les croissances comparées, $x^3/e^x$ et $x/e^x$ tendent vers $0$. La limite vaut donc $1$.
+
+<h2>Pour aller plus loin
+	Le lien entre signe de la dérivée et variations est admis au lycée ; sa démonstration relève de la licence. docdg la sert et le signale.
+<Démontre>le lien entre signe de la dérivée et variations, au niveau licence 1

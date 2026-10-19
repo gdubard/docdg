@@ -1,0 +1,62 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,8;
+	niveau: cinquième;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+
+<h1>Les nombres au collège — classe de cinquième
+
+<remarque>Ce document est composé au niveau cinquième : les termes du supérieur y sont suivis d'une note de vocabulaire, qui disparaîtra d'elle-même aux niveaux supérieurs. L'énoncé, lui, ne change jamais.
+
+<h2>Les nombres relatifs
+
+<Énonce>le nombre relatif
+
+<Énonce>la somme de deux nombres relatifs
+
+<Énonce>la différence de deux nombres relatifs
+
+<h2>Le calcul
+
+<Énonce>les priorités opératoires
+
+<Énonce>l'écriture fractionnaire
+
+<Énonce>la réduction d'une expression littérale
+
+<Énonce>le test d'une égalité
+
+<h2>Le repérage
+
+<Énonce>la demi-droite graduée
+
+<Énonce>le repère du plan
+
+<h2>La proportionnalité
+
+<Énonce>l'égalité des produits en croix
+
+<Énonce>l'augmentation et diminution en pourcentage
+
+<Énonce>l'échelle d'un plan
+
+<h2>La géométrie
+
+<Énonce>les cas d'isométrie des triangles : trois côtés
+
+<Énonce>la hauteur d'un triangle
+
+<Énonce>la médiane d'un triangle
+
+<h2>Les statistiques
+
+<Énonce>l'effectif et fréquence
+
+<Soit>une fonction f(x) = 2x
+
+<Représente>graphiquement la fonction f pour x appartient à [-3 ; 3] et y à [-6 ; 6], avec 100 échantillons

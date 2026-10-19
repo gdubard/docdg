@@ -1,0 +1,210 @@
+document {
+	orientation: portrait;
+	marges: 12;
+	espacements: 2;
+	taille: 11;
+	interligne: 1,6;
+	niveau: terminale;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+
+<h1>Écrire soi-même sa démonstration
+
+	Les documents <gras>{demonstration3} et <gras>{demonstration4} montrent ce que docdg démontre seul : l'énoncé suffit, le moteur cherche la preuve et la rédige. Celui-ci montre l'autre moitié du travail — celle où <gras>{l'auteur écrit les mathématiques et le moteur fournit la charpente}.
+	Chacun des onze raisonnements a sa forme. On l'annonce après le verbe, on nomme ses étapes, et le moteur écrit l'annonce, les intitulés et la conclusion — jamais les mathématiques. Comparez la source et le rendu : ce qui manque dans la source est exactement ce que le moteur ajoute.
+
+<h2>Le raisonnement direct
+
+	La forme nue : pas de modificateur, pas d'étapes. Le moteur pose l'annonce, l'auteur enchaîne.
+
+<Montre>que la somme de deux nombres impairs est paire {
+Deux nombres impairs s'écrivent $2k + 1$ et $2l + 1$, avec $k$ et $l$ entiers.
+Leur somme vaut $2k + 1 + 2l + 1 = 2(k + l + 1)$, qui est le double d'un entier.
+}
+
+<h2>Par l'absurde
+
+	Deux étapes nommées : <gras>{absurde} pose l'hypothèse que l'on veut ruiner, <gras>{contradiction} dit ce qui la ruine. Le moteur les annonce et conclut.
+
+<Montre>par l'absurde que $racine(2)$ n'est pas un nombre décimal {
+absurde{
+$racine(2)$ est décimal : il s'écrit $a/10^n$ avec $a$ entier et $n$ entier naturel
+}
+En élevant au carré, $2 = a^2/10^(2n)$, donc $a^2 = 2 * 10^(2n)$.
+Le membre de droite se termine par un $0$ dès que $n >= 1$, et vaut $2$ si $n = 0$.
+Or le carré d'un entier ne se termine jamais par $2$, et $a^2 = 2$ est impossible puisque $racine(2)$ n'est pas entier.
+contradiction{
+aucun entier $a$ ne convient
+}
+}
+
+<page suivante h2>Par contraposée
+
+	Une seule étape, <gras>{contraposée}, qui énonce la proposition que l'on va démontrer à la place. Le moteur rappelle en fin de preuve que la contraposition rend l'énoncé de départ.
+
+<Montre>que si $n^2$ est pair alors $n$ est pair {
+Cette implication se démontre plus commodément dans l'autre sens.
+}
+
+<Montre>par contraposée que si $n^2$ est pair alors $n$ est pair {
+contraposée{
+si $n$ est impair, alors $n^2$ est impair
+}
+Un entier impair s'écrit $n = 2k + 1$ avec $k$ entier.
+Son carré vaut $n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$, qui est impair.
+}
+
+	<remarque>La première forme, sans étape, laisse l'auteur seul : le moteur annonce et se tait. La seconde nomme le raisonnement, et la conclusion s'écrit d'elle-même.
+
+<h2>Par récurrence
+
+	Les deux étapes obligées : <gras>{initialisation} et <gras>{hérédité}. Le moteur les intitule et invoque le principe de récurrence.
+
+<Montre>par récurrence que pour tout entier naturel $n$, $7^n - 1$ est divisible par $6$ {
+initialisation{
+Au rang $0$, $7^0 - 1 = 0$, qui est divisible par $6$.
+}
+hérédité{
+Supposons $7^n - 1 = 6q$ avec $q$ entier. Alors $7^(n+1) - 1 = 7(7^n - 1) + 6 = 42q + 6 = 6(7q + 1)$, qui est encore divisible par $6$.
+}
+}
+
+	<remarque>Lorsque la formule est une somme que le calcul formel sait vérifier, le corps devient inutile : <gras>{demonstration3} montre la même récurrence écrite en une seule ligne, sans accolades.
+
+<page suivante h2>Par disjonction de cas
+
+	Autant d'étapes <gras>{cas …} que de cas. Le titre de l'étape suit le mot : il devient l'intitulé du cas. Le moteur les numérote en toutes lettres et conclut que les cas couvrent tout.
+
+<Montre>par disjonction de cas que pour tout entier $n$, le produit $n(n+1)$ est pair {
+Tout entier est pair ou impair : ces deux cas épuisent les possibilités.
+cas $n$ est pair{
+$n$ s'écrit $2k$, donc $n(n+1) = 2k(n+1)$ est pair.
+}
+cas $n$ est impair{
+$n$ s'écrit $2k + 1$, donc $n + 1 = 2k + 2 = 2(k+1)$ est pair, et $n(n+1)$ aussi.
+}
+}
+
+<h2>Par élément quelconque
+
+	Une étape <gras>{soit}, qui pose l'élément. Le moteur rappelle à la fin qu'il était quelconque — c'est ce qui autorise la généralisation.
+
+<Montre>par élément quelconque réel $x$, $x^2 - 4x + 7 > 0$ {
+soit{
+$x$ un réel
+}
+La forme canonique donne $x^2 - 4x + 7 = (x - 2)^2 + 3$.
+Un carré est positif, donc cette somme est au moins égale à $3$, donc strictement positive.
+}
+
+<page suivante h2>Par le principe des tiroirs
+
+	Deux étapes, <gras>{objets} et <gras>{tiroirs}, qui disent ce que l'on range et où. Le moteur formule le principe et conclut.
+
+<Montre>par le principe des tiroirs que parmi six entiers quelconques, deux au moins ont le même reste dans la division par cinq {
+objets{
+les six entiers choisis
+}
+tiroirs{
+les cinq restes possibles dans la division par cinq
+}
+La division euclidienne par $5$ donne un reste parmi $0$, $1$, $2$, $3$ et $4$, soit cinq valeurs pour six entiers.
+}
+
+<h2>L'existence et l'unicité
+
+	Deux étapes, <gras>{existence} et <gras>{unicité}. L'énoncé s'ouvre sur les mots « l'existence et l'unicité » : c'est à eux que le moteur reconnaît la forme.
+
+<Montre>l'existence et l'unicité du quotient et du reste de la division euclidienne de $17$ par $5$ {
+existence{
+En retranchant $5$ à $17$ tant que le résultat reste positif, on obtient $17 = 5 * 3 + 2$, avec $0 <= 2 < 5$.
+}
+unicité{
+Si $17 = 5q + r = 5q' + r'$ avec deux restes dans $[0 ; 5[$, alors $5(q - q') = r' - r$. Le membre de droite est de valeur absolue strictement inférieure à $5$, et le gauche est un multiple de $5$ : tous deux sont nuls, donc $q = q'$ et $r = r'$.
+}
+}
+
+<page suivante h1>Les deux raisonnements du supérieur
+
+	Les huit formes précédentes se rencontrent du collège au lycée. Les trois suivantes appartiennent à l'enseignement supérieur, mais leur charpente s'écrit exactement de la même façon.
+
+<h2>Par analyse-synthèse
+
+	<gras>{analyse} suppose le problème résolu et en tire la forme obligée de la solution ; <gras>{synthèse} vérifie que cette forme convient. Le moteur intitule les deux temps, et ne conclut pas : l'analyse-synthèse conclut d'elle-même.
+
+<Montre>par analyse-synthèse que toute fonction de $RR$ dans $RR$ s'écrit de façon unique comme somme d'une fonction paire et d'une fonction impaire {
+analyse{
+Supposons $f = p + i$ avec $p$ paire et $i$ impaire. En évaluant en $-x$, il vient $f(-x) = p(x) - i(x)$. En additionnant puis en soustrayant, $p(x) = (f(x) + f(-x))/2$ et $i(x) = (f(x) - f(-x))/2$ : la décomposition, si elle existe, est celle-là et pas une autre.
+}
+synthèse{
+Réciproquement, ces deux fonctions conviennent : leur somme vaut $f$, la première est paire et la seconde impaire, comme le montre l'échange de $x$ et $-x$.
+}
+}
+
+<h2>Par double implication
+
+	L'équivalence se démontre en deux temps : une implication, puis sa réciproque. Les deux étapes portent le nom de la <gras>{direction} et non du rang — <gras>{directe} et <gras>{réciproque} —, si bien qu'on ne peut pas les intervertir sans que le document le dise. Pour « P si et seulement si Q », le sens direct est P implique Q.
+
+<Montre>par double implication qu'un entier est pair si et seulement si son carré est pair {
+directe{
+Si $n = 2k$, alors $n^2 = 4k^2 = 2(2k^2)$, qui est pair.
+}
+réciproque{
+Si $n$ est impair, $n = 2k + 1$ et $n^2 = 2(2k^2 + 2k) + 1$ est impair. Par contraposition, un carré pair impose un entier pair.
+}
+}
+
+	<remarque>Ne pas confondre avec la double inclusion, qui suit : deux lettres les séparent, et elles ne démontrent pas la même chose. La double implication établit une équivalence entre deux <gras>{propositions} ; la double inclusion, une égalité entre deux <gras>{ensembles}. Écrire l'une pour l'autre est refusé.
+
+<h2>Par double inclusion
+
+	Deux étapes, <gras>{directe} et <gras>{réciproque}, une par inclusion. Le moteur les intitule première et seconde inclusion, et conclut par la double inclusion.
+
+<Montre>par double inclusion que le complémentaire de l'union de deux parties est l'intersection de leurs complémentaires {
+directe{
+Soit $x$ dans le complémentaire de $A uu B$. Alors $x$ n'appartient ni à $A$ ni à $B$, donc il appartient au complémentaire de $A$ et à celui de $B$, donc à leur intersection.
+}
+réciproque{
+Soit $x$ dans l'intersection des deux complémentaires. Il n'appartient pas à $A$ et pas à $B$, donc pas à leur union, donc il est dans le complémentaire de l'union.
+}
+}
+
+<page suivante h1>La preuve logée dans l'énoncé
+
+	Les dix formes valent aussi <gras>{à l'intérieur d'un environnement numéroté}, sous le mot <gras>{démonstration} : la preuve suit son énoncé au lieu d'en être séparée, et le renvoi porte sur le numéro.
+
+<Énonce>le théorème <étiquette>{carre-impair} {
+Le carré d'un entier impair est impair.
+
+démonstration par élément quelconque entier impair $n$, $n^2$ est impair {
+soit{
+$n$ un entier impair, qui s'écrit donc $n = 2k + 1$ avec $k$ entier
+}
+Son carré vaut $n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$, qui est impair.
+}
+}
+
+<Énonce>le corollaire {
+Si le carré d'un entier est pair, cet entier est pair.
+
+démonstration par contraposée que si $n^2$ est pair alors $n$ est pair {
+contraposée{
+si $n$ est impair, alors $n^2$ est impair
+}
+C'est exactement le théorème <renvoi>{carre-impair}.
+}
+}
+
+<h2>Sans raisonnement nommé
+
+	Le mot <gras>{démonstration} seul suffit : le moteur compose la preuve sous son intitulé, sans annonce ni conclusion — c'est la forme la plus discrète, celle des corollaires immédiats.
+
+<Énonce>la propriété {
+La somme de trois entiers consécutifs est divisible par trois.
+
+démonstration {
+Ces trois entiers s'écrivent $n$, $n + 1$ et $n + 2$. Leur somme vaut $3n + 3 = 3(n + 1)$.
+}
+}

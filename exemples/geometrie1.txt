@@ -1,0 +1,42 @@
+document {
+	orientation: portrait;
+	marges: 5;
+	espacements: 2;
+	taille: 11;
+	interligne: 2,0;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+
+<h1>Géométrie — les figures planes
+
+<h2>Points, droites, demi-droites et segments
+	On place un point — le mot est celui du compas posé sur la feuille. En géométrie, un point ne se donne pas par ses coordonnées mais par ses distances aux autres : trois longueurs suffisent à fixer un triangle. Un point placé est déclaré : les figures suivantes peuvent s'y référer.
+	Entre deux points placés, la notation fait la figure : parenthèse pour la droite, crochet pour l'extrémité comprise.
+
+<Place>les points A, B et C tels que AB = 5 cm, BC = 4 cm et AC = 3 cm
+
+<Trace>la droite (AB)
+<Trace>la demi-droite [AB)
+<Trace>la demi-droite (AB]
+<Trace>le segment de droite [AB]
+
+	Un segment se donne aussi par sa longueur seule :
+
+<Trace>le segment [CD] tel que CD = 4 cm
+<Trace>la demi-droite (EF] telle que EF = 3,5 cm
+
+<h2>Triangles
+<Trace>le triangle ABC équilatéral, de côté 5 cm
+<Trace>le triangle ABC isocèle en A, de côté 5 cm
+<Trace>le triangle ABC rectangle en A, de côté AB 3 cm et de côté AC 4 cm, avec les marques
+
+<h2>Quadrilatères
+<Trace>le carré ABCD, de côté 4 cm, avec les marques
+<Trace>le losange ABCD, de côté 3 cm et d'angle 60
+
+<page suivante h2>Cercles
+	Le rayon se donne en centimètres. Le disque est le cercle et son intérieur :
+
+<Trace>le cercle O, de rayon 3 cm
+<Trace>le disque O, de rayon 2 cm

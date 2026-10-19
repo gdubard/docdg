@@ -1,0 +1,50 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 1,4;
+	niveau: master 2;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+<h1>Leçon d'algèbre — représentations des groupes finis
+
+<h2>Prérequis de la leçon
+<Dresse>les prérequis du théorème de Maschke
+
+<h2>Le développement
+<Énonce>le théorème de Maschke <étiquette>{maschke}
+<Démontre>le théorème de Maschke
+
+<h2>Ce qui en découle
+<Énonce>l'orthogonalité des caractères
+	<remarque>Le théorème <renvoi>{maschke} fournit la semi-simplicité, sans laquelle la théorie des caractères n'aurait pas d'objet.
+
+<h2>À l'agrégation, rien n'est admis
+	Un même énoncé, un seul identifiant, deux exigences : la licence énonce sans preuve ce que le concours demande de démontrer.
+<Énonce>le théorème de Cayley-Hamilton
+<Énonce>la décomposition de Dunford
+<Énonce>les théorèmes de Sylow
+
+<h2>Outils mobilisés
+<Rappelle>la formule orbite-stabilisateur et l'équation aux classes
+<Rappelle>le théorème de Lagrange
+
+<page suivante h2>Exercices types
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — un groupe d'ordre p au carré est abélien} {
+	Soit $p$ un nombre premier et $G$ un groupe d'ordre $p^2$. Montrer que $G$ est abélien.
+}
+<correction>Correction. L'équation aux classes appliquée à l'action de $G$ sur lui-même par conjugaison donne $|G| = |Z(G)| + somme(i=1;r) [G : Stab(x_i)]$, chaque terme de la somme étant un multiple de $p$ strictement supérieur à $1$. Donc $p$ divise $|Z(G)|$, et le centre n'est pas trivial.
+	Si $|Z(G)| = p^2$, le groupe est abélien. Sinon $|Z(G)| = p$, et le quotient $G//Z(G)$ est d'ordre $p$, donc cyclique. Or si $G//Z(G)$ est cyclique, $G$ est abélien — et alors $Z(G) = G$, ce qui contredit $|Z(G)| = p$. Ce second cas est donc impossible.
+	<remarque>L'argument « $G//Z(G)$ cyclique entraîne $G$ abélien » mérite d'être su : c'est un classique de leçon, et il se démontre en trois lignes.
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — dénombrer des coloriages} {
+	De combien de façons peut-on colorier les sommets d'un carré avec $k$ couleurs, deux coloriages se déduisant l'un de l'autre par une rotation étant identifiés ?
+}
+<correction>Correction. Le groupe agissant est le groupe cyclique des quatre rotations. La formule de Burnside donne le nombre d'orbites comme moyenne des points fixes : l'identité en fixe $k^4$, les rotations d'un quart et de trois quarts de tour $k$ chacune, et le demi-tour $k^2$.
+	Le nombre de coloriages vaut donc $(k^4 + k^2 + 2k)/4$.
+	<remarque>Pour $k = 2$, on trouve $6$ : on peut les énumérer à la main et vérifier.

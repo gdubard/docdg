@@ -1,0 +1,43 @@
+document {
+	orientation: portrait;
+	marges: 15;
+	taille: 11;
+	interligne: 2;
+	niveau: quatrième;
+}
+soit h1 = <bleu marine gras section num>
+soit h2 = <bleu italique sous-section>
+soit remarque = <gris foncé italique>
+soit correction = <fond gris clair>
+
+<h1>La transformation chimique — classe de quatrième
+
+<h2>Ce qu'il faut savoir avant
+<Dresse>les prérequis de la conservation de la masse au cours d'une réaction
+
+<h2>Les énoncés du chapitre
+<Énonce>la transformation chimique <étiquette>{transformation}
+	<remarque>La distinction avec le changement d'état est déclarée comme une dépendance : l'énoncé du changement d'état est convoqué, non paraphrasé.
+<Énonce>la conservation des atomes <étiquette>{atomes}
+<Énonce>la conservation de la masse au cours d'une réaction <étiquette>{masse}
+	<remarque>Le corpus enregistre que cette loi cesse d'être exacte pour les transformations nucléaires. L'information ne s'affiche pas en quatrième, mais elle est là, et elle ressortira en terminale.
+
+<h2>Écrire une équation
+<Énonce>l'équation de réaction
+	L'ajustement des nombres n'est pas une devinette : il découle de <renvoi>{atomes}.
+<Équilibre>CH4 + O2 -> CO2 + H2O
+	<remarque>Les nombres stœchiométriques ci-dessus sont CALCULÉS, non saisis. Ils sont obtenus par le noyau de la matrice de composition, augmentée d'une ligne de charge. Une équation impossible serait signalée comme telle.
+
+<h2>Les tests d'identification
+<Énonce>le test du dioxygène
+<Énonce>le test du dioxyde de carbone
+<Énonce>le test de l'eau
+
+<h2>Exercice type
+
+<Affiche>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — la combustion du carbone} {
+	On brûle 3 g de carbone dans un flacon fermé contenant 8 g de dioxygène.
+	Écrire l'équation de la réaction, puis déterminer la masse de dioxyde de carbone formé.
+}
+<correction>Correction. L'équation s'écrit <Équilibre>C + O2 -> CO2. Le flacon étant fermé, <renvoi>{masse} impose que la masse totale se conserve : la masse de dioxyde de carbone formé vaut $3 + 8 = 11$ g.
+	<remarque>Le système fermé n'est pas un détail de l'énoncé : c'est l'hypothèse déclarée de la loi. Un flacon ouvert donnerait un résultat apparemment contradictoire, et c'est un bon sujet de discussion.
