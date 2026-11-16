@@ -275,7 +275,7 @@ images, lois en prose : « la loi de Poisson de paramètre 1,5 ») ; plus aucun
 accent grave de Markdown ; `<page suivante h2>` rétabli dans `geometrie.txt` ;
 écritures informatiques retirées (`[-2, 3)`, `[100, 400, …]`, `0.25`, `1e-6`,
 `sqrt`, produits à astérisque) ; textes périmés corrigés ; sous-sections de la
-vitrine sans numéro. Aucun nombre de lignes ne change. `references-pdf/` porte
+vitrine sans numéro. Aucun nombre de lignes ne change. `pdf/` porte
 leurs PDF du 13 novembre.
 
 **Le bandeau et l'application.** Huit modèles de `classeur.json` perdent leur
@@ -333,7 +333,7 @@ ses constats sont repris.
   des chapitres assemblés.
 - *Manuel et corpus.* Quatre formulations reprises ; hypothèses complétées
   dans trois fiches (Bayes, convergence dominée, inégalité de la moyenne).
-- *Livraison.* La graine est régénérée ; `references-pdf/LISEZ-MOI.md` nomme
+- *Livraison.* La graine est régénérée ; `pdf/LISEZ-MOI.md` nomme
   les deux PDF antérieurs aux corrections.
 
 **Le suivi de `docdg2.zip`.** Dernières réserves reprises : le diagnostic
@@ -345,7 +345,7 @@ avec leur niveau, sont tous rendus sans admission ; deux exemples du manuel
 passent à la forme canonique.
 
 **L'avis de publication.** Le dernier audit extérieur est favorable.
-`references-pdf/` porte les 23 PDF d'un même export final, graine de calcul
+`pdf/` porte les 23 PDF d'un même export final, graine de calcul
 régénérée sur la machine de l'auteur. Une coquille est corrigée dans
 `exemples/seyes.txt` (« XXI<sup>e</sup> siècle ») et `seyes.pdf` est
 réexporté.
@@ -499,7 +499,7 @@ nouveau, n'attend plus les 110 ms réservés à la frappe.
 
 **Les exemples sont remis en page.** Seize exemples reçoivent une nouvelle
 mise en page de l'auteur (sauts de page, marges, interligne), et
-`references-pdf/` porte leurs PDF du 12 novembre. Une masse molaire suit de
+`pdf/` porte leurs PDF du 12 novembre. Une masse molaire suit de
 nouveau le réglage `précision` du document (`précision: 2` donne
 `2 × 1,01 + 16,00 ≈ 18,02`).
 
@@ -1826,7 +1826,7 @@ dont l'empreinte change est différée après la 4.0 : gain mesuré marginal
     reste obtenu par la composition.
   - **Références PDF.** Les 23 PDF de référence sont désormais ceux de la
     4.0, composés par Typst ; chacun a le nombre de pages de son homologue
-    3.9. Les originaux de la 3.9 sont conservés dans `references-pdf/3.9/`.
+    3.9. Les originaux de la 3.9 sont conservés dans `pdf/3.9/`.
   - **Documentation.** Nouvelle notice de l'interface (`docs/INTERFACE.md`) :
     bandeau et pastilles, rubans, volets, saisies, cahier, export, ligne de
     commande. README (titre, version, compilation, témoins du moteur,
@@ -2077,7 +2077,7 @@ dont l'empreinte change est différée après la 4.0 : gain mesuré marginal
 - Les 23 exemples publics sont remplacés **à l'identique** par les textes
   retouchés par l'auteur, afin de respecter ses choix de pagination et le rendu
   de ses PDF (15 fichiers différents de la précédente référence).
-- Les 23 PDF fournis sont conservés *sans modification* sous `references-pdf/`
+- Les 23 PDF fournis sont conservés *sans modification* sous `pdf/`
   pour faciliter la validation visuelle ; ils ne sont pas régénérés par les tests.
 - Empreintes SHA-256 et assertions de tests anciennes relatives à trois sauts
   de la vitrine mises en conformité avec ces sources de référence. La décision
