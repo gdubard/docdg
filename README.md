@@ -34,11 +34,6 @@ non déduites de la seule présence d'une commande dans la documentation.
 
 ---
 
-
-## Compilation du projet
-
-`cargo run --release` compile et lance l'application (`cargo run --release exemples/vitrine.txt` l'ouvre sur un document ; `cargo run -p xtask` fabrique `docdg.app` sous macOS), qui embarque ses polices et fonctionne sans réseau ; Rust 1.92 ou plus est requis.
-
 ## Avant de commencer : installation
 
 **docdg est une application autonome** : l'exécutable est la seule chose à installer. Il embarque son propre moteur de calcul — Python 3.13 avec SymPy et mpmath pour le calcul formel, NumPy et SciPy pour le calcul numérique, dans des versions figées et propres à chaque système — qui prend en charge les calculs avancés (tableau de variations, dérivées, primitives, zéros de fonctions, lois de probabilité, équations différentielles). Aucune distribution TeX, aucun éditeur spécialisé, aucun Python à installer : un Python éventuellement présent sur la machine n'est ni utilisé ni modifié.
