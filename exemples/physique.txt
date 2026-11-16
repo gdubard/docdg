@@ -1,16 +1,15 @@
 document {
     orientation: portrait;
     marges: 5;
-    espacements: 2;
     taille: 11;
     interligne: 1,4;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Physique — exemples progressifs
 
@@ -22,8 +21,8 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h0>Collège
 
-soit remarque: un style = <gris foncé italique>
-soit correction: un style = <fond gris clair>
+soit remarque un style défini par <gris foncé italique>
+soit correction un style défini par <fond gris clair>
 
 <h1>Poids et masse — classe de quatrième
 
@@ -154,10 +153,9 @@ soit correction: un style = <fond gris clair>
 
 <Énoncer>la troisième loi de Kepler <étiquette>{kepler}
 
-<page suivante>
 <Démontrer>la troisième loi de Kepler
 
-<h2>Exercice type
+<page suivante h2>Exercice type
 
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — l'orbite géostationnaire} {
 	Un satellite géostationnaire reste à la verticale du même point de l'équateur.
@@ -175,17 +173,17 @@ Le nombre N de noyaux décroît selon N' = -λN, où la constante radioactive va
 <Résoudre>numériquement l'équation différentielle N' = -λN, avec T = 5730, λ = ln(2)/T et N(0) = 1000, sur [0 ; 20000]
 	<remarque>Au bout de 20 000 ans, soit un peu moins de quatre demi-vies, il reste environ 1000/2^3,5 ≈ 89 noyaux sur 1000 : la valeur numérique le confirme.
 
-<h2>Charge d'un condensateur
+<page suivante h2>Charge d'un condensateur
 Dans un circuit RC soumis à un échelon de tension E, la tension u aux bornes du condensateur vérifie RC u' + u = E.
-<Résoudre>numériquement l'équation différentielle RC u' + u = E, avec R = 1000, C = 1e-6, E = 5 et u(0) = 0, sur [0 ; 0,005]
+<Résoudre>numériquement l'équation différentielle RC u' + u = E, avec R = 1000, C = 10^(-6), E = 5 et u(0) = 0, sur [0 ; 0,005]
 	<remarque>L'équation est écrite telle qu'elle sort de la loi des mailles, sans isoler u'. La constante de temps τ = RC vaut 1 ms : après 5τ, le condensateur est chargé à plus de 99 %.
 
-<page suivante h2>Chute d'un parachutiste
+<h2>Chute d'un parachutiste
 Avec un frottement de l'air proportionnel au carré de la vitesse, la deuxième loi de Newton donne m v' = m g - k v². Cette équation n'a pas de solution simple au programme ; le calcul numérique la traite directement.
 <Résoudre>numériquement l'équation différentielle m v' = m g - k v^2, avec m = 80, g = 9,81, k = 0,25 et v(0) = 0, sur [0 ; 30]
 	<remarque>La vitesse se stabilise vers la vitesse limite, atteinte quand le poids équilibre le frottement : v = √(mg/k) ≈ 56 m/s.
 
-<h2>Le spectre d'une note de musique
+<page suivante h2>Le spectre d'une note de musique
 Un son musical n'est pas une sinusoïde pure : à la fréquence fondamentale s'ajoutent des harmoniques, de fréquences multiples, qui font le timbre de l'instrument. Le la du diapason, à 440 Hz, avec deux harmoniques :
 <Tracer>le spectre du signal s(t) = sin(2π·440t) + 0,5sin(2π·880t) + 0,25sin(2π·1320t), échantillonné à 8000 Hz sur [0 ; 0,5], jusqu'à 2000 Hz
 	<remarque>Le spectre montre trois raies, à 440, 880 et 1320 Hz : la hauteur de la note est celle du fondamental, le timbre tient aux amplitudes des harmoniques.
@@ -203,20 +201,19 @@ Un projectile est lancé verticalement à 20 m/s. On intègre le mouvement jusqu
 L'apogée est l'instant où la vitesse s'annule :
 <Résoudre>numériquement l'équation différentielle y'' = -g, avec g = 9,81, y(0) = 0 et y'(0) = 20, sur [0 ; 10], jusqu'à ce que y' = 0
 
-<h1>Les constantes fondamentales
+<page suivante h1>Les constantes fondamentales
 
 Depuis 2019, les unités du Système international sont définies en fixant la valeur exacte de sept constantes. Les autres se mesurent : leur valeur est donnée avec son incertitude, selon la compilation internationale CODATA.
-<Calculer>la vitesse de la lumière
-<Calculer>la constante de Planck
-<Calculer>la charge élémentaire
-<Calculer>la constante d'Avogadro
-<Calculer>la constante de Boltzmann
-<Calculer>la constante gravitationnelle
-<Calculer>la masse de l'électron
+<Donner>la vitesse de la lumière
+<Donner>la constante de Planck
+<Donner>la charge élémentaire
+<Donner>la constante d'Avogadro
+<Donner>la constante de Boltzmann
+<Donner>la constante gravitationnelle
+<Donner>la masse de l'électron
 	<remarque>G est la constante fondamentale la moins bien connue : son incertitude relative est près de cent mille fois celle de la masse de l'électron.
 
 <page suivante h0>Enseignement supérieur
-
 
 
 <h1>Des équations de Maxwell à l'onde électromagnétique — licence 3
@@ -230,7 +227,7 @@ Depuis 2019, les unités du Système international sont définies en fixant la v
 <Énoncer>l'équation de Maxwell-Thomson <étiquette>{thomson}
 <Énoncer>l'équation de Maxwell-Faraday <étiquette>{faraday}
 <Énoncer>l'équation de Maxwell-Ampère <étiquette>{ampere}
-	<remarque>Chaque énoncé affiche désormais sa formule, ses hypothèses et son domaine de validité. Les relations sont vérifiées en homogénéité à la compilation : `rot(B) = mu_0 * j + mu_0 * epsilon_0 * d_dt(E)` a passé le contrôle.
+	<remarque>Chaque énoncé affiche désormais sa formule, ses hypothèses et son domaine de validité. Les relations sont vérifiées en homogénéité à la compilation : « rot(B) = mu_0 * j + mu_0 * epsilon_0 * d_dt(E) » a passé le contrôle.
 
 <h2>Le terme que Maxwell a ajouté
 
@@ -256,14 +253,14 @@ Depuis 2019, les unités du Système international sont définies en fixant la v
 
 <h2>Le contrôle dimensionnel
 
-<Vérifier>l'homogénéité de div(E) = rho / epsilon_0 avec E champ électrostatique, rho densité volumique de charge, epsilon_0 permittivité du vide
-	<remarque>La relation s'écrit dans la même syntaxe que le champ vérifié à la compilation, opérateurs compris : `div` divise par une longueur, et c'est ce facteur qui fait l'homogénéité. Écrire `div_E` comme un simple symbole, et le déclarer champ électrostatique, donnerait une relation fausse d'un facteur de longueur — le moteur le dirait.
+<Vérifier>l'homogénéité de div(E) = ρ / ε_0 avec E champ électrostatique, ρ densité volumique de charge, ε_0 permittivité du vide
+	<remarque>La relation s'écrit dans la même syntaxe que le champ vérifié à la compilation, opérateurs compris : « div » divise par une longueur, et c'est ce facteur qui fait l'homogénéité. Écrire « div_E » comme un simple symbole, et le déclarer champ électrostatique, donnerait une relation fausse d'un facteur de longueur — le moteur le dirait.
 
-Une relation écrite sans le carré de la célérité serait rejetée par le contrôle dimensionnel. La vérification négative complète demeure dans le test historique `physique4.txt`.
-<Vérifier>l'homogénéité de E = m * c^2 avec E énergie, m masse, c célérité
+Une relation écrite sans le carré de la célérité serait rejetée par le contrôle dimensionnel.
+<Vérifier>l'homogénéité de E = m c^2 avec E énergie, m masse, c célérité
 	<remarque>La relation corrigée est homogène : les deux membres ont la dimension d'une énergie.
 
-<page suivante h2>Exercice type
+<h2>Exercice type
 
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice — pression de radiation} {
 	Une onde plane progressive monochromatique se propage dans le vide selon l'axe $Ox$, d'amplitude $E_0 = 1,0 * 10^3$ V·m⁻¹.
@@ -292,27 +289,27 @@ La période de ce mouvement a une expression exacte, par l'intégrale elliptique
 <Tracer>le spectre du signal s(t) = sin(2π·50t) + 0,5sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], avec une fenêtre de Hann
 	<remarque>La fenêtre de Hann limite les fuites spectrales au prix d'un lobe principal plus large ; l'amplitude affichée est corrigée de son gain.
 
-<h2>Les harmoniques d'un signal carré
+<page suivante h2>Les harmoniques d'un signal carré
 La série de Fourier d'un créneau d'amplitude 1 ne contient que des harmoniques impaires, d'amplitudes 4/(nπ).
 <Tracer>le spectre du signal s(t) = 4/π (sin(2π f t) + sin(6π f t)/3 + sin(10π f t)/5 + sin(14π f t)/7), échantillonné à 2 kHz sur [0 ; 1], avec f = 50, jusqu'à 500 Hz
 
-<page suivante h2>La modulation d'amplitude
+<h2>La modulation d'amplitude
 <Tracer>le spectre du signal u(t) = (1 + m cos(2π fm t)) cos(2π fp t), échantillonné à 10 kHz sur [0 ; 0,5], avec m = 0,5, fm = 100, fp = 1000, jusqu'à 1500 Hz
 	<remarque>La porteuse à fp est entourée de deux bandes latérales à fp ± fm, d'amplitude m/2 : la bande occupée vaut 2fm.
 
-<h2>Le filtre RC, premier ordre
-<Tracer>le diagramme de Bode de H(p) = 1/(1 + RCp), avec R = 1000 et C = 1e-6
+<page suivante h2>Le filtre RC, premier ordre
+<Tracer>le diagramme de Bode de H(p) = 1/(1 + RCp), avec R = 1000 et C = 10^(-6)
 	<remarque>La coupure à −3 dB tombe à 1/RC = 1000 rad/s ; au-delà, le gain chute de 20 dB par décade et la phase tend vers −90°.
 
-<h2>Le second ordre et la résonance
+<page suivante h2>Le second ordre et la résonance
 <Tracer>le diagramme de Bode de H(p) = K/(1 + 2ξp/ω0 + p^2/ω0^2), avec K = 2, ξ = 0,2 et ω0 = 100
 	<remarque>Pour un amortissement ξ < 1/√2, le gain passe par un maximum en ω_r = ω0√(1 − 2ξ²), au-dessus du gain statique de 20 log(1/(2ξ√(1 − ξ²))) dB.
 
-<h2>La stabilité d'un asservissement
+<page suivante h2>La stabilité d'un asservissement
 <Tracer>le diagramme de Bode de T(p) = 10/(p(1 + p)(1 + 0,1p)), entre 0,01 et 1000 rad/s
 	<remarque>La marge de phase, mesurée à la pulsation où le gain de la boucle ouverte vaut 0 dB, est à peine positive : le système bouclé est stable, mais très mal amorti. Diminuer le gain la ferait croître.
 
-<h2>Débruiter une mesure
+<page suivante h2>Débruiter une mesure
 Une mesure lente à 5 Hz est polluée par un parasite à 120 Hz et par un bruit gaussien. Un passe-bas de Butterworth, appliqué en aller-retour, restitue la composante utile sans la déphaser.
 <Tracer>le filtrage du signal s(t) = sin(2π·5t) + 0,3sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 20 Hz, avec un bruit d'écart type 0,2
 
@@ -347,6 +344,7 @@ Dans une ailette de longueur unité, l'écart de température θ à l'air ambian
 <Démontrer>la masse effective et la dynamique des porteurs
 
 <h2>Du modèle au transport
+
 <Énoncer>la surface de Fermi et le caractère métallique
 <Démontrer>la surface de Fermi et le caractère métallique
 	<remarque>C'est le remplissage, non la nature chimique, qui décide de la conduction. Un nombre impair d'électrons par maille garantit un métal ; un nombre pair ne garantit rien.
@@ -355,6 +353,7 @@ Dans une ailette de longueur unité, l'écart de température θ à l'air ambian
 <Démontrer>la conductivité de Drude et le temps de relaxation
 
 <Énoncer>l'effet Hall et le signe des porteurs
+
 <Démontrer>l'effet Hall et le signe des porteurs
 	<remarque>Le béryllium et l'aluminium donnent une constante de Hall positive. Aucun modèle à porteurs négatifs n'en rend compte : c'est la preuve expérimentale que le trou décrit quelque chose de réel.
 
@@ -365,30 +364,26 @@ Dans une ailette de longueur unité, l'écart de température θ à l'air ambian
 
 <h2>À l'agrégation, rien n'est admis
 	Un même énoncé, un seul identifiant, deux exigences : le master énonce sans preuve ce que le concours demande de démontrer. La voie déclarée en tête de page suffit à basculer le statut.
-
 <Énoncer>le modèle de Debye de la capacité thermique
 
 <Démontrer>le modèle de Debye de la capacité thermique
 
 <h2>Le contrôle dimensionnel
-
-<Vérifier>l'homogénéité de sigma_e = n * q^2 * tau / m avec sigma_e conductivité, n densité particulaire, q charge électrique, tau temps de relaxation des porteurs, m masse effective
+<Vérifier>l'homogénéité de σ_e = (n q^2 τ) / m avec σ_e conductivité, n densité particulaire, q charge électrique, τ temps de relaxation des porteurs, m masse effective
 	<remarque>Les grandeurs sont nommées telles que le corpus les déclare. La masse effective et le temps de relaxation des porteurs sont des grandeurs du master, ajoutées avec le domaine.
 
-<Vérifier>l'homogénéité de E_F = hbar^2 * k_F^2 / m avec E_F énergie de Fermi, hbar constante de Planck réduite, k_F vecteur d'onde de Fermi, m masse
-
-<Vérifier>l'homogénéité de R_H = 1 / (n * q) avec R_H constante de Hall, n densité particulaire, q charge électrique
+<Vérifier>l'homogénéité de E_F = (ℏ^2 k_F^2) / (2m) avec E_F énergie de Fermi, ℏ constante de Planck réduite, k_F vecteur d'onde de Fermi, m masse
+<Vérifier>l'homogénéité de R_H = 1 / (n q) avec R_H constante de Hall, n densité particulaire, q charge électrique
 	<remarque>La constante de Hall ne dépend ni de la masse effective ni du temps de relaxation : la vérification le montre avant tout calcul.
 
-<page suivante h2>Exercices types
-
+<h2>Exercices types
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — vitesse de dérive dans le cuivre} {
 	Le cuivre compte un électron de conduction par atome, pour une masse volumique de $8,96 * 10^3$ kg·m⁻³ et une masse molaire de $63,5$ g·mol⁻¹.
 	Un fil de section $1,0$ mm² est parcouru par un courant de $1,0$ A.
 	Calculer la densité de porteurs, puis la vitesse de dérive. Comparer à la vitesse de Fermi, de l'ordre de $1,6 * 10^6$ m·s⁻¹.
 }
-<correction>Correction. La densité de porteurs vaut le quotient de la masse volumique par la masse molaire, multiplié par le nombre d'Avogadro, soit environ $8,5 * 10^{28}$ m⁻³.
-	La vitesse de dérive se tire de $j = n q v$ : avec $j = 1,0 * 10^6$ A·m⁻², elle vaut environ $7 * 10^{-5}$ m·s⁻¹, soit quelques centièmes de millimètre par seconde.
+<correction>Correction. La densité de porteurs vaut le quotient de la masse volumique par la masse molaire, multiplié par le nombre d'Avogadro, soit environ $8,5 × 10^(28)$ m⁻³.
+	La vitesse de dérive se tire de $j = n q v$ : avec $j = 1,0 × 10^6$ A·m⁻², elle vaut environ $7 × 10^(-5)$ m·s⁻¹, soit quelques centièmes de millimètre par seconde.
 	<remarque>Onze ordres de grandeur séparent les deux vitesses. Le signal électrique ne se propage donc pas au rythme des électrons : c'est le champ qui va vite, non les porteurs.
 
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 2 — le régime de basse température} {

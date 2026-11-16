@@ -1,5 +1,5 @@
 document {
-	marges: 25;
+	marges: 15;
 	script: Georgia;
 	taille: 11;
 	interligne: 1,6;
@@ -7,16 +7,16 @@ document {
 	orphelines: 2;
 	veuves: 2;
 }
-soit h0: un style = <bleu nuit gras chapitre num>
-soit h1: un style = <bleu nuit gras section num>
-soit h2: un style = <bleu nuit italique sous-section num>
-soit h3: un style = <sous-sous-section num>
+soit h0 un style défini par <bleu nuit gras chapitre num>
+soit h1 un style défini par <bleu nuit gras section num>
+soit h2 un style défini par <bleu nuit italique sous-section num>
+soit h3 un style défini par <sous-sous-section num>
 
-soit nature: un style = <petites capitales grand au centre>
-soit ouvrage: un style = <gras 26 pt au centre>
-soit complement: un style = <16 pt italique au centre>
-soit mention: un style = <14 pt au centre>
-soit maison: un style = <au centre>
+soit nature un style défini par <petites capitales grand au centre>
+soit ouvrage un style défini par <gras 26 pt au centre>
+soit complement un style défini par <16 pt italique au centre>
+soit mention un style défini par <14 pt au centre>
+soit maison un style défini par <au centre>
 
 <nature>{Essai}
 

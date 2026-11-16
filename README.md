@@ -1,20 +1,21 @@
-# *docdg 3.9*
+# *DocDG 4.0*
 
-> Interface docdg 3.9 : [architecture et navigation unifiées](docs/INTERFACE_3_9.md).
+> Interface DocDG 4.0 : [rubans, volets, saisies et export](docs/INTERFACE.md).
 
 **docdg** est une application de composition documentaire écrite en Rust,
 autour d'un langage de balises en français. L'auteur écrit un fichier texte
-ordinaire, que le moteur transforme en document ; l'aperçu utilise une WebView,
-et l'application peut exporter le document en PDF. Elle couvre notamment cadres,
+ordinaire, que le moteur transforme en document ; l'interface est native
+(iced), et Typst compose l'aperçu comme le PDF exporté, identiques page pour
+page. Elle couvre notamment cadres,
 grilles, tableaux, images, notations mathématiques, tracés de fonctions,
 géométrie plane et spatiale, statistiques, physique-chimie et rédaction longue
 (chapitres, renvois croisés, bibliographie). La justesse scientifique et la
 fidélité typographique doivent être appréciées à l'aide des tests et exemples,
 non déduites de la seule présence d'une commande dans la documentation.
 
-**Author / Maintainer:** Gérard Dubard — docdg69@gmail.com
-**License:** proprietary freeware — see [CLUF.md](CLUF.md)
-**Repository:** https://github.com/gdubard/docdg
+**Auteur et mainteneur :** Gérard Dubard — docdg69@gmail.com
+**Licence :** gratuiciel propriétaire — voir [CLUF.md](CLUF.md)
+**Dépôt :** https://github.com/gdubard/docdg
 
 ---
 
@@ -22,21 +23,21 @@ non déduites de la seule présence d'une commande dans la documentation.
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-3.9-2980b9?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.0-2980b9?style=flat-square)](CHANGELOG.md)
 [![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![Licence](https://img.shields.io/badge/licence-propriétaire_freeware-8e44ad?style=flat-square)](CLUF.md)
 
 **[Journal des versions](CHANGELOG.md)**
 
-> **Règle normative de la version 3.9 : typage explicite obligatoire.** Toute nouvelle variable, tout style, conteneur, paramètre de fonction, type de retour, résultat de saisie et indice de boucle doit porter un **type déclaré explicitement, avec son article français**. Une inférence possible ne dispense jamais de la déclaration. Par exemple `soit n: un entier naturel = 5` et `soit h1: un style = <bleu gras>` ; `soit n = 5` et `soit n: entier naturel = 5` sont interdits. Une réaffectation n'est **pas** une déclaration : `n = 6`. Le contrat détaillé figure dans [Typage obligatoire](docs/TYPAGE_OBLIGATOIRE.md). La persistance éventuelle d'une syntaxe historique dans le moteur ou un exemple est un **défaut à corriger**, non une variante autorisée.
+> **Règle normative depuis la version 3.9 : typage explicite obligatoire.** Toute nouvelle variable, tout style, conteneur, paramètre de fonction, type de retour, résultat de saisie et indice de boucle doit porter un **type déclaré explicitement, avec son article français**. Une inférence possible ne dispense jamais de la déclaration. Par exemple `soit n ∈ ℕ tel que n = 5` et `soit h1 un style défini par <bleu gras>` ; `soit n = 5` et `soit n: entier naturel = 5` ne déclarent aucune variable et restent du texte sans avertissement. Une utilisation ultérieure d'un nom sans déclaration valide est signalée à son emplacement. Une réaffectation n'est **pas** une déclaration : `n ← 6`. Le contrat détaillé figure dans [Typage obligatoire](docs/TYPAGE_OBLIGATOIRE.md). La persistance éventuelle d'une syntaxe historique dans le moteur ou un exemple est un **défaut à corriger**, non une variante autorisée.
 
 ---
 
 
-## Compilation du projet 3.9
+## Compilation du projet
 
-La compilation avec `cargo build --workspace --locked` ou `cargo run --release -p docdg` installe automatiquement les ressources typographiques manquantes depuis KaTeX 0.18.1 et Fontsource 5.3.0. Une connexion Internet est nécessaire uniquement lors de la première compilation sur un dossier neuf ; les fichiers sont ensuite conservés localement. L’exécutable généré les embarque et fonctionne sans réseau. Aucun correctif ni script de restauration n’est nécessaire.
+`cargo run --release` compile et lance l'application (`cargo run --release exemples/vitrine.txt` l'ouvre sur un document ; `cargo run -p xtask` fabrique `docdg.app` sous macOS), qui embarque ses polices et fonctionne sans réseau ; Rust 1.92 ou plus est requis.
 
 ## Avant de commencer : installation
 
@@ -48,17 +49,19 @@ La compilation avec `cargo build --workspace --locked` ou `cargo run --release -
 https://github.com/gdubard/docdg/releases
 ```
 
-Sous Windows, télécharger et lancer l'exécutable `.exe` ; il n'est pas nécessaire de modifier le `PATH` pour une application graphique. Sous macOS, utiliser l'application `.app`. Sous Linux, un **AppImage** peut être fourni séparément ; l'archive `docdg-3.9-linux.zip` issue du script de qualification contient uniquement le **binaire** et nécessite GTK 3 et WebKitGTK 4.1 installés. Consulter [docs/COMPILER.md](docs/COMPILER.md) pour l'AppImage et [docs/QUALIFICATION_WINDOWS_LINUX.md](docs/QUALIFICATION_WINDOWS_LINUX.md) pour les recettes de validation.
+Sous Windows, télécharger et lancer l'exécutable `.exe` ; il n'est pas nécessaire de modifier le `PATH` pour une application graphique. Sous macOS, utiliser l'application `.app`. Sous Linux, télécharger l'**AppImage**, la rendre exécutable (`chmod +x`) et la lancer : elle ne dépend ni de GTK ni de WebKitGTK depuis la 4.0 (les dialogues de fichiers passent par le portail XDG du bureau). Consulter [docs/COMPILER.md](docs/COMPILER.md) pour l'AppImage et la validation sur chaque système.
 
 **Premier lancement.** Au tout premier démarrage, docdg installe son moteur de calcul dans le dossier de données de l'utilisateur (`%LOCALAPPDATA%\docdg\runtime` sous Windows, `~/Library/Application Support/docdg/runtime` sous macOS, `~/.local/share/docdg/runtime` sous Linux), une fois pour toutes : l'opération prend quelques secondes et se fait en arrière-plan. Une nouvelle version de docdg remplace ce dossier et efface l'ancien.
 
-**Les témoins du moteur.** En haut à droite de la fenêtre, SymPy, mpmath,
-NumPy et SciPy ont chacun leur témoin : rouge pendant leur chargement, qui se
-fait en arrière-plan dès l'ouverture de docdg, vert dès qu'ils sont
-disponibles — une à deux secondes d'ordinaire, davantage au tout premier
-lancement. Le survol affiche la version chargée. On peut écrire pendant le
-chargement : les calculs qui en dépendent s'affichent dès que le moteur est
-prêt.
+**Les témoins du moteur.** En haut à droite de la fenêtre, une pastille
+**Document** puis une pastille par bibliothèque — SymPy, mpmath, NumPy et
+SciPy — portent chacune leur voyant. Celui du document est rouge pendant le
+chargement ou une recomposition, vert dès que l'aperçu est à jour, et le temps
+global de chargement s'affiche à côté. Ceux des bibliothèques sont rouges
+pendant leur chargement, qui se fait en arrière-plan dès l'ouverture, verts
+dès qu'elles sont disponibles — une à deux secondes d'ordinaire, davantage au
+tout premier lancement. On peut écrire pendant le chargement : les calculs qui
+en dépendent s'affichent dès que le moteur est prêt.
 
 ## **📚 Sommaire détaillé**
 
@@ -80,7 +83,7 @@ prêt.
 
 ### La référence
 
-Pour distinguer les commandes **présentes et testées** des propositions de grammaire, voir [l’état des fonctionnalités de la version 3.9](docs/ETAT_FONCTIONNALITES.md). Ce document fait également le point sur les 22 exercices publics et les 40 fixtures historiques.
+Les commandes **présentes et testées** sont celles que composent les exemples de `exemples/` et les blocs de code des manuels : chacun est exécuté par la suite de tests, et le contrat du typage est dans [docs/TYPAGE_OBLIGATOIRE.md](docs/TYPAGE_OBLIGATOIRE.md).
 
 **Conventions du supérieur :** [contrats de notation, de typage et d'hypothèses mathématiques](docs/NOTATIONS_SUPERIEUR.md). Cette référence distingue la syntaxe écrite par l'utilisateur de la notation mathématique et documente les limites actuelles du moteur.
 
@@ -122,7 +125,7 @@ Pour distinguer les commandes **présentes et testées** des propositions de gra
 ## **📖 Qu'est-ce que docdg ?**
 
 **docdg est un langage de composition documentaire.**  
-Il permet de **créer simplement des documents de grande qualité** grâce à un **moteur de composition Rust** qui produit directement du HTML et du PDF.
+Il permet de **créer simplement des documents de grande qualité** grâce à un **moteur de composition Rust** qui produit directement une composition Typst et son PDF.
 
 **docdg prend en charge toute la composition** : vous décrivez le document en français, il produit le PDF — sans intermédiaire, sans passer par un autre système.
 
@@ -146,14 +149,14 @@ Ce manuel suit une **progression logique** :
 **Chaque construction est présentée de la même façon :**
 
 1. **L'écriture docdg** (ce que **vous écrivez**) ;
-2. **Le HTML et PDF généré** (ce que docdg **produit pour vous**) ;
+2. **L’aperçu et le PDF générés** (ce que docdg **produit pour vous**) ;
 3. **Une explication** de ce que fait ce code.
 
 > 💡 **Vous pouvez lire ce manuel dans l'ordre**, ou **sauter directement au chapitre qui vous intéresse** et revenir aux fondations en cas de besoin.
 
 ### **📜 Une convention de lecture**
 
-Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg génère le HTML et le PDF pour vous, en coulisse.
+Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg génère l’aperçu Typst et le PDF pour vous, en coulisse.
 
 ---
 
@@ -165,10 +168,10 @@ Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C
 | **🏷️ Une seule syntaxe de balise** | `<attributs>{contenu}` couvre texte, tableaux, images, maths, cadres, listes et mises en page pleine page                 | `<Afficher>un cadre avec une bordure bleue{Texte}`, `<Dresser>un tableau {<mc>...}` |
 | **🎨 148 couleurs nommées**         | Une palette en **français**, une couleur par nom, accordée selon l'orthographe | `rouge`, `bleu nuit`, `vert forêt` |
 | **📐 Un mini-langage mathématique** | Fractions, racines, sommes, produits, intégrales, dérivées, trigonométrie, matrices et systèmes, **le tout dans `$...$`** | `$somme(k=1;n) k^2$`, `$intégrale(x=a;b) f(x)$`    |
-| **📦 Cadres et grilles**            | Panneaux `<Afficher>un cadre` colorés et mises en page à zones nommées **façon CSS Grid**                                            | `<Afficher>une grille`, `<Afficher>un cadre avec des coins arrondis de 5 mm`       |
-| **📊 Des tableaux sans douleur**    | Placement de cellule en **deux lettres**, fusions, en-têtes, bordures, **aucun `&` à compter**                            | `<Dresser>un tableau avec des bordures`                        |
-| **♻️ Alias et macros**              | Factorisez un style **une fois**, nommez-le partout ; **une seule retouche restyle tout le document**                     | `soit titre: un style = <gras 18 pt>`, `soit exercice{n} = ...` |
-| **🔁 Structures de contrôle**       | Boucles, conditionnelles et interpolation **`#{...}`** dans le corps du document                                          | `pour n: un entier naturel de 1 à 5`, `si note >= 10`                 |
+| **📦 Cadres et grilles**            | Panneaux `<Afficher>un cadre` colorés et mises en page Typst à zones nommées et fusionnées                                            | `<Afficher>une grille`, `<Afficher>un cadre avec des coins arrondis de 5 mm`       |
+| **📊 Des tableaux sans douleur**    | Placement de cellule en **deux lettres**, fusions, en-têtes, bordures, **aucun `&` à compter**                            | `<Dresser>un tableau {<mc>...}`                        |
+| **♻️ Alias et macros**              | Factorisez un style **une fois**, nommez-le partout ; **une seule retouche restyle tout le document**                     | `soit titre un style défini par <gras 18 pt>`, `soit exercice{n} = ...` |
+| **🔁 Structures de contrôle**       | Boucles, conditionnelles et interpolation **`#{...}`** dans le corps du document                                          | `pour n ∈ ⟦1 ; 5⟧`, `si note >= 10`                 |
 
 
 ---
@@ -210,18 +213,22 @@ docdg est un exécutable autonome : rien d'autre à installer, ni Python, ni Sym
 https://github.com/gdubard/docdg/releases
 ```
 
-Sous Windows, l'installeur configure le `PATH`. Sous macOS/Linux :
+Sous macOS, glissez `docdg.app` dans `/Applications`. Sous Windows, lancez
+`docdg.exe`. Sous Linux, après extraction de l'archive :
 
 ```bash
 chmod +x docdg
 sudo mv docdg /usr/local/bin/
 ```
 
-Vérifiez l'installation :
+Vérifiez l'installation — la commande affiche `DocDG 4.0` :
 
 ```bash
 docdg --version
 ```
+
+Lancé avec le chemin d'un fichier (`docdg exemples/vitrine.txt`), DocDG
+l'ouvre directement.
 
 ## **🚀 Premiers documents**
 
@@ -316,6 +323,7 @@ document {
 | `veuves`     | nombre             | `2`         | Lignes minimales reportées en haut de page |
 | `précision`  | nombre             | `-1`        | Décimales pour arrondi (`-1` = pas d'arrondi) |
 | `graine`     | entier positif     | *absente*   | Fixe les tirages : le document devient reproductible, l'énoncé et son corrigé coïncident. Absente, chaque compilation tire à neuf |
+| `récursion`  | entier de 10 à 100 000 | `500`   | Profondeur maximale des appels imbriqués d'une fonction. Au-delà, le calcul s'arrête avec un message, sans jamais faire planter l'application ; relevez la limite pour une récursion profonde mais légitime |
 | `niveau`     | texte              | *absent*    | Le niveau scolaire du document, en toutes lettres — de `CP` à `master 2`. Il décide de ce que le corpus admet et de ce qu'il démontre |
 | `corpus`     | chemin             | *embarqué*  | Désigne une base personnelle (`.docdgc`) à la place de la base embarquée — celle d'un enseignant ou d'un établissement |
 
@@ -345,7 +353,7 @@ Deuxième paragraphe.
 **docdg**
 
 ```docdg
-soit titre: un style = <rouge gras 18 pt au centre>
+soit titre un style défini par <rouge gras 18 pt au centre>
 
 <titre>Ma feuille d'exercices
 ```
@@ -353,24 +361,60 @@ soit titre: un style = <rouge gras 18 pt au centre>
 
 ## **🗂️ Le classeur de saisie**
 
-L'onglet **Saisie** de l'application est un classeur de six intercalaires,
-disposés comme ceux d'un classeur au format paysage.
+L'onglet **Saisie** de l'application porte sept rubans, décrits en détail dans
+[docs/INTERFACE.md](docs/INTERFACE.md).
 
-| intercalaire | ce qu'on y trouve |
+| ruban | ce qu'on y trouve |
 |---|---|
-| **Fichier** | créer un nouveau document, ouvrir, enregistrer, enregistrer sous et exporter ; le nom du document en cours et l'état de l'enregistrement automatique |
+| **Fichier** | Nouveau, Ouvrir, Enregistrer sous et Exporter ; le chemin de la source et celui du dernier PDF exporté |
 | **Document** | tous les réglages du bloc `document { }` — page, texte, marges, espacements, conduite, numérotation, niveau, corpus |
 | **Styles** | tout ce qui se met entre chevrons sans verbe : caractère, alignement, couleur et fond, police, taille, niveau de titre et forme de numérotation |
-| **Actions** | les trente-huit verbes, rangés par catégorie, et leurs objets |
+| **Actions** | les trente-sept verbes, rangés par catégorie, et leurs objets, filtrés par matière et par niveau |
 | **Corpus** | les énoncés et les démonstrations de la base, filtrés par matière, niveau, domaine et type |
-| **Programmation** | structures, conteneurs et instructions du langage algorithmique |
+| **Mathématiques** | les formules prêtes à l'emploi, en cinq domaines puis en catégories |
+| **Programmation** | déclarations, saisies, calcul matriciel, structures et instructions du langage algorithmique |
 
-L'enregistrement automatique conserve les modifications d'un document non vide une seconde après la dernière saisie. Si vous effacez tout le contenu, il est suspendu afin de ne pas remplacer accidentellement votre fichier par un document vide. Pour enregistrer volontairement un document vide, utilisez **Ctrl+S** (**⌘S** sur Mac) et confirmez votre choix. **Ouvrir** remplace le texte affiché au lieu de l'ajouter à la suite ; docdg demande confirmation si des modifications ne sont pas encore enregistrées. **Nouveau** demande confirmation avant de quitter un document ouvert, enregistre ses modifications non vides et ouvre ensuite le choix du nom du nouveau fichier. La source n'est effacée qu'après la création du fichier. Une annulation conserve le document précédent. Si la source est vide après effacement, l'ancien fichier est conservé sans être remplacé par un fichier vide. Un document non encore enregistré qui contient du texte doit d'abord être enregistré avant de créer le suivant.
+Actions, Mathématiques et Programmation se déplient en cascade : chaque étage
+s'ouvre dans un cadre titré, chaque choix est une pastille, et les rangées
+passent à la ligne au lieu de défiler. Les volets Source et Aperçu gardent leur
+place.
 
-Chaque intercalaire tient sur un seul rang de commandes, et le bandeau garde la
-même hauteur de l'un à l'autre : les volets Source et Aperçu ne bougent jamais.
-Dès qu'une famille compte plus de quatre éléments, elle est présentée en liste
-déroulante rangée par catégorie plutôt qu'en rangée de boutons.
+L'enregistrement est automatique dès que le document a un fichier : il est
+réécrit une seconde après la dernière frappe. Il n'y a donc ni bouton
+« Enregistrer » ni raccourci d'enregistrement ; un nouveau document reçoit son
+fichier par **Enregistrer sous**. **Ouvrir** remplace le texte affiché au lieu
+de l'ajouter à la suite.
+
+**Fermer la fenêtre demande confirmation.** La croix ouvre « Quitter DocDG ? » :
+**Quitter** (ou Entrée) ferme, **Annuler** (ou Échap, ou un clic à côté) revient
+au document. Un document qui n'a jamais reçu de fichier y est signalé : son
+texte serait perdu.
+
+**La réouverture réutilise le Typst sauvegardé.** Après enregistrement du texte
+et composition valide, docdg garde le Typst du document dans son cache privé,
+dans le dossier de données de l'utilisateur — et là seulement : il n'écrit rien
+à côté de `cours.txt`. À la prochaine ouverture, il vérifie le texte, le moteur
+et les ressources avant de reprendre ce Typst sans réexécuter les instructions
+DocDG. Un document courant est repris d'un seul tenant ; pour un document
+volumineux, la première page est montrée d'abord, puis le document entier. La
+composition des pages par Typst reste nécessaire. Le cache se régénère seul et
+ne garde que les 256 documents les plus récemment composés ; le `.txt` reste le
+document à modifier.
+
+**La prose reste de la prose.** Une ligne dont la syntaxe algorithmique n'est
+pas reconnue reste affichée sans avertissement et n'est pas exécutée. Une
+utilisation de variable sans déclaration valide, une erreur de calcul ou une
+erreur documentaire est signalée à son emplacement ; l'aperçu continue à
+composer les éléments valides. Les
+messages ne sont plus regroupés en rouge au-dessus du document. Deux écritures
+sont signalées à leur place, parce que l'intention y est sans équivoque : une
+déclaration complète terminée par un point (`soit n ∈ ℕ tel que n = 7.`), que
+le message invite à retirer, et un bloc dont l'accolade fermante manque,
+signalé à sa ligne d'ouverture. Le contenu d'un bloc non fermé reste lisible
+comme source ; docdg n'invente pas une fermeture d'accolade. Si le moteur de composition ne peut plus composer
+le document, un aperçu de secours conserve la source lisible et les diagnostics
+dont l'origine est connue. Ces aperçus provisoires ne remplacent pas le cache
+d'une composition valide. Les contrôles de qualification restent stricts.
 
 **Tout s'insère en direct.** Il n'y a ni bouton « Insérer » ni bouton
 « Appliquer ». Choisir « gras » écrit `<gras>{}` dans la source, le curseur
@@ -378,6 +422,13 @@ entre les accolades ; tapez votre texte, puis choisissez « bleu marine » et la
 balise devient `<bleu marine gras>{votre texte}` sans que rien de ce que vous
 avez tapé ne bouge, et le curseur reste où il était. Les réglages du document
 se réappliquent de même, en réécrivant le bloc `document { }` en place.
+
+**L'éditeur tient le retrait pour vous.** Un retour à la ligne reprend le
+retrait de la ligne précédente, et l'augmente d'une tabulation après une
+accolade ouvrante ; une accolade fermante tapée sur une ligne encore vide
+retire cette tabulation. Dans un tableau, la tabulation et le retour à la
+ligne **réalignent les colonnes** de tout le tableau (détails au chapitre des
+tableaux).
 
 **Les accolades suivent l'usage.** En début de ligne, la balise encadre un
 bloc : l'accolade fermante passe à la ligne suivante et le curseur se place sur
@@ -410,7 +461,7 @@ pour une fonction, encore faut-il que cette fonction existe. Le classeur écrit
 donc les deux lignes d'un coup, et seulement si la déclaration manque :
 
 ```docdg
-<Soit>une fonction f(x) = x^2 - 5x + 6
+<Soit>f une fonction définie par f(x) = x² − 5x + 6
 <Dresser>le tableau de signes de f
 ```
 
@@ -435,7 +486,7 @@ se fait qu'une fois par document.
 > <Calculer>l'aire du disque de rayon 3
 > ```
 >
-> Quand l'action porte sur un contenu de plusieurs lignes, celui-ci suit entre accolades : `<Action>complément {` … `}`. Les attributs se disent avec leurs articles (« avec **des** bordures », « **un** écart de 3 mm »), et un objet déclaré se rappelle par sa catégorie (« le système S », « la fonction f » — jamais le nom seul). Les options éventuelles d'une action restent dans la balise, après le verbe. Et parce que l'objectif est d'écrire moins : **la rédaction pas à pas est le comportement, pas une option**. `<Résoudre>le système s` déroule le pivot, `<Calculer>1/2 + 1/3` détaille la mise au même dénominateur — il n'y a rien à demander. L'ancienne écriture `<Action>complément` reste comprise, mais toute la documentation et tous les exemples suivent la règle ci-dessus : une seule forme à apprendre, une seule forme à relire.
+> Quand l'action porte sur un contenu de plusieurs lignes, celui-ci suit entre accolades : `<Action>complément {` … `}`. Les attributs se disent avec leurs articles (« avec **des** bordures », « **un** écart de 3 mm »), et un objet déclaré se rappelle par sa catégorie (« le système S », « la fonction f » — jamais le nom seul). Les options éventuelles d'une action restent dans la balise, après le verbe. Et parce que l'objectif est d'écrire moins : **la rédaction pas à pas est le comportement, pas une option**. `<Résoudre>le système s` déroule le pivot, `<Calculer>1/2 + 1/3` détaille la mise au même dénominateur — il n'y a rien à demander. L'écriture au chevron englobant, `<Action complément>`, se compile de façon identique, mais toute la documentation et tous les exemples suivent la règle ci-dessus : une seule forme à apprendre, une seule forme à relire.
 
 
 La syntaxe de docdg repose sur **quatre familles de commandes** :
@@ -448,25 +499,25 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 | **Propriétés** | Personnalisation     | `rouge`, `gras`, `14 pt`, `au centre` |
 | **Valeurs**    | Paramètres           | `oui`, `non`, `30`, `bleu foncé`  |
 
-**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Afficher>un cadre avec ...{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>la matrice M{...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise commence par un **verbe d'action à l'impératif présent** — jamais par l'objet nu (règle n°12). Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresser>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
+**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Afficher>un cadre avec ...{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>M une matrice définie par {...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise d'action commence par un **verbe à l'infinitif** — l'usage du secondaire comme du supérieur — jamais par l'objet nu (règle n°12) ; seules font exception la déclaration `<Soit>` et les balises de style (`<gras>`, un style nommé), qui ne commandent aucune action. Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresser>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
 
 ### **📌 Les règles de base**
 
 1. **Les balises** sont entre **chevrons** et commencent par un **verbe** : `<Afficher>un cadre`, `<Dresser>un tableau`, `<Insérer l'image IMAGES/photo.png avec une largeur de 30 mm>`  (règle n°12)
 2. **Le contenu** est entre **accolades** : `<Afficher>un cadre{Du texte ici}`. Quand il s'étend sur plusieurs lignes, il **commence à la ligne qui suit l'accolade**, jamais à sa droite — comme le corps d'un bloc dans tout langage, et pour que la source garde la forme du rendu. Ce qui est écrit à droite d'une accolade ouvrante est signalé ; seuls des espaces ne comptent pas pour du contenu, et une construction qui tient sur une seule ligne n'est pas concernée. docdg n'a pas de syntaxe de commentaire : `%` désigne l'opérateur modulo dans les calculs.
 3. **Les noms composés** utilisent des **espaces** : `<table des matières>`
-4. **Les propriétés** s'écrivent **en français** : `<bleu foncé centre 14 pt>{Titre}`
+4. **Les propriétés** s'écrivent **en français** : `<bleu foncé au centre 14 pt>{Titre}`
 5. **Les couleurs** : `rouge`, `bleu foncé` (français)
 6. **Les polices** : en **MAJUSCULES** : `<ARIAL>`
 7. **Échappement** : doublez les caractères spéciaux pour les afficher littéralement : `<<` → `<`, `>>` → `>`, `{{` → `{`, `}}` → `}`, `##` → `#`, `$$` → `$`.
-8. **Les séparateurs** : le point-virgule `;` sépare **les nombres, et rien d'autre** — coordonnées (`A(2;3)`), bornes d'intervalles (`[-5 ; 5]`), séries de données (`{12 ; 15 ; 9}`), arguments numériques (`arrondi(5/3; 2)`). La virgule `,` sépare les fragments de prose (règle n°10) et reste la virgule décimale à l'intérieur d'un nombre (`3,5`). La barre `|` sépare les paires `clé: valeur` des données nommées (`{Marche: 5 | Bus: 3}`) et les colonnes des rangées saisies. Trois séparateurs, trois usages, aucune exception.
+8. **Les séparateurs** : le point-virgule `;` sépare **les éléments d'une donnée** — coordonnées (`A(2;3)`), bornes d'intervalles (`[-5 ; 5]`), séries de nombres (`{12 ; 15 ; 9}`) ou de textes (`{"lundi" ; "mardi"}`), arguments d'une fonction (`arrondi(5/3; 2)`). La virgule `,` sépare les fragments de prose (règle n°10) et reste la virgule décimale à l'intérieur d'un nombre (`3,5`). La barre `|` sépare les paires `clé: valeur` des données nommées (`{Marche: 5 | Bus: 3}`) et les colonnes des rangées saisies. Deux constructions suivent l'usage mathématique plutôt que cette répartition : les paramètres d'une signature se séparent par la virgule (`(a, b) ↦ a − b`), et un dictionnaire lie chaque clé à sa valeur par deux-points, ses entrées restant séparées par le point-virgule (`{"Marche": 5 ; "Bus": 3}`).
 
-9. **Majuscule de phrase** : **Seules** les actions dont l'écriture se lit comme une phrase française (`<Soit>`, `<Tracer>`, etc.) commencent par une majuscule. Les **mots-clés techniques** (`soit`, `pour`, `si`, `fonction`) restent en minuscules.
+9. **Majuscule de phrase** : **Seules** les actions dont l'écriture se lit comme une phrase française (`<Soit>`, `<Tracer>`, etc.) commencent par une majuscule. Les **mots-clés techniques** (`soit`, `pour`, `si`, `tant que`) restent en minuscules.
 10. **Article + prose** : toute action-phrase (`<Soit>`, `<Tracer>`) désigne ses objets avec un article et décrit leurs attributs en prose. En détail :
 
-   - **L'article porte l'intention.** `<Soit>` introduit du nouveau : article **indéfini** (`un point A(2;7)`). Au pluriel, le subjonctif s'accorde — `<Soient>` — et l'article **factorise** : `<Soient>les points A(-1,5;3), B(2;5) et C(0;-4,3)` — une seule phrase pour trois points. Un **nombre** peut tenir lieu d'article pluriel (`<Soient>3 points A(1;2), B(-1;2) et C(-1;-2)`) : docdg vérifie alors que le compte annoncé correspond au nombre de points décrits. Enfin, la **distribution respective** — l'idiome des énoncés du secondaire et du supérieur (« de coordonnées respectives », « d'unités respectives ») — sépare les noms des valeurs et les apparie dans l'ordre : `<Soient>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)`. `<Tracer>` prend l'article **défini** pour un objet déjà posé (`le point A`) et l'**indéfini** quand il crée la figure au moment du tracé (`un triangle ABC équilatéral, de côté 5 cm`). Les deux formes produisent le même tracé. L'article se met devant chaque nom — objets compris : `<un cadre avec une bordure rouge...>`, `<une grille...>`.
+   - **L'article porte l'intention.** `<Soit>` introduit du nouveau : le type vient **après** le nom, avec l'article **indéfini** (`A(2;7) un point`). Au pluriel, la balise `<Soit>` reste invariable dans la source et la phrase imprimée s'accorde d'elle-même (« Soient A et B deux points… ») ; l'article **cède la place au nombre**, en chiffres : `<Soit>A(-1,5;3), B(2;5) et C(0;-4,3) 3 points` — une seule phrase pour trois points, et docdg vérifie que le compte annoncé correspond au nombre de noms. Le nombre ne se met jamais avant les noms : `<Soit>3 points A, B et C …` est refusé, avec la forme corrigée. Enfin, la **distribution respective** — l'idiome des énoncés du secondaire et du supérieur (« de coordonnées respectives », « d'unités respectives ») — sépare les noms des valeurs et les apparie dans l'ordre : `<Soit>A, B et C 3 points de coordonnées respectives (1;2), (-1;2) et (-1;-2)`. `<Tracer>` prend l'article **défini** pour un objet déjà posé (`le point A`) et l'**indéfini** quand il crée la figure au moment du tracé (`un triangle ABC équilatéral, de côté 5 cm`). Les deux formes produisent le même tracé. L'article se met devant chaque nom — objets compris : `<Afficher>un cadre avec une bordure rouge…`, `<Afficher>une grille…`.
    - **Les qualificatifs** restent accolés au nom sans « de » : `équilatéral`, `rectangle en A`.
-   - **Les propriétés à antonyme court** se disent en prose : `avec les marques` / `sans marques`, `avec les valeurs` / `sans valeurs`. `avec` prend l'article, `sans` ne le prend pas — comme en français (`avec du sucre` / `sans sucre`). `avec` sert aussi à introduire un groupe d'attributs : `<un tableau [...] avec entête>`, `avec un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}`.
+   - **Les propriétés à antonyme court** se disent en prose : `avec les marques` / `sans marques`, `avec les valeurs` / `sans valeurs`. `avec` prend l'article, `sans` ne le prend pas — comme en français (`avec du sucre` / `sans sucre`). `avec` sert aussi à introduire un groupe d'attributs : `avec un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}`.
    - **La couleur** se dit avec `en` : `en bleu`, `en rouge foncé`.
    - **L'épaisseur du trait** se dit `de trait N mm` (`de trait 0,5 mm`) — c'est une mesure : son unité est obligatoire, comme toutes les unités de longueur.
 
@@ -482,13 +533,13 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
    - **Les unités de longueur** (`cm`, `mm`) sont **obligatoires** : `de côté 5,3 cm`, jamais `de côté 5,3`. Une longueur sans unité est une erreur, dite en français. *Seule exception :* dans un repère, les longueurs se comptent en **graduations** et s'écrivent sans unité.
    - **Le clé:valeur** ne garde que les réglages purement techniques sans tournure française courante. Chaque fois qu'un nom français existe, la prose gagne : `avec 200 échantillons` plutôt qu'un réglage abstrait, `un pas de $pi/6$` plutôt qu'un `step:`.
 
-12. **Une balise commence toujours par un verbe d'action à l'infinitif** — `<Dresser>un tableau ...`, `<Afficher>un cadre ...`, `<Insérer l'image ...>`, `<Construire>un arbre ...`, `<Tracer>...`, `<Soit>` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Afficher>un cadre` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Trois familles seulement échappent au verbe, parce qu'elles ne posent aucun objet dans le document : les **styles** (`<gras rouge 14 pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Afficher>un cadre avec ...`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Afficher`, `Dresser`, `Construire` et `Insérer` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
+12. **Une balise d'action commence par un verbe à l'infinitif** — `<Dresser>un tableau ...`, `<Afficher>un cadre ...`, `<Insérer l'image ...>`, `<Construire>un arbre ...`, `<Tracer>...` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Afficher>un cadre` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Quatre familles seulement échappent à l'infinitif : la **déclaration** `<Soit>`, formule consacrée du discours mathématique, et trois familles qui ne posent aucun objet dans le document : les **styles** (`<gras rouge 14 pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Afficher>un cadre avec ...`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Afficher`, `Dresser`, `Construire` et `Insérer` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
 
 
 ### **🔹 Structure d'une balise**
 
-```docdg
-<OBJET PROPRIÉTÉS>{
+```
+<Action>objet avec propriétés {
   CONTENU
 }
 ```
@@ -496,7 +547,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 **Exemple :**
 
 ```docdg
-<un cadre avec une bordure rouge, un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention}>{
+<Afficher>un cadre avec une bordure rouge, un fond jaune clair, des coins arrondis de 5 mm et un titre {Attention} {
   <gras 14 pt>{Exercice important !}
 }
 ```
@@ -584,6 +635,8 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 2. **Chaque donnée est entre crochets**, une paire par cellule, séparées par une ou plusieurs tabulations : `[Nom]	[15]`, jamais de point-virgule à l'intérieur.
 3. **Les fusions se lisent dans l'entête** : un tiret en fin de mot fusionne horizontalement, un deux-points fusionne verticalement — voir plus bas.
 
+> **⇥ Les colonnes s'alignent d'elles-mêmes.** Dans le volet Source, la tabulation et le retour à la ligne réalignent tout le tableau : chaque colonne démarre au même endroit sur toutes les rangées, les données d'une rangée de continuation se rangent sous leur colonne, et une tabulation en fin de rangée place le curseur sous la colonne suivante. Un tableau collé ou inséré depuis le bandeau arrive déjà aligné. Seules les tabulations bougent — la grammaire en admet une ou plusieurs —, si bien que le document lu ne change pas d'un iota ; une rangée en cours de frappe (crochet encore ouvert) est laissée telle quelle, et un seul Cmd-Z (Ctrl-Z) annule la frappe et l'alignement ensemble.
+
 ```docdg
 <Dresser>un tableau {
 	<mc>	<mg>	<md>
@@ -610,7 +663,7 @@ La première rangée, hors crochets, est l'entête, en gras, sans que le mot `en
 
 « S1 » couvre trois rangées, « Lundi » deux : chacun couvre ce qu'il porte. Le deux-points est consommé, jamais imprimé — mais un deux-points **à l'intérieur d'une donnée** (`[Nom :]`) n'est que du texte : la grammaire ne regarde le deux-points qu'en dehors des crochets.
 
-**Fusion horizontale : le tiret après l'entête.** Un ou plusieurs tirets après une entête la font couvrir une colonne de plus par tiret. L'espacement ne compte pas — `Identité-`, `Identité -` et un tiret seul dans sa colonne disent la même chose, les tabulations ne servant qu'à aligner la source à l'œil. Sans risque pour un mot composé : le tiret de fusion n'est jamais suivi d'une lettre, si bien que « Sous-total » reste un seul mot :
+**Fusion horizontale : le tiret après l'entête.** Un ou plusieurs tirets après une entête la font couvrir une colonne de plus par tiret. L'espacement ne compte pas — `Identité-`, `Identité -` et un tiret seul dans sa colonne disent la même chose, les tabulations ne servant qu'à aligner la source à l'œil — alignement que l'éditeur fait lui-même. Sans risque pour un mot composé : le tiret de fusion n'est jamais suivi d'une lettre, si bien que « Sous-total » reste un seul mot :
 
 ```docdg
 <Dresser>un tableau {
@@ -667,7 +720,7 @@ Employé seul, sans piste vertical/horizontal explicite, `au centre` vaut `mc`, 
 
 | **Option**              | **S'écrit**                          | **Défaut**    | **Description**                              |
 | ----------------------- | --------------------------------------- | ------------- | ---------------------------------------------- |
-| Couleur de la bordure    | `une bordure <couleur>`               | `gris`        | Couleur des bordures                            |
+| Couleur de la bordure    | `une bordure <couleur>`               | `noir`        | Couleur des filets, tracés d'office             |
 | Couleur des cellules     | `texte <couleur>`, `fond <couleur>`   | -             | Couleur du texte et du fond des cellules        |
 | Couleur des entêtes      | `des entêtes en <couleur texte> sur fond <couleur fond>` | -   | Couleur de toutes les cellules d'entête         |
 | Écart entre cellules     | `écart de <N> mm`                     | `0 mm`        | Espacement entre cellules                       |
@@ -693,8 +746,8 @@ Mêmes conventions que pour `<Afficher>un cadre` : `texte <couleur>` / `fond <co
 <Dresser>un tableau {
 	<mg>	<md>
 	Jour	Note
-	pour j: une chaîne de caractères dans {Lundi ; Mardi ; Mercredi} {
-		[#j]	[#{tirage(0;20)}]
+	pour j ∈ {"Lundi" ; "Mardi" ; "Mercredi"} {
+		[#j]	[#{aléatoire(0 ; 20)}]
 	}
 }
 ```
@@ -784,7 +837,7 @@ donnée, elle suit la dimension — `cm` pour un périmètre, `cm²` pour une ai
 <Factoriser>x^2 + 1 dans Q[X]
 ```
 
-`dans les complexes` et `dans C[X]` sont la même demande. `<Résoudre>` reçoit les mêmes compléments, plus `dans les entiers` (ou `dans ZZ`) pour une équation diophantienne.
+`dans les complexes` et `dans C[X]` sont la même demande. Dans $\mathbb{R}$ et dans $\mathbb{C}$, la factorisation va jusqu'aux facteurs irréductibles lorsque les coefficients sont des nombres et que les racines gardent une écriture courte (`x^2 - 2`, `x^2 - pi`, `x^4 + 1`) ; sinon docdg rend la factorisation rationnelle et dit que le facteur restant n'a pas été décomposé — c'est une limite du moteur, non un résultat sur le polynôme. `<Résoudre>` reçoit les mêmes compléments, plus `dans les entiers` (ou `dans ZZ`) pour une équation diophantienne.
 
 ```docdg
 <Écrire>le complexe z = 1 + i sous ses trois formes
@@ -819,7 +872,7 @@ Notation colonne, deux ou trois coordonnées, fractions acceptées. Le nom est f
 Le tableau se dresse tout seul. La somme des probabilités est vérifiée : une loi qui ne totalise pas 1 est refusée, avec le total fautif dans le message.
 
 ```docdg
-<Soit>la suite u définie par u(0) = 1 et u(n+1) = 2u(n) + 1
+<Soit>u une suite définie par u(0) = 1 et u(n+1) = 2u(n) + 1
 
 <Calculer>les 6 premiers termes de u
 ```
@@ -960,7 +1013,7 @@ La hauteur d'une rangée est facultative : sans elle, la rangée vaut `<min>`.
 
 | **Propriété**            | **S'écrit**                          | **Défaut** | **Description**                                                  |
 | ------------------------- | --------------------------------------| ---------- | ------------------------------------------------------------------|
-| Bordures                   | `bordures` (sans valeur)             | absentes   | Affiche une bordure autour de chaque zone                          |
+| Bordures                   | `des bordures`, une couleur peut suivre | absentes   | Affiche une bordure autour de chaque zone (`des bordures orange`)  |
 | Couleur de la bordure      | `une bordure <couleur>`              | `gris`     | Couleur des bordures (par défaut, surchargeable par zone)          |
 | Couleur du contenu         | `texte <couleur>`, `fond <couleur>`  | `texte noir, fond blanc` | Couleur du contenu (par défaut, surchargeable par zone) |
 | Écart                      | `écart de <N> mm`                    | `3 mm`     | Espacement entre zones                                              |
@@ -1027,8 +1080,8 @@ Une étiquette posée sur une division se renvoie **par son seul numéro** : `la
 **Exemple :**
 
 ```docdg
-soit h0: un style = <bleu marine gras chapitre Roman>
-soit h1: un style = <bleu gras section Alpha>
+soit h0 un style défini par <bleu marine gras chapitre Roman>
+soit h1 un style défini par <bleu gras section Alpha>
 
 <tome>Ce que la matière imposait
 
@@ -1039,7 +1092,7 @@ soit h1: un style = <bleu gras section Alpha>
 <h1>Une longueur qui ne se discutait pas
 ```
 
-Une division se déclare aussi bien par un style nommé — `soit p: un style = <bleu nuit partie>` — que par son mot nu, comme ci-dessus.
+Une division se déclare aussi bien par un style nommé — `soit p un style défini par <bleu nuit partie>` — que par son mot nu, comme ci-dessus.
 
 ---
 
@@ -1048,7 +1101,7 @@ Une division se déclare aussi bien par un style nommé — `soit p: un style = 
 Toutes les pages n'ont pas besoin d'être en colonnes, et c'est pourquoi la colonne n'est pas un réglage du document : **un passage se compose en colonnes, entre deux accolades**, et le reste garde la pleine largeur.
 
 ```docdg
-<Composer>sur deux colonnes {
+<Composer>sur 2 colonnes {
 	La colonne étroite est la respiration de la page savante : l'œil y saisit
 	la ligne entière sans balayer, et la césure y trouve son plein emploi.
 
@@ -1057,7 +1110,7 @@ Toutes les pages n'ont pas besoin d'être en colonnes, et c'est pourquoi la colo
 }
 ```
 
-**D'une à cinq colonnes**, en toutes lettres ou en chiffres — `sur deux colonnes` ou `sur 2 colonnes`, au choix. Deux pour un article, trois pour un lexique ou une liste de mots courts.
+**D'une à cinq colonnes**, le nombre s'écrit en chiffres, comme partout dans la source — `sur 2 colonnes` ; l'écriture en toutes lettres est refusée avec la forme attendue. Deux pour un article, trois pour un lexique ou une liste de mots courts.
 
 Le corps est du docdg ordinaire : des paragraphes, des listes, des cadres, des formules. **Ce qui suit l'accolade fermante retrouve la pleine largeur** — un tableau large, une frise, une figure se posent donc entre deux passages en colonnes, sans syntaxe d'échappement.
 
@@ -1074,7 +1127,7 @@ document {
 **Un filet se demande** et se décrit comme tous les traits de docdg — une couleur, un dessin, une épaisseur :
 
 ```docdg
-<Composer>sur trois colonnes avec un filet gris clair {
+<Composer>sur 3 colonnes avec un filet gris clair {
 	Trois colonnes conviennent à un lexique : la ligne est brève, l'œil en
 	saisit plusieurs d'un seul coup.
 
@@ -1085,7 +1138,7 @@ document {
 
 **Un passage plus haut qu'une page se poursuit sur la suivante**, en colonnes de même, sans qu'on ait rien à déclarer : à la différence du cadre, qui est insécable tant qu'on ne le déclare pas sécable, le passage en colonnes se coupe toujours — un texte courant n'a aucune raison de rester d'un seul tenant.
 
-`basique3` montre la forme, `publication3` la démonstration typographique : un passage de quatre paragraphes qui traverse une page, filet compris. Une colonne accueille tout ce qu'accueille la page, [réglure Seyès comprise](#-lécriture-en-réglure).
+`basique.txt` montre la forme (« Le passage en colonnes »), `publication3.txt` la démonstration typographique : un passage de quatre paragraphes qui traverse une page, filet compris. Une colonne accueille tout ce qu'accueille la page, [réglure Seyès comprise](#-lécriture-en-réglure).
 
 ---
 
@@ -1173,13 +1226,15 @@ Son carré vaut $n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$, qui est impair.
 
 Le mot **`démonstration` seul** suffit lorsque la preuve n'a pas de charpente à nommer : le moteur la compose sous son intitulé, sans annonce ni conclusion — c'est la forme des corollaires immédiats. Et **`démonstration que …`** restitue la propriété à démontrer quand l'énoncé compte plusieurs phrases.
 
-### **Trois documents, trois usages**
+### **Trois parties, trois usages**
 
-| Document | Ce qu'il montre |
+Les trois parties de `exemples/demonstration.txt` :
+
+| Partie | Ce qu'elle montre |
 |---|---|
-| `tests/fixtures/exemples-historiques/demonstration2.txt` | **l'auteur écrit, le moteur charpente** — les dix raisonnements écrits à la main, plus la preuve logée dans l'énoncé |
-| `tests/fixtures/exemples-historiques/demonstration3.txt` | **le moteur démontre seul** au lycée — aucun corps entre accolades |
-| `tests/fixtures/exemples-historiques/demonstration4.txt` | **le moteur démontre seul** dans le supérieur — quatre-vingt-dix des cent une fiches de la bibliothèque y passent, les onze autres étant appelées par `demonstration3.txt` |
+| « Démonstrations rédigées par l'auteur » | **l'auteur écrit, le moteur charpente** — les raisonnements écrits à la main, plus la preuve logée dans l'énoncé |
+| « Démonstrations automatiques : lycée » | **le moteur démontre seul** au lycée — aucun corps entre accolades |
+| « Démonstrations automatiques : supérieur » | **le moteur démontre seul** dans le supérieur — suites, séries, structures algébriques, algèbre linéaire, arithmétique, analyse et topologie |
 
 ### **Trois sources, une seule rédaction**
 
@@ -1218,21 +1273,21 @@ L'énoncé est reconnu après normalisation — accents, mathématiques et ponct
 
 ### **`<Soit>` — Poser des hypothèses de départ**
 
-**Rôle :** `<Soit>` déclare un ou plusieurs éléments ou hypothèses d'un coup (points, valeurs, fonctions, champs, systèmes...) *et les affiche* dans le document sous la forme d'un énoncé « Soit ... ». `soit` en minuscule, lui, assigne silencieusement, sans rien afficher (voir « Alias et macros »). C'est le même verbe sous deux formes — la casse suit la règle n°9.
+**Rôle :** `<Soit>` déclare un ou plusieurs éléments ou hypothèses d'un coup (points, valeurs, fonctions, champs, systèmes...) *et les affiche* dans le document sous la forme d'un énoncé « Soit ... ». Une déclaration complète avec `soit` en minuscule est exécutée silencieusement, sans rien afficher (voir « Alias et macros »). Une ligne qui n'en respecte pas la syntaxe reste de la prose, sans alerte. C'est le même verbe sous deux formes — la casse suit la règle n°9.
 
 **Syntaxe (plusieurs éléments) :**
 
 ```docdg
 <Soit>{
-	un point A(2;-1,5)
-	un point B(-4,1;3,4)
+	A(2;-1,5) un point
+	B(-4,1;3,4) un point
 }
 ```
 
 **Syntaxe (un seul élément) :** comme pour `<Tracer>`, le contenu suit directement le chevron fermant sans accolades — celles-ci ne servent qu'à regrouper plusieurs lignes.
 
 ```docdg
-<Soit>un point A(2;-1,5)
+<Soit>A(2;-1,5) un point
 ```
 
 **Affiche :**
@@ -1248,46 +1303,69 @@ Soit A le point de coordonnées (2 ; -1,5).
 Soit B le point de coordonnées (-4,1 ; 3,4).
 ```
 
-**L'ordre suit l'usage du supérieur : le nom, puis la nature.** « Soit A le point de coordonnées (2 ; 3) », et non « Soit le point A(2 ; 3) ». Le pluriel accorde l'impératif, à la balise comme dans la phrase rendue — `<Soient>les points A et B de coordonnées respectives …` donne « Soient A et B les points de coordonnées … ». Chaque déclaration est une **phrase**, non une formule affichée :
+**L'ordre suit l'usage du supérieur : le nom, puis la nature.** « Soit A le point de coordonnées (2 ; 3) », et non « Soit le point A(2 ; 3) ». Au pluriel, la balise ne change pas et la phrase rendue s'accorde — `<Soit>A et B 2 points de coordonnées respectives …` donne « Soient A et B deux points de coordonnées respectives … » : le nombre s'écrit en chiffres dans la source, où il ne dépend d'aucune orthographe, et se rend en toutes lettres. Chaque déclaration est une **phrase**, non une formule affichée — sauf la fonction, qui se compose hors texte comme au tableau, sur deux lignes alignées :
 
 | Déclaration | Rendu |
 |---|---|
-| `<Soit>une fonction f(x) = x^2 - 2` | Soit *f* la fonction définie par *f*(*x*) = *x*² − 2. |
-| `<Soient>les fonctions f(x) = x^2 et g(x) = -x^2` | Soient *f* et *g* les fonctions définies par … |
-| `<Soit>un vecteur u(3;-2)` | Soit *u⃗* le vecteur de coordonnées (3 ; −2). |
-| `<Soit>la matrice M{…}` | Soit *M* la matrice définie par : puis la matrice hors texte |
-| `<Soit>le système s{…}` | Soit (*s*) le système : puis le système hors texte |
+| `<Soit>f une fonction définie par f(x) = x² − 2` | Soit *f* la fonction définie par *f*(*x*) = *x*² − 2. |
+| `<Soit>f une fonction de ℝ dans ℝ définie par f(x) = x² − 2` | Soit *f* : ℝ ⟶ ℝ, puis à la ligne *x* ⟼ *x*² − 2 |
+| `<Soit>f et g 2 fonctions définies par f(x) = x² et g(x) = −x²` | Soit *f* et *g* deux fonctions définies par *f*(*x*) = *x*² et *g*(*x*) = −*x*². |
+| `<Soit>u(3;-2) un vecteur` | Soit *u⃗* le vecteur de coordonnées (3 ; −2). |
+| `<Soit>M une matrice définie par {…}` | Soit *M* la matrice définie par : puis la matrice hors texte |
+| `<Soit>s un système défini par {…}` | Soit (*s*) le système : puis le système hors texte |
 
 Le système garde l'ordre inverse : son nom est une étiquette parenthésée, non le nom propre de l'objet.
 
-Les points ainsi déclarés peuvent ensuite être repris par `<Tracer>` (voir plus bas) sans qu'il soit nécessaire de redonner leurs coordonnées.
+**Une fonction se déclare comme on l'écrit au tableau, dans l'un de trois registres.** Le nom, puis son type introduit par l'article, sans virgule — « f une fonction » —, puis sa définition ; le registre dit seulement comment les ensembles sont donnés :
 
-**La factorisation plurielle, sous quatre formes équivalentes.** Une seule phrase déclare plusieurs points ; l'article pluriel (`les`, `des`) ou un **nombre** ouvre la liste, et les coordonnées se donnent soit accolées à chaque nom, soit regroupées en fin de phrase par la **distribution respective** — la tournure des énoncés de collège, de lycée et du supérieur (« de coordonnées respectives », « de rayons respectifs », « de probabilités respectives ») :
+| Registre | Écriture | Ensembles | Rendu |
+|---|---|---|---|
+| Simplifié | `<Soit>t une fonction définie par t(x) = tan(x)` | implicites | la phrase « Soit t la fonction définie par t(x) = tan(x). » |
+| Rédigé | `<Soit>f une fonction de ℝ dans ℝ définie par f(x) = x²` | en mots | « Soit f : ℝ ⟶ ℝ », puis « x ⟼ x² » |
+| Formel | `<Soit>f : ℝ → ℝ, x ↦ x²` | en symboles | « Soit f : ℝ ⟶ ℝ », puis « x ⟼ x² » |
+
+Sans ensembles écrits, la convention est celle de la fonction de la variable réelle : définie sur son ensemble de définition, à valeurs dans ℝ (ℝ² au départ pour deux variables) ; `<Déterminer>le domaine de t` le calcule. Avec ensembles, la déclaration se compose hors texte, à gauche, comme un tableau à trois colonnes : la variable calée sous l'ensemble de départ, ⟼ sous ⟶, l'image sous l'ensemble d'arrivée. Dans cette déclaration, le lien est toujours « définie par » — DocDG refuse « telle que » et rappelle la forme admise — et le participe s'accorde. Plusieurs fonctions se déclarent ensemble avec leur nombre en chiffres, que docdg contrôle : `<Soit>f et g 2 fonctions définies par f(x) = x² et g(x) = 2x`. Dans DocDG, le mot-clé `<Soit>` reste invariable (« Soit deux droites ») : `<Soient>`, que la langue admet, y est refusé avec la forme corrigée.
+
+Un nom de plusieurs lettres se compose droit, comme `\operatorname`, jusque dans ses appels, si bien qu'une définition récursive reste lisible ; une définition par morceaux prend l'accolade des cas, une ligne « valeur si condition », la dernière « valeur sinon » :
 
 ```docdg
-<Soient>les points A(1;2), B(-1;2) et C(-1;-2)
-<Soient>3 points A(1;2), B(-1;2) et C(-1;-2)
-<Soient>les points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
-<Soient>3 points A, B et C de coordonnées respectives (1;2), (-1;2) et (-1;-2)
+<Soit>factorielle une fonction de ℕ dans ℕ définie par
+factorielle(n) = {
+    1 si n = 0
+    n × factorielle(n − 1) sinon
+}
 ```
 
-Les quatre phrases posent exactement les trois mêmes points. Deux garde-fous, dits en français : le **compte** annoncé par le nombre doit correspondre au nombre de points décrits, et la distribution respective exige **autant de couples de coordonnées que de noms**, appariés dans l'ordre. La factorisation vaut aussi pour les **fonctions** — une seule phrase les pose toutes :
+Déclarée par `soit` en minuscule, une fonction devient algorithmique : elle se calcule sans s'afficher (`#{factorielle(5)}` vaut 120), et, typage oblige, elle donne toujours ses ensembles — `soit g une fonction de ℤ dans ℤ définie par g(n) = n + 1` ou `soit g : ℤ → ℤ, n ↦ n + 1` ; le registre simplifié lui est refusé. Les ensembles s'écrivent comme on les lit : `ℝ²*+` donne ℝ avec 2 en exposant et ∗+ en indice, en prose comme entre dollars.
+
+Les points ainsi déclarés peuvent ensuite être repris par `<Tracer>` (voir plus bas) sans qu'il soit nécessaire de redonner leurs coordonnées.
+
+**Les points et les vecteurs, sous deux formes.** Comme toute déclaration, celle d'un point suit l'ordre de l'usage : le nom, puis le type introduit par l'article — ou par le nombre en chiffres quand on en déclare plusieurs —, sans virgule entre eux. Les coordonnées se donnent soit **accolées aux noms**, comme on écrit un vecteur u(1 ; 0) — la forme courte des énoncés, « Soit A(1 ; 2), B(−1 ; 2) et C(−1 ; −2) trois points » —, soit en fin de phrase, par la **distribution respective** :
 
 ```docdg
-<Soient>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
+<Soit>A(1;2), B(-1;2) et C(-1;-2) 3 points
+<Soit>A, B et C 3 points de coordonnées respectives (1;2), (-1;2) et (-1;-2)
+```
+
+Au singulier : `<Soit>A(1 ; 2) un point` ou `<Soit>A un point de coordonnées (1 ; 2)`. Les vecteurs suivent les mêmes deux formes (`<Soit>u(1 ; 0 ; 1) et v(0 ; 1 ; 1) 2 vecteurs`). Les autres objets prennent leur lien : `<Soit>u une suite définie par u(0) = 1 et u(n+1) = 2u(n) + 1`, `<Soit>S un système défini par {` … `}`, `<Soit>M une matrice définie par {` … `}` ou, d'une ligne, `<Soit>M une matrice telle que M = {{1 ; 2} ; {3 ; 4}}`. Les anciennes tournures (`<Soit>les points A(1;2)…`, `<Soit>un point A(…)`, `<Soit>la matrice M {`) sont refusées avec la forme attendue.
+
+Les deux phrases posent exactement les trois mêmes points. Deux garde-fous, dits en français : le **compte** annoncé par le nombre doit correspondre au nombre de points décrits, et la distribution respective exige **autant de couples de coordonnées que de noms**, appariés dans l'ordre. La factorisation vaut aussi pour les **fonctions** — une seule phrase les pose toutes :
+
+```docdg
+<Soit>f, g et h 3 fonctions définies par f(x) = exp(−x²), g(x) = −x⁴ + 2x² + 1 et h(x) = (x+1)/(x−2)
 ```
 
 et chacune est enregistrée comme si elle avait été posée seule (tableaux de variations, dérivées, zéros, tracé : tout suit). Les coefficients décimaux s'écrivent à la française (`-4,9t^2 + 20t`) : la virgule décimale, encadrée de chiffres, n'est jamais confondue avec la virgule qui sépare les fonctions. Elle vaut de même pour les **phrases calculantes** — `<Calculer>la dérivée de f, g et h` vaut trois calculs, un par fonction, et de même pour la dérivée seconde, la primitive, les zéros... — et pour le **tracé** : `<Représenter>graphiquement les fonctions f, g et h pour x dans [-2 ; 2] et y dans [-3 ; 3]` dessine les trois courbes dans le même repère, chacune avec sa couleur et sa légende. La distribution respective sert aussi au repère (`avec des unités respectives de 2 cm et 0,5 cm`, voir `<Tracer>`) ; son extension aux autres objets (sphères, événements) suivra au fil des versions.
 
-> **Règle de l'article :** indéfini à la déclaration (`<Soit>` : `un point A`), défini à toute reprise ultérieure (`<Tracer>` ou une autre action : `le point A`).
+> **Règle de l'article :** indéfini à la déclaration (`<Soit>A(1 ; 2) un point`), défini à toute reprise ultérieure (`<Tracer>` ou une autre action : `le point A`).
 
 **Le champ de vecteurs.** Pour les classes préparatoires, `<Soit>` sait déclarer un champ :
 
 ```docdg
-<Soit>un champ de vecteurs F de RR^3 dans RR^3 défini par F(x, y, z) = (x^2, yz, sin(z))
+<Soit>F un champ de vecteurs de ℝ³ dans ℝ³ défini par F(x, y, z) = (x², yz, sin(z))
 ```
 
-qui s'affiche « Soit un champ de vecteurs F : ℝ³ → ℝ³ défini par F(x, y, z) = (x², yz, sin(z)) ». Les doubles lettres `RR`, `NN`, `ZZ`, `QQ`, `CC` produisent les ensembles en gras de tableau, comme partout dans les zones mathématiques. La déclaration est **purement notationnelle** : un champ vectoriel n'a ni courbe ni tableau de variations associables, il n'est donc pas enregistré comme les fonctions scalaires le sont.
+qui s'affiche « Soit F le champ de vecteurs de ℝ³ dans ℝ³ défini par F(x, y, z) = (x², yz, sin(z)) ». Comme toute déclaration, le nom vient d'abord, puis le type ; les ensembles s'écrivent comme partout, ℝ³, ℝ²*+. La déclaration est **purement notationnelle** : un champ vectoriel n'a ni courbe ni tableau de variations associables, il n'est donc pas enregistré comme les fonctions scalaires le sont.
 
 
 ### **`<Tracer>` — Dessiner tout type de figure**
@@ -1328,7 +1406,7 @@ en clé:valeur (le seul réglage technique restant à ce niveau) — `rotation:N
 
 ```docdg
 <Tracer>le cercle O, de rayon 3 cm
-<Soient>les points A(0;0) et B(3;0)
+<Soit>A(0;0) et B(3;0) 2 points
 <Tracer>le cercle O, de rayon AB
 <Tracer>le cercle O, de diamètre 6 cm
 <Tracer>le cercle, de centre O et de rayon 4 cm
@@ -1348,6 +1426,35 @@ en clé:valeur (le seul réglage technique restant à ce niveau) — `rotation:N
 
 
 Mêmes options pour `disque` (`de centre A`, `de rayon N` ou `de diamètre N`, `rempli`) et pour `polygone` (`de centre A`, `de rayon N` pour un polygone régulier inscrit).
+
+#### **🧭 Déclarer le repère**
+
+Un repère se déclare comme tout objet, nom puis type : son origine et sa base, sa nature, son espace.
+
+```docdg
+<Soit>(O ; i, j) un repère orthonormé du plan
+<Soit>(O ; i, j, k) un repère orthonormé de l'espace
+<Soit>(O ; i, j) un repère orthogonal du plan
+<Soit>(O ; i, j) un repère du plan
+```
+
+La nature compte, parce que les formules en dépendent. Dans un repère **orthonormé**, ‖u‖² = x² + y². Dans un repère **orthogonal**, les vecteurs de base ont chacun leur longueur, et ‖u‖² = x²‖i‖² + y²‖j‖² : la norme, le produit scalaire, l'angle et le projeté orthogonal se calculent dès que ces longueurs sont déclarées.
+
+```docdg
+<Soit>(O ; i, j) un repère orthogonal du plan tel que ‖i‖ = 2 et ‖j‖ = 1
+<Soit>u(3 ; 4) un vecteur
+<Calculer>la norme de u
+```
+
+Le calcul affiché porte les longueurs : ‖u‖ = √(3² × 2² + 4²) = 2√13. Si elles manquent, `<Calculer>la norme de u` est refusé, et le message dit lesquelles déclarer. Dans un repère **quelconque**, les coordonnées ne suffisent pas : il faudrait aussi les angles des vecteurs de base, et le calcul est refusé pour cette raison. Sans repère déclaré, rien ne change : les calculs supposent, comme toujours, un repère orthonormé.
+
+Le repère est un objet du document. Sa déclaration pose aussi son origine comme point et ses vecteurs de base comme vecteurs : après `<Soit>(O ; i, j) un repère orthogonal du plan tel que ‖i‖ = 2 et ‖j‖ = 1`, `<Calculer>la norme de i` donne 2 et `<Calculer>le produit scalaire de i et j` donne 0. La distance d'un point à un plan suit les mêmes longueurs. Les figures en héritent : `<Tracer>dans un repère où…` prend les proportions du repère déclaré, et une figure qui demanderait un repère orthonormé alors qu'il est déclaré orthogonal est refusée.
+
+**Vecteur par combinaison.** Un vecteur se pose aussi comme combinaison de vecteurs déjà posés, ceux du repère compris : `<Soit>u un vecteur tel que u = 2i + 3j`, `<Soit>w un vecteur tel que w = 2u − 3v`, ou avec un coefficient nommé, `w = k u`. docdg en calcule les coordonnées, et le vecteur sert ensuite comme tout autre. Un nom qui n'est ni un vecteur ni un nombre est signalé.
+
+**Opérateur.** `soit rg un opérateur` déclare une notation : dans les formules, `rg` est alors composé en droit avec l'espacement d'un opérateur, `$rg(A)$` comme `$rg A$`. Les opérateurs usuels n'ont pas à être déclarés — `rang`, `noyau`, `image`, `trace`, `déterminant`, `dim`, `pgcd`, `card` et leurs voisins sont connus.
+
+**Autres objets nommés.** Une suite explicite et un polynôme se posent comme une fonction et se calculent de même : `<Soit>v une suite définie par v(n) = (n + 1) / (2n + 3)`, puis `#{v(3)}` ; `<Soit>P un polynôme défini par P(X) = X³ − 2X + 1`, puis `#{P(2)}`. Un intervalle et un cercle sont des objets contrôlés — les bornes d'un intervalle se suivent, le centre d'un cercle est un point déjà posé, son rayon est strictement positif — et reçoivent un nom que le moteur résout partout où une commande le cite, quelle que soit la tournure — `sur I`, `dans I`, `l'abscisse appartient à I` — : `<Soit>I un intervalle tel que I = [0 ; 1]`, puis `<Soit>f une fonction de I dans ℝ définie par f(x) = x²` ; `<Soit>C un cercle de centre A et de rayon 3`, puis `<Tracer>le cercle C`.
 
 #### **📊 Repère orthonormé**
 
@@ -1412,7 +1519,7 @@ Même convention que pour les figures planes : `arête`, `rayon`, `diamètre`, `
 Pour tracer un élément isolé, sans ouvrir un repère complet :
 
 ```docdg
-<Soit>un point A(2;-1,5)
+<Soit>A(2;-1,5) un point
 <Placer>le point A
 <Placer>un point B(3 ; 1)
 <Placer>les points A, B et C tels que AB = 5 cm, BC = 4 cm et AC = 3 cm
@@ -1488,7 +1595,7 @@ Pour construire une figure complète dans une partie (ou un cadre) — plusieurs
 - **La bissectrice** se dit `la bissectrice de l'angle ABC` — le **sommet est la lettre centrale** (ici `B`), convention géométrique française. Elle se trace comme demi-droite issue du sommet, prolongée jusqu'au bord du repère. `avec les marques` ajoute les deux arcs égaux de part et d'autre.
 - **L'angle** seul, `l'angle BAC`, trace la marque d'arc au sommet (lettre centrale) — utile pour désigner un angle sur une figure sans le bissecter. Ne pas confondre avec l'*attribut* `d'angle N` (une mesure, en degrés) du losange ou du parallélogramme.
 
-> Les points posés par un `<Soit>` antérieur — au singulier (`un point A(2;7)`) comme au pluriel factorisé (`les points A(-3;1), B(3;-1) et C(2;4)`) — **persistent** : tout bloc `<Tracer>` qui les nomme les reçoit automatiquement. La médiatrice et la bissectrice sur figure métrique (hors repère, `le triangle ABC...`) restent prévues pour une version ultérieure.
+> Les points posés par un `<Soit>` antérieur — au singulier (`<Soit>A(2;7) un point`) comme au pluriel factorisé (`<Soit>A(-3;1), B(3;-1) et C(2;4) 3 points`) — **persistent** : tout bloc `<Tracer>` qui les nomme les reçoit automatiquement. La médiatrice et la bissectrice sur figure métrique (hors repère, `le triangle ABC...`) restent prévues pour une version ultérieure.
 
 **L'angle sous toutes ses formes.** Au-delà de `l'angle BAC` (trois points, sommet central), le repère accepte :
 
@@ -1512,14 +1619,14 @@ Pour construire une figure complète dans une partie (ou un cadre) — plusieurs
 - **`l'angle entre OA et OC`** est la forme non orientée de la même construction.
 - **`le vecteur u(1;0)`** pose un vecteur libre, tracé depuis l'origine ; **`l'angle entre le vecteur u et le vecteur v`** marque l'arc entre leurs directions, au point de départ du premier. Les deux vecteurs doivent avoir été tracés dans le même bloc.
 
-> **Périmètre du moteur de figures — et feuille de route.** Le moteur de figures est un moteur **plan**. L'angle dièdre entre deux plans, le plan défini par trois points de l'espace, l'angle entre une droite et un plan — toutes les constructions qui exigent une vraie troisième dimension — sont notés pour une version ultérieure dotée d'un moteur 3D (les solides actuels sont des projections câblées, pas un espace calculé). De même, `la droite d, passant par A et B` comme objet *nommé* réutilisable attend le mécanisme d'alias de figures (`soit d: une droite = ...`), prévu avec la persistance des points entre blocs. Cette forme est prospective, non disponible en 3.9.
+> **Périmètre du moteur de figures — et feuille de route.** Le moteur de figures est un moteur **plan**. L'angle dièdre entre deux plans, le plan défini par trois points de l'espace, l'angle entre une droite et un plan — toutes les constructions qui exigent une vraie troisième dimension — sont notés pour une version ultérieure dotée d'un moteur 3D (les solides actuels sont des projections câblées, pas un espace calculé). De même, `la droite d, passant par A et B` comme objet *nommé* réutilisable attend le mécanisme d'alias de figures (`soit d une droite telle que d = ...`), prévu avec la persistance des points entre blocs. Cette forme est prospective, non disponible en 3.9.
 
 > **Un seul verbe, une seule prose.** Le mode analytique n'introduit aucune syntaxe nouvelle : c'est un `<Tracer>le repère, ...` ordinaire (règle n°10, article défini, bornes en prose `où l'abscisse appartient à [a ; b] et l'ordonnée à [c ; d]`) dont le contenu entre accolades énumère les objets à inscrire dans ce repère, chacun à son tour avec sa propre prose. Une ébauche antérieure du langage ouvrait ce mode par un réglage `axes:{...}` en clé:valeur ; mais les bornes décrivent *ce que montre* la figure, au même titre qu'un rayon ou un côté — elles sont donc en prose, et le mot `axes:` n'existe pas. On n'écrit jamais `<Tracer, où l'abscisse ...>` (virgule après un verbe sans objet, incorrecte en français) : le repère est toujours nommé (`le repère`), exactement comme on nomme `le cercle` ou `la fonction`. Le même repère se dit aussi bien `<Représenter>graphiquement le repère, ...` dès que son contenu relève de l'analyse (courbes de fonctions) plutôt que de la géométrie plane — voir l'encadré ci-dessous.
 
 **Le repère est un objet : il accueille des courbes de fonctions.** Une fonction posée par `<Soit>` se trace *dans* un repère qui contient aussi des points, des droites ou des vecteurs — la courbe est un habitant du repère parmi les autres :
 
 ```docdg
-<Soient>les fonctions f(x) = x^2 - 2 et g(x) = -x^2 + 3
+<Soit>f et g 2 fonctions définies par f(x) = x² − 2 et g(x) = −x² + 3
 
 <Représenter>graphiquement un repère où l'abscisse appartient à [-3 ; 3] et l'ordonnée à [-4 ; 4]{
     les courbes des fonctions f et g
@@ -1533,7 +1640,7 @@ Chaque courbe reçoit sa couleur et son nom en étiquette. Trois proses équival
 **La forme académique du repère.** Les énoncés du secondaire et du supérieur nomment le repère et détaillent chaque axe ; docdg les lit tels quels :
 
 ```docdg
-<Représenter>graphiquement dans un repère orthogonal (O, i, j) pour x appartient à [-3 ; 3] et y à [-9 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées{
+<Représenter>graphiquement dans un repère orthogonal (O ; i, j) pour x ∈ [-3 ; 3] et y ∈ [-9 ; 9] avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées{
     les courbes des fonctions f et g
     la droite d'équation y = x
     le point A(-2 ; 3,5)
@@ -1551,8 +1658,8 @@ Chaque courbe reçoit sa couleur et son nom en étiquette. Trois proses équival
 | Algèbre linéaire | `<Afficher>` | matrices, tableaux |
 
 - **`dans un repère ...`** : le `dans` de la tournure académique se lit naturellement après le verbe.
-- **`(O, i, j)`** nomme le repère — la notation est acceptée et consommée ; elle n'ajoute rien au tracé (l'origine s'appelle toujours O).
-- **`pour x appartient à [a ; b] et y à [c ; d]`** est l'équivalent de `où l'abscisse appartient à ... et l'ordonnée à ...` — les deux tournures se valent.
+- **`(O ; i, j)`** nomme le repère, comme au tableau (les écritures `(O, i, j)` et `(O ; i ; j)` sont lues de même) — la notation est acceptée et consommée ; elle n'ajoute rien au tracé (l'origine s'appelle toujours O).
+- **`pour x ∈ [a ; b] et y ∈ [c ; d]`** — qui se dit aussi `pour x appartient à [a ; b] et y à [c ; d]` — est l'équivalent de `où l'abscisse appartient à ... et l'ordonnée à ...` — les deux tournures se valent.
 - **`avec des unités graphiques de 1,5 cm pour l'axe des abscisses et de 0,5 cm pour l'axe des ordonnées`** est la forme longue, chaque axe nommé en toutes lettres, de `avec des unités respectives de 1,5 cm et 0,5 cm` — l'ordre des axes peut être inversé, les valeurs se remettent d'elles-mêmes dans le bon ordre.
 
 ---
@@ -1568,17 +1675,17 @@ Chaque courbe reçoit sa couleur et son nom en étiquette. Trois proses équival
 Une saisie se déclare comme une définition ordinaire : le type à sa place habituelle, à gauche du signe égal, et la balise ne porte que la question entre accolades.
 
 ```docdg
-soit prénom: une chaîne de caractères = <Saisir>{Quel est le prénom de l'élève ?}
-soit âge: un entier = <Saisir>{Quel est son âge ?}
-soit taille: un décimal = <Saisir>{Quelle est sa taille, en mètres ?}
-soit fraction: un rationnel = <Saisir>{Quelle fraction (ex. 1/3) ?}
-soit mesure: un réel = <Saisir>{Quel réel (ex. racine(2)) ?}
-soit affixe: un complexe = <Saisir>{Quel complexe (ex. 1 + 2i) ?}
-soit marié: un booléen = <Saisir>{Est-il marié ?}
-soit initiale: un caractère = <Saisir>{Quelle est sa lettre préférée ?}
+soit prénom une chaîne de caractères telle que prénom = <Saisir>{Quel est le prénom de l'élève ?}
+soit âge ∈ ℤ tel que âge = <Saisir>{Quel est son âge ?}
+soit taille ∈ 𝔻 tel que taille = <Saisir>{Quelle est sa taille, en mètres ?}
+soit fraction ∈ ℚ tel que fraction = <Saisir>{Quelle fraction (ex. 1/3) ?}
+soit mesure ∈ ℝ tel que mesure = <Saisir>{Quel réel (ex. racine(2)) ?}
+soit affixe ∈ ℂ tel que affixe = <Saisir>{Quel complexe (ex. 1 + 2i) ?}
+soit marié ∈ 𝔹 tel que marié = <Saisir>{Est-il marié ?}
+soit initiale un caractère tel que initiale = <Saisir>{Quelle est sa lettre préférée ?}
 ```
 
-Le type s'écrit là où tout type s'écrit — la saisie ne fait aucune exception à la règle. Neuf types simples se saisissent : **un entier naturel** (positif ou nul), **un entier relatif** (ou, par convention, **un entier**), **un décimal** (écrit avec **la virgule**, jamais le point — `1,65`), **un rationnel** (par exemple `1/3`), **un réel** (par exemple `racine(2)`), **un complexe** (par exemple `1 + 2i`), **un booléen** (`vrai`, `oui`, `faux` ou `non`), **un caractère** (un seul), **une chaîne de caractères** (non vide). Les nombres sont évalués et vérifiés par le même moteur de typage exact que les déclarations ordinaires : une valeur irrationnelle n'est pas admise comme rationnelle et un complexe non réel n'est pas admis comme réel. L'ancienne forme, qui portait le type dans la balise, est refusée en nommant la forme correcte. Une saisie sans type, ou dont le type n'est pas directement saisissable — une liste ou une matrice —, est signalée au lieu de disparaître silencieusement.
+Le type s'écrit là où tout type s'écrit — la saisie ne fait aucune exception à la règle. Neuf types simples se saisissent : **un entier naturel** (positif ou nul), **un entier relatif** (ou, par convention, **un entier**), **un décimal** (écrit avec **la virgule**, jamais le point — `1,65`), **un rationnel** (par exemple `1/3`), **un réel** (par exemple `racine(2)`), **un complexe** (par exemple `1 + 2i`), **un booléen** (`vrai`, `oui`, `faux` ou `non`), **un caractère** (un seul), **une chaîne de caractères** (non vide). Les nombres sont évalués et vérifiés par le même moteur de typage exact que les déclarations ordinaires : une valeur irrationnelle n'est pas admise comme rationnelle et un complexe non réel n'est pas admis comme réel. Le type se déclare avec la variable, et non dans la balise. Une déclaration algorithmique de saisie sans type, ou dont la syntaxe n'est pas reconnue, reste du texte sans avertissement et sans poser la question. Une déclaration reconnue dont le type n'est pas directement saisissable — une liste ou une matrice — conserve un diagnostic sur ce type.
 
 ### Le blocage typé
 
@@ -1591,10 +1698,10 @@ Une valeur validée s'affiche en bleu ; **cliquer dessus rouvre la question** �
 Une saisie s'affiche avec `#nom` et entre dans les calculs comme n'importe quelle variable :
 
 ```docdg
-soit prénom: une chaîne de caractères = "Iris"
-soit âge: un entier naturel = 9
-soit taille: un décimal = 1,32
-soit a: un entier naturel = 3
+soit prénom une chaîne de caractères telle que prénom = "Iris"
+soit âge ∈ ℕ tel que âge = 9
+soit taille ∈ 𝔻 tel que taille = 1,32
+soit a ∈ ℕ tel que a = 3
 #prénom a #âge ans et mesure #taille m, soit #{taille * 100} cm.
 <Tracer>le solide cube, d'arête #a cm
 ```
@@ -1603,9 +1710,10 @@ Un booléen s'affiche `vrai`/`faux` mais vaut 1/0 dans les conditions ; les desc
 
 ### L'alternative : le bloc et la ligne
 
-L'alternative existe sous deux formes. **Le bloc**, pour dérouler du contenu :
+L'alternative existe sous deux formes. Les exemples suivants fixent les réponses pour pouvoir être exécutés séparément. **Le bloc**, pour dérouler du contenu :
 
 ```docdg
+soit marié ∈ 𝔹 tel que marié = vrai
 si marié {
 	Il est marié.
 } sinon {
@@ -1616,8 +1724,10 @@ si marié {
 **La ligne**, pour produire une valeur — du texte ou un nombre :
 
 ```docdg
-soit statut: une chaîne de caractères = si marié { marié } sinon { célibataire }
-soit tarif: un entier naturel = si âge moins de 18 { 5 } sinon { 9 }
+soit marié ∈ 𝔹 tel que marié = vrai
+soit âge ∈ ℕ tel que âge = 17
+soit statut une chaîne de caractères telle que statut = si marié { marié } sinon { célibataire }
+soit tarif ∈ ℕ tel que tarif = si âge moins de 18 { 5 } sinon { 9 }
 ```
 
 La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / `vaut faux`, ou avec tout comparateur du langage : `vaut`, `moins de`, `plus de`, `au moins`, `au plus`, `différent de`. Une valeur produite en ligne se comporte comme les autres : `#statut` l'affiche, `#{tarif * 2}` la calcule.
@@ -1643,7 +1753,7 @@ La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / 
 
 ### **🎨 Couleurs et tailles**
 
-**Couleurs :** `rouge`, `bleu foncé`, `vert forêt` — les 148 noms français listés dans la [référence des couleurs](#-référence-des-couleurs-148-disponibles), avec leurs accords. Dans une balise de style, **la couleur nue est celle du texte**, et `fond <couleur>` celle du fond : `<gris clair>` écrit en gris clair, `<fond gris clair>` pose un fond gris clair. Un style nommé les combine — `soit correction: un style = <fond gris clair>`.
+**Couleurs :** `rouge`, `bleu foncé`, `vert forêt` — les 148 noms français listés dans la [référence des couleurs](#-référence-des-couleurs-148-disponibles), avec leurs accords. Dans une balise de style, **la couleur nue est celle du texte**, et `fond <couleur>` celle du fond : `<gris clair>` écrit en gris clair, `<fond gris clair>` pose un fond gris clair. Un style nommé les combine — `soit correction un style défini par <fond gris clair>`.
 
 **Filet de sécurité — teinte absente de la palette française :** les 148 noms français couvrent l'intégralité de la palette CSS usuelle ; il ne devrait donc jamais être nécessaire d'en sortir. Aucun exemple de ce guide n'utilise de nom anglais — docdg se lit et s'écrit intégralement en français.
 
@@ -1711,45 +1821,53 @@ Trois points d'usage, hérités de la typographie française :
 
 ### **🔖 Alias et macros avec `soit`**
 
-> **⚠️ Distinction importante :**
-> - `soit` (minuscule) : **Mot-clé technique** pour les assignations (invisible dans le PDF).
->   Exemple conforme : `soit x: un entier = 5` (`soit x = 5` est interdit).
+> **Reconnaissance des instructions :**
+>
+> - `soit` (minuscule) ouvre une déclaration **si la ligne complète en respecte la syntaxe** ; la déclaration est alors exécutée sans s'afficher.
+>   Exemple conforme : `soit x ∈ ℤ tel que x = 5`. `soit x = 5` reste du texte sans alerte et ne crée pas `x`.
 > - `<Soit>` (majuscule) : **Action-phrase** qui affiche un énoncé dans le PDF.
->   Exemple : `<Soit>un point A`
+>   Exemple : `<Soit>A(1 ; 2) un point`
 >
 > Cette distinction suit la **règle n°9** : seules les actions-phrases (qui s’écrivent comme des phrases françaises) commencent par une majuscule.
 
 **Mauvaise et bonne pratiques**
-```docdg
--- ❌ MAUVAIS : "Soit" en majuscule pour une assignation
-Soit titre = <gras 18 pt au centre>
 
--- ✅ BON : majuscule uniquement pour l'action
-soit titre: un style = <gras 18 pt au centre>
-<Soit>un point A(2;3)
+À éviter : « Soit » en majuscule pour une déclaration technique. Cette ligne n'est pas une instruction ; elle s'imprime telle quelle dans le PDF :
+```text
+Soit titre = <gras 18 pt au centre>
 ```
+
+Pour déclarer un style, écrire une déclaration complète en minuscule ; pour afficher un énoncé, utiliser la balise d'action `<Soit>` :
+```docdg
+soit titre un style défini par <gras 18 pt au centre>
+<Soit>A(2;3) un point
+```
+
+**La minuscule ne suffit pas à reconnaître une instruction.** En tête de ligne, `soit`, `pour`, `si`, `sinon`, `tant que`, `faire` et `selon la valeur de` ne sont exécutés que si leur construction complète respecte la grammaire. Sinon, la ligne reste affichée comme du texte ordinaire, sans avertissement et sans effet sur les variables. Ainsi `soit $x = 2$ ou $x = -2$.`, `pour cette raison, le résultat est vrai.` et `selon la valeur de $x$, le signe change.` sont des phrases. « Soit $x$ un réel positif. » avec une majuscule reste aussi du texte. Au milieu d'une phrase, « soit » garde son sens de « ou bien ».
+
+**Le diagnostic se place à l'utilisation d'une variable.** Après une ligne mal formée telle que `soit n = 12`, `#n` demande une valeur qui n'a pas été déclarée : le message explique que la déclaration est absente ou ne respecte pas la syntaxe de DocDG. Il apparaît à l'endroit de cette utilisation ; le reste du document est composé. Les symboles d'une formule, comme `$n$` ou `$x_{n}$`, sont des notations mathématiques libres. Une instruction reconnue reste soumise aux contrôles de valeur, de type et de calcul.
 
 **Repères sur les instructions de cet exemple** (ces indications sont hors du code docdg) :
 
 | Écriture ou rubrique | Explication |
 |---|---|
-| `Soit titre = <gras 18 pt au centre>` | → Erreur : ce n'est pas une action-phrase ! |
-| `<Soit>un point A(2;3)` | → Correct : action-phrase |
+| `Soit titre = <gras 18 pt au centre>` | Texte affiché ; aucune déclaration de style |
+| `<Soit>A(2;3) un point` | → Correct : action-phrase |
 
 
 **Définir un style :**
 
 ```docdg
-soit titre: un style = <bleu marine gras 18 pt au centre>
-soit important: un style = <gras souligné rouge>
+soit titre un style défini par <bleu marine gras 18 pt au centre>
+soit important un style défini par <gras souligné rouge>
 ```
 
 **Variables numériques :**
 
 ```docdg
-soit pi: un décimal = 3,14159
-soit rayon: un entier naturel = 5
-soit aire: un réel = #{pi * rayon^2}
+soit pi ∈ 𝔻 tel que pi = 3,14159
+soit rayon ∈ ℕ tel que rayon = 5
+soit aire ∈ ℝ tel que aire = pi * rayon^2
 L'aire vaut #aire cm².
 ```
 
@@ -1771,53 +1889,52 @@ soit carre{x} = #{x^2}
 | `<carre{5}>` | → 25 |
 
 
-**Exemple complet**
+**Exemple complet** — les trois premières lignes déclarent sans rien afficher (`soit`, mot-clé technique) ; les deux dernières sont des actions-phrases, qui s'affichent dans le PDF. docdg n'a pas de commentaire : toute ligne qui n'est pas une instruction s'imprime.
 ```docdg
--- Assignation silencieuse (mot-clé technique)
-soit titre: un style = <gras 18 pt au centre>
-soit pi: un décimal = 3,14159
+soit titre un style défini par <gras 18 pt au centre>
+soit pi ∈ 𝔻 tel que pi = 3,14159
 soit bonjour{nom} = Bonjour #nom !
 
--- Action-phrase (affiche dans le PDF)
-<Soit>un point A(2;3)
+<Soit>A(2;3) un point
 <Tracer>le cercle, de centre A et de rayon 5 cm
 ```
 
 ### **🔁 Structures de contrôle**
 
-> **💡 Les deux branches s'accordent en nature.** Dans `soit statut: une chaîne de caractères = si marié { marié } sinon { célibataire }`, si l'une des deux branches est du texte, le résultat est du texte — même lorsqu'un mot de branche porte le nom d'une valeur déjà définie. Deux branches numériques donnent un nombre, calculable comme les autres.
+> **💡 Les deux branches s'accordent en nature.** Dans `soit statut une chaîne de caractères telle que statut = si marié { marié } sinon { célibataire }`, si l'une des deux branches est du texte, le résultat est du texte — même lorsqu'un mot de branche porte le nom d'une valeur déjà définie. Deux branches numériques donnent un nombre, calculable comme les autres.
 
 
 **Boucles `pour` :**
 
 ```docdg
-pour n: un entier naturel de 1 à 5 {
+pour n ∈ ⟦1 ; 5⟧ {
   <gras>Exercice #n
 }
 ```
 
-**La variable de parcours doit déclarer son type**, selon les mêmes règles qu'une variable ordinaire :
+**La variable de parcours dit son domaine**, comme au tableau : `pour k ∈ ⟦1 ; 10⟧` parcourt l'intervalle d'entiers, bornes incluses.
 
 ```docdg
-pour k: un entier naturel de 1 à 10 {
+pour k ∈ ⟦1 ; 10⟧ {
   #k
 }
 ```
 
-Ce programme affiche les dix valeurs de 1 à 10. L'annotation est vérifiée avant le déroulement : `pour k: un entier naturel de -2 à 2` est refusé, de même qu'un pas fractionnaire qui sortirait des entiers naturels. La forme non typée `pour k de ... à ...` est désormais refusée : toutes les boucles qui introduisent une variable exigent une annotation avec un article. La forme `pour k: un entier naturel dans {1 ; 3 ; 5}` est également admise.
+Ce programme affiche les dix valeurs de 1 à 10. Le domaine porte le type : `⟦1 ; 10⟧` donne un entier naturel, `⟦-2 ; 2⟧` un entier relatif, `[0 ; 2] par pas de 0,25` un décimal, et `pour x ∈ v` prend le type des éléments de `v`. La forme non typée `pour k de ... à ...` et l'écriture à deux-points `pour k: un entier naturel de 1 à 3` sont refusées. Un **ensemble écrit sur place** se parcourt aussi : `pour k ∈ {1 ; 3 ; 5}` donne à `k` le plus petit type de la hiérarchie numérique ℕ ⊂ ℤ ⊂ 𝔻 ⊂ ℚ ⊂ ℝ capable de représenter exactement toutes les valeurs — ℕ ici, qui contient 0, ℤ pour `{-1 ; 2}`, 𝔻 pour `{0,5 ; 1}`, ℚ pour `{1/3 ; 2}` —, et `pour jour ∈ {"lundi" ; "mardi"}` une chaîne de caractères. Une chaîne s'écrit **entre guillemets** : un mot nu serait pris pour une variable, il est refusé avec la forme corrigée. Un ensemble **n'a pas d'élément répété** : `{1 ; 3 ; 3 ; 5}` est refusé, et l'on parcourt des répétitions en déclarant une liste, puis en la parcourant. L'ordre d'écriture est une convention de parcours, non une propriété de l'ensemble. Les éléments ont tous la même nature, des nombres ou des chaînes ; un ensemble vide, des éléments mêlés ou composés sont refusés, avec la forme attendue. Un paramètre de fonction se parcourt de même, selon son type déclaré.
 
-**Les deux bornes sont incluses** : `pour n: un entier naturel de 1 à 5` parcourt 1, 2, 3, 4 **et** 5 (cinq passages), exactement comme on le lirait à voix haute. Contrairement à la plupart des langages de programmation (où une borne « à N » exclut souvent N), docdg ne demande pas à un professeur de compter « il faut mettre 6 pour aller jusqu'à 5 » — la phrase française fait foi.
+**Les deux bornes sont incluses** : `pour n ∈ ⟦1 ; 5⟧` parcourt 1, 2, 3, 4 **et** 5 (cinq passages), exactement comme on le lirait à voix haute. Contrairement à la plupart des langages de programmation (où une borne « à N » exclut souvent N), docdg ne demande pas à un professeur de compter « il faut mettre 6 pour aller jusqu'à 5 » — la phrase française fait foi.
 
 ```docdg
-pour f: une chaîne de caractères dans {chat.png ; chien.png} {
+soit noms une liste de chaînes de caractères telle que noms = {"chat.png" ; "chien.png"}
+pour f ∈ noms {
   <Insérer l'image IMAGES/#f avec une largeur de 20 mm>
 }
 ```
 
-**Le pas** se règle en prose, comme tout réglage : `avec un pas de p`. Les bornes et le pas acceptent les **décimaux**, virgule française comprise :
+**Le pas** se règle en prose, à la suite du domaine : `par pas de p`. Les bornes et le pas acceptent les **décimaux**, virgule française comprise :
 
 ```docdg
-pour i: un décimal de 0,5 à 2,5 avec un pas de 0,5 {
+pour i ∈ 𝔻, allant de 0,5 à 2,5 par pas de 0,5 {
   Valeur : #i
 }
 ```
@@ -1825,7 +1942,7 @@ pour i: un décimal de 0,5 à 2,5 avec un pas de 0,5 {
 **Le booléen s'écrit en quatre mots.** `vrai` et `oui` d'un côté, `faux` et `non` de l'autre, la casse étant indifférente : `Oui`, `NON` et `Faux` sont lus comme leurs minuscules. Une question fermée posée à l'élève se répond donc comme on la lit.
 
 ```docdg
-soit inscrit: un booléen = <Saisir>{L'élève est-il inscrit ?}
+soit inscrit ∈ 𝔹 tel que inscrit = <Saisir>{L'élève est-il inscrit ?}
 ```
 
 **Boucles `répéter … fois` :** quand le rang n'a pas à paraître, la répétition se dit comme en Logo — un nombre de tours, rien d'autre. Aucune variable de boucle n'est introduite, donc aucune à nommer ni à ignorer.
@@ -1841,31 +1958,31 @@ Le nombre de tours accepte une expression : `répéter n fois`, `répéter 2*k f
 **Boucles `tant que` :** la condition est vérifiée **avant** chaque passage ; le mot `faire` devant l'accolade est facultatif mais recommandé — il se lit mieux.
 
 ```docdg
-soit n: un entier naturel = 0
+soit n ∈ ℕ tel que n = 0
 tant que n < 3 faire {
   Passage numéro #n
-  n = n + 1
+  n ← n + 1
 }
 ```
 
 **Boucles `faire ... tant que` :** le corps s'exécute **au moins une fois**, la condition est vérifiée **après** chaque passage.
 
 ```docdg
-soit n: un entier naturel = 0
+soit n ∈ ℕ tel que n = 0
 faire {
   Passage numéro #n
-  n = n + 1
+  n ← n + 1
 } tant que n < 3
 ```
 
-> **Compteurs et portées.** `soit` **déclare**, une fois ; `n = n + 1` **réaffecte** un nom déjà posé, et c'est ce qui fait avancer la boucle. Le répéter à chaque tour n'apprendrait rien. La condition qui rend cette écriture sûre tient en un mot : le nom doit déjà exister — une ligne de prose contenant un signe égal n'est donc jamais prise pour une affectation. Un nom posé pour la première fois *à l'intérieur* d'un bloc, lui, reste local au bloc (règle des portées, plus bas) : ce qu'on pose en tête sert partout, ce qu'on pose dans un tiroir reste dans le tiroir.
+> **Compteurs et portées.** `soit` **déclare**, une fois ; `n ← n + 1` **réaffecte** un nom déjà posé, et c'est ce qui fait avancer la boucle. Le répéter à chaque tour n'apprendrait rien. La flèche rend cette écriture sûre deux fois : `←` ne se confond avec rien d'autre dans une phrase, et le nom doit déjà exister. Un nom posé pour la première fois *à l'intérieur* d'un bloc, lui, reste local au bloc (règle des portées, plus bas) : ce qu'on pose en tête sert partout, ce qu'on pose dans un tiroir reste dans le tiroir.
 
-> **Minuscule ou majuscule.** La majuscule initiale marque la classe **là où une classe est attendue** : après un deux-points et devant la parenthèse d'instanciation — `soit c: un Carré = Carré("c" ; 3)`. Partout ailleurs elle ne dit rien de particulier, et `A` nomme une matrice comme au tableau noir. Un nom de variable identique à une primitive — `somme`, `min`, `max`, `trier`, `longueur` — est en revanche refusé : une fonction que vous écrivez remplace la primitive du même nom, ce qui est voulu ; une variable ne ferait que la masquer, en silence.
+> **Minuscule ou majuscule.** La majuscule initiale marque la classe **là où une classe est attendue** : après un deux-points et devant la parenthèse d'instanciation — `soit c un Carré tel que c = Carré("c" ; 3)`. Partout ailleurs elle ne dit rien de particulier, et `A` nomme une matrice comme au tableau noir. Un nom de variable identique à une primitive — `somme`, `min`, `max`, `trier`, `longueur` — est en revanche refusé : une fonction que vous écrivez remplace la primitive du même nom, ce qui est voulu ; une variable ne ferait que la masquer, en silence.
 
 **Conditions `si` :**
 
 ```docdg
-soit note: un entier = 15
+soit note ∈ ℤ tel que note = 15
 
 si note >= 10 {
   <vert gras>Admis !
@@ -1882,8 +1999,22 @@ Les opérateurs symboliques (`>=`, `<=`, `==`, `!=`) ont chacun un synonyme en t
 | `==`    | `égal à`       | `!=`    | `différent de` |
 
 ```docdg
+soit note ∈ ℤ tel que note = 15
 si note au moins 10 {
   <vert gras>Admis !
+}
+```
+
+**Choisir parmi plusieurs cas : `selon la valeur de`.** Quand une même valeur se compare à plusieurs cas, `selon la valeur de` remplace la cascade de `si`. Un cas est une valeur isolée, plusieurs valeurs séparées par `;`, un intervalle — fermé `[4 ; 10]` ou demi-ouvert `]10 ; 20]` — ou une combinaison par `ou` ; le premier cas compatible est retenu, et `sinon` reste facultatif.
+
+```docdg
+soit note ∈ ℤ tel que note = 15
+selon la valeur de note {
+	0 { <rouge gras>Nulle. }
+	1 ; 2 ; 3 { Faible. }
+	[4 ; 10] { Moyenne. }
+	]10 ; 20] { <vert gras>Bonne. }
+	sinon { La note est hors barème. }
 }
 ```
 
@@ -1894,11 +2025,11 @@ si note au moins 10 {
 | `si note au moins 10 {` | strictement équivalent à : si note >= 10 |
 
 
-Les conditions se **combinent** avec les connecteurs du français, `et` et `ou`, et s'enchaînent avec `sinon si` :
+Les conditions se **combinent** avec les connecteurs du français, `et` et `ou`, et s'enchaînent avec `sinon si` — seule la première branche vraie est retenue :
 
 ```docdg
-soit note: un entier = 12
-soit rattrapage: un entier = 8
+soit note ∈ ℤ tel que note = 12
+soit rattrapage ∈ ℤ tel que rattrapage = 8
 
 si note >= 10 et rattrapage >= 10 {
   <vert gras>Admis sans réserve.
@@ -1916,7 +2047,7 @@ si note >= 10 et rattrapage >= 10 {
 - Algébriques : `abs`, `racine`, `defaut`, `signe`, `min`, `max`
 - Exponentielles : `exp`, `ln`, `log`, `log2`, `logb(x;base)`
 - Trigonométriques : `sin`, `cos`, `tan`, `cot`, `sinus en degrés`, `cosinus en degrés`, `tangente en degrés`
-- Inverses : `arcsin`, `arccos`, `arctan`
+- Circulaires réciproques : `arcsin`, `arccos`, `arctan`
 - Hyperboliques : `sinh`, `cosh`, `tanh`, `coth`
 - Arrondi : `arrondi(x;d)`, `defaut(x:pas)`, `exces(x:pas)`
 - Constantes : `pi`, `e`
@@ -1937,15 +2068,15 @@ La valeur de π est environ #{arrondi(pi;4)}.
 
 ### **🔢 Les types**
 
-Le type se lit en toutes lettres et **porte toujours son article** : `soit v: un vecteur de 4 réels`, `soit f(x: un entier): un entier`, `pour i: un entier naturel de 1 à 10`. L'article n'est pas un ornement — c'est la règle du langage tout entier, celle qui vaut déjà pour l'objet d'une balise (`<Afficher>un cadre`, jamais `<cadre>`) et pour la prose de `<Soit>`. Un nom sans article sonne faux en français, et docdg se veut le plus proche possible de la langue. L'article s'accorde au type : **un** entier, **un** réel, **une** chaîne de caractères, **une** liste, **une** matrice, **une** pile, **une** file. Au pluriel il devient `des` : `soient a, b: des entiers relatifs = 3 ; -5`. Les formes sans article sont **interdites par le contrat de la 3.9** : la compatibilité éventuelle avec d’anciens fichiers relève d’un défaut de conformité à supprimer avant publication, pas d’une écriture alternative.
+Le type se dit comme au tableau noir. Pour les nombres, c'est l'appartenance à un ensemble qui le porte : `soit n ∈ ℕ tel que n = 7`, `soit x ∈ ℝ tel que x = racine(2)` — sept ensembles s'écrivent ainsi, ℕ, ℤ, 𝔻, ℚ, ℝ, ℂ et 𝔹. Pour tout autre type, le nom du type se lit en toutes lettres, à la suite du nom et sans virgule, et **porte toujours son article** : `soit v un vecteur de 4 réels tel que v = …`, `soit s une chaîne de caractères telle que s = "été"` — `tel`, `telle`, `tels` ou `telles` s'accordent avec lui. Un style se déclare par `défini par` : `soit h0 un style défini par <bleu marine gras chapitre num>`. L'article n'est pas un ornement — c'est la règle du langage tout entier, celle qui vaut déjà pour l'objet d'une balise (`<Afficher>un cadre`, jamais `<cadre>`) et pour la prose de `<Soit>`. Un nom sans article sonne faux en français, et docdg se veut le plus proche possible de la langue. Plusieurs nombres se posent d'un trait : `soit a, b ∈ ℤ tels que (a ; b) = (3 ; -5)`, et plusieurs conteneurs de même type de même façon : `soit u, v des vecteurs de 2 rationnels tels que u = {1 ; 2} et v = {3 ; 4}`. Le mot-clé algorithmique `soit` est invariable dans DocDG. Une phrase commençant par `soient` reste de la prose. L'ancienne écriture à deux-points, `soit prix: un entier = 150`, ne constitue pas une déclaration reconnue : elle est affichée sans alerte et ne crée pas `prix`.
 
 Le type n'est pas décoratif : il est vérifié à la déclaration, à chaque réaffectation et à la sortie d'une boucle, et l'erreur nomme la variable fautive.
 
-**Le type est obligatoire, et l'article avec lui.** Toute variable déclare son type à sa naissance — valeurs, conteneurs, styles, résultats de saisie, indices de boucle, paramètres et types de retour. `soit prix = 150` est interdit ; la forme correcte est `soit prix: un entier = 150`. `soit prix: entier = 150` est également interdit : l'article fait partie de la déclaration de type.
+**Le type est obligatoire, et l'article avec lui.** Toute variable déclare son type à sa naissance — valeurs, conteneurs, styles, résultats de saisie, indices de boucle, paramètres et types de retour. `soit prix = 150` ne déclare rien — aucun type n'est dit ; la forme correcte est `soit prix ∈ ℤ tel que prix = 150`. `soit s, chaîne de caractères, telle que …` ne constitue pas non plus une déclaration : l'article fait partie du type. L'écriture antérieure `soit prix: un entier = 150` reste également du texte. Ces lignes n'émettent aucun avertissement ; l'erreur n'apparaît que si l'on utilise ensuite un nom sans déclaration valide.
 
 **Aucune variable nommée n'échappe au typage**, y compris une table de données sur plusieurs lignes : celle-ci se déclare avec un type explicite. Les composants paramétrés comme `soit exo{n} = ...` sont des **gabarits textuels** historiques, et non des variables de valeur ; leur statut lexical spécifique ne justifie aucune déclaration de valeur non typée. Toute nouvelle forme de macro produisant une valeur devra elle aussi être typée. Voir le [contrat de typage](docs/TYPAGE_OBLIGATOIRE.md) pour les points du moteur restant à aligner.
 
-**Une réaffectation ne redit ni `soit` ni le type** : ils ont été posés à la déclaration. Après `soit prix: un entier = 150`, on écrit `prix = 180` ; écrire une seconde déclaration `soit prix: un entier = 180` serait incorrect.
+**Une réaffectation ne redit ni `soit` ni le type** : ils ont été posés à la déclaration. Elle s'écrit avec la flèche d'affectation des manuels d'algorithmique : après `soit prix ∈ ℤ tel que prix = 150`, on écrit `prix ← 180`. Écrire une seconde déclaration `soit prix ∈ ℤ tel que prix = 180` serait incorrect. La flèche `←` s'insère d'un clic depuis le ruban Symboles ; la graphie ASCII `<-` n'existe pas, car `x <- 5` ne se distinguerait pas de la comparaison `x < -5`. Le signe `=` est réservé à la déclaration : hors d'elle, `prix = #prix` est une égalité du texte qui s'affiche. Dans le corps d'une fonction, écrire `prix = 180` à la place de `prix ← 180` rend le bloc non reconnu : il reste du texte, sans alerte et sans créer de fonction.
 
 | Type | Ce qu'il contient |
 |---|---|
@@ -1958,28 +2089,28 @@ Le type n'est pas décoratif : il est vérifié à la déclaration, à chaque r�
 | `booléen` | vrai ou faux |
 | `chaîne de caractères` | du texte ; `chaîne` et `texte` sont synonymes |
 
-L'inclusion ℕ ⊂ ℤ ⊂ 𝔻 ⊂ ℚ ⊂ ℝ ⊂ ℂ ne se remonte jamais, et **l'appartenance se décide sur la représentation exacte, jamais sur un flottant** : `-3` appartient à ℤ et non à ℕ, `1/3` à ℚ et non à 𝔻, `racine(2)` et `pi` à ℝ et non à ℚ. En sens inverse elle s'emploie librement : `soit z: un complexe = 3` est accepté, puisque ℝ ⊂ ℂ. Le refus nomme les deux ensembles, le sens de l'inclusion et la sortie :
+L'inclusion ℕ ⊂ ℤ ⊂ 𝔻 ⊂ ℚ ⊂ ℝ ⊂ ℂ ne se remonte jamais, et **l'appartenance se décide sur la représentation exacte, jamais sur un flottant** : `-3` appartient à ℤ et non à ℕ, `1/3` à ℚ et non à 𝔻, `racine(2)` et `pi` à ℝ et non à ℚ. En sens inverse elle s'emploie librement : `soit z ∈ ℂ tel que z = 3` est accepté, puisque ℝ ⊂ ℂ. Le refus nomme les deux ensembles, le sens de l'inclusion et la sortie :
 
 > ⚠ **pi est un réel : il n'appartient pas à ℚ. L'inclusion ℚ ⊂ ℝ ne se remonte pas — déclarez « un réel », ou demandez une valeur approchée avec arrondi(… ; n).**
 
-Deux notions se distinguent, et c'est le cœur du typage. Le **domicile** d'une valeur — le plus petit ensemble de la chaîne auquel elle appartient — décide de la **validité**. Le **type déclaré** — l'ensemble où l'on a choisi de travailler — décide de l'**écriture**, car une même valeur a plusieurs notations également justes : `soit q: un rationnel = 1/3 + 1/6` donne `1/2`, `soit d: un décimal = 1/3 + 1/6` donne `0,5`. `<Afficher>le type de q` dit les deux d'un trait : **un rationnel mais sa valeur appartient à 𝔻**.
+Deux notions se distinguent, et c'est le cœur du typage. Le **domicile** d'une valeur — le plus petit ensemble de la chaîne auquel elle appartient — décide de la **validité**. Le **type déclaré** — l'ensemble où l'on a choisi de travailler — décide de l'**écriture**, car une même valeur a plusieurs notations également justes : `soit q ∈ ℚ tel que q = 1/3 + 1/6` donne `1/2`, `soit d ∈ 𝔻 tel que d = 1/3 + 1/6` donne `0,5`. `<Afficher>le type de q` dit les deux d'un trait : **un rationnel mais sa valeur appartient à 𝔻**.
 
 Les entiers sont des grands entiers : `2^64` s'écrit `18446744073709551616`, sans saturation. Une variable typée s'emploie partout comme une autre : dans `pour`, `tant que`, `si` et `#nom`.
 
 ### **📦 Les conteneurs**
 
-Quatre conteneurs, une seule grammaire — le nom, le deux-points, le type, la valeur. **Le type se dit avec son article**, comme tout nom français : `un entier`, `une liste de décimaux`, jamais `entier` nu. La grammaire est la même partout où un nom naît côté langage — déclaration, paramètre et valeur d'une fonction, déstructuration, indice de boucle, saisie — et elle ne souffre aucune exception, y compris quand le type semble évident. Les indices commencent à **0**, comme en NSI ; le point-virgule sépare, l'accolade rassemble.
+Quatre conteneurs, une seule grammaire — le nom, puis le type avec son article, puis `tel que` et la valeur, sans virgule, comme on écrit « Soit n un entier tel que… ». **Le type se dit avec son article**, comme tout nom français : `une liste de décimaux`, jamais `liste` nue. La grammaire est la même partout où un nom naît côté langage — déclaration, paramètre et valeur d'une fonction, déstructuration, indice de boucle, saisie — et elle ne souffre aucune exception, y compris quand le type semble évident. Les indices commencent à **0**, comme en NSI ; le point-virgule sépare, l'accolade rassemble.
 
 ```docdg
-soit notes: une liste de décimaux = {12,5 ; 15 ; 9,5}
-soit trajets: un dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5 ; "Bus": 3}
-soit A: une matrice 2×2 d'entiers = {{1 ; 2} ; {3 ; 4}}
-soit devise: une chaîne de caractères = "liberté égalité fraternité"
+soit notes une liste de décimaux telle que notes = {12,5 ; 15 ; 9,5}
+soit trajets un dictionnaire de chaînes de caractères et d'entiers tel que trajets = {"Marche": 5 ; "Bus": 3}
+soit A une matrice 2×2 d'entiers telle que A = {{1 ; 2} ; {3 ; 4}}
+soit devise une chaîne de caractères telle que devise = "liberté égalité fraternité"
 ```
 
-`liste`, `tableau`, `collection` et `vecteur` nomment le même type : ce sont les mots du programme et ceux des mathématiques, tous acceptés. `vecteur` et `liste de réels` désignent le même objet dans deux domaines — l'un l'écrit en mathématiques, l'autre en informatique — et rien ne les oppose. `docs/VECTEURS.md` arrête la grammaire vectorielle à venir : les constructeurs, les réductions, l'algèbre linéaire et le partage entre le calcul exact et le pont numérique.
+`liste`, `tableau` et `collection` nomment le même type : ce sont les mots du programme, tous acceptés. `vecteur` se déclare et s'écrit de la même façon, mais c'est une matrice à une colonne : il porte l'algèbre linéaire (transposée, produit, norme), et une `liste de réels` ne se substitue pas à lui sans conversion déclarée.
 
-**Lire, écrire, découper.** `notes[1]` lit, `notes[1] = 14` écrit, `notes[0 à 2]` découpe une tranche **bornes incluses** — comme « de 1 à 5 » fait cinq tours. Une tranche dont la borne de gauche dépasse celle de droite est simplement **vide**, ce n'est pas une faute : c'est ce qui permet de conclure une fusion de deux listes triées en une ligne. Une matrice se lit par `A[ligne ; colonne]`, un dictionnaire par sa clé.
+**Lire, écrire, découper.** `notes[1]` lit, `notes[1] ← 14` écrit, `notes[0 à 2]` découpe une tranche **bornes incluses** — comme « de 1 à 5 » fait cinq tours. Une tranche dont la borne de gauche dépasse celle de droite est simplement **vide**, ce n'est pas une faute : c'est ce qui permet de conclure une fusion de deux listes triées en une ligne. Une matrice se lit par `A[ligne ; colonne]`, un dictionnaire par sa clé.
 
 **Grandir.** Le `+` concatène deux conteneurs ; `ajouter(v ; x)` en ajoute un élément.
 
@@ -2016,16 +2147,16 @@ Un **nom** pour ce qui produit une valeur, un **verbe** pour ce qui répond par 
 Les guillemets, droits ou français, délimitent sans appartenir à la valeur.
 
 ```docdg
-soit m: une chaîne de caractères = "Bonjour"
+soit m une chaîne de caractères telle que m = "Bonjour"
 ```
 
-`m[0]` rend une lettre — qui est une chaîne d'un seul caractère, docdg n'introduit pas de type distinct. `pour c: une chaîne de caractères dans m` la parcourt lettre à lettre. S'y ajoutent `majuscule`, `minuscule`, `sans accents`, `élaguer` (les espaces des deux bouts) et `compacter` (tous les espaces), `code("B")` et `caractère(97)` pour le va-et-vient avec le rang Unicode, et les conversions `texte(42)` et `nombre("1,5")`.
+`m[0]` rend une lettre — qui est une chaîne d'un seul caractère, docdg n'introduit pas de type distinct. `pour c ∈ m` la parcourt lettre à lettre. S'y ajoutent `majuscule`, `minuscule`, `sans accents`, `élaguer` (les espaces des deux bouts) et `compacter` (tous les espaces), `code("B")` et `caractère(97)` pour le va-et-vient avec le rang Unicode, et les conversions `texte(42)` et `nombre("1,5")`.
 
 **Les guillemets délimitent, ils n'appartiennent pas à la valeur** — droits ou français. C'est ce qui distingue le texte d'un document, qui s'écrit nu comme en LaTeX, de la chaîne de caractères qui relève de la programmation : elle se cite, y compris dans une liste et en clé de dictionnaire.
 
 ```docdg
-soit mots: une liste de chaînes de caractères = {"chat" ; "chien"}
-soit trajets: un dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5}
+soit mots une liste de chaînes de caractères telle que mots = {"chat" ; "chien"}
+soit trajets un dictionnaire de chaînes de caractères et d'entiers tel que trajets = {"Marche": 5}
 ```
 
 `majuscule("été")` rend **ÉTÉ**, non ETE : la typographie française accentue les capitales. Le tri suit la **collation française** — « école » se classe avant « Zoé », alors que le codepoint de « é » vient après celui de « z ».
@@ -2035,10 +2166,19 @@ soit trajets: un dictionnaire de chaînes de caractères et d'entiers = {"Marche
 Les chevrons marquent la fonction **mathématique** — objet d'étude qu'on dérive et qu'on trace ; le `soit` nu marque la fonction **algorithmique** — calcul nommé qu'on réutilise. Un même nom ne peut désigner les deux.
 
 ```docdg
-soit addition(a: un entier ; b: un entier): un entier = a + b
+soit addition : ℤ² → ℤ, (a, b) ↦ a + b
 ```
 
-Dès que le corps compte plusieurs lignes, la valeur produite se désigne par `retourne`, et rien n'est implicite. Un corps qui ne rend rien est une erreur, pas un silence. `retourne` placé dans une boucle en sort sur-le-champ.
+La signature se lit comme au tableau : le domaine, la flèche `→`, le codomaine, puis la variable et son image par `↦`. Les ensembles s'y disent par leurs symboles, un produit par l'exposant (`ℝ²`) ou par `×` (`une liste d'entiers × ℤ → ℤ`), et les autres types en toutes lettres. Dès que le corps compte plusieurs lignes, il suit entre accolades et la valeur produite se désigne par `retourner`, et rien n'est implicite :
+
+```docdg
+soit hypoténuse : ℝ² → ℝ, (a, b) ↦ {
+	soit carrés ∈ ℝ tel que carrés = a×a + b×b
+	retourner racine(carrés)
+}
+```
+
+Une fonction dont le bloc d'instructions ne définit aucune valeur de retour reste du texte, sans avertissement et sans créer de fonction. Si une fonction reconnue atteint à l'exécution une branche qui ne retourne aucune valeur, cette erreur reste signalée à son appel. `retourner` placé dans une boucle en sort sur-le-champ. À l'intérieur d'une classe, une méthode se déclare comme toute fonction : `soit translaté : ℝ² → un Point, (dx, dy) ↦ …`, ou, sans argument, `soit norme une fonction à valeurs dans ℝ définie par norme() = …`.
 
 **Un paramètre peut être un conteneur ou une chaîne**, et la valeur rendue aussi. Le passage se fait **par copie** : une fonction reçoit une valeur, elle ne peut rien renvoyer dans la série de l'appelant. C'est ce qui rend saine l'acceptation d'une `liste d'entiers` là où une `liste de réels` est attendue.
 
@@ -2049,13 +2189,13 @@ La récursivité est admise, bornée à deux cents appels imbriqués — au-del�
 Longueur fixe, types pouvant différer — le programme le distingue explicitement de la liste. Il s'écrit entre parenthèses, comme un point du plan.
 
 ```docdg
-soit divise(a: un entier ; b: un entier): (un entier ; un entier) = (quotient de a par b ; reste de a par b)
-soit résultats: (un entier ; un entier) = divise(17 ; 5)
-soit q: un entier = résultats[0]
-soit r: un entier = résultats[1]
+soit divise : ℤ² → ℤ × ℤ, (a, b) ↦ (quotient de a par b ; reste de a par b)
+soit résultats (un entier ; un entier) tel que résultats = divise(17 ; 5)
+soit q ∈ ℤ tel que q = résultats[0]
+soit r ∈ ℤ tel que r = résultats[1]
 ```
 
-Les **deux valeurs sont introduites avec un type déclaré**. On peut extraire les membres du p-uplet par leur rang (`résultats[0]`, `résultats[1]`). L'ancienne déliaison `soit (q ; r) = ...` crée deux noms sans annotation : **elle ne constitue pas une syntaxe conforme au contrat de typage obligatoire**. La forme désormais prévue est `soit (q: un entier ; r: un entier) = divise(17 ; 5)` ; elle est couverte par les tests du chantier 1, dont l’exécution native reste requise.
+Les **deux valeurs sont introduites avec un type déclaré**. On peut extraire les membres du p-uplet par leur rang (`résultats[0]`, `résultats[1]`). L'ancienne déliaison `soit (q ; r) = ...` crée deux noms sans annotation : **elle ne constitue pas une syntaxe conforme au contrat de typage obligatoire**. La forme prévue est `soit q, r ∈ ℤ tels que (q ; r) = divise(17 ; 5)` ; l'écriture de la 3.9, `soit (q: un entier ; r: un entier) = …`, reste du texte et ne crée aucun des deux noms.
 
 ### **🎲 Le hasard, et le cours d'une boucle**
 
@@ -2068,12 +2208,12 @@ Les **deux valeurs sont introduites avec un type déclaré**. On peut extraire l
 Les structures nommées du programme de terminale, avec leur discipline — c'est tout leur intérêt.
 
 ```docdg
-soit p: une pile d'entiers = {}
-p = empiler(p ; 1)
-p = empiler(p ; 2)
+soit p une pile d'entiers telle que p = {}
+p ← empiler(p ; 1)
+p ← empiler(p ; 2)
 #{sommet(p)}    #{dépiler(p)}
 
-soit f: une file de chaînes de caractères = {"a" ; "b"}
+soit f une file de chaînes de caractères telle que f = {"a" ; "b"}
 #{tête(f)}      #{défiler(f)}
 ```
 
@@ -2081,19 +2221,19 @@ soit f: une file de chaînes de caractères = {"a" ; "b"}
 
 ### **🧱 Les objets**
 
-Une classe rassemble des données et ce qu'on sait en faire. Son nom commence par une majuscule ; le type de ses attributs se passe d'article.
+Une classe rassemble des données et ce qu'on sait en faire. Son nom commence par une majuscule. Ses membres se déclarent comme partout ailleurs : un attribut numérique par son ensemble (`abscisse ∈ ℝ`), les autres par leur type et son article (`titulaire une chaîne de caractères`, `gauche un Arbre`), une méthode comme une fonction.
 
 ```docdg
 soit une classe Point {
-	abscisse: un réel
-	ordonnée: un réel
+	abscisse ∈ ℝ
+	ordonnée ∈ ℝ
 
-	soit norme(): un réel = racine(abscisse * abscisse + ordonnée * ordonnée)
+	soit norme une fonction à valeurs dans ℝ définie par norme() = racine(abscisse * abscisse + ordonnée * ordonnée)
 }
 
-soit p: un Point = Point(3 ; 4)
+soit p un Point tel que p = Point(3 ; 4)
 #{p.abscisse}    #{p.norme()}
-p.abscisse = 6
+p.abscisse ← 6
 ```
 
 Dans le corps d'une méthode, les attributs sont visibles par leur nom : la formule s'écrit comme au tableau. Un attribut se modifie sans `soit`, puisque rien n'est déclaré.
@@ -2102,10 +2242,10 @@ Dans le corps d'une méthode, les attributs sont visibles par leur nom : la form
 
 | Pilier | Écriture |
 |---|---|
-| **Encapsulation** | `privé solde: un réel`, `privé soit taux(): un réel = 0,02` |
+| **Encapsulation** | `privé solde ∈ ℝ`, `privé soit taux une fonction à valeurs dans ℝ définie par taux() = 0,02` |
 | **Héritage** | `soit une classe Chien qui hérite de la classe Animal { … }` |
 | **Polymorphisme** | la valeur décide de la méthode appelée, non le type écrit |
-| **Abstraction** | `soit une classe abstraite Forme { soit aire(): un réel }` |
+| **Abstraction** | `soit une classe abstraite Forme { … }`, où `soit aire une fonction à valeurs dans ℝ`, sans « définie par », n'a pas de corps |
 
 Ce qui est privé reste visible **depuis la classe** ; du dehors, la lecture comme l'écriture sont refusées. Un enfant tient la place de son parent, l'inverse est dit. Une classe abstraite ne s'instancie pas, et une classe concrète ne peut rien laisser sans corps.
 
@@ -2124,25 +2264,25 @@ Un indice hors bornes, une clé absente, un type qui ne convient pas, une récur
 Déclarer une fonction, c'est **poser un objet nouveau** — exactement ce que fait `<Soit>` pour un point. On emploie donc la même action, avec l'article indéfini (règle n°10) :
 
 ```docdg
-<Soit>une fonction f(x) = x^2 - 2
-<Soit>une fonction g(t) = sin(t) + cos(t)
+<Soit>f une fonction définie par f(x) = x² − 2
+<Soit>g une fonction définie par g(t) = sin(t) + cos(t)
 ```
 
 > **Pourquoi `<Soit>` et non un objet `<fonction>` ?** Une fonction est une **hypothèse de départ** au même titre qu'un point : elle se *pose*, elle ne se *dessine* pas (c'est `<Représenter>graphiquement` qui la dessinera ensuite). La formule scolaire canonique est d'ailleurs « **Soit** f la fonction définie par… ». Unifier toute déclaration sous le verbe `<Soit>` (points, valeurs, fonctions) évite d'avoir à retenir un objet spécial `<fonction>` : un seul verbe pour tout ce qu'on pose, un seul verbe de graphage (`<Représenter>graphiquement`) pour tout ce qu'on représente dans un repère.
 
-Comme pour un point, plusieurs déclarations se regroupent entre accolades :
+Plusieurs déclarations, de natures différentes si l'on veut, se regroupent entre accolades ; chaque ligne doit être une déclaration complète. Un groupe dont la syntaxe n'est pas reconnue reste affiché comme du texte, sans déclaration partielle :
 
 ```docdg
 <Soit>{
-    une fonction f(x) = x^2 - 2
-    une fonction g(t) = sin(t) + cos(t)
+    f une fonction définie par f(x) = x² − 2
+    g une fonction définie par g(t) = sin(t) + cos(t)
 }
 ```
 
 ### **Tracé de la courbe**
 
 ```docdg
-<Soit>une fonction f(x) = x^2 - 2
+<Soit>f une fonction définie par f(x) = x² − 2
 <Représenter>graphiquement la fonction f
 <Représenter>graphiquement la fonction f pour x appartient à [-5 ; 5] et y à [-10 ; 10]
 <Représenter>graphiquement la fonction f, en rouge et de trait 0,5 mm
@@ -2161,7 +2301,7 @@ Comme pour un point, plusieurs déclarations se regroupent entre accolades :
 Chaque construction se pose en une phrase, sur une fonction ou une matrice déjà introduite par `<Soit>` ; le calcul est formel (SymPy), le rendu suit les notations du supérieur.
 
 ```docdg
-<Soit>une fonction f(x) = sin(x)/x
+<Soit>f une fonction définie par f(x) = sin(x)/x
 
 <Calculer>la limite de f en 0
 <Calculer>la limite de f en +infini
@@ -2176,7 +2316,7 @@ Chaque construction se pose en une phrase, sur une fonction ou une matrice déj�
 <Simplifier>(x^2 - 1)/(x - 1)
 <Résoudre>l'équation x^2 = 2x + 1
 
-<Soit>la matrice M{
+<Soit>M une matrice définie par {
     2 ; 1
     1 ; 1
 }
@@ -2208,7 +2348,7 @@ Le développement limité s'écrit avec le petit o de l'usage français (`+ o(x^
 Le système se pose par `<Soit>`, qui l'affiche et le mémorise, puis se résout par `<Résoudre>` — en **calcul exact** : coefficients entiers, décimaux ou fractions `p/q`, solutions rendues en fractions irréductibles. Le solveur dit aussi, en français, quand le système n'a aucune solution ou en admet une infinité.
 
 ```docdg
-<Soit>le système s{
+<Soit>s un système défini par {
     a + b + c = 2
     4a + 2b + c = 3
     9a + 3b + c = 6
@@ -2231,7 +2371,7 @@ Le système se pose par `<Soit>`, qui l'affiche et le mémorise, puis se résout
 Après avoir défini une fonction réelle d'une variable, demandez son domaine de définition dans le langage usuel de l'analyse :
 
 ```docdg
-<Soit>une fonction q(x) = |x|racine((1-x)/(1+3x))
+<Soit>q une fonction définie par q(x) = |x|racine((1−x)/(1+3x))
 <Déterminer>le domaine de définition de q
 ```
 
@@ -2242,24 +2382,24 @@ Le moteur affiche le domaine exact : \(D_q=\left]-\frac13\,;\,1\right]\). Il dis
 Le tableau de variations **se calcule tout seul** — dérivée, zéros réels, signes et valeurs exactes. La fonction doit avoir été posée par `<Soit>` auparavant : le tableau retrouve sa définition et l'affiche en tête.
 
 ```docdg
-<Soit>une fonction q(x) = -x^4 + 2x^2 + 1
+<Soit>q une fonction définie par q(x) = −x⁴ + 2x² + 1
 
 <Dresser>le tableau de variations de q
 ```
 
 C'est la seule forme : on nomme la fonction, docdg fait le reste. `<Étudier>les variations de q` en est le synonyme conjugué.
 
-Les compagnons du calcul formel s'écrivent tous par une **action** — un verbe à l'infinitif, jamais un nom seul : `<Calculer>la dérivée de q` (et `<Calculer>la dérivée seconde de q`) affiche la dérivée simplifiée ; `<Déterminer>les zéros de q` l'ensemble exact des solutions de q(x) = 0, radicaux compris ; `<Calculer>la primitive de q` une primitive (avec sa constante). Les verbes interchangeables sont `Calculer`, `Déterminer` et `Donner`. Ces phrases se **factorisent** au pluriel (règle n°10) : `<Calculer>la dérivée de f, g et h` affiche les trois dérivées, une par ligne — l'argument doit être une pure liste de noms, virgules entre eux, « et » avant le dernier. Le tracé de la même fonction se fait par une phrase en langage naturel :
+Les compagnons du calcul formel s'écrivent tous par une **action** — un verbe à l'infinitif, jamais un nom seul : `<Calculer>la dérivée de q` (et `<Calculer>la dérivée seconde de q`) affiche la dérivée simplifiée ; `<Déterminer>les zéros de q` l'ensemble exact des solutions de q(x) = 0, radicaux compris ; `<Calculer>une primitive de q` les primitives, à une constante près (« la primitive » est refusée : une fonction en admet une infinité). Les verbes interchangeables sont `Calculer`, `Déterminer` et `Donner`. Ces phrases se **factorisent** au pluriel (règle n°10) : `<Calculer>la dérivée de f, g et h` affiche les trois dérivées, une par ligne — l'argument doit être une pure liste de noms, virgules entre eux, « et » avant le dernier. Le tracé de la même fonction se fait par une phrase en langage naturel :
 
 ```docdg
-<Soit>une fonction q(x) = x^3 - x
+<Soit>q une fonction définie par q(x) = x³ − x
 <Représenter>graphiquement la fonction q pour x appartient à [-2 ; 2] et y à [-3 ; 3], avec 200 échantillons
 ```
 
 ### **Tableau de signes**
 
 ```docdg
-<Soit>une fonction f(x) = (x+2)(x-3)
+<Soit>f une fonction définie par f(x) = (x+2)(x−3)
 <Dresser>le tableau de signes de f
 ```
 
@@ -2292,7 +2432,7 @@ $E(x)$
 | `$E(x)$` | Partie entière (ent(x) et floor(x) tolérés) |
 
 
-La valeur absolue s'écrit entre barres partout — dans une formule, dans une fonction posée (`<Soit>une fonction k(x) = |x - 2|`) comme dans une équation à résoudre (`<Résoudre>l'équation |x - 2| = 3`). La partie entière s'écrit `E(x)` — la notation la plus simple — et se rend $E(x)$ (`ent` et `floor` restent compris) ; toutes deux s'évaluent, se tracent et se prêtent aux limites à gauche et à droite (`<Calculer>la limite de pe en 2 à gauche`).
+La valeur absolue s'écrit entre barres partout — dans une formule, dans une fonction posée (`<Soit>k une fonction définie par k(x) = |x − 2|`) comme dans une équation à résoudre (`<Résoudre>l'équation |x - 2| = 3`). La partie entière s'écrit `E(x)` — la notation la plus simple — et se rend $E(x)$ (`ent` et `floor` restent compris) ; toutes deux s'évaluent, se tracent et se prêtent aux limites à gauche et à droite (`<Calculer>la limite de pe en 2 à gauche`).
 
 **Le tracé d'une courbe est complet d'office** — même doctrine que la rédaction : dans un repère, `la courbe de la fonction f` embarque ce que dit le tableau de variations. Les tangentes horizontales se tracent aux extremums (avec le point marqué), les asymptotes verticales, horizontales et obliques viennent en tirets, et les fonctions en escalier dessinent leurs marches sans faux traits verticaux, avec le point plein au bord atteint et le cercle ouvert au bord exclu, comme au tableau. Il n'y a rien à demander.
 
@@ -2349,7 +2489,7 @@ $HH$ ou $quaternions$
 ### **Quantificateurs et logique**
 
 ```docdg
-$pour tout x dans RR$
+$pour tout x appartenant à RR$
 $pour tout x appartenant à RR$
 $pour tout x n'appartenant pas à RR$
 $il existe x$
@@ -2357,7 +2497,7 @@ $il n'existe pas de x$
 $x appartient à NN$
 $x n'appartient pas à NN$
 $tel que x appartient à RR$
-$(P et Q) ou négation de P$
+$(P et Q) ou non P$
 $(P et Q) ou non P$
 ```
 
@@ -2365,7 +2505,7 @@ $(P et Q) ou non P$
 
 | Écriture ou rubrique | Explication |
 |---|---|
-| `$pour tout x dans RR$` | ∀x ∈ ℝ |
+| `$pour tout x appartenant à RR$` | ∀x ∈ ℝ |
 | `$pour tout x appartenant à RR$` | ∀x ∈ ℝ |
 | `$pour tout x n'appartenant pas à RR$` | ∀x ∉ ℝ |
 | `$il existe x$` | ∃x |
@@ -2373,7 +2513,7 @@ $(P et Q) ou non P$
 | `$x appartient à NN$` | x ∈ ℕ |
 | `$x n'appartient pas à NN$` | x ∉ ℕ |
 | `$tel que x appartient à RR$` | \| x ∈ ℝ |
-| `$(P et Q) ou négation de P$` | (P ∧ Q) ∨ ¬P |
+| `$(P et Q) ou non P$` | (P ∧ Q) ∨ ¬P |
 | `$(P et Q) ou non P$` | (P ∧ Q) ∨ ¬P |
 
 
@@ -2384,7 +2524,7 @@ tout x appartenant à ℝ »). Chacune se nie en insérant `n'` et `pas` :
 `n'appartient pas à`, `n'appartenant pas à`. Le mot `tel que` pose la barre de
 condition (∣), la même qu'en probabilités conditionnelles.
 
-Dans une zone mathématique, `et` et `ou` sont les connecteurs logiques (∧, ∨) ; `négation de` et `non` donnent tous deux ¬. Suivi d'une parenthèse, en revanche, `non` désigne le **complémentaire** d'un ensemble ou d'un événement : `non(A)` s'affiche $\overline{A}$.
+Dans une zone mathématique, `et` et `ou` sont les connecteurs logiques (∧, ∨) ; `non` donne ¬ (`négation de` est refusé, avec la forme attendue). Suivi d'une parenthèse, en revanche, `non` désigne le **complémentaire** d'un ensemble ou d'un événement : `non(A)` s'affiche $\overline{A}$.
 
 ### **Opérations sur les ensembles**
 
@@ -2419,7 +2559,7 @@ $a congru à b modulo n$
 | `$vide$` | ∅ |
 | `$non(A union B) = non(A) inter non(B)$` | loi de De Morgan |
 | `$parties de(A)$` | 𝒫(A) |
-| `$cardinal(A)$` | card(A) |
+| `$cardinal(A)$` | Card(A) |
 | `$a congru à b modulo n$` | a ≡ b [n] |
 
 
@@ -2466,7 +2606,7 @@ $engendré par(u, v)$
 $trace(A)$
 $déterminant(A)$
 $^t{A}$
-$A^{-1}$
+$A^(-1)$
 $comatrice(A)$
 $spectre(A)$
 $A^*$
@@ -2483,7 +2623,7 @@ $rang(A)$
 | `$trace(A)$` | Tr(A) |
 | `$déterminant(A)$` | det(A) |
 | `$^t{A}$` | transposée |
-| `$A^{-1}$` | inverse |
+| `$A^(-1)$` | inverse |
 | `$comatrice(A)$` | Com(A) |
 | `$spectre(A)$` | Sp(A) |
 | `$A^*$` | adjoint |
@@ -2500,7 +2640,7 @@ $arcsin(1/2) = pi/6$
 $sinus en degrés(30) = 0,5$
 $exp(1) = e$
 $ln(e) = 1$
-$abs(-5) = 5$
+$|-5| = 5$
 $norme(vecteur(AB))$
 ```
 
@@ -2659,18 +2799,18 @@ Parenthèses ou crochets s'écrivent une fois, à l'ouverture, et referment le b
 La même forme scindée s'applique aux objets **nommés**, gardés pour un calcul ultérieur — la matrice ou le système reçoit alors son nom avant l'ouverture, et les accolades neutres restent le délimiteur (les rangées contiennent déjà des parenthèses ou des crochets, dans une équation ou un coefficient) :
 
 ```docdg
-<Soit>la matrice M {
+<Soit>M une matrice définie par {
 	2	1
 	1	1
 }
 
-<Soit>le système s {
+<Soit>s un système défini par {
 	2x + 3y = 7
 	x - y = 1
 }
 ```
 
-équivalent à `<Soit>la matrice M{...}` et `<Soit>le système s{...}`.
+équivalent à `<Soit>M une matrice définie par {...}` et `<Soit>s un système défini par {...}`.
 
 Dans ces blocs, la **tabulation** sépare les colonnes et le **saut de ligne** sépare les lignes ; avec parenthèses ou crochets, c'est le **point-virgule** qui sépare les colonnes (voir plus haut). Pour un système, découper la ligne en plusieurs colonnes permet d'aligner sur plusieurs points à la fois (le signe `+` et le signe `=`), pas seulement sur le `=`.
 
@@ -2710,7 +2850,7 @@ $EE(X)$ ou $espérance(X)$
 $variance(X)$
 $écart type(X)$
 $covariance(X ; Y)$
-$normal(mu ; sigma)$
+$normale(mu ; sigma)$
 $poisson(lambda)$
 $binomiale(n ; p)$
 $fonction de répartition(X ; x)$
@@ -2731,7 +2871,7 @@ $densité(X ; x)$
 | `$variance(X)$` | Var(X) Variance |
 | `$écart type(X)$` | σ(X) Écart-type |
 | `$covariance(X ; Y)$` | Cov(X,Y) Covariance |
-| `$normal(mu ; sigma)$` | 𝒩(μ,σ²) Loi normale |
+| `$normale(mu ; sigma)$` | 𝒩(μ,σ²) Loi normale |
 | `$poisson(lambda)$` | 𝒫(λ) Loi de Poisson |
 | `$binomiale(n ; p)$` | ℬ(n,p) Loi binomiale |
 | `$fonction de répartition(X ; x)$` | F_X(x) Fonction de répartition |
@@ -2771,7 +2911,7 @@ Les génératrices du cône sont les tangentes exactes à l'ellipse de base depu
 Les points déclarés se placent dans un repère (O ; x, y, z) gradué, avec le chemin de coordonnées en pointillés rouges depuis l'origine — le dessin canonique de Terminale :
 
 ```docdg
-<Soient>les points A(1;2;3) et B(3;1;2)
+<Soit>A(1;2;3) et B(3;1;2) 2 points
 <Tracer>dans un repère de l'espace les points A et B, le segment [AB] et le vecteur AB
 ```
 
@@ -2779,11 +2919,11 @@ Les segments se citent entre crochets, les vecteurs se dessinent en flèches rou
 
 ### Les droites, les plans, les positions relatives
 
-Une droite se déclare par un point et un vecteur directeur — en coordonnées ou par référence à des objets déclarés :
+Une droite se déclare par un point et un vecteur directeur — ou, dans le plan comme dans l'espace, par deux points : `<Soit>d une droite passant par A(1 ; 0) et B(3 ; 2)` — en coordonnées ou par référence à des objets déclarés. Droite et plan s'affichent comme des énoncés, sous leur vrai nom : « Soit la droite *d* passant par le point de coordonnées (1 ; 0 ; 2) et de vecteur directeur de coordonnées (1 ; 1 ; −1). », « Soit le plan 𝒬 d'équation 2*x* + *y* − *z* = 3. » :
 
 ```docdg
-<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
-<Soit>le plan P d'équation 2x + y - z = 3
+<Soit>d une droite passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>P un plan d'équation 2x + y - z = 3
 <Donner>une représentation paramétrique de la droite d
 <Donner>le vecteur normal du plan P
 <Calculer>la distance du point (1 ; 2 ; 0) au plan P
@@ -2792,10 +2932,10 @@ Une droite se déclare par un point et un vecteur directeur — en coordonnées 
 Et les positions relatives se **rédigent pas à pas**, comme une copie modèle — colinéarité des vecteurs, résolution du système, vérification de la troisième équation, conclusion avec le point ou la droite d'intersection :
 
 ```docdg
-<Soit>la droite d passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
-<Soit>la droite d' passant par B(0;1;3) et de vecteur directeur v(2;2;-2)
-<Soit>le plan P d'équation 2x + y - z = 3
-<Soit>le plan Q d'équation 2x + y - z = 5
+<Soit>d une droite passant par A(1;0;2) et de vecteur directeur u(1;1;-1)
+<Soit>d' une droite passant par B(0;1;3) et de vecteur directeur v(2;2;-2)
+<Soit>P un plan d'équation 2x + y - z = 3
+<Soit>Q un plan d'équation 2x + y - z = 5
 <Étudier>la position relative des droites d et d'
 <Étudier>la position relative de la droite d et du plan P
 <Étudier>la position relative des plans P et Q
@@ -2834,7 +2974,7 @@ Chaque cas conclut proprement : droites confondues, strictement parallèles, sé
 **Avec variables :**
 
 ```docdg
-soit notes: un dictionnaire de chaînes de caractères et de décimaux = {
+soit notes un dictionnaire de chaînes de caractères et de décimaux tel que notes = {
 	"Mathématiques": 15,5 ;
 	"Français": 12 ;
 	"Histoire": 14
@@ -2951,7 +3091,7 @@ citation ne se coupe pas en morceaux.
 
 ```docdg
 <Représenter>graphiquement la droite graduée sur [-5 ; 5] {
-	abs(x - 1/2) >= 5/2
+	|x - 1/2| >= 5/2
 }
 ```
 
@@ -3000,7 +3140,7 @@ Trois clés du bloc `document {…}` règlent le cahier : `seyès` nomme la curs
 Une fraction écrite entre `$` et `$` se compose **en style de texte** : à la taille de la phrase, comme le ferait LaTeX. Le style d'affichage — numérateur et dénominateur pleine taille — est réservé aux formules détachées. Sur la réglure, elle **pose sa barre sur le trait**, numérateur au-dessus et dénominateur dans le haut du carreau d'en dessous, **sans décaler la ligne suivante** : aucune ligne n'est réservée sous elle, et tout ce qui suit reste sur les traits. Dans une opération, les signes `+` et `=` se posent sur la barre, et un entier ou une lettre voisins se tiennent sur la ligne, comme au cahier : `$2/5 + 4 = 22/5$`. Il en va de même d'un exposant, d'un indice, d'un radical ou d'une somme en ligne.
 
 ```docdg
-soit consigne: un style = <rouge gras>
+soit consigne un style défini par <rouge gras>
 
 <Écrire>en réglure Seyès{
 	<consigne>Le carré et le cube.
@@ -3035,7 +3175,7 @@ document {
 	espacements: {0;0;0;25};
 }
 
-<Composer>sur deux colonnes {
+<Composer>sur 2 colonnes {
 <Écrire>en réglure Seyès{
 	Lundi 8 septembre
 
@@ -3049,7 +3189,7 @@ La réglure doit être **le seul contenu de la composition**, sans rien avant ni
 
 Le nombre de carreaux et de lignes n'est jamais à déclarer : **il se déduit** de la disposition, des quatre marges, des quatre espacements et du nombre de colonnes. Le moteur pose le plus grand nombre entier de carreaux et de lignes qui tienne dans la place et laisse le reliquat en blanc : aucun carreau, aucune ligne n'est jamais tronqué, quel que soit le réglage. `docs/CAHIERS.md` donne la règle et les réglages exacts du cahier A4, du petit cahier 17 × 22 et du cahier d'écolier en paysage.
 
-`seyes1` montre les usages de classe — phrases modèles, opérations posées, un dessin à légender, une étude de fonction posée sur les lignes — et `seyes2` la tenue du texte long sur la réglure.
+La première partie de `exemples/seyes.txt` montre les usages de classe — phrases modèles, opérations posées, un dessin à légender, une étude de fonction posée sur les lignes — et la seconde la tenue du texte long sur la réglure et les compositions en colonnes.
 
 ## **⚗️ La physique-chimie**
 
@@ -3058,18 +3198,20 @@ Le corpus couvre la physique et la chimie du CE2 à l'agrégation :
 d'hypothèses, répartis en 102 domaines — le catalogue complet, par matière et par
 niveau, est dans [Redaction.md](Redaction.md). Les relations y sont vérifiées en homogénéité
 au moment de la compilation. Depuis la 3.9, les sciences de l'ingénieur s'y
-ajoutent, de la terminale au master.
+ajoutent, de la première au master 2.
 
 **`<Vérifier>`** soumet au même contrôle une relation écrite dans le document.
 Les symboles ne se devinent pas : ils se nomment après `avec`, par le nom que la
 grandeur porte au corpus.
 
 ```docdg
-<Vérifier>l'homogénéité de sigma = E * epsilon avec sigma contrainte normale, E module d'Young, epsilon déformation
+<Vérifier>l'homogénéité de σ = E ε avec σ contrainte normale, E module d'Young, ε déformation
 ```
 
-Le moteur répond par la dimension commune aux deux membres, ou nomme l'endroit
-où l'égalité se rompt.
+La relation s'écrit comme au tableau : le produit par juxtaposition (`m c^2`,
+`mc²`), par `×` ou par `*` ; les lettres grecques telles quelles ou par leur
+nom (`σ` ou `sigma`, `ℏ` ou `hbar`) ; `π` est un nombre. Le moteur répond par
+la dimension commune aux deux membres, ou nomme l'endroit où l'égalité se rompt.
 
 Deux verbes lui sont propres. **`<Équilibrer>`** ajuste les coefficients
 stœchiométriques d'une équation de réaction — nombres entiers minimaux, ions et
@@ -3114,7 +3256,7 @@ La date se lit en `AAAA`, `MM/AAAA` ou `JJ/MM/AAAA` ; **l'année négative est a
 **La frise s'annonce « la frise chronologique » et rien d'autre** : la description ne porte aucun complément, et le moteur refuse celui qu'on lui donnerait. La frise ne porte donc pas de titre — celui qui en veut un l'écrit lui-même, au-dessus ou en dessous, comme tout autre titre du document, et le place où sa page le demande :
 
 ```docdg
-soit h2: un style = <gras au centre>
+soit h2 un style défini par <gras au centre>
 
 <h2>La Révolution française
 
@@ -3154,7 +3296,7 @@ de 1929 à 1939 : Grande Dépression
 
 Une bande porte son nom dans la marge, ses périodes dans son bandeau et ses cartouches de part et d'autre, dans sa couleur. Elle s'ouvre d'un nom suivi d'une accolade — `politique {` — et le deux-points se tolère : `Vie politique: {`. Ce qui est simultané se lit dans une même verticale : c'est ce qui rend une frise multilinéaire argumentative et non plus seulement descriptive.
 
-Trois documents suivent les niveaux du programme. **`histoire2`** (collège) : la frise linéaire simple et la frise par périodes — ordonner des événements, se repérer dans le temps. **`histoire3`** (lycée) : la frise thématique et multilinéaire, et la périodisation des régimes français — articuler cause et effet, problématiser un découpage. **`histoire4`** (supérieur) : les trois temps de Braudel en trois bandes d'échelles différentes, et deux périodisations concurrentes posées l'une sous l'autre — mettre en évidence la simultanéité, questionner la pertinence des découpages.
+Les chapitres de `exemples/histoire.txt` suivent les niveaux du programme. **Collège** : la frise linéaire simple et la frise par périodes — ordonner des événements, se repérer dans le temps. **Lycée** : la frise thématique et multilinéaire, et la périodisation des régimes français — articuler cause et effet, problématiser un découpage. **Enseignement supérieur** : les trois temps de Braudel en trois bandes d'échelles différentes, et deux périodisations concurrentes posées l'une sous l'autre — mettre en évidence la simultanéité, questionner la pertinence des découpages.
 
 ## **🗄️ Le corpus : le personnaliser, l'emprunter**
 
@@ -3249,7 +3391,7 @@ Les recueils thématiques sont désormais **un fichier par domaine**, sans suffi
 | `exemples/geometrie.txt` | École élémentaire, Collège, Lycée, Enseignement supérieur |
 | `exemples/histoire.txt` | École élémentaire, Collège, Lycée, Enseignement supérieur |
 | `exemples/math.txt` | Pythagore (quatrième), exponentielle (terminale), complétude (licence 1), groupes finis (master 2) |
-| `exemples/mathlang.txt` | Mini-langage mathématique : **277 notations classées en 37 catégories** |
+| `exemples/mathlang.txt` | Mini-langage mathématique : **271 notations classées en 37 catégories** |
 | `exemples/physique-chimie.txt` | Lycée, Enseignement supérieur |
 | `exemples/physique.txt` | Collège, Lycée, Enseignement supérieur, Approfondissements |
 | `exemples/seyes.txt` | Écriture en réglure Seyès et compositions en colonnes |
@@ -3258,23 +3400,9 @@ Les recueils thématiques sont désormais **un fichier par domaine**, sans suffi
 
 `exemples/vitrine.txt` commence par la réglure Seyès, puis présente sur sa deuxième page une sélection de notations de `mathlang.txt` avant les démonstrations scientifiques et typographiques.
 
-**Organisation des exemples :** les 23 fichiers publics regroupent les démonstrations thématiques du langage. Les réglages `document { … }` s'appliquent à chaque fichier entier ; les démonstrations nécessitant un niveau particulier utilisent une surcharge explicite. Les 40 sources historiques sont conservées comme fixtures de non-régression.
+**Organisation des exemples :** les 23 fichiers publics regroupent les démonstrations thématiques du langage. Les réglages `document { … }` s'appliquent à chaque fichier entier ; les démonstrations nécessitant un niveau particulier utilisent une surcharge explicite.
 
-Les 40 sources historiques conservées dans `tests/fixtures/exemples-historiques/` sont des **fixtures de non-régression**, et non des recueils installés avec les exemples publics. Elles servent notamment aux tests de non-régression et pour retrouver les **saisies interactives d’origine**. Dans les recueils, ces saisies ont été préremplies pour qu’aucune question ne bloque la navigation vers les chapitres suivants. Un recueil ne pouvant posséder qu’un seul réglage global `document { ... }`, les paramétrages locaux initiaux (notamment `niveau`, marges et interligne) se consultent dans les sources archivées ; les recueils privilégient la navigation pédagogique.
-
-**Historique des exemples numérotés (40 fixtures de tests sous `tests/fixtures/exemples-historiques/`) :**
-
-Ces exemples historiques suivent le niveau scolaire, porté par le suffixe du nom de fichier :
-
-| Suffixe | Niveau | Fichiers |
-|---|---|---|
-| **1** | la langue et la mise en forme | `basique1` |
-| **2** | collège | `algebre2`, `analyse2`, `basique2`, `geometrie2`, `statistiques-probabilites2` |
-| **3** | lycée | `algebre3`, `analyse3`, `geometrie3`, `basique3`, `statistiques-probabilites3` |
-| **4** | supérieur | `algebre4`, `analyse4`, `geometrie4`, `statistiques-probabilites4` |
-| **5** | agrégation | `math5`, `chimie5`, `physique5` — des leçons entières |
-
-S'y ajoutent `physique-chimie3` et `physique-chimie4` (équations chimiques, avancement, conversions, constantes, incertitudes, opérateurs de champs), `factorisation` (une étude complète), et depuis la 2.2 deux documents de publication : **`publication1`** (un article court — page de titre, résumé, mots-clés, notes, tableau de mesures) et **`publication2`** (un mémoire — page de titre, table des matières, chapitres sectionnés, renvois croisés, bibliographie) ; la 2.3 y ajoute **`publication3`** (une démonstration typographique — césure, veuves et orphelines, cadre et tableau sécables). La 2.4 réorganise la série algorithmique en trois niveaux, comme toutes les autres : **`algo2`** (déclarer et initialiser, entrer et sortir, décider, répéter — jusqu'à `sortir` et `continuer`), **`algo3`** (les conteneurs, les chaînes de caractères et les fonctions) et **`algo4`** (récursivité, algorithmes classiques du programme — recherche, dichotomie, tris, fusion — et structures de données avancées : pile, file, p-uplet, simulation). Les nouveautés de la 2.0 vivent dans les fichiers de leurs domaines : les saisies interactives et l'alternative dans `basique2` ; les solides, patrons et volumes dans `geometrie2` ; le repère de l'espace, les droites, les plans et les positions relatives dans `geometrie3` ; les paramétrées, polaires et coniques dans `geometrie4` ; les surfaces, Lagrange, intégrales multiples, le plan complexe et les résidus dans `analyse4` ; les groupes dans `algebre4` ; les lois à densité et le théorème central limite dans `statistiques-probabilites4`. La 2.6 ajoute **`vitrine4`** (la vitrine scientifique et typographique : réglure Seyès, composition en colonnes, systèmes, matrices, nombres complexes, graphes et étude de fonction avec dérivées, tableaux et courbe), **`calcul1`** (l'école élémentaire : les quatre opérations, décomposition, fractions de même dénominateur, division euclidienne, conversions), **`geometrie1`** (les figures planes : points placés, droites et segments, triangles, cercles, repère), **`demonstration3`** et **`demonstration4`** (pas une ligne de mathématiques écrite à la main : chaque énoncé, sans accolades, est démontré et rédigé par le moteur — récurrences et propriétés universelles menées par le calcul formel, le reste appelé dans la bibliothèque des classiques, du lycée aux classes préparatoires). La 2.7 ouvre une série d'histoire, réglée elle aussi sur les niveaux : **`histoire2`** (le collège — frise linéaire de la Révolution, grandes périodes de l'histoire : ordonner, se repérer), **`histoire3`** (le lycée — frise thématique et multilinéaire de l'entre-deux-guerres, périodisation des régimes français : articuler cause et effet, problématiser un découpage) et **`histoire4`** (le supérieur — les trois temps de Braudel en trois bandes, deux périodisations concurrentes en regard : la simultanéité, la critique des découpages) ; elle ajoute enfin **`publication4`** (les environnements numérotés : deux chapitres, huit énoncés, six renvois croisés, trois démonstrations dont une récurrence rédigée par le moteur). La 3.1 remet la série de publication d'aplomb, un document par usage réel : **`publication1`** reste l'article court, **`publication2`** devient l'**exposé d'élève en histoire** (deux frises — une linéaire illustrée, une multilinéaire à trois bandes —, un tableau de lecture, un cadre de méthode, une note, une bibliographie), **`publication3`** reste la démonstration typographique, **`publication4`** devient la **mini-thèse** (page de titre à emblème, résumé et mots-clés, quatorze environnements numérotés couvrant les dix genres, neuf renvois croisés, quatre démonstrations dont deux récurrences rédigées par le moteur) et **`publication5`** l'**essai** (les sept divisions : deux tomes, deux livres, trois parties, des chapitres sectionnés jusqu'à la sous-sous-section, un renvoi à une partie et une bibliographie). Chaque fichier se clôt sur sa figure à la demande. La 3.2 ajoute **`couleurs1`** — le nuancier des 148 teintes, une par nom, suivi des trois régimes d'accord et des formes fautives que le moteur refuse en nommant la règle — et **`demonstration2`**, le pendant de `demonstration3` et `demonstration4` : les onze raisonnements **écrits par l'auteur**, du raisonnement direct à la double implication, plus la preuve logée dans l'énoncé. Quatre documents, enfin, traitent un chapitre entier plutôt qu'une fonctionnalité, et éprouvent le corpus sur la continuité d'une progression : **`nombres2`** (les ensembles de nombres, cinquième — seize énoncés appelés, aucun démontré, comme le veut le cycle 4), **`math2`** (le théorème de Pythagore et sa réciproque, quatrième — quatre énoncés, quatre démonstrations), **`math3`** (exponentielle et logarithme, terminale — huit énoncés, sept démonstrations) et **`math4`** (complétude de R et théorèmes fondamentaux de l'analyse réelle, licence 1 — même appareil, au registre du supérieur). Chacun déclare son `niveau` dans le bloc `document` : l'ancrage curriculaire décide seul de ce qui est admis et de ce qui est démontré, et la même ligne source ne rend pas la même page en cinquième et en licence.
+Les exemples numérotés des versions antérieures (`algebre2`, `algebre3`, `demonstration4`…) sont réunis dans ces fichiers, un par thème. Seule la série `publication1` à `publication5` reste séparée, pour garder ses mises en page ; leurs saisies interactives sont préremplies là où une question bloquerait la lecture des chapitres suivants.
 
 ---
 
@@ -3289,12 +3417,12 @@ document {
   précision: 2;
 }
 
-soit titre: un style = <bleu marine gras 18 pt au centre>
-soit sous-titre: un style = <bleu marine gras 14 pt>
-soit exercice: un style = <bleu marine gras sous-section>
-soit cadre-ex: un style = <cadre avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 4 mm>
-soit important: un style = <gras rouge souligné>
-soit indication: un style = <italique bleu>
+soit titre un style défini par <bleu marine gras 18 pt au centre>
+soit sous-titre un style défini par <bleu marine gras 14 pt>
+soit exercice un style défini par <bleu marine gras sous-section>
+soit cadre-ex un style défini par <cadre avec une bordure bleu marine, un fond bleu Alice et des coins arrondis de 4 mm>
+soit important un style défini par <gras rouge souligné>
+soit indication un style défini par <italique bleu>
 
 <Afficher>une grille avec un écart de 5 mm{
 	<max>	<max>	<50 mm>
@@ -3344,7 +3472,7 @@ soit indication: un style = <italique bleu>
 <exercice>Exercice 3 : Étude de fonction
 
 <Afficher>un cadre-ex{
-  <Soit>une fonction f(x) = x^2 - 4x + 3
+  <Soit>f une fonction définie par f(x) = x² − 4x + 3
   
   <Dresser le tableau de variations de f, x:{-infini | 2 | +infini},
       dérivée:{- | +}, variations:{+infini \ -1 / +infini}>
@@ -3382,13 +3510,13 @@ Ce chapitre rassemble les points de détail qui, une fois compris, évitent la p
 
 ### **🚦 Les messages d'erreur**
 
-Quand docdg rencontre une faute, il l'annonce **en français**, en désignant la balise et la ligne fautives. Les erreurs les plus fréquentes :
+Une tentative d'instruction algorithmique mal formée reste de la prose, sans avertissement. Pour les erreurs d'utilisation, de calcul ou de balise, docdg donne un diagnostic **en français**, à l'emplacement concerné. Les erreurs les plus fréquentes :
 
 | **Ce que vous écrivez**              | **Message docdg**                                              |
 | ------------------------------------ | ----------------------------------------------------------------- |
-| `<Placer>le point A` sans avoir défini A | *Le point A n'a pas été défini. Déclarez-le d'abord avec `<Soit>un point A(...)`.* |
-| `<Représenter>graphiquement la fonction f` sans `<Soit>une fonction f` | *La fonction f n'a pas été déclarée.*                     |
-| `Soit titre = ...` (majuscule pour une assignation) | *« Soit » avec majuscule est une action-phrase. Pour une assignation, écrivez `soit` en minuscule.* |
+| `<Placer>le point A` sans avoir défini A | *Le point A n'a pas été défini. Déclarez-le d'abord avec `<Soit>A(...) un point`.* |
+| `<Représenter>graphiquement la fonction f` sans `<Soit>f : …` | *La fonction f n'a pas été déclarée.*                     |
+| `#n` sans déclaration valide de `n` | La variable n'a pas de déclaration valide avant cette utilisation : elle est absente ou sa déclaration ne respecte pas la syntaxe de DocDG. |
 | `<Afficher>un cadre{...` (accolade non refermée) | *Accolade ouverte à la ligne N jamais refermée.*                  |
 | `<Tracer>un carré ABCD, de côté 5` (unité manquante) | *Longueur sans unité : écrivez « de côté 5 cm » ou « de côté 50 mm ». L'unité est obligatoire hors d'un repère.* |
 | `données:{12, 15}` (virgule dans une liste numérique) | *Liste numérique : utilisez le point-virgule (`12 ; 15`).*  |
@@ -3397,13 +3525,13 @@ Quand docdg rencontre une faute, il l'annonce **en français**, en désignant la
 
 ### **🔭 La portée des `soit`**
 
-Une déclaration `soit x: un entier = ...` est **visible depuis sa déclaration jusqu'à la fin du document**, y compris à l'intérieur des blocs (`<Afficher>un cadre`, boucles `pour`, conditions `si`) ouverts *après* elle. À l'inverse, une variable déclarée **à l'intérieur** d'un bloc ne vit que dans ce bloc :
+Une déclaration `soit x ∈ ℤ tel que x = ...` est **visible depuis sa déclaration jusqu'à la fin du document**, y compris à l'intérieur des blocs (`<Afficher>un cadre`, boucles `pour`, conditions `si`) ouverts *après* elle. À l'inverse, une variable déclarée **à l'intérieur** d'un bloc ne vit que dans ce bloc :
 
 ```docdg
-soit tva: un décimal = 0,2
+soit tva ∈ 𝔻 tel que tva = 0,2
 
 <Afficher>un cadre{
-  soit prix: un entier naturel = 100
+  soit prix ∈ ℕ tel que prix = 100
   Total : #{prix * (1 + tva)} €
 }
 
@@ -3413,12 +3541,12 @@ soit tva: un décimal = 0,2
 
 | Écriture ou rubrique | Explication |
 |---|---|
-| `soit tva: un décimal = 0,2` | visible partout ensuite |
-| `soit prix: un entier naturel = 100` | visible seulement dans ce cadre |
+| `soit tva ∈ 𝔻 tel que tva = 0,2` | visible partout ensuite |
+| `soit prix ∈ ℕ tel que prix = 100` | visible seulement dans ce cadre |
 | Précision | Ici, tva existe encore ; prix, non. |
 
 
-La variable d'une boucle (`pour n: un entier naturel de 1 à 5`) ne vit que le temps de la boucle. Cette règle est celle qu'on attend naturellement : ce qu'on pose « en tête » sert partout, ce qu'on pose « dans un tiroir » reste dans le tiroir.
+La variable d'une boucle (`pour n ∈ ⟦1 ; 5⟧`) ne vit que le temps de la boucle. Cette règle est celle qu'on attend naturellement : ce qu'on pose « en tête » sert partout, ce qu'on pose « dans un tiroir » reste dans le tiroir.
 
 ### **🔢 Calculs `#{...}` et virgule décimale**
 
@@ -3604,7 +3732,7 @@ française, virgule décimale comprise.
 | Phrase | Effet |
 |---|---|
 | `<Factoriser>EXPR` | Factorisation |
-| `<Développer>EXPR` ou `<Développer>et réduis EXPR` | Développement |
+| `<Développer>EXPR` ou `<Développer>et réduire EXPR` | Développement |
 | `<Simplifier>EXPR` | Simplification |
 | `<Décomposer>en éléments simples EXPR` | Éléments simples |
 | `<Calculer>la forme canonique de EXPR` | Trinôme canonique |
@@ -3613,7 +3741,7 @@ française, virgule décimale comprise.
 | `<Calculer>la somme de EXPR pour k de a à b` | Forme close de la somme |
 | `<Calculer>le produit de EXPR pour k de a à b` | Forme close du produit |
 | `<Calculer>la dérivée de f` / `<Calculer>la dérivée seconde de f` | Dérivées (fonction posée par `<Soit>`) |
-| `<Calculer>la primitive de f` | Primitive |
+| `<Calculer>une primitive de f` | Primitive |
 | `<Déterminer>les zéros de f` | Ensemble des zéros |
 | `<Calculer>la limite de f en a` (+ `à droite` / `à gauche`) | Limite |
 | `<Calculer>le développement limité de f en a à l'ordre n` | DL avec reste de Landau |
@@ -3642,7 +3770,7 @@ docdg le dit en français.
 
 ### L'algèbre linéaire calculée
 
-Une matrice posée par `<Soit>la matrice M{...}` accepte, outre
+Une matrice posée par `<Soit>M une matrice définie par {...}` accepte, outre
 `<Calculer>le déterminant de M` et `<Calculer>l'inverse de M` :
 
 ```
@@ -3662,7 +3790,7 @@ une cinétique à plusieurs étapes —, `numériquement` la confie à
 `scipy.integrate.solve_ivp`, embarqué : les valeurs affichées sont exactement
 celles d'un TP Python. La méthode par défaut est celle de `solve_ivp`,
 **RK45** (Dormand-Prince, Runge-Kutta 5(4) à pas adaptatif), avec ses
-tolérances `rtol = 1e-3` et `atol = 1e-6`.
+tolérances : relative 10⁻³, absolue 10⁻⁶.
 
 ```docdg
 <Résoudre>numériquement l'équation différentielle θ'' + (g/L)sin(θ) = 0, avec g = 9,81, L = 0,5, θ(0) = 1 et θ'(0) = 0, sur [0 ; 10]
@@ -3687,7 +3815,7 @@ Chaque composante est tracée en fonction du temps, avec sa légende.
 inconnues, `le portrait de phase` celui de y' en fonction de y :
 
 ```docdg
-<Résoudre>numériquement le système différentiel, avec x(0) = 1, y(0) = 1 et z(0) = 1, sur [0 ; 40], en traçant z en fonction de x, rtol = 1e-8, atol = 1e-10 {
+<Résoudre>numériquement le système différentiel, avec x(0) = 1, y(0) = 1 et z(0) = 1, sur [0 ; 40], en traçant z en fonction de x, avec une tolérance relative de 10^(-8) et une tolérance absolue de 10^(-10) {
 	x' = 10(y - x)
 	y' = x(28 - z) - y
 	z' = xy - 8/3 z
@@ -3698,7 +3826,7 @@ inconnues, `le portrait de phase` celui de y' en fonction de y :
 |---|---|
 | `par la méthode de Radau` | Méthode de `solve_ivp` : `RK45` (défaut), `RK23`, `DOP853` (haute précision), `Radau`, `BDF` (problèmes raides), `LSODA` (choix automatique) |
 | `d'inconnue N(x)` | Nomme l'inconnue et la variable (par défaut `t`) |
-| `rtol = 1e-8`, `atol = 1e-10` | Resserre les tolérances, comme dans `solve_ivp` |
+| `avec une tolérance relative de 10^(-8)`, `une tolérance absolue de 10^(-10)` | Resserre les tolérances (`rtol` et `atol` de `solve_ivp`) |
 | `en traçant y en fonction de t` | Une seule composante en fonction du temps |
 | `en rouge`, `en vert`… | Couleur de la première courbe |
 
@@ -3711,10 +3839,10 @@ d'ordres de grandeur très différents, comme celle de Robertson — épuise les
 méthodes explicites : on choisit alors une méthode implicite.
 
 ```docdg
-<Résoudre>numériquement le système différentiel, avec a(0) = 1, b(0) = 0 et c(0) = 0, sur [0 ; 40], par la méthode de Radau, rtol = 1e-6, atol = 1e-10 {
-	a' = -0,04a + 1e4 b c
-	b' = 0,04a - 1e4 b c - 3e7 b^2
-	c' = 3e7 b^2
+<Résoudre>numériquement le système différentiel, avec a(0) = 1, b(0) = 0 et c(0) = 0, sur [0 ; 40], par la méthode de Radau, avec une tolérance relative de 10^(-6) et une tolérance absolue de 10^(-10) {
+	a' = -0,04a + 10^4 b c
+	b' = 0,04a - 10^4 b c - 3 × 10^7 b^2
+	c' = 3 × 10^7 b^2
 }
 ```
 
@@ -3817,8 +3945,7 @@ des points alignés ou confondus sont signalés en français.
 ### SciPy dans docdg, en un coup d'œil
 
 Les fichiers cités sont les **recueils publics consolidés** : leurs chapitres
-regroupent plusieurs niveaux. Les noms numérotés subsistent uniquement dans les
-fixtures de non-régression, présentées séparément plus haut.
+regroupent plusieurs niveaux.
 
 | Domaine | Ce que docdg en tire | Exemples |
 |---|---|---|
@@ -3832,7 +3959,7 @@ fixtures de non-régression, présentées séparément plus haut.
 
 ### Les constantes physiques et les fonctions spéciales
 
-`<Calculer>la constante de Planck` donne la valeur CODATA 2022 de
+`<Donner>la constante de Planck` donne la valeur CODATA 2022 de
 `scipy.constants`, avec son unité et son statut : **exacte** pour les sept
 constantes qui définissent le SI depuis 2019 (et celles qui s'en déduisent),
 **mesurée** pour les autres, avec leur incertitude-type relative. Les chiffres
@@ -3858,13 +3985,13 @@ Les fonctions spéciales viennent de `scipy.special` :
 
 ### L'algèbre linéaire numérique
 
-Sur une matrice déclarée par `<Soit>la matrice A { … }`, `scipy.linalg`
+Sur une matrice déclarée par `<Soit>A une matrice définie par { … }`, `scipy.linalg`
 décompose, conditionne et exponentie ; les coefficients s'affichent en
 fractions quand ils en sont, en décimales sinon. Le calcul exact (déterminant,
 inverse, valeurs propres exactes, diagonalisation) reste à SymPy.
 
 ```docdg
-<Soit>la matrice A {
+<Soit>A une matrice définie par {
 	0 ; 2 ; 1
 	1 ; 1 ; 1
 	2 ; 1 ; 3
@@ -3898,14 +4025,14 @@ Le disque (`sur le disque de rayon 2`) est reconnu, les variables se nomment
 
 ### Les intervalles de confiance et les tests statistiques
 
-`<Calculer>l'intervalle de confiance …` et `<Calculer>le test … ` confient
+`<Calculer>l'intervalle de confiance …` et `<Effectuer>le test … ` confient
 l'inférence à `scipy.stats`. Chaque test énonce \(H_0\) et \(H_1\), donne la
 statistique, les degrés de liberté et la p-valeur, puis la décision au seuil
 choisi (5 % par défaut) ; pour Student et le \(\chi^2\), la densité de la loi
 montre la zone de rejet et la valeur observée.
 
 ```docdg
-<Calculer>le test de Student de l'hypothèse μ = 12 sur la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7, au seuil de 5 %
+<Effectuer>le test de Student de l'hypothèse μ = 12 sur la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7, au seuil de 5 %
 ```
 
 | Phrase | Méthode de `scipy.stats` |
@@ -4007,7 +4134,7 @@ sont tracés ensemble.
 | `<Calculer>la probabilité que X <= a pour la loi normale(m ; s)` | Probabilité ; opérateurs `<=`, `>=`, `=`, `<`, `>` |
 | `<Calculer>le quantile d'ordre p de la loi ...` | Quantile |
 | `<Calculer>l'espérance de la loi ...` / `<Calculer>l'écart type de la loi ...` | Moments |
-| `<Ajuster f(x) = a*exp(b*x) aux données {(0;1) (1;2,7) ...}>` | Moindres carrés non linéaires par `scipy.optimize.curve_fit` : chaque paramètre avec son incertitude-type u, tirée de la matrice de covariance, et le coefficient de détermination R² — le tout dans la balise, les données comprises |
+| `<Ajuster>f(x) = a exp(b x) aux données {(0;1) (1;2,7) ...}` | Moindres carrés non linéaires par `scipy.optimize.curve_fit` : chaque paramètre avec son incertitude-type u, tirée de la matrice de covariance, et le coefficient de détermination R² — le tout dans la balise, les données comprises |
 
 Les lois reconnues : `normale(m ; s)`, `binomiale(n ; p)`,
 `poisson(l)`, `uniforme(a ; b)`, `exponentielle(l)` (paramètre λ, à la
@@ -4037,7 +4164,7 @@ pourtant éprouvés par les tests et employés dans les exemples livrés :
 
 | verbe | ce qu'il fait | forme |
 | --- | --- | --- |
-| `<Convertir>` | change d'unité, en respectant la dimension | `<Convertir>90 km/h en m/s` |
+| `<Convertir>` | change d'unité, en respectant la dimension et les chiffres significatifs de la donnée | `<Convertir>90 km/h en m/s` |
 | `<Effectuer>` | pose une opération et la déroule | `<Effectuer>la division euclidienne de 152 par 6` |
 | `<Compléter>` | remplit ce qui manque, marqué `?` | `<Compléter>le tableau de proportionnalité {…}` |
 | `<Exprimer>` | met en formule un énoncé en prose | `<Exprimer>le programme de calcul en fonction de x {…}` |
@@ -4053,14 +4180,14 @@ tableau de variations.
 ### La factorisation des points
 
 Les points se regroupent sous un article pluriel :
-`<Soient>les points A(2;3) et B(-1;4)` — la forme « un point... et un
+`<Soit>A(2;3) et B(-1;4) 2 points` — la forme « un point... et un
 point... » est refusée avec un rappel de la règle.
 
 ### Les bornes naturelles
 
 ```
 <Représenter>graphiquement la fonction f sur [-2 ; 5], en ordonnée [0 ; 3], en bleu
-<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2, 3)} et de points {1}
+<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2 ; 3[} et de points {1}
 ```
 
 ### Les réglages en toutes lettres
@@ -4105,7 +4232,7 @@ Une table de données se déclare et se réutilise par son nom, ses
 entrées en `clé: valeur` comme les données en ligne :
 
 ```
-soit sondage: un dictionnaire de chaînes de caractères et d'entiers = {
+soit sondage un dictionnaire de chaînes de caractères et d'entiers tel que sondage = {
 	"Jeudi": 8 ;
 	"Lundi": 5 ;
 	"Mardi": 3

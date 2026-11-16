@@ -22,9 +22,10 @@
 
 ### 0. 📦 Ce que ce contrat couvre
 
-Le présent contrat régit **l'application docdg sous sa forme exécutable**,
+Le présent contrat régit **l'application DocDG sous sa forme exécutable**, à
+partir de la version 4.0,
 distribuée depuis ses deux adresses officielles — le site
-<https://docdg.dubard.re> et le dépôt
+<https://dubard.re> et le dépôt
 [GitHub (gdubard/docdg)](https://github.com/gdubard/docdg).
 
 Il **ne régit pas** les fichiers publiés sur ce dépôt — exemples, documents
@@ -114,7 +115,7 @@ docdg n'a ni publicité ni démarchage : il se transmet de la main à la main.
 Quand vous voulez le faire connaître à un collègue, à un camarade de classe,
 à qui vous voudrez, **partagez les adresses plutôt que les fichiers** :
 
-* le site — <https://docdg.dubard.re>
+* le site — <https://dubard.re>
 * le dépôt — <https://github.com/gdubard/docdg>
 
 La raison est pratique autant que courtoise. Une version copiée vieillit :
@@ -131,10 +132,20 @@ l'on peut vous signaler un défaut.
 docdg embarque des composants qui ne lui appartiennent pas et qui conservent
 leurs licences respectives :
 
-* la cursive **Marelle** et les polices de texte **Gelasio**, **Tinos** et
-  **Arimo**, sous *SIL Open Font License 1.1* — voir
+* la cursive **Marelle**, distribuée sans modification, et les polices de
+  texte **Gelasio**, **Tinos** et **Arimo**, sous *SIL Open Font License
+  1.1*, ainsi que les polices du compositeur (**New Computer Modern**, sous
+  *GUST Font License* ; **Libertinus Serif**, sous *SIL Open Font License
+  1.1* ; **DejaVu Sans Mono**, sous licence *Bitstream Vera*) — voir
   [LICENCES-FONTES.md](LICENCES-FONTES.md) ;
-* la bibliothèque de composition mathématique **KaTeX**, sous licence *MIT*.
+* le compositeur **Typst**, sous licence *Apache 2.0* ;
+* la bibliothèque d'interface **iced**, la bibliothèque de dialogues **rfd**
+  et l'exécutif asynchrone **tokio**, sous licence *MIT* ; le moteur de
+  rendu SVG **resvg**, sous licence *MIT* ou *Apache 2.0* ;
+* la bibliothèque **SQLite**, versée au domaine public, qui range le corpus ;
+  la bibliothèque **option-ext**, sous *Mozilla Public License 2.0*, employée
+  sans modification ; les autres bibliothèques Rust embarquées, sous licences
+  *MIT*, *Apache 2.0*, *BSD*, *Zlib* ou *Unicode* ;
 * le moteur de calcul : l'interpréteur **Python** (CPython), sous
   *Python Software Foundation License* ; **SymPy**, **mpmath**, **NumPy** et
   **SciPy**, sous licence *BSD à trois clauses*, avec les bibliothèques
@@ -152,9 +163,19 @@ accordent sur ces composants.
 
 docdg travaille **entièrement sur votre machine**. Il n'envoie rien, ne
 consulte aucun service distant, ne collecte ni ne transmet aucune donnée
-d'usage. Il n'écrit, hors des documents que vous enregistrez vous-même, que
-deux fichiers dans votre dossier de configuration personnel — vos préférences
-d'interface et la date d'installation de la version courante.
+d'usage. Hors des documents que vous enregistrez vous-même et des PDF que vous
+exportez, il n'écrit que :
+
+* son moteur de calcul, installé au premier lancement dans votre dossier de
+  données personnel ;
+* des fichiers de travail qui accélèrent la réouverture : un cache de
+  composition et un cache de calcul, dans vos dossiers de données et de cache —
+  rien à côté de vos documents ;
+* si vous employez l'onglet Édition, votre base personnelle du corpus et son
+  journal, dans le dossier `docdg` de vos Documents.
+
+Aucun de ces fichiers ne quitte votre machine. docdg ne conserve aucune
+préférence d'interface d'une session à l'autre.
 
 ---
 

@@ -5,9 +5,9 @@ document {
 	taille: 11;
 	interligne: 1,4;
 }
-soit h1: un style = <rouge gras italique 19 pt au centre>
-soit h2: un style = <rouge 11 pt section num>
-soit h3: un style = <bleu italique sous-section num>
+soit h1 un style défini par <rouge gras italique 19 pt au centre>
+soit h2 un style défini par <rouge 11 pt section num>
+soit h3 un style défini par <bleu italique sous-section sans numéro>
 
 <h1>La réglure Seyès
 
@@ -28,7 +28,7 @@ soit h3: un style = <bleu italique sous-section num>
 }
 
 <Écrire>en réglure Seyès{
-Au <TIMES NEW ROMAN italique 24 pt>{XXI}<exposant>{è} siècle, il y a 2,2 millions d'habitants et plus de 130 musées.
+Au <TIMES NEW ROMAN italique 24 pt>{XXI}<exposant>{e} siècle, il y a 2,2 millions d'habitants et plus de 130 musées.
 	On dit souvent : « Mieux vaut tard que jamais. »
 		Mon frère a 8 ans — il aime les trains, les robots et les étoiles.
 	L'île d'Ouessant est à 20 km des côtes du Finistère.
@@ -56,9 +56,9 @@ La notation mathématique de docdg s'écrit entre deux signes dollar. Voici un a
 	Appartenance : $x appartient à NN$ ; inclusion : $NN inclus dans ZZ$.
 	Quantificateurs :
 
-	$pour tout x dans RR$
+	$pour tout x appartenant à RR$
 
-	$il existe x dans RR$
+	$il existe x appartenant à RR$
 
 	Opérations ensemblistes : $A union B$ ; $A inter B$.
 	Probabilité : $PP(A)$ ; conditionnelle : $PP(A sachant B)$.
@@ -68,11 +68,11 @@ La notation mathématique de docdg s'écrit entre deux signes dollar. Voici un a
 
 Le type porte la forme, la valeur porte le contenu. Le cardinal et les dimensions se disent une fois, à gauche du signe égal ; le membre de droite ne dit plus que ce que les cases valent. Le vecteur nul et la matrice identité n'ont donc pas à redire leur taille — elle est déjà écrite. Le corollaire vaut contrôle : un vecteur déclaré de quatre qui en reçoit cinq est refusé, et c'est l'inversion de dimensions, la faute la plus banale de l'algèbre linéaire, qui se trouve attrapée avant l'impression.
 
-soit u: un vecteur de 4 rationnels = {2 ; 2 ; 2 ; 2}
-soit v: un vecteur de 4 rationnels = {1 ; 2 ; 3 ; 4}
-soit moy: un rationnel = la moyenne de v
-soit ps: un rationnel = le produit scalaire de u et v
-soit nv: un réel = la norme de v
+soit u un vecteur de 4 rationnels tel que u = {2 ; 2 ; 2 ; 2}
+soit v un vecteur de 4 rationnels tel que v = {1 ; 2 ; 3 ; 4}
+soit moy ∈ ℚ tel que moy = la moyenne de v
+soit ps ∈ ℚ tel que ps = le produit scalaire de u et v
+soit nv ∈ ℝ tel que nv = la norme de v
 
 <h2>Les grandeurs se disent en prose, et restent exactes
 
@@ -86,13 +86,13 @@ soit nv: un réel = la norme de v
 
 La moyenne d'entiers est une fraction, jamais un flottant arrondi ; la norme garde son radical tant qu'elle n'est pas rationnelle. C'est le type déclaré qui décide de l'écriture.
 
-soit A: une matrice 2×2 de rationnels = {{2 ; 1} ; {1 ; 3}}
-soit B: une matrice 2×2 de rationnels = {{1 ; 0} ; {2 ; 1}}
-soit c: un vecteur de 2 rationnels = {5 ; 6}
-soit det: un rationnel = le déterminant de A
-soit iA: une matrice 2×2 de rationnels = l'inverse de A
-soit AB: une matrice 2×2 de rationnels = A × B
-soit x: un vecteur de 2 rationnels = la solution de l'équation A × x = c
+soit A une matrice 2×2 de rationnels telle que A = {{2 ; 1} ; {1 ; 3}}
+soit B une matrice 2×2 de rationnels telle que B = {{1 ; 0} ; {2 ; 1}}
+soit c un vecteur de 2 rationnels tel que c = {5 ; 6}
+soit det ∈ ℚ tel que det = le déterminant de A
+soit iA une matrice 2×2 de rationnels telle que iA = l'inverse de A
+soit AB une matrice 2×2 de rationnels telle que AB = A × B
+soit x un vecteur de 2 rationnels tel que x = la solution de l'équation A × x = c
 
 <h2>Les matrices et les systèmes s'écrivent comme au tableau
 
@@ -120,14 +120,14 @@ La consigne est celle du cours de PTSI, écrite telle qu'on l'énonce au tableau
 <h3>Systèmes d'équations
 	Un système s'aligne tout seul sur le premier opérateur relationnel, égalités et inégalités mêlées, une équation par ligne :
 
-<Soit>le système s {
+<Soit>s un système défini par {
 	2x + 3y = 7
 	x - y = 1
 }
 <Résoudre>le système s
 
 <h3>Déterminant et inverse
-<Soit>la matrice M {
+<Soit>M une matrice définie par {
 	2 ; 1
 	1 ; 1
 }
@@ -145,14 +145,11 @@ La consigne est celle du cours de PTSI, écrite telle qu'on l'énonce au tableau
 	A -> C
 }
 
-<h1>Analyse
+<page suivante h1>Analyse
 
-<Soit>une fonction q(x) = |x|racine((1-x)/(1+3x))
-
+<Soit>q : ]−1/3 ; 1] → ℝ, x ↦ |x|racine((1-x)/(1+3x))
 <Calculer>la dérivée de q
-
 <Calculer>la dérivée seconde de q
-
 <Déterminer>les zéros de q
 
 <Dresser>le tableau de signes de q
@@ -184,7 +181,7 @@ La consigne est celle du cours de PTSI, écrite telle qu'on l'énonce au tableau
 <h3>Une fonction, son type, sa récursion
 	Depuis la 3.8, le type se déclare à la première apparition d'un nom : le document dit ce qu'il manipule.
 
-soit factorielle(n: un entier): un entier = si n vaut 0 { 1 } sinon { n * factorielle(n - 1) }
+soit factorielle : ℤ → ℤ, n ↦ si n vaut 0 { 1 } sinon { n × factorielle(n − 1) }
 
 	Les six premières factorielles : #{factorielle(1)}, #{factorielle(2)}, #{factorielle(3)}, #{factorielle(4)}, #{factorielle(5)}, #{factorielle(6)}.
 
@@ -192,8 +189,8 @@ soit factorielle(n: un entier): un entier = si n vaut 0 { 1 } sinon { n * factor
 <Dresser>un tableau {
 	<mc>	<md>	<md>
 	Rang	Carré	Cube
-	pour n: un entier naturel de 1 à 6 {
-		[#n]	[#{n * n}]	[#{n * n * n}]
+	pour n ∈ ⟦1 ; 6⟧ {
+		[#n]	[#{n × n}]	[#{n × n × n}]
 	}
 }
 
@@ -203,23 +200,23 @@ répéter 4 fois {
 }
 
 <h3>Chercher dans une série
-soit recherche(v: une liste d'entiers ; x: un entier): un entier = {
-	pour i: un entier naturel de 0 à longueur(v) - 1 {
+soit recherche : une liste d'entiers × ℤ → ℤ, (v, x) ↦ {
+	pour i ∈ ⟦0 ; longueur(v) − 1⟧ {
 		si v[i] vaut x {
-			retourne i
+			retourner i
 		}
 	}
-	retourne -1
+	retourner −1
 }
 
-soit serie: une liste d'entiers = {5 ; 3 ; 8 ; 1 ; 9 ; 2}
+soit serie une liste d'entiers telle que serie = {5 ; 3 ; 8 ; 1 ; 9 ; 2}
 	La série #serie contient #{longueur(serie)} termes ; le 8 s'y trouve au rang #{recherche(serie ; 8)}, et une fois triée elle devient #{trier(serie)}.
 
 <h3>Une boucle à condition
-soit terme: un entier = 1
-tant que terme moins de 200 {
+soit terme ∈ ℤ tel que terme = 1
+tant que terme est inférieur à 200 {
 	Le terme vaut #terme.
-	terme = terme * 3
+	terme ← terme × 3
 }
 
 <page suivante h1>Nombres et calcul
@@ -246,7 +243,7 @@ tant que terme moins de 200 {
 <Convertir>2500 cm^2 en m^2
 
 <h3>Une droite graduée
-<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2, 3)} et de points {1}, en rouge
+<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2 ; 3[} et de points {1}, en rouge
 
 <page suivante h1>Statistiques et probabilités
 
@@ -254,24 +251,24 @@ tant que terme moins de 200 {
 	La série ${7 ; 1 ; 5 ; 3 ; 9}$ totalise #{somme({7 ; 1 ; 5 ; 3 ; 9})} pour #{longueur({7 ; 1 ; 5 ; 3 ; 9})} valeurs, soit une moyenne de #{somme({7 ; 1 ; 5 ; 3 ; 9}) / longueur({7 ; 1 ; 5 ; 3 ; 9})}.
 
 <h3>Les lois, calculées et non tabulées
-<Calculer>la probabilité que X = 0 pour la loi binomiale(20 ; 0,05)
+<Calculer>la probabilité que X = 0 pour la loi binomiale de paramètres 20 et 0,05
 
-<Calculer>l'espérance de la loi binomiale(20 ; 0,05)
+<Calculer>l'espérance de la loi binomiale de paramètres 20 et 0,05
 
-<Calculer>la probabilité que X >= 1 pour la loi exponentielle(2)
+<Calculer>la probabilité que X >= 1 pour la loi exponentielle de paramètre 2
 
-<Déterminer>le quantile d'ordre 0,975 de la loi normale(0 ; 1)
+<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart type 1
 
-<Déterminer>le quantile d'ordre 0,975 de la loi student(9)
+<Déterminer>le quantile d'ordre 0,975 de la loi de Student à 9 degrés de liberté
 
-<Étudier>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
+<Étudier>la loi de densité f(x) = 3x^2 sur [0 ; 1]
 
 <h3>La densité, tracée
 <Tracer>la densité de la loi normale d'espérance 0 et d'écart type 1
 
 <h3>La loi des grands nombres, montrée par une boucle
-pour n: un entier naturel dans [100, 400, 1600, 6400] {
-	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2*racine(n)) ; 4)}.
+pour n ∈ {100 ; 400 ; 1600 ; 6400} {
+	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2×racine(n)) ; 4)}.
 }
 
 
@@ -286,9 +283,9 @@ pour n: un entier naturel dans [100, 400, 1600, 6400] {
 <Rappeler>l'interaction gravitationnelle
 
 <h3>L'homogénéité se vérifie, elle ne se suppose pas
-<Vérifier>l'homogénéité de E = m * c avec E énergie, m masse, c célérité
+<Vérifier>l'homogénéité de E = m c avec E énergie, m masse, c célérité
 
-<Vérifier>l'homogénéité de div(E) = rho / epsilon_0 avec E champ électrostatique, rho densité volumique de charge, epsilon_0 permittivité du vide
+<Vérifier>l'homogénéité de div(E) = ρ / ε_0 avec E champ électrostatique, ρ densité volumique de charge, ε_0 permittivité du vide
 
 	La première relation est fausse d'une puissance de célérité, et docdg le dit avant l'impression. C'est le même contrôle qui valide la base à la compilation.
 
@@ -330,7 +327,7 @@ pour n: un entier naturel dans [100, 400, 1600, 6400] {
 
 <Démontrer>la réciproque du théorème de Pythagore
 
-	La preuve ci-dessus s'appuie sur le <renvoi>{pythagore} : le renvoi porte le numéro que la composition lui a donné, et suit l'énoncé s'il change de page.
+	La preuve ci-dessus s'appuie sur le théorème <renvoi>{pythagore} : le renvoi porte le numéro que la composition lui a donné, et suit l'énoncé s'il change de page.
 
 <h3>Un énoncé écrit à la main, numéroté comme les autres
 <Énoncer>le théorème <étiquette>{carre-impair} {
@@ -358,7 +355,7 @@ pour n: un entier naturel dans [100, 400, 1600, 6400] {
 	476 : Chute de Rome
 	1492 : Voyage de Colomb
 	1789 : Révolution française
-	2025 : Aujourd'hui
+	2026 : Aujourd'hui
 }
 
 <page suivante h1>Tableaux et grilles
@@ -416,16 +413,16 @@ pour n: un entier naturel dans [100, 400, 1600, 6400] {
 <h3>Les styles se composent, les couleurs se nomment
 	Un mot <rouge gras>{rouge et gras}, un autre <vert foncé italique>{vert foncé et italique}, un troisième <bleu marine souligné>{souligné}, et une <gris foncé 14 pt>{taille choisie}.
 
-	Les indices et les exposants suivent la prose : H<indice>{2}O, le XXI<exposant>{e} siècle, $10^{-3}$ en mathématiques.
+	Les indices et les exposants suivent la prose : H<indice>{2}O, le XXI<exposant>{e} siècle, $10^(-3)$ en mathématiques.
 
 <h3>Deux colonnes, quand le sujet s'y prête
-<Composer>sur deux colonnes avec un filet gris clair {
+<Composer>sur 2 colonnes avec un filet gris clair {
 	Le texte coule d'une colonne à l'autre sans que rien ne soit découpé à la main : c'est la composition qui répartit, et l'espacement se règle une fois pour toutes dans le bloc document.
 	Une balise absente vaut une colonne unique : en l'absence de <<Composer>>, tout le document est comme enfermé dans une colonne qui occupe la justification.
 }
 
 <h3>Ce que la page sait faire d'elle-même
-	Les marges, l'interligne, les espacements de colonne, l'orphelines et les veuves se règlent une fois dans le bloc document, en tête de fichier. Le reste du document n'en parle plus jamais.
+	Les marges, l'interligne, les espacements de colonne, les orphelines et les veuves se règlent une fois dans le bloc document, en tête de fichier. Le reste du document n'en parle plus jamais.
 
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Ce que vous venez de voir} {
 	Un seul fichier de prose, aucune balise de mise en forme dans le texte, et un rendu identique à l'écran, à l'impression et dans le PDF.

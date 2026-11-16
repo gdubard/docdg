@@ -1,18 +1,17 @@
 document {
     orientation: portrait;
     marges: 5;
-    espacements: 2;
     taille: 11;
-    interligne: 1,4;
+    interligne: 1,3;
 }
 
-soit titre: un style = <bleu marine gras 19 pt au centre>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
+soit titre un style défini par <bleu marine gras 19 pt au centre>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
 
 <titre>Mathlang — mini-langage mathématique de docdg
 
-Ce recueil réunit les notations mathématiques saisies entre deux signes dollar. Chaque ligne montre la syntaxe docdg employée dans une formule. Il contient tous les modèles de la palette Mathématiques de docdg 3.9, complétés par les notations reconnues par le traducteur et attestées dans les exemples ou les tests du moteur.
+Ce recueil réunit les notations mathématiques saisies entre deux signes dollar. Chaque ligne montre la syntaxe docdg employée dans une formule. Il contient tous les modèles de la palette Mathématiques de DocDG 4.0, complétés par les notations reconnues par le traducteur et attestées dans les exemples ou les tests du moteur.
 
 Les lettres sont des symboles de présentation, pas des variables à déclarer. Les formules de probabilité qui supposent des événements indépendants sont des exemples de notation et non des identités universelles.
 
@@ -27,7 +26,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Multiplication explicite : $a * b$
 	Plus ou moins : $x +- y$
 	Égalité : $a = b$
-	Différence : $a != b$
+	Différence : $a différent de b$, ou au clavier $a != b$
 	Inégalité large inférieure : $a <= b$
 	Inégalité large supérieure : $a >= b$
 	Infériorité stricte : $a < b$
@@ -40,7 +39,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Exposant sur le numérateur : $a^2/b$
 	Exposant sur le dénominateur : $a/b^2$
 	Carré d’une fraction : $(a/b)^2$
-	Produit remarquable : $(a+b)^2 = a^2 + 2*a*b + b^2$
+	Produit remarquable : $(a+b)^2 = a^2 + 2 a b + b^2$
 
 	Multiplication de deux parenthèses : $(a+b)(c+d)$
 	Nombres décimaux : $1,5 + 2,75 = 4,25$
@@ -94,7 +93,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Varphi : $varphi$
 	Pi : $pi$
 
-<h1>Lettres grecques majuscules
+<page suivante h1>Lettres grecques majuscules
 
 	Gamma : $Gamma$
 	Delta : $Delta$
@@ -122,7 +121,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Tangente : $tan(x)$
 	Identité fondamentale : $cos(x)^2 + sin(x)^2 = 1$
 
-<h1>Fonctions circulaires inverses
+<page suivante h1>Fonctions circulaires réciproques
 
 	Arcsinus : $arcsin(x)$
 	Arccosinus : $arccos(x)$
@@ -138,21 +137,15 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Tangente hyperbolique (notation française) : $th(x)$
 	Identité fondamentale : $cosh(x)^2 - sinh(x)^2 = 1$
 
-<h1>Fonctions hyperboliques inverses
+<h1>Fonctions hyperboliques réciproques
 
 	Argument sinus hyperbolique : $argsh(x)$
 	Argument cosinus hyperbolique : $argch(x)$
 	Argument tangente hyperbolique : $argth(x)$
-	Sinus hyperbolique inverse (notation internationale) : $asinh(x)$
-	Cosinus hyperbolique inverse (notation internationale) : $acosh(x)$
-	Tangente hyperbolique inverse (notation internationale) : $atanh(x)$
 
 <page suivante h1>Fonctions circulaires et hyperboliques supplémentaires
 
 	Arc cotangente : $arccot(x)$
-	Argument sinus hyperbolique long : $arsinh(x)$
-	Argument cosinus hyperbolique long : $arcosh(x)$
-	Argument tangente hyperbolique long : $artanh(x)$
 
 <h1>Limites et intégrales
 
@@ -166,7 +159,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 <h1>Calcul différentiel supplémentaire
 
-	Différentielle ordinaire : $dd(f)/dd(x)$
+	Dérivée, notation de Leibniz : $dd(f)/dd(x)$
 	Dérivée partielle selon y : $partielle(f)/partielle(y)$
 	Dérivée directionnelle (autre fonction) : $dérivée directionnelle(g; u)$
 	Gradient et produit scalaire : $produit scalaire(gradient(f); v)$
@@ -220,7 +213,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Quantificateur restreint :
 
-	$pour tout x dans [0; 1]$
+	$pour tout x appartenant à [0; 1]$
 
 	Différence à elle-même : $A privé de A = vide$
 	Ensemble des réels non nuls : $RR^*$
@@ -231,12 +224,12 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Quantificateur universel :
 
-	$pour tout x dans RR$
+	$pour tout x appartenant à RR$
 
 
 	Quantificateur existentiel :
 
-	$il existe x dans RR$
+	$il existe x appartenant à RR$
 
 
 <h1>Logique et quantificateurs
@@ -244,12 +237,12 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Pour tout et il existe :
 
-	$pour tout x dans RR, il existe y dans RR, y > x$
+	$pour tout x appartenant à RR, il existe y appartenant à RR, y > x$
 
 
 	Absence de quantificateur existentiel :
 
-	$il n'existe pas de m dans NN$
+	$il n'existe pas de m appartenant à NN$
 
 
 	Implication :
@@ -263,26 +256,25 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Conjonction : $P et Q$
 	Disjonction : $P ou Q$
-	Négation : $négation de P$
-	Formule logique composée : $(P et Q) ou négation de P$
+	Négation : $non P$
+	Formule logique composée : $(P et Q) ou non P$
 
 	Quantificateurs imbriqués :
 
-	$pour tout x dans RR, il existe y dans RR, y > x$
+	$pour tout x appartenant à RR, il existe y appartenant à RR, y > x$
 
 
 	Inégalité et équivalence :
 
-	$abs(x) <= 1 <=> -1 <= x <= 1$
+	$|x| <= 1 <=> -1 <= x <= 1$
 
 
 <h1>Ensembles et logique complémentaires
 
-	Application dans un ensemble : $x dans RR$
 	Restriction sous condition : $x tel que x > 0$
 	Négation explicite : $non P$
 	Opérations booléennes : $P et Q ou R$
-	Attention aux priorités : la notation `P et Q ou R` ne démontre aucune équivalence et ne doit pas être interprétée sans convention logique. Pour lever toute ambiguïté dans les assertions, écrire les parenthèses de la structure voulue.
+	Attention aux priorités : la notation « P et Q ou R » ne démontre aucune équivalence et ne doit pas être interprétée sans convention logique. Pour lever toute ambiguïté dans les assertions, écrire les parenthèses de la structure voulue.
 
 <h1>Relations ensemblistes
 	Non-appartenance : $x n'appartient pas à QQ$
@@ -297,20 +289,20 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Appartenance à un ensemble de nombres : $racine(2) appartient à RR$
 
-<h1>Opérations ensemblistes
+<page suivante h1>Opérations ensemblistes
 
 	Réunion : $A union B$
 	Intersection : $A inter B$
 	Différence : $A privé de B$
 	Ensemble vide : $vide$
 	Complémentaire de A : $non(A)$
-	Convention de notation : `non(A)` avec parenthèses désigne le complémentaire dans un univers fixé ; `non P` sans parenthèses est une négation propositionnelle. Ces écritures sont distinctes du calcul effectif sur des ensembles typés.
+	Convention de notation : « non(A) » avec parenthèses désigne le complémentaire dans un univers fixé ; « non P » sans parenthèses est une négation propositionnelle. Ces écritures sont distinctes du calcul effectif sur des ensembles typés.
 	Complémentaire d’une réunion : $non(A union B)$
 	Loi de De Morgan : $non(A union B) = non(A) inter non(B)$
 	Ces identités concernent les complémentaires relatifs à un même univers de référence, fixé au préalable.
 	Loi de De Morgan pour intersection : $non(A inter B) = non(A) union non(B)$
 	Ensemble des parties : $parties de(A)$
-	Cardinal : $card(A)$
+	Cardinal : $cardinal(A)$
 	Intervalle entier : $intervalle entier(1; n)$
 	Réunion indexée : $réunion de(i=1; n) A_i$
 	Intersection indexée : $intersection de(i=1; n) A_i$
@@ -327,11 +319,11 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 <h1>Conjugaison et topologie
 
-	Nombre complexe : $z = a + i*b$
+	Nombre complexe : $z = a + i b$
 	Conjugué : $conjugué(z)$
 	Module : $|z|$
 	Unité imaginaire : $i^2 = -1$
-	Égalité d’Euler : $exp(i*pi) + 1 = 0$
+	Égalité d’Euler : $exp(i pi) + 1 = 0$
 	Adhérence : $adhérence(A)$
 	Composée : $g rond f$
 
@@ -348,11 +340,11 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Milieu : $milieu(A; B)$
 	Parallélisme : $(AB) parallèle (CD)$
 	Perpendicularité : $(AB) perpendiculaire (CD)$
-	Non parallélisme : $(AB) !parallèle (CD)$
+	Non parallélisme : $(AB) non parallèle (CD)$
 	Figures isométriques : $ABC isométrique A'B'C'$
 	Figures semblables : $ABC semblable A'B'C'$
 
-<h1>Vecteurs et repères
+<page suivante h1>Vecteurs et repères
 
 	Vecteur : $vecteur(AB)$
 	Vecteur nommé en ligne : $vecteur u(3;5)$
@@ -369,7 +361,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Repère orthonormé : $repère orthonormé(O; i; j)$
 	Norme et produit scalaire : $norme(vecteur(u))^2 = vecteur(u) . vecteur(u)$
 
-<page suivante h1>Algèbre linéaire
+<h1>Algèbre linéaire
 
 	Déterminant : $déterminant(A)$
 	Trace : $trace(A)$
@@ -377,7 +369,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Noyau : $noyau(A)$
 	Produit scalaire : $produit scalaire(u; v)$
 
-<h1>Fonctions et opérations linéaires supplémentaires
+<page suivante h1>Fonctions et opérations linéaires supplémentaires
 
 	Comatrice : $comatrice(A)$
 	Spectre : $spectre(A)$
@@ -395,7 +387,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Covariance : $covariance(X; Y)$
 	Écart type : $écart type(X)$
 
-<page suivante h1>Probabilités : événements
+<h1>Probabilités : événements
 
 	Probabilité d’un événement : $PP(A)$
 	Probabilité du contraire : $PP(non(A))$
@@ -418,13 +410,13 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Formule de Bayes : $PP(A sachant B) = (PP(B sachant A) PP(A))/PP(B)$
 	La formule de Bayes exige une probabilité de B strictement positive ; l’écriture de la conditionnelle réciproque exige également une probabilité de A strictement positive.
 
-<page suivante h1>Probabilités complémentaires
+<h1>Probabilités complémentaires
 
-	Espérance du produit : $EE(X*Y)$
+	Espérance du produit : $EE(X Y)$
 	Conditionnement et complémentaire : $PP(non(A) sachant B)$
 	Probabilité conjointe : $PP(A inter B sachant C)$
-	Borne supérieure de l’écart-type d’une fréquence de Bernoulli : $1/(2 racine(n))$
-	Pour n tirages de Bernoulli indépendants et de même paramètre, avec n entier naturel strictement positif, l’écart-type de la fréquence vaut la racine de p fois (1 moins p) divisé par n ; il est au plus égal à la borne affichée. Ce n’est pas l’énoncé général de la loi des grands nombres.
+	Borne supérieure de l’écart type d’une fréquence de Bernoulli : $1/(2 racine(n))$
+	Pour n tirages de Bernoulli indépendants et de même paramètre, avec n entier naturel strictement positif, l’écart type de la fréquence vaut la racine de p fois (1 moins p) divisé par n ; il est au plus égal à la borne affichée. Ce n’est pas l’énoncé général de la loi des grands nombres.
 
 <h1>Statistiques : paramètres
 
@@ -434,7 +426,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Moyenne avec barre : $moyenne(x)$
 	Variance de X et Y : $variance(X) + variance(Y)$
 	Covariance nulle : $covariance(X; Y) = 0$
-	Écart-type et variance : $écart type(X) = racine(variance(X))$
+	Écart type et variance : $écart type(X) = racine(variance(X))$
 
 <h1>Statistiques : fonctions
 
@@ -444,11 +436,11 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Répartition par intégration : $répartition de(X; x) = intégrale(t=-infini;x) densité de(X; t)$
 	Cette représentation intégrale suppose que la loi de X admet une densité ; elle ne convient pas telle quelle à une variable aléatoire purement discrète.
 
-<page suivante h1>Lois de probabilité
+<h1>Lois de probabilité
 
-	Loi normale centrée réduite : $normal(0; 1)$
-	Loi normale générale : $normal(mu; sigma)$
-	Pour cette notation, sigma désigne l’écart-type, strictement positif ; la variance vaut son carré.
+	Loi normale centrée réduite : $normale(0; 1)$
+	Loi normale générale : $normale(mu; sigma)$
+	Pour cette notation, sigma désigne l’écart type, strictement positif ; la variance vaut son carré.
 	Loi binomiale : $binomiale(n; p)$
 	Paramètres : n est un entier naturel ; p est une probabilité comprise entre zéro et un. La loi décrit notamment la somme de n épreuves de Bernoulli indépendantes de même paramètre.
 	Loi de Poisson : $poisson(lambda)$

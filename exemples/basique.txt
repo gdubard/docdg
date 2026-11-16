@@ -6,11 +6,11 @@ document {
     interligne: 1,4;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Les bases de docdg — exemples progressifs
 
@@ -22,7 +22,7 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h0>Bases : écriture et mise en forme
 
-soit titre: un style = <rouge gras 18 pt au centre>
+soit titre un style défini par <rouge gras 18 pt au centre>
 
 <titre>docdg — les bases, niveau 1
 
@@ -50,10 +50,10 @@ De même, il est nécessaire de doubler le caractère $$ pour qu'un dollar isol�
 }
 
 <page suivante h1>Calculs et interpolation
-Un calcul s'écrit entre #{ et } — la frontière est exacte, une lettre collée à la valeur n'est jamais avalée :
-soit n: un entier naturel = 7
+Un calcul s'écrit entre ##{{ et }} — la frontière est exacte, une lettre collée à la valeur n'est jamais avalée :
+soit n ∈ ℕ tel que n = 7
 <Afficher>un cadre avec un fond vert menthe, une bordure bleu canard et des coins arrondis de 3 mm {
-    $n = #n$, donc $n^2 = #{n*n}$ et $n/2 = #{n/2}$
+    $n = #n$, donc $n^2 = #{n×n}$ et $n/2 = #{n/2}$
     
     $#{n}x$ vaut sept fois $x$, et $#{n}x^2$ garde sa puissance.
     
@@ -62,23 +62,23 @@ soit n: un entier naturel = 7
     Arrondis : #{arrondi(5/3; 2)}, défaut #{défaut(3,7)}, excès #{excès(3,2)}.
 }
 <h1>Variables, boucles et conditions
-soit tva: un décimal = 0,2
-soit prix: un entier = 150
-Le prix TTC est #{prix * (1 + tva)} euros.
+soit tva ∈ 𝔻 tel que tva = 0,2
+soit prix ∈ ℤ tel que prix = 150
+Le prix TTC est #{prix × (1 + tva)} euros.
 
-pour k: un entier naturel de 1 à 3 {
-    Ligne #k : le carré de #k vaut #{k*k}.
+pour k ∈ ⟦1 ; 3⟧ {
+    Ligne #k : le carré de #k vaut #{k×k}.
 }
 
-soit note: un entier = 12
-si note au moins 10 {
+soit note ∈ ℤ tel que note = 12
+si note est supérieur ou égal à 10 {
     Admis avec #note.
 } sinon {
     Ajourné.
 }
 
-pour k: un décimal de 0 à 2 avec un pas de 0.25 {
-    Terme #{defaut(4*k)+1} : #k.
+pour k ∈ [0 ; 2] par pas de 0,25 {
+    Terme #{défaut(4×k)+1} : #k.
 }
 
 <h1>Styles et couleurs en ligne
@@ -103,7 +103,7 @@ Des tailles : <8 pt>{tout petit}, <10 pt>{petit}, normal,
 Le principe<note>{Une note descend au bas de la page, numérotée toute seule.} s'applique sans compteur à gérer.
 
 <h1>Listes
-	Une liste s'écrit <<Dresser une liste STYLE>> — un élément par ligne, sans balise d'élément. Puces : à puces, à puces vides, à puces carrées, sans puce ;
+	Une liste s'écrit <<Dresser>>une liste STYLE — un élément par ligne, sans balise d'élément. Puces : à puces, à puces vides, à puces carrées, sans puce ;
 numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres romains, en chiffres romains majuscules ; à cocher pour les cases.
 <Dresser>une liste numérotée {
     Lire l'énoncé
@@ -129,16 +129,16 @@ numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres 
 
 <h1>Un cadre simple
 <Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie et un titre {Identité remarquable} {
-    L'identité $(a + b)^2 = a^2 + 2*a*b + b^2$ vaut pour tous les réels.
-    Le <gras>{double produit} $2*a*b$ est celui que l'on oublie.
+    L'identité $(a + b)^2 = a^2 + 2 a b + b^2$ vaut pour tous les réels.
+    Le <gras>{double produit} $2 a b$ est celui que l'on oublie.
 }
 
 <h1>Insérer une image
-	Une image s'insère par <<Insérer l'image ...>> ; le chemin s'écrit en entier dans la balise, relatif au fichier source, et les dimensions se disent en prose comme tout attribut — ici une largeur, ailleurs un côté ou une légende. Un nom comportant des espaces s'accolade : <<l'image {mon chat.png}>>.
-<Insérer l'image IMAGES/chat.png avec une largeur de 30 mm>
+	Une image s'insère par <<Insérer>>l'image ... ; le chemin s'écrit en entier dans la balise, relatif au fichier source, et les dimensions se disent en prose comme tout attribut — ici une largeur, ailleurs un côté ou une légende. Un nom comportant des espaces s'accolade : <<l'image {mon chat.png}>>.
+<Insérer>l'image IMAGES/chat.png avec une largeur de 30 mm
 
 	Une légende s'ajoute avec <<et la légende {...}>>, sous l'image :
-<Insérer l'image IMAGES/pommes.png avec une largeur de 30 mm et la légende {Cinq pommes}>
+<Insérer>l'image IMAGES/pommes.png avec une largeur de 30 mm et la légende {Cinq pommes}
 
 <h1>Une image dans un cadre
 	Un cadre accueille une image comme n'importe quel autre contenu ;
@@ -152,54 +152,54 @@ numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres 
 
 <page suivante h0>Bases : langage complet
 
-soit cle: un style = <gras cramoisi>
-soit h3canard: un style = <bleu canard italique sous-sous-section>
+soit cle un style défini par <gras cramoisi>
+soit h3canard un style défini par <bleu canard italique sous-sous-section>
 
 <h1>Valeur absolue, norme, vecteur
-<Afficher un cadre avec un fond vert menthe et une bordure bleu canard>{
-	$abs(x)$, $norme(v)$, la relation $vecteur(AB) + vecteur(BC) = vecteur(AC)$
+<Afficher>un cadre avec un fond vert menthe et une bordure bleu canard {
+	$|x|$, $norme(v)$, la relation $vecteur(AB) + vecteur(BC) = vecteur(AC)$
 	et la norme d'un vecteur $norme(vecteur(AB))$.
 }
 
 <h1>Ensembles de nombres
 	Une capitale doublée est un ensemble en gras de tableau :
-<Afficher un cadre avec un fond bleu Alice,  une bordure bleue, des coins arrondis de 1 mm et un titre {La chaîne usuelle}>{
+<Afficher>un cadre avec un fond bleu Alice, une bordure bleue, des coins arrondis de 1 mm et un titre {La chaîne usuelle} {
 	$NN inclus dans ZZ inclus dans DD inclus dans QQ inclus dans RR inclus dans CC$
 }
 	Les ensembles savants suivent — $PP$ pour la probabilité, $KK$ pour un corps, $HH$ pour les quaternions.
 
 <h1>Quantificateurs et connecteurs
-<Afficher un cadre avec un fond vert menthe, une bordure bleu canard, des coins arrondis de 3 mm et un titre {Un énoncé, posé en mots}>{
-	$pour tout x dans RR, il existe y dans RR, y > x$
-	$(P et Q) ou négation de P$
+<Afficher>un cadre avec un fond vert menthe, une bordure bleu canard, des coins arrondis de 3 mm et un titre {Un énoncé, posé en mots} {
+	$pour tout x appartenant à RR, il existe y appartenant à RR, y > x$
+	$(P et Q) ou non P$
 }
 
 <h1>Implication et équivalence
-<Afficher un cadre avec un fond vert menthe et une bordure bleu canard>{
+<Afficher>un cadre avec un fond vert menthe et une bordure bleu canard {
 	$x = y => x^2 = y^2$
-	$x^2 = y^2 <=> abs(x) = abs(y)$
-	$abs(x) <= 1 <=> -1 <= x <= 1$
+	$x^2 = y^2 <=> |x| = |y|$
+	$|x| <= 1 <=> -1 <= x <= 1$
 }
 
-<h1>La négation d'un seul !
+<h1>La négation, en toutes lettres
 	Un ! devant une relation ou un quantificateur donne sa forme barrée :
-<Afficher un cadre avec un fond bleu lavande, une bordure bleu marine, des coins arrondis de 3 mm et un titre {Énoncer un irrationnel}>{
-	$racine(2) dans RR$ et $racine(2) n'appartient pas à QQ$
-	$il n'existe pas de m dans NN, pour tout n dans NN, n <= m$
+<Afficher>un cadre avec un fond lavande, une bordure bleu marine, des coins arrondis de 3 mm et un titre {Énoncer un irrationnel} {
+	$racine(2) appartient à RR$ et $racine(2) n'appartient pas à QQ$
+	$il n'existe pas de m appartenant à NN, pour tout n appartenant à NN, n <= m$
 }
 
 <h1>Relations et opérations ensemblistes
-<Afficher un cadre avec un fond vert honeydew, une bordure vert foncé, des coins arrondis de 3 mm et un titre {De Morgan en une ligne}>{
+<Afficher>un cadre avec un fond vert d'eau, une bordure vert foncé, des coins arrondis de 3 mm et un titre {De Morgan en une ligne} {
 	$non(A union B) = non(A) inter non(B)$
 	$A inter B inclus dans ou égal à A$	$A privé de A = vide$
 }
 
 <h1>Partie entière
-<Afficher un cadre avec un fond rose brumeux et une bordure cramoisie>{
+<Afficher>un cadre avec un fond rose brumeux et une bordure cramoisie {
 	$défaut(3,7) = 3$	$excès(3,2) = 4$	$défaut(n/2)$
 }
 <h1>La barre : conjugué, moyenne, adhérence, négation
-<Afficher un cadre avec un fond vieille dentelle, une bordure orange foncé, des coins arrondis de 3 mm et un titre {Quatre lectures d'une barre}>{
+<Afficher>un cadre avec un fond vieille dentelle, une bordure orange foncé, des coins arrondis de 3 mm et un titre {Quatre lectures d'une barre} {
 	Conjugué : $conjugué(z) = a - i*b$ quand $z = a + i*b$.
 
 	Moyenne : $moyenne(x) = 1/n somme(k=1; n) x_k$.
@@ -210,9 +210,9 @@ soit h3canard: un style = <bleu canard italique sous-sous-section>
 }
 
 <h1>Arithmétique et ensembles
-<Afficher un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un titre {Une notation qui énonce}>{
+<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un titre {Une notation qui énonce} {
 	$parties de(A)$ est l'ensemble des parties, $intervalle entier(1; n)$ l'intervalle
-	entier, $card(A)$ le cardinal, $signe(x)$ le signe et
+	entier, $cardinal(A)$ le cardinal, $signe(x)$ le signe et
 	$a congru à b modulo n$ une congruence ; la factorielle $factorielle(5)$.
 }
 
@@ -223,7 +223,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 <page suivante h1>Échappements
 	Une poignée de caractères pilote le langage ; pour les afficher, on les double — c'est toute la règle.
-<Afficher un cadre avec un fond bleu lavande, une bordure pourpre, des coins arrondis de 3 mm et un titre {Doubler rend littéral}>{
+<Afficher>un cadre avec un fond lavande, une bordure pourpre, des coins arrondis de 3 mm et un titre {Doubler rend littéral} {
 	Chevrons littéraux : << et >>. Accolades : {{ et }}. Dièse : ##. Dollar : $$.
 
 	Une paire équilibrée s'affiche comme une seule, donc l'ensemble en
@@ -236,7 +236,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 
 	Dans un cadre, un retour à la ligne génère un nouveau paragraphe :
-<Afficher un cadre avec un fond bleu lavande, une bordure pourpre et des coins arrondis de 3 mm>{
+<Afficher>un cadre avec un fond lavande, une bordure pourpre et des coins arrondis de 3 mm {
 	Première ligne d'une adresse
 	seconde ligne de l'adresse
 }
@@ -259,7 +259,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	La parole d'un autre se marque d'un trait à gauche, non d'une boîte fermée : ce que le Markdown écrit d'un chevron, docdg le nomme.
 }
 
-<Afficher>un cadre de largeur 110 mm au centre avec une bordure pourpre en pointillés de 0,5 mm, un fond bleu lavande et des coins arrondis de 3 mm{
+<Afficher>un cadre de largeur 110 mm au centre avec une bordure pourpre en pointillés de 0,5 mm, un fond lavande et des coins arrondis de 3 mm{
 	Un cadre plus étroit que la colonne se place avec les mots des alignements : au centre, à gauche, à droite.
 }
 
@@ -268,7 +268,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 <h1>Le passage en colonnes
 	Un passage se compose sur deux à cinq colonnes. La gouttière vient des espacements du document, un filet peut les séparer, et ce qui suit l'accolade fermante retrouve la pleine largeur.
 
-<Composer>sur trois colonnes avec un filet gris clair {
+<Composer>sur 3 colonnes avec un filet gris clair {
 	Trois colonnes conviennent à un lexique ou à une liste de mots courts : la ligne est brève, l'œil en saisit plusieurs d'un seul coup.
 
 	Les colonnes s'équilibrent d'elles-mêmes. On ne dit pas où couper : on dit combien de colonnes, et le moteur répartit.
@@ -281,12 +281,12 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 <Dresser>une liste à puces{
 	Fruits
-	<Dresser une liste à puces vides>{
+	<Dresser>une liste à puces vides {
 		pommes
 		poires
 	}
 	Légumes
-	<Dresser une liste à puces carrées>{
+	<Dresser>une liste à puces carrées {
 		carottes
 		navets
 	}
@@ -330,7 +330,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 <h2>Entêtes fusionnées sur plusieurs colonnes
 	Un tiret après une entête la fait couvrir une colonne de plus, deux tirets deux colonnes. L'espacement autour du tiret ne compte pas : « Identité - », « Identité-» ou un tiret seul dans sa colonne disent la même chose. Un nom composé ne risque rien, le tiret de fusion n'étant jamais suivi d'une lettre.
-<Dresser>un tableau avec des bordures {
+<Dresser>un tableau {
 	<mc>	<mc>	<mc>	<mc>
 	Identité -	Coordonnées -
 	Nom	Prénom	Ville	Téléphone
@@ -339,14 +339,14 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 }
 
 	Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau.
-<Dresser>un tableau avec des bordures {
+<Dresser>un tableau {
 	<mc>	<mc>	<mc>	<mc>
 	Sous-total	-	-	Reste
 	Janvier	Février	Mars	Avril
 	[12]	[15]	[9]	[14]
 }
 
-<h2>Une image dans une cellule
+<page suivante h2>Une image dans une cellule
 	Une cellule de tableau accueille une formule ou une image, pas seulement du texte — chaque colonne garde son placement propre.
 <Dresser>un tableau {
 	<mc>	<hg>	<bd>
@@ -366,11 +366,11 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 <h2>Rangées dynamiques
 	Le nombre de colonnes est vérifié à chaque rangée, donc boucles et interpolation vivent dans un tableau.
-<Dresser un tableau > {
+<Dresser>un tableau {
 	<mc>	<mg>	<mc>
 	Table des carrés
 	n	Légende	Carré
-	pour n: un entier naturel de 1 à 3 {
+	pour n ∈ ⟦1 ; 3⟧ {
 		[ligne #n]	[#n]	[$#n^2$]
 	}
 }
@@ -390,7 +390,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	Une ligne ne portant que --- coupe le cadre en deux parties.
 <Afficher>un cadre de largeur 15 cm au centre avec un fond blanc fumé, une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Problème} {
 	<au centre>{<Insérer l'image FIGURES/figure1.jpg avec une largeur de 40 mm>}
-	
+
 	Mesure la hauteur du triangle sur ta figure, à l'échelle 1:10.
 	---
 	<Afficher>une liste numérotée {
@@ -401,7 +401,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 }
 
 <h2>Cadres côte à côte
-	Une <<Afficher une rangée>> pose ses cadres en colonnes d'égale largeur.
+	<<Afficher>>une rangée pose ses cadres en colonnes d'égale largeur.
 <Afficher>une rangée avec un écart de 5 mm {
 	<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 2 mm et un titre {Énoncé} {
 		Le périmètre d'un triangle rectangle de côtés 3 et 4 se trouve
@@ -415,7 +415,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 
 <h2>Un composant réutilisable
 soit carte{n} = <Afficher un cadre avec un titre {Exercice #n} et une bordure grise>
-pour n: un entier naturel de 1 à 2 {
+pour n ∈ ⟦1 ; 2⟧ {
 	<carte #n>{
 		Calcule $#n^2 + #n$ et écris le résultat ci-dessous.
 	}
@@ -440,7 +440,7 @@ pour n: un entier naturel de 1 à 2 {
 		Calculatrice autorisée.
 	}
 	logo : au milieu, au centre {
-		<Insérer l'image IMAGES/oiseau.png avec une largeur de 20 mm>
+		<Insérer>l'image IMAGES/oiseau.png avec une largeur de 20 mm
 	}
 	corps : en mc {
 		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
@@ -454,7 +454,7 @@ pour n: un entier naturel de 1 à 2 {
 }
 
 	Un titre de cadre est du texte ordinaire : il peut courir sur deux lignes et porter un chevron qui n'a rien d'une balise :
-<Afficher un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un  titre {seuil a> b, vérifié sur deux lignes}>{
+<Afficher>un cadre avec un fond rose brumeux, une bordure cramoisie, des coins arrondis de 3 mm et un titre {seuil a> b, vérifié sur deux lignes} {
 	Le titre a débordé sur une seconde ligne et contenait un $>$ littéral.
 }
 
@@ -618,26 +618,26 @@ pour n: un entier naturel de 1 à 2 {
 <h1>La fiche de l'enseignant
 	Un document docdg peut poser des questions au lecteur. Chaque question bloque la suite du document tant que la réponse ne correspond pas au type attendu : un entier s'écrit sans virgule, un décimal avec une virgule, un booléen se dit vrai ou faux.
 
-soit prénom: une chaîne de caractères = <Saisir>{Quel est le prénom de l'élève ?}
-soit nom: une chaîne de caractères = <Saisir>{Quel est le nom de l'élève ?}
-soit âge: un entier = <Saisir>{Quel est son âge ?}
-soit taille: un décimal = <Saisir>{Quelle est sa taille, en mètres ?}
-soit marié: un booléen = <Saisir>{Est-il marié ?}
-soit initiale: un caractère = <Saisir>{Quelle est sa lettre préférée ?}
-soit statut: une chaîne de caractères = si marié { marié } sinon { célibataire }
-soit tarif: un entier = si âge moins de 18 { 5 } sinon { 9 }
+soit prénom une chaîne de caractères telle que prénom = <Saisir>{Quel est le prénom de l'élève ?}
+soit nom une chaîne de caractères telle que nom = <Saisir>{Quel est le nom de l'élève ?}
+soit âge ∈ ℤ tel que âge = <Saisir>{Quel est son âge ?}
+soit taille ∈ 𝔻 tel que taille = <Saisir>{Quelle est sa taille, en mètres ?}
+soit marié ∈ 𝔹 tel que marié = <Saisir>{Est-il marié ?}
+soit initiale un caractère tel que initiale = <Saisir>{Quelle est sa lettre préférée ?}
+soit statut une chaîne de caractères telle que statut = si marié { marié } sinon { célibataire }
+soit tarif ∈ ℤ tel que tarif = si âge est inférieur à 18 { 5 } sinon { 9 }
 
 <h1>Le portrait, composé à partir des réponses
 	#prénom #nom a #âge ans.
 	Il est #statut.
-	Il mesure #taille m, soit #{taille * 100} cm.
+	Il mesure #taille m, soit #{taille × 100} cm.
 	Sa lettre préférée est "#initiale".
-	Son entrée au musée coûte #tarif euros, soit #{tarif * 2} euros pour deux.
+	Son entrée au musée coûte #tarif euros, soit #{tarif × 2} euros pour deux.
 
 <h1>Les réponses se calculent
 	Les valeurs saisies sont des valeurs comme les autres : dans dix ans, #prénom aura #{âge + 10} ans ; s'il grandit de 12 cm, il mesurera #{taille + 0,12} m.
 
 <Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et des coins arrondis de 3 mm {
-	$#taille  m = #{taille * 100}  cm = #{taille * 1000}  mm$
+	$#taille  m = #{taille × 100}  cm = #{taille × 1000}  mm$
 }
 	Pour répondre à nouveau à une question, il suffit de cliquer sur la valeur affichée en bleu : le document se replie jusqu'à cette question et se déroule de nouveau.

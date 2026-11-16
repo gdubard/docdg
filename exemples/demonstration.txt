@@ -6,11 +6,11 @@ document {
     interligne: 1,4;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Démonstrations — exemples progressifs
 
@@ -22,7 +22,7 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h0>Démonstrations rédigées par l'auteur
 
-soit remarque: un style = <gris foncé italique>
+soit remarque un style défini par <gris foncé italique>
 
 
 	Les chapitres suivants montrent ce que docdg démontre seul : l'énoncé suffit, le moteur cherche la preuve et la rédige. Celui-ci montre l'autre moitié du travail — celle où <gras>{l'auteur écrit les mathématiques et le moteur fournit la charpente}.
@@ -313,6 +313,7 @@ Ces trois entiers s'écrivent $n$, $n + 1$ et $n + 2$. Leur somme vaut $3n + 3 =
 
 <Montrer>un ensemble à n éléments admet 2^n parties
 
+<page suivante>
 <Montrer>il n'existe pas de surjection d'un ensemble sur l'ensemble de ses parties
 
 <Montrer>argument diagonal de Cantor
@@ -353,6 +354,7 @@ Ces trois entiers s'écrivent $n$, $n + 1$ et $n + 2$. Leur somme vaut $3n + 3 =
 
 <Montrer>petit théorème de Fermat
 
+<page suivante>
 <Montrer>parmi cinq entiers deux ont le même reste modulo quatre
 
 <h1>Analyse et topologie

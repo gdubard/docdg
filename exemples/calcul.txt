@@ -7,11 +7,11 @@ document {
     niveau: cinquième;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit remarque: un style = <gris foncé italique>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit remarque un style défini par <gris foncé italique>
 
 <volume>Calcul et nombres — de l'école au collège
 
@@ -26,7 +26,7 @@ soit remarque: un style = <gris foncé italique>
 
 <Calculer>247 + 385
 <Calculer>1 000 - 458
-<Calculer>36 * 24
+<Calculer>36 × 24
 
 <h1>Décomposer les nombres
 	Un nombre se lit par ses milliers, ses centaines, ses dizaines et ses unités :
@@ -50,7 +50,6 @@ soit remarque: un style = <gris foncé italique>
 <Convertir>150 min en h
 
 <page suivante h0>Nombres — collège (classe de cinquième)
-
 
 <remarque>Ce document est composé au niveau cinquième : les termes du supérieur y sont suivis d'une note de vocabulaire, qui disparaîtra d'elle-même aux niveaux supérieurs. L'énoncé, lui, ne change jamais.
 
@@ -98,6 +97,6 @@ soit remarque: un style = <gris foncé italique>
 
 <Énoncer>l'effectif et fréquence
 
-<Soit>une fonction f(x) = 2x
+<Soit>f : ℝ → ℝ, x ↦ 2x
 
 <Représenter>graphiquement la fonction f pour x appartient à [-3 ; 3] et y à [-6 ; 6], avec 100 échantillons

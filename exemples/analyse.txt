@@ -6,11 +6,11 @@ document {
     interligne: 1,4;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Analyse — exemples progressifs
 
@@ -38,13 +38,13 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <h1>Fonctions linéaires et affines
 
-<Soit>une fonction f(x) = 2x + 1
+<Soit>f : ℝ → ℝ, x ↦ 2x + 1
 
 <Calculer>l'image de 3 par f
 
 <Résoudre>l'équation 2x + 1 = 7
 
-<Soit>une fonction g(x) = -3x
+<Soit>g : ℝ → ℝ, x ↦ -3x
 
 <Calculer>l'image de 5 par g
 
@@ -68,21 +68,21 @@ $sinh(x)$, $tanh(x)$.
 
 <h1>Tableaux de signes
 
-<Soit>une fonction f(x) = (x+2)(x-3)
+<Soit>f : ℝ → ℝ, x ↦ (x+2)(x-3)
 
 <Dresser>le tableau de signes de f
 
-<Soit>une fonction g(x) = (x+1)/(x-2)
+<Soit>g : ℝ ∖ {2} → ℝ, x ↦ (x+1)/(x-2)
 
 <Dresser>le tableau de signes de g
 
 Pour une fonction périodique, le moteur étudie automatiquement une période. Il centre l'intervalle d'étude sur l'origine lorsque la fonction est paire ou impaire.
 
-<Soit>une fonction c(x) = cos(x)
+<Soit>c : ℝ → ℝ, x ↦ cos(x)
 
 <Dresser>le tableau de signes de c
 
-<Soit>une fonction t(x) = tan(x)
+<Soit>t une fonction définie par t(x) = tan(x)
 
 <Dresser>le tableau de signes de t
 
@@ -91,60 +91,53 @@ L'intervalle d'étude s'impose quand on le veut, périodique ou non :
 <Dresser>le tableau de signes de c sur [0 ; 2pi]
 
 <h1>Tableau de variations
-
-<Soit>une fonction q(x) = |x|racine((1-x)/(1+3x))
-
+<Soit>q : ]−1/3 ; 1] → ℝ, x ↦ |x|racine((1-x)/(1+3x))
 <Dresser>le tableau de variations de q
-
 <Dresser>le tableau de variations de c
 
 <Dresser>le tableau de variations de t
 
 <Dresser>le tableau de variations de q sur [-1 ; 1]
-
 <Calculer>la dérivée de q
-
 <Calculer>la dérivée seconde de q
-
 <Déterminer>les zéros de q
-
 <Représenter>graphiquement la fonction q sur [-2 ; 2] en abscisse et [-2 ; 2] en ordonnée, en bleu, avec 200 échantillons
 
 <h1>La droite graduée
-<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2, 3)} et de points {1}, en rouge
+<Représenter>graphiquement la droite graduée sur [-3 ; 4], d'intervalle {[-2 ; 3[} et de points {1}, en rouge
 
 <h1>Aires et intégrales
-<On pose>une fonction p(x) = -x^2/4 + 3
-<On pose>une fonction v(x) = x/2
+<On pose>p une fonction définie par p(x) = −x²/4 + 3
+<On pose>v une fonction définie par v(x) = x/2
 L'aire sous la courbe de $p$ entre 1 et 3 :
 <Représenter>graphiquement la fonction p sur [-1 ; 4] en abscisse et [-1 ; 4] en ordonnée, avec l'aire entre 1 et 3
 L'aire entre les courbes de $p$ et $v$ sur $[0 ; 3]$ :
 <Représenter>graphiquement la fonction p sur [-1 ; 4] en abscisse et [-1 ; 4] en ordonnée, avec l'aire jusqu'à v et area:{0, 3}
 
 
-<page suivante h1>Intégrale numérique
-<Soit>une fonction m(x) = exp(-x^2)
+<h1>Intégrale numérique
+<Soit>m : ℝ → ℝ, x ↦ exp(-x^2)
 <Calculer>l'intégrale numérique de m entre 0 et 1
 
-<h1>Calcul formel du lycée
+<page suivante h1>Calcul formel du lycée
 <Factoriser>x^2 - 5x + 6
-<Développer>et réduis (x+1)^3
+<Développer>et réduire (x+1)^3
 <Déterminer>la forme canonique de x^2 - 4x + 1
 <Résoudre>l'équation x^2 - 5x + 6 = 0
 
 <h1>Convexité
-<Soit>une fonction h(x) = x^3 - 3x^2 + 2
+<Soit>h : ℝ → ℝ, x ↦ x^3 - 3x^2 + 2
 <Étudier>la convexité de h
 
-<Soit>une fonction d(x) = exp(x) / x
+<Soit>d : ℝ* → ℝ, x ↦ exp(x) / x
 <Étudier>la convexité de d
 
 <h2>Asymptotes
-<Soit>une fonction e(x) = (2x^2 + 1) / (x - 1)
+<Soit>e : ℝ ∖ {1} → ℝ, x ↦ (2x^2 + 1) / (x - 1)
 
 <Déterminer>les asymptotes de e
 
-<Soit>une fonction k(x) = (3x + 1) / (x + 2)
+<Soit>k : ℝ ∖ {−2} → ℝ, x ↦ (3x + 1) / (x + 2)
 
 <Déterminer>les asymptotes de k
 
@@ -163,32 +156,32 @@ L'aire entre les courbes de $p$ et $v$ sur $[0 ; 3]$ :
 $f'(x)$, $f''(x)$, la forme de Leibniz $dd(f)/dd(x)$ et la dérivée partielle $partielle(f)/partielle(x)$.
 
 <h1>Suites récurrentes
-<Soit>une fonction h(x) = racine(2x+3)
+<Soit>h : [−3/2 ; +∞[ → ℝ, x ↦ racine(2x+3)
 L'escalier de $p_(n+1) = h(p_n)$ depuis $p_0 = 0,2$, convergeant vers le point fixe $l = 3$ :
 <Représenter>graphiquement la fonction h sur [0 ; 4] en abscisse et [0 ; 4] en ordonnée, avec le diagramme en escalier depuis 0,2 sur 10 termes
 
 <h1>Primitive, limites, développement limité
-<Soit>une fonction w(x) = 1/(x^2 + 1)
-<Calculer>la primitive de w
+<Soit>w : ℝ → ℝ, x ↦ 1/(x^2 + 1)
+<Calculer>une primitive de w
 <Calculer>la limite de w en +infini
 
-<Soit>une fonction q2(x) = 1/(x-1)
+<Soit>q2 : ℝ ∖ {1} → ℝ, x ↦ 1/(x-1)
 <Calculer>la limite de q2 en 1 à droite
 <Calculer>la limite de q2 en 1 à gauche
 
-<Soit>une fonction s(x) = exp(x)
+<Soit>s : ℝ → ℝ, x ↦ exp(x)
 <Calculer>le développement limité de s en 0 à l'ordre 4
 
 <h2>Valeur absolue et partie entière
 La valeur absolue s'écrit entre barres et la partie entière se note $E(x)$. Attention : la valeur absolue n'est pas dérivable à son point anguleux, et la partie entière est discontinue aux entiers.
 
-<Soit>une fonction k2(x) = |x - 2|
+<Soit>k2 : ℝ → ℝ, x ↦ |x - 2|
 
 <Calculer>l'image de 5 par k2
 
 <Résoudre>l'équation |x - 2| = 3
 
-<Soit>une fonction pe(x) = E(x)
+<Soit>pe une fonction définie par pe(x) = E(x)
 
 <Calculer>l'image de 2,7 par pe
 
@@ -204,7 +197,7 @@ La valeur absolue s'écrit entre barres et la partie entière se note $E(x)$. At
 
 Le tracé d'une courbe embarque ce que dit le tableau de variations : tangentes en tirets fléchés aux extremums et aux points à tangente verticale, asymptotes en tirets — et les marches de la partie entière sans faux traits verticaux.
 
-<Soit>une fonction tc(x) = x^3 - 3x^2 + 2
+<Soit>tc : ℝ → ℝ, x ↦ x^3 - 3x^2 + 2
 
 <Dresser>le tableau de variations de tc
 
@@ -212,7 +205,7 @@ Le tracé d'une courbe embarque ce que dit le tableau de variations : tangentes 
 	la courbe de la fonction tc
 }
 
-<Soit>une fonction cr(x) = racine[3](x)
+<Soit>cr une fonction définie par cr(x) = racine[3](x)
 
 <Dresser>le tableau de variations de cr
 
@@ -224,7 +217,7 @@ La racine cubique montre la tangente verticale à l'origine :
 
 <page suivante h0>Enseignement supérieur
 
-soit remarque: un style = <gris foncé italique>
+soit remarque un style défini par <gris foncé italique>
 
 <h1>Opérateurs différentiels
 Le gradient $gradient(f)$, la divergence $divergence(F)$, le rotationnel $rotationnel(F)$, le laplacien $laplacien(f)$ et la dérivée directionnelle $dérivée directionnelle(f; v)$.
@@ -253,16 +246,16 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Résoudre>l'équation aux dérivées partielles u_x + u_y = u
 
 <page suivante h1>Intégrales exactes et impropres
-<Soit>une fonction g(x) = x * exp(x)
+<Soit>g : ℝ → ℝ, x ↦ x * exp(x)
 <Calculer>l'intégrale de g entre 0 et 1
-<Soient>les fonctions p(x) = 1/x^2 et q(x) = 1/x
+<Soit>p et q 2 fonctions définies par p(x) = 1/x² et q(x) = 1/x
 <Déterminer>la nature de l'intégrale de p entre 1 et +infini
 <Déterminer>la nature de l'intégrale de q entre 1 et +infini
 
 <h2>Équivalents
-<Soit>une fonction m(x) = sin(x) - x
+<Soit>m : ℝ → ℝ, x ↦ sin(x) - x
 <Calculer>un équivalent de m en 0
-<Soit>une fonction n(x) = (x^2 + 1) / (x - 3)
+<Soit>n : ℝ ∖ {3} → ℝ, x ↦ (x^2 + 1) / (x - 3)
 <Calculer>un équivalent de n en +infini
 
 <h1>Séries numériques
@@ -270,56 +263,47 @@ Les transformées se nomment : $la transformée de Laplace(f)$ et $la transform�
 <Déterminer>la nature de la série de terme général 1/n
 
 <h1>Fonctions de plusieurs variables
-<Soit>une fonction psi(x, y) = x^3 - 3x + y^2
+<Soit>psi une fonction définie par psi(x, y) = x³ − 3x + y²
 <Calculer>le gradient de psi
 <Calculer>la matrice hessienne de psi
 <Calculer>la dérivée partielle de psi par rapport à y
 <Déterminer>les points critiques de psi
 
 <h1>Fourier, Laplace et wronskien, calculés
-<Soit>une fonction cr(x) = x
-
+<Soit>cr : ℝ → ℝ, x ↦ x
 <Calculer>la série de Fourier de cr sur [-pi ; pi] à l'ordre 4
-
-<Soit>une fonction ex(t) = exp(-2t)
-
+<Soit>ex : ℝ → ℝ, t ↦ exp(-2t)
 <Calculer>la transformée de Laplace de ex
-
-<Soit>une fonction Fp(p) = 1 / (p^2 + 1)
-
+<Soit>Fp : ℝ → ℝ, p ↦ 1 / (p^2 + 1)
 <Calculer>la transformée de Laplace inverse de Fp
-
-<Soient>les fonctions co(x) = cos(x) et si(x) = sin(x)
-
+<Soit>co et si 2 fonctions définies par co(x) = cos(x) et si(x) = sin(x)
 <Calculer>le wronskien de co et si
-
-<Soient>les fonctions li(x) = x et lj(x) = 2x
-
+<Soit>li et lj 2 fonctions définies par li(x) = x et lj(x) = 2x
 <Calculer>le wronskien de li et lj
 
 <h1>Les surfaces
 	Une fonction de deux variables se représente par sa nappe $z = f(x, y)$, en perspective cavalière ombrée :
 <Tracer>la surface z = x^2 - y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2]
-<Tracer>la surface z = cos(x)*cos(y) pour x dans [-3 ; 3] et y dans [-3 ; 3], avec 32 mailles, en violet
+<Tracer>la surface z = cos(x) cos(y) pour x dans [-3 ; 3] et y dans [-3 ; 3], avec 32 mailles, en violet
 
 <page suivante h1>Les lignes de niveau
 	La même fonction se lit aussi par ses courbes $f(x, y) = c$ :
 <Tracer>les lignes de niveau de z = x^2 + y^2 pour x dans [-2 ; 2] et y dans [-2 ; 2], aux niveaux {1 ; 2 ; 3}
-<Tracer>les lignes de niveau de z = x*y pour x dans [-2 ; 2] et y dans [-2 ; 2], en vert
+<Tracer>les lignes de niveau de z = xy pour x dans [-2 ; 2] et y dans [-2 ; 2], en vert
 
-<h1>Les extremums
+<page suivante h1>Les extremums
 <h2>Extremums libres
-<Soit>la fonction g(x, y) = x^2 + y^2 - 2*x
+<Soit>g une fonction définie par g(x, y) = x² + y² − 2×x
 <Déterminer>les points critiques de g
 
 <h2>Extremums sous contrainte
-<Soit>la fonction f(x, y) = x*y
+<Soit>f une fonction définie par f(x, y) = x×y
 <Déterminer>les extremums de f sous la contrainte x^2 + y^2 = 2
 
 <h1>Les intégrales multiples
-<Calculer>l'intégrale double de x*y sur [0 ; 1] × [0 ; 2]
+<Calculer>l'intégrale double de xy sur [0 ; 1] × [0 ; 2]
 <Calculer>l'intégrale double de x^2 + y^2 sur le disque de rayon 2
-<Calculer>l'intégrale triple de x*y*z sur [0 ; 1] × [0 ; 1] × [0 ; 2]
+<Calculer>l'intégrale triple de xyz sur [0 ; 1] × [0 ; 1] × [0 ; 2]
 
 Quand l'intégrande n'a pas de primitive exprimable, le calcul devient numérique, par quadratures adaptatives : la gaussienne sur un carré, puis sur le triangle 0 ⩽ y ⩽ x ⩽ 1, dont une borne dépend de la variable précédente.
 <Calculer>numériquement l'intégrale double de exp(-(x^2 + y^2)) sur [0 ; 1] × [0 ; 1]
@@ -339,10 +323,10 @@ Quand l'intégrande n'a pas de primitive exprimable, le calcul devient numériqu
 <Calculer>les résidus de 1/(z^2 + 1)
 <Calculer>les résidus de 1/(z^2*(z - 1))
 
-<page suivante h1>Systèmes dynamiques : intégration numérique
+<h1>Systèmes dynamiques : intégration numérique
 Un système d'équations différentielles autonome se lit dans son espace des phases. docdg l'intègre par une méthode de Runge-Kutta adaptative et en trace les trajectoires : cycle limite, orbites fermées, attracteur étrange.
 
-<h2>L'oscillateur de Van der Pol : un cycle limite
+<page suivante h2>L'oscillateur de Van der Pol : un cycle limite
 L'amortissement change de signe avec l'amplitude : négatif près de l'équilibre, il amplifie les petites oscillations ; positif au-delà, il freine les grandes.
 <Résoudre>numériquement l'équation différentielle x'' - μ(1 - x^2)x' + x = 0, avec μ = 2, x(0) = 0,1 et x'(0) = 0, sur [0 ; 30], le portrait de phase
 	<remarque>Quelle que soit la condition initiale, la trajectoire rejoint le même cycle fermé : c'est un cycle limite, qu'aucune équation linéaire ne peut produire.
@@ -354,8 +338,8 @@ L'amortissement change de signe avec l'amplitude : négatif près de l'équilibr
 }
 	<remarque>Les deux populations oscillent en décalage : les prédateurs culminent après les proies.
 
-<h2>Le système de Lorenz et le chaos
-<Résoudre>numériquement le système différentiel, avec σ = 10, ρ = 28, β = 8/3, x(0) = 1, y(0) = 1 et z(0) = 1, sur [0 ; 40], en traçant z en fonction de x, rtol = 1e-8, atol = 1e-10 {
+<page suivante h2>Le système de Lorenz et le chaos
+<Résoudre>numériquement le système différentiel, avec σ = 10, ρ = 28, β = 8/3, x(0) = 1, y(0) = 1 et z(0) = 1, sur [0 ; 40], en traçant z en fonction de x, avec une tolérance relative de 10^(-8) et une tolérance absolue de 10^(-10) {
 	x' = σ(y - x)
 	y' = x(ρ - z) - y
 	z' = xy - β z
@@ -364,7 +348,7 @@ L'amortissement change de signe avec l'amplitude : négatif près de l'équilibr
 
 <h2>Un problème aux limites non linéaire : la chaînette
 Une chaîne suspendue par ses deux extrémités, à la même hauteur, prend une forme qui vérifie y'' = √(1 + y'²). Les conditions portent sur les deux points d'attache.
-<Résoudre>numériquement l'équation différentielle y'' = sqrt(1 + y'^2), d'inconnue y(x), avec y(-1) = 1 et y(1) = 1, sur [-1 ; 1]
+<Résoudre>numériquement l'équation différentielle y'' = racine(1 + y'^2), d'inconnue y(x), avec y(-1) = 1 et y(1) = 1, sur [-1 ; 1]
 	<remarque>La solution est un cosinus hyperbolique : y(x) = ch(x) − ch(1) + 1, de pente sh(1) ≈ 1,175 aux points d'attache.
 
 <page suivante h1>Interpolation : Lagrange et les splines
@@ -403,19 +387,19 @@ Solution de y'' = xy, elle décrit l'intensité lumineuse près d'une caustique 
 <Calculer>les intégrales elliptiques complètes de module 0,5
 
 <page suivante h1>Une nappe à la demande
-soit k: un entier = 2
+soit k ∈ ℤ tel que k = 2
 Pour k = #k, la surface s'écrit $z = 2xy$.
-<Tracer>la surface z = 2*x*y pour x dans [-1 ; 1] et y dans [-1 ; 1], en orange
+<Tracer>la surface z = 2xy pour x dans [-1 ; 1] et y dans [-1 ; 1], en orange
 
 <h2>Intégrale exacte
-<Soit>une fonction j(x) = x^2
+<Soit>j : ℝ → ℝ, x ↦ x^2
 <Calculer>l'intégrale de j entre 0 et 1
 
 <h2>Autres variables, autres objets
 	La variable se lit dans la définition — $t$ pour le temps, comme en physique :
 
-<Soit>une fonction g(t) = t^2 + 1
+<Soit>g : ℝ → ℝ, t ↦ t^2 + 1
 <Calculer>la dérivée de g
 
-<Soit>un champ de vecteurs F de RR^2 dans RR^2 défini par F(x, y) = (-y, x)
+<Soit>F un champ de vecteurs de ℝ² dans ℝ² défini par F(x, y) = (-y, x)
 

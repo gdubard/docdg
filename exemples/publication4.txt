@@ -7,17 +7,17 @@ document {
 	orphelines: 2;
 	veuves: 2;
 }
-soit h0: un style = <bleu nuit gras chapitre num>
-soit h1: un style = <bleu nuit gras section num>
-soit resume: un style = <italique 10 pt>
-soit motcle: un style = <petites capitales>
+soit h0 un style défini par <bleu nuit gras chapitre num>
+soit h1 un style défini par <bleu nuit gras section num>
+soit resume un style défini par <italique 10 pt>
+soit motcle un style défini par <petites capitales>
 
-soit nature: un style = <petites capitales grand au centre>
-soit maison: un style = <14 pt au centre>
-soit filiere: un style = <italique au centre>
-soit ouvrage: un style = <gras 18 pt au centre>
-soit complement: un style = <16 pt au centre>
-soit mention: un style = <14 pt au centre>
+soit nature un style défini par <petites capitales grand au centre>
+soit maison un style défini par <14 pt au centre>
+soit filiere un style défini par <italique au centre>
+soit ouvrage un style défini par <gras 18 pt au centre>
+soit complement un style défini par <16 pt au centre>
+soit mention un style défini par <14 pt au centre>
 
 <au centre>{<Insérer l'image IMAGES/institut.svg avec une largeur de 30 mm>}
 

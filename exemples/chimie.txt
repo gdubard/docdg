@@ -6,11 +6,11 @@ document {
     interligne: 1,5;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Chimie — exemples progressifs
 
@@ -22,8 +22,8 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h0>Collège
 
-soit remarque: un style = <gris foncé italique>
-soit correction: un style = <fond gris clair>
+soit remarque un style défini par <gris foncé italique>
+soit correction un style défini par <fond gris clair>
 
 <h1>La transformation chimique — classe de quatrième
 
@@ -54,7 +54,7 @@ soit correction: un style = <fond gris clair>
 	On brûle 3 g de carbone dans un flacon fermé contenant 8 g de dioxygène.
 	Écrire l'équation de la réaction, puis déterminer la masse de dioxyde de carbone formé.
 }
-<correction>Correction. L'équation s'écrit <Équilibrer>C + O2 -> CO2. Le flacon étant fermé, <renvoi>{masse} impose que la masse totale se conserve : la masse de dioxyde de carbone formé vaut $3 + 8 = 11$ g.
+<correction>Correction. L'équation s'écrit C + O<indice>{2} → CO<indice>{2}. Le flacon étant fermé, la propriété <renvoi>{masse} impose que la masse totale se conserve : la masse de dioxyde de carbone formé vaut $3 + 8 = 11$ g.
 	<remarque>Le système fermé n'est pas un détail de l'énoncé : c'est l'hypothèse déclarée de la loi. Un flacon ouvert donnerait un résultat apparemment contradictoire, et c'est un bon sujet de discussion.
 
 <page suivante h0>Lycée
@@ -110,7 +110,7 @@ soit correction: un style = <fond gris clair>
 <Équilibrer>MnO4^- + Fe^2+ + H^+ -> Mn^2+ + Fe^3+ + H2O
 	<remarque>Les nombres ci-dessus sont calculés. La ligne de charge de la matrice garantit qu'ils conservent aussi l'électroneutralité, ce qu'un ajustement à la main oublie régulièrement.
 
-<h2>Le titrage
+<page suivante h2>Le titrage
 <Énoncer>le titrage
 <Énoncer>l'équivalence d'un titrage <étiquette>{equivalence}
 <Énoncer>la relation à l'équivalence <étiquette>{relation}
@@ -142,15 +142,15 @@ On verse une solution de soude dans une solution d'acide et l'on relève le pH �
 <Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une spline cubique, avec sa dérivée
 	<remarque>Le volume équivalent se lit au pic de la dérivée. Juste après le saut, la spline cubique oscille légèrement : elle impose une courbure continue, que les mesures ne justifient pas.
 
-<h2>Une interpolation sans dépassement
+<page suivante h2>Une interpolation sans dépassement
 L'interpolation monotone PCHIP ne crée aucune oscillation entre deux mesures : la courbe reste croissante là où les mesures le sont.
 <Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une interpolation monotone, avec sa dérivée
 	<remarque>Les deux méthodes s'accordent sur le volume équivalent à un vingtième de millilitre près, bien en deçà de la précision de la burette.
 
 <page suivante h0>Enseignement supérieur
 
-soit h1vert: un style = <vert foncé gras section num>
-soit h2vert: un style = <vert italique sous-section>
+soit h1vert un style défini par <vert foncé gras section num>
+soit h2vert un style défini par <vert italique sous-section>
 
 
 <h1vert>Du potentiel d'électrode au diagramme potentiel-pH — licence 3
@@ -187,7 +187,7 @@ soit h2vert: un style = <vert italique sous-section>
 <page suivante h2vert>Exercice type
 
 <Afficher>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice — domaine du fer} {
-	On donne $E°(Fe^{2+}/Fe) = -0,44$ V et $E°(Fe^{3+}/Fe^{2+}) = 0,77$ V, ainsi que les produits de solubilité des deux hydroxydes.
+	On donne $E°(Fe^(2+)/Fe) = -0,44$ V et $E°(Fe^(3+)/Fe^(2+)) = 0,77$ V, ainsi que les produits de solubilité des deux hydroxydes.
 	Tracer le diagramme potentiel-pH du fer pour une concentration de travail de $1,0 * 10^-2$ mol·L⁻¹.
 	Superposer celui de l'eau et conclure sur la stabilité du fer métallique en milieu aéré.
 }
@@ -207,10 +207,10 @@ Pour deux réactions d'ordre 1 de constantes k1 et k2, l'intermédiaire B passe 
 
 <page suivante h2vert>Une cinétique raide : le problème de Robertson
 Trois constantes de vitesse s'étalent sur neuf ordres de grandeur : les méthodes explicites y épuisent leur pas. Une méthode implicite, celle de Radau, traverse le problème en quelques dizaines de pas.
-<Résoudre>numériquement le système différentiel, avec a(0) = 1, b(0) = 0 et c(0) = 0, sur [0 ; 40], par la méthode de Radau, rtol = 1e-6, atol = 1e-10 {
-	a' = -0,04a + 1e4 b c
-	b' = 0,04a - 1e4 b c - 3e7 b^2
-	c' = 3e7 b^2
+<Résoudre>numériquement le système différentiel, avec a(0) = 1, b(0) = 0 et c(0) = 0, sur [0 ; 40], par la méthode de Radau, avec une tolérance relative de 10^(-6) et une tolérance absolue de 10^(-10) {
+	a' = -0,04a + 10^4 b c
+	b' = 0,04a - 10^4 b c - 3 × 10^7 b^2
+	c' = 3 × 10^7 b^2
 }
 	<remarque>L'espèce B reste à l'état de traces, de l'ordre de 10⁻⁵ : c'est l'intermédiaire réactionnel très réactif qui rend le système raide.
 
@@ -236,14 +236,14 @@ Trois constantes de vitesse s'étalent sur neuf ordres de grandeur : les méthod
 <Énoncer>le postulat de Hammond
 <Énoncer>la relation de Hammett
 
-<h2vert>De la barrière à la sélectivité
+<page suivante h2vert>De la barrière à la sélectivité
 <Énoncer>l'effet isotopique cinétique
 	<remarque>Un rapport voisin de sept désigne la rupture de la liaison à l'étape déterminante ; un rapport très supérieur trahit un effet tunnel, que la théorie de l'état de transition ne prévoit pas.
 <Énoncer>la catalyse asymétrique et l'induction chirale
 	<remarque>Deux kilojoules par mole d'écart entre les deux états de transition diastéréoisomères donnent déjà soixante pour cent d'excès énantiomérique. C'est l'exponentielle qui transforme une différence négligeable en une sélectivité exploitable.
 
-<h2vert>Une lacune assumée
-	Ces trois résultats sont ancrés « démontré » et portent `demonstration_prevue` dans le corpus : la démonstration est attendue à ce niveau mais n'est pas encore rédigée. `<Démontrer>` le dit alors franchement, au lieu d'inventer une preuve.
+<h2vert>Une démonstration attendue est une démonstration rédigée
+	Ces trois résultats sont ancrés « démontré » : leur démonstration, attendue à ce niveau, est rédigée dans le corpus, et « <<Démontrer>> » la compose comme toutes les autres. Aucun ancrage « démontré » ne reste sans preuve.
 
 <h2vert>La photochimie, où le même appareil resert
 <Énoncer>le rendement quantique photochimique
@@ -268,14 +268,14 @@ Trois constantes de vitesse s'étalent sur neuf ordres de grandeur : les méthod
 
 <h2vert>Le contrôle dimensionnel
 
-<Vérifier>l'homogénéité de theta = K * P / (1 + K * P) avec theta taux de recouvrement d'une surface, K constante d'adsorption de Langmuir, P pression
+<Vérifier>l'homogénéité de θ = (K P) / (1 + K P) avec θ taux de recouvrement d'une surface, K constante d'adsorption de Langmuir, P pression
 	<remarque>Le taux de recouvrement est sans dimension, et la constante d'adsorption est l'inverse d'une pression : la somme au dénominateur n'a de sens qu'à cette condition. La vérification l'impose avant tout calcul.
 
-<Vérifier>l'homogénéité de G_act = H_act - T * S_act avec G_act enthalpie libre standard d'activation, H_act enthalpie standard d'activation, T température, S_act entropie standard d'activation
+<Vérifier>l'homogénéité de G_act = H_act - T S_act avec G_act enthalpie libre standard d'activation, H_act enthalpie standard d'activation, T température, S_act entropie standard d'activation
 
 <Vérifier>l'homogénéité de ee = (n_R - n_S) / (n_R + n_S) avec ee excès énantiomérique, n_R quantité de matière, n_S quantité de matière
 
-<h2vert>Exercices types
+<page suivante h2vert>Exercices types
 
 <Afficher>un cadre avec une bordure vert foncé, un fond vert menthe, des coins arrondis de 2 mm et un titre {Exercice 1 — lire une entropie d'activation} {
 	Deux substitutions nucléophiles sur des dérivés halogénés donnent, à $298$ K, des entropies d'activation de $-120$ J·K⁻¹·mol⁻¹ et $+15$ J·K⁻¹·mol⁻¹.

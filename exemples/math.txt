@@ -6,12 +6,12 @@ document {
     niveau: quatrième;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit remarque: un style = <gris foncé italique>
-soit correction: un style = <fond gris clair>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit remarque un style défini par <gris foncé italique>
+soit correction un style défini par <fond gris clair>
 
 <volume>Mathématiques — du collège au master
 
@@ -103,15 +103,16 @@ Tout n'est pas démontré en quatrième. Le corpus le sait et le dit.
 <Démontrer>la dérivée du logarithme, au niveau terminale
 
 <h2>Croissances comparées
+
 <Énoncer>les croissances comparées
 
 <Démontrer>les croissances comparées, au niveau terminale
 
 <h2>Exercices types
-
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 1 — résoudre une équation} {
 	Résoudre dans $RR$ l'équation $e^(2x) - 3e^x + 2 = 0$.
 }
+
 <correction>Correction. Posons $X = e^x$, qui est strictement positif d'après la stricte positivité de l'exponentielle. L'équation devient $X^2 - 3X + 2 = 0$, de discriminant $9 - 8 = 1$, donc de racines $X = 1$ et $X = 2$. Toutes deux sont strictement positives, donc admissibles. La stricte croissance de l'exponentielle donne alors $x = 0$ et $x = ln(2)$.
 	<remarque>Le changement d'inconnue n'est licite que parce que l'exponentielle ne prend que des valeurs strictement positives : il faut le dire, et écarter d'emblée une racine négative si elle apparaissait.
 
@@ -179,7 +180,7 @@ Tout n'est pas démontré en quatrième. Le corpus le sait et le dit.
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Exercice 3 — irrationnels denses} {
 	Déduire de <renvoi>{densite} que les irrationnels sont eux aussi denses dans $RR$.
 }
-<correction>Correction. Soient $a < b$ deux réels. Appliquons la densité des rationnels aux réels $a - racine(2)$ et $b - racine(2)$ : il existe un rationnel $r$ tel que $a - racine(2) < r < b - racine(2)$, donc $a < r + racine(2) < b$. Le nombre $r + racine(2)$ est irrationnel, car sinon $racine(2)$ serait la différence de deux rationnels, donc rationnel.
+<correction>Correction. Soit $a < b$ deux réels. Appliquons la densité des rationnels aux réels $a - racine(2)$ et $b - racine(2)$ : il existe un rationnel $r$ tel que $a - racine(2) < r < b - racine(2)$, donc $a < r + racine(2) < b$. Le nombre $r + racine(2)$ est irrationnel, car sinon $racine(2)$ serait la différence de deux rationnels, donc rationnel.
 
 <page suivante h0>Supérieur — master 2
 

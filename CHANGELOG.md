@@ -1,3 +1,2039 @@
+## 4.0.0 — Confirmation de fermeture et cache unique (16 novembre 2026)
+
+**Fermer la fenêtre demande de nouveau confirmation.** La question s'était
+perdue au fil des versions. La croix écrit ce qui restait à enregistrer, puis
+ouvre « Quitter DocDG ? » dans la fenêtre même, sans dialogue du système :
+« Quitter » ou Entrée ferme, « Annuler », Échap ou un clic à côté revient au
+document, et une seconde croix ferme sans attendre. Tant que la question est
+posée, la source ne reçoit aucune frappe. Le panneau avertit de ce qui serait
+perdu, et de cela seulement : un document qui n'a jamais reçu de fichier —
+le bouton devient « Quitter sans enregistrer » — ou un enregistrement
+automatique qui a échoué. Sous macOS, ⌘Q quitte toujours sans question.
+
+**Le cache de réouverture n'a plus qu'un emplacement.** Le Typst d'un document
+était écrit à côté de lui (`cours.typ`), ses empreintes et ses ressources dans
+le dossier de données de l'utilisateur : deux endroits pour un seul cache, et
+le fichier voisin ne servait à rien sans l'autre moitié. Tout est maintenant
+dans le cache privé (`DocDG/cache-typst` du dossier de données) ; DocDG n'écrit
+plus rien à côté des documents, et un `.typ` personnel n'est ni lu ni touché.
+Le cache ne garde que les 256 documents les plus récemment composés ; il
+grandissait sans limite.
+
+Les fichiers `.typ` déjà écrits à côté de vos documents par les moutures
+précédentes ne sont plus lus ni modifiés. Ils commencent par la ligne
+« // Cache DocDG généré automatiquement » et peuvent être supprimés.
+
+## 4.0.0 — Ouverture d'un document et lecture des formules (16 novembre 2026)
+
+Deux écarts de vitesse avec la mouture parallèle de la 4.0, mesurés puis
+comblés ; le second est poussé plus loin qu'elle. Le détail des mesures est
+dans [docs/AUDIT_FINAL_4_0.md](docs/AUDIT_FINAL_4_0.md), section 6.
+
+**La lecture des formules.** À chaque position d'une formule, le lecteur
+cherchait chaque nom de fonction connu dans tout le reste de la formule, pour
+ne retenir que l'appel placé là. Il ne lit plus que l'appel qui commence à la
+position courante : même résultat, sans le parcours. Le premier rendu d'un
+document chargé en formules en est deux à trois fois plus court — moteur à
+froid, `demonstration` passe de 90 à 30 ms, `math` de 40 à 15 ms, `mathlang`
+de 21 à 8 ms. Le rendu à chaud et la frappe ne changent pas. Correctif repris de la
+mouture parallèle.
+
+**L'ouverture d'un document.**
+
+- Un document rouvert dont le cache est valide est composé d'un seul tenant :
+  la première page n'est plus esquissée avant lui, ce qui ajoutait une
+  composition et un affichage pour un document prêt l'instant d'après. Au-delà
+  de 256 Kio de texte Typst — une quarantaine de pages denses —, la première
+  page reste montrée d'abord.
+- L'ouverture est un seul travail de fond — lecture du cache, première page
+  s'il y a lieu, document entier — qui ne repasse plus par l'interface entre
+  ses étapes. Il part dès que le fichier est lu, au lancement comme par
+  « Ouvrir » : il s'exécute pendant que la fenêtre se crée et que la source se
+  met en page, au lieu d'attendre son tour derrière elles.
+- À conditions égales (deux cœurs, rendu logiciel), le voyant Document de
+  `demonstration` rouvert passe de 750–790 ms à 460–490 ms, là où la mouture
+  parallèle affiche 590–735 ms ; à la première ouverture, de 1,3 s pour elle à
+  0,8 s. Ces durées ne valent que par comparaison : sur une machine de
+  bureau, elles sont plusieurs fois plus courtes.
+
+## 4.0.0 — Audit final avant publication (16 novembre 2026)
+
+Le détail est dans [docs/AUDIT_FINAL_4_0.md](docs/AUDIT_FINAL_4_0.md).
+
+**Windows.** L'application ne se compilait plus sous Windows : le banc
+`docdg --mesure` appelait `getrusage`, que ce système n'a pas. La mémoire de
+crête se lit maintenant par l'appel propre à chaque système. Le cache de
+calcul, qui cherchait `HOME`, n'était jamais écrit sous Windows : il va dans
+le dossier de cache de l'utilisateur sur les trois systèmes.
+
+**Le document de l'utilisateur.**
+
+- Fermer la fenêtre, ouvrir un autre document, « Nouveau » et « Enregistrer
+  sous » écrivent d'abord la frappe encore en attente : elle était perdue si
+  le geste suivait la frappe de moins de 900 ms.
+- L'enregistrement remplace le fichier d'un seul geste, et deux écritures ne
+  peuvent plus se croiser : un disque plein ou une coupure laisse la version
+  précédente intacte.
+- Un fichier enregistré avec une marque d'ordre des octets (Bloc-notes de
+  Windows) perdait son bloc `document { }`, imprimé comme du texte. La marque
+  est retirée ; l'UTF-16 et l'ANSI de Windows sont lus, au lieu d'un refus
+  muet ; les fins de ligne de Windows sont normalisées. Un fichier illisible
+  est signalé.
+- Une source aux accents décomposés (copier-coller depuis un PDF) n'était plus
+  comprise — « définie » cessait d'être reconnu. Le moteur lit la forme
+  canonique.
+
+**Robustesse.**
+
+- En compilation de développement, trente à quarante cadres imbriqués, ou
+  cinquante exposants emboîtés, faisaient déborder la pile et fermaient
+  l'application avant que le garde-fou des soixante-quatre niveaux ne joue.
+  L'interprétation des structures et la lecture des formules tiennent
+  maintenant sur une pile extensible, comme la récursion des fonctions, quel
+  que soit le fil d'exécution.
+- Une formule aux parenthèses imbriquées par centaines occupait le moteur
+  pendant des minutes avant d'être refusée ; elle l'est d'emblée.
+- Une boucle `tant que` sans fin était arrêtée après 2 000 tours sans rien
+  dire, et la suite du document se calculait sur une valeur fausse. Elle
+  reçoit le même avis que la boucle `pour`.
+- `<Convertir>` refuse une température inférieure au zéro absolu, au lieu
+  d'écrire un nombre négatif de kelvins.
+
+**Les réglages du document.** Une marge, une taille ou un interligne négatifs
+remplaçaient tout l'aperçu par « invariant documentaire : TailleNonValide ».
+Chaque réglage est contrôlé à sa lecture et refusé à sa ligne, le document
+restant composé : orientation (`portrait` ou `paysage`), marges, espacements,
+taille, interligne, tabulation, hauteur, décalage, précision (de −1 à 15),
+numérotation, et le niveau, dont une faute de frappe changeait sans le dire
+ce que le corpus admet ou démontre. La largeur d'une piste de grille ou de
+tableau doit être strictement positive.
+
+**Les messages.** Les refus qui parlaient la langue du chantier (« trajet
+historique entier », « compatibilité non qualifiée », « hors couverture
+native ») disent ce qu'il faut écrire. Les erreurs du modèle de document ont
+une phrase en français, et une expression vide ou illisible passée au calcul
+formel n'affiche plus l'erreur brute de Python.
+
+**L'intitulé d'un énoncé.** « Théorème 2 (Central limite) », « Théorème 1
+(Spectral) », « Propriété 1 (Colligatives) » : le genre n'est plus retiré du
+titre que devant un complément de nom — « Théorème de Pythagore » donne
+toujours « (Pythagore) », « Théorème spectral » reste entier.
+
+**Le corpus.** Les 76 énoncés du parcours de sciences de l'ingénieur étaient
+des intitulés de programme sans phrase, tous classés « propriété », et
+portaient, comme leurs 26 démonstrations, des notes de travail (« à relire
+avant diffusion », « version de travail »). Ils sont rédigés, classés par
+genre et par domaine ; les démonstrations sont relues et corrigées (variable
+de Laplace, « la analyse spectrale », matrices diagonales mal désignées,
+renvois à un document absent, marques de Markdown) ; cinq sont rattachées à
+l'énoncé qu'elles démontrent. Les totaux ne changent pas : 1 606 énoncés,
+602 démonstrations. Les catalogues sont régénérés.
+
+**Empaquetage et documentation.** Le paquet macOS annonçait la version 3.4.0 ;
+`Info.plist` porte la 4.0 et un test l'y tient. `docs/COMPILER.md`,
+`catalogues/README.md`, `app/LISEZ-MOI.md`, `docs/REGLES-CORPUS.md` et le
+README ne renvoient plus à des scripts ou à des fichiers absents ; le CLUF
+décrit ce que l'application écrit réellement sur la machine. Le code est
+formaté par `cargo fmt`.
+
+## 4.0.0 — Fermeture automatique et langue du supérieur (15 novembre 2026)
+
+**L'éditeur referme ce qu'il ouvre.** `(`, `[` et `{` posent leur fermant et
+laissent le curseur entre les deux ; la frappe du fermant déjà présent passe
+par-dessus ; le retour arrière entre une paire vide efface les deux ; Entrée
+entre `{` et `}` ouvre le bloc sur une ligne indentée ; une sélection est
+entourée. Les intervalles ouverts à la française restent saisissables tels
+quels : `]a ; b[` et `[a ; b[`.
+
+**Les seize points laissés en suspens par l'audit sont tranchés**, chacun pour
+la forme que l'enseignant du supérieur écrit au tableau. Une ancienne écriture
+n'est jamais lue de travers : elle donne, à sa ligne, la forme attendue.
+
+- **Soient.** La balise `<Soit>` reste invariable dans la source ; la phrase
+  imprimée s'accorde — « Soient A et B deux points de coordonnées
+  respectives… », « Soient f et g deux fonctions définies par… ».
+- **Homogénéité.** La relation s'écrit comme au tableau : produit par
+  juxtaposition (`E = m c^2`, `E = mc²`), par `×` ou par `*` ; lettres
+  grecques telles quelles ou par leur nom (`σ` ou `sigma`, `ℏ` ou `hbar`) ;
+  `π` est un nombre ; les décimaux et les exposants en chef sont lus.
+- **Tolérances.** « avec une tolérance relative de 10^(-8) et une tolérance
+  absolue de 10^(-10) » remplace `rtol = 1e-8, atol = 1e-10`.
+- **Surfaces et lignes de niveau.** `z = xy`, `z = 2xy`, `z = cos(x) cos(y)`
+  sont lus comme dans un système différentiel.
+- **Classes.** Les membres se déclarent comme partout : `abscisse ∈ ℝ`,
+  `titulaire une chaîne de caractères`, `gauche un Arbre` ; une méthode est
+  une fonction — `soit translaté : ℝ² → un Point, (dx, dy) ↦ …`, ou, sans
+  argument, `soit norme une fonction à valeurs dans ℝ définie par
+  norme() = …`. L'écriture de la 3.9 (`abscisse: un réel`,
+  `soit norme(): un réel = …`) reste du texte.
+- **Verbes.** Une constante se donne (`<Donner>la constante de Planck`), un
+  test s'effectue (`<Effectuer>le test de Student …`) ; on calcule *une*
+  primitive (`<Calculer>une primitive de w`).
+- **Un mot par notion**, à côté de son symbole : `normale(0 ; 1)`,
+  `cardinal(A)`, `argsh`, `argch`, `argth`, `|x|` ou `valeur absolue(x)`,
+  `non P`, `x appartient à E` et `x appartenant à E`, `non parallèle`,
+  `différent de`, `sur 2 colonnes`. `!=`, `<=` et `>=` restent : ce sont les
+  saisies au clavier de ≠, ⩽ et ⩾.
+- **Rendus.** `milieu(A; B)` donne « milieu de [AB] » ; `cos(x)^2` ne porte
+  plus de blanc ; une intégrale au dénominateur reste entière ; les matrices
+  sont entre parenthèses, ℙ, 𝔼, Var et le d de la différentielle sont droits
+  dans les résultats comme dans la notation ; « L'original de F » et
+  ℒ⁻¹{F} ; un résultat numérique porte les chiffres significatifs de ses
+  données.
+- **Exemples.** Plus de LaTeX dans `publication3` et `algo` ; exposants
+  composés entre parenthèses (`10^(-3)`, `Fe^(2+)`).
+
+Trois défauts corrigés en chemin : `argsh(x)` s'affichait mais se calculait
+de travers ; un résultat en argsh ne pouvait pas s'afficher ; `cardinal(A)`,
+documenté, sortait en lettres italiques.
+
+## 4.0.0 — Version hybride : ouverture, frappe et diagnostics (15 novembre 2026)
+
+Réunion de deux lignées de la 4.0 : la reconnaissance stricte de la prose,
+le cache `.typ` voisin, l'aperçu tolérant et l'annulation par document d'un
+côté ; l'ouverture, la frappe et deux diagnostics de l'autre.
+
+- Les polices du système ne sont plus lues à chaque lancement : elles ne le
+  sont que lorsqu'un document nomme une police que DocDG n'embarque pas.
+- À la réouverture, la première page est de nouveau montrée d'abord ; le
+  document repris du cache suit, sans que le moteur soit exécuté sur lui.
+- Le délai avant recomposition, fixé à 110 ms après la dernière frappe, suit
+  le coût de la dernière composition, entre 30 et 110 ms.
+- `DOCDG_PROFIL=1` écrit la chronologie du lancement, étape par étape ;
+  `docdg --mesure` commence par le coût de chaque étape du lancement.
+- Une déclaration complète terminée par un point (`soit n ∈ ℕ tel que
+  n = 7.`) est signalée à sa ligne, avec l'invitation à retirer le point.
+- Un bloc dont l'accolade fermante manque est signalé à sa ligne d'ouverture,
+  pour une instruction (`pour … {`) comme pour une action (`<Afficher>un
+  cadre {`) ; son contenu reste lisible.
+- Le message d'une réaffectation refusée cite la ligne avec sa flèche
+  (`n ← n + 1`). Une division par zéro dans `<Calculer>` le dit en français.
+- Les fichiers Rust ne portent plus de commentaires ; le code mort signalé à
+  la compilation est retiré.
+
+## 4.0.0 — Reconnaissance algorithmique et prose (15 novembre 2026)
+
+- Une tentative de déclaration ou de contrôle mal formée est affichée comme
+  du texte, sans avertissement et sans exécuter une partie de l'instruction.
+  Le premier mot en minuscule ne suffit plus à déclencher l'interpréteur.
+- L'utilisation d'un nom sans déclaration valide est signalée à son emplacement ;
+  le message rappelle l'absence possible de déclaration ou une syntaxe non conforme.
+  Les symboles mathématiques entre dollars restent de la notation libre.
+- La reconnaissance conserve les contrôles de valeur et de calcul des instructions
+  conformes, ainsi que la poursuite de l'aperçu après une erreur locale.
+- L'annulation d'une composition appartient à son instance de DocDG : deux
+  instances, ou deux tests parallèles, ne peuvent plus s'annuler mutuellement.
+- Le cache Typst voisin et les diagnostics locaux de la livraison précédente
+  sont conservés. Le guide et le contrat de typage décrivent le nouveau comportement.
+
+## 4.0.0 — Réouverture et diagnostics locaux (15 novembre 2026)
+
+- Cache Typst voisin du source, avec validation des empreintes et préservation
+  des fichiers Typst personnels ; repli sur le cache privé si nécessaire.
+- Lecture du cache avant l'esquisse et la composition par chapitres. Les
+  documents assemblés conservent leur émission complète pour la réouverture.
+- Une émission unique suffit si la composition par chapitres est refusée.
+  Les compositions périmées en attente sont écartées avant leur exécution.
+- Les ressources de polices documentaires sont désormais reprises par le cache.
+- Recherche d'accolade hors des formules sans allocation de chaîne temporaire ;
+  calcul SHA-256 sans recopier intégralement le contenu à contrôler.
+- Aperçu tolérant après un refus : diagnostic dans la zone concernée et poursuite
+  des unités valides. Les contrôles stricts restent disponibles pour qualification.
+- Aperçu de secours lisible en cas d'échec de composition ; suppression du
+  bandeau rouge documentaire au-dessus des pages. Les résultats provisoires ne
+  deviennent pas des caches valides.
+
+## 4.0.0 — Audit de la Release Candidate 3 : exactitude des formules, prose des exemples (12 novembre 2026)
+
+**Une fraction garde son dénominateur entier.** `(PP(B sachant A) PP(A))/PP(B)`
+composait ℙ seul sous la barre et « (B) » dehors ; `lambda^k / factorielle(k)`
+donnait (λᵏ/k)!. Un appel, une norme, une valeur absolue, une factorielle sont
+désormais des atomes entiers des deux côtés de la barre, et un nom collé à sa
+parenthèse est une application : `1/f(x)`, `u(n+1)/u(n)`, `n!/(k!(n−k)!)`.
+Les frontières « courtes » héritées de l'ancien lecteur sont retirées de
+`bord_fraction`, avec les attentes de tests qui les figeaient.
+
+**Les ensembles gardent leurs accolades.** `{7 ; 1 ; 5}`, `RR privé de {1}`,
+`x appartient à {0 ; 1}` se composent avec leurs accolades ; `^t{A}` et
+`a/{b+c}` restent des groupements.
+
+**La typographie des formules.** Point-virgule espacé des deux côtés, partout
+(`[0 ; 1]`, `f(x ; y)`, `u(3 ; 5)`) ; plus d'espace avant la virgule ;
+`intervalle entier(1; n)` donne ⟦1 ; n⟧ ; `a congru à b modulo n` donne
+a ≡ b [n], comme le dit le README ; `repère(O; i; j)` donne (O ; i, j) ;
+`f rond g` reprend l'espacement d'un opérateur ; la norme perd ses blancs
+intérieurs ; `normale(0; 1)` donne 𝒩(0, 1).
+
+**Les résultats parlent la langue du supérieur.** Une primitive rend `arctan`,
+`arcsin`, `arccos` (`cas.py` : la graine est à refaire). Un radical ou π
+interpolé dans la prose se compose (√30, et non « racine(30) »). Une quantité
+et son unité sont séparées d'une espace fine dans les conversions, les masses
+molaires et les constantes ; « 25 °C » remplace « 25° C ».
+
+**Les exemples.** Formes `<Action>`complément partout (cadres, listes, tableaux,
+images, lois en prose : « la loi de Poisson de paramètre 1,5 ») ; plus aucun
+accent grave de Markdown ; `<page suivante h2>` rétabli dans `geometrie.txt` ;
+écritures informatiques retirées (`[-2, 3)`, `[100, 400, …]`, `0.25`, `1e-6`,
+`sqrt`, produits à astérisque) ; textes périmés corrigés ; sous-sections de la
+vitrine sans numéro. Aucun nombre de lignes ne change. `references-pdf/` porte
+leurs PDF du 13 novembre.
+
+**Le bandeau et l'application.** Huit modèles de `classeur.json` perdent leur
+astérisque ou leur `abs(`. Les deux bancs
+`qualification_annotations_publics08`, scellés sur un état antérieur des
+sources publiques, sont marqués `#[ignore]`.
+
+**Le second audit, indépendant.** Un audit extérieur du 13 novembre a
+reproduit des défauts que le premier n'avait pas vus ; ceux qui suivent sont
+corrigés.
+
+- *Justesse du cache.* L'empreinte d'une fonction ne retenait que son nom et
+  son corps : après permutation des paramètres ou changement du type de
+  retour, le résultat restait celui d'avant. Elle porte maintenant toute la
+  signature. Les ancres d'un document assemblé par chapitres sont recalculées
+  depuis la table de lignes courante, la composition restant réemployée.
+- *Boucles.* `pour k ∈ ]0 ; 3[` parcourt 1 et 2 : l'ouverture de chaque borne
+  est respectée, pas décimal ou négatif compris. Une borne nommée négative
+  (`⟦a ; 2⟧`) n'est plus refusée ; la variable d'une boucle dont une borne est
+  un nom ou un calcul est un entier relatif.
+- *Chaînes.* Une chaîne entre guillemets droits ou français n'est plus
+  réécrite par les passes de normalisation (`«2 ÷ 3»` reste `2 ÷ 3`).
+- *Factorisation.* `dans les complexes`, `dans les réels`, `dans les
+  rationnels`, `dans les entiers` sont reconnus comme `dans C[X]`… ; ℤ[X] est
+  annoncé comme tel ; dans ℝ[X] et ℂ[X] la factorisation est complète quand
+  les racines s'écrivent par radicaux (`x² − 2` donne `(x − √2)(x + √2)`).
+- *Notation.* `2pi`, `4pi^2`, `theta''` se composent 2π, 4π², θ″ ; une
+  signature se lit avec ou sans espaces autour des flèches ; `ℝ⁰` n'est plus
+  pris pour ℝ.
+- *Bandeau.* Changer un réglage ne réécrit plus que sa ligne : les unités
+  (`18 pt`, `5 mm`, `80%`), `césure: faux` et les clés que l'interface ne
+  connaît pas sont conservés. Un préalable n'est inséré que s'il manque avant
+  le curseur, nom par nom et genre par genre. Le choix d'une démonstration
+  parmi plusieurs transmet son niveau. Le bouton ⁿ√ insère `racine[n](x)`.
+- *Manuel et corpus.* Six passages normatifs du README corrigés ; trois fiches
+  du corpus rectifiées (moindres carrés, chaîne gaussienne, Born-Oppenheimer),
+  catalogues régénérés.
+
+**L'audit de suivi.** Il confirme ces corrections et en borne la portée ;
+ses constats sont repris.
+
+- *Chaînes.* `∈`, `→` et `↦` ne modifient plus une valeur littérale : les
+  passes travaillent sur un texte dont les chaînes sont masquées.
+- *Boucles.* Un pas négatif nommé donne le même parcours que sa valeur
+  (`⟦1 ; 3⟧ par pas de p`, p = −1 : 3, 2, 1) ; le type de la variable se
+  déduit des valeurs des bornes et du pas, décimales nommées comprises.
+- *Factorisation.* Coefficients algébriques admis (`x² − √2`) ; un facteur
+  resté réductible est signalé par une phrase au lieu d'être passé sous
+  silence.
+- *Bandeau.* Les réglages lisent tous les blocs `document` et modifient la
+  dernière occurrence d'une clé ; un préalable n'ajoute que l'objet manquant,
+  sans redéfinir ceux qui existent ; le niveau de toute démonstration choisie
+  est transmis.
+- *Cache.* Les ressources d'un document (polices, images) entrent dans la clé
+  des chapitres assemblés.
+- *Manuel et corpus.* Quatre formulations reprises ; hypothèses complétées
+  dans trois fiches (Bayes, convergence dominée, inégalité de la moyenne).
+- *Livraison.* La graine est régénérée ; `references-pdf/LISEZ-MOI.md` nomme
+  les deux PDF antérieurs aux corrections.
+
+**Le suivi de `docdg2.zip`.** Dernières réserves reprises : le diagnostic
+d'une factorisation incomplète ne prétend plus rien sur les racines et les
+coefficients transcendants sont admis (`x² − π`) ; un intervalle d'entiers
+`⟦a ; b⟧` refuse des bornes décimales ; une liste de nombres portant un
+radical ou π se compose en formule ; les 602 choix de démonstration, appelés
+avec leur niveau, sont tous rendus sans admission ; deux exemples du manuel
+passent à la forme canonique.
+
+**L'avis de publication.** Le dernier audit extérieur est favorable.
+`references-pdf/` porte les 23 PDF d'un même export final, graine de calcul
+régénérée sur la machine de l'auteur. Une coquille est corrigée dans
+`exemples/seyes.txt` (« XXI<sup>e</sup> siècle ») et `seyes.pdf` est
+réexporté.
+
+**Une ligne mal formée est du texte.** Une ligne qui commence par un
+mot-clé en minuscule sans avoir la forme de l'instruction est imprimée telle
+quelle, sans alerte et sans arrêter le document ; rien ne s'affiche au-dessus
+de la page. L'erreur vient à l'emploi : `#n` écrit sans déclaration valable
+affiche à sa place que `n` n'a pas de déclaration valide. Une accolade dans
+une formule (`$x_{n}$`) n'est plus prise pour l'ouverture d'un bloc, et une
+phrase en « si » sans bloc garde ses signes.
+
+**Les formules du corpus sur leur ligne.** Une formule que la fiche écrit
+seule sur sa ligne, après la phrase qui l'annonce, garde sa ligne au lieu
+d'être remise dans la phrase ; la suite de la phrase, en minuscule, se
+poursuit après elle. Une formule trop longue ne laisse plus la
+phrase précédente étirée sur toute la largeur de la page. 613 lignes dans
+344 textes ; parmi les exemples, `chimie`, `math` et `physique` changent et
+leurs PDF sont à réexporter.
+
+**La minuscule déclare, la majuscule commence une phrase.** Remarque d'un
+relecteur : un paragraphe qui commence par « soit » en minuscule suivi d'une
+formule est lu comme une déclaration. C'est la règle n° 9, et elle n'est pas
+assouplie : `soit`, `pour`, `si`, `sinon`, `tant que`, `faire` en minuscule en
+tête de ligne sont des mots-clés ; « Soit », « Pour », « Si » commencent une
+phrase et sortent intacts ; au milieu d'une phrase, « soit » reste la
+conjonction. Le manuel dit la règle dans les deux sens.
+`selon la valeur de …` sans accolade ne disparaît plus en emportant la
+ligne suivante. Dans le corpus, les éléments de liste qui se
+suivaient étaient collés bout à bout dans huit démonstrations de sciences de
+l'ingénieur : chacun retrouve sa ligne. Un test compose désormais les
+2 208 énoncés et démonstrations et échoue si l'un d'eux est refusé ou porte
+un diagnostic.
+
+Reste ouvert : l'ordonnancement des compositions, le verrou de raster et les
+budgets mémoire, à mesurer sur la machine cible avant d'y toucher.
+
+**Les bancs natif contre historique.** La référence historique portait les
+défauts corrigés ; les bancs le disent désormais. 32 formules de
+`mathlang.txt`, quatre cas de `comparaisons_ab_des_notations_scientifiques` et
+douze cas de `declarations_pedagogiques…` sont déclarés « notations
+corrigées » : leur écart de peinture avec l'historique n'est plus une erreur,
+tout le reste demeure comparé strictement. Le test des conversions Celsius,
+qui affirmait l'ancien rendu, contrôle maintenant le rendu natif seul, et
+`conversion.rs` gagne deux tests d'émission (espace fine, « 25 °C »).
+
+Le détail, les vérifications faites et celles qui restent à faire sont dans
+[docs/AUDIT_RC3.md](docs/AUDIT_RC3.md).
+
+## 4.0.0 — Audit de pré-publication : langue du supérieur, bandeau, corpus, cache (11 novembre 2026)
+
+**Une consigne s'écrit avec les symboles du supérieur.** `<Calculer>la limite de f
+en +∞`, `<Résoudre>dans ℤ l'équation 3x = 7`, `<Résoudre>dans ℂ …`,
+`<Factoriser>X² + 1 dans ℚ[X]`, `pour x ∈ [a ; b] et y ∈ [c ; d]` sont lus comme
+leurs écritures `+infini`, `ZZ`, `CC`, `Q[X]`, `dans`. Auparavant `+∞` et `ℚ[X]`
+faisaient échouer le document, et `dans ℤ` était ignoré sans alerte : l'équation
+se résolvait dans ℝ.
+
+**Les tournures de l'usage.** `<Décomposer>360 en produit de facteurs premiers`
+donne la décomposition (les mots étaient lus comme des variables) ;
+`<Développer>et réduire …` remplace l'impératif « et réduis », refusé avec la
+forme à l'infinitif ; `<Insérer>l'image … avec une largeur de 60 mm` suit la
+règle d'or `<Action>`complément ; le repère s'écrit `(O ; i, j)`, comme au
+tableau, dans `<Soit>` comme dans `<Représenter>` ; une balise qui commence par
+l'objet nu (`<un cadre …>`) est refusée avec la forme attendue au lieu d'être
+imprimée telle quelle.
+
+**Les lois se nomment en prose.** « la loi de Poisson de paramètre 4 », « la loi
+binomiale de paramètres 20 et 0,05 », « la loi de Student à 8 degrés de
+liberté », « la loi uniforme sur [0 ; 2] ». Un moment exact s'écrit avec `=`,
+`≈` restant réservé aux valeurs approchées. `$normale(mu; sigma)$` est reconnu.
+
+**Le corpus se compose en entier.** 92 énoncés et démonstrations faisaient
+échouer le document qui les appelait. Le lecteur de notation lit désormais les
+arguments TeX nus (`\tfrac12`, `\pmod p`, `\sqrt2`), les bras et les kets, les
+matrices `\begin{pmatrix}` et leurs variantes, `\begin{cases}`, `\boxed`,
+`\underbrace`, `\xrightarrow`, `\not`, `\Re`, `\Im`, un `\text{…}` de plusieurs
+mots, les structures `(E,+)`, la demi-droite `[AC)`, l'exposant antéposé
+`{}^t M`. Une ligne de prose qui commence par « pour tout » n'est plus prise
+pour une boucle. Six démonstrations sont retouchées dans la base.
+
+**Le bandeau.** Six choix produisaient un rendu fautif sans alerte (saisie,
+tableaux de signes et de variations de trois fonctions, `<Montrer>que`,
+décomposition, extremums sous contrainte) ; vingt objets changent de domaine ;
+deux doublons disparaissent ; les modèles s'écrivent avec ℤ, ℂ, ℚ[X], +∞, ∈,
+« une primitive » ; Programmation reçoit `sinon si`, `selon la valeur de`, le
+p-uplet, la pile, la file et l'instance de classe. Le test du bandeau compose
+chaque choix jusqu'à Typst, styles et titres compris, et repère les échecs
+silencieux.
+
+**Le cache de segments sert dès le deuxième rendu.** L'empreinte du corpus par
+défaut changeait à son chargement paresseux : le deuxième rendu d'un document
+qui appelle le corpus recalculait tout, et un énoncé modifié dans l'onglet
+Édition pouvait être resservi dans son ancienne rédaction. L'empreinte ne change
+plus qu'au rafraîchissement du corpus.
+
+**Le moteur de calcul patiente.** La première demande attend l'ouvrier Python
+tant qu'il démarre, au lieu d'abandonner au bout de trente secondes.
+
+**Valeurs exactes, valeurs approchées.** Une conversion garde les chiffres
+significatifs de sa donnée et s'écrit avec `≈` quand elle est arrondie
+(`13,6 eV ≈ 2,18 × 10⁻¹⁸ J`), avec `=` quand elle est exacte
+(`90 km/h = 25 m/s`). Une masse molaire est donnée à la précision des masses
+atomiques (`M(H₂O) = 18,015 g·mol⁻¹`). Une conique sans coefficient décimal est
+étudiée en fractions et en radicaux (`A = 1/9`, `c = √5`). `≤` et `≥` se
+composent `⩽` et `⩾` partout. La règle est dans `docs/NOTATIONS_SUPERIEUR.md`.
+
+**Les catalogues du corpus se régénèrent.** `cargo app catalogues` réécrit
+`catalogues/corpus/` depuis `corpus/corpus.db` : CSV, JSON, manifeste et quatre
+documents par matière. Ces documents ne se composaient plus (ils portaient des
+commentaires en `%`) ; ils appellent maintenant chaque entrée par son titre.
+`cargo test -p xtask` vérifie que les catalogues publiés sont ceux de l'atelier.
+
+**Une erreur en aval cite le refus qui la cause.** Quand une déclaration est
+refusée puis qu'une consigne s'appuie sur elle, le document s'arrêtait sur la
+seule conséquence (« Le système s n'a pas été déclaré »). Le message donne
+maintenant la ligne refusée et sa forme corrigée, puis la conséquence :
+« ligne 98 : … le type suit le nom sans virgule : « <Soit>s un système défini
+par { » — d'où, ligne 102 : Le système s n'a pas été déclaré. » Le p-uplet
+écrit entre virgules est refusé sur place avec sa forme corrigée, au lieu d'un
+message sur une variable de boucle.
+
+**Une réponse ne renvoie plus au début du document.** Après une réponse
+refusée (« 17,9 » pour un entier), ou après la dernière réponse d'un document,
+l'aperçu se recadrait sur la ligne du curseur de la source — la première ligne
+tant qu'on n'a pas cliqué dans la source. Une réponse refusée laisse désormais
+l'aperçu sur la question, le champ gardant la main et le refus s'affichant
+dessous ; une réponse acceptée laisse l'aperçu où elle a été donnée.
+
+**Les tableaux scientifiques ne se collent plus.** Un tableau de signes, de
+variations ou d'avancement s'espace comme un tableau ordinaire : un interligne
+au-dessus et au-dessous. Les tableaux d'une consigne au pluriel (`<Dresser>les
+tableaux de signes de f, g et h`) ne se touchent plus, et il n'y a plus besoin
+d'une ligne vide avant un tableau.
+
+**L'ensemble vide s'écrit ∅.** `<Déterminer>les zéros de f` écrivait
+`f(x) = 0 ⟺ x ∈ {∅}` quand f ne s'annule pas ; la rédaction est maintenant
+`x ∈ ∅`.
+
+**La première page s'affiche avant le document entier.** À l'ouverture d'un
+fichier, DocDG compose d'abord la source jusqu'au premier `<page suivante>`,
+affiche cette page, puis compose le document entier. Sur les 23 exemples, la
+première page arrive en 8 à 16 ms au lieu de 40 à 330 ms ; le temps du document
+entier ne change pas. L'esquisse est abandonnée au moindre doute : question en
+attente, table des matières sur la première page, bloc ouvert, ou première page
+qui pèse plus du quart du document. `DOCDG_SANS_ESQUISSE=1` la désactive, et
+`docdg --mesure` en donne le temps dans une colonne `esquisse`.
+
+**Une réponse recompose aussitôt.** Valider une réponse, ou y répondre de
+nouveau, n'attend plus les 110 ms réservés à la frappe.
+
+**Les exemples sont remis en page.** Seize exemples reçoivent une nouvelle
+mise en page de l'auteur (sauts de page, marges, interligne), et
+`references-pdf/` porte leurs PDF du 12 novembre. Une masse molaire suit de
+nouveau le réglage `précision` du document (`précision: 2` donne
+`2 × 1,01 + 16,00 ≈ 18,02`).
+
+**Le nombre se rend en toutes lettres.** Une déclaration groupée garde son
+nombre en chiffres dans la source et le rend en lettres : `<Soit>f, g et h
+3 fonctions définies par …` donne « Soit f, g et h trois fonctions définies
+par … », `<Soit>u(1;0;1) et v(0;1;1) 2 vecteurs` donne « Soit u et v deux
+vecteurs de coordonnées … ». Le rendu écrivait « les fonctions », « les
+vecteurs », « les points ».
+
+**Les exécutables se fabriquent sur GitHub.** Le workflow `paquets`
+(`.github/workflows/paquets.yml`) se lance à la main et produit le binaire
+universel macOS, l'exécutable Windows et l'AppImage Linux.
+`outils/fabriquer_runtime.py`, que `transpiler/build.rs` appelle, fabrique le
+Python privé de chaque cible : CPython 3.13.18, mpmath 1.3.0, SymPy 1.14.0,
+NumPy 2.5.3 et SciPy 1.18.1.
+
+Le rapport complet est dans `docs/AUDIT_4_0.md`.
+
+## 4.0.0 — Clôture : message de `<Montrer>`, document de typage (11 novembre 2026)
+
+**Le message d'une démonstration inconnue cite des titres lisibles.** Quand une
+démonstration n'est ni calculable ni en bibliothèque, docdg propose des énoncés
+proches ; leurs titres étaient cités avec leurs délimiteurs de formule, « tend
+vers $+infini$ ». Ils sont désormais lisibles : « tend vers +∞ ».
+
+`docs/TYPAGE_OBLIGATOIRE.md` décrit les ensembles parcourus comme le moteur les
+lit : hiérarchie numérique, pas d'élément répété, chaînes entre guillemets.
+
+## 4.0.0 — Opérateurs déclarés, vecteurs par combinaison, noms résolus par le moteur (11 novembre 2026)
+
+**Un opérateur se déclare.** `soit rg un opérateur` inscrit une notation dans le
+moteur : dans les formules, `rg` est composé en droit avec l'espacement d'un
+opérateur, `$rg(A)$` comme `$rg A$`. Le nom compte au moins deux lettres. Les
+opérateurs usuels — `rang`, `noyau`, `image`, `trace`, `déterminant`, `dim`,
+`pgcd`, `card` — restent connus sans déclaration.
+
+**Un vecteur se pose par combinaison.** `<Soit>u un vecteur tel que u = 2i + 3j`,
+`<Soit>w un vecteur tel que w = 2u − 3v`, ou `w = k u` avec un coefficient
+nommé : les coordonnées sont calculées à partir des vecteurs déjà posés, ceux du
+repère compris, et le vecteur sert ensuite comme tout autre. Un nom qui n'est ni
+un vecteur ni un nombre, ou des vecteurs de dimensions différentes, sont
+signalés.
+
+**Le moteur résout le nom d'un intervalle et d'un cercle.** Dans une commande,
+le nom n'est plus remplacé par la réécriture d'après une liste de tournures :
+le moteur le résout depuis l'objet, mot entier, où qu'il soit cité — `sur I`,
+`dans I`, et désormais `<Tracer>dans un repère où l'abscisse appartient à I et
+l'ordonnée à I`. La réécriture ne garde que ce qu'elle traduit avant
+l'exécution : le domaine d'une fonction et les conditions `x ∈ I`.
+
+Le bandeau gagne « un vecteur par combinaison » et « un opérateur » : 660 choix,
+tous composés par le test.
+
+## 4.0.0 — Récursion réglable ; repère, intervalle et cercle deviennent des objets (11 novembre 2026)
+
+**La profondeur de récursion se règle.** Elle vaut 500 par défaut et se règle de
+10 à 100 000, par la clé `récursion` du bloc `document` ou par le champ
+Récursion de l'onglet Document. Le message de dépassement cite la limite en
+vigueur et la façon de la relever.
+
+**Le repère est un objet du moteur.** Sa déclaration inscrit son origine comme
+point et ses vecteurs de base comme vecteurs : `<Calculer>la norme de i` donne la
+longueur déclarée, `<Calculer>le produit scalaire de i et j` donne 0. La distance
+d'un point à un plan suit les longueurs du repère orthogonal — le dénominateur
+devient √(a²/‖i‖² + b²/‖j‖² + c²/‖k‖²), y compris dans la formule affichée. Les
+figures en héritent : `<Tracer>dans un repère où…` prend les proportions du
+repère déclaré, et une figure « orthonormée » dans un repère déclaré orthogonal
+est refusée. La norme de la phrase du repère est composée sans espaces parasites.
+
+**L'intervalle et le cercle sont des objets contrôlés.** Ils rejoignent
+l'environnement du moteur avec leur définition : les bornes d'un intervalle se
+suivent dans l'ordre croissant et ne le laissent pas vide ; le centre d'un cercle
+est un point déjà posé, son rayon est strictement positif. Chaque manquement a
+son message.
+
+**Un en-tête refusé emporte son bloc.** Après le refus de
+`pour prenom ∈ {Léa ; Hugo} {`, le corps de la boucle et son accolade restaient
+affichés comme du texte. Le bloc d'une structure refusée — `pour`, `si`,
+`tant que` — disparaît avec elle.
+
+La graine du CAS est régénérée.
+
+## 4.0.0 — Suites d'une relecture : chaînes, ensembles, récursion, morceaux, repère orthogonal (11 novembre 2026)
+
+**Une chaîne s'écrit entre guillemets.** `pour prenom ∈ {"Léa" ; "Hugo"}` :
+la forme entre guillemets affichait des caractères parasites, et un mot nu était
+évalué comme une expression — `{Léa ; Hugo}` échouait dès qu'une variable `Hugo`
+existait. Les guillemets sont désormais lus, un élément d'une boucle typée chaîne
+n'est plus jamais évalué, et un mot nu est refusé avec la forme corrigée.
+
+**Un ensemble n'a pas d'élément répété.** `pour k ∈ {1 ; 3 ; 3 ; 5}` est refusé :
+pour parcourir des répétitions, on déclare une liste. L'ordre d'écriture reste
+l'ordre de parcours, par convention.
+
+**Récursion.** La limite passe de 200 à 10 000 appels imbriqués — une somme
+récursive jusqu'à 300 était refusée à tort — et le message ne préjuge plus de la
+cause : « limite de récursion atteinte (10 000 appels imbriqués) : vérifiez la
+condition d'arrêt ». Le budget d'un million de tours par boucle est inchangé.
+
+**Morceaux contradictoires, dès la déclaration.** Deux morceaux qui donnent deux
+valeurs au même point n'étaient signalés qu'à l'appel en ce point. La fonction
+est désormais évaluée, à sa déclaration, aux bornes écrites dans ses conditions :
+`1 si x ≥ 0`, `2 si x ≤ 0` est signalé en x = 0. C'est une erreur démontrée ;
+docdg ne prétend pas pour autant avoir vérifié le reste du domaine.
+
+**Repère orthogonal.** Le refus en bloc était excessif. Avec les longueurs des
+vecteurs de base — `<Soit>(O ; i ; j) un repère orthogonal du plan tel que
+‖i‖ = 2 et ‖j‖ = 1` —, la norme, le produit scalaire, l'angle et le projeté
+orthogonal se calculent, chaque terme pondéré par le carré de la longueur de son
+axe, y compris dans le calcul affiché : ‖u‖ = √(3² × 2² + 4²) = 2√13. Sans
+longueurs, le refus dit lesquelles déclarer ; dans un repère quelconque, il dit
+qu'il faudrait aussi les angles des vecteurs de base. La graine du CAS est
+régénérée.
+
+## 4.0.0 — Le repère se déclare ; suite explicite, polynôme, intervalle et cercle (10 novembre 2026)
+
+**Le repère devient un objet déclaré, et sa nature compte.** Le repère
+n'existait que comme cadre de figure (`<Tracer>dans un repère où…`). Il se
+déclare désormais nom puis type : `<Soit>(O ; i ; j) un repère orthonormé du
+plan`, `<Soit>(O ; i ; j ; k) un repère orthonormé de l'espace`, ou
+`orthogonal`, ou sans adjectif pour un repère quelconque. La phrase est composée
+avec ses vecteurs. Surtout, la nature déclarée garde les calculs : la norme, la
+distance, le produit scalaire, l'angle et le projeté orthogonal ne se calculent
+par les coordonnées que dans un repère orthonormé, et `<Calculer>la norme de u`
+est refusé, avec sa raison, si le repère déclaré ne l'est pas. Sans repère
+déclaré, rien ne change. Le nombre de vecteurs est contrôlé contre l'espace.
+
+**Quatre déclarations que le bandeau proposait sans que le moteur les
+réalise.** Une suite explicite et un polynôme se posent comme une fonction —
+`<Soit>v une suite définie par v(n) = (n + 1) / (2n + 3)`, `<Soit>P un polynôme
+défini par P(X) = X³ − 2X + 1` —, s'affichent sous leur vrai nom (« Soit (vₙ)
+la suite définie par… », « Soit P le polynôme défini par… ») et se calculent :
+`#{v(3)}` donne 4/9, `#{P(2)}` donne 5. Un intervalle et un cercle reçoivent un
+nom que les commandes suivantes comprennent : `<Soit>I un intervalle tel que
+I = [0 ; 1]`, puis `une fonction de I dans ℝ` ; `<Soit>C un cercle de centre A
+et de rayon 3`, puis `<Tracer>le cercle C`. Chacune a son refus, avec la forme
+attendue. Le complexe n'est pas rétabli : un nombre se déclare par
+`soit z ∈ ℂ tel que z = 1 + i`. Le bandeau retrouve six objets, dont le repère
+du plan et celui de l'espace : 658 choix, tous composés par le test.
+
+## 4.0.0 — Audit du bandeau : chaque choix compose (10 novembre 2026)
+
+**Tout choix du bandeau est composé par le moteur, et un test le garde.** Un
+modèle inséré d'un clic pouvait aboutir à une alerte : `<Montrer>que f est
+croissante…` n'avait pas de corps. L'audit a composé les 659 insertions du
+bandeau — actions, mathématiques, programmation, couleurs — avec leur préalable :
+613 composaient, 46 échouaient, toutes parmi les actions. Trente-neuf sont
+corrigées d'après les exemples du dépôt : blocs munis de leurs accolades
+(`<Tracer>dans un repère… { }`, `<Étudier>le second degré { }`, programmes de
+calcul, tableau de proportionnalité), données bien formées (statistiques en
+barres, camembert, histogramme, nuage, boîte à moustaches ; arbre de
+probabilité), bon verbe (les polynômes caractéristique et minimal se demandent
+par `<Calculer>`), exemples valides (rosace à 8 pétales, `E = m * c^2`, matrice
+stochastique), préalables complets (fonctions, vecteurs, points, plans, droites),
+balise d'image à attributs. Sept sont retirées, que le moteur ne réalise pas :
+six `<Soit>` — suite explicite, cercle, repère, intervalle, complexe, polynôme —
+et `<Afficher>le type d'une variable`. Le bandeau compte 652 choix, tous
+composés par le test `chaque_choix_du_bandeau_compose_sans_alerte` ; un second
+test compose chacun des 106 symboles en phrase et en formule.
+
+**Un défaut du moteur trouvé par l'audit.** L'équation d'un plan n'acceptait que
+le tiret : `<Soit>P un plan d'équation 2x + y − z = 3`, écrit avec le signe moins
+typographique, n'était pas comprise, et la commande qui suivait répondait « non
+prise en charge ». Le signe moins est désormais lu comme partout ailleurs.
+
+Les motifs des préalables ne citent plus `Soient`, verbe disparu.
+
+## 4.0.0 — Les rubans en cascade adoptent la présentation de la maquette A (10 novembre 2026)
+
+**Une seule présentation pour les trois rubans en cascade.** typst36 avait
+repris de la maquette A son étage de domaines, mais pas son habillage, et les
+seules Actions en profitaient. Actions, Mathématiques et Programmation suivent
+désormais le même modèle : chaque étage dans un cadre arrondi titré, chaque choix
+sous la forme d'une pastille bordée à liseré coloré, avec son effectif en gris,
+et des rangées qui passent à la ligne au lieu de défiler. Le liseré dit l'étage
+(bleu ciel, vert, or) ; les domaines des actions et leurs objets gardent la
+couleur de leur domaine, la même sous tous les verbes. La logique des cascades —
+messages, insertions, filtres de matière et de niveau — est inchangée.
+
+## 4.0.0 — Le bandeau des actions gagne un étage de domaines (10 novembre 2026)
+
+**Plus de défilement horizontal dans les actions.** Dix verbes sur trente-sept
+débordaient de leur rangée d'objets — `<Calculer>` en comptait 76, `<Tracer>` 33,
+`<Soit>` 29. Chaque objet du classeur porte désormais un champ `domaine`, parmi
+douze domaines communs à tous les verbes : nombres et calcul, grandeurs et
+mesures, géométrie plane, géométrie de l'espace, fonctions et analyse, analyse
+vectorielle, algèbre linéaire, arithmétique et algèbre, probabilités et
+statistique, physique et chimie, rédaction et corpus, mise en page. Au-delà de
+dix objets, un étage de domaines s'intercale entre le verbe et ses objets ; les
+vingt-sept autres verbes gardent leur rangée unique. La rangée la plus chargée
+compte dix-sept objets, et les rangées des domaines et des objets passent à la
+ligne au lieu de défiler. Le domaine est une donnée du classeur, non un calcul de
+l'interface : un objet ajouté plus tard choisit le sien une fois pour toutes.
+Trois tests le gardent : tout objet a un domaine connu, l'étage couvre tout le
+verbe et n'apparaît qu'au-delà de dix objets, aucune rangée ne dépasse dix-sept.
+
+## 4.0.0 — Les deux-points d'un dictionnaire et d'un objet suivent la typographie française (10 novembre 2026)
+
+**`Marche : 5`, et non plus `Marche: 5`.** L'affichage d'un dictionnaire et
+d'un objet collait les deux-points à la clé ou à l'attribut, alors que docdg
+espace déjà le point-virgule (`{1 ; 2 ; 3}`). Une espace insécable précède
+désormais les deux-points : `{Marche : 5 ; Bus : 10}`, `Point(abscisse : 3 ;
+ordonnée : 4)`. La forme relisible interne, que le moteur relit, et le rendu
+HTML historique conservé pour référence ne changent pas.
+
+## 4.0.0 — Conteneurs : l'ordre des éléments et les clés de dictionnaire (10 novembre 2026)
+
+**Un élément réaffecté suit l'ordre des lignes.** La coupure d'un paragraphe aux
+instructions de premier niveau ne reconnaissait pas l'écriture d'un élément :
+après `l[1] ← −3` ou `d["Bus"] ← 10`, un `#l` ou un `#d` écrit *avant* montrait
+déjà la nouvelle valeur. Elle est désormais un point de coupure comme `x ← …`.
+
+**Une clé de dictionnaire se retrouve, avec ou sans guillemets.** Les clés sont
+rangées sans leurs guillemets, mais la lecture et l'écriture comparaient le
+texte brut de l'indice : `d["Bus"] ← 10` ajoutait une nouvelle clé `"Bus"` au
+lieu de modifier `Bus`, et `#{d["Bus"]}` ne la trouvait pas. Les deux passent
+désormais par la même normalisation : une chaîne littérale perd ses guillemets,
+une variable chaîne donne sa valeur (`d[mode]`). Rappel : les éléments d'une
+liste se comptent à partir de 0 — `l[0]` est le premier.
+
+## 4.0.0 — Une fonction se contrôle à sa définition (10 novembre 2026)
+
+**Une fonction fautive se dit, même jamais appelée.** Le corps d'une fonction
+n'était examiné qu'à l'appel : une fonction jamais appelée passait sans aucun
+diagnostic, et le refus de `t = t + 1` restait enfoui dans un corps que personne
+n'affichait. La réécriture contrôle désormais chaque fonction à sa définition,
+avec les règles mêmes de l'exécuteur : le corps ne contient que des instructions
+(`soit`, `←`, `si`, `pour`, `tant que`, `retourner`) ; toute variable réaffectée
+est déclarée d'abord — paramètre, déclaration locale, variable de boucle ou nom
+déclaré plus haut dans le document ; la fonction retourne une valeur. Une
+fonction fautive est remplacée par ses diagnostics, chacun à sa ligne et sans
+décaler les suivantes. Sur `t ← t + 1`, `t = t + 1`, `#t` sans `retourner`, les
+quatre fautes sont dites.
+
+## 4.0.0 — `=` déclare, `←` réaffecte ; les valeurs suivent l'ordre des lignes (10 novembre 2026)
+
+**Le signe `=` est réservé à la déclaration.** Après `soit`, `=` donne sa
+valeur à la variable (`soit n ∈ ℕ tel que n = 12`) ; partout ailleurs, la seule
+réaffectation est la flèche des manuels d'algorithmique, `n ← 13`, y compris pour
+un élément (`t[2] ← 5`). Hors d'une déclaration, `a = …` est une égalité du
+texte : « a = #a et b = #b » comme « a = 3 et b = −5 » s'affichent, et `a`
+n'est pas modifié. Dans le corps d'une fonction ou d'une classe, où la prose n'a
+pas sa place, `t = t + 1` est refusé avec la forme `t ← t + 1`, et le refus
+remonte proprement, sans balisage. Les blocs de données — un système, une
+matrice, un littéral sur plusieurs lignes — gardent leurs équations : la
+réécriture suit la pile des blocs ouverts et distingue données et instructions.
+Les exemples, les manuels et le bandeau écrivaient déjà la flèche ; 85
+réaffectations des tests d'intégration sont migrées.
+
+**Les valeurs suivent l'ordre des lignes, même dans un paragraphe.** Un
+paragraphe était préparé d'un bloc : ses affectations s'exécutaient toutes, puis
+sa prose était interpolée avec les valeurs de fin — « A #a », écrit avant
+`a ← a + 1`, montrait déjà la nouvelle valeur. Le segment est désormais coupé
+avant chaque instruction de premier niveau (`soit`, `←`, `pour`, `si`,
+`tant que`) précédée d'une interpolation, puis recollé par un simple retour à la
+ligne : la mise en page est inchangée, le générateur aléatoire n'est réensemencé
+qu'une fois, et les documents sans ce cas ne passent pas par la coupure.
+
+**`COMPILER.md` décrit le linter réel.** Il présentait encore celui de la 3.9
+(« article après le deux-points ») ; il dit maintenant que `cargo app lint`
+demande son verdict au moteur, et donne la commande de secours
+`cargo run -q -p xtask -- lint`.
+
+## 4.0.0 — Une égalité dans le texte n'est pas une réaffectation ; l'alias `cargo app` (10 novembre 2026)
+
+**« a = #a et b = #b » s'affiche.** Une ligne qui commençait par une variable
+déclarée suivie de `=` était toujours prise pour une réaffectation, et une
+phrase comme « a = #a et b = #b » échouait (« … n'est pas calculable »). Le
+membre droit d'une réaffectation est une expression : il ne contient ni `#`,
+l'interpolation du texte, ni un second `=` hors parenthèses. Une ligne qui en
+contient est une phrase. La règle était écrite trois fois, différemment —
+`ligne_affectation`, la réaffectation des conteneurs, la normalisation des
+affectations, qui excluait déjà `#` mais pas le second `=` — ; elle n'existe
+plus qu'une fois. `n = 13`, `n = n + 1`, `n ← n + 4` et `v = {3 ; 4}` restent
+des réaffectations. Pour une égalité typographiée en mathématiques, `$a = #a$`.
+
+**`cargo app` existe.** `COMPILER.md` documentait l'alias `cargo app` (vers le
+crate `xtask`), mais `.cargo/config.toml` n'avait jamais été livré : la commande
+était introuvable. Il est ajouté ; `cargo app lint` relit les 42 fichiers publiés
+sans écart.
+
+## 4.0.0 — Plus de « soient », corpus aux titres distincts, dépôt réduit aux documents normatifs (9 novembre 2026)
+
+**Plus de « soient », ni mot-clé ni balise.** `soit` est invariable comme
+`<Soit>` : plusieurs nombres se posent par `soit a, b ∈ ℤ tels que a = 3 et
+b = −5` (les noms se séparent par une virgule ou par « et »), plusieurs
+conteneurs par `soit u, v des vecteurs de 2 rationnels tels que u = {1 ; 2} et
+v = {3 ; 4}`, une déstructuration par `soit q, r ∈ ℤ tels que (q ; r) =
+divise(17 ; 5)`, un bloc par `soit { … }`, une variable par ligne. `soient` et
+`soient { … }` sont refusés avec la forme corrigée. L'étape `soit{…}` d'une
+démonstration reste une étape : dans un bloc `<Montrer>`, `<Démontrer>` ou
+`démonstration … {`, elle n'ouvre jamais un bloc de déclarations. Seule
+subsiste l'écriture interne `soient`, que produit la réécriture et que l'auteur
+ne tape jamais.
+
+**Deux démonstrations aux titres distincts.** Banach–Steinhaus et Liouville
+portaient chacun deux rédactions de la même méthode sous un titre identique ; les
+deux sont gardées, la plus spécifique prenant le sien (« … par le théorème de Baire
+sur les fermés de niveau », « … par majoration de la dérivée sur des cercles de
+rayon croissant »), dans la base et dans le catalogue exporté. Un test interdit
+désormais deux titres identiques dans un même énoncé.
+
+**Le dépôt ne garde que les documents normatifs.** Les rapports de chantier, les
+états consolidés, les recettes, les journaux de correctifs, `BENCH.md`,
+`HYBRIDE.md` et `PUBLICATION_3_9.md` sont retirés, comme `ETAT_FONCTIONNALITES.md`
+et `QUALIFICATION_WINDOWS_LINUX.md`, qui décrivaient la 3.9 et sa chaîne WebView.
+Restent `docs/` — `CAHIERS`, `CHAPITRES_COUSUS`, `COMPILER`, `INTERFACE`,
+`NOTATIONS_SUPERIEUR`, `REGLES-CORPUS`, `REPLIS_NATIFS_4_0`, `RESERVES_POUR_4_1`,
+`TYPAGE_OBLIGATOIRE` — et, à la racine, le README, les manuels, le guide, le
+CLUF et les licences de fontes. Le contrat de test des annotations publiques
+passe dans `docs/contrats/`. Deux liens du README étaient déjà morts
+(`VIRTUALISATION_ET_TUILES.md`, `RAPPORT_CHANTIER_08_08.md`) ; ils sont retirés.
+Le relevé des replis natifs est refait : 96 sources, aucune nouvelle, cinq
+résolues ; la graine du calcul formel gagne la courbe de `x² − 4x + 3`.
+
+**`cargo app lint` relit enfin du 4.0.** Il signalait 546 écarts sur des
+déclarations valides, parce qu'il recopiait la grammaire de la 3.9 ; il
+interroge maintenant le moteur lui-même (`controle_de_declaration`), et ne
+vérifie plus les jeux de test, qui contiennent volontairement des formes
+refusées et sont exécutés par la suite. Résultat : 0 écart sur les 42 fichiers
+publiés.
+
+## 4.0.0 — Soit invariable, gabarits de texte, prose « nom = … », audit avant publication (9 novembre 2026)
+
+**« Soit » est invariable ; « <Soient> » n'existe plus.** Comme au tableau
+(« Soit A et B deux points »), la balise `<Soit>` sert au singulier comme au
+pluriel. `<Soient>` est refusé, ligne ou bloc, avec la forme corrigée ; la
+phrase rendue dit « Soit A et B les points » dans les deux rendus, le
+historique écrivant encore « Soient ». L'action « Soient » du bandeau est
+retirée, comme ses dernières acceptations internes : une phrase de prose qui
+commence par « Soient A et B… » n'est plus jamais lue comme une déclaration.
+
+**Les gabarits à corps de texte fonctionnent.** Le README documentait
+`soit bonjour{nom} = Bonjour #nom !` et `soit carre{x} = #{x^2}`, que le rendu
+natif refusait par un message sur une « variable de boucle ». Ils s'enregistrent
+désormais et s'appellent par `<bonjour{Jean}>` comme par `<bonjour Jean>` ; un
+gabarit peut finir par un point.
+
+**Un nom jamais déclaré ne se réaffecte pas.** « Moyenne = #{…} » est de la
+prose, comme dans un texte mathématique ; la réaffectation d'une variable
+déclarée reste une instruction.
+
+**Audit avant publication.** Le balayage des exemples, des manuels, de la
+documentation et des 561 modèles du bandeau ne trouve plus d'ancienne forme
+enseignée ; il a corrigé le README (un bloc qui mêlait contre-exemple et
+pseudo-commentaires `--`, docdg n'ayant pas de commentaire, et une phrase qui
+présentait la déstructuration de la 3.9 comme la forme prévue). La base du
+corpus est intègre : 1606 énoncés, 602 démonstrations, 234 grandeurs, 122
+cadres, aucune référence orpheline, aucun doublon d'énoncé ou d'alias, aucun
+défaut d'encodage. Deux énoncés (Banach–Steinhaus, Liouville) portent deux
+rédactions de la même méthode sous un titre identique : question de contenu,
+laissée à l'auteur. La liste d'attente du test des manuels est vide.
+
+## 4.0.0 — Diagnostics en vocabulaire 4.0, morceaux contrôlés, reliquat de l'oracle soldé (9 novembre 2026)
+
+**Une fonction mathématique par morceaux a une valeur en chaque point.** Pour
+une fonction `<Soit>`, deux conditions vraies qui donnent des valeurs
+différentes sont dites (« g n'est pas bien définie en x = 2 : les conditions
+« x > 0 » et « x > 1 » sont vraies toutes deux et donnent 1 et 2 »), comme
+l'absence de condition vraie sans `sinon` (« g n'est pas définie en x = 0 »),
+au lieu du « il manque « retourner » » de l'algorithmique. Un raccord où deux
+morceaux donnent la même valeur, comme |x| en 0, est admis. Les fonctions
+algorithmiques gardent la règle de la première condition vraie.
+
+**L'appartenance se teste dans toute condition.** `x ∈ [0 ; 1]` n'était jamais
+traduit : la condition valait faux en silence, dans un `si`, un `tant que` ou un
+morceau. Intervalles ouverts ou fermés et ensembles écrits sur place
+(`n ∈ {2 ; 3}`) deviennent des comparaisons explicites.
+
+**Les messages parlent 4.0.** Pas de point final après une déclaration (refus
+uniforme, forme sans point dans le message) ; une déclaration `<Soit>` non
+reconnue montre les formes attendues ; une valeur hors de son ensemble conseille
+« déclarez-le dans ℤ, en écrivant « ∈ ℤ » », boucles comprises. Trois messages
+de `conteneurs.rs` citaient encore la 3.9. Un test relit désormais chaque
+exemple cité entre guillemets dans les messages de 37 fichiers, gabarits
+instanciés, et exige que la grammaire l'accepte.
+
+**La famille `soient`.** La déclaration multiple de la 3.9 (`soient a, b: des
+entiers relatifs = 3 ; -5`) passait en silence ; elle est refusée avec sa forme
+4.0, calculée. Plusieurs conteneurs se déclarent ensemble : `soient u, v des
+vecteurs de 2 rationnels tels que u = {1 ; 2} et v = {3 ; 4}`. Un nombre de
+valeurs différent du nombre de noms est dit (« 3 variables, 2 valeurs »). Le
+bloc `soient { … }` est conservé, comme `<Soit>{ … }`, avec des lignes 4.0 ;
+une ligne 3.9 y est refusée avec sa forme corrigée. Le modèle du bandeau, qui
+insérait de la 3.9, est migré. `soit p des Point tel que …` est transmis au
+moteur, qui dit qu'une instance de classe est singulière.
+
+**Le contrat de typage est en 4.0.** `docs/TYPAGE_OBLIGATOIRE.md` est réécrit ;
+chaque forme qu'il cite, admise ou refusée, a été vérifiée par le moteur.
+`docs/BILAN_TYPAGE_3_9.md` porte un bandeau historique.
+
+**Le reliquat de l'oracle est soldé.** Les treize échecs de la suite
+d'intégration étaient des sources de tests en 3.9 et des attentes écrites avant
+le vrai signe moins ; elles sont migrées sans changement d'intention. Les 69
+binaires passent.
+
+## 4.0.0 — La boucle sur un ensemble écrit sur place, droites et plans affichés (9 novembre 2026)
+
+**`pour k ∈ {1 ; 3 ; 5}` se parcourt enfin.** Le README l'annonçait (« est
+également admise ») ; le moteur la refusait. La variable prend le plus petit
+ensemble qui contient toutes les valeurs, par la règle déjà appliquée à un
+nombre déclaré : ℕ pour `{1 ; 3 ; 5}`, ℤ pour `{−1 ; 2}`, 𝔻 pour `{0,5 ; 1}`, ℚ
+pour `{1/3 ; 2}`, une chaîne de caractères pour des mots (`{Léa ; Hugo ;
+Anaïs}`). L'ordre écrit et les doublons sont conservés. Un ensemble vide, des
+éléments mêlés (`{1 ; a}`) ou composés (`{{1 ; 2} ; {3}}`) sont refusés avec la
+forme attendue. Une source inconnue (`pour x ∈ truc`) dit enfin qu'elle n'est
+pas un conteneur et que le texte s'écrit entre guillemets, et un paramètre de
+fonction se parcourt selon son type déclaré, piles et files comprises (« on ne
+parcourt pas une pile : on la vide, en la dépilant »), avec restauration du
+conteneur homonyme à la sortie de la fonction. L'exemple des prénoms d'`Ecole.md`
+fonctionne.
+
+**Trois tests avaient changé de sens à la migration.** `dans [a, b]` et `dans
+[100, 400]` sont des listes de deux valeurs, que l'outil de migration avait
+converties en intervalles ; `statistiques.rs` parcourait 301 valeurs au lieu de
+deux. Ils sont rétablis avec la nouvelle écriture.
+
+**Plans et droites sous leur vrai nom.** `<Soit>Q un plan d'équation …`
+affichait « le plan 𝒫 », le nom étant écrit en dur ; la droite, elle, ne
+s'affichait pas. Elle s'énonce maintenant « Soit la droite d passant par le
+point de coordonnées (1 ; 0 ; 2) et de vecteur directeur de coordonnées (1 ; 1 ;
+−1). », comme le plan « Soit le plan 𝒬 d'équation … ».
+
+## 4.0.0 — Récursion sûre, appels des fonctions `<Soit>`, anciennes formes fermées (9 novembre 2026)
+
+**La récursion ne plante plus l'application.** La borne de 200 appels
+imbriqués existait ; ce qui manquait, c'était la pile : 200 niveaux dépassent
+les 2 Mio d'une tâche `tokio` en débogage, et le dépassement abat le processus
+sans appel possible. `appelle` s'exécute désormais sur une pile extensible
+(`stacker`, déjà présent dans le verrou via Typst) : la récursion sans fin
+rend « la récursion dépasse 200 appels imbriqués : chaque appel doit se
+rapprocher du cas de base », et une récursion de 150 niveaux aboutit, quel que
+soit le thread. Trois tests de la lib l'exercent sur une pile de 2 Mio.
+
+**Une fonction `<Soit>` se calcule dans le texte.** `<Soit>f une fonction
+définie par f(x) = x²` suivi de `#{f(3)}` affichait « … » : seules les
+fonctions par morceaux étaient inscrites au registre d'appel. Toute fonction
+signée l'est maintenant, dans les trois registres, avec des types tolérants
+pour les domaines (`ℝ ∖ {2}`, `]−1/3 ; 1]`, `ℕ`) ; hors domaine, le message
+est exact (« division par zéro : 1 ne se divise pas par 0 »).
+
+**Anciennes formes fermées.** Le bloc `<Soit>{ … }` contrôle chaque ligne comme
+une déclaration seule ; une ancienne forme, ou une déclaration qui ouvre sa
+propre accolade, remplace le bloc par ses diagnostics sans décaler les lignes.
+La quantité avant les noms (`<Soient>3 points A, B et C …`, `<Soit>deux droites
+d et e …`) est refusée avec la forme corrigée calculée. Le README, son
+`exemples/geometrie.txt` et deux tests, qui enseignaient ou figeaient ces
+formes, sont migrés ; la prose du README, qui disait encore « le subjonctif
+s'accorde » et `un point A(2;7)`, est corrigée.
+
+**Un refus qui citait une ligne terminée par `{` faisait échouer tout le
+document** (`<Soit>S, un système, défini par {` : « groupe de style non
+terminé »). La ligne citée est désormais équilibrée.
+
+**Trois formes de la 3.9 passaient encore en silence**, parce qu'elles sont la
+forme *interne* que la réécriture produit elle-même : la signature typée
+(`soit carre(x: un entier): un entier = …`, y compris sans argument), la
+déstructuration typée (`soit (q: un entier ; r: un entier) = …`) et la
+variable à p-uplet (`soit c: (un entier ; une chaîne) = …`). Elles sont refusées
+avec la forme 4.0 calculée (« soit carre : ℤ → ℤ, x ↦ x * x », « soient q, r ∈ ℤ
+tels que (q ; r) = … »), mais **seulement hors d'une classe** : les méthodes
+(`soit cri(): une chaîne de caractères = …`) restent la syntaxe vivante de la
+programmation objet, dont la grammaire fera l'objet d'un chantier propre. Le
+bloc du README sur le p-uplet et cinq entrées de tests sont migrés.
+
+**Les manuels sont exécutés.** `qualification_manuels` compose chaque bloc
+`docdg` des huit manuels par le rendu natif de l'application — plus strict que
+le test du README, qui passe par le rendu historique — et refuse toute alerte.
+Un bloc ```` ```docdg refusé ```` déclare un contre-exemple volontaire, qui doit
+alerter. Quatre blocs sont en attente, nommés avec leur motif : la boucle sur un
+ensemble littéral (`Ecole.md`), les macros à corps de texte et la ligne de
+prose `Moyenne = …` du README, que le rendu natif refuse alors que le manuel les
+documente. Chacun doit continuer d'échouer, faute de quoi le test force à le
+retirer de la liste.
+
+## 4.0.0 — Droites, plans et champs de vecteurs, nom puis type (9 novembre 2026)
+
+Les trois derniers objets déclarés à l'ancienne suivent le patron commun :
+`<Soit>d une droite passant par …`, `<Soit>P un plan d'équation …`,
+`<Soit>F un champ de vecteurs de ℝ³ dans ℝ³ défini par …` ; les anciennes
+tournures déclaratives sont refusées avec la forme attendue, sans toucher aux
+phrases libres (« Soit le plan muni d'un repère »). La droite se déclare
+désormais dans le plan comme dans l'espace, par un point et un vecteur
+directeur ou par deux points, nommés ou en coordonnées, le vecteur directeur
+étant calculé : la droite par deux points que proposait le bandeau était
+jusqu'ici refusée. Les motifs des préalables du bandeau suivent la nouvelle
+grammaire, quel que soit le verbe : un préalable déjà déclaré (`<Soit>f une
+fonction …`, `<Soit>f : ℝ → ℝ, …`, `<On pose>P un plan …`) n'est plus réinséré.
+Migration : 29 lignes, ensembles `RR^3` récrits `ℝ³`.
+
+## 4.0.0 — Qualification indépendante des empreintes de source (9 novembre 2026)
+
+Le contrôle PDF de clôture tenait une réserve propre à `publication2`,
+déclenchée par l'empreinte exacte de sa source : l'extraction de texte du PDF
+restitue mal une ligature formée à cheval sur un point de césure
+(« Suf­frage » lu « Suf­ff rage »). Toute édition de la source — ici le retrait
+des virgules dans ses déclarations de styles — désarmait la réserve et faisait
+échouer le contrôle sans défaut de rendu. La règle est désormais générale :
+un fragment attendu portant une ligature césurée (`f­f`, `f­i`, `f­l`) est
+remplacé par un autre fragment constant de la même source, et le
+remplacement est consigné, quel que soit le document. Le détecteur de
+déclarations du banc pédagogique lit la grammaire sans virgule (`2 points`,
+`une fonction`) ; l'empreinte de sa source « trigonalisation » suit la
+migration.
+
+## 4.0.0 — Le type suit le nom sans virgule (9 novembre 2026)
+
+On écrit « Soit f une fonction », « Soit n un entier tel que… », « Soient A,
+B et C trois points » : le type est un attribut, non une apposition, et
+l'usage ne l'entoure pas de virgules. Toutes les déclarations suivent
+désormais cette écriture — variables (`soit prix un entier tel que prix =
+150`), styles (`soit titre un style défini par <…>`), conteneurs, fonctions
+(`<Soit>f une fonction définie par f(x) = x²`, `f et g 2 fonctions de ℝ dans ℝ
+définies par …`), points et vecteurs (`<Soit>D(6 ; −1) un point`,
+`<Soit>A(1 ; 1), B(5 ; 3) et C(2 ; 4) 3 points`), suites, systèmes, matrices.
+Les seules virgules restantes séparent les noms entre eux. Une lecture
+commune de la tête de déclaration — les noms, puis `un`, `une` ou un nombre
+— sert à toutes ; la forme à virgules est refusée avec sa version corrigée
+dans le message. Un n-uplet se type entre parenthèses (`soit c (un entier ;
+une chaîne de caractères) tel que c = …`). Les synonymes de « Soit » (`<On
+pose>`, `<On considère>`, `<On note>`) suivent la même grammaire.
+
+Migration : 916 lignes — exemples, README, guide, manuels, référence
+normative du typage, sources de tests et bandeau.
+
+## 4.0.0 — Les objets se déclarent par apposition (9 novembre 2026)
+
+Points, vecteurs, suites, systèmes et matrices suivent le patron des
+fonctions : le nom, le type introduit par l'article — ou par le nombre en
+chiffres, contrôlé —, puis le lien propre au type. Le point et le vecteur
+ont deux formes : courte, coordonnées accolées aux noms comme pour un vecteur
+(`<Soit>A(1 ; 1), B(5 ; 3) et C(2 ; 4), 3 points`, la tournure des énoncés,
+sans répéter les noms), et longue (`<Soit>A, B et C, 3 points, de coordonnées
+respectives …`). La suite est « définie par », le système « défini par » son
+bloc, la matrice « définie par » son bloc ou, d'une ligne, « telle que M =
+{{1 ; 2} ; {3 ; 4}} ». Genre, nombre, accord et lien fautifs sont refusés avec
+la forme attendue, comme les anciennes tournures (`<Soient>les points A(…)`,
+`<Soit>un point A(…)`, `<Soit>la matrice M {`). `<Soit>` reste invariable au
+pluriel ; `<Soient>` est admis et rendu tel quel.
+
+Une fonction algorithmique sans argument, hors des classes, se déclare par
+son seul ensemble d'arrivée : `soit dé, une fonction à valeurs dans ℕ,
+définie par dé() = …`. Le codomaine implicite du registre simplifié est ℝ.
+
+Migration : 178 lignes de sources et de tests, et le bandeau, dont l'action
+« Soient » disparaît au profit de « Soit ». Le banc pédagogique qualifie
+nativement les déclarations groupées, que l'oracle historique écrit encore
+« Soient » ; l'empreinte de sa source « trigonalisation » suit la migration.
+
+## 4.0.0 — Une fonction se déclare par apposition (9 novembre 2026)
+
+La déclaration d'une fonction suit désormais le patron de toute déclaration :
+le nom, son type introduit par l'article, puis sa définition — « f, une
+fonction, définie par f(x) = x² ». Trois registres, au choix de l'auteur :
+simplifié (`t, une fonction, définie par t(x) = tan(x)`, ensembles implicites,
+fonction de la variable réelle), rédigé (`f, une fonction de ℝ dans ℝ, définie
+par f(x) = x²`, ensembles en mots), formel (`f : ℝ → ℝ, x ↦ x²`). Le simplifié
+se rend en phrase (« Soit t la fonction définie par t(x) = tan(x). ») ; le
+rédigé et le formel en tableau à trois colonnes, à gauche : la variable calée
+sous l'ensemble de départ, ⟼ sous ⟶, l'image sous l'ensemble d'arrivée.
+Plusieurs fonctions se déclarent avec leur nombre en chiffres, contrôlé
+(`f et g, 2 fonctions, définies par …`) ; `<Soit>` est invariable, comme pour
+poser les données d'un problème, `<Soient>` restant admis et rendu tel quel.
+Le lien est « définie par » ; « telle que », le genre (« un fonction »), le
+nombre et l'accord du participe fautifs sont refusés avec la forme attendue,
+de même que les anciennes formes (`une fonction f(x) = …`, `la fonction f(x)
+= …`, `la fonction f : ℝ → ℝ définie par …`). Une fonction algorithmique
+(`soit`) donne toujours ses ensembles et se déclare une par ligne. Morceaux et
+récursion valent dans les trois registres.
+
+La migration repart des sources d'origine : les déclarations sans domaine
+passent au registre simplifié, au lieu des domaines devinés ; « définie sur
+D » devient le registre rédigé ; les déclarations formelles écrites par
+l'auteur restent intactes. Bandeau (une entrée par registre, « deux
+fonctions », préalables au nouveau motif), exemples, README, manuels et
+sources de tests suivent.
+
+## 4.0.0 — Le vocabulaire du supérieur, jusque dans le rendu (8 novembre 2026)
+
+Le nouveau vocabulaire est le cœur de la 4.0 ; il restait pourtant invisible :
+le bandeau insérait les formes 3.9 (`<Soit>une fonction f(x) = x^2 - 5x + 6`,
+`2*x`, `RR^+`) et la couche de réécriture retraduisait `<Soit>h : ℝ → ℝ, x ↦ x²`
+en « Soit h la fonction définie par h(x) = x² », perdant ensembles et flèche.
+
+**La fonction se compose comme au tableau.** La signature est lue et gardée par
+l'objet fonction ; formelle (`f : ℝ → ℝ, x ↦ x²`) ou rédigée (`la fonction f :
+ℝ → ℝ définie par f(x) = x²`), la déclaration prend un seul rendu, hors texte,
+à gauche : « Soit f : ℝ ⟶ ℝ », puis « x ⟼ x² », la variable sous l'ensemble
+de départ et ⟼ sous ⟶. Un nom de plusieurs lettres se compose droit, jusque
+dans ses appels ; les morceaux prennent l'accolade des cas, « si » et
+« sinon » en colonne. Une définition par morceaux ou récursive se calcule
+nativement (5! = 120), SymPy ne suivant pas une récursion utilisateur.
+`<Soient>f : … et g : …` déclare au pluriel ; `#g(3 ; 4)` interpole un appel.
+
+**Les ensembles décorés.** `ℝ²*+` comme `ℝ*+²` donnent ℝ avec 2 en exposant et
+∗+ en indice, en prose comme entre dollars ; `ℕ*`, `ℝ*−`, `ℤ−` de même. Les
+décorations se tapent sur la ligne de la lettre.
+
+**Le calcul suit l'écriture.** Les exposants Unicode se calculent (`x² + y²`,
+`7²`), sans toucher aux chaînes ; `soient a, b ∈ ℤ tels que a = 3 et b = −5`
+déclare et contrôle chaque valeur ; `pour n ∈ ℕ, allant de 2 à −1 par pas
+de −1` parcourt dans le sens écrit et signale la sortie de ℕ (il ne
+produisait rien). Le vrai signe moins remplace le trait d'union devant un
+nombre ou une lettre et entre deux opérandes numériques, jamais dans une
+source LaTeX ni entre deux mots.
+
+**Migration.** Les formes 3.9 de fonction sont refusées avec la forme du
+supérieur en exemple. Bandeau (57 entrées, six modèles nouveaux : fonction
+rédigée, par morceaux, récursive, formelle, algorithmique), exemples,
+README, guide, manuels et sources de tests passent au 4.0 ; les domaines
+reprennent ceux posés dans `analyse.txt`. Les comparaisons A/B avec
+l'oracle historique cèdent, sur les seuls extraits qui déclarent une
+fonction, à une qualification native de la forme canonique.
+
+## 4.0.0 — Les tableaux s'alignent d'eux-mêmes (8 novembre 2026)
+
+Dans le volet Source, un tableau se tapait à l'aveugle : dès qu'une donnée
+dépassait un arrêt de tabulation, ses voisines décrochaient, et les rangées
+de continuation sous une entête fusionnée ne tombaient plus sous leur
+colonne. Le transpileur gagne `layout/alignement.rs` : il attribue à chaque
+jeton sa colonne par les règles mêmes de `lire_tableau` (pistes, entêtes,
+fusions `-` et `:`, profondeur des entêtes de rangée), puis pose des
+tabulations élastiques sur les arrêts de l'éditeur, tous les huit
+caractères comme cosmic-text. La grammaire admettant une ou plusieurs
+tabulations, seule la présentation change, et un filet le garantit : le
+tableau est relu avant et après, l'alignement est abandonné si la lecture
+diffère. Les boucles gardent leur bloc, une rangée au crochet encore ouvert
+reste telle quelle, la forme englobante multiligne est reconnue, les
+tableaux de signes et d'avancement sont écartés, les fins de ligne Windows
+conservées. L'éditeur s'en sert à la tabulation, au retour à la ligne, au
+collage et à chaque insertion depuis le bandeau ; le curseur suit son
+jeton, une tabulation finale le fait attendre sous la colonne suivante, et
+un seul Cmd-Z annule la frappe et l'alignement. Le retour à la ligne
+reprend le retrait de la ligne précédente, l'augmente après une accolade
+ouvrante, et l'accolade fermante tapée sur une ligne vide le rend.
+README et guide l'exposent ; le guide et la règle normative du README
+écrivaient encore la réaffectation `n = 13` : c'est `n ← 13`.
+
+## 4.0.0 — Audit de pré-publication (8 novembre 2026)
+
+Deux régressions levées : le relevé des origines de segments excluait les
+déclarations, privant la ligne d'une déclaration de son ancre de
+défilement ; une occultation faisait porter sur la variance les assertions
+de l'écart type. La forme ouverte `<Ajuster>… aux données {…}` retombe sur
+le calcul : le corps est replié dans la description quand les lecteurs
+spécialisés ont tous décliné, sur le trajet natif comme sur l'oracle.
+« Avec des bordures » est refusé sur le tableau (les filets se tracent
+d'office), la grille lit enfin la couleur de « des bordures orange ». La
+graine du CAS, périmée depuis l'évolution de `cas.py`, ne se chargeait
+plus : régénérée (364 paires). Deux échappements doublés corrigés dans le
+corpus ; les 101 replis natifs restants consignés dans
+`docs/REPLIS_NATIFS_4_0.md`. Le filet du volet Source n'est plus recouvert
+par le fond de l'éditeur ; l'historique d'annulation passe en `VecDeque`.
+
+## 4.0.0 — Le focus insiste, l'affichage se dénude (8 novembre 2026)
+
+Le repli du bandeau fonctionnait mais le focus ne tenait pas : posé par
+l'opération au moment du message, il pouvait être repris par la fin du
+cycle du clic ou le retour d'un dialogue natif, et il fallait encore
+cliquer dans la source. `focalise_source` pose désormais le focus deux
+fois : immédiatement, puis par un second passage 60 ms plus tard
+(`FocusSource`), hors de toute rafale d'événements. Tous les chemins —
+insertions, Nouveau, Ouvrir, Enregistrer sous, Exporter — passent par
+lui. Le curseur, lui, était déjà au bon endroit : `jeton::ecrit` le pose
+à la fin de l'insertion, donc à la ligne suivante puisque chaque modèle
+se termine par un saut de ligne. Et les affichages du classeur quittent
+leurs crochets : « #x », « #a #b », « #x : #{d[x]} » — la forme nue est
+celle des interpolations éprouvées du langage, et l'entrée « valeur »
+historique s'y aligne. Le garde-fou des 81 modèles couvre la nouvelle
+forme comme l'ancienne.
+
+## 4.0.0 — Le bandeau rend la main après usage (8 novembre 2026)
+
+Insérer depuis le bandeau ou choisir une action du menu laissait le
+panneau déployé sur certains chemins et, surtout, ne rendait jamais le
+focus : il fallait recliquer dans la source pour continuer à écrire.
+L'éditeur reçoit un identifiant focalisable (`id_editeur`) et une
+méthode unique, `rend_la_main_a_la_source`, referme le panneau, la
+palette de symboles et la recherche, focalise l'éditeur et programme le
+recadrage du curseur — un défilement annoncé, donc un écho pour la
+synchronisation, jamais un geste. Elle est branchée sur toutes les
+insertions (modèles, symboles, encadrement, validation de la recherche
+syntaxique) ; les actions du menu Fichier focalisent l'éditeur à leur
+retour : Nouveau et Ouvrir avec leurs retours en tête, Enregistrer sous
+et Exporter à l'issue du dialogue, succès, échec ou abandon. La ligne
+insérée revient ainsi sous le curseur dans la source, et l'aperçu la
+recadre comme toujours par `garde_ligne_visible` à la composition
+suivante. Les panneaux-formulaires (Document, Styles) restent ouverts :
+on y enchaîne des réglages, pas des insertions.
+Test : `une_insertion_referme_le_bandeau_et_programme_le_recadrage`.
+
+## 4.0.0 — Le bandeau montre ce qu'il déclare (8 novembre 2026)
+
+Le garde-fou a nommé son premier défaut, et il était antérieur à la
+migration : « un caractère » n'a jamais été un type de valeur littérale
+— c'est un type de saisie, le moteur le dit en toutes lettres dans
+`conteneurs.rs` — et le bouton « soit e: un caractère = "A" » composait
+déjà un refus en 3.9. L'entrée devient ce que le langage définit :
+« soit e, un caractère, tel que e = <Saisir>{Quel caractère ?} ».
+Ensuite, chaque insertion qui fait naître une variable la montre :
+les déclarations, l'affectation groupée, la déliaison, les lois de
+tirage et les vingt-quatre modèles de statistiques et d'algèbre
+linéaire affichent leur(s) variable(s) par la forme prouvée « [#x] » ;
+la boucle « pour k ∈ ⟦1 ; 10⟧ » et le « tant que » affichent k à chaque
+tour ; le parcours quitte la liste pour le cas plus riche du
+dictionnaire — « pour x ∈ d » avec « [#x] : [#{d[x]}] », clé puis
+valeur. Les modèles à saisie n'affichent rien avant la réponse, à
+dessein. Enfin le diagnostic d'une boucle non typée enseignait encore
+la forme interdite par deux-points : il prescrit désormais
+« pour k ∈ ⟦1 ; 10⟧ », « pour x ∈ ℝ, allant de a à b par pas de p » ou
+« pour x ∈ conteneur », en accord avec le refus de
+`langage/superieur.rs`.
+
+## 4.0.0 — Le bandeau parle la notation du supérieur (8 novembre 2026)
+
+Le moteur refusait désormais, à raison, ce que la saisie automatisée
+insérait encore : les modèles du classeur dataient du typage 3.9 par
+deux-points. Les 81 modèles de l'onglet Programmation et le préalable
+« le type d'une variable » sont migrés vers la notation du supérieur,
+dans les formes exactes que les tests de `langage/superieur.rs`
+prouvent : ensembles par appartenance (« soit z ∈ ℤ tel que z = -7 »,
+ℕ ℤ 𝔻 ℚ ℝ ℂ 𝔹, saisies comprises), autres types par apposition
+(« soit nom, une chaîne de caractères, telle que nom = … », accord en
+genre), styles par « défini par », fonctions par signature
+(« soit la fonction carre : ℤ → ℤ définie par carre(x) = x × x » et
+« soit divise : ℤ² → ℤ², (a, b) ↦ … »), déliaison par
+« soient q, r ∈ ℤ tels que (q ; r) = … » — le p-uplet littéral est
+admis à droite —, boucles par « pour k ∈ ⟦1 ; 10⟧ » et « pour x ∈ l »,
+réaffectation par « ← », seul signe retenu, et conditions verbales
+(« est égal à »). Restent en l'état, parce que le transpileur les
+définit ainsi aujourd'hui : le bloc « soient { … } », « répéter … fois »
+et les membres de classe (champs sans « soit », méthodes signées).
+Le test `chaque_modele_de_programmation_compose_sans_refus` fait
+désormais composer chacun des 81 modèles et refuse tout « ⚠ » dans
+l'émission : le bandeau ne pourra plus se désaccorder du moteur en
+silence.
+
+## 4.0.0 — La page n'est remplacée qu'une fois sa texture montée (8 novembre 2026)
+
+Les vidéos ont tranché : le sautillement n'était pas un défilement mais
+une page blanche de une à deux trames, à l'arrivée de chaque raster.
+Cause, documentée par Iced 0.14 lui-même : le pipeline wgpu ne téléverse
+de façon synchrone que les images de moins de 2 Mio ; au-delà, un worker
+asynchrone s'en charge et l'image n'est pas peinte tant qu'il n'a pas
+fini. Nos vignettes de page font environ 11 Mo : chaque remplacement de
+poignée laissait donc le fond blanc du conteneur pendant la montée.
+Deux corrections. D'abord `image::allocate`, le remède officiel : la
+nouvelle poignée est allouée avant d'être posée ; `VignetteAllouee` ne
+remplace l'ancienne qu'une fois la texture garantie peignable, et
+l'`Allocation` est conservée à côté de la poignée tant que la vignette
+vit, ce qui la protège aussi de l'éviction du cache d'images. Ensuite le
+raster porte l'empreinte de ses pixels (`Raster::pixels`) : quand une
+page est re-rastérisée uniquement parce que ses spans ont glissé (la
+quasi-totalité des 17/25 du profil), les pixels sont identiques — la
+poignée existante est gardée telle quelle et rien n'est téléversé, pour
+les vignettes comme pour les tuiles. La page reste couverte par la
+vignette en place jusqu'à la bascule : plus de blanc à la frappe, et le
+flux GPU tombe d'une quinzaine de pages par caractère à la seule page
+réellement modifiée.
+Test : `un_raster_identique_garde_sa_poignee_et_un_nouveau_attend_son_allocation`.
+
+## 4.0.0 — Une notification de géométrie n'est pas un geste (8 novembre 2026)
+
+Le saut à la frappe persistait : trois notifications de volet passaient
+encore pour des gestes de l'utilisateur. D'abord le recadrage du curseur
+(`montre_curseur`) défilait la source par un `scroll_to` nu, sans
+s'annoncer ; en saisie, le curseur longe le bas de la fenêtre, le
+recadrage partait donc à chaque caractère, et son atterrissage — reçu
+sans attente — déclenchait la synchronisation de l'aperçu. Ensuite Iced
+publie une notification à chaque relayout du volet : décalage immobile,
+ou hauteur de contenu changée (reflux d'une recomposition, rangée
+d'habillage gagnée ou perdue par la frappe dans l'éditeur) — rien n'y a
+été défilé par personne. Trois corrections. Tout défilement programmé
+passe par `programme_defilement` et se reconnaît comme écho : recadrage
+du curseur, retours en tête de Nouveau et d'Ouvrir ; le `vers` nu
+disparaît. Dans l'éditeur, la planification de composition précède le
+recadrage, qui porte ainsi la révision courante au lieu d'être périmé
+par elle. Enfin le verdict « geste » exige un décalage qui bouge
+(au moins 0,5 px) à contenu stable (0,5 px près), première notification
+exclue — le défilement lié à la molette et à la barre reste entier, et
+le recadrage de la ligne éditée reste l'affaire de `garde_ligne_visible`.
+Tests : `le_recadrage_du_curseur_s_annonce_et_son_echo_ne_resynchronise_pas`,
+`un_relayout_du_source_ne_vaut_pas_un_geste_mais_un_defilement_si`,
+`un_reflux_de_l_apercu_apres_composition_ne_tire_pas_la_source`.
+
+## 4.0.0 — L'aperçu ne saute plus à la frappe (7 novembre 2026)
+
+Le profil a désigné la cause : une boucle de rétroaction entre les deux
+volets. Un défilement programmé atterrissait à un ou deux pixels de sa
+cible (arrondi, butée) ; la réception prenait cet écart pour un geste de
+l'utilisateur et faisait suivre l'autre volet, qui à son tour… — rafales
+de petits défilements, et sauts d'une page entière près de la fin du
+document, où la règle « bas de la source = bas de l'aperçu » basculait à
+chaque reflux du texte. Deux corrections. `synchro::recoit_defilement` :
+tant qu'un défilement programmé est en attente, toute position autre que
+le départ est sa réponse (écho, même imprécis) ; seul un défilement sans
+demande en attente est un geste de l'utilisateur. Et une composition ne
+resynchronise plus l'aperçu sur la source : `garde_ligne_visible` ne
+recadre l'aperçu que si la ligne éditée en sort (marge de 15 %), en la
+plaçant au tiers haut. Test : `la_reponse_imprecise_a_un_defilement_programme_n_est_jamais_un_geste`.
+
+## 4.0.0 — Graine sur le corpus publié, profil de l'aperçu (7 novembre 2026)
+
+Le fabricant de graine tentait de desceller `corpus/corpus.db`, qui est
+l'atelier en clair : « fichier scellé illisible ». Il lit désormais le
+corpus publié, celui qu'embarque le binaire et que reçoivent les
+utilisateurs, par la nouvelle `docdg_corpus::composants_publies()`.
+Sous `DOCDG_PROFIL=1`, chaque composition rapporte le nombre de pages dont
+l'empreinte a changé (donc re-rastérisées) et tout défilement de
+synchronisation programmé sur l'aperçu, pour qualifier le saut visuel
+signalé à la frappe.
+
+## 4.0.0 — Phase 3 : le matériel d'avant le saut reste au chapitre précédent (7 novembre 2026)
+
+La garde des bornes refusait toute ligne Typst rattachée à la ligne de
+frontière k mais émise avant le saut faible — espacement des lignes vides
+qui précèdent la frontière, que le découpeur de segments attribue à la
+ligne suivante. Ce matériel se peint avant le saut, donc sur la dernière
+page du chapitre précédent, où la découpe le laisse : la borne haute d'un
+chapitre inclut désormais la frontière suivante. Le refus éventuel nomme
+la ligne docdg, les bornes et le texte de la ligne fautive.
+
+## 4.0.0 — Phase 3 : la coupe passe après le transpileur (7 novembre 2026)
+
+Erreur d'architecture corrigée. Transpiler chaque chapitre séparément
+perdait l'état documentaire du transpileur : le diagnostic l'a montré en
+page 6, numéros de chapitres et de sections repartis à 1. Le moteur ne
+coûte que quelques millisecondes sur le document entier ; ce qui coûte,
+c'est Typst. Désormais le document est transpilé une fois, comme le
+monolithe, et `typst_pont::decoupe_emission` découpe le Typst émis aux
+frontières, retrouvées par la table des lignes de l'émetteur : numérotation
+exacte par construction. Gardes : saut faible à chaque frontière, aucune
+ligne hors frontières, ni note, ni sommaire, ni requête documentaire dans
+le corps ; contrats recomptés par chapitre. Ancres relevées en lignes
+globales, `ancres_des_structures` appliqué au document fusionné. Le test
+A/B compare désormais toutes les pages. `compose_par_chapitres` prend la
+source entière ; la garde d'entête devient sans objet et disparaît.
+
+## 4.0.0 — Phase 3 : le chapitre autonome est la tranche exacte (7 novembre 2026)
+
+Le diagnostic d'une ligne a localisé l'écart en page 0, c'est-à-dire dans
+le chapitre 0, sans aucun recalage en jeu : la source du chapitre différait
+de celle du monolithe. `source_autonome` normalisait `<page suivante hN>`
+en `<hN>` ; or l'émetteur écrit pour la première forme un marqueur
+d'origine de rupture et un saut faible — absents du chapitre normalisé.
+La normalisation, inutile (un saut faible en tête de document est sans
+effet), est retirée : un chapitre autonome est l'entête suivie de la
+tranche exacte, et son émission est celle du monolithe au mot près. Le
+test du découpeur devient `la_source_autonome_est_l_entete_et_la_tranche_exacte`.
+Le test A/B, s'il échoue encore, rend en une ligne les bandes de pixels
+divergents et la première ligne de source Typst où chapitre 0 et
+monolithe se séparent.
+
+## 4.0.0 — Phase 3 : pied de page par numbering et test au diagnostic d'une ligne (7 novembre 2026)
+
+Le pied de page recalé est désormais rendu par
+`numbering("1 / 1", counter(page).get().first(), total)` — le chemin de
+code exact que `display("1 / 1", both: true)` emprunte en interne — au
+lieu d'une concaténation de deux contenus dont le façonnage pouvait
+dévier du monolithe. Et le test A/B ne déverse plus jamais les octets
+d'une image : à l'écart, il rend une ligne — nombre de pixels différents
+et zone exacte — qui localise immédiatement un pied de page ou une
+frontière de chapitre.
+
+## 4.0.0 — Phase 3 : l'émission technique devient monoligne (7 novembre 2026)
+
+Le refus parlant a désigné le dernier verrou : « entête à corps non vide
+(100 octets) » — la seconde moitié de la ligne des contrats, coupée par un
+saut de ligne interne sans fonction entre ses deux métadonnées, n'était
+plus classifiable comme préambule. Le saut devient un espace : une
+instruction, une ligne, et la garde d'entête comme le point d'injection de
+la couture reposent sur un préambule intégralement ligne à ligne. Le test
+A/B gagne l'export PDF du document cousu, qui clôt la couture PDF de la
+phase 4 par construction (même document fusionné).
+
+## 4.0.0 — Phase 3 : l'émetteur réel, l'ancre physique et les refus parlants (7 novembre 2026)
+
+Le pied de page partagé avait été extrait dans `sortie.rs` — qui est
+l'oracle historique sous `#[cfg(test)]`, pas l'émetteur de production
+(`typst_natif::emet`) : la release ne compilait pas. L'oracle est restitué
+à l'octet près et `pied_de_page_numerote` vit désormais dans
+`typst_natif`, utilisé par l'émission et par la couture. Cause du refus
+persistant du test : les contrats de métadonnées étaient conditionnés à
+`counter(page).get().first() == 1`, qu'aucune page d'un chapitre recalé
+n'atteint jamais — les marqueurs manquaient, la couture échouait. La
+condition dit maintenant ce qu'elle a toujours voulu dire : première page
+physique, `here().page() == 1`, insensible aux recalages ; constante de
+génération du cache bougée (`v4-ancre-page-physique`, invalidation propre
+des caches disque existants, une fois). Enfin `compose_par_chapitres`
+rend un motif de refus au lieu d'un silence : le test l'affiche à
+l'échec, et `DOCDG_PROFIL=1` trace « couture refusée : … » dans
+l'application.
+
+## 4.0.0 — Phase 3 : la garde d'entête devient syntaxique (7 novembre 2026)
+
+La garde « entête sans peinture » compilait l'entête seule et parcourait
+les cadres : elle y voyait le pied de page « 1 / 1 » et refusait toute
+couture, y compris celle du test A/B. Le mobilier de page n'est pas un
+corps : il vient des `#set` du préambule et chaque chapitre le repeint à
+l'identique. La garde est donc redéfinie sur notre propre émission —
+`convertit` assemble préambule puis corps, rien après —, par
+`typst_pont::corps_apres_preambule` : l'entête est admise si son Typst
+émis est blanc après le préambule. Le détecteur de peinture
+(`peint_quelque_chose`, `frame_peinte`, cache associé) est retiré.
+
+## 4.0.0 — Chantier 4, phase 3 : la composition cousue en production (7 novembre 2026)
+
+La couture quitte le banc : `typst_pont::compose_cousue` compose chaque
+chapitre dans son propre passage du Monde, concatène les pages en un
+`PagedDocument` unique et relève liens, destinations, champ et valeurs sur
+le document fusionné ; `lance_composition` l'active dès 8 chapitres
+(`DOCDG_COUSU`) quand les saisies sont vides, avec repli monolithique
+intégral sur tout refus ou toute erreur. Les numéros de pages sont recalés
+par injection en fin de préambule (`counter(page).update` et pied de page
+au total littéral, fabriqué par `sortie::pied_de_page_numerote`, désormais
+l'unique source du pied de page). Caches générationnels par empreinte :
+segments (une édition ne recompose que son chapitre), pages par source
+brute, relevés d'ancres partagés avec le monolithe. Gardes : entête qui
+peint, saisies, valeurs, chapitre sans préambule → monolithe. Test
+`la_couture_peint_identique_au_monolithe` : tailles, rasters pixel à pixel
+(pieds de page compris) et ancres identiques entre les deux voies. Détail
+du contrat dans docs/CHAPITRES_COUSUS.md.
+
+## 4.0.0 — Langage : la réaffectation reste au seul signe « ← » (7 novembre 2026)
+
+Question ouverte depuis l'audit, tranchée pour 4.0 : le signe « = » ne vaut
+pas réaffectation et reste refusé avec le message dédié. « ← » demeure
+l'unique forme. À revoir ultérieurement si l'usage le réclame.
+
+## 4.0.0 — Chapitres cousus : la règle du titre sous accolade précisée (7 novembre 2026)
+
+Deux tests du découpeur décrivaient la même syntaxe — un `<h1>` sous une
+accolade ouverte — avec deux verdicts opposés. Le contrat tranche, dans le
+sens de la peinture : un titre sous accolade appartient à son conteneur,
+donc au chapitre courant, et n'est jamais une frontière ; à chaque frontière
+la profondeur est nulle par construction, si bien qu'aucun objet ne peut
+être à cheval. Le refus porte sur le déséquilibre lui-même (accolade jamais
+refermée, ou fermée en trop). Le test `une_accolade_a_cheval_refuse_la_decoupe`
+devient `un_titre_sous_accolade_reste_du_contenu_et_le_desequilibre_refuse`
+et vérifie les quatre cas ; `docs/CHAPITRES_COUSUS.md` est aligné. Le banc
+du jour via le découpeur de production : 240 pages, inc monolithe 119,4 ms,
+inc d'un chapitre 1,1 ms — rapport 113,4×, crête 695 Mo.
+
+## 4.0.0 — Correctif : `pub mod chapitres` sous la mauvaise garde (7 novembre 2026)
+
+L'insertion de la phase 2 avait placé `pub mod chapitres;` entre
+`#[cfg(feature = "qualification")]` et le `pub mod qualification;` que cet
+attribut gardait : sous les features par défaut, `chapitres` était compilé
+hors-jeu (E0432 sur le `pub use`) et `qualification` avait perdu sa garde.
+L'ordre est rétabli dans `transpiler/src/lib.rs` — `chapitres` libre,
+l'attribut rendu à `qualification` — sémantique d'origine restaurée à
+l'identique.
+
+## 4.0.0 — Cible de test de la lib du transpileur réparée (7 novembre 2026)
+
+`default-members = ["app"]` fait que `cargo test` à la racine ne construit
+que l'application : la cible de test de la lib `docdg-transpiler` n'avait
+jamais été compilée seule, et `cargo test -p docdg-transpiler` a exposé des
+tests historiques préexistants non gardés — exactement ce que la
+qualification finale `--workspace --all-features` aurait rencontré.
+
+Mise en conformité avec la convention du dépôt (`#[cfg(fixtures)]` pour les
+captures historiques figées, comme côté app) : les tests à `include_str!`
+de fixtures absentes de l'arborescence sont gardés par `#[cfg(fixtures)]`
+— `natif.rs` (deux tests de continuation de titres et leur auxiliaire
+`titres`), `natif_navigation.rs` (étiquette dupliquée),
+`natif_saisies.rs` (quatre tests de saisies), `natif_structures.rs` (un
+test de plan sous rangée et les deux modules entiers
+`tests_colonnes_reglees_finales` et `tests_grilles_intrinseques_finales`).
+Le module de tests diophantien, qui compare au calcul historique, passe
+sous `#[cfg(all(test, feature = "reference-historique"))]` avec ses appels
+`prose`/`bezout_tex` qualifiés `super::super::` pour compiler réellement
+sous `--all-features`. Le test de moyenne pondérée de
+`statistiques/local.rs` appelle un accesseur `historique()` qui n'existe
+sur `EtudeGraphique` sous aucune configuration : il rejoint le tiroir
+`#[cfg(fixtures)]` en attendant son accesseur — à trancher avant 4.1.
+Variable inutilisée soulignée dans `statistiques/discrete.rs`. Les tests
+vivants de ces modules restent actifs ; `cargo test -p docdg-transpiler`
+compile et tourne désormais.
+
+## 4.0.0 — Chantier gros documents 4/5, phase 2 : découpeur de production (7 novembre 2026)
+
+Le banc a rendu son verdict (120 chapitres, 240 pages, M5) : incrémental
+monolithe 102,2 ms contre 1,1 ms pour le chapitre seul — rapport **97×**,
+crête mémoire 697 Mo. La phase 2 du contrat est donc implémentée.
+
+**`docdg_transpiler::decoupe_chapitres`** (`transpiler/src/chapitres.rs`,
+exporté par `lib.rs`). La frontière est la division de tête du niveau le
+plus élevé présent dans le document — h0 si le document a des parties, h1
+sinon — sous les deux formes `<hN>` et `<page suivante hN>`, reconnue hors
+accolades seulement. `Decoupage` rend l'entête et les chapitres verbatim
+(recouture = identité octet à octet) et `source_autonome(k)` fabrique le
+document d'un chapitre : entête préfixée, `<page suivante hN>` normalisé en
+`<hN>` en tête. Refus en `None` — repli monolithique, jamais une couture
+fausse : accolade à cheval sur une frontière ou jamais refermée, document
+sans division de tête, et toute déclaration globale (`soit`, `soient`,
+`<Soit>`, `<Soient>`) hors accolades après la première frontière, la passe
+de réutilisation n'existant pas encore. Sept tests dans le module
+(identité, normalisation, frontière au niveau le plus élevé, h1 sous
+accolade ignoré, refus d'accolade à cheval, refus de déclaration tardive,
+déclaration d'entête admise).
+
+Le banc (`mesure_trajet.rs`) utilise désormais ce découpeur de production
+au lieu de sa copie locale, supprimée ; le test
+`le_synthetique_se_decoupe_et_se_recoud_sans_perte` passe par lui et
+vérifie en plus les sources autonomes. `docs/CHAPITRES_COUSUS.md` consigne
+le verdict du banc et l'état des phases.
+
+## 4.0.0 — Chantier gros documents 4/5, phase 1 : banc des chapitres cousus et règle de frontière (7 novembre 2026)
+
+Le chantier s'ouvre comme décidé : par le banc et par le contrat, avant toute
+ligne dans le produit.
+
+**Banc synthétique** (`app/src/mesure_trajet.rs`).
+`document_synthetique(chapitres)` engendre un polycopié de mise en page pure
+— titres, sections, prose, formules en ligne — sans calcul formel ni corpus,
+pour que la composition soit seule mesurée ;
+`DOCDG_SYNTHESE=120 cargo run --release -- --mesure synthese` (ou tout filtre
+contenant « synthese ») le compose d'abord en monolithe (moteur froid, typst
+froid, incrémental d'une édition au chapitre médian, page0), puis chapitre
+par chapitre via `chapitres_du_synthetique` — somme et maximum des
+composes, incrémental du seul chapitre médian — et imprime le rapport
+inc monolithe/chapitre ainsi que la crête mémoire du processus
+(`getrusage`, dépendance `libc`). Le découpeur normalise
+`<page suivante h1>` en `<h1>` en tête de chapitre ; le test
+`le_synthetique_se_decoupe_et_se_recoud_sans_perte` verrouille
+découpe ∘ recouture = identité. Le nombre de chapitres se règle par
+`DOCDG_SYNTHESE` (120 par défaut ≈ 400 pages) ; sans cette variable ni
+filtre, `--mesure` reste exactement ce qu'il était.
+
+**Règle de frontière** (`docs/CHAPITRES_COUSUS.md`). Noir sur blanc : la
+frontière est la division de tête `<h1>`/`<page suivante h1>`, saut de page
+garanti, aucun objet à cheval (contrôle d'accolades, repli monolithique sinon),
+environnement propagé par la passe légère ; recalage des pages par
+`counter(page).update(décalage + 1)` injecté en préambule de chapitre — une
+édition qui ne change pas la pagination du chapitre k ne recompose que k ;
+couture des ancres, liens, tuiles et PDF par table des cumuls ; numérotation
+des titres et renvois déjà résolus par docdg à l'émission, donc insensibles à
+la découpe. Phases 2 à 5 (découpeur de production, composition cousue dans
+`typst_pont`, recalage et PDF concaténé, parallélisation facultative) y sont
+ordonnées, avec qualification A/B d'identité de peinture contre le monolithe
+et seuil d'activation mesuré au banc.
+
+## 4.0.0 — Chantier gros documents 3/5 : mimalloc et instantanés Arc<str> (7 novembre 2026)
+
+**Allocateur.** mimalloc devient l'allocateur global de l'application et du
+fabricant de graine (`#[global_allocator]` dans `app/src/main.rs` et
+`transpiler/src/bin/graine.rs`, dépendance `mimalloc = "0.1.43"`). Le moteur
+et l'émission Typst vivent de petites allocations de chaînes : gain attendu
+de 5 à 15 % sur le trajet de frappe, sans toucher une ligne de logique —
+`--mesure` avant/après fait foi.
+
+**Instantané figé du source.** `Content::text()` d'iced reconstruisait la
+chaîne entière à chaque appel, et elle était reconstruite plusieurs fois par
+frappe : pour l'historique d'annulation, pour la position du curseur, pour la
+géométrie des rangées, pour les comparaisons du cache. `Docdg::texte_fige()`
+mémoïse désormais un `Arc<str>` invalidé aux deux seuls points de mutation du
+contenu (`perform` d'une édition, `remplace_texte`), aux côtés du cache de
+géométrie existant. L'historique d'annulation stocke des `Arc<str>` : pousser
+un état devient un partage O(1) du même instantané au lieu d'une copie
+intégrale — quatre cents états d'un document d'un mégaoctet ne pèsent plus
+quatre cents mégaoctets. Convertis à l'instantané : sélection et curseur,
+recherche et remplacement, encadrement, insertions, pose de style, réglages,
+annuler/rétablir, comparaison du cache disque, géométrie des rangées.
+`lance_composition` et la sauvegarde gardent une `String` possédée : le
+premier la range dans l'`Instantane` du cache, la seconde part sur le disque
+— une copie par composition débondée ou par enregistrement, pas par frappe.
+`texte()` demeure pour ces usages et se sert du même instantané.
+
+## 4.0.0 — Chantier gros documents 2/5 : ancres par empreinte et raster spéculatif (7 novembre 2026)
+
+**Ancres par empreinte** (`app/src/typst_pont.rs`). Le calcul des ancres
+balayait chaque cadre de chaque page à chaque composition. Il se scinde : un
+relevé par page des minima (span, hauteur) — ce qui ne dépend que du contenu
+de la page — mémoïsé sous son empreinte `hash128`, et la résolution
+span → ligne du source courant, seule part refaite à chaque frappe. Le cache
+est reconstruit à chaque composition sur les seules empreintes présentes :
+borné par la pagination, insensible aux décalages d'octets en amont (les
+spans survivent au reparse incrémental, leurs positions sont résolues à
+chaud). Une édition au milieu d'un document de n pages ne retraverse plus que
+les cadres des pages dont le contenu a changé. Sémantique inchangée au bit
+près (même min lexicographique (page, hauteur)), test d'équivalence
+froid/chaud/décalé ajouté.
+
+**Raster spéculatif** (`app/src/apercu.rs`, `app/src/main.rs`).
+`tuiles_requises` prend un paramètre de préchargement
+(`PRECHARGEMENT_VUES = 1,0` : une hauteur d'écran au-dessus et au-dessous) ;
+le tri visible-d'abord et le plafond inchangé de 72 tuiles garantissent que
+la spéculation n'évince jamais une tuile visible et n'ajoute aucun octet au
+pire cas. Les tuiles spéculatives ne consomment que la capacité restante
+(`MAX_RASTERS_EN_COURS` après les visibles) : au repos, les abords se
+remplissent ; à la frappe, l'époque les annule comme avant. En mode
+vignettes, la fenêtre passe à deux écrans au-dessus et trois au-dessous, le
+tri par distance au centre restant premier servi. Appels de qualification et
+de mesure figés à préchargement nul pour garder leurs chiffres comparables ;
+test du cap et de la non-éviction ajouté.
+
+## 4.0.0 — Chantier gros documents 1/5 : archive de calcul précompilée (7 novembre 2026)
+
+Le mécanisme de graine embarquée existait (`graine.jsonl`, signé par le moteur
+de calcul, fusionné au cache disque) mais rien ne le fabriquait et il ignorait
+le corpus — d'où les 1 690 ms du premier `vitrine.txt`. Nouveau binaire
+`cargo run --release -p docdg-transpiler --bin graine` : il rend les 23
+exemples, les blocs des manuels, puis les 1 606 énoncés et 602 démonstrations
+du corpus (corps refondus comme par `<Démontrer>`, donc requêtes identiques à
+l'octet près à celles de l'exécution), et exporte l'archive triée et signée
+(`exporte_graine`, `paires_connues` exposés par la crate). Le premier rendu
+d'une source livrée devient une lecture de table ; SymPy ne se paie plus que
+pour les expressions propres à l'utilisateur. Protocole consigné dans
+`docs/COMPILER.md` ; le test `graine.rs` continue de verrouiller la
+correspondance graine-moteur. À exécuter sur la machine de fabrication avant
+publication, et après toute modification de `cas.py` ou du corpus.
+
+## 4.0.0 — Audit de publication du 7 novembre 2026
+
+Lot issu de l'audit final sur trois axes : langage du supérieur, cohérence
+moteur-documentation-exemples, performances et mémoire.
+
+**Langage.** L'écriture de la version précédente est refusée en source, avec un
+message qui rappelle la forme attendue : `soit x: un entier = 3` (toutes
+déclarations à deux-points, styles compris), `pour i: un type de a à b` et
+`retourne` sont rejetés au profit de `soit x ∈ ℤ tel que x = 3`,
+`soit s, une chaîne de caractères, telle que s = …`,
+`soit h0, un style, défini par <…>`, `pour k ∈ ⟦1 ; n⟧` et `retourner`
+(`transpiler/src/langage/superieur.rs`). Les signatures fléchées et les
+méthodes à parenthèses des classes sont inchangées. La réaffectation ne
+s'écrit que par `←`, insérée depuis le ruban Symboles : la graphie ASCII `<-`
+n'est pas introduite, `x <- 5` ne se distinguant pas de la comparaison
+`x < -5`. Les exposants des signatures couvrent désormais tous les chiffres,
+y compris composés (`ℝ⁷`, `ℝ¹²`), avec correction d'un ordre inversé.
+La réaffectation par signe égal (`n = n + 1`) reste comprise par le moteur
+mais ne figure plus dans la documentation ; son refus demandera une analyse
+de portée et reste à trancher.
+
+**Cohérence.** Le README, `GUIDE_UTILISATEUR.md` et `MasterAgregation.md`
+sont migrés au langage 4.0 (déclarations ensemblistes, forme à virgule,
+`défini par`, boucles `⟦ ⟧` et `allant de … par pas de …`, `retourner`,
+`selon la valeur de` documenté, règle d'or corrigée : verbe d'action à
+l'infinitif). Les messages du moteur citent les formes 4.0
+(`tournures.rs`, `rendu.rs`, `fonctions.rs`). `<Ajuster>` passe à l'écriture
+moderne dans `statistiques-probabilites.txt` ; `algo.txt` ne mentionne plus
+que `retourner`. Les sources des tests actifs sont converties ; les modules
+`cfg(fixtures)` et `audit_chantier_08`, qui comparent des captures
+historiques figées, restent à l'identique par construction. `BENCH.md` est
+purgé de ses chapitres navigateur, WebKit et `outils/` disparus. La base du
+corpus est auditée : 1 606 énoncés, 602 démonstrations, totaux conformes à
+`Redaction.md`, zéro orphelin, zéro cycle, monotonie des dépendances
+respectée, ancrages élémentaires tous « admis ».
+
+**Performances et mémoire.** Le plafond du cache de pages pleines passe de
+160 à 64 Mo par page (`typst_pont.rs`) ; la recherche des polices nommées est
+mémoïsée entre deux frappes. La restriction du calcul des ancres aux pages
+dont l'empreinte change est différée après la 4.0 : gain mesuré marginal
+(typ_inc ≤ 7 ms) contre un risque sur la synchronisation source-aperçu.
+
+## 4.0.0 — Variante hybride du 2 novembre 2026
+
+- Fusion ciblée des deux archives ; voir `HYBRIDE.md` pour les 9 optimisations supplémentaires, les tests et les réserves.
+- Le paragraphe historique « plus aucune ligne de commentaire » ci-dessous décrit la variante de l’ami ; **il ne s’applique pas à cette version hybride**, qui conserve les commentaires.
+- Maintien de la version qualifiée de `vitrine.txt` et des outils CI/Cargo.
+
+## 4.0.0 — 2 novembre 2026
+
+### Audit de l'archive iced + Typst (2 novembre 2026)
+
+- Mémoire : le cache de mémoïsation de Typst est désormais purgé après chaque
+  composition (`comemo::evict`), comme le fait typst-cli ; sans cela il
+  grossissait à chaque frappe pendant toute la session. Le cache des images
+  enregistrées pour Typst est vidé avant chaque rendu.
+- Saisie : une composition devenue périmée pendant la transpilation est
+  abandonnée avant d'entrer dans Typst, au lieu d'être menée jusqu'au bout
+  puis jetée ; chaque formule n'est plus reconvertie de LaTeX en Typst à chaque
+  frappe (mémoïsation par formule) ; les feuilles de style du moteur ne sont
+  plus réanalysées ni leur cascade reconstruite tant qu'elles n'ont pas changé.
+- Réglure Seyès : une ligne entièrement enveloppée par un style (`<justifié>`,
+  `<au centre>`, `<italique>`…) voyait ses lignes repliées s'empiler sur la
+  première, parce que le texte enveloppé recevait des bords « baseline » sans
+  hauteur ; les bords des lignes réglées sont désormais absolus, calculés
+  en points depuis la taille de la réglure, ce qui tient le pas quel que
+  soit le corps du texte enveloppé ; un style posé sur toute la ligne est
+  remonté sur la ligne elle-même, et son alignement (centré, justifié…) est
+  appliqué, ce qui ne l'était pas.
+- Interface : le bouton ⇄ permute les volets Source et Aperçu, comme le
+  bouton « Inverser » de la maquette ; le bouton ⊟ bascule entre la
+  disposition côte à côte et la disposition superposée.
+- Corpus : les 143 champs des sciences de l'ingénieur qui employaient
+  l'apostrophe droite emploient l'apostrophe typographique, comme les trois
+  autres matières ; le catalogue de `catalogues/corpus/` est régénéré et son
+  vérificateur passe de nouveau. Cette correction a révélé une dépendance
+  tue : « si_parcours_preuve_l2_d3 » cite le théorème de l'énergie cinétique
+  de physique sans le déclarer ; la mention est ajoutée. Le contrôle des
+  dépendances tues ne distingue plus l'apostrophe droite de l'apostrophe
+  typographique, pour qu'une telle citation ne puisse plus lui échapper.
+- Dépôt : plus aucune ligne de commentaire dans les fichiers Rust ; plancher
+  Rust unifié à 1.92 dans l'espace de travail ; workflow GitHub et dossier
+  `.idea` retirés ; `README.md`, `BENCH.md` et `docs/COMPILER.md` ne
+  mentionnent plus la vue web, KaTeX ni WebKitGTK, et la recette Linux
+  n'exige plus GTK.
+
+## 4.0.0 — 22 octobre 2026
+
+### Interface native iced et composition Typst (21 octobre 2026)
+
+- Version 4.0.0 : l'interface affiche la version de l'espace de travail,
+  désormais 4.0.0 ; la notice Linux de la distribution ne réclame plus
+  WebKitGTK ni GTK (dialogues de fichiers par le portail XDG).
+- Chantier 5, première brique : la cursive Marelle, que le moteur embarque
+  en woff2, est convertie en TrueType (`app/polices/marelle-400-normal.ttf`,
+  métriques d'origine : ascendante 1,44 em, descendante 0,96 em) et chargée
+  par Typst avec les autres polices.
+- Chantier 5 — réglure Seyès et cahier : un bloc `docdg-lignes` se compose
+  en Typst. La réglure (symbole SVG partagé ou SVG complet) devient le motif
+  de fond du bloc, répété sur chaque fragment quand le passage se coupe ;
+  le bloc prend la largeur de sa réglure. Le calage reprend le calcul CSS :
+  bords du texte à pas/2 ± (ascendante − descendante)/2 em, interligne nul,
+  métriques lues dans les `@font-face` du moteur ; la ligne de base tombe
+  sur le trait fort. Chaque ligne porte une espace sans chasse qui lui donne
+  la hauteur d'un pas, et une formule ne fait pas grandir sa ligne. Un
+  cahier en colonnes (`data-colonnes` plus grand que le nombre de blocs)
+  coule son bloc réglé de colonne en colonne ; une rangée flexible ordinaire
+  devient une grille. `seyes` (9 pages) et `vitrine` (16 pages) retrouvent
+  la pagination de leur référence : les 23 exemples ont désormais
+  exactement le nombre de pages de leur PDF de référence.
+- Cahier, enchaînements : deux blocs réglés consécutifs se touchent, comme
+  en CSS (aucun espacement autour d'un bloc réglé) ; la réglure et la marge
+  rouge restent continues quand le moteur ferme un bloc autour d'un titre.
+  La cursive, qui n'a qu'une graisse, reçoit un gras simulé (contour de la
+  couleur du texte) ; les titres `h1`–`h6` et les `th` pris en ligne
+  retrouvent le gras par défaut du navigateur.
+- Cadres : `margin: auto` centre le cadre comme objet sans centrer son
+  contenu ; `text-align` n'aligne que le contenu. Dans une rangée étirée
+  (`align-items: stretch`, valeur par défaut), la hauteur naturelle de
+  chaque cellule est mesurée et les cadres en `height: 100%` prennent la
+  hauteur de la plus haute : les cadres côte à côte sont égaux.
+- Cahier, calculs en fraction : la règle d'écriture sur Seyès est tenue —
+  la ligne est le sol. Une ligne de calcul en fraction est abaissée de la
+  hauteur de son axe mathématique : chaque barre de fraction se pose sur la
+  ligne, numérateur au-dessus, dénominateur au-dessous, et les signes
+  (+, −, ×, :, =) se calent sur la barre, donc sur la ligne. Les nombres et
+  les lettres isolés hors fraction (`2/5 + 4 = 22/5`, `3 + 1/2 = 7/2`) sont
+  relevés d'autant et reposent sur la ligne ; les fractions, qu'elles
+  s'écrivent `frac(…)` ou `a/b`, restent entières. Les `span`, `sup` et `sub` du
+  cahier ne comptent plus dans la hauteur de ligne (`line-height: 0`) : un
+  mot plus gros, tel un « XXI » en Times italique 24 pt, n'agrandit plus
+  sa ligne.
+- Portabilité des polices : sur macOS, les PDF embarquaient les véritables
+  Georgia et Times New Roman du système au lieu de Gelasio et Tinos, et les
+  figures comme les signes rares (∎, ⩽, ☐, π, √, Ω…) prenaient des polices
+  propres à la machine. Désormais : Georgia, Times New Roman, Arial, Times,
+  Helvetica, Courier et les familles génériques désignent toujours les
+  polices jointes, dans le texte comme dans les figures SVG (familles
+  réécrites, famille par défaut posée sur chaque figure) ; toute liste de
+  polices se termine par une chaîne de repli embarquée (Libertinus Serif,
+  New Computer Modern Math, DejaVu Sans Mono) ; les polices du système ne
+  sont chargées que pour les familles que le document nomme et que DocDG
+  n'embarque pas (correctif : la fonction qui relève ces familles n'était
+  compilée que pour les tests, d'où l'échec de `cargo run -p xtask`). Les
+  23 références n'embarquent plus que des polices de
+  DocDG ; elles sont recomposées avec le code final (filet tireté compris),
+  pagination inchangée.
+- `sinon si` fonctionne enfin : le moteur exigeait une accolade juste après
+  `sinon` et abandonnait sans rien dire la branche `sinon si cond {`, au
+  niveau du document comme dans les corps de boucle (les corps de fonction
+  la géraient déjà). La chaîne documentée dans le README est désormais
+  réellement évaluée : seule la première branche vraie est retenue. Trois
+  tests (`transpiler/tests/sinon_si.rs`) la couvrent, ainsi que la
+  sémantique de `selon la valeur de`, qui se traduit maintenant en une
+  vraie chaîne `si … } sinon si … } sinon { … }` ; les intervalles ouverts
+  (`]10 ; 20]`, `[25 ; 30[`) deviennent des doubles comparaisons.
+- Aperçu : les liens internes des pages composées — entrées du sommaire,
+  renvois — sont cliquables ; un clic fait défiler l'aperçu jusqu'à la
+  page et la hauteur de la cible, comme les repères.
+- Chantier 7 — vocabulaire du supérieur (première livraison). Une couche
+  de réécriture, `langage/superieur.rs`, traduit en tête du rendu, ligne
+  pour ligne et sans changer la numérotation, l'écriture du guide
+  « Vocabulaire et syntaxe DocDG 4.0 » vers les formes canoniques du
+  moteur, qui restent acceptées :
+  - déclarations `soit n ∈ ℕ tel que n = 7` (ℕ, ℤ, 𝔻, ℚ, ℝ, ℂ, 𝔹),
+    `soit A, une matrice 2×2 de rationnels, telle que A = …`,
+    `soit h0, un style, défini par <…>`,
+    `soient q, r ∈ ℤ tels que (q ; r) = divise(17 ; 5)` ;
+  - fonctions `soit f : ℤ² → ℤ, (a, b) ↦ corps` (types produits avec
+    `×`, puissances ℝ², listes, chaînes, classes, retours multiples),
+    `soit la fonction g : ℤ → ℤ définie par g(n) = …`, et les deux formes
+    `<Soit>f : ℝ → ℝ, x ↦ …` / `<Soit>la fonction f définie par f(x) = …` ;
+  - boucles `pour k ∈ ⟦a ; b⟧`, `pour x ∈ [a ; b] par pas de p` (un pas
+    négatif part de la borne haute), `pour k ∈ 𝔻, allant de a à b`,
+    `pour n ∈ [100, 400, 1600]`, et `pour x ∈ collection` dont le type
+    d'élément est inféré des déclarations, des paramètres de fonction et
+    des littéraux de chaîne ;
+  - réaffectation `x ← expr` (membre indexé compris), `retourner`,
+    comparateurs en toutes lettres (`est supérieur ou égal à`…) et
+    symboliques (⩽, ⩾, ≠), opérateurs ×, −, ÷, y compris dans les
+    interpolations `#{…}` ;
+  - `selon la valeur de x { … }`, traduit en une suite de `si` exclusifs
+    (valeurs, listes de valeurs, intervalles, `ou`, `sinon`).
+  Les 23 exemples publics sont réécrits dans ce vocabulaire (empreintes et
+  références 4.0 mises à jour) et se composent sans alerte nouvelle. Reste
+  à faire : README, manuels et modèles du ruban dans la nouvelle écriture.
+- Variantes de police absentes : quand un texte demande l'italique ou le gras
+  dans une famille qui n'a pas cette variante (Comic Sans MS n'a pas
+  d'italique, Marelle ni italique ni gras), DocDG la simule comme le faisait
+  le navigateur — lettres inclinées de 12° pour l'italique, contour épaissi
+  de la couleur du texte pour le gras — au lieu de retomber sans rien dire
+  sur le romain. Les variantes réellement disponibles sont relevées une fois,
+  sur les polices embarquées et sur celles du système.
+- `geometrie.txt` : sauts de page déplacés par l'auteur ; empreinte et
+  référence 4.0 mises à jour (35 pages).
+- Chantier 4, dernier point — encadré sécable : quand un cadre déclaré
+  `sécable` se coupe, son filet devient tireté au point de rupture, en bas
+  du fragment qui s'interrompt comme en haut de celui qui reprend ; les
+  côtés restent pleins, le titre ne se répète pas, et le vrai haut comme le
+  vrai bas du cadre restent pleins, coins arrondis compris. Le tireté
+  reprend l'épaisseur et la couleur du filet déclaré. Un cadre qui tient sur
+  sa page, ou un cadre insécable, garde un filet entièrement plein.
+- Chantier 6 — bascule 4.0 :
+  - **Marelle d'origine.** L'application embarque le fichier TrueType des
+    auteurs (version 1.005), octet pour octet, avec sa licence
+    (`app/polices/OFL-Marelle.txt`, jointe aussi à chaque paquet sous
+    `licences/`). Le WOFF2 du moteur est régénéré par simple compression de
+    ce fichier : plus aucune métrique réécrite, la fonte distribuée sous le
+    nom réservé « Marelle » est celle des auteurs. Le calage sur la réglure
+    reste obtenu par la composition.
+  - **Références PDF.** Les 23 PDF de référence sont désormais ceux de la
+    4.0, composés par Typst ; chacun a le nombre de pages de son homologue
+    3.9. Les originaux de la 3.9 sont conservés dans `references-pdf/3.9/`.
+  - **Documentation.** Nouvelle notice de l'interface (`docs/INTERFACE.md`) :
+    bandeau et pastilles, rubans, volets, saisies, cahier, export, ligne de
+    commande. README (titre, version, compilation, témoins du moteur,
+    installation), guide de démarrage, CLUF (composants tiers : Typst,
+    tylax, iced, rfd, tokio, resvg et polices du compositeur ; aucune
+    préférence conservée) et licences des polices mis à jour pour la 4.0.
+  - **Ligne de commande.** `docdg --version` affiche `DocDG 4.0`.
+  - **Paquets Windows et Linux.** Flux d'intégration continue
+    `.github/workflows/qualification.yml` : sur Linux, Windows et macOS, il
+    lance les tests de l'espace de travail, vérifie `--version`, les
+    contrôles du dépôt, puis fabrique et publie le paquet du système.
+    L'outil de distribution n'exige plus Node.js quand aucun test
+    JavaScript n'existe.
+- `basique.txt` : l'âge se saisit comme un entier naturel ; empreinte du
+  manifeste mise à jour.
+- Saisies : l'indication du champ porte son article indéfini (« un entier
+  naturel », « un booléen », « une chaîne de caractères »…) ; le bouton
+  « Reprendre les saisies » est retiré — un clic sur une valeur répondue
+  repose la question, l'ancienne réponse déjà dans le champ.
+- Version : l'interface affiche « 4.0 » (majeure.mineure lue dans Cargo) ;
+  l'« À propos » de macOS dit « DocDG 4.0 » (`CFBundleName` et
+  `CFBundleDisplayName` à DocDG, version courte 4.0, version de
+  construction 4.0.0).
+- Colonnes : le nombre se donne en chiffres (`<Composer>sur 2 colonnes`) dans
+  les exemples, le ruban, le README, `docs/CAHIERS.md` et les messages du
+  moteur ; l'écriture en lettres reste comprise. Les empreintes du manifeste
+  sont mises à jour.
+
+- L'application devient native : interface iced 0.14 sans vue web,
+  composition, aperçu et PDF par Typst 0.15.1. La crate `app/` (paquet et
+  exécutable `docdg`) est remplacée ; tao, wry, muda, tungstenite, le HTML/JS/CSS
+  de l'interface et l'export par Chrome sont retirés. L'outil de mesure
+  `bench/moteurs` et son analyseur `bench/moteurs.py`, propres à la vue web,
+  disparaissent avec eux.
+- Tests et outils dont l'objet était la vue web retirés : contrôles du calage,
+  de la pagination JavaScript, du transport WebView et du CSS d'impression
+  (`tests/colonnes_impression.py`, `composition_simple.py`,
+  `ressources_compilation_chantier3.py`, `exports_chantier4.py`,
+  `chantier4_performances.py`, `performance_chantier4.py`,
+  `recette_pdf_chantier3.py`, et les tests web de `finalisation_v7`,
+  `regression_v4`, `regression_v8`, `hybride_3_9`) ; outils Chromium/Playwright
+  de `outils/` ; préparation des polices KaTeX (`outils/polices_compilation.rs`,
+  `bench/build.rs`). Le test de marges du CSS (`page_options`) disparaît : la
+  règle d'espacement vertical est désormais garantie côté Typst.
+- Le contrôle des modèles du ruban (`mathematiques_ensembles_probabilites`) et
+  l'audit des notations (`outils/auditer_chantier3.py`) lisent
+  `app/donnees/classeur.json`.
+- `xtask` écrit la version de l'espace de travail dans `Info.plist` (qui
+  restait figé à 3.4.0) ; sous Linux, la fenêtre porte la classe `docdg`
+  attendue par l'entrée de bureau.
+- Classeur reconstruit : onglets Saisie et Édition, sept intercalaires,
+  cascades Actions, Mathématiques et Programmation, panneaux Fichier, Document,
+  Styles et Corpus, recherche universelle (⌘ K, flèches, Entrée). Données
+  reprises de `classeur.js` dans `app/donnees/classeur.json`, désormais leur source unique.
+- Aperçu paginé par Typst, rastérisé page par page à la demande ; export PDF
+  par `typst-pdf`, sans navigateur.
+- Défilement lié Source ↔ Aperçu, sans bouton, fondé sur les positions des
+  lignes dans les pages composées.
+- Une instruction insérée occupe toujours sa propre ligne.
+- Onglet Édition : enregistrement, masquage et restauration par le journal en
+  tâche de fond.
+- Chantier 1, socle : le moteur 3.9 (calculs Python compris) tourne dans
+  l'application ; son rendu est traduit en Typst (`sortie.rs`), formules
+  comprises (`maths.rs`, via `tylax`). Les 23 exemples se composent et
+  s'exportent en PDF ; les 2 584 formules distinctes qu'ils produisent se
+  compilent toutes. Voyants réels des quatre bibliothèques Python.
+- Socle, compléments : sommaire confié à Typst (numéros de page exacts),
+  présentation de la 3.9 (entrées en noir, retraits par niveau), titres
+  visibles séparés des titres de signets ; interligne CSS restitué exactement
+  pour les lignes vides (vérifié par un test de mesure) ; pied de page « n / N ».
+- Chantier 2, formules (en cours) : systèmes `aligned` et `alignedat` sous
+  accolade alignés comme en LaTeX, accolade centrée et proportionnée ;
+  `\pmod` avec son espace ; formules à 1,21 em comme KaTeX ; espacement des
+  formules centrées équivalent au CSS de la 3.9, avec cumul des marges entre
+  deux formules consécutives ; matrices composées en style texte comme KaTeX,
+  en ligne comme en bloc ; marge de 5 pt entre délimiteur et contenu pour
+  `\left( \begin{matrix} … \right)`, contenu serré pour `pmatrix`, `bmatrix`
+  et variantes, comme amsmath ; barre d'augmentation de `\begin{array}{cc|c}` ;
+  virgule décimale collée aux chiffres, y compris dans les matrices ; valeurs
+  absolues (`|x|`, `\lvert x\rvert`) composées serrées ; `\mathscr` en ronde ;
+  figures SVG à largeur sans unité lues en pixels. Sur les 23 exemples, 19 ont
+  exactement le nombre de pages de leur PDF de référence.
+- Cascade CSS (`app/src/cascade.rs`) : les feuilles que le moteur émet dans
+  son rendu (environnements, corpus, figures, frises) et la partie
+  « document » de la feuille 3.9 (`app/donnees/feuille_3_9.css`) sont
+  appliquées comme dans un navigateur : sélecteurs de classes et de balises,
+  combinateurs descendant et enfant, spécificité puis ordre, styles en ligne
+  prioritaires, héritage des styles de texte. Les règles de figures sont
+  injectées dans chaque SVG. Définitions et propriétés retrouvent leur
+  titre en gras et leur énoncé en italique, les niveaux du corpus leur gris,
+  les titres leur taille de la 3.9. Sur les 23 exemples, 20 ont désormais
+  exactement le nombre de pages de leur PDF de référence.
+- `tests/consolidation3_9.py` referme ses connexions SQLite.
+- Chantier 3, tableaux : le convertisseur de tableaux suit désormais le CSS
+  au lieu d'imposer une grille pleine largeur. Largeur ajustée ou pleine,
+  cadre de la table, filets de rangée et bordures de cellule côté par côté
+  (cellules fusionnées placées dans la grille), hauteurs de rangée,
+  alignements horizontal et vertical, marges internes plus le demi-interligne
+  du CSS, fonds et hachures, marges et centrage. Les tableaux de signes et de
+  variations retrouvent leur forme de la 3.9 : largeur ajustée, filet après
+  la première colonne, valeurs étagées en haut ou en bas, doubles barres.
+  Les rangées d'entête (`thead`, `tab-entete`, rangées de `th`) se répètent
+  en tête de chaque fragment ; un tableau n'est sécable que s'il est déclaré
+  `secable`. Les formules ne sont jamais mises en gras, comme dans KaTeX.
+- La cascade reconnaît `:first-child` et `:last-child`.
+- Blocs : pleine largeur par défaut comme un `div`, bordures côté par côté,
+  rayons de coin par angle, marges internes conservées même sans fond,
+  centrage par `margin: auto` ; un encadré est insécable par défaut et
+  sécable s'il est déclaré `secable`. Les bandeaux de titre des encadrés
+  occupent toute la largeur.
+- Interface : le bandeau supérieur ne porte plus de ligne de mesures
+  détaillées. Une pastille « Document » (voyant rouge pendant le chargement
+  ou la recomposition, vert quand l'aperçu est à jour) affiche le temps
+  global de chargement, remis à zéro à chaque ouverture ; chaque
+  bibliothèque de calcul a sa pastille arrondie avec son voyant. Le panneau
+  Fichier montre, à la place d'« En cours », le chemin de la source et celui
+  du dernier PDF exporté, les erreurs d'enregistrement ou d'export en rouge
+  dans le groupe concerné.
+- Un `<` qui n'ouvre pas de balise est du texte, comme en HTML5 : les
+  formules `\(p < 0,05\)` des tests statistiques ne tronquent plus leur
+  paragraphe ; les nœuds de texte adjacents sont fusionnés.
+- Chantier 4, colonnes : un passage en colonnes (`column-count`) se compose
+  en colonnes équilibrées, gouttière et filet (`column-rule`) compris, et se
+  poursuit sur la page suivante s'il la dépasse.
+- Tableaux : une cellule alignée en haut ou en bas (rangées de variations)
+  mesure son contenu sur son encre et garde 0,3 em jusqu'au filet ; les
+  grandes formules (fractions, radicaux, ±∞) ne touchent plus la bordure.
+- Notation : `pgcd`, `PGCD`, `ppcm` et `PPCM` sont des opérateurs droits du
+  mini-langage, comme Card, Vect ou Ker.
+- Exemples : `publication3.txt` et `algo.txt` n'emploient plus la notation
+  LaTeX brute `\(…\)` mais la notation native `$…$`, comme les 21 autres ;
+  `publication3.txt` reprend l'interligne 1,7 et le saut de page avant le
+  passage en colonnes. Les empreintes du manifeste sont mises à jour.
+- Saisies interactives, bloquantes, à droite de la question comme dans la
+  console d'un IDE : une question `<Saisir>` en attente est composée dans
+  l'aperçu avec son champ ; la position exacte du champ dans la page est
+  demandée à l'introspecteur de Typst, et un vrai champ de saisie, à la
+  taille du document et au zoom, s'y superpose et prend le focus. Entrée
+  transmet la réponse au moteur, qui la valide selon le type déclaré ; une
+  réponse refusée est signalée en rouge sous le champ. Chaque nouvelle
+  question est amenée en haut des deux volets ; « Reprendre les saisies »
+  efface les réponses.
+- Volets : Source et Aperçu forment une grille à séparateur déplaçable à la
+  souris ; un seul bouton bascule la disposition, côte à côte (⇄) ou source
+  au-dessus de l'aperçu (⇅), proportion conservée ; Code et Aperçu masquent
+  l'un ou l'autre. L'inversion des volets est retirée.
+- Saisies : une réponse vide est signalée (« Une réponse est attendue. ») ;
+  un refus dit simplement ce qui ne va pas (« « 3,5 » n'est pas un entier
+  naturel. »), avec l'écriture attendue quand elle compte (virgule
+  décimale, 3/4, 2 + 3i, oui ou non, une seule lettre).
+- Moteur : un élément produit par une ligne précise d'un segment porte son
+  décalage dans le segment, converti en numéro de ligne absolu à
+  l'assemblage (retiré quand les numéros de ligne ne sont pas demandés) ;
+  les saisies, regroupées en un seul segment, ont désormais chacune leur
+  ancre, et le défilement lié ne se décale plus sur un bloc de questions.
+- Saisies : un clic sur une valeur répondue (en bleu) repose cette seule
+  question, l'ancienne réponse déjà dans le champ ; les zones cliquables
+  sont situées dans la page par deux repères Typst, au début et à la fin de
+  la valeur.
+- Rubans : Mathématiques compte cinq domaines d'au moins trois catégories
+  (nombres et calcul ; algèbre et arithmétique : sommes et produits,
+  arithmétique et dénombrement, algèbre linéaire ; analyse ; ensembles et
+  logique ; probabilités et statistiques).
+- Le test de césure de `publication3` vérifie qu'aucune coupure n'entre
+  dans la formule du PGCD, quelle que soit son écriture.
+- Images : les images que le moteur émet en ligne (`data:` PNG, JPEG, GIF,
+  SVG, WebP, en base64) sont décodées, déposées dans un registre adressé
+  par leur contenu et servies à Typst comme fichiers virtuels ; largeur et
+  hauteur viennent des attributs ou du style. Les pictogrammes au fil du
+  texte et les illustrations des exemples réapparaissent.
+- Blocs en ligne : `figure` et `figcaption` sont des blocs ; un élément
+  `inline` ou `inline-block` n'est jamais pris pour un bloc par son parent ;
+  un `inline-block` qui contient des blocs devient une boîte en ligne à
+  largeur ajustée au plus large de ses éléments (grille d'une colonne),
+  alignée selon son `text-align` — une figure pose sa légende sous l'image.
+- Césure : les coupures viennent du moteur, comme dans la 3.9 (règles
+  françaises, longueurs minimales, noms propres, sigles et formules
+  épargnés) ; Typst n'utilise plus que ces tirets conditionnels. Le réglage
+  `césure` du document est respecté ; `demonstration` porte exactement les
+  3 802 coupures possibles de sa référence.
+- Lignes isolées : `veuves` et `orphelines` du document règlent l'évitement
+  des lignes isolées en haut et en bas de page.
+- Formules en ligne : une formule peut empiéter d'un quart d'interligne
+  au-dessus de sa ligne, comme le permet la boîte de ligne CSS, sans jamais
+  toucher la ligne précédente. `demonstration` retrouve ses 35 pages : sur
+  les 23 exemples, 21 ont exactement le nombre de pages de leur PDF de
+  référence (restent les deux documents Seyès).
+- Espace de travail : l'application est le membre par défaut ;
+  `cargo run --release exemples/analyse.txt` lance docdg (et non plus
+  l'outil de mesure).
+- Ouverture : le document s'ouvre en tête, curseur et volets compris, y
+  compris quand il est passé en argument au lancement.
+- Défilement lié : le titre caché qui alimente le sommaire et les signets
+  est écrit sur une ligne Typst sans correspondance dans la source ; les
+  entrées du sommaire ne captent plus l'ancre des titres, et les ancres
+  suivent l'ordre du document (le décalage entre Source et Aperçu
+  disparaît).
+- Formules : les accolades de cas (`cases`) sont aérées comme dans
+  amsmath (cadratin entre les colonnes, rangées espacées) ; `\iff` donne
+  la longue double flèche ⟺.
+- Rubans : Mathématiques s'organise en cinq domaines (nombres et calcul,
+  analyse, algèbre, ensembles et logique, probabilités et statistiques),
+  puis catégories, puis formules ; Programmation sépare les saisies et le
+  calcul matriciel (statistiques, algèbre, géométrie, extraction) des
+  déclarations. Aucun premier étage ne dépasse cinq entrées.
+- Rust 1.92 ou plus requis pour l'application (Typst 0.15).
+
 ## 3.9.0 — mouture unique de publication (17 octobre 2026)
 
 ### Synchronisation monotone à vitesse continue (17 octobre 2026 — finition)

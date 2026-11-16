@@ -9,13 +9,13 @@ document {
 	hauteur: 6;
 	précision: 3;
 }
-soit h1: un style = <bleu nuit gras section num>
-soit resume: un style = <italique 10 pt>
-soit motcle: un style = <petites capitales>
+soit h1 un style défini par <bleu nuit gras section num>
+soit resume un style défini par <italique 10 pt>
+soit motcle un style défini par <petites capitales>
 
-soit ouvrage: un style = <gras 22 pt au centre>
-soit mention: un style = <14 pt au centre>
-soit maison: un style = <italique au centre>
+soit ouvrage un style défini par <gras 22 pt au centre>
+soit mention un style défini par <14 pt au centre>
+soit maison un style défini par <italique au centre>
 
 <ouvrage>{De la mesure du pendule simple}
 
@@ -35,13 +35,13 @@ soit maison: un style = <italique au centre>
 
 	Pour un pendule de longueur $L$, l'équation du mouvement s'écrit $theta'' + (g/L) sin(theta) = 0$. L'approximation des petits angles remplace $sin(theta)$ par $theta$ ; le développement limité chiffre l'erreur commise<note>{Le terme suivant du développement, en $theta^3/6$, reste inférieur à un millième pour $theta < 0,18$ radian.} :
 
-<Soit>une fonction s(x) = sin(x)
+<Soit>s : ℝ → ℝ, x ↦ sin(x)
 
 <Calculer>le développement limité de s en 0 à l'ordre 5
 
 	Dans ce régime, la période vaut $T = 2pi racine(L/g)$, d'où $g = 4pi^2 L/T^2$.
 
-<h1>Mesures et propagation des incertitudes
+<page suivante h1>Mesures et propagation des incertitudes
 
 	La longueur est mesurée au réglet, la période au chronomètre sur vingt oscillations :
 

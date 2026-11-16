@@ -14,7 +14,7 @@ La licence 1 à la licence 3, PCSI, PC, MPSI et MP : les outils du supérieur et
 > Le registre des classes préparatoires s'écrit tel quel. Les résultats sont exacts ; les impossibilités renvoient honnêtement au raisonnement à rédiger.
 
 ```docdg
-<Soient>les fonctions f(x) = x^2, g(x) = 1/x^2 et s(x) = sin(x)
+<Soit>f, g et s 3 fonctions définies par f(x) = x², g(x) = 1/x² et s(x) = sin(x)
 <Calculer>l'intégrale de f entre 0 et 1
 <Déterminer>la nature de l'intégrale de g entre 1 et +infini
 <Calculer>un équivalent de s en 0
@@ -24,11 +24,11 @@ La licence 1 à la licence 3, PCSI, PC, MPSI et MP : les outils du supérieur et
 Intégrales en forme close, impropres avec nature et valeur, équivalents en un point ou en $\pm\infty$ (notation $\sim$), séries avec convergence prouvée et somme quand elle existe ($\pi^2/6$…).
 
 ```docdg
-<Soit>la matrice M {
+<Soit>M une matrice définie par {
 	2 ; 1
 	1 ; 1
 }
-<Soient>les vecteurs u(1;0;1), v(0;1;1), a(1;2;0) et b(1;0;0)
+<Soit>u(1;0;1), v(0;1;1), a(1;2;0) et b(1;0;0) 4 vecteurs
 <Calculer>le rang de M
 <Déterminer>le noyau de M
 <Déterminer>l'image de M
@@ -51,7 +51,7 @@ $\mathrm{Ker}$ et $\mathrm{Im}$ en $\mathrm{Vect}(\dots)$, $\chi_M$ factorisé, 
 Les polynômes formels parlent la langue du chapitre : quotient et reste, PGCD unitaire, irréductibles du corps choisi. Les mêmes phrases acceptent les entiers ($47 = 5 \times 9 + 2$).
 
 ```docdg
-<Soit>une fonction psi(x, y) = x^3 - 3x + y^2
+<Soit>psi une fonction définie par psi(x, y) = x³ − 3x + y²
 
 <Calculer>le gradient de psi
 <Calculer>la matrice hessienne de psi
@@ -62,7 +62,7 @@ Les polynômes formels parlent la langue du chapitre : quotient et reste, PGCD u
 Les fonctions de plusieurs variables se posent naturellement ; les points critiques viennent avec leur nature par la hessienne (minimum, maximum, point col).
 
 ```docdg
-<Soient>les fonctions f(x) = x^2, g(x) = x et F(p) = 1/(p^2 + 1)
+<Soit>f, g et F 3 fonctions définies par f(x) = x², g(x) = x et F(p) = 1/(p² + 1)
 <Calculer>la série de Fourier de f sur [-pi ; pi] à l'ordre 4
 <Calculer>la transformée de Laplace de f
 <Calculer>la transformée de Laplace inverse de F
@@ -137,7 +137,7 @@ Sans liste, neuf niveaux se répartissent d'eux-mêmes entre le minimum et le ma
 Les extremums libres passent par les points critiques et la hessienne — `<Déterminer>les points critiques de g` conclut minimum, maximum ou point col. Sous contrainte, docdg introduit le lagrangien, résout \\(\\nabla f = \\lambda\\,\\nabla g\\) avec \\(g = 0\\), et classe les candidats :
 
 ```docdg
-<Soit>la fonction f(x, y) = x*y
+<Soit>f une fonction définie par f(x, y) = x×y
 <Déterminer>les extremums de f sous la contrainte x^2 + y^2 = 2
 ```
 
@@ -278,7 +278,7 @@ conditionnement, exponentielle de matrice, valeurs propres numériques :
 Hilbert d'ordre 4 y montre ce que coûte un mauvais conditionnement.
 
 ```docdg
-<Soit>la matrice J {
+<Soit>J une matrice définie par {
 	0 ; -1
 	1 ; 0
 }
@@ -303,7 +303,7 @@ Shapiro-Wilk : `scipy.stats` rédige les hypothèses, la p-valeur et la
 décision, et trace la zone de rejet (`statistiques-probabilites.txt`).
 
 ```docdg
-<Calculer>le test du khi-deux d'indépendance du tableau {20 ; 30 ; 25 | 15 ; 25 ; 35}
+<Effectuer>le test du khi-deux d'indépendance du tableau {20 ; 30 ; 25 | 15 ; 25 ; 35}
 ```
 
 ### Interpolation : Lagrange et les splines

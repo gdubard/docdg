@@ -1,6 +1,6 @@
 document {
 	orientation: portrait;
-	marges: 20;
+	marges: 15;
 	espacements: {0;3;0;3};
 	script: Georgia;
 	taille: 12;
@@ -12,12 +12,12 @@ document {
 	veuves: 2;
 	précision: 3;
 }
-soit h1: un style = <bleu nuit gras section num>
-soit h2: un style = <bleu nuit italique sous-section>
+soit h1 un style défini par <bleu nuit gras section num>
+soit h2 un style défini par <bleu nuit italique sous-section>
 
-soit ouvrage: un style = <gras 20 pt au centre>
-soit mention: un style = <12 pt au centre>
-soit maison: un style = <italique au centre>
+soit ouvrage un style défini par <gras 20 pt au centre>
+soit mention un style défini par <12 pt au centre>
+soit maison un style défini par <italique au centre>
 
 <Afficher>un cadre bleu nuit de 0,5 mm et d'une largeur de 140 mm au centre {
 <ouvrage>{De la composition du texte courant}
@@ -45,7 +45,7 @@ soit maison: un style = <italique au centre>
 
 	Un paragraphe justifié sans césure étire ses blancs interlettres jusqu'à l'invraisemblable dès qu'un mot long se présente en fin de ligne : la ligne précédente se distend, la suivante se resserre, et l'œil perçoit ces irrégularités comme des lézardes verticales qui parcourent la colonne. Les typographes appellent gris typographique cette impression d'ensemble qu'une page donne lorsqu'on la regarde de loin, sans chercher à la lire ; un gris régulier est le signe d'une composition maîtrisée. La césure française répartit les mots incommodes de part et d'autre de la coupure et rend au paragraphe une densité constante. Les mots que la présente démonstration exerce sont volontairement interminables : anticonstitutionnellement, incompréhensiblement, particulièrement, développement, professionnellement, mathématiquement, extraordinairement, vraisemblablement, remarquablement, systématiquement. Chacun d'eux, placé en fin de ligne, se coupe désormais aux endroits que les motifs français autorisent : deux lettres au moins restent avant la coupure, trois au moins la suivent, et jamais un mot composé, un sigle ou un nom propre ne se trouve disloqué.
 
-	Les mathématiques, elles, ne se coupent jamais. La ligne \(\operatorname{PGCD}(84\,;\,60) = 12\) traverse le paragraphe sans qu'aucun trait d'union conditionnel ne vienne s'y glisser, pas davantage que dans \(\displaystyle\sum_{k=1}^{n} k^2 = \dfrac{n(n+1)(2n+1)}{6}\) ; les titres de section, les figures et le code en sont également préservés. La césure est une opération de présentation, appliquée au texte courant et à lui seul, ce qui laisse intacte la sortie canonique du moteur.
+	Les mathématiques, elles, ne se coupent jamais. La ligne $pgcd(84 ; 60) = 12$ traverse le paragraphe sans qu'aucun trait d'union conditionnel ne vienne s'y glisser, pas davantage que dans $somme(k=1;n) k^2 = (n(n+1)(2n+1))/6$ ; les titres de section, les figures et le code en sont également préservés. La césure est une opération de présentation, appliquée au texte courant et à lui seul, ce qui laisse intacte la sortie canonique du moteur.
 
 <page suivante h2>Les veuves et les orphelines
 
@@ -60,7 +60,7 @@ soit maison: un style = <italique au centre>
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 3 mm, un titre {Une démonstration qui se poursuit}, sécable{
 	Ce cadre est déclaré <italique>{sécable} : il s'étend sur autant de pages qu'il en faut, et son filet devient tireté au point de rupture pour signaler au lecteur que la démonstration continue. La bordure supérieure du fragment suivant est tiretée de même, tandis que le titre ne se répète pas — il appartient à l'ouverture du raisonnement, non à sa continuation.
 
-	Soit une suite \((u_n)\) définie par \(u_0 = 1\) et \(u_{n+1} = 2u_n + 1\). On établit par récurrence que \(u_n = 2^{n+1} - 1\) pour tout entier naturel \(n\). L'initialisation est immédiate puisque \(2^{0+1} - 1 = 1 = u_0\). Supposons la propriété acquise au rang \(n\) : alors \(u_{n+1} = 2(2^{n+1} - 1) + 1 = 2^{n+2} - 2 + 1 = 2^{n+2} - 1\), ce qui est exactement la propriété au rang \(n+1\). La récurrence est donc établie, et la suite croît géométriquement, ce que le tableau de la section suivante illustre numériquement sur ses vingt premiers termes.
+	Soit une suite $(u_n)$ définie par $u_0 = 1$ et $u_(n+1) = 2u_n + 1$. On établit par récurrence que $u_n = 2^(n+1) - 1$ pour tout entier naturel $n$. L'initialisation est immédiate puisque $2^(0+1) - 1 = 1 = u_0$. Supposons la propriété acquise au rang $n$ : alors $u_(n+1) = 2(2^(n+1) - 1) + 1 = 2^(n+2) - 2 + 1 = 2^(n+2) - 1$, ce qui est exactement la propriété au rang $n+1$. La récurrence est donc établie, et la suite croît géométriquement, ce que le tableau de la section suivante illustre numériquement sur ses vingt premiers termes.
 
 	Ce troisième paragraphe existe pour que le cadre déborde effectivement, quelle que soit la place restante au moment où la composition l'atteint. Il n'apporte rien au raisonnement et l'avoue franchement ; sa seule fonction est d'occuper suffisamment de lignes pour que la coupure se produise et devienne observable. Les règles de veuve et d'orpheline s'appliquent à l'intérieur du cadre exactement comme dans le texte courant.
 }
@@ -103,11 +103,11 @@ soit maison: un style = <italique au centre>
 
 	Le rapport de deux termes consécutifs converge vers 2, ce que la démonstration par récurrence laissait attendre. La rangée d'entête reparaît au sommet de chaque fragment du tableau, sans que rien n'ait été écrit pour l'exiger.
 
-<h2>Un passage en colonnes
+<page suivante h2>Un passage en colonnes
 
 	La colonne étroite est la respiration de la page savante : l'œil y saisit la ligne entière sans balayer, et la césure, qui régularise le gris, y trouve son plein emploi. Toutes les pages n'en ont pas besoin pour autant — un tableau large, une frise, une figure réclament au contraire la pleine mesure. Le passage en colonnes se déclare donc là où il commence et se referme là où il finit, sans engager le reste du document.
 
-<Composer>sur deux colonnes avec un filet gris clair {
+<Composer>sur 2 colonnes avec un filet gris clair {
 	La composition en colonnes est née de la contrainte du journal, où il fallait loger beaucoup de texte sur peu de papier, mais elle a survécu à cette contrainte parce qu'elle sert la lecture. Une ligne de soixante à soixante-dix signes est celle que l'œil parcourt le plus vite : au-delà, le retour à la ligne devient une manœuvre, et le regard perd son point de reprise ; en deçà, la césure se multiplie et le blanc interlettre se creuse. La revue scientifique a fixé les deux colonnes comme sa mesure ordinaire, et l'usage ne s'est pas démenti depuis.
 
 	Ce que le passage en colonnes demande au moteur n'est pas trivial. Il faut que les deux colonnes s'équilibrent, c'est-à-dire qu'elles finissent à la même hauteur, sans quoi la page paraît boiteuse ; il faut que la coupure se produise entre deux lignes et non au milieu d'un mot ; il faut enfin que le passage, s'il dépasse la page, se poursuive sur la suivante en colonnes de même. Rien de tout cela ne se déclare : c'est le comportement par défaut, et c'est le seul.

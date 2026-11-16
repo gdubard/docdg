@@ -31,8 +31,8 @@ Nouveauté de docdg 2.2 : ce qu'exige un document long — une structure au-dess
 Le mot de style `chapitre` ouvre un niveau au-dessus de `section` :
 
 ```docdg
-soit h0: un style = <bleu nuit gras chapitre num>
-soit h1: un style = <bleu nuit gras section num>
+soit h0 un style défini par <bleu nuit gras chapitre num>
+soit h1 un style défini par <bleu nuit gras section num>
 
 <h0>Le pendule comme instrument
 
@@ -46,9 +46,9 @@ Les chapitres se numérotent seuls, remettent les compteurs de sections à zéro
 La page de titre **se compose dans le corps du document**, avec les styles nommés et l'insertion d'image — comme tout le reste. Le bloc `document { }` ne porte que le physique : il n'a jamais à connaître le titre de l'ouvrage ni le nom de son auteur.
 
 ```docdg
-soit ouvrage: un style = <gras 22 pt au centre>
-soit mention: un style = <14 pt au centre>
-soit maison: un style = <italique au centre>
+soit ouvrage un style défini par <gras 22 pt au centre>
+soit mention un style défini par <14 pt au centre>
+soit maison un style défini par <italique au centre>
 
 <ouvrage>{De la mesure en physique}
 
@@ -116,7 +116,7 @@ La clé `voie:` n'existe plus : le niveau suffit au corpus, et le moteur la refu
 Nouveauté de docdg 2.7 : le théorème, la proposition, la propriété, le lemme, le corollaire, l'axiome, la conjecture, la définition, l'exemple et la remarque **s'énoncent** — et se numérotent tout seuls :
 
 ```docdg
-soit théorème: un style = <bleu nuit petites capitales>
+soit théorème un style défini par <bleu nuit petites capitales>
 
 <Énoncer>le théorème de Pythagore <étiquette>{pythagore} {
 Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des carrés des deux autres côtés.
@@ -127,7 +127,7 @@ Dans un triangle rectangle, le carré de l'hypoténuse est égal à la somme des
 
 Le titre se compose en vedette — **Théorème 3.2 (Pythagore).** — et le corps le suit, en italique pour les énoncés, en romain pour les définitions, les exemples et les remarques : la convention des livres. Ce qui suit le nom du genre devient le nom propre de l'énoncé, débarrassé de sa liaison : `le théorème des valeurs intermédiaires` s'imprime « Théorème 3.4 (valeurs intermédiaires) ».
 
-**Chaque genre tient son compteur.** Le théorème 2 succède au théorème 1 sans regarder les définitions ; le chapitre remet tous les compteurs à zéro et préfixe les numéros, comme il le fait des sections. L'étiquette et le renvoi sont ceux du document long — `voir le théorème <renvoi>{pythagore}` se remplace par le numéro, cliquable — et le titre s'habille comme un titre de section : `soit théorème: un style = <bleu nuit petites capitales>`.
+**Chaque genre tient son compteur.** Le théorème 2 succède au théorème 1 sans regarder les définitions ; le chapitre remet tous les compteurs à zéro et préfixe les numéros, comme il le fait des sections. L'étiquette et le renvoi sont ceux du document long — `voir le théorème <renvoi>{pythagore}` se remplace par le numéro, cliquable — et le titre s'habille comme un titre de section : `soit théorème un style défini par <bleu nuit petites capitales>`.
 
 **La preuve loge dans l'énoncé.** Un sous-bloc `démonstration { … }` se compose en vedette — *Démonstration.* — et se referme d'un tombeau, en romain quand l'énoncé est en italique. Avec un raisonnement, c'est la machinerie de `<Montrer>` qui rédige :
 
@@ -193,7 +193,7 @@ Une suite de mots **en majuscules** dans une balise de style désigne une police
 <au centre italique 14 pt>Je suis<TIMES NEW ROMAN gras>{très}fatigué.
 ```
 
-La convention vaut en début de ligne, en milieu de paragraphe, et dans les styles nommés (`soit manuscrit: un style = <SCHOLA italique>`).
+La convention vaut en début de ligne, en milieu de paragraphe, et dans les styles nommés (`soit manuscrit un style défini par <SCHOLA italique>`).
 
 ---
 

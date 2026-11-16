@@ -6,11 +6,11 @@ document {
     interligne: 2,1;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Algèbre — exemples progressifs
 
@@ -25,7 +25,7 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 <h1>Fractions, pas à pas
 <Calculer>1/2 + 1/3
 <Calculer>7/6 - 3/4
-<Calculer>3/4 * 2/5
+<Calculer>3/4 × 2/5
 <Calculer>1/2 : 3/4
 <Simplifier>la fraction 84/60
 
@@ -95,14 +95,14 @@ La solution de l'équation 2(x - 1) = x + 4 est : <Résoudre>l'équation 2(x - 1
 ]
 <h1>Systèmes d'équations
 	Un système s'aligne tout seul sur le premier opérateur relationnel, égalités et inégalités mêlées, une équation par ligne :
-<Soit>le système s {
+<Soit>s un système défini par {
 	2x + 3y = 7
 	x - y = 1
 }
 <Résoudre>le système s
 
 <h1>Déterminant et inverse
-<Soit>la matrice M {
+<Soit>M une matrice définie par {
 	2 ; 1
 	1 ; 1
 }
@@ -120,6 +120,7 @@ La solution de l'équation 2(x - 1) = x + 4 est : <Résoudre>l'équation 2(x - 1
 
 Un discriminant qui n'est pas un carré parfait garde le radical et donne une valeur approchée :
 
+
 <Étudier>le second degré {
 	x^2 - 2
 }
@@ -130,7 +131,7 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 
 <h1>Suite par récurrence
 	La suite se définit d'un premier terme et d'une relation ; les termes se calculent ensuite à la demande.
-	<Soit>la suite u, définie par u(0) = 1 et u(n+1) = 2u(n) + 1
+	<Soit>u une suite définie par u(0) = 1 et u(n+1) = 2u(n) + 1
 	<Calculer>les 6 premiers termes de u
 
 <h2>Suites arithmétiques et géométriques
@@ -144,11 +145,12 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 <Étudier>la congruence 6x ≡ 4 [8]
 
 <h1>Notations de l'algèbre linéaire
-	L'engendré $engendré par(u, v)$, la trace $trace(A)$, le déterminant $déterminant(A)$, la transposée $^t{A}$, l'inverse $A^{-1}$, la comatrice $comatrice(A)$, le spectre $spectre(A)$ et l'adjoint $A^*$ se nomment en clair dans une formule.
+	L'engendré $engendré par(u, v)$, la trace $trace(A)$, le déterminant $déterminant(A)$, la transposée $^t{A}$, l'inverse $A^(-1)$, la comatrice $comatrice(A)$, le spectre $spectre(A)$ et l'adjoint $A^*$ se nomment en clair dans une formule.
 	Le noyau et l'image s'écrivent $noyau(A)$ et $image(A)$, le rang $rang(A)$.
 
 <h1>Le pivot à trois inconnues
-<Soit>le système t {
+
+<Soit>t un système défini par {
 	x + y + z = 2
 	4x + 2y + z = 3
 	9x + 3y + z = 6
@@ -162,7 +164,7 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 <Dresser>la table de Cayley du groupe Z/4Z
 <Dresser>la table de Cayley du groupe (Z/8Z)*
 
-<page suivante h1>Dénombrement
+<h1>Dénombrement
 <Dénombrer>les combinaisons de 3 parmi 10
 <Dénombrer>les arrangements de 3 parmi 10
 <Dénombrer>les permutations de 5
@@ -178,14 +180,14 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 <Écrire>le complexe w = -2i sous ses trois formes
 
 <h1>Puissances de matrices et chaînes de Markov
-<Soit>la matrice M {
+<Soit>M une matrice définie par {
 	0,5 ; 0,5
 	0,25 ; 0,75
 }
 <Calculer>la puissance 3 de M
 <Calculer>l'état stable de M
 
-<h1>Graphes
+<page suivante h1>Graphes
 <Construire>le graphe G {
 	A -> B
 	B -> C
@@ -203,17 +205,17 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 
 <page suivante h0>Enseignement supérieur
 
-soit remarque: un style = <gris foncé italique>
+soit remarque un style défini par <gris foncé italique>
 <h1>Valeurs propres et diagonalisation
-<Soit>la matrice A {
+<Soit>A une matrice définie par {
 	2 ; 1
 	1 ; 2
 }
 <Déterminer>les valeurs propres de A
-<Diagonaliser A>
+<Diagonaliser>A
 Une matrice à valeur propre double :
 
-<Soit>la matrice B {
+<Soit>B une matrice définie par {
 	3 ; 0
 	0 ; 3
 }
@@ -224,7 +226,7 @@ Une matrice à valeur propre double :
 <Calculer>la somme de k^3 pour k de 1 à n
 
 <h1>Rang, noyau, image
-<Soit>la matrice C {
+<Soit>C une matrice définie par {
 	1 ; 2 ; 3
 	2 ; 4 ; 6
 	1 ; 0 ; 1
@@ -234,7 +236,7 @@ Une matrice à valeur propre double :
 <Déterminer>l'image de C
 
 <h2>Réduction : polynômes caractéristique et minimal, trigonalisation
-<Soit>la matrice D {
+<Soit>D une matrice définie par {
 	3 ; 1 ; 0
 	0 ; 3 ; 0
 	0 ; 0 ; 2
@@ -250,7 +252,7 @@ Une matrice à valeur propre double :
 <Factoriser>X^4 - 1 dans C[X]
 <Factoriser>X^4 - 1 dans les complexes
 <Factoriser>X^2 + 1 dans Q[X]
-	Les quatre anneaux se disent de deux façons : `dans C[X]` et `dans les complexes` sont la même demande, et l'absence de complément vaut `dans R[X]`. `dans Q[X]` refuse ce qui ne se factorise pas sur les rationnels.
+	Les quatre anneaux se disent de deux façons : « dans C[X] » et « dans les complexes » sont la même demande, et l'absence de complément vaut « dans R[X] ». « dans Q[X] » refuse ce qui ne se factorise pas sur les rationnels.
 
 <page suivante h1>Le groupe Z/nZ
 <h2>Les tables
@@ -289,7 +291,7 @@ Au-delà du calcul exact, les méthodes numériques de l'algèbre linéaire déc
 
 <h2>Les décompositions LU et QR
 Le premier pivot de A est nul : la décomposition LU exige une permutation des lignes.
-<Soit>la matrice A {
+<Soit>A une matrice définie par {
 	0 ; 2 ; 1
 	1 ; 1 ; 1
 	2 ; 1 ; 3
@@ -299,14 +301,14 @@ Le premier pivot de A est nul : la décomposition LU exige une permutation des l
 
 <h2>La décomposition de Cholesky
 Une matrice symétrique définie positive s'écrit LLᵀ, avec L triangulaire inférieure : c'est la méthode de choix pour résoudre les systèmes normaux des moindres carrés.
-<Soit>la matrice S {
+<Soit>S une matrice définie par {
 	4 ; 2
 	2 ; 3
 }
 <Calculer>la décomposition de Cholesky de S
 
 <h2>Valeurs singulières et conditionnement
-<Soit>la matrice R {
+<Soit>R une matrice définie par {
 	1 ; 2
 	2 ; 4
 	3 ; 6
@@ -315,7 +317,7 @@ Une matrice symétrique définie positive s'écrit LLᵀ, avec L triangulaire in
 	<remarque>Une seule valeur singulière non nulle : les colonnes de R sont proportionnelles, la matrice est de rang 1.
 
 La matrice de Hilbert, symétrique et inversible, est pourtant redoutable pour le calcul numérique :
-<Soit>la matrice H {
+<Soit>H une matrice définie par {
 	1 ; 1/2 ; 1/3 ; 1/4
 	1/2 ; 1/3 ; 1/4 ; 1/5
 	1/3 ; 1/4 ; 1/5 ; 1/6
@@ -325,7 +327,7 @@ La matrice de Hilbert, symétrique et inversible, est pourtant redoutable pour l
 
 <h2>L'exponentielle de matrice
 Le système X' = JX décrit une rotation uniforme ; sa solution s'écrit avec l'exponentielle de J.
-<Soit>la matrice J {
+<Soit>J une matrice définie par {
 	0 ; -1
 	1 ; 0
 }
@@ -334,7 +336,7 @@ Le système X' = JX décrit une rotation uniforme ; sa solution s'écrit avec l'
 
 <h2>Des valeurs propres hors de portée du calcul exact
 Au-delà du degré 4, les racines d'un polynôme caractéristique n'ont en général pas d'expression par radicaux : le calcul numérique prend le relais.
-<Soit>la matrice C {
+<Soit>C une matrice définie par {
 	0 ; 1 ; 0 ; 0 ; 0
 	0 ; 0 ; 1 ; 0 ; 0
 	0 ; 0 ; 0 ; 1 ; 0
@@ -344,8 +346,8 @@ Au-delà du degré 4, les racines d'un polynôme caractéristique n'ont en gén�
 <Déterminer>numériquement les valeurs propres de C
 	<remarque>Ce sont les cinq racines cinquièmes de l'unité : la matrice de permutation circulaire vérifie C⁵ = I.
 
-<page suivante h1>Une table à la demande
-soit n: un entier = 5
+<h1>Une table à la demande
+soit n ∈ ℤ tel que n = 5
 La valeur choisie est n = #n. Voici la table pour Z/5Z :
 <Dresser>la table de Z/5Z pour l'addition
 
@@ -353,22 +355,22 @@ La valeur choisie est n = #n. Voici la table pour Z/5Z :
 <Calculer>les racines cinquièmes de l'unité
 <Calculer>les racines cubiques de 8i
 
-<Soit>la matrice T {
+<Soit>T une matrice définie par {
 	2 ; 1
 	0 ; 2
 }
 <Trigonaliser>T
-<Soient>les vecteurs u(1;0;1) et v(0;1;1)
+<Soit>u(1;0;1) et v(0;1;1) 2 vecteurs
 <Orthonormaliser>la famille u et v
 
 
 <h2>L'article pluriel
 
-	L'article pluriel factorise une déclaration : une seule phrase pose plusieurs objets, et le subjonctif s'accorde — `<Soient>`. Il ne vaut que pour les objets qui tiennent sur la ligne, points, vecteurs et fonctions. Une matrice porte son tableau entre accolades : elle se déclare seule, au singulier.
+	L'article pluriel factorise une déclaration : une seule phrase pose plusieurs objets, et « <<Soit>> » reste invariable dans la source ; la phrase imprimée s'accorde d'elle-même, comme dans « Soient A et B deux points ». Il ne vaut que pour les objets qui tiennent sur la ligne, points, vecteurs et fonctions. Une matrice porte son tableau entre accolades : elle se déclare seule, au singulier.
 
-<Soient>les vecteurs w(2;1;0) et z(0;1;2)
+<Soit>w(2;1;0) et z(0;1;2) 2 vecteurs
 
-<Soit>la matrice P {
+<Soit>P une matrice définie par {
 	1 ; 1
 	0 ; 1
 }
@@ -380,25 +382,25 @@ La valeur choisie est n = #n. Voici la table pour Z/5Z :
 
 <h2>Déclarer un vecteur et une matrice
 
-soit V: un vecteur de 4 rationnels = {1 ; 2 ; 3 ; 4}
-soit W: un vecteur de 4 rationnels = {2 ; 2 ; 2 ; 2}
-soit A: une matrice 2×2 de rationnels = {{2 ; 1} ; {1 ; 3}}
-soit M: une matrice 2×3 de rationnels = {{1 ; 2 ; 3} ; {4 ; 5 ; 6}}
+soit V un vecteur de 4 rationnels tel que V = {1 ; 2 ; 3 ; 4}
+soit W un vecteur de 4 rationnels tel que W = {2 ; 2 ; 2 ; 2}
+soit A une matrice 2×2 de rationnels telle que A = {{2 ; 1} ; {1 ; 3}}
+soit M une matrice 2×3 de rationnels telle que M = {{1 ; 2 ; 3} ; {4 ; 5 ; 6}}
 
 Le type porte la forme, la valeur porte le contenu : la taille se dit une fois, à gauche du signe égal, et le membre de droite ne dit plus que ce que les cases valent.
 
-soit Z: un vecteur de 4 rationnels = le vecteur nul
-soit U: un vecteur de 4 rationnels = le vecteur unité
-soit I: une matrice 2×2 d'entiers naturels = la matrice identité
+soit Z un vecteur de 4 rationnels tel que Z = le vecteur nul
+soit U un vecteur de 4 rationnels tel que U = le vecteur unité
+soit I une matrice 2×2 d'entiers naturels telle que I = la matrice identité
 
 <h2>Les réductions
 
-soit S: un rationnel = la somme de V
-soit P: un rationnel = le produit de V
-soit moy: un rationnel = la moyenne de V
-soit med: un rationnel = la médiane de V
-soit mx: un rationnel = le maximum de V
-soit mn: un rationnel = le minimum de V
+soit S ∈ ℚ tel que S = la somme de V
+soit P ∈ ℚ tel que P = le produit de V
+soit moy ∈ ℚ tel que moy = la moyenne de V
+soit med ∈ ℚ tel que med = la médiane de V
+soit mx ∈ ℚ tel que mx = le maximum de V
+soit mn ∈ ℚ tel que mn = le minimum de V
 
 La somme vaut #{S}, le produit #{P}, le maximum #{mx} et le minimum #{mn}.
 
@@ -406,49 +408,49 @@ La moyenne de V vaut #{moy} et sa médiane #{med} : ce sont des fractions, pas d
 
 <h2>Les normes
 
-soit T: un vecteur de 2 rationnels = {3 ; 4}
-soit N: un réel = la norme de T
-soit N1: un rationnel = la norme 1 de T
-soit Ninf: un rationnel = la norme infinie de T
+soit T un vecteur de 2 rationnels tel que T = {3 ; 4}
+soit N ∈ ℝ tel que N = la norme de T
+soit N1 ∈ ℚ tel que N1 = la norme 1 de T
+soit Ninf ∈ ℚ tel que Ninf = la norme infinie de T
 
 La norme euclidienne vaut #{N}, la norme 1 vaut #{N1} et la norme infinie #{Ninf}.
 
 <h2>Les opérateurs
 
-soit C: une matrice 2×2 de rationnels = A × I
-soit D: une matrice 2×2 de rationnels = 2 × A
-soit E: une matrice 2×2 de rationnels = A + I
-soit Y: une liste de rationnels = le produit terme à terme de V et W
-soit Q: une liste de rationnels = le quotient terme à terme de V par W
-soit G: une liste de rationnels = V augmenté de 2
+soit C une matrice 2×2 de rationnels telle que C = A × I
+soit D une matrice 2×2 de rationnels telle que D = 2 × A
+soit E une matrice 2×2 de rationnels telle que E = A + I
+soit Y une liste de rationnels telle que Y = le produit terme à terme de V et W
+soit Q une liste de rationnels telle que Q = le quotient terme à terme de V par W
+soit G une liste de rationnels telle que G = V augmenté de 2
 
 <remarque>Le signe × garde son sens mathématique : entre deux matrices c'est le produit matriciel, entre un nombre et une matrice la loi externe. Le produit terme à terme, qui n'est pas une opération des mathématiques, se dit en toutes lettres.
 
 <h2>L'algèbre de la matrice carrée
 
-soit Tr: un rationnel = la trace de A
-soit Det: un rationnel = le déterminant de A
-soit Rg: un entier naturel = le rang de A
-soit At: une matrice 2×2 de rationnels = la transposée de A
-soit Ai: une matrice 2×2 de rationnels = l'inverse de A
+soit Tr ∈ ℚ tel que Tr = la trace de A
+soit Det ∈ ℚ tel que Det = le déterminant de A
+soit Rg ∈ ℕ tel que Rg = le rang de A
+soit At une matrice 2×2 de rationnels telle que At = la transposée de A
+soit Ai une matrice 2×2 de rationnels telle que Ai = l'inverse de A
 
 La trace de A vaut #{Tr}, son déterminant #{Det} et son rang #{Rg}.
 
 L'inverse se calcule exactement : ses coefficients sont des fractions, et le produit de A par son inverse redonne l'identité.
 
-soit Verif: une matrice 2×2 de rationnels = A × Ai
+soit Verif une matrice 2×2 de rationnels telle que Verif = A × Ai
 
-<h2>Résoudre un système
+<page suivante h2>Résoudre un système
 
-soit B: un vecteur de 2 rationnels = {5 ; 6}
-soit X: un vecteur de 2 rationnels = la solution de l'équation A × X = B
+soit B un vecteur de 2 rationnels tel que B = {5 ; 6}
+soit X un vecteur de 2 rationnels tel que X = la solution de l'équation A × X = B
 
 La solution vaut #{X[0]} et #{X[1]} : deux fractions exactes, et non deux décimaux approchés.
 
 <h2>Le rectangulaire et ses refus
 
-soit RgM: un entier naturel = le rang de M
-soit Mt: une matrice 3×2 de rationnels = la transposée de M
+soit RgM ∈ ℕ tel que RgM = le rang de M
+soit Mt une matrice 3×2 de rationnels telle que Mt = la transposée de M
 
 Le rang de M vaut #{RgM}, et sa transposée est de taille 3 sur 2.
 
@@ -456,21 +458,21 @@ Le rang de M vaut #{RgM}, et sa transposée est de taille 3 sur 2.
 
 <h2>Extraire
 
-soit L: une liste de rationnels = la ligne 0 de M
-soit K: une liste de rationnels = la colonne 2 de M
-soit Sm: une matrice 2×2 de rationnels = la sous-matrice de M des lignes 0 à 1 et des colonnes 1 à 2
+soit L une liste de rationnels telle que L = la ligne 0 de M
+soit K une liste de rationnels telle que K = la colonne 2 de M
+soit Sm une matrice 2×2 de rationnels telle que Sm = la sous-matrice de M des lignes 0 à 1 et des colonnes 1 à 2
 
 La première ligne de M commence par #{L[0]}, et sa dernière colonne par #{K[0]}.
 
 <h2>Géométrie et statistique
 
-soit O: un vecteur de 2 rationnels = {0 ; 0}
-soit Pt: un vecteur de 2 rationnels = {3 ; 4}
-soit ps: un rationnel = le produit scalaire de V et W
-soit dist: un réel = la distance de O à Pt
-soit Pr: une liste de rationnels = la projection orthogonale de T sur Pt
-soit cov: un rationnel = la covariance de V et W
-soit frq: un rationnel = la proportion des éléments de V strictement supérieurs à 2
+soit O un vecteur de 2 rationnels tel que O = {0 ; 0}
+soit Pt un vecteur de 2 rationnels tel que Pt = {3 ; 4}
+soit ps ∈ ℚ tel que ps = le produit scalaire de V et W
+soit dist ∈ ℝ tel que dist = la distance de O à Pt
+soit Pr une liste de rationnels telle que Pr = la projection orthogonale de T sur Pt
+soit cov ∈ ℚ tel que cov = la covariance de V et W
+soit frq ∈ ℚ tel que frq = la proportion des éléments de V strictement supérieurs à 2
 
 Le produit scalaire de V et W vaut #{ps}, la distance de O à Pt vaut #{dist}.
 
@@ -478,9 +480,9 @@ La covariance de V et W vaut #{cov}, et la proportion des éléments de V strict
 
 <h2>Les tirages au hasard
 
-soit De: un vecteur d'entiers naturels = 20 tirages au hasard entre 1 et 6 selon la loi uniforme
-soit Moy: un rationnel = la moyenne de De
-soit Six: un rationnel = la proportion des éléments de De supérieurs ou égaux à 6
+soit De un vecteur d'entiers naturels tel que De = 20 tirages au hasard entre 1 et 6 selon la loi uniforme
+soit Moy ∈ ℚ tel que Moy = la moyenne de De
+soit Six ∈ ℚ tel que Six = la proportion des éléments de De supérieurs ou égaux à 6
 
 La moyenne des vingt lancers vaut #{Moy}, et la fréquence des six #{Six}.
 

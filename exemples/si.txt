@@ -6,11 +6,11 @@ document {
     interligne: 1,5;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Sciences de l'ingénieur — exemples progressifs
 
@@ -22,7 +22,7 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h0>Lycée — terminale
 
-soit remarque: un style = <gris foncé italique>
+soit remarque un style défini par <gris foncé italique>
 
 Un système se modélise par une fonction de transfert H(p) : son comportement temporel se lit sur la réponse à un échelon, son comportement fréquentiel sur le diagramme de Bode. docdg calcule les deux à partir de la fonction de transfert.
 
@@ -40,7 +40,7 @@ Une suspension de véhicule se modélise par un second ordre, de pulsation propr
 <h1>Filtrer et numériser
 
 <h2>Le filtre RC, premier ordre
-<Tracer>le diagramme de Bode de H(p) = 1/(1 + RCp), avec R = 1000 et C = 1e-6
+<Tracer>le diagramme de Bode de H(p) = 1/(1 + RCp), avec R = 1000 et C = 10^(-6)
 	<remarque>Au-delà de la pulsation de coupure 1/RC, le gain chute de 20 dB par décade : le filtre laisse passer les basses fréquences.
 
 <h2>Le spectre d'un signal numérisé
@@ -99,7 +99,7 @@ Une masse m suspendue à un ressort de raideur k, freinée par un amortisseur de
 <h2>Les modes propres d'un système à deux degrés de liberté
 <Énoncer>les modes propres d'un système à plusieurs degrés de liberté
 Deux masses égales m reliées par trois ressorts de raideur k : les pulsations propres au carré sont, en unités de k/m, les valeurs propres de la matrice de raideur réduite.
-<Soit>la matrice D {
+<Soit>D une matrice définie par {
 	2 ; -1
 	-1 ; 2
 }
@@ -109,7 +109,7 @@ Deux masses égales m reliées par trois ressorts de raideur k : les pulsations 
 <h2>La flèche d'une poutre en console
 <Énoncer>la flèche d'une poutre en console
 <Énoncer>le flambement d'Euler
-<Vérifier>l'homogénéité de F = E * I / L^2 avec F force, E module d'Young, I moment quadratique, L longueur
+<Vérifier>l'homogénéité de F = (E I) / L^2 avec F force, E module d'Young, I moment quadratique, L longueur
 	<remarque>La charge critique se contrôle comme toute relation du corpus : docdg nomme la dimension commune aux deux membres, et refuserait un carré oublié.
 
 Une poutre encastrée en x = 0, libre en x = L = 1, sous une charge répartie uniforme : l'équation d'Euler-Bernoulli EI y'''' = q est du quatrième ordre, avec deux conditions à chaque extrémité (encastrement : y = y' = 0 ; bord libre : moment et effort tranchant nuls, y'' = y''' = 0).

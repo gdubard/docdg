@@ -1,15 +1,15 @@
 document {
 	orientation: portrait;
-	marges: 10;
+	marges: 8;
 	espacements: 2;
 	taille: 11;
 	interligne: 2,1;
 }
-soit h1: un style = <bleu marine gras section num>
+soit h1 un style défini par <bleu marine gras section num>
 
 <h1>Étude d'une fonction
 
-<Soient>les fonctions f(x) = exp(-x^2), g(x) = -x^4 + 2x^2 + 1 et h(x) = (x+1)/(x-2)
+<Soit>f, g et h 3 fonctions définies par f(x) = exp(−x²), g(x) = −x⁴ + 2x² + 1 et h(x) = (x+1)/(x−2)
 
 <Dresser>les tableaux de signes de f, g, et h
 

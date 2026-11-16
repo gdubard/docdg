@@ -6,18 +6,18 @@ document {
 	taille: 11;
 	interligne: 2;
 }
-soit h1: un style = <bleu nuit gras section num>
-soit h2: un style = <bleu nuit italique sous-section num>
-soit chapo: un style = <italique 10 pt>
-soit motcle: un style = <petites capitales>
-soit remarque: un style = <gris foncé italique 10 pt>
+soit h1 un style défini par <bleu nuit gras section num>
+soit h2 un style défini par <bleu nuit italique sous-section num>
+soit chapo un style défini par <italique 10 pt>
+soit motcle un style défini par <petites capitales>
+soit remarque un style défini par <gris foncé italique 10 pt>
 
-soit nature: un style = <petites capitales grand au centre>
-soit ouvrage: un style = <gras 24 pt au centre>
-soit complement: un style = <16 pt au centre>
-soit mention: un style = <au centre>
-soit maison: un style = <italique au centre>
-soit h3: un style = <gras au centre>
+soit nature un style défini par <petites capitales grand au centre>
+soit ouvrage un style défini par <gras 24 pt au centre>
+soit complement un style défini par <16 pt au centre>
+soit mention un style défini par <au centre>
+soit maison un style défini par <italique au centre>
+soit h3 un style défini par <gras au centre>
 
 <nature>{Exposé d'histoire}
 

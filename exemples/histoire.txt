@@ -6,11 +6,11 @@ document {
     interligne: 1,5;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Histoire — exemples progressifs
 
@@ -22,10 +22,10 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h0>École élémentaire
 
-soit titre: un style = <bleu nuit gras grand au centre>
-soit h1histoire: un style = <bleu nuit gras section num>
-soit h2histoire: un style = <gras au centre>
-soit remarque: un style = <gris foncé italique>
+soit titre un style défini par <bleu nuit gras grand au centre>
+soit h1histoire un style défini par <bleu nuit gras section num>
+soit h2histoire un style défini par <gras au centre>
+soit remarque un style défini par <gris foncé italique>
 
 <titre>Les grandes périodes de l'histoire
 
@@ -65,7 +65,7 @@ soit remarque: un style = <gris foncé italique>
 <h1histoire>Une image dans le fil du texte
 	Le chemin se nomme dans la balise, de la même façon que pour une vignette de frise : une seule forme à retenir. Un nom comportant des espaces s'accolade — <<l'image {histoire/mon dessin.svg}>>.
 
-<Insérer l'image histoire/chateau.svg avec une largeur de 45 mm et la légende {Un château fort, dessiné en pictogramme}>
+<Insérer>l'image histoire/chateau.svg avec une largeur de 45 mm et la légende {Un château fort, dessiné en pictogramme}
 
 	Elle s'emploie aussi au milieu d'une phrase : les seigneurs bâtissaient des châteaux <Insérer l'image histoire/chateau.svg avec une largeur de 12 mm> pour protéger leurs terres, et les marins partaient sur des caravelles <Insérer l'image histoire/caravelle.svg avec une largeur de 12 mm> vers des continents inconnus.
 

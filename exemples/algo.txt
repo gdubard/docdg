@@ -12,11 +12,11 @@ document {
 	veuves: 2;
 }
 
-soit volume: un style = <bleu marine gras 19 pt au centre>
-soit h0: un style = <bleu marine gras chapitre num>
-soit h1: un style = <bleu marine gras section num>
-soit h2: un style = <bleu italique sous-section>
-soit h3: un style = <bleu italique sous-sous-section>
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+soit h2 un style défini par <bleu italique sous-section>
+soit h3 un style défini par <bleu italique sous-sous-section>
 
 <volume>Algorithmique — exemples progressifs
 
@@ -29,10 +29,10 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 <page suivante h0>Collège
 
 
-<italique>{Version de démonstration : les saisies sont préremplies pour permettre la lecture intégrale. Les formulaires interactifs d’origine sont conservés dans archives.}
+<italique>{Version de démonstration : les saisies sont préremplies pour permettre la lecture intégrale.}
 
-soit h1algo: un style = <bleu nuit gras section num>
-soit h2algo: un style = <bleu nuit italique sous-section>
+soit h1algo un style défini par <bleu nuit gras section num>
+soit h2algo un style défini par <bleu nuit italique sous-section>
 
 <h1algo>Ce que ce document couvre
 
@@ -40,11 +40,11 @@ Déclarer une variable et l'initialiser, poser une question au lecteur, décider
 
 <h1algo>Variables et sortie
 
-Une variable se pose avec `soit`, se relit avec `#`, entre dans un calcul avec `#{...}` — l'équivalent d'une affectation suivie d'un affichage.
+Une variable se pose avec « soit », se relit avec « ## », entre dans un calcul avec « ##{{...}} » — l'équivalent d'une affectation suivie d'un affichage.
 
-soit tva: un décimal = 0,2
-soit prix: un entier = 150
-Le prix TTC est #{prix * (1 + tva)} euros.
+soit tva ∈ 𝔻 tel que tva = 0,2
+soit prix ∈ ℤ tel que prix = 150
+Le prix TTC est #{prix × (1 + tva)} euros.
 
 <h1algo>Une valeur initialisée
 
@@ -52,22 +52,22 @@ Pour conserver la navigation libre entre les chapitres, cet exemple utilise un e
 
 Pour découvrir la saisie interactive bloquante, consulter exclusivement l’atelier placé à la fin de basique.txt.
 
-soit âge: un entier = 16
-soit majorité: une chaîne de caractères = si âge moins de 18 { mineur(e) } sinon { majeur(e) }
+soit âge ∈ ℤ tel que âge = 16
+soit majorité une chaîne de caractères telle que majorité = si âge est inférieur à 18 { mineur(e) } sinon { majeur(e) }
 Tu es #majorité.
 
 
 <h1algo>Une boucle simple
 
-`pour` répète un bloc un nombre de fois connu à l'avance — l'équivalent d'un `for`.
+« pour » répète un bloc un nombre de fois connu à l'avance — l'équivalent d'un « for ».
 
-pour k: un entier naturel de 1 à 3 {
-	Ligne #k : le carré de #k vaut #{k*k}.
+pour k ∈ ⟦1 ; 3⟧ {
+	Ligne #k : le carré de #k vaut #{k×k}.
 }
 
 <h1algo>Une répétition sans compteur
 
-`répéter ... fois` répète un bloc quand le rang n'a pas à paraître — la répétition du Logo, sans variable à nommer.
+« répéter ... fois » répète un bloc quand le rang n'a pas à paraître — la répétition du Logo, sans variable à nommer.
 
 répéter 3 fois {
 	Une ligne de plus, à l'identique.
@@ -75,22 +75,36 @@ répéter 3 fois {
 
 <h1algo>Une condition simple
 
-`si ... sinon` choisit entre deux issues, une fois, sans répétition.
+« si ... sinon » choisit entre deux issues, une fois, sans répétition.
 
-soit note: un entier = 12
-si note au moins 10 {
+soit note ∈ ℤ tel que note = 12
+si note est supérieur ou égal à 10 {
 	Admis avec #note.
 }
 sinon {
 	Ajourné.
 }
 
+<h1algo>Choisir parmi plusieurs cas : selon la valeur de
+
+« selon la valeur de » évite une succession de « si » quand une même valeur doit être comparée à plusieurs cas. Les valeurs isolées, les choix séparés par « ; » et les intervalles peuvent se combiner. Le premier cas compatible est retenu ; « sinon » reste facultatif.
+
+La note utilisée dans la section précédente vaut #note. Voici les différents cas possibles :
+
+selon la valeur de note {
+    0 { Note nulle. }
+    1 ; 2 ; 3 { Note très faible. }
+    [4 ; 10] { Note comprise entre 4 et 10, bornes incluses. }
+    ]10 ; 20] ou [25 ; 30[ { Note située dans l'un des deux intervalles. }
+    sinon { Note hors des cas précédents. }
+}
+
 <h1algo>Une boucle avec un pas négatif
 
-Le pas se règle en prose, comme tout réglage : `avec un pas de p`. Ici la boucle avance de 0,25 en 0,25.
+Le pas s'écrit après l'intervalle : « par pas de p ». Ici la boucle recule de 0,25 en 0,25.
 
-pour k: un décimal de 2 à 0 avec un pas de -0,25 {
-	Terme #{défaut(-4*k)+9} : #k.
+pour k ∈ [0 ; 2] par pas de −0,25 {
+	Terme #{défaut(−4×k)+9} : #k.
 }
 
 <h1algo>Une boucle qui filtre
@@ -102,7 +116,7 @@ Aucune ligne n'est écrite pour les tours silencieux — ils n'existent simpleme
 <Dresser>un tableau {
 	<mc>	<mc>
 	n	Multiple de 3 ?
-	pour n: un entier naturel de 1 à 20 {
+	pour n ∈ ⟦1 ; 20⟧ {
 		si n % 3 vaut 0 {
 			[#n]	[oui]
 		}
@@ -111,12 +125,12 @@ Aucune ligne n'est écrite pour les tours silencieux — ils n'existent simpleme
 
 <page suivante h1algo>Chercher les diviseurs d'un entier
 
-Un entier \(d\) divise \(n\) lorsque le reste de la division de \(n\) par \(d\) est nul. Balayer tous les diviseurs candidats de 1 à \(n\), et ne retenir que ceux qui divisent effectivement, donne la liste complète des diviseurs — la première brique, sur le papier comme ici, de tout test de primalité.
+Un entier $d$ divise $n$ lorsque le reste de la division de $n$ par $d$ est nul. Balayer tous les diviseurs candidats de 1 à $n$, et ne retenir que ceux qui divisent effectivement, donne la liste complète des diviseurs — la première brique, sur le papier comme ici, de tout test de primalité.
 
 <Dresser>un tableau sécable {
 	<mc>	<mc>
 	Diviseur	de 84
-	pour d: un entier naturel de 1 à 84 {
+	pour d ∈ ⟦1 ; 84⟧ {
 		si 84 % d vaut 0 {
 			[#d]	[convient]
 		}
@@ -127,14 +141,14 @@ Un nombre premier n'a, par définition, aucun diviseur strictement compris entre
 
 <h1algo>Filtrer par intervalle
 
-`appartient à` et sa négation `n'appartient pas à` filtrent un intervalle aussi simplement qu'un test de divisibilité — utile chaque fois que l'algorithme cherche « à partir de quel rang » une grandeur franchit un seuil.
+« appartient à » et sa négation « n'appartient pas à » filtrent un intervalle aussi simplement qu'un test de divisibilité — utile chaque fois que l'algorithme cherche « à partir de quel rang » une grandeur franchit un seuil.
 
 <Dresser>un tableau {
 	<mc>	<mc>	<mc>
 	Rang	Terme	Écart
-	pour n: un entier naturel de 0 à 20 {
+	pour n ∈ ⟦0 ; 20⟧ {
 		si (n appartient à [16;20]) {
-			[#n]	[#{2^(n+1) - 1}]	[#{2^n}]
+			[#n]	[#{2^(n+1) − 1}]	[#{2^n}]
 		}
 	}
 }
@@ -142,27 +156,27 @@ Un nombre premier n'a, par définition, aucun diviseur strictement compris entre
 
 <h1algo>L'opérateur ternaire
 
-`si ... sinon` peut aussi produire une valeur plutôt que du texte — affecté directement à une variable, comme un opérateur ternaire.
+« si ... sinon » peut aussi produire une valeur plutôt que du texte — affecté directement à une variable, comme un opérateur ternaire.
 
-soit n: un entier = 17
-soit parité: une chaîne de caractères = si n % 2 vaut 0 { pair } sinon { impair }
+soit n ∈ ℤ tel que n = 17
+soit parité une chaîne de caractères telle que parité = si n % 2 vaut 0 { pair } sinon { impair }
 #n est #parité.
 
 <h1algo>Conditions composées
 
-`et` comme `ou` combinent deux conditions dans le même test ; les parenthèses en précisent l'ordre quand les deux se mêlent.
+« et » comme « ou » combinent deux conditions dans le même test ; les parenthèses en précisent l'ordre quand les deux se mêlent.
 
 <Dresser>un tableau {
 	<mc>	<mc>
 	n	Retenu
-	pour n: un entier naturel de 1 à 30 {
+	pour n ∈ ⟦1 ; 30⟧ {
 		si n % 3 vaut 0 et n % 5 vaut 0 {
 			[#n]	[multiple de 15]
 		}
 	}
 }
 
-soit n: un entier naturel = 5
+soit n ∈ ℕ tel que n = 5
 si (n % 3 vaut 0 et n % 5 vaut 0) ou n vaut 5 {
 	Retenu par l'exception.
 }
@@ -174,75 +188,75 @@ sinon {
 
 Une variable posée avant la boucle et réaffectée à l'intérieur garde sa valeur d'un tour au suivant : c'est l'accumulateur, celui qui totalise une somme ou compte les cas retenus.
 
-soit somme: un entier naturel = 0
-pour k: un entier naturel de 1 à 100 {
-	somme = somme + k
+soit somme ∈ ℕ tel que somme = 0
+pour k ∈ ⟦1 ; 100⟧ {
+	somme ← somme + k
 }
 La somme des entiers de 1 à 100 vaut #somme.
 
-soit produit: un entier naturel = 1
-pour k: un entier naturel de 1 à 5 {
-	produit = produit * k
+soit produit ∈ ℕ tel que produit = 1
+pour k ∈ ⟦1 ; 5⟧ {
+	produit ← produit × k
 }
 La factorielle de 5 vaut #produit.
 
 <h1algo>Compter sous condition
 
-L'accumulateur placé à l'intérieur d'un `si` ne s'incrémente que sur les tours retenus — le compteur de l'algorithmique classique.
+L'accumulateur placé à l'intérieur d'un « si » ne s'incrémente que sur les tours retenus — le compteur de l'algorithmique classique.
 
-soit diviseurs: un entier naturel = 0
-pour d: un entier naturel de 1 à 84 {
+soit diviseurs ∈ ℕ tel que diviseurs = 0
+pour d ∈ ⟦1 ; 84⟧ {
 	si 84 % d vaut 0 {
-		diviseurs = diviseurs + 1
+		diviseurs ← diviseurs + 1
 	}
 }
 84 possède #diviseurs diviseurs.
 
-soit diviseurs: un entier naturel = 0
-pour d: un entier naturel de 1 à 83 {
+soit diviseurs ∈ ℕ tel que diviseurs = 0
+pour d ∈ ⟦1 ; 83⟧ {
 	si 83 % d vaut 0 {
-		diviseurs = diviseurs + 1
+		diviseurs ← diviseurs + 1
 	}
 }
 83 en possède #diviseurs : c'est donc un nombre premier.
 
 <page suivante h1algo>Les boucles conditionnelles
 
-`pour` répète un nombre de fois connu d'avance. Quand ce nombre dépend du calcul lui-même, c'est `tant que` qui convient : la condition est vérifiée <gras>{avant} chaque passage, si bien que la boucle peut n'en faire aucun.
+« pour » répète un nombre de fois connu d'avance. Quand ce nombre dépend du calcul lui-même, c'est « tant que » qui convient : la condition est vérifiée <gras>{avant} chaque passage, si bien que la boucle peut n'en faire aucun.
 
-soit p: un entier naturel = 1
-soit rang: un entier naturel = 0
+soit p ∈ ℕ tel que p = 1
+soit rang ∈ ℕ tel que rang = 0
 tant que p < 1000 faire {
-	p = p * 2
-	rang = rang + 1
+	p ← p × 2
+	rang ← rang + 1
 }
 La première puissance de 2 supérieure à 1000 est #p, atteinte au rang #rang.
 
-La variante `faire … tant que` vérifie la condition <gras>{après} chaque passage : le corps s'exécute donc au moins une fois, même lorsque la condition est fausse dès le départ.
+La variante « faire … tant que » vérifie la condition <gras>{après} chaque passage : le corps s'exécute donc au moins une fois, même lorsque la condition est fausse dès le départ.
 
-soit n: un entier naturel = 10
+soit n ∈ ℕ tel que n = 10
 faire {
 	Passage unique, avec n valant #n.
-	n = n + 1
+	n ← n + 1
 } tant que n < 3
 
 Les deux formes reposent sur l'accumulateur de la section précédente : sans une variable qui avance d'un tour à l'autre, une boucle conditionnelle ne s'arrêterait jamais.
 
 <h1algo>Interrompre une répétition
 
-Deux mots gouvernent le cours d'une boucle. `sortir` l'arrête entièrement — c'est la recherche qui cesse dès qu'elle a trouvé. `continuer` n'arrête que le tour en cours.
+Deux mots gouvernent le cours d'une boucle. « sortir » l'arrête entièrement — c'est la recherche qui cesse dès qu'elle a trouvé. « continuer » n'arrête que le tour en cours.
 
-soit premier_diviseur: un entier naturel = 0
-pour d: un entier naturel de 2 à 100 {
+soit premier_diviseur ∈ ℕ tel que premier_diviseur = 0
+pour d ∈ ⟦2 ; 100⟧ {
 	si reste de 91 par d vaut 0 {
-		premier_diviseur = d
+		premier_diviseur ← d
 		sortir
 	}
 }
 
 Le plus petit diviseur de 91 autre que 1 est #premier_diviseur.
 
-pour k: un entier naturel de 1 à 6 {
+pour k ∈ ⟦1 ; 6⟧ {
 	si reste de k par 2 vaut 0 {
 		continuer
 	}
@@ -256,18 +270,18 @@ Seuls les rangs impairs ont laissé une trace.
 
 <h1algo>Trois conteneurs, une seule grammaire
 
-Un conteneur se déclare comme toute variable — le nom, le deux-points, le type en toutes lettres, puis la valeur. Le type est toujours écrit ; le point-virgule sépare les éléments ; l'accolade les rassemble. Les indices commencent à 0, comme en NSI.
+Un conteneur se déclare comme toute variable — le nom, le type en toutes lettres entre virgules, puis la valeur après « tel que ». Le type est toujours écrit ; le point-virgule sépare les éléments ; l'accolade les rassemble. Les indices commencent à 0, comme en NSI.
 
 <h1algo>La liste
 
-soit notes: une liste de décimaux = {12,5 ; 15 ; 9,5}
-soit mots: une liste de chaînes de caractères = {"chat" ; "chien" ; "cheval"}
+soit notes une liste de décimaux telle que notes = {12,5 ; 15 ; 9,5}
+soit mots une liste de chaînes de caractères telle que mots = {"chat" ; "chien" ; "cheval"}
 
-Le dièse affiche le conteneur entier : #notes — et l'indice lit un élément : la deuxième note est #notes[1], le premier mot est #mots[0]. Un élément entre dans un calcul comme toute valeur : le double de la deuxième note vaut #{notes[1] * 2}.
+Le dièse affiche le conteneur entier : #notes — et l'indice lit un élément : la deuxième note est #notes[1], le premier mot est #mots[0]. Un élément entre dans un calcul comme toute valeur : le double de la deuxième note vaut #{notes[1] × 2}.
 
 L'écriture indexée modifie une case existante, sans soit puisque rien n'est déclaré :
 
-notes[2] = 14
+notes[2] ← 14
 
 Après correction : #notes. L'indice 7 dépasserait les trois éléments disponibles : docdg refuserait cette lecture. Le cas fautif reste testé séparément.
 
@@ -275,26 +289,26 @@ Après correction : #notes. L'indice 7 dépasserait les trois éléments disponi
 
 Une liste déclarée vide grandit par +, qui concatène toujours deux conteneurs — l'élément ajouté s'écrit donc en singleton, entre accolades. La réaffectation ne redit ni soit ni le type : ils ont été posés à la déclaration.
 
-soit S: une liste d'entiers = {}
-pour k: un entier naturel de 1 à 5 {
-	S = S + {k * k}
+soit S une liste d'entiers telle que S = {}
+pour k ∈ ⟦1 ; 5⟧ {
+	S ← S + {k × k}
 }
 
 Les cinq premiers carrés : #S.
 
 <h1algo>Le dictionnaire
 
-soit trajets: un dictionnaire de chaînes de caractères et d'entiers = {"Marche": 5 ; "Bus": 3}
+soit trajets un dictionnaire de chaînes de caractères et d'entiers tel que trajets = {"Marche": 5 ; "Bus": 3}
 
 La clé lit sa valeur : à pied, #trajets["Marche"] minutes. Le + ajoute une paire :
 
-trajets = trajets + {"Vélo": 7}
+trajets ← trajets + {"Vélo": 7}
 
 Le dictionnaire complet : #trajets. Chercher une clé absente comme Métro serait refusé : la démonstration utilise seulement les clés existantes.
 
 La boucle dans livre les clés, et l'indexation retrouve chaque valeur :
 
-pour t: une chaîne de caractères dans trajets {
+pour t ∈ trajets {
 	#t : #{trajets[t]} minutes.
 }
 
@@ -302,8 +316,8 @@ pour t: une chaîne de caractères dans trajets {
 
 Une matrice porte ses dimensions dans son type. La forme littérale tient sur une ligne ; la forme bloc s'aligne à l'œil dans l'éditeur — tabulations entre colonnes, retours à la ligne entre rangées, aucun point-virgule :
 
-soit A: une matrice 2×2 d'entiers = {{1 ; 2} ; {3 ; 4}}
-soit B: une matrice 2×2 d'entiers = {
+soit A une matrice 2×2 d'entiers telle que A = {{1 ; 2} ; {3 ; 4}}
+soit B une matrice 2×2 d'entiers telle que B = {
 	5	6
 	7	8
 }
@@ -312,10 +326,10 @@ A vaut #A et B vaut #B. Une case se lit par [ligne ; colonne] : #A[0 ; 1] puis #
 
 Déclarée avec {}, une matrice naît remplie de ses valeurs par défaut, puis se remplit case par case :
 
-soit T: une matrice 3×3 d'entiers = {}
-pour i: un entier naturel de 0 à 2 {
-	pour j: un entier naturel de 0 à 2 {
-		T[i ; j] = (i + 1) * (j + 1)
+soit T une matrice 3×3 d'entiers telle que T = {}
+pour i ∈ ⟦0 ; 2⟧ {
+	pour j ∈ ⟦0 ; 2⟧ {
+		T[i ; j] ← (i + 1) × (j + 1)
 	}
 }
 
@@ -325,13 +339,13 @@ La table de multiplication : #T — et sa case centrale : #T[1 ; 1].
 
 Un tableau à plusieurs dimensions dont la taille n'est pas connue d'avance est une liste de listes. La rangée se déclare dans la boucle — elle repart vide à chaque tour — pendant que le conteneur extérieur, déclaré avant, accumule :
 
-soit M: une liste de listes d'entiers = {}
-pour i: un entier naturel de 0 à 2 {
-	soit rangée: une liste d'entiers = {}
-	pour j: un entier naturel de 0 à 3 {
-		rangée = rangée + {i * j}
+soit M une liste de listes d'entiers telle que M = {}
+pour i ∈ ⟦0 ; 2⟧ {
+	soit rangée une liste d'entiers telle que rangée = {}
+	pour j ∈ ⟦0 ; 3⟧ {
+		rangée ← rangée + {i × j}
 	}
-	M = M + {rangée}
+	M ← M + {rangée}
 }
 
 Le résultat : #M.
@@ -340,10 +354,10 @@ Le résultat : #M.
 
 Le langage distingue les ensembles tels que les mathématiques les enseignent, et il respecte leur emboîtement $NN inclus dans ZZ inclus dans DD inclus dans QQ inclus dans RR inclus dans CC$ : un entier relatif appartient à $ZZ$, un décimal à $DD$ — son écriture décimale est finie — un rationnel à $QQ$, un réel à $RR$, et un complexe à $CC$, sous sa forme algébrique $a + ib$.
 
-soit ent: une liste d'entiers = {1 ; -4 ; 12}
-soit dec: une liste de décimaux = {12,5 ; 0,25 ; 15}
-soit ree: une liste de réels = {1/3 ; racine(2) ; 2,5}
-soit cpx: une liste de complexes = {1 + 2i ; -i}
+soit ent une liste d'entiers telle que ent = {1 ; −4 ; 12}
+soit dec une liste de décimaux telle que dec = {12,5 ; 0,25 ; 15}
+soit ree une liste de réels telle que ree = {1/3 ; racine(2) ; 2,5}
+soit cpx une liste de complexes telle que cpx = {1 + 2i ; −i}
 
 Entiers : #ent — décimaux : #dec — réels : #ree — complexes : #cpx. Le second complexe vaut #cpx[1], dont la partie réelle est nulle.
 
@@ -359,7 +373,7 @@ Le type déclaré est vérifié à la déclaration comme à la réaffectation. U
 
 Un conteneur ne se contente pas de se remplir : il se mesure, se parcourt, se range. Le vocabulaire suit une règle simple — un nom pour ce qui produit une valeur, un verbe pour ce qui répond par oui ou non.
 
-soit notes: une liste d'entiers = {12 ; 15 ; 9 ; 18 ; 11}
+soit notes une liste d'entiers telle que notes = {12 ; 15 ; 9 ; 18 ; 11}
 
 <Dresser>un tableau {
 	<mg>	<mc>
@@ -400,13 +414,13 @@ Le conteneur peut aussi précéder la primitive, ce qui se lit comme une phrase 
 
 <h2algo>La chaîne de caractères
 Une chaîne se déclare comme un nombre — les guillemets délimitent la valeur sans lui appartenir.
-soit devise: une chaîne de caractères = "liberté égalité fraternité"
+soit devise une chaîne de caractères telle que devise = "liberté égalité fraternité"
 
 #devise compte #{longueur(devise)} lettres, dont les huit premières sont #{devise[0 à 7]}. La première est #{devise[0]} — une lettre est une chaîne d'un seul caractère, docdg n'a pas de type distinct.
 
 La chaîne se parcourt lettre à lettre. Les crochets ne servent qu'à rendre chaque tour visible : sans eux, sept lettres sur sept lignes consécutives ne feraient qu'un seul paragraphe, et se reliraient comme le mot de départ.
 
-pour c: une chaîne de caractères dans "exact" {
+pour c ∈ "exact" {
 	[#c]
 }
 
@@ -415,7 +429,7 @@ Une boucle qui affiche met chaque tour sur sa ligne. Pour aligner une suite sur 
 
 #{joindre(compacter("un code") ; ", ")}
 
-soit v: une liste d'entiers = {12 ; 15 ; 9}
+soit v une liste d'entiers telle que v = {12 ; 15 ; 9}
 
 #{joindre(v ; ", ")} — et avec un autre séparateur : #{joindre(v ; " — ")}.
 
@@ -445,7 +459,7 @@ Chercher un élément absent déclencherait une erreur explicite. Sur la liste e
 
 <h2algo>La tranche
 
-Deux positions séparées par à désignent une portion, bornes incluses — comme pour n: un entier naturel de 1 à 5 fait cinq tours.
+Deux positions séparées par à désignent une portion, bornes incluses — comme pour n ∈ ⟦1 ; 5⟧ fait cinq tours.
 
 Les trois premières notes : #{notes[0 à 2]}. La dernière seule : #{notes[4 à 4]}.
 
@@ -453,7 +467,7 @@ Une tranche dont la borne de gauche dépasse celle de droite est simplement vide
 
 <h2algo>Le classement des chaînes
 
-soit mots: une liste de chaînes de caractères = {"Zoé" ; "école" ; "avion" ; "èdre"}
+soit mots une liste de chaînes de caractères telle que mots = {"Zoé" ; "école" ; "avion" ; "èdre"}
 
 #{trier(mots)}
 
@@ -463,11 +477,11 @@ L'accent ne retourne pas le mot à la fin de l'alphabet : la comparaison porte d
 
 docdg distingue la fonction mathématique — objet d'étude qu'on dérive, qu'on trace, dont on cherche les limites — et la fonction algorithmique, calcul nommé qu'on réutilise. Les chevrons marquent la première, le soit nu la seconde, exactement comme ils distinguent déjà la matrice de l'algèbre du conteneur de l'algorithmique.
 
-Une fonction algorithmique déclare le type de chacun de ses paramètres et celui de sa valeur, avec l'article, comme partout ailleurs dans le langage : un entier, une liste de réels. Elle s'appelle ensuite par son nom, arguments séparés par le point-virgule comme toute donnée.
+Une fonction algorithmique déclare son ensemble de départ et son ensemble d'arrivée, comme une application : ℤ² → ℤ, ou une liste de réels → ℝ. Elle s'appelle ensuite par son nom, arguments séparés par le point-virgule comme toute donnée.
 
 <h1algo>La forme la plus simple
 
-soit addition(a: un entier ; b: un entier): un entier = a + b
+soit addition : ℤ² → ℤ, (a, b) ↦ a + b
 
 L'appel se fait dans un calcul : #{addition(3 ; 7)}, ou #{addition(12 ; 30)}.
 
@@ -477,25 +491,25 @@ Les types ne sont pas décoratifs : un décimal à la place d'un entier, ou un a
 
 Quand le calcul tient en une expression, l'accolade est facultative :
 
-soit aire(L: un réel ; l: un réel): un réel = { L * l }
+soit aire : ℝ² → ℝ, (L, l) ↦ { L × l }
 
 L'aire d'un rectangle de 2,5 sur 4 vaut #{aire(2,5 ; 4)}.
 
 <h2algo>Plusieurs instructions
 
-Dès que le corps compte plusieurs lignes, la valeur produite doit être désignée par retourne — rien n'est implicite :
+Dès que le corps compte plusieurs lignes, la valeur produite doit être désignée par retourner — rien n'est implicite :
 
-soit hypoténuse(a: un réel ; b: un réel): un réel = {
-	soit carrés: un réel = a*a + b*b
-	retourne racine(carrés)
+soit hypoténuse : ℝ² → ℝ, (a, b) ↦ {
+	soit carrés ∈ ℝ tel que carrés = a×a + b×b
+	retourner racine(carrés)
 }
 
 Le triangle de côtés 3 et 4 a pour hypoténuse #{hypoténuse(3 ; 4)}, celui de côtés 5 et 12 a pour hypoténuse #{hypoténuse(5 ; 12)}.
 
 Une fonction dont le corps ne retourne rien serait refusée. Voici la forme correcte avec un retour explicite :
 
-soit identité(a: un entier): un entier = {
-	retourne a
+soit identité : ℤ → ℤ, a ↦ {
+	retourner a
 }
 
 Appel : #{identité(3)}.
@@ -503,21 +517,21 @@ Appel : #{identité(3)}.
 <h1algo>Fonctions et boucles
 
 Une fonction s'appelle partout où un calcul est admis — dans le texte, dans une rangée de tableau, dans la condition d'une boucle, dans un accumulateur.
-soit carré(n: un entier): un entier = n * n
-soit somme: une liste d'entiers = {}
-pour k: un entier naturel de 1 à 6 {
-	somme = somme + {carré(k)}
+soit carré : ℤ → ℤ, n ↦ n × n
+soit somme une liste d'entiers telle que somme = {}
+pour k ∈ ⟦1 ; 6⟧ {
+	somme ← somme + {carré(k)}
 }
 
 Les six premiers carrés, calculés par la fonction et rassemblés dans une liste : #somme.
 Et le test de divisibilité, écrit une fois, réutilisé partout :
 
-soit divise(d: un entier ; n: un entier): un entier = n % d
+soit divise : ℤ² → ℤ, (d, n) ↦ n % d
 
 <Dresser>un tableau {
 	<mc>	<mc>
 	Diviseur	de 60
-	pour d: un entier naturel de 1 à 60 {
+	pour d ∈ ⟦1 ; 60⟧ {
 		si divise(d ; 60) vaut 0 {
 			[#d]	[convient]
 		}
@@ -526,49 +540,49 @@ soit divise(d: un entier ; n: un entier): un entier = n % d
 
 <h1algo>Recevoir et rendre un conteneur
 Un paramètre peut être une collection, un dictionnaire, une matrice ou un texte : son type s'écrit comme celui d'une variable.
-soit moyenne(v: une liste de réels): un réel = {
-	soit s: un réel = 0
-	pour x: un réel dans v {
-		s = s + x
+soit moyenne : une liste de réels → ℝ, v ↦ {
+	soit s ∈ ℝ tel que s = 0
+	pour x ∈ v {
+		s ← s + x
 	}
-	retourne s / longueur(v)
+	retourner s / longueur(v)
 }
-soit notes: une liste de réels = {12,5 ; 15 ; 9,5 ; 18 ; 11}
+soit notes une liste de réels telle que notes = {12,5 ; 15 ; 9,5 ; 18 ; 11}
 La moyenne de la série vaut #{moyenne(notes)}.
 La primitive longueur mesure un conteneur — collection, dictionnaire, matrice ou texte.
 Une collection d'entiers est acceptée là où une liste de réels est attendue : la fonction reçoit une copie, elle ne peut donc rien renvoyer dans la série de l'appelant.
 <h2algo>Rendre une collection
-soit doublée(v: une liste d'entiers): une liste d'entiers = v + v
+soit doublée : une liste d'entiers → une liste d'entiers, v ↦ v + v
 La série {1 ; 2 ; 3} doublée donne #{doublée({1 ; 2 ; 3})}.
 <h2algo>Chercher dans une collection reçue
-soit recherche(v: une liste d'entiers ; x: un entier): un entier = {
-	soit trouvé: un entier = -1
-	pour i: un entier naturel de 0 à longueur(v) - 1 {
+soit recherche : une liste d'entiers × ℤ → ℤ, (v, x) ↦ {
+	soit trouvé ∈ ℤ tel que trouvé = −1
+	pour i ∈ ⟦0 ; longueur(v) − 1⟧ {
 		si v[i] vaut x {
-			trouvé = i
+			trouvé ← i
 		}
 	}
-	retourne trouvé
+	retourner trouvé
 }
 15 occupe la position #{recherche({4 ; 8 ; 15 ; 16} ; 15)} ; 7 n'y figure pas : #{recherche({4 ; 8 ; 15 ; 16} ; 7)}.
 <h2algo>Modifier une copie locale
 Un nom posé sur un conteneur reçu en désigne une copie : l'écriture indexée n'atteint jamais la série de l'appelant.
-soit modifie(v: une liste d'entiers): une liste d'entiers = {
-	soit t: une liste d'entiers = v
-	t[0] = 100
-	retourne t
+soit modifie : une liste d'entiers → une liste d'entiers, v ↦ {
+	soit t une liste d'entiers telle que t = v
+	t[0] ← 100
+	retourner t
 }
-soit série: une liste d'entiers = {1 ; 2 ; 3}
+soit série une liste d'entiers telle que série = {1 ; 2 ; 3}
 Copie modifiée : #{modifie(série)} — série d'origine : #série.
 <h2algo>Les chaînes de caractères
-soit joint(a: une chaîne de caractères ; b: une chaîne de caractères): une chaîne de caractères = a + b
+soit joint : une chaîne de caractères × une chaîne de caractères → une chaîne de caractères, (a, b) ↦ a + b
 #{joint(bon ; jour)}
 Les types restent vérifiés : passer un nombre seul à la place d'une liste serait refusé. Avec une véritable liste, la recherche de 3 renvoie #{recherche({1 ; 2 ; 3} ; 3)}.
 <h1algo>Les primitives dans un corps
 Les primitives de conteneur — longueur, trier, inverser, somme, min, max, quotient, contient, indice de, insérer, supprimer, ajouter — s'emploient partout, y compris dans un corps de fonction :
-soit médiane(v: une liste de réels): un réel = {
-	soit t: une liste de réels = trier(v)
-	retourne t[quotient de longueur(t) par 2]
+soit médiane : une liste de réels → ℝ, v ↦ {
+	soit t une liste de réels telle que t = trier(v)
+	retourner t[quotient de longueur(t) par 2]
 }
 La médiane de {7 ; 1 ; 5 ; 3 ; 9} vaut #{médiane({7 ; 1 ; 5 ; 3 ; 9})} — la série est d'abord triée, puis on lit la valeur du milieu. La formule vaut pour un nombre impair de valeurs.
 
@@ -592,19 +606,19 @@ Avec k égal à la taille du jeu, le vote se réduit à la classe majoritaire, q
 
 Une fonction peut s'appeler elle-même. La condition d'arrêt s'écrit avec si … sinon, qui produit ici une valeur plutôt qu'un texte :
 
-soit factorielle(n: un entier): un entier = si n vaut 0 { 1 } sinon { n * factorielle(n - 1) }
+soit factorielle : ℤ → ℤ, n ↦ si n vaut 0 { 1 } sinon { n × factorielle(n − 1) }
 
 Les premières factorielles : #{factorielle(1)}, #{factorielle(2)}, #{factorielle(3)}, #{factorielle(4)}, #{factorielle(5)}, #{factorielle(6)}.
 
 La suite de Fibonacci se définit de la même façon, avec deux appels par tour :
 
-soit fib(n: un entier): un entier = si n moins de 2 { n } sinon { fib(n - 1) + fib(n - 2) }
+soit fib : ℤ → ℤ, n ↦ si n est inférieur à 2 { n } sinon { fib(n − 1) + fib(n − 2) }
 
 Les douze premiers termes, dressés par une boucle qui appelle la fonction à chaque rang :
 <Dresser>un tableau {
 	<mc>	<md>
 	Rang	Terme
-	pour n: un entier naturel de 0 à 11 {
+	pour n ∈ ⟦0 ; 11⟧ {
 		[#n]	[#{fib(n)}]
 	}
 }
@@ -617,68 +631,68 @@ Les exercices du programme s'écrivent avec ce qui précède : une fonction, une
 
 <h2algo>Chercher
 
-soit recherche(v: une liste d'entiers ; x: un entier): un entier = {
-	pour i: un entier naturel de 0 à longueur(v) - 1 {
+soit recherche : une liste d'entiers × ℤ → ℤ, (v, x) ↦ {
+	pour i ∈ ⟦0 ; longueur(v) − 1⟧ {
 		si v[i] vaut x {
-			retourne i
+			retourner i
 		}
 	}
-	retourne -1
+	retourner −1
 }
 
-Le `retourne` placé dans la boucle en sort sur-le-champ : c'est le geste que montre tout manuel. Dans une série triée, la dichotomie coupe l'intervalle en deux à chaque tour.
+Le « retourner » placé dans la boucle en sort sur-le-champ : c'est le geste que montre tout manuel. Dans une série triée, la dichotomie coupe l'intervalle en deux à chaque tour.
 
-soit dichotomie(v: une liste d'entiers ; x: un entier): un entier = {
-	soit g: un entier naturel = 0
-	soit d: un entier = longueur(v) - 1
-	tant que g moins de d faire {
-		soit m: un entier naturel = quotient de g + d par 2
-		si v[m] moins de x {
-			g = m + 1
+soit dichotomie : une liste d'entiers × ℤ → ℤ, (v, x) ↦ {
+	soit g ∈ ℕ tel que g = 0
+	soit d ∈ ℤ tel que d = longueur(v) − 1
+	tant que g est inférieur à d faire {
+		soit m ∈ ℕ tel que m = quotient de g + d par 2
+		si v[m] est inférieur à x {
+			g ← m + 1
 		} sinon {
-			d = m
+			d ← m
 		}
 	}
-	retourne g
+	retourner g
 }
 
-soit premiers: une liste d'entiers = {2 ; 3 ; 5 ; 7 ; 11 ; 13 ; 17 ; 19}
+soit premiers une liste d'entiers telle que premiers = {2 ; 3 ; 5 ; 7 ; 11 ; 13 ; 17 ; 19}
 
 11 occupe la position #{dichotomie(premiers ; 11)} ; recherche(premiers ; 4) ne le trouve pas : #{recherche(premiers ; 4)}.
 
 <h2algo>Trier
 
-soit tri_par_insertion(v: une liste d'entiers): une liste d'entiers = {
-	soit t: une liste d'entiers = v
-	pour i: un entier naturel de 1 à longueur(t) - 1 {
-		soit x: un entier = t[i]
-		soit j: un entier = i - 1
-		tant que j au moins 0 et t[j] plus de x faire {
-			t[j + 1] = t[j]
-			j = j - 1
+soit tri_par_insertion : une liste d'entiers → une liste d'entiers, v ↦ {
+	soit t une liste d'entiers telle que t = v
+	pour i ∈ ⟦1 ; longueur(t) − 1⟧ {
+		soit x ∈ ℤ tel que x = t[i]
+		soit j ∈ ℤ tel que j = i − 1
+		tant que j est supérieur ou égal à 0 et t[j] est supérieur à x faire {
+			t[j + 1] ← t[j]
+			j ← j − 1
 		}
-		t[j + 1] = x
+		t[j + 1] ← x
 	}
-	retourne t
+	retourner t
 }
 
-soit tri_par_sélection(v: une liste d'entiers): une liste d'entiers = {
-	soit t: une liste d'entiers = v
-	pour i: un entier naturel de 0 à longueur(t) - 2 {
-		soit p: un entier naturel = i
-		pour j: un entier naturel de i + 1 à longueur(t) - 1 {
-			si t[j] moins de t[p] {
-				p = j
+soit tri_par_sélection : une liste d'entiers → une liste d'entiers, v ↦ {
+	soit t une liste d'entiers telle que t = v
+	pour i ∈ ⟦0 ; longueur(t) − 2⟧ {
+		soit p ∈ ℕ tel que p = i
+		pour j ∈ ⟦i + 1 ; longueur(t) − 1⟧ {
+			si t[j] est inférieur à t[p] {
+				p ← j
 			}
 		}
-		soit x: un entier = t[i]
-		t[i] = t[p]
-		t[p] = x
+		soit x ∈ ℤ tel que x = t[i]
+		t[i] ← t[p]
+		t[p] ← x
 	}
-	retourne t
+	retourner t
 }
 
-soit désordre: une liste d'entiers = {5 ; 2 ; 9 ; 1 ; 5 ; 6}
+soit désordre une liste d'entiers telle que désordre = {5 ; 2 ; 9 ; 1 ; 5 ; 6}
 
 <Dresser>un tableau {
 	<mg>	<mg>
@@ -692,20 +706,20 @@ La série de départ n'a pas bougé : une fonction rend une valeur, elle ne modi
 
 <h2algo>Fusionner deux listes triées
 
-soit fusion(a: une liste d'entiers ; b: une liste d'entiers): une liste d'entiers = {
-	soit r: une liste d'entiers = {}
-	soit i: un entier naturel = 0
-	soit j: un entier naturel = 0
-	tant que i moins de longueur(a) et j moins de longueur(b) faire {
-		si a[i] au plus b[j] {
-			r = ajouter(r ; a[i])
-			i = i + 1
+soit fusion : une liste d'entiers × une liste d'entiers → une liste d'entiers, (a, b) ↦ {
+	soit r une liste d'entiers telle que r = {}
+	soit i ∈ ℕ tel que i = 0
+	soit j ∈ ℕ tel que j = 0
+	tant que i est inférieur à longueur(a) et j est inférieur à longueur(b) faire {
+		si a[i] est inférieur ou égal à b[j] {
+			r ← ajouter(r ; a[i])
+			i ← i + 1
 		} sinon {
-			r = ajouter(r ; b[j])
-			j = j + 1
+			r ← ajouter(r ; b[j])
+			j ← j + 1
 		}
 	}
-	retourne r + a[i à longueur(a) - 1] + b[j à longueur(b) - 1]
+	retourner r + a[i à longueur(a) − 1] + b[j à longueur(b) − 1]
 }
 
 #{fusion({1 ; 4 ; 7 ; 9} ; {2 ; 3 ; 8})}
@@ -718,17 +732,17 @@ soit fusion(a: une liste d'entiers ; b: une liste d'entiers): une liste d'entier
 
 Sept lignes suffisent, et aucune n'est du moteur : la structure du programme de terminale se démontre au tableau au lieu d'être cachée dans le logiciel. On les nomme ici avec un suffixe, car une fonction qu'on écrit masque la primitive du même nom — c'est voulu, pour que l'élève puisse écrire la sienne, mais cela empêcherait d'employer les deux dans un même document.
 
-soit empile_liste(p: une liste d'entiers ; x: un entier): une liste d'entiers = ajouter(p ; x)
-soit sommet_liste(p: une liste d'entiers): un entier = p[longueur(p) - 1]
-soit dépile_liste(p: une liste d'entiers): une liste d'entiers = p[0 à longueur(p) - 2]
+soit empile_liste : une liste d'entiers × ℤ → une liste d'entiers, (p, x) ↦ ajouter(p ; x)
+soit sommet_liste : une liste d'entiers → ℤ, p ↦ p[longueur(p) − 1]
+soit dépile_liste : une liste d'entiers → une liste d'entiers, p ↦ p[0 à longueur(p) − 2]
 
-soit enfile_liste(f: une liste d'entiers ; x: un entier): une liste d'entiers = ajouter(f ; x)
-soit tête_liste(f: une liste d'entiers): un entier = f[0]
-soit défile_liste(f: une liste d'entiers): une liste d'entiers = f[1 à longueur(f) - 1]
+soit enfile_liste : une liste d'entiers × ℤ → une liste d'entiers, (f, x) ↦ ajouter(f ; x)
+soit tête_liste : une liste d'entiers → ℤ, f ↦ f[0]
+soit défile_liste : une liste d'entiers → une liste d'entiers, f ↦ f[1 à longueur(f) − 1]
 
-soit vide_liste(c: une liste d'entiers): un booléen = si longueur(c) vaut 0 { 1 } sinon { 0 }
+soit vide_liste : une liste d'entiers → 𝔹, c ↦ si longueur(c) vaut 0 { 1 } sinon { 0 }
 
-soit p: une liste d'entiers = empile_liste(empile_liste(empile_liste({} ; 1) ; 2) ; 3)
+soit p une liste d'entiers telle que p = empile_liste(empile_liste(empile_liste({} ; 1) ; 2) ; 3)
 
 La pile #p a pour sommet #{sommet_liste(p)} ; après dépilement il reste #{dépile_liste(p)}. La file {1 ; 2 ; 3} a pour tête #{tête_liste({1 ; 2 ; 3})} et laisse #{défile_liste({1 ; 2 ; 3})}.
 
@@ -738,13 +752,13 @@ Le type de p s'écrit comme partout ailleurs : une seule règle, sans exception 
 
 Une fois l'exercice fait, le langage les fournit — avec leur discipline, qui est tout leur intérêt. Une file n'a pas de sommet, une pile n'a pas de tête, et aucune des deux ne s'indexe.
 
-soit q: une pile d'entiers = {}
-q = empiler(q ; 1)
-q = empiler(q ; 2)
+soit q une pile d'entiers telle que q = {}
+q ← empiler(q ; 1)
+q ← empiler(q ; 2)
 
 La pile #q a pour sommet #{sommet(q)} ; dépilée, il reste #{dépiler(q)}. Elle est vide ? #{est vide(q)}
 
-soit r: une file d'entiers = {1 ; 2 ; 3}
+soit r une file d'entiers telle que r = {1 ; 2 ; 3}
 
 La file #r a pour tête #{tête(r)} ; défilée, il reste #{défiler(r)}.
 
@@ -752,31 +766,31 @@ La file #r a pour tête #{tête(r)} ; défilée, il reste #{défiler(r)}.
 
 Un p-uplet a une longueur fixe et des types qui peuvent différer, là où une collection est homogène et de longueur libre. Il s'écrit entre parenthèses, comme un point du plan.
 
-soit divise(a: un entier ; b: un entier): (un entier ; un entier) = (quotient de a par b ; reste de a par b)
+soit divise : ℤ² → ℤ², (a, b) ↦ (quotient de a par b ; reste de a par b)
 
-soit (q: un entier ; r: un entier) = divise(17 ; 5)
+soit q, r ∈ ℤ tels que (q ; r) = divise(17 ; 5)
 
 17 = 5 × #q + #r — la déliaison pose les deux noms d'un coup.
 
 L'exercice qui justifie à lui seul le p-uplet : deux résultats, un seul parcours.
 
-soit extrema(v: une liste d'entiers): (un entier ; un entier) = {
-	soit petit: un entier = v[0]
-	soit grand: un entier = v[0]
-	pour x: un entier dans v {
-		si x moins de petit { petit = x }
-		si x plus de grand { grand = x }
+soit extrema : une liste d'entiers → ℤ², v ↦ {
+	soit petit ∈ ℤ tel que petit = v[0]
+	soit grand ∈ ℤ tel que grand = v[0]
+	pour x ∈ v {
+		si x est inférieur à petit { petit = x }
+		si x est supérieur à grand { grand = x }
 	}
-	retourne (petit ; grand)
+	retourner (petit ; grand)
 }
 
-soit (mini: un entier ; maxi: un entier) = extrema({12 ; 15 ; 9 ; 18})
+soit mini, maxi ∈ ℤ tels que (mini ; maxi) = extrema({12 ; 15 ; 9 ; 18})
 
 La plus petite valeur est #mini, la plus grande #maxi.
 
 Les membres se lisent aussi par leur rang, et les types peuvent différer :
 
-soit c: (un entier ; une chaîne de caractères) = (3 ; "trois")
+soit c (un entier ; une chaîne de caractères) tel que c = (3 ; "trois")
 
 #c — dont le second membre est #{c[1]}.
 
@@ -784,31 +798,31 @@ soit c: (un entier ; une chaîne de caractères) = (3 ; "trois")
 
 aléatoire(a ; b) rend un entier entre les deux bornes, comprises. Deux compilations donnent deux tirages : c'est ce qu'une simulation attend.
 
-soit lancers(n: un entier): un entier = {
-	soit six: un entier naturel = 0
-	pour k: un entier naturel de 1 à n {
+soit lancers : ℤ → ℤ, n ↦ {
+	soit six ∈ ℕ tel que six = 0
+	pour k ∈ ⟦1 ; n⟧ {
 		si aléatoire(1 ; 6) vaut 6 {
-			six = six + 1
+			six ← six + 1
 		}
 	}
-	retourne six
+	retourner six
 }
 
 Sur 60 lancers d'un dé, #{lancers(60)} six — pour une espérance de 10.
 
 <h1algo>Les objets
 
-Une classe rassemble des données et ce qu'on sait en faire. Elle se déclare comme une phrase de mathématiques, et le type de ses attributs porte son article comme partout ailleurs : une seule règle, du premier `soit` au dernier.
+Une classe rassemble des données et ce qu'on sait en faire. Elle se déclare comme une phrase de mathématiques : un attribut numérique par son ensemble, les autres par leur type et son article, une méthode comme une fonction — une seule règle, du premier « soit » au dernier.
 
 soit une classe Point {
-	abscisse: un réel
-	ordonnée: un réel
+	abscisse ∈ ℝ
+	ordonnée ∈ ℝ
 
-	soit norme(): un réel = racine(abscisse * abscisse + ordonnée * ordonnée)
-	soit translaté(dx: un réel ; dy: un réel): Point = Point(abscisse + dx ; ordonnée + dy)
+	soit norme une fonction à valeurs dans ℝ définie par norme() = racine(abscisse × abscisse + ordonnée × ordonnée)
+	soit translaté : ℝ² → un Point, (dx, dy) ↦ Point(abscisse + dx ; ordonnée + dy)
 }
 
-soit p: Point = Point(3 ; 4)
+soit p un Point tel que p = Point(3 ; 4)
 
 Le point #p a pour distance à l'origine #{p.norme()}. Translaté d'une unité dans chaque direction, il devient #{p.translaté(1 ; 1)}.
 
@@ -816,8 +830,8 @@ Le nom d'une classe commence par une majuscule : c'est ce qui le distingue d'un 
 
 Un attribut se modifie sans soit, puisque rien n'est déclaré :
 
-soit q: Point = Point(1 ; 2)
-q.abscisse = 6
+soit q un Point tel que q = Point(1 ; 2)
+q.abscisse ← 6
 
 Le point q vaut #q.
 
@@ -826,14 +840,14 @@ Le point q vaut #q.
 Une classe peut garder pour elle ce qui ne regarde pas le dehors. Un seul mot le dit, et tout ce qui n'est pas marqué reste visible.
 
 soit une classe Compte {
-	titulaire: une chaîne de caractères
-	privé solde: un réel
+	titulaire une chaîne de caractères
+	privé solde ∈ ℝ
 
-	privé soit taux(): un réel = 0,02
-	soit intérêts(): un réel = solde * taux()
+	privé soit taux une fonction à valeurs dans ℝ définie par taux() = 0,02
+	soit intérêts une fonction à valeurs dans ℝ définie par intérêts() = solde × taux()
 }
 
-soit c: Compte = Compte("Léa" ; 250)
+soit c un Compte tel que c = Compte("Léa" ; 250)
 
 Le titulaire se lit du dehors : #{c.titulaire}. Les intérêts se calculent : #{c.intérêts()} — la méthode publique lit l'attribut privé et appelle la méthode privée, ce qui est tout l'objet de l'encapsulation.
 
@@ -844,27 +858,27 @@ Le solde ne se lit pas du dehors, et la méthode privée taux ne peut pas être 
 Une classe peut reprendre une autre et la prolonger. Elle en reçoit les attributs, les méthodes et les secrets.
 
 soit une classe Animal {
-	nom: une chaîne de caractères
+	nom une chaîne de caractères
 
-	soit cri(): une chaîne de caractères = "..."
-	soit carte(): une chaîne de caractères = nom
+	soit cri une fonction à valeurs dans une chaîne de caractères définie par cri() = "..."
+	soit carte une fonction à valeurs dans une chaîne de caractères définie par carte() = nom
 }
 
 soit une classe Chien qui hérite de la classe Animal {
-	race: une chaîne de caractères
+	race une chaîne de caractères
 
-	soit cri(): une chaîne de caractères = "ouaf"
+	soit cri une fonction à valeurs dans une chaîne de caractères définie par cri() = "ouaf"
 }
 
 soit une classe Chat qui hérite de la classe Animal {
-	soit cri(): une chaîne de caractères = "miaou"
+	soit cri une fonction à valeurs dans une chaîne de caractères définie par cri() = "miaou"
 }
 
-soit rex: Chien = Chien("Rex" ; "berger")
+soit rex un Chien tel que rex = Chien("Rex" ; "berger")
 
 Rex reçoit de sa classe mère la méthode carte, qui donne #{rex.carte()}, et redéfinit cri, qui donne #{rex.cri()}. L'animal, lui, garde le sien :
 
-soit loup: Animal = Animal("Loup")
+soit loup un Animal tel que loup = Animal("Loup")
 
 #{loup.cri()}
 
@@ -872,15 +886,15 @@ soit loup: Animal = Animal("Loup")
 
 Un chien tient la place d'un animal. C'est la valeur qui décide de la méthode appelée, non le type écrit :
 
-soit fait(x: Animal): une chaîne de caractères = x.cri()
+soit fait : un Animal → une chaîne de caractères, x ↦ x.cri()
 
 #{fait(rex)} — la fonction attend un animal, elle a reçu un chien, et c'est le cri du chien qui sort.
 
 Rangés ensemble, chacun garde le sien :
 
-soit z: une liste d'Animal = {Chien("Rex" ; "berger") ; Chat("Mia")}
+soit z une liste d'Animal telle que z = {Chien("Rex" ; "berger") ; Chat("Mia")}
 
-pour a: un Animal dans z {
+pour a ∈ z {
 	[#{a.cri()}]
 }
 
@@ -889,26 +903,26 @@ pour a: un Animal dans z {
 Une classe peut dire ce que ses filles doivent savoir faire, sans dire comment. Une méthode déclarée sans membre droit n'a pas de corps.
 
 soit une classe abstraite Forme {
-	nom: une chaîne de caractères
+	nom une chaîne de caractères
 
-	soit aire(): un réel
-	soit carte(): une chaîne de caractères = nom
+	soit aire une fonction à valeurs dans ℝ
+	soit carte une fonction à valeurs dans une chaîne de caractères définie par carte() = nom
 }
 
 soit une classe Carré qui hérite de la classe Forme {
-	côté: un réel
+	côté ∈ ℝ
 
-	soit aire(): un réel = côté * côté
+	soit aire une fonction à valeurs dans ℝ définie par aire() = côté × côté
 }
 
 soit une classe Rectangle qui hérite de la classe Forme {
-	largeur: un réel
-	hauteur: un réel
+	largeur ∈ ℝ
+	hauteur ∈ ℝ
 
-	soit aire(): un réel = largeur * hauteur
+	soit aire une fonction à valeurs dans ℝ définie par aire() = largeur × hauteur
 }
 
-soit mesure(f: Forme): un réel = f.aire()
+soit mesure : un Forme → ℝ, f ↦ f.aire()
 
 Un carré de 3 a pour aire #{mesure(Carré("c" ; 3))} ; un rectangle 2 sur 5 a pour aire #{mesure(Rectangle("r" ; 2 ; 5))}. La fonction mesure ne sait rien de l'une ni de l'autre : elle sait seulement qu'une forme a une aire.
 
@@ -919,25 +933,25 @@ Une classe abstraite ne s'instancie pas : seules les classes concrètes Carré e
 Les quatre piliers suffisent à écrire un arbre, sans avoir besoin d'une valeur nulle : l'arbre vide est une classe. La hiérarchie dit tout — un arbre est vide, ou c'est un nœud.
 
 soit une classe abstraite Arbre {
-	soit taille(): un entier
-	soit hauteur(): un entier
+	soit taille une fonction à valeurs dans ℤ
+	soit hauteur une fonction à valeurs dans ℤ
 }
 
 soit une classe Vide qui hérite de la classe Arbre {
-	soit taille(): un entier = 0
-	soit hauteur(): un entier = 0
+	soit taille une fonction à valeurs dans ℤ définie par taille() = 0
+	soit hauteur une fonction à valeurs dans ℤ définie par hauteur() = 0
 }
 
 soit une classe Nœud qui hérite de la classe Arbre {
-	valeur: un entier
-	gauche: Arbre
-	droit: Arbre
+	valeur ∈ ℤ
+	gauche un Arbre
+	droit un Arbre
 
-	soit taille(): un entier = 1 + gauche.taille() + droit.taille()
-	soit hauteur(): un entier = 1 + max(gauche.hauteur() ; droit.hauteur())
+	soit taille une fonction à valeurs dans ℤ définie par taille() = 1 + gauche.taille() + droit.taille()
+	soit hauteur une fonction à valeurs dans ℤ définie par hauteur() = 1 + max(gauche.hauteur() ; droit.hauteur())
 }
 
-soit t: Nœud = Nœud(1 ; Nœud(2 ; Vide() ; Vide()) ; Nœud(3 ; Vide() ; Vide()))
+soit t un Nœud tel que t = Nœud(1 ; Nœud(2 ; Vide() ; Vide()) ; Nœud(3 ; Vide() ; Vide()))
 
 Cet arbre compte #{t.taille()} nœuds et sa hauteur vaut #{t.hauteur()}.
 
@@ -947,64 +961,64 @@ Un attribut peut donc contenir un objet : c'est ce qui permet à une structure d
 
 Un graphe se donne par sa liste d'adjacence : un dictionnaire dont chaque clé est un sommet et chaque valeur la liste de ses voisins.
 
-soit g: un dictionnaire de chaînes de caractères et de listes de chaînes de caractères = {"A": {"B" ; "C"} ; "B": {"D"} ; "C": {"D"} ; "D": {}}
+soit g un dictionnaire de chaînes de caractères et de listes de chaînes de caractères tel que g = {"A": {"B" ; "C"} ; "B": {"D"} ; "C": {"D"} ; "D": {}}
 
 Le graphe compte #{longueur(g)} sommets ; les voisins de A sont #{g["A"]}.
 
 Les deux parcours diffèrent par une seule chose : la file donne le parcours en largeur, la pile le parcours en profondeur.
 
-soit largeur(g: un dictionnaire de chaînes de caractères et de listes de chaînes de caractères ; départ: une chaîne de caractères): une chaîne de caractères = {
-	soit vus: une chaîne de caractères = ""
-	soit f: une file de chaînes de caractères = {}
-	f = enfiler(f ; départ)
+soit largeur : un dictionnaire de chaînes de caractères et de listes de chaînes de caractères × une chaîne de caractères → une chaîne de caractères, (g, départ) ↦ {
+	soit vus une chaîne de caractères telle que vus = ""
+	soit f une file de chaînes de caractères telle que f = {}
+	f ← enfiler(f ; départ)
 	tant que est vide(f) vaut faux faire {
-		soit s: une chaîne de caractères = tête(f)
-		f = défiler(f)
+		soit s une chaîne de caractères telle que s = tête(f)
+		f ← défiler(f)
 		si vus contient(s) vaut faux {
-			vus = vus + s
-			pour v: une chaîne de caractères dans g[s] {
-				f = enfiler(f ; v)
+			vus ← vus + s
+			pour v ∈ g[s] {
+				f ← enfiler(f ; v)
 			}
 		}
 	}
-	retourne vus
+	retourner vus
 }
 
-soit profondeur(g: un dictionnaire de chaînes de caractères et de listes de chaînes de caractères ; départ: une chaîne de caractères): une chaîne de caractères = {
-	soit vus: une chaîne de caractères = ""
-	soit p: une pile de chaînes de caractères = {}
-	p = empiler(p ; départ)
+soit profondeur : un dictionnaire de chaînes de caractères et de listes de chaînes de caractères × une chaîne de caractères → une chaîne de caractères, (g, départ) ↦ {
+	soit vus une chaîne de caractères telle que vus = ""
+	soit p une pile de chaînes de caractères telle que p = {}
+	p ← empiler(p ; départ)
 	tant que est vide(p) vaut faux faire {
-		soit s: une chaîne de caractères = sommet(p)
-		p = dépiler(p)
+		soit s une chaîne de caractères telle que s = sommet(p)
+		p ← dépiler(p)
 		si vus contient(s) vaut faux {
-			vus = vus + s
-			pour v: une chaîne de caractères dans g[s] {
-				p = empiler(p ; v)
+			vus ← vus + s
+			pour v ∈ g[s] {
+				p ← empiler(p ; v)
 			}
 		}
 	}
-	retourne vus
+	retourner vus
 }
 
 Depuis A, en largeur : #{largeur(g ; "A")}. En profondeur : #{profondeur(g ; "A")}.
 
 <h1algo>Écrire un résultat sur une ligne
 
-soit premiers(n: un entier): une liste d'entiers = {
-	soit p: une liste d'entiers = {}
-	pour m: un entier naturel de 2 à n {
-		soit d: un entier naturel = 0
-		pour k: un entier naturel de 2 à m - 1 {
+soit premiers : ℤ → une liste d'entiers, n ↦ {
+	soit p une liste d'entiers telle que p = {}
+	pour m ∈ ⟦2 ; n⟧ {
+		soit d ∈ ℕ tel que d = 0
+		pour k ∈ ⟦2 ; m − 1⟧ {
 			si reste de m par k vaut 0 {
-				d = d + 1
+				d ← d + 1
 			}
 		}
 		si d vaut 0 {
-			p = ajouter(p ; m)
+			p ← ajouter(p ; m)
 		}
 	}
-	retourne p
+	retourner p
 }
 
 Les nombres premiers jusqu'à 50 : #{joindre(premiers(50) ; ", ")}.

@@ -95,7 +95,7 @@ Styles en ligne, interpolations, calculs : le corps du bloc est du docdg ordinai
 Et comme l'interpolation vaut là comme ailleurs, un jeu de modèles nominatifs pour toute la classe tient en quatre lignes :
 
 ```docdg
-pour prenom: une chaîne de caractères dans {Léa ; Hugo ; Anaïs} {
+pour prenom ∈ {"Léa" ; "Hugo" ; "Anaïs"} {
 	<Écrire>en réglure Seyès{
 #prenom mange une pomme.
 

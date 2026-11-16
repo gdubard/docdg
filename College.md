@@ -81,7 +81,7 @@ Dix figures (du carré à la boule), formule affichée, $\pi$ gardé exact ($36\
 ### **Nombres et programmes de calcul**
 
 ```docdg
-<Soit>une fonction f(x) = 2x + 1
+<Soit>f une fonction définie par f(x) = 2x + 1
 <Calculer>1/2 + 1/3
 <Simplifier>la fraction 84/60
 <Écrire>le nombre 45 600 en notation scientifique
@@ -108,8 +108,8 @@ Mise au même dénominateur, inverse pour la division, simplification par le PGC
 ### **Transformations du plan**
 
 ```docdg
-<Soient>les points A, B et C de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
-<Soit>un vecteur u(2;1)
+<Soit>A, B et C 3 points de coordonnées respectives (1 ; 1), (4 ; 1) et (2 ; 3)
+<Soit>u(2;1) un vecteur
 
 <Construire>l'image du triangle ABC par la symétrie axiale d'axe l'axe des abscisses
 <Construire>l'image du triangle ABC par la symétrie centrale de centre O

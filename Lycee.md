@@ -14,7 +14,7 @@ La seconde à la terminale : tronc commun, spécialité et enseignement scientif
 > De la seconde aux maths expertes : chaque chapitre a sa phrase, en registre de la classe.
 
 ```docdg
-<Soit>une fonction f(x) = x^3 - 3x^2 + 2
+<Soit>f une fonction définie par f(x) = x³ − 3x² + 2
 
 <Étudier>la convexité de f
 <Déterminer>les asymptotes de f
@@ -24,8 +24,8 @@ La seconde à la terminale : tronc commun, spécialité et enseignement scientif
 La convexité donne $f''$, son tableau de signes en intervalles, les points d'inflexion ; les asymptotes horizontales, obliques et verticales sont énoncées avec leurs équations ; les équations trigonométriques résolues sur $\mathbb{R}$ par les valeurs remarquables.
 
 ```docdg
-<Soient>les vecteurs u et v de coordonnées respectives (3 ; -2) et (4 ; 6)
-<Soit>le plan P d'équation 2x + y - z = 3
+<Soit>u et v 2 vecteurs de coordonnées respectives (3 ; -2) et (4 ; 6)
+<Soit>P un plan d'équation 2x + y - z = 3
 
 <Calculer>le produit scalaire de u et v
 <Calculer>la norme de u
@@ -46,7 +46,7 @@ Produit scalaire détaillé (orthogonalité signalée quand il est nul), normes 
 <Dresser>la matrice d'adjacence de G
 <Dénombrer>les chemins de longueur 3 de A à B dans G
 
-<Soit>la matrice M {
+<Soit>M une matrice définie par {
 	0,5 ; 0,5
 	0,2 ; 0,8
 }
@@ -105,7 +105,7 @@ comme elle sort du cours, sans isoler la dérivée :
 <Résoudre>numériquement l'équation différentielle m v' = m g - k v^2, avec m = 80, g = 9,81, k = 0,25 et v(0) = 0, sur [0 ; 30]
 ```
 
-Les paramètres se posent dans la phrase (`avec R = 1000, C = 1e-6`) et
+Les paramètres se posent dans la phrase (`avec R = 1000, C = 10^(-6)`) et
 peuvent se calculer les uns des autres (`T = 5730, λ = ln(2)/T`). Les exemples
 `physique.txt` et `chimie.txt` rédigent ces situations dans leurs
 chapitres consacrés au lycée ; le premier trace aussi le spectre d'une note de musique — un fondamental et ses harmoniques, comme en
