@@ -25,9 +25,9 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 <h1>Incertitudes et lois de probabilité
 Le facteur d'élargissement à 95 pourcent est le quantile de la loi normale centrée réduite :
 
-<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart type 1
+<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart-type 1
 
-<Calculer>la probabilité que X <= 1,96 pour la loi normale d'espérance 0 et d'écart type 1
+<Calculer>la probabilité que X <= 1,96 pour la loi normale d'espérance 0 et d'écart-type 1
 
 Un contrôle de qualité sur 20 pièces, chacune défectueuse avec la probabilité 0,05 :
 
@@ -118,7 +118,7 @@ La résistance mesurée par la loi d'Ohm, avec les incertitudes-types des deux a
 <h1>Ajustement de courbe
 	Cinq mesures d'une population de noyaux au cours du temps, ajustées au modèle exponentiel (paramètres libres $a$ et $b$) :
 
-<Ajuster>N(t) = a exp(b t) aux données {(0;100) (1;61) (2;37) (3;22) (4;14)}
+<Ajuster>N(t) = a exp(b t) aux données {(0;100) ; (1;61) ; (2;37) ; (3;22) ; (4;14)}
 
 <h1>Oscillateur harmonique
 	Un ressort de pulsation $omega = 2$ :

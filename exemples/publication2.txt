@@ -46,12 +46,12 @@ soit h3 un style défini par <gras au centre>
 	Avant d'expliquer, il faut situer. La première frise ne fait que cela : poser les dates dans l'ordre du temps, sans les commenter. Les six repères ci-dessous sont ceux que le manuel retient ; chacun marque une rupture que la suite de l'exposé devra justifier.
 
 <Construire>la frise chronologique {
-14/07/1789 : Prise de la Bastille (Le peuple de Paris s'empare de la forteresse.) avec l'image histoire/bastille.svg
-26/08/1789 : Déclaration des droits de l'homme et du citoyen avec l'image histoire/ecriture.svg
-21/09/1792 : Proclamation de la République avec l'image histoire/tricolore.svg
+14/07/1789 : Prise de la Bastille (Le peuple de Paris s'empare de la forteresse.) avec l'image "histoire/bastille.svg"
+26/08/1789 : Déclaration des droits de l'homme et du citoyen avec l'image "histoire/ecriture.svg"
+21/09/1792 : Proclamation de la République avec l'image "histoire/tricolore.svg"
 02/12/1804 : Sacre de Napoléon Ier
-1848 : Suffrage universel masculin (Deux millions d'électeurs deviennent neuf millions.) avec l'image histoire/urne.svg
-04/09/1870 : Proclamation de la Troisième République avec l'image histoire/tricolore.svg
+1848 : Suffrage universel masculin (Deux millions d'électeurs deviennent neuf millions.) avec l'image "histoire/urne.svg"
+04/09/1870 : Proclamation de la Troisième République avec l'image "histoire/tricolore.svg"
 }
 
 <h3>{La Révolution et ses suites}
@@ -82,7 +82,7 @@ droit de vote {
 presse et transports {
 de 1837 à 1870 : Essor du chemin de fer
 1836 : Naissance de la presse à bon marché (Le premier quotidien vendu à quarante francs l'an.)
-1857 : Paris relié à Marseille par le rail avec l'image histoire/locomotive.svg
+1857 : Paris relié à Marseille par le rail avec l'image "histoire/locomotive.svg"
 1881 : Loi sur la liberté de la presse
 }
 }

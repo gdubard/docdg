@@ -1,0 +1,286 @@
+document {
+    orientation: portrait;
+    marges: 5;
+    espacements: 2;
+    taille: 11;
+    interligne: 1,5;
+}
+
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+
+<volume>Analyse de données — des relevés à la loi
+
+Six stations de montagne, un an de relevés quotidiens. Ce document lit les fichiers, décrit les séries, choisit et regroupe par des requêtes, relie la température à l'altitude, puis conclut par une estimation et un test. Rien n'y est recopié à la main : chaque nombre vient des fichiers, et suit leurs corrections.
+
+Les stations et leurs mesures sont fictives. Le script « outils/ecrire_donnees_exemple.py » les tire d'un modèle simple, toujours le même : une saison, un refroidissement régulier avec l'altitude, un aléa.
+
+<page suivante>
+
+<table des matières>{Sommaire}
+
+<page suivante h0>Les sources
+
+<h1>Un fichier de relevés
+Le fichier « releves.csv » sort d'un tableur : point-virgule entre les champs, virgule décimale, dates à la française. Il se charge dans une table.
+soit releves une table telle que releves = <Lire>le fichier "DONNEES/releves.csv"
+La table : #releves. Elle porte une ligne par station et par jour ; voici les huit premières.
+<Dresser>un tableau avec les 8 premières lignes de releves
+
+Chaque colonne a reçu le type de ses cellules : la station est un texte, le jour une date, les températures et la pluie des décimaux, la neige un booléen. Une cellule vide, ou « NA », est une valeur manquante — un capteur qui n'a rien transmis.
+
+<h1>Une base de stations
+La base « meteo.duckdb » décrit les stations. Une de ses tables se lit par son nom.
+soit stations une table telle que stations = <Lire>la table "stations" de la base "DONNEES/meteo.duckdb"
+<Dresser>un tableau avec les données stations
+
+<page suivante h0>Décrire une série
+
+<h1>Les indicateurs
+Une colonne est une série. Voici les températures maximales de l'année, toutes stations confondues.
+
+<Calculer>la moyenne de la série releves["Maximale"]
+
+<Calculer>la médiane de la série releves["Maximale"]
+
+<Calculer>les quartiles de la série releves["Maximale"]
+
+<Calculer>l'écart-type de la série releves["Maximale"]
+
+Une somme de plus de douze termes s'abrège, comme une série rangée de plus de quarante valeurs. Les valeurs manquantes sont écartées, et chaque réponse dit combien.
+
+<page suivante h1>La distribution
+L'histogramme compte les valeurs par classes de même amplitude ; la boîte à moustaches situe la médiane et les quartiles.
+<Représenter>graphiquement une statistique en histogramme avec les données releves["Maximale"]
+
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données releves["Maximale"]
+
+Les bornes se choisissent. La pluie n'a rien de symétrique : la plupart des jours sont secs.
+<Représenter>graphiquement une statistique en histogramme avec les bornes {0 ; 5 ; 10 ; 15 ; 20 ; 25 ; 30 ; 35 ; 40 ; 45 ; 50 ; 55} et les données releves["Pluie"]
+
+<h0>Choisir et regrouper
+
+<h1>Interroger en français
+Une table du document s'interroge en français, avec le vocabulaire du cours de bases de données et l'ordre des clauses de SQL : les colonnes après « avec », puis « joindre … sur », « où », « regrouper par », « dont », « trier par » et « limiter à ». Une liste de colonnes s'écrit comme une phrase : « Jour, Minimale et Maximale ». Les nombres, les dates et les conditions s'y écrivent comme partout ailleurs dans le document. Une colonne calculée se nomme par « nom = expression » ; ce nom s'emploie dans la suite de la liste et dans toutes les clauses qui suivent, sans recopier l'expression.
+
+<h1>Choisir des lignes
+La projection garde des colonnes, la sélection garde des lignes. Les variables du document entrent dans la requête par leur dièse, ##station et ##seuil : on change de station en une ligne, et tout ce qui suit se recalcule.
+soit station une chaîne de caractères telle que station = "ALP"
+soit seuil ∈ 𝔻 tel que seuil = 22
+soit chauds une table telle que chauds = <Interroger>releves {
+	avec Jour, Minimale et Maximale
+	où Station = #station et Maximale ⩾ #seuil
+	trier par Maximale décroissant
+	limiter à 5 lignes
+}
+Les #{longueur(chauds)} journées les plus chaudes de la station #station, parmi celles qui atteignent #seuil degrés :
+<Dresser>un tableau avec les données chauds
+
+<h1>Regrouper
+« regrouper par » réunit les lignes d'un même mois et un agrégat les résume. La pluie de la même station, mois par mois :
+soit mensuel une table telle que mensuel = <Interroger>releves {
+	avec mois = mois(Jour) et pluie_du_mois = arrondi(somme(Pluie) ; 1)
+	où Station = #station
+	regrouper par mois
+	trier par mois
+}
+<Représenter>graphiquement une statistique en barres avec les données mensuel
+
+<page suivante>
+« effectif() » compte les lignes d'un groupe, « effectif(Maximale) » ses valeurs présentes, « effectif(où Neige) » celles qui vérifient une condition. Les jours de gel, les jours de neige et les maximales perdues de chaque station :
+soit hiver une table telle que hiver = <Interroger>releves {
+	avec Station, jours_de_gel = effectif(où Minimale < 0), jours_de_neige = effectif(où Neige)
+		et pannes = effectif() - effectif(Maximale)
+	regrouper par Station
+	trier par jours_de_gel
+}
+<Dresser>un tableau avec les données hiver
+
+<h1>Joindre le fichier et la base
+La table des stations, lue dans la base, se joint aux relevés du fichier : la jointure donne à chaque relevé le nom et l'altitude de sa station.
+soit bilan une table telle que bilan = <Interroger>releves {
+	avec nom, altitude, moyenne = arrondi(moyenne((Minimale + Maximale) ÷ 2) ; 2)
+		et pluie_totale = arrondi(somme(Pluie))
+	joindre stations sur Station = code
+	regrouper par code, nom et altitude
+	trier par altitude
+}
+<Dresser>un tableau avec les données bilan
+
+<h1>Réunir, croiser, retrancher
+Deux sélections de la même table se combinent comme des ensembles : ∩ garde les jours communs, ∖ retire ceux de la seconde, ∪ les réunit.
+soit gel une table telle que gel = <Interroger>releves {
+	avec Station et Jour
+	où Minimale < 0
+}
+soit neige une table telle que neige = <Interroger>releves {
+	avec Station et Jour
+	où Neige
+}
+soit gel_et_neige une table telle que gel_et_neige = gel ∩ neige
+soit gel_sans_neige une table telle que gel_sans_neige = gel ∖ neige
+Toutes stations confondues, #{longueur(gel_et_neige)} journées ont connu le gel et la neige, et #{longueur(gel_sans_neige)} le gel sans la neige.
+
+<h0>Calculer par fenêtres et par cas
+
+<h1>Chaque jour comparé à sa station
+Un agrégat suivi de « par » calcule sur le groupe de chaque ligne sans regrouper les lignes ; un ordre en fait un rang ou un cumul. Le jour le plus chaud de chaque station :
+soit records une table telle que records = <Interroger>releves {
+	avec Station, Jour, Maximale, moyenne_station = arrondi(moyenne(Maximale) par Station ; 1)
+		et place = rang(Maximale décroissant) par Station
+	où place = 1
+	trier par Station
+}
+<Dresser>un tableau avec les données records
+
+<h1>Des classes de température
+« selon la valeur de » range chaque maximale dans une classe ; le regroupement compte ensuite les jours de chaque classe. Une valeur manquante ne choisit aucun cas.
+soit ressentis une table telle que ressentis = <Interroger>releves {
+	avec ressenti = selon la valeur de Maximale { [-50 ; 0[ { "glacial" } [0 ; 15[ { "frais" } [15 ; 25[ { "doux" } sinon { "chaud" } }
+		et jours = effectif()
+	où Station = #station et ressenti n'est pas manquante
+	regrouper par ressenti
+	trier par jours décroissant
+}
+<Dresser>un tableau avec les données ressentis
+
+<h1>Un cumul
+Un jour sans relevé de pluie compte pour zéro : le nom « pluie_du_jour » le dit une fois, puis le cumul l'emploie.
+soit pluie_cumulee une table telle que pluie_cumulee = <Interroger>releves {
+	avec Jour, pluie_du_jour = Pluie à défaut 0 et depuis_janvier = arrondi(cumul(pluie_du_jour ; Jour) ; 1)
+	où Station = #station
+	trier par Jour
+	limiter à 7 lignes
+}
+<Dresser>un tableau avec les données pluie_cumulee
+
+<page suivante h0>Relier deux grandeurs
+
+<h1>La température et l'altitude
+La projection garde les deux colonnes à relier ; le nuage en fait ses points, et l'ajustement sa droite.
+soit gradient une table telle que gradient = <Interroger>bilan {
+	avec altitude et moyenne
+}
+<Représenter>graphiquement une statistique en nuage avec ajustement et avec les données gradient
+
+<Calculer>la covariance des séries bilan["altitude"] et bilan["moyenne"]
+
+La pente se lit sous la figure : la température moyenne baisse d'environ 0,62 degré tous les cent mètres. C'est le refroidissement que le modèle a donné à ces relevés fictifs : l'analyse le retrouve, à l'aléa près.
+
+<h1>Le jour et la nuit
+soit amplitudes une table telle que amplitudes = <Interroger>releves {
+	avec Minimale et Maximale
+	où Station = #station et Minimale n'est pas manquante et Maximale n'est pas manquante
+}
+Pour la station #station, le nuage représente #{longueur(amplitudes)} couples de températures mesurées le même jour.
+<Représenter>graphiquement une statistique en nuage avec ajustement et avec les données amplitudes
+
+<h1>L'écart à la normale
+La base range aussi les normales mensuelles de chaque station. Le SQL reste à disposition, pour le cours où il est l'objet d'étude : la requête s'adresse alors à la base, dont elle lit directement les tables. Une jointure sur la station et le mois compare l'année à ses normales ; un écart négatif se lit sous l'axe.
+soit ecarts une table telle que ecarts = <Interroger>la base "DONNEES/meteo.duckdb" {
+	SELECT normales.mois AS mois, ROUND(AVG((Minimale + Maximale) / 2) - temperature, 2) AS ecart
+	FROM releves
+	JOIN normales ON normales.station = releves.Station
+		AND normales.mois = month(Jour)
+	WHERE releves.Station = :station
+	GROUP BY normales.mois, normales.temperature
+	ORDER BY normales.mois
+}
+<Représenter>graphiquement une statistique en barres avec les données ecarts
+
+<h0>Les dates
+
+<h1>Une période
+Une date se déclare, se compare et se trie ; dans une requête, elle borne une période, comme un intervalle.
+soit debut une date telle que debut = 21/06/2025
+soit fin une date telle que fin = 22/09/2025
+soit ete une table telle que ete = <Interroger>releves {
+	avec nom, jours = effectif(), maximale_moyenne = arrondi(moyenne(Maximale) ; 1)
+		et record = max(Maximale)
+	joindre stations sur Station = code
+	où Jour ∈ [#debut ; #fin]
+	regrouper par code, nom et altitude
+	trier par altitude
+}
+L'été, du #debut au #fin :
+<Dresser>un tableau avec les données ete
+
+<h1>Trier des dates
+soit ouvertures une liste de dates telle que ouvertures = stations["ouverte"]
+Les stations ont ouvert, de la plus ancienne à la plus récente : #{trier(ouvertures)}.
+
+soit jour une table telle que jour = <Interroger>releves {
+	avec Station, Jour et Maximale
+	trier par Maximale décroissant
+	limiter à 1 ligne
+}
+Le record de l'année, #{jour["Maximale" ; 0]} degrés, date du #{jour["Jour" ; 0]}, à la station #{jour["Station" ; 0]}.
+
+<h0>Estimer et tester
+
+<h1>Un intervalle de confiance
+Les maximales de juillet de deux stations voisines, la plaine et le bocage. Une jointure de la table avec elle-même, nommée deux fois, range les deux stations côte à côte, jour par jour. Une fois nommée, la table ne se désigne plus que par ses nouveaux noms, p et b.
+soit juillet une table telle que juillet = <Interroger>p = releves {
+	avec journée = p["Jour"], plaine = p["Maximale"] et bocage = b["Maximale"]
+	joindre b = releves sur b["Jour"] = p["Jour"]
+	où p["Station"] = "PLA" et b["Station"] = "BOC" et mois(journée) = 7
+	trier par journée
+}
+<Dresser>un tableau avec les 5 premières lignes de juillet
+
+<Calculer>l'intervalle de confiance à 95 % de la moyenne de la série juillet["plaine"]
+
+<Calculer>l'intervalle de confiance à 95 % de la moyenne de la série juillet["bocage"]
+
+L'intervalle suppose des mesures indépendantes. Deux jours qui se suivent se ressemblent : il est ici un peu trop étroit, et se lit comme un ordre de grandeur.
+
+<page suivante h1>Un test
+Les deux moyennes diffèrent-elles ? Les deux stations vivent le même temps, jour pour jour : les séries sont appariées, et le test porte sur leurs différences.
+
+<Effectuer>le test de Student d'égalité des moyennes des séries appariées juillet["plaine"] et juillet["bocage"]
+
+<page suivante h0>Définir et modifier une table
+
+<h1>Une table définie par ses colonnes
+Une table se définit aussi par ses colonnes, chacune avec son type et ses contraintes, comme CREATE TABLE ; elle commence vide.
+soit visites une table définie par {
+	numero un entier, clé primaire
+	station une chaîne de caractères, obligatoire
+	jour une date, obligatoire
+	note un entier, à valeurs dans [1 ; 5]
+	remarque une chaîne de caractères, par défaut "RAS"
+}
+
+<Insérer>dans visites {
+	numero = 1 ; station = "PLA" ; jour = 03/02/2025 ; note = 4
+	numero = 2 ; station = "ALP" ; jour = 10/02/2025 ; note = 2 ; remarque = "capteur givré"
+	numero = 3 ; station = "BOC" ; jour = 17/03/2025 ; note = 5
+}
+Les trois visites insérées ; une remarque absente prend sa valeur par défaut :
+<Dresser>un tableau avec les données visites
+
+Une vue est une interrogation que DocDG recalcule chaque fois que ses tables changent.
+soit bonnes une vue telle que bonnes = <Interroger>visites {
+	avec numero, station et note
+	où note ⩾ 4
+}
+
+<h1>Modifier les lignes
+La mise à jour réaffecte des colonnes, la suppression retire des lignes ; les contraintes sont vérifiées à chaque écriture. Le fichier, lui, n'est jamais modifié.
+<Mettre à jour>visites où station = "ALP" {
+	note ← 4
+	remarque ← "capteur réparé"
+}
+
+<Supprimer>les lignes de visites où numero = 3
+
+<Dresser>un tableau avec les données visites
+
+La vue a suivi : elle garde désormais la visite de la station ALP, et a perdu celle du bocage.
+<Dresser>un tableau avec les données bonnes
+
+<h0>Garder le résultat
+
+<h1>Exporter une table
+Chaque table de ce document — « releves », « bilan », « juillet » — s'enregistre depuis le ruban Fichier, groupe Tables, au format Parquet ou Arrow. Polars et pandas relisent ces fichiers tels quels, et DocDG aussi : le résultat d'une requête devient à son tour une source.

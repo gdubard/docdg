@@ -190,7 +190,7 @@ Un son musical n'est pas une sinusoïde pure : à la fréquence fondamentale s'a
 
 <h2>Lisser des mesures bruitées
 Une sonde relève la température d'un liquide chauffé chaque minute ; les mesures fluctuent autour de la tendance. Une spline de lissage suit la tendance sans passer par chaque point, et permet d'estimer la température entre deux relevés.
-<Tracer>l'interpolation de T en fonction de t des données {(0;20,1) (1;24,8) (2;28,2) (3;32,9) (4;35,1) (5;39,3) (6;41,0) (7;44,6) (8;45,8) (9;48,9) (10;49,7)} par une spline de lissage, en t = 2,5 ; 7,5
+<Tracer>l'interpolation de T en fonction de t des données {(0;20,1) ; (1;24,8) ; (2;28,2) ; (3;32,9) ; (4;35,1) ; (5;39,3) ; (6;41,0) ; (7;44,6) ; (8;45,8) ; (9;48,9) ; (10;49,7)} par une spline de lissage, en t = 2,5 ; 7,5
 	<remarque>Le degré de lissage est choisi par validation croisée : ni trop, ce qui effacerait la tendance, ni trop peu, ce qui reproduirait le bruit.
 
 <h2>Le temps de vol d'un projectile
@@ -311,11 +311,11 @@ La série de Fourier d'un créneau d'amplitude 1 ne contient que des harmoniques
 
 <page suivante h2>Débruiter une mesure
 Une mesure lente à 5 Hz est polluée par un parasite à 120 Hz et par un bruit gaussien. Un passe-bas de Butterworth, appliqué en aller-retour, restitue la composante utile sans la déphaser.
-<Tracer>le filtrage du signal s(t) = sin(2π·5t) + 0,3sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 20 Hz, avec un bruit d'écart type 0,2
+<Tracer>le filtrage du signal s(t) = sin(2π·5t) + 0,3sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 20 Hz, avec un bruit d'écart-type 0,2
 
 <h2>Isoler une fréquence
 <Tracer>le filtrage du signal s(t) = sin(2π·10t) + sin(2π·50t) + sin(2π·200t), échantillonné à 2 kHz sur [0 ; 0,5], par un passe-bande de Butterworth d'ordre 3 entre 40 et 60 Hz
-	<remarque>Seule la composante à 50 Hz traverse le filtre : l'écart type du signal filtré approche 1/√2, celui d'une sinusoïde d'amplitude 1.
+	<remarque>Seule la composante à 50 Hz traverse le filtre : l'écart-type du signal filtré approche 1/√2, celui d'une sinusoïde d'amplitude 1.
 
 <h2>Un problème aux limites : l'ailette de refroidissement
 Dans une ailette de longueur unité, l'écart de température θ à l'air ambiant vérifie θ'' = m²θ. La base est maintenue à θ = 1 ; l'extrémité, isolée, impose un flux nul : θ'(1) = 0. Les deux conditions portent sur les deux bouts : docdg reconnaît un problème aux limites et le résout par collocation à maillage adaptatif.

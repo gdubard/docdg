@@ -142,10 +142,15 @@ leurs licences respectives :
 * la bibliothèque d'interface **iced**, la bibliothèque de dialogues **rfd**
   et l'exécutif asynchrone **tokio**, sous licence *MIT* ; le moteur de
   rendu SVG **resvg**, sous licence *MIT* ou *Apache 2.0* ;
-* la bibliothèque **SQLite**, versée au domaine public, qui range le corpus ;
+* la bibliothèque **DuckDB**, sous licence *MIT*, qui stocke le corpus
+  et exécute les requêtes des documents ;
   la bibliothèque **option-ext**, sous *Mozilla Public License 2.0*, employée
   sans modification ; les autres bibliothèques Rust embarquées, sous licences
   *MIT*, *Apache 2.0*, *BSD*, *Zlib* ou *Unicode* ;
+* les bibliothèques **Apache Arrow** et **Apache Parquet** (arrow-rs), sous
+  licence *Apache 2.0*, qui portent les tables de données, avec les décodeurs
+  **zstd**, **snappy** et **brotli**, sous licences *BSD*, et **lz4_flex**,
+  sous licence *MIT* ;
 * le moteur de calcul : l'interpréteur **Python** (CPython), sous
   *Python Software Foundation License* ; **SymPy**, **mpmath**, **NumPy** et
   **SciPy**, sous licence *BSD à trois clauses*, avec les bibliothèques

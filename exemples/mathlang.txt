@@ -240,9 +240,9 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	$pour tout x appartenant à RR, il existe y appartenant à RR, y > x$
 
 
-	Absence de quantificateur existentiel :
+	Non-existence (il n'y a pas de plus grand entier naturel) :
 
-	$il n'existe pas de m appartenant à NN$
+	$il n'existe pas de m appartenant à NN, pour tout n appartenant à NN, n <= m$
 
 
 	Implication :
@@ -385,7 +385,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Variance : $variance(X)$
 	Covariance : $covariance(X; Y)$
-	Écart type : $écart type(X)$
+	Écart-type : $écart-type(X)$
 
 <h1>Probabilités : événements
 
@@ -415,8 +415,8 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Espérance du produit : $EE(X Y)$
 	Conditionnement et complémentaire : $PP(non(A) sachant B)$
 	Probabilité conjointe : $PP(A inter B sachant C)$
-	Borne supérieure de l’écart type d’une fréquence de Bernoulli : $1/(2 racine(n))$
-	Pour n tirages de Bernoulli indépendants et de même paramètre, avec n entier naturel strictement positif, l’écart type de la fréquence vaut la racine de p fois (1 moins p) divisé par n ; il est au plus égal à la borne affichée. Ce n’est pas l’énoncé général de la loi des grands nombres.
+	Borne supérieure de l’écart-type d’une fréquence de Bernoulli : $1/(2 racine(n))$
+	Pour n tirages de Bernoulli indépendants et de même paramètre, avec n entier naturel strictement positif, l’écart-type de la fréquence vaut la racine de p fois (1 moins p) divisé par n ; il est au plus égal à la borne affichée. Ce n’est pas l’énoncé général de la loi des grands nombres.
 
 <h1>Statistiques : paramètres
 
@@ -426,7 +426,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 	Moyenne avec barre : $moyenne(x)$
 	Variance de X et Y : $variance(X) + variance(Y)$
 	Covariance nulle : $covariance(X; Y) = 0$
-	Écart type et variance : $écart type(X) = racine(variance(X))$
+	Écart-type et variance : $écart-type(X) = racine(variance(X))$
 
 <h1>Statistiques : fonctions
 
@@ -440,7 +440,7 @@ Les lettres sont des symboles de présentation, pas des variables à déclarer. 
 
 	Loi normale centrée réduite : $normale(0; 1)$
 	Loi normale générale : $normale(mu; sigma)$
-	Pour cette notation, sigma désigne l’écart type, strictement positif ; la variance vaut son carré.
+	Pour cette notation, sigma désigne l’écart-type, strictement positif ; la variance vaut son carré.
 	Loi binomiale : $binomiale(n; p)$
 	Paramètres : n est un entier naturel ; p est une probabilité comprise entre zéro et un. La loi décrit notamment la somme de n épreuves de Bernoulli indépendantes de même paramètre.
 	Loi de Poisson : $poisson(lambda)$

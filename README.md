@@ -1,17 +1,23 @@
-# *DocDG 4.0*
+# *DocDG 4.1*
 
-> Interface DocDG 4.0 : [rubans, volets, saisies et export](docs/INTERFACE.md).
-
-**docdg** est une application de composition documentaire écrite en Rust,
-autour d'un langage de balises en français. L'auteur écrit un fichier texte
-ordinaire, que le moteur transforme en document ; l'interface est native
-(iced), et Typst compose l'aperçu comme le PDF exporté, identiques page pour
-page. Elle couvre notamment cadres,
+**docdg** est une application de composition documentaire, écrite pour les
+enseignants et les chercheurs du secondaire et du supérieur, autour d'un
+langage de balises en français. Vous écrivez un fichier texte ordinaire ;
+docdg en compose le document, affiché à côté de la source pendant la frappe et
+exporté en PDF, identique page pour page. Elle couvre notamment cadres,
 grilles, tableaux, images, notations mathématiques, tracés de fonctions,
-géométrie plane et spatiale, statistiques, physique-chimie et rédaction longue
-(chapitres, renvois croisés, bibliographie). La justesse scientifique et la
-fidélité typographique doivent être appréciées à l'aide des tests et exemples,
-non déduites de la seule présence d'une commande dans la documentation.
+géométrie plane et spatiale, statistiques et analyse de données,
+physique-chimie et rédaction longue (chapitres, renvois croisés,
+bibliographie).
+
+**Nouveau dans la 4.1 : les tables de données.** Un document lit un fichier
+CSV, Arrow ou Parquet, ou une base DuckDB ou SQLite, puis l'interroge en
+français ou en SQL : [les requêtes en français](docs/SQL_FRANCAIS.md) ·
+[interroger des données](docs/DONNEES_DUCKDB_D2.md) ·
+[feuilleter et exporter une table](docs/DONNEES_ARROW_D3.md) ·
+[personnaliser le corpus](docs/CORPUS_DUCKDB_D1.md).
+
+> L'interface de DocDG 4.1 : [rubans, volets, saisies et export](docs/INTERFACE.md).
 
 **Auteur et mainteneur :** Gérard Dubard — docdg69@gmail.com
 **Licence :** gratuiciel propriétaire — voir [CLUF.md](CLUF.md)
@@ -23,14 +29,13 @@ non déduites de la seule présence d'une commande dans la documentation.
 
 > *Un petit langage de balises, cohérent, pour les documents qu'un enseignant fabrique réellement.*
 
-[![Version](https://img.shields.io/badge/version-4.0-2980b9?style=flat-square)](CHANGELOG.md)
-[![Engine](https://img.shields.io/badge/moteur-Rust-E95420?style=flat-square)](https://www.rust-lang.org/)
+[![Version](https://img.shields.io/badge/version-4.1-2980b9?style=flat-square)](NOUVEAUTES.md)
 [![Standalone](https://img.shields.io/badge/distribution-autonome-27ae60?style=flat-square)](https://github.com/gdubard/docdg)
 [![Licence](https://img.shields.io/badge/licence-propriétaire_freeware-8e44ad?style=flat-square)](CLUF.md)
 
-**[Journal des versions](CHANGELOG.md)**
+**[Nouveautés de la 4.1](NOUVEAUTES.md)**
 
-> **Règle normative depuis la version 3.9 : typage explicite obligatoire.** Toute nouvelle variable, tout style, conteneur, paramètre de fonction, type de retour, résultat de saisie et indice de boucle doit porter un **type déclaré explicitement, avec son article français**. Une inférence possible ne dispense jamais de la déclaration. Par exemple `soit n ∈ ℕ tel que n = 5` et `soit h1 un style défini par <bleu gras>` ; `soit n = 5` et `soit n: entier naturel = 5` ne déclarent aucune variable et restent du texte sans avertissement. Une utilisation ultérieure d'un nom sans déclaration valide est signalée à son emplacement. Une réaffectation n'est **pas** une déclaration : `n ← 6`. Le contrat détaillé figure dans [Typage obligatoire](docs/TYPAGE_OBLIGATOIRE.md). La persistance éventuelle d'une syntaxe historique dans le moteur ou un exemple est un **défaut à corriger**, non une variante autorisée.
+> **Règle normative depuis la version 3.9 : typage explicite obligatoire.** Toute nouvelle variable, tout style, conteneur, paramètre de fonction, type de retour, résultat de saisie et indice de boucle doit porter un **type déclaré explicitement** : l'ensemble pour un nombre ou un booléen (`∈ ℕ`, `∈ 𝔹`), ou le type en toutes lettres **avec son article français** (`un entier`, `une liste d'entiers`, `un style`). Une inférence possible ne dispense jamais de la déclaration. Par exemple `soit n ∈ ℕ tel que n = 5` et `soit h1 un style défini par <bleu gras>` ; `soit n = 5` et `soit n: entier naturel = 5` ne déclarent aucune variable et restent du texte sans avertissement. Une utilisation ultérieure d'un nom sans déclaration valide est signalée à son emplacement. Une réaffectation n'est **pas** une déclaration : `n ← 6`. Le contrat détaillé figure dans [Typage obligatoire](docs/TYPAGE_OBLIGATOIRE.md).
 
 ---
 
@@ -44,7 +49,16 @@ non déduites de la seule présence d'une commande dans la documentation.
 https://github.com/gdubard/docdg/releases
 ```
 
-Sous Windows, télécharger et lancer l'exécutable `.exe` ; il n'est pas nécessaire de modifier le `PATH` pour une application graphique. Sous macOS, utiliser l'application `.app`. Sous Linux, télécharger l'**AppImage**, la rendre exécutable (`chmod +x`) et la lancer : elle ne dépend ni de GTK ni de WebKitGTK depuis la 4.0 (les dialogues de fichiers passent par le portail XDG du bureau). Consulter [docs/COMPILER.md](docs/COMPILER.md) pour l'AppImage et la validation sur chaque système.
+Sous Windows, télécharger l'exécutable `.exe` et le lancer. Sous macOS, glisser l'application `docdg.app` dans le dossier Applications. Sous Linux, télécharger l'**AppImage**, l'autoriser à s'exécuter dans les propriétés du fichier (ou par `chmod +x`), puis la lancer d'un double-clic.
+
+**Ouvrir docdg pour la première fois sous macOS.** L'application est signée par son auteur mais n'est pas notariée par Apple : au premier double-clic, macOS refuse de l'ouvrir. Il suffit de l'autoriser une fois :
+
+1. double-cliquer sur `docdg.app` et fermer le message qui s'affiche ;
+2. ouvrir le menu Pomme, puis Réglages Système, puis Confidentialité et sécurité ;
+3. descendre jusqu'à la rubrique Sécurité et cliquer sur « Ouvrir quand même » (le bouton reste proposé environ une heure après la tentative) ;
+4. confirmer, puis saisir le mot de passe de la session.
+
+Les ouvertures suivantes se font normalement. Depuis macOS 15, le clic droit suivi de « Ouvrir » ne suffit plus. Sur un parc géré, l'administrateur peut aussi retirer la quarantaine dans le Terminal : `xattr -dr com.apple.quarantine /Applications/docdg.app`.
 
 **Premier lancement.** Au tout premier démarrage, docdg installe son moteur de calcul dans le dossier de données de l'utilisateur (`%LOCALAPPDATA%\docdg\runtime` sous Windows, `~/Library/Application Support/docdg/runtime` sous macOS, `~/.local/share/docdg/runtime` sous Linux), une fois pour toutes : l'opération prend quelques secondes et se fait en arrière-plan. Une nouvelle version de docdg remplace ce dossier et efface l'ancien.
 
@@ -74,44 +88,45 @@ en dépendent s'affichent dès que le moteur est prêt.
 
 | document | contenu |
 |---|---|
-| [Redaction.md](Redaction.md) | les 1606 énoncés et les 602 démonstrations du corpus, par matière et par niveau, avec la phrase qui les appelle — plus les 101 démonstrations classiques servies par `<Montrer>` |
+| [Redaction.md](Redaction.md) | les 1674 énoncés et les 608 démonstrations du corpus, par matière et par niveau, avec la phrase qui les appelle — plus les 101 démonstrations classiques servies par `<Montrer>` |
 
 ### La référence
 
-Les commandes **présentes et testées** sont celles que composent les exemples de `exemples/` et les blocs de code des manuels : chacun est exécuté par la suite de tests, et le contrat du typage est dans [docs/TYPAGE_OBLIGATOIRE.md](docs/TYPAGE_OBLIGATOIRE.md).
+Chaque bloc de code de ces manuels, comme chaque exemple du dossier `exemples/`, est composé tel quel par docdg et donne le résultat décrit ; le contrat du typage est dans [Typage obligatoire](docs/TYPAGE_OBLIGATOIRE.md).
 
 **Conventions du supérieur :** [contrats de notation, de typage et d'hypothèses mathématiques](docs/NOTATIONS_SUPERIEUR.md). Cette référence distingue la syntaxe écrite par l'utilisateur de la notation mathématique et documente les limites actuelles du moteur.
 
 1. [Qu'est-ce que docdg ?](#-quest-ce-que-docdg-)
 2. [Fonctionnalités clés](#-fonctionnalités-clés)
 3. [Pourquoi docdg ?](#-pourquoi-docdg-)
-4. [Ce dont vous avez besoin](#-ce-dont-vous-avez-besoin)
+4. [Ce dont vous avez besoin](#%EF%B8%8F-ce-dont-vous-avez-besoin)
 5. [Premiers documents](#-premiers-documents)
-6. [Le classeur de saisie](#-le-classeur-de-saisie) — les six intercalaires, l'insertion directe, l'enregistrement automatique
+6. [Le classeur de saisie](#%EF%B8%8F-le-classeur-de-saisie) — les sept rubans, l'insertion directe, l'enregistrement automatique
 7. [La syntaxe](#-la-syntaxe)
 8. [Les objets](#-les-objets) — cadres, tableaux, images, listes, grilles, sections
 9. [La mise en colonnes](#-la-mise-en-colonnes) — un passage sur une à cinq colonnes, le reste en pleine largeur
-10. [Les actions](#-les-actions) — `Soit`, `Tracer` : figures, repère, solides, mode analytique
+10. [Les actions](#%EF%B8%8F-les-actions) — `Soit`, `Tracer` : figures, repère, solides, mode analytique
 11. [Les démonstrations](#-les-démonstrations) — les dix raisonnements, la preuve automatique, la bibliothèque
-12. [Les saisies interactives](#-les-saisies-interactives) — `<Saisir>`, blocage typé, alternative `si … sinon`, le document vivant
+12. [Les saisies interactives](#%EF%B8%8F-les-saisies-interactives) — `<Saisir>`, blocage typé, alternative `si … sinon`, le document vivant
 13. [Les styles et la mise en forme](#-les-styles-et-la-mise-en-forme)
 14. [Le langage algorithmique](#-le-langage-algorithmique) — types, conteneurs, primitives, chaînes, fonctions, p-uplets
 15. [Les graphiques de fonctions](#-les-graphiques-de-fonctions)
 16. [Les mathématiques](#-les-mathématiques)
 17. [La géométrie](#-la-géométrie)
 18. [La géométrie dans l'espace](#-la-géométrie-dans-lespace) — solides, patrons, repère de l'espace, droites et plans, positions relatives
-19. [Les statistiques](#-les-statistiques) — diagrammes, arbres de probabilités, droite graduée
-20. [L'écriture en réglure](#-lécriture-en-réglure) — la réglure Seyès, la cursive, les styles et les mathématiques sur les lignes
-21. [La physique-chimie](#-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
-22. [La frise chronologique](#-la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
-23. [Le corpus : le personnaliser, l'emprunter](#-le-corpus--le-personnaliser-lemprunter) — l'onglet Édition, le journal, la base d'un établissement
-24. [Les exemples, par niveau](#-les-exemples-par-niveau)
+19. [Les statistiques](#-les-statistiques) — indicateurs d'une série, diagrammes, tables de données, arbres de probabilités, droite graduée
+20. [L'écriture en réglure](#%EF%B8%8F-lécriture-en-réglure) — la réglure Seyès, la cursive, les styles et les mathématiques sur les lignes
+21. [La physique-chimie](#%EF%B8%8F-la-physique-chimie) — équations, masses molaires, avancement, unités, constantes, incertitudes
+22. [La frise chronologique](#%EF%B8%8F-la-frise-chronologique) — l'histoire entre en scène : dates, titres, détails
+23. [Le corpus : le personnaliser, l'emprunter](#%EF%B8%8F-le-corpus--le-personnaliser-lemprunter) — l'onglet Édition, le journal, la base d'un établissement
+24. [Les exemples, par niveau](#%EF%B8%8F-les-exemples-par-niveau)
 25. [Les documents complexes](#-les-documents-complexes)
 26. [Comprendre les erreurs et les cas particuliers](#-comprendre-les-erreurs-et-les-cas-particuliers)
 27. [Référence complète](#-référence-complète) — couleurs et options de classe
 28. [Bonnes pratiques](#-bonnes-pratiques)
 29. [Le calcul scientifique étendu](#-le-calcul-scientifique-étendu) — SymPy : ce que débloque le second moteur
-30. [Les tournures et le placement](#-les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
+30. [Les tournures et le placement](#%EF%B8%8F-les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
+31. [Statistiques et probabilités du supérieur](#-statistiques-et-probabilités-du-supérieur) — les six guides : inférence, multivarié, Markov, lois, tests et modèles, estimation
 
 *Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
 
@@ -120,7 +135,7 @@ Les commandes **présentes et testées** sont celles que composent les exemples 
 ## **📖 Qu'est-ce que docdg ?**
 
 **docdg est un langage de composition documentaire.**  
-Il permet de **créer simplement des documents de grande qualité** grâce à un **moteur de composition Rust** qui produit directement une composition Typst et son PDF.
+Il permet de **créer simplement des documents de grande qualité** grâce à un **moteur de composition** qui produit directement le PDF.
 
 **docdg prend en charge toute la composition** : vous décrivez le document en français, il produit le PDF — sans intermédiaire, sans passer par un autre système.
 
@@ -151,7 +166,7 @@ Ce manuel suit une **progression logique** :
 
 ### **📜 Une convention de lecture**
 
-Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg génère l’aperçu Typst et le PDF pour vous, en coulisse.
+Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C'est la seule syntaxe à connaître : docdg compose l’aperçu et le PDF pour vous, en coulisse.
 
 ---
 
@@ -163,7 +178,7 @@ Dans tout ce manuel, un bloc marqué **`docdg`** est ce que **vous écrivez**. C
 | **🏷️ Une seule syntaxe de balise** | `<attributs>{contenu}` couvre texte, tableaux, images, maths, cadres, listes et mises en page pleine page                 | `<Afficher>un cadre avec une bordure bleue{Texte}`, `<Dresser>un tableau {<mc>...}` |
 | **🎨 148 couleurs nommées**         | Une palette en **français**, une couleur par nom, accordée selon l'orthographe | `rouge`, `bleu nuit`, `vert forêt` |
 | **📐 Un mini-langage mathématique** | Fractions, racines, sommes, produits, intégrales, dérivées, trigonométrie, matrices et systèmes, **le tout dans `$...$`** | `$somme(k=1;n) k^2$`, `$intégrale(x=a;b) f(x)$`    |
-| **📦 Cadres et grilles**            | Panneaux `<Afficher>un cadre` colorés et mises en page Typst à zones nommées et fusionnées                                            | `<Afficher>une grille`, `<Afficher>un cadre avec des coins arrondis de 5 mm`       |
+| **📦 Cadres et grilles**            | Panneaux `<Afficher>un cadre` colorés et mises en page à zones nommées et fusionnées                                                  | `<Afficher>une grille`, `<Afficher>un cadre avec des coins arrondis de 5 mm`       |
 | **📊 Des tableaux sans douleur**    | Placement de cellule en **deux lettres**, fusions, en-têtes, bordures, **aucun `&` à compter**                            | `<Dresser>un tableau {<mc>...}`                        |
 | **♻️ Alias et macros**              | Factorisez un style **une fois**, nommez-le partout ; **une seule retouche restyle tout le document**                     | `soit titre un style défini par <gras 18 pt>`, `soit exercice{n} = ...` |
 | **🔁 Structures de contrôle**       | Boucles, conditionnelles et interpolation **`#{...}`** dans le corps du document                                          | `pour n ∈ ⟦1 ; 5⟧`, `si note >= 10`                 |
@@ -200,30 +215,12 @@ De nombreux utilisateurs rédigent aujourd'hui leurs documents à l'aide de **tr
 
 ### **Installation**
 
-docdg est un exécutable autonome : rien d'autre à installer, ni Python, ni SymPy, ni distribution TeX — le moteur de calcul formel est embarqué.
-
-**Téléchargement :** récupérez le binaire pour votre système sur la page des versions :
-
-```
-https://github.com/gdubard/docdg/releases
-```
-
-Sous macOS, glissez `docdg.app` dans `/Applications`. Sous Windows, lancez
-`docdg.exe`. Sous Linux, après extraction de l'archive :
-
-```bash
-chmod +x docdg
-sudo mv docdg /usr/local/bin/
-```
-
-Vérifiez l'installation — la commande affiche `DocDG 4.0` :
-
-```bash
-docdg --version
-```
-
-Lancé avec le chemin d'un fichier (`docdg exemples/vitrine.txt`), DocDG
-l'ouvre directement.
+docdg est une application autonome : rien d'autre à installer, ni Python, ni
+distribution TeX — le moteur de calcul est embarqué. Le téléchargement et le
+premier lancement sont décrits au début de ce manuel, dans
+[Avant de commencer : installation](#avant-de-commencer--installation). Il
+suffit ensuite d'un fichier texte : docdg l'ouvre, le compose et l'enregistre
+au fil de la frappe.
 
 ## **🚀 Premiers documents**
 
@@ -240,7 +237,7 @@ Bonjour le monde !
 
 Tout ce qui décrit le **corps physique** du document — son format, ses polices, sa conduite — s'écrit dans un bloc `document { }` en tête du fichier. Il est entièrement facultatif : sans lui, des valeurs par défaut raisonnables s'appliquent.
 
-> **📌 L'identité n'est pas un réglage.** Le titre, l'auteur, l'institution, l'emblème, la nature du document : tout cela **se compose** sur la première page, avec les mêmes outils que le reste — des styles (`au centre`, une taille), `<Insérer l'image …>` pour l'emblème, et `<page suivante>` pour refermer la couverture. Le bloc `document { }` ne décrit que le papier. Une clé d'identité qui s'y glisse est refusée, et le refus nomme le chemin.
+> **📌 L'identité n'est pas un réglage.** Le titre, l'auteur, l'institution, l'emblème, la nature du document : tout cela **se compose** sur la première page, avec les mêmes outils que le reste — des styles (`au centre`, une taille), `<Insérer l'image "…">` pour l'emblème, et `<page suivante>` pour refermer la couverture. Le bloc `document { }` ne décrit que le papier. Une clé d'identité qui s'y glisse est refusée, et le refus nomme le chemin.
 
 **docdg**
 
@@ -317,7 +314,7 @@ document {
 | `numérotation` | `composée`, `simple` ou `sans` | `composée` | Numéros de page : `1 / 3`, `1` seul, ou aucun |
 | `veuves`     | nombre             | `2`         | Lignes minimales reportées en haut de page |
 | `précision`  | nombre             | `-1`        | Décimales pour arrondi (`-1` = pas d'arrondi) |
-| `graine`     | entier positif     | *absente*   | Fixe les tirages : le document devient reproductible, l'énoncé et son corrigé coïncident. Absente, chaque compilation tire à neuf |
+| `graine`     | entier positif     | *absente*   | Fixe les tirages : le document devient reproductible, l'énoncé et son corrigé coïncident. Absente, chaque composition tire à neuf |
 | `récursion`  | entier de 10 à 100 000 | `500`   | Profondeur maximale des appels imbriqués d'une fonction. Au-delà, le calcul s'arrête avec un message, sans jamais faire planter l'application ; relevez la limite pour une récursion profonde mais légitime |
 | `niveau`     | texte              | *absent*    | Le niveau scolaire du document, en toutes lettres — de `CP` à `master 2`. Il décide de ce que le corpus admet et de ce qu'il démontre |
 | `corpus`     | chemin             | *embarqué*  | Désigne une base personnelle (`.docdgc`) à la place de la base embarquée — celle d'un enseignant ou d'un établissement |
@@ -330,7 +327,7 @@ document {
 
 > **␣ Les blancs de la ponctuation française.** docdg pose lui-même, au rendu, les espaces que la typographie française exige et que le clavier ne donne pas : une **espace fine insécable** devant `;`, `!` et `?`, une **espace insécable** devant `:` et `»` et après `«`. Rien à écrire ni à régler — on tape une espace ordinaire, docdg la remplace par la bonne, et la ligne ne se coupe plus devant un signe double, à l'écran comme dans le PDF. Les mathématiques, le code et les éléments de classe `donnee` sont épargnés : là, un point-virgule sépare des données et n'est pas une ponctuation.
 
-> **📄 Les blocs qui se coupent.** Un cadre et un tableau sont **insécables par défaut** : un théorème, un énoncé bref, un petit tableau doivent rester d'un seul tenant, et passent entiers à la page suivante s'ils n'y tiennent pas. L'adjectif `sécable` les autorise à se poursuivre d'une page à l'autre — indispensable dès qu'un cadre de démonstration ou un tableau de données dépasse la page. Le filet du cadre devient tireté au point de rupture et son titre ne se répète pas ; la **rangée d'entête du tableau, elle, reparaît en tête de chaque fragment**, sans qu'il y ait rien à écrire pour l'exiger. Un tableau se coupe dès qu'une rangée tient dans la place restante : les règles de veuve et d'orpheline valent pour la prose, non pour les rangées, et continuent de s'appliquer à l'intérieur d'un cadre scindé. L'exemple `publication3.txt` met les cinq réglages à l'épreuve sur un même document.
+> **📄 Les blocs qui se coupent.** Un cadre et un tableau sont **insécables par défaut** : un théorème, un énoncé bref, un petit tableau doivent rester d'un seul tenant, et passent entiers à la page suivante s'ils n'y tiennent pas. L'adjectif `sécable` les autorise à se poursuivre d'une page à l'autre — indispensable dès qu'un cadre de démonstration ou un tableau de données dépasse la page. Le filet du cadre devient tireté au point de rupture et son titre ne se répète pas ; la **ligne d'entête du tableau, elle, reparaît en tête de chaque fragment**, sans qu'il y ait rien à écrire pour l'exiger. Un tableau se coupe dès qu'une de ses lignes tient dans la place restante : les règles de veuve et d'orpheline valent pour la prose, non pour les lignes d'un tableau, et continuent de s'appliquer à l'intérieur d'un cadre scindé. L'exemple `publication3.txt` met les cinq réglages à l'épreuve sur un même document.
 
 ### **📝 Écrire plusieurs paragraphes**
 
@@ -361,7 +358,7 @@ L'onglet **Saisie** de l'application porte sept rubans, décrits en détail dans
 
 | ruban | ce qu'on y trouve |
 |---|---|
-| **Fichier** | Nouveau, Ouvrir, Enregistrer sous et Exporter ; le chemin de la source et celui du dernier PDF exporté |
+| **Fichier** | Nouveau, Ouvrir, Enregistrer sous et Exporter ; le chemin de la source et celui du dernier PDF exporté ; les tables du document, à exporter en Parquet ou en Arrow |
 | **Document** | tous les réglages du bloc `document { }` — page, texte, marges, espacements, conduite, numérotation, niveau, corpus |
 | **Styles** | tout ce qui se met entre chevrons sans verbe : caractère, alignement, couleur et fond, police, taille, niveau de titre et forme de numérotation |
 | **Actions** | les trente-sept verbes, rangés par catégorie, et leurs objets, filtrés par matière et par niveau |
@@ -385,16 +382,14 @@ de l'ajouter à la suite.
 au document. Un document qui n'a jamais reçu de fichier y est signalé : son
 texte serait perdu.
 
-**La réouverture réutilise le Typst sauvegardé.** Après enregistrement du texte
-et composition valide, docdg garde le Typst du document dans son cache privé,
-dans le dossier de données de l'utilisateur — et là seulement : il n'écrit rien
-à côté de `cours.txt`. À la prochaine ouverture, il vérifie le texte, le moteur
-et les ressources avant de reprendre ce Typst sans réexécuter les instructions
-DocDG. Un document courant est repris d'un seul tenant ; pour un document
-volumineux, la première page est montrée d'abord, puis le document entier. La
-composition des pages par Typst reste nécessaire. Le cache se régénère seul et
-ne garde que les 256 documents les plus récemment composés ; le `.txt` reste le
-document à modifier.
+**La réouverture est immédiate.** Après enregistrement du texte et composition
+valide, docdg garde une copie de la mise en page du document dans son dossier
+de données — et là seulement : il n'écrit rien à côté de `cours.txt`. À la
+prochaine ouverture, il vérifie que le texte, les images et le moteur n'ont pas
+changé, puis reprend cette mise en page sans refaire les calculs. Pour un
+document volumineux, la première page est montrée d'abord, puis le document
+entier. Ces copies concernent les 256 documents les plus récemment ouverts et
+se refont d'elles-mêmes ; le `.txt` reste le seul document à modifier.
 
 **La prose reste de la prose.** Une ligne dont la syntaxe algorithmique n'est
 pas reconnue reste affichée sans avertissement et n'est pas exécutée. Une
@@ -408,8 +403,8 @@ le message invite à retirer, et un bloc dont l'accolade fermante manque,
 signalé à sa ligne d'ouverture. Le contenu d'un bloc non fermé reste lisible
 comme source ; docdg n'invente pas une fermeture d'accolade. Si le moteur de composition ne peut plus composer
 le document, un aperçu de secours conserve la source lisible et les diagnostics
-dont l'origine est connue. Ces aperçus provisoires ne remplacent pas le cache
-d'une composition valide. Les contrôles de qualification restent stricts.
+dont l'origine est connue ; il disparaît dès que le document se compose de
+nouveau.
 
 **Tout s'insère en direct.** Il n'y a ni bouton « Insérer » ni bouton
 « Appliquer ». Choisir « gras » écrit `<gras>{}` dans la source, le curseur
@@ -448,7 +443,7 @@ fusionnées et ses cellules de données ; une grille avec son plan de largeurs,
 ses zones nommées et leurs blocs de placement ; matrice avec ses
 coefficients, un système avec ses équations, un graphe avec ses arcs, une frise
 avec ses bornes et ses événements. Les tableaux se règlent au passage —
-colonnes, groupes, rangées — et les grilles par leur couleur de bordure et leur
+colonnes, groupes, lignes — et les grilles par leur couleur de bordure et leur
 écart.
 
 **Les actions écrivent ce qu'elles supposent.** Un tableau de signes se dresse
@@ -494,18 +489,18 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 | **Propriétés** | Personnalisation     | `rouge`, `gras`, `14 pt`, `au centre` |
 | **Valeurs**    | Paramètres           | `oui`, `non`, `30`, `bleu foncé`  |
 
-**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme le plus souvent tout de suite après l'objet et ses attributs — `<Afficher>un cadre avec ...{...}` — mais pour les objets qui se nomment en vue d'un calcul ultérieur (matrice, un système), le chevron peut aussi se refermer tout de suite après le verbe seul, l'objet et son nom suivant en toutes lettres : `<Soit>M une matrice définie par {...}` (voir la section **Matrices et systèmes**) ; les deux s'y compilent de façon identique. Toute balise d'action commence par un **verbe à l'infinitif** — l'usage du secondaire comme du supérieur — jamais par l'objet nu (règle n°12) ; seules font exception la déclaration `<Soit>` et les balises de style (`<gras>`, un style nommé), qui ne commandent aucune action. Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresser>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
+**Une seule façon de parler à docdg : la phrase.** Une balise se lit dans l'ordre où elle s'écrit — l'**action** d'abord (le verbe, entre chevrons), puis l'**objet** qu'elle concerne, avec son article et ses attributs en prose, puis enfin le **contenu**, entre accolades : `<Action>objet avec propriétés{contenu}`. Le chevron se referme tout de suite après le verbe ; l'objet, son nom et ses attributs suivent en toutes lettres, sur la même ligne : `<Afficher>un cadre avec ... {...}`, `<Soit>M une matrice définie par {...}` (voir la section **Matrices et systèmes**). Une balise dont l'objet et les attributs restent à l'intérieur des chevrons n'est pas exécutée : elle s'imprime telle quelle. Toute balise d'action commence par un **verbe à l'infinitif** — l'usage du secondaire comme du supérieur — jamais par l'objet nu (règle n°12) ; seules font exception la déclaration `<Soit>` et les balises de style (`<gras>`, un style nommé), qui ne commandent aucune action. Les attributs se disent **en prose**, introduits par `avec`, avec le nom et son article (`avec une bordure rouge, un fond jaune clair et des coins arrondis de 5 mm`) — l'ancienne écriture en couples `attribut:valeur` n'existe plus, hors des rares réglages techniques signalés comme tels (`x:{...}` des tableaux de signes, par exemple). Convention du manuel : quand un chapitre étudie un objet en particulier, la tête de balise s'écrit soit avec un verbe (`<Dresser>un tableau ...`), soit avec trois points qui tiennent la place de n'importe quel verbe d'action : `<... un tableau ...>`.
 
 ### **📌 Les règles de base**
 
-1. **Les balises** sont entre **chevrons** et commencent par un **verbe** : `<Afficher>un cadre`, `<Dresser>un tableau`, `<Insérer l'image IMAGES/photo.png avec une largeur de 30 mm>`  (règle n°12)
+1. **Les balises** sont entre **chevrons** et commencent par un **verbe** : `<Afficher>un cadre`, `<Dresser>un tableau`, `<Insérer>l'image "IMAGES/photo.png" avec une largeur de 30 mm`  (règle n°12)
 2. **Le contenu** est entre **accolades** : `<Afficher>un cadre{Du texte ici}`. Quand il s'étend sur plusieurs lignes, il **commence à la ligne qui suit l'accolade**, jamais à sa droite — comme le corps d'un bloc dans tout langage, et pour que la source garde la forme du rendu. Ce qui est écrit à droite d'une accolade ouvrante est signalé ; seuls des espaces ne comptent pas pour du contenu, et une construction qui tient sur une seule ligne n'est pas concernée. docdg n'a pas de syntaxe de commentaire : `%` désigne l'opérateur modulo dans les calculs.
 3. **Les noms composés** utilisent des **espaces** : `<table des matières>`
 4. **Les propriétés** s'écrivent **en français** : `<bleu foncé au centre 14 pt>{Titre}`
 5. **Les couleurs** : `rouge`, `bleu foncé` (français)
 6. **Les polices** : en **MAJUSCULES** : `<ARIAL>`
 7. **Échappement** : doublez les caractères spéciaux pour les afficher littéralement : `<<` → `<`, `>>` → `>`, `{{` → `{`, `}}` → `}`, `##` → `#`, `$$` → `$`.
-8. **Les séparateurs** : le point-virgule `;` sépare **les éléments d'une donnée** — coordonnées (`A(2;3)`), bornes d'intervalles (`[-5 ; 5]`), séries de nombres (`{12 ; 15 ; 9}`) ou de textes (`{"lundi" ; "mardi"}`), arguments d'une fonction (`arrondi(5/3; 2)`). La virgule `,` sépare les fragments de prose (règle n°10) et reste la virgule décimale à l'intérieur d'un nombre (`3,5`). La barre `|` sépare les paires `clé: valeur` des données nommées (`{Marche: 5 | Bus: 3}`) et les colonnes des rangées saisies. Deux constructions suivent l'usage mathématique plutôt que cette répartition : les paramètres d'une signature se séparent par la virgule (`(a, b) ↦ a − b`), et un dictionnaire lie chaque clé à sa valeur par deux-points, ses entrées restant séparées par le point-virgule (`{"Marche": 5 ; "Bus": 3}`).
+8. **Les séparateurs** : le point-virgule `;` sépare **les éléments d'une donnée** — coordonnées (`A(2;3)`), bornes d'intervalles (`[-5 ; 5]`), séries de nombres (`{12 ; 15 ; 9}`), de textes (`{"lundi" ; "mardi"}`) ou de couples (`{(1 ; 2) ; (3 ; 4,5)}`), arguments d'une fonction (`arrondi(5/3; 2)`). La virgule `,` sépare les fragments de prose (règle n°10) et reste la virgule décimale à l'intérieur d'un nombre (`3,5`). La barre `|` sépare les colonnes des lignes saisies, et elle seule : les données d'un diagramme sont un dictionnaire, dont les paires se séparent par le point-virgule et dont les clés textuelles sont des chaînes, entre guillemets (`{"Marche": 5 ; "Bus": 3}`) ; une clé numérique reste un nombre (`{1: 0,4 ; 2: 0,6}`). Deux constructions suivent l'usage mathématique plutôt que cette répartition : les paramètres d'une signature se séparent par la virgule (`(a, b) ↦ a − b`), et un dictionnaire lie chaque clé à sa valeur par deux-points, ses entrées restant séparées par le point-virgule (`{"Marche": 5 ; "Bus": 3}`).
 
 9. **Majuscule de phrase** : **Seules** les actions dont l'écriture se lit comme une phrase française (`<Soit>`, `<Tracer>`, etc.) commencent par une majuscule. Les **mots-clés techniques** (`soit`, `pour`, `si`, `tant que`) restent en minuscules.
 10. **Article + prose** : toute action-phrase (`<Soit>`, `<Tracer>`) désigne ses objets avec un article et décrit leurs attributs en prose. En détail :
@@ -519,8 +514,9 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 11. **Les attributs d'un objet s'ouvrent par « avec »**, se séparent par une virgule, et les deux derniers se relient par « et ». C'est la seule forme admise ; écrire les attributs sans `avec` est refusé avec un message qui rappelle la règle. Chaque attribut porte de préférence son **nom précédé d'un article** — plus proche du langage naturel que l'adjectif seul :
 
     ```docdg
-    <Afficher un cadre avec un fond vert menthe, une bordure bleu canard,
-        des coins arrondis de 3 mm et un titre {Théorème}>{ ... }
+    <Afficher>un cadre avec un fond vert menthe, une bordure bleu canard, des coins arrondis de 3 mm et un titre {Théorème} {
+    	...
+    }
     ```
 
     L'adjectif `bordé de` n'existe plus : la couleur de bordure se dit `une bordure bleu canard`, comme le fond se dit `un fond vert menthe` — le nom précédé de son article (`une bordure`, `un fond`) se lit mieux que l'adjectif, et docdg ne garde qu'une forme canonique par concept. Les qualificatifs qui font corps avec l'objet restent des adjectifs (`un triangle rectangle`, `un triangle équilatéral`). Un objet **sans** attribut s'écrit nu (`<Afficher>un cadre{...}`, `<Dresser>un tableau{...}`).
@@ -528,7 +524,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
    - **Les unités de longueur** (`cm`, `mm`) sont **obligatoires** : `de côté 5,3 cm`, jamais `de côté 5,3`. Une longueur sans unité est une erreur, dite en français. *Seule exception :* dans un repère, les longueurs se comptent en **graduations** et s'écrivent sans unité.
    - **Le clé:valeur** ne garde que les réglages purement techniques sans tournure française courante. Chaque fois qu'un nom français existe, la prose gagne : `avec 200 échantillons` plutôt qu'un réglage abstrait, `un pas de $pi/6$` plutôt qu'un `step:`.
 
-12. **Une balise d'action commence par un verbe à l'infinitif** — `<Dresser>un tableau ...`, `<Afficher>un cadre ...`, `<Insérer l'image ...>`, `<Construire>un arbre ...`, `<Tracer>...` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Afficher>un cadre` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Quatre familles seulement échappent à l'infinitif : la **déclaration** `<Soit>`, formule consacrée du discours mathématique, et trois familles qui ne posent aucun objet dans le document : les **styles** (`<gras rouge 14 pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Afficher>un cadre avec ...`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Afficher`, `Dresser`, `Construire` et `Insérer` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
+12. **Une balise d'action commence par un verbe à l'infinitif** — `<Dresser>un tableau ...`, `<Afficher>un cadre ...`, `<Insérer>l'image "..."`, `<Construire>un arbre ...`, `<Tracer>...` — **jamais par l'objet nu**. L'objet porte toujours son article, et l'article suit un verbe : `<Afficher>un cadre` et non `<cadre>`. Écrire l'objet nu est refusé avec un message qui rappelle la règle. Quatre familles seulement échappent à l'infinitif : la **déclaration** `<Soit>`, formule consacrée du discours mathématique, et trois familles qui ne posent aucun objet dans le document : les **styles** (`<gras rouge 14 pt>`), les **commandes structurelles** (`<section>`, `<sous-section>`, `<table des matières>`) et les **définitions d'alias** (`soit exo{n} = <Afficher>un cadre avec ...`, où le membre droit décrit un objet sans encore l'afficher — le verbe y est le bienvenu mais la définition seule ne produit rien). Les verbes d'objet interchangeables sont `Afficher`, `Dresser`, `Construire` et `Insérer` ; le manuel écrit `<... un tableau ...>` quand le verbe importe peu.
 
 
 ### **🔹 Structure d'une balise**
@@ -591,8 +587,7 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
   Résoudre $x^2 - 5x + 6 = 0$.
 }
 
-<Afficher un cadre avec une bordure rouge foncé, un fond blanc, des coins arrondis de 6 mm,
-  un titre {Théorème de Pythagore} et un titre en blanc sur fond rouge foncé>{
+<Afficher>un cadre avec une bordure rouge foncé, un fond blanc, des coins arrondis de 6 mm, un titre {Théorème de Pythagore} et un titre en blanc sur fond rouge foncé {
   Dans un triangle rectangle...
 }
 ```
@@ -626,11 +621,11 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 
 **Trois règles suffisent, après la ligne de pistes :**
 
-1. **Hors des crochets, tout est entête** — la rangée du haut comme la colonne de gauche.
+1. **Hors des crochets, tout est entête** — la ligne du haut comme la colonne de gauche.
 2. **Chaque donnée est entre crochets**, une paire par cellule, séparées par une ou plusieurs tabulations : `[Nom]	[15]`, jamais de point-virgule à l'intérieur.
 3. **Les fusions se lisent dans l'entête** : un tiret en fin de mot fusionne horizontalement, un deux-points fusionne verticalement — voir plus bas.
 
-> **⇥ Les colonnes s'alignent d'elles-mêmes.** Dans le volet Source, la tabulation et le retour à la ligne réalignent tout le tableau : chaque colonne démarre au même endroit sur toutes les rangées, les données d'une rangée de continuation se rangent sous leur colonne, et une tabulation en fin de rangée place le curseur sous la colonne suivante. Un tableau collé ou inséré depuis le bandeau arrive déjà aligné. Seules les tabulations bougent — la grammaire en admet une ou plusieurs —, si bien que le document lu ne change pas d'un iota ; une rangée en cours de frappe (crochet encore ouvert) est laissée telle quelle, et un seul Cmd-Z (Ctrl-Z) annule la frappe et l'alignement ensemble.
+> **⇥ Les colonnes s'alignent d'elles-mêmes.** Dans le volet Source, la tabulation et le retour à la ligne réalignent tout le tableau : chaque colonne démarre au même endroit sur toutes les lignes, les données d'une ligne de continuation se rangent sous leur colonne, et une tabulation en fin de ligne place le curseur sous la colonne suivante. Un tableau collé ou inséré depuis le bandeau arrive déjà aligné. Seules les tabulations bougent — la grammaire en admet une ou plusieurs —, si bien que le document lu ne change pas d'un iota ; une ligne en cours de frappe (crochet encore ouvert) est laissée telle quelle, et un seul Cmd-Z (Ctrl-Z) annule la frappe et l'alignement ensemble.
 
 ```docdg
 <Dresser>un tableau {
@@ -641,9 +636,9 @@ La syntaxe de docdg repose sur **quatre familles de commandes** :
 }
 ```
 
-La première rangée, hors crochets, est l'entête, en gras, sans que le mot `entête` figure nulle part.
+La première ligne, hors crochets, est l'entête, en gras, sans que le mot `entête` figure nulle part.
 
-**Fusion verticale : le deux-points.** Une entête suivie d'un deux-points porte les rangées de données qui suivent immédiatement sur la même ligne — un seul deux-points suffit, quel que soit le nombre de rangées couvertes ; sa portée se lit à ce qui la suit, pas à un décompte :
+**Fusion verticale : le deux-points.** Une entête suivie d'un deux-points porte les lignes de données qui la suivent, dès la sienne — un seul deux-points suffit, quel que soit le nombre de lignes couvertes ; sa portée se lit à ce qui la suit, pas à un décompte :
 
 ```docdg
 <Dresser>un tableau {
@@ -656,7 +651,7 @@ La première rangée, hors crochets, est l'entête, en gras, sans que le mot `en
 }
 ```
 
-« S1 » couvre trois rangées, « Lundi » deux : chacun couvre ce qu'il porte. Le deux-points est consommé, jamais imprimé — mais un deux-points **à l'intérieur d'une donnée** (`[Nom :]`) n'est que du texte : la grammaire ne regarde le deux-points qu'en dehors des crochets.
+« S1 » couvre trois lignes, « Lundi » deux : chacun couvre ce qu'il porte. Le deux-points est consommé, jamais imprimé — mais un deux-points **à l'intérieur d'une donnée** (`[Nom :]`) n'est que du texte : la grammaire ne regarde le deux-points qu'en dehors des crochets.
 
 **Fusion horizontale : le tiret après l'entête.** Un ou plusieurs tirets après une entête la font couvrir une colonne de plus par tiret. L'espacement ne compte pas — `Identité-`, `Identité -` et un tiret seul dans sa colonne disent la même chose, les tabulations ne servant qu'à aligner la source à l'œil — alignement que l'éditeur fait lui-même. Sans risque pour un mot composé : le tiret de fusion n'est jamais suivi d'une lettre, si bien que « Sous-total » reste un seul mot :
 
@@ -669,7 +664,7 @@ La première rangée, hors crochets, est l'entête, en gras, sans que le mot `en
 }
 ```
 
-« Identité - » couvre 2 colonnes ; « Coordonnées », dernier mot de la rangée, s'étend jusqu'au bord par la règle qui suit — inutile d'y ajouter un tiret. Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau :
+« Identité - » couvre 2 colonnes ; « Coordonnées », dernier mot de la ligne, s'étend jusqu'au bord par la règle qui suit — inutile d'y ajouter un tiret. Le tiret peut aussi s'écrire seul dans la colonne qu'il couvre, pour que la source ait la forme du tableau :
 
 ```docdg
 <Dresser>un tableau {
@@ -680,7 +675,7 @@ La première rangée, hors crochets, est l'entête, en gras, sans que le mot `en
 }
 ```
 
-**Fusion horizontale implicite : la rangée courte.** Une rangée d'entête plus courte que le tableau, et qui ne se termine ni par un tiret ni par un deux-points, étend sa dernière cellule jusqu'au bord droit — un titre seul couvre toute la largeur :
+**Fusion horizontale implicite : la ligne courte.** Une ligne d'entête plus courte que le tableau, et qui ne se termine ni par un tiret ni par un deux-points, étend sa dernière cellule jusqu'au bord droit — un titre seul couvre toute la largeur :
 
 ```docdg
 <Dresser>un tableau {
@@ -719,15 +714,14 @@ Employé seul, sans piste vertical/horizontal explicite, `au centre` vaut `mc`, 
 | Couleur des cellules     | `texte <couleur>`, `fond <couleur>`   | -             | Couleur du texte et du fond des cellules        |
 | Couleur des entêtes      | `des entêtes en <couleur texte> sur fond <couleur fond>` | -   | Couleur de toutes les cellules d'entête         |
 | Écart entre cellules     | `écart de <N> mm`                     | `0 mm`        | Espacement entre cellules                       |
-| Coupure entre pages      | `sécable` / `insécable`               | `insécable`   | Autorise le tableau à se poursuivre d'une page à l'autre ; la rangée d'entête se répète en tête de chaque fragment |
+| Coupure entre pages      | `sécable` / `insécable`               | `insécable`   | Autorise le tableau à se poursuivre d'une page à l'autre ; la ligne d'entête se répète en tête de chaque fragment |
 
 Mêmes conventions que pour `<Afficher>un cadre` : `texte <couleur>` / `fond <couleur>`, chaque partie facultative.
 
 **Exemple complet :**
 
 ```docdg
-<Dresser un tableau avec un écart de 3 mm,
-  une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine>{
+<Dresser>un tableau avec un écart de 3 mm, une bordure bleu marine, un fond bleu Alice et un entête en blanc, sur fond bleu marine {
 	<mc>	<mg>	<mc>
 	Jour	Matière	Note
 	Lundi :	[Mathématiques]	[15]
@@ -753,9 +747,9 @@ Pour écrire des crochets littéraux dans une cellule, les protéger par des dol
 ### **3️⃣ Dénombrement, arithmétique, complexes**
 
 ```docdg
-<Dénombrer>les combinaisons de 3 parmi 10
-<Dénombrer>les arrangements de 3 parmi 10
-<Dénombrer>les permutations de 5
+<Dénombrer>les combinaisons de 3 éléments parmi 10
+<Dénombrer>les arrangements de 3 éléments parmi 10
+<Dénombrer>les permutations de 5 éléments
 <Dresser>le triangle de Pascal jusqu'à la ligne 5
 ```
 
@@ -872,7 +866,7 @@ Le tableau se dresse tout seul. La somme des probabilités est vérifiée : une 
 <Calculer>les 6 premiers termes de u
 ```
 
-La définition s'affiche en notation indicielle, puis les termes se calculent à la demande.
+La définition s'affiche en notation indicielle, puis les termes se calculent à la demande. Elle s'écrit aussi avec ses indices, comme au tableau : `<Soit>u une suite définie par u_0 = 1 et u_(n+1) = 2u_n + 1`.
 
 ### **3️⃣ `<Étudier>le second degré` — Trinômes**
 
@@ -890,7 +884,7 @@ Les fractions restent exactes tant que le discriminant est un carré parfait ; s
 
 ### **3️⃣ `<Insérer>une image` — Insertion d'images**
 
-**Syntaxe :** `<Insérer l'image CHEMIN avec ATTRIBUTS>` — le chemin s'écrit **en entier dans la balise**, relatif au fichier du document ; rien ne reste à accoler après. Un nom comportant des espaces s'accolade : `l'image {mon chat.png}`. Les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. docdg ne cherche jamais dans un dossier par défaut : omettre le chemin est refusé avec un message qui rappelle la forme.
+**Syntaxe :** `<Insérer>l'image "CHEMIN" avec ATTRIBUTS` — et, au milieu d'une ligne (dans une phrase, une cellule ou un groupe `<au centre>{…}`), la balise englobante `<Insérer l'image "CHEMIN" avec ATTRIBUTS>`. Le chemin s'écrit **en entier, entre guillemets**, relatif au dossier du document : c'est une chaîne de caractères, comme le chemin de `<Lire>le fichier "…"`, espaces comprises (`l'image "mon chat.png"`). La légende, elle, est du texte affiché : elle reste entre accolades, sans guillemets. Les dimensions se disent **en prose**, comme tout attribut (règle n°11), l'unité (mm) obligatoire. docdg ne cherche jamais dans un dossier par défaut : omettre le chemin est refusé avec un message qui rappelle la forme.
 
 - `avec une largeur de 30 mm` — 30 mm de large, hauteur proportionnelle ;
 - `avec une hauteur de 20 mm` — 20 mm de haut, largeur proportionnelle ;
@@ -902,15 +896,15 @@ Les fractions restent exactes tant que le discriminant est un carré parfait ; s
 
 | **Attribut** | **S'écrit**              | **Description**       | **Obligatoire** |
 | ------------ | ------------------------ | ---------------------- | ---------------- |
-| Chemin       | `l'image DOSSIER/fichier.png` | Le fichier, depuis la source | oui, toujours |
+| Chemin       | `l'image "DOSSIER/fichier.png"` | Le fichier, depuis le dossier du document, entre guillemets | oui, toujours |
 | Légende      | `la légende {...}`       | Légende sous l'image   | non               |
 
 **Exemples :**
 
 ```docdg
-<Insérer l'image IMAGES/diagramme.png avec une largeur de 50 mm>
-<Insérer l'image IMAGES/photo.png avec une largeur de 80 mm, une hauteur de 60 mm et la légende {Figure 1}>
-<Insérer l'image IMAGES/GEOMETRIE/cercle.png avec un côté de 30 mm>
+<Insérer>l'image "IMAGES/diagramme.png" avec une largeur de 50 mm
+<Insérer>l'image "IMAGES/photo.png" avec une largeur de 80 mm, une hauteur de 60 mm et la légende {Figure 1}
+<Insérer>l'image "IMAGES/GEOMETRIE/cercle.png" avec un côté de 30 mm
 ```
 
 ### **4️⃣ `<Dresser>une liste ADJECTIF` — Listes variées**
@@ -949,7 +943,7 @@ Deuxième point
 
 ### **5️⃣ `<Afficher>une grille` — Mise en page avancée**
 
-**La grille s'ouvre par son plan** : une ligne de largeurs au-dessus des colonnes, puis une ligne par rangée, qui commence par sa hauteur et nomme ses zones. Le plan se lit à l'œil, comme un croquis tracé à la main, et une ligne vide le sépare des zones :
+**La grille s'ouvre par son plan** : une ligne de largeurs au-dessus des colonnes, puis les lignes de la grille, dont chacune commence par sa hauteur et nomme ses zones. Le plan se lit à l'œil, comme un croquis tracé à la main, et une ligne vide le sépare des zones :
 
 ```docdg
 <Afficher>une grille avec un écart de 3 mm {
@@ -968,7 +962,7 @@ Deuxième point
 		Calculatrice autorisée.
 	}
 	logo : au centre {
-		<Insérer l'image IMAGES/oiseau.png avec une largeur de 20 mm>
+		<Insérer>l'image "IMAGES/oiseau.png" avec une largeur de 20 mm
 	}
 	corps : au centre {
 		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
@@ -984,9 +978,9 @@ Deuxième point
 | `<max>`   | le reste de la place, partagé à parts égales entre les `max` |
 | `<24 mm>` | une largeur ou une hauteur fixée (`mm`, `cm`)                |
 
-La hauteur d'une rangée est facultative : sans elle, la rangée vaut `<min>`.
+La hauteur d'une ligne est facultative : sans elle, la ligne vaut `<min>`.
 
-**Un nom de zone par case, un point pour une case vide.** Une zone qui occupe plusieurs cases répète son nom — « titre » sur deux colonnes, « corps » sur un carré de deux colonnes et deux rangées. Le point laisse une case vide :
+**Un nom de zone par case, un point pour une case vide.** Une zone qui occupe plusieurs cases répète son nom — « titre » sur deux colonnes, « corps » sur un carré de deux colonnes et deux lignes. Le point laisse une case vide :
 
 ```docdg
 <Afficher>une grille avec un écart de 4 mm {
@@ -1133,7 +1127,7 @@ document {
 
 **Un passage plus haut qu'une page se poursuit sur la suivante**, en colonnes de même, sans qu'on ait rien à déclarer : à la différence du cadre, qui est insécable tant qu'on ne le déclare pas sécable, le passage en colonnes se coupe toujours — un texte courant n'a aucune raison de rester d'un seul tenant.
 
-`basique.txt` montre la forme (« Le passage en colonnes »), `publication3.txt` la démonstration typographique : un passage de quatre paragraphes qui traverse une page, filet compris. Une colonne accueille tout ce qu'accueille la page, [réglure Seyès comprise](#-lécriture-en-réglure).
+`basique.txt` montre la forme (« Le passage en colonnes »), `publication3.txt` la démonstration typographique : un passage de quatre paragraphes qui traverse une page, filet compris. Une colonne accueille tout ce qu'accueille la page, [réglure Seyès comprise](#%EF%B8%8F-lécriture-en-réglure).
 
 ---
 
@@ -1304,7 +1298,7 @@ Soit B le point de coordonnées (-4,1 ; 3,4).
 |---|---|
 | `<Soit>f une fonction définie par f(x) = x² − 2` | Soit *f* la fonction définie par *f*(*x*) = *x*² − 2. |
 | `<Soit>f une fonction de ℝ dans ℝ définie par f(x) = x² − 2` | Soit *f* : ℝ ⟶ ℝ, puis à la ligne *x* ⟼ *x*² − 2 |
-| `<Soit>f et g 2 fonctions définies par f(x) = x² et g(x) = −x²` | Soit *f* et *g* deux fonctions définies par *f*(*x*) = *x*² et *g*(*x*) = −*x*². |
+| `<Soit>f et g 2 fonctions définies par f(x) = x² et g(x) = −x²` | Soient *f* et *g* deux fonctions définies par *f*(*x*) = *x*² et *g*(*x*) = −*x*². |
 | `<Soit>u(3;-2) un vecteur` | Soit *u⃗* le vecteur de coordonnées (3 ; −2). |
 | `<Soit>M une matrice définie par {…}` | Soit *M* la matrice définie par : puis la matrice hors texte |
 | `<Soit>s un système défini par {…}` | Soit (*s*) le système : puis le système hors texte |
@@ -1342,7 +1336,7 @@ Les points ainsi déclarés peuvent ensuite être repris par `<Tracer>` (voir pl
 <Soit>A, B et C 3 points de coordonnées respectives (1;2), (-1;2) et (-1;-2)
 ```
 
-Au singulier : `<Soit>A(1 ; 2) un point` ou `<Soit>A un point de coordonnées (1 ; 2)`. Les vecteurs suivent les mêmes deux formes (`<Soit>u(1 ; 0 ; 1) et v(0 ; 1 ; 1) 2 vecteurs`). Les autres objets prennent leur lien : `<Soit>u une suite définie par u(0) = 1 et u(n+1) = 2u(n) + 1`, `<Soit>S un système défini par {` … `}`, `<Soit>M une matrice définie par {` … `}` ou, d'une ligne, `<Soit>M une matrice telle que M = {{1 ; 2} ; {3 ; 4}}`. Les anciennes tournures (`<Soit>les points A(1;2)…`, `<Soit>un point A(…)`, `<Soit>la matrice M {`) sont refusées avec la forme attendue.
+Au singulier : `<Soit>A(1 ; 2) un point` ou `<Soit>A un point de coordonnées (1 ; 2)`. Les vecteurs suivent les mêmes deux formes (`<Soit>u(1 ; 0 ; 1) et v(0 ; 1 ; 1) 2 vecteurs`). Les autres objets prennent leur lien : `<Soit>u une suite définie par u(0) = 1 et u(n+1) = 2u(n) + 1` (ou `u_0 = 1 et u_(n+1) = 2u_n + 1`), `<Soit>S un système défini par {` … `}`, `<Soit>M une matrice définie par {` … `}` ou, d'une ligne, `<Soit>M une matrice telle que M = {{1 ; 2} ; {3 ; 4}}`. Les anciennes tournures (`<Soit>les points A(1;2)…`, `<Soit>un point A(…)`, `<Soit>la matrice M {`) sont refusées avec la forme attendue.
 
 Les deux phrases posent exactement les trois mêmes points. Deux garde-fous, dits en français : le **compte** annoncé par le nombre doit correspondre au nombre de points décrits, et la distribution respective exige **autant de couples de coordonnées que de noms**, appariés dans l'ordre. La factorisation vaut aussi pour les **fonctions** — une seule phrase les pose toutes :
 
@@ -1698,7 +1692,7 @@ soit âge ∈ ℕ tel que âge = 9
 soit taille ∈ 𝔻 tel que taille = 1,32
 soit a ∈ ℕ tel que a = 3
 #prénom a #âge ans et mesure #taille m, soit #{taille * 100} cm.
-<Tracer>le solide cube, d'arête #a cm
+<Tracer>le cube d'arête #a cm
 ```
 
 Un booléen s'affiche `vrai`/`faux` mais vaut 1/0 dans les conditions ; les descriptions de balises interpolent aussi les `#`, si bien qu'un solide, un calcul ou une figure peuvent dépendre d'une réponse du lecteur.
@@ -1721,8 +1715,8 @@ si marié {
 ```docdg
 soit marié ∈ 𝔹 tel que marié = vrai
 soit âge ∈ ℕ tel que âge = 17
-soit statut une chaîne de caractères telle que statut = si marié { marié } sinon { célibataire }
-soit tarif ∈ ℕ tel que tarif = si âge moins de 18 { 5 } sinon { 9 }
+soit statut une chaîne de caractères telle que statut = si marié { "marié" } sinon { "célibataire" }
+soit tarif ∈ ℕ tel que tarif = si âge est inférieur à 18 { 5 } sinon { 9 }
 ```
 
 La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / `vaut faux`, ou avec tout comparateur du langage : `vaut`, `moins de`, `plus de`, `au moins`, `au plus`, `différent de`. Une valeur produite en ligne se comporte comme les autres : `#statut` l'affiche, `#{tarif * 2}` la calcule.
@@ -1760,7 +1754,7 @@ La condition s'écrit nue (`si marié` — vrai si non nul), avec `vaut vrai` / 
 
 **Horizontal :** `à gauche`, `au centre`, `à droite`, `justifié`
 
-**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#2-dresseun-tableau--tableaux-simplifiés))
+**Vertical (dans cellules) :** `hg`, `hc`, `hd`, `mg`, `mc`, `md`, `bg`, `bc`, `bd` (alias en toutes lettres : voir [Les objets - le tableau](#2%EF%B8%8F%E2%83%A3-dresserun-tableau--tableaux-simplifiés))
 
 ### **📄 Tabulations et sauts**
 
@@ -1896,7 +1890,7 @@ soit bonjour{nom} = Bonjour #nom !
 
 ### **🔁 Structures de contrôle**
 
-> **💡 Les deux branches s'accordent en nature.** Dans `soit statut une chaîne de caractères telle que statut = si marié { marié } sinon { célibataire }`, si l'une des deux branches est du texte, le résultat est du texte — même lorsqu'un mot de branche porte le nom d'une valeur déjà définie. Deux branches numériques donnent un nombre, calculable comme les autres.
+> **💡 Les deux branches s'accordent en nature.** Dans `soit statut une chaîne de caractères telle que statut = si marié { "marié" } sinon { "célibataire" }`, la variable est une chaîne de caractères : chaque branche en est une, et s'écrit donc entre guillemets, comme toute valeur de ce type — un mot nu serait pris pour une variable, et il est refusé avec la forme corrigée. Deux branches numériques donnent un nombre, calculable comme les autres.
 
 
 **Boucles `pour` :**
@@ -1922,7 +1916,7 @@ Ce programme affiche les dix valeurs de 1 à 10. Le domaine porte le type : `⟦
 ```docdg
 soit noms une liste de chaînes de caractères telle que noms = {"chat.png" ; "chien.png"}
 pour f ∈ noms {
-  <Insérer l'image IMAGES/#f avec une largeur de 20 mm>
+  <Insérer>l'image "IMAGES/#f" avec une largeur de 20 mm
 }
 ```
 
@@ -2067,9 +2061,9 @@ Le type se dit comme au tableau noir. Pour les nombres, c'est l'appartenance à 
 
 Le type n'est pas décoratif : il est vérifié à la déclaration, à chaque réaffectation et à la sortie d'une boucle, et l'erreur nomme la variable fautive.
 
-**Le type est obligatoire, et l'article avec lui.** Toute variable déclare son type à sa naissance — valeurs, conteneurs, styles, résultats de saisie, indices de boucle, paramètres et types de retour. `soit prix = 150` ne déclare rien — aucun type n'est dit ; la forme correcte est `soit prix ∈ ℤ tel que prix = 150`. `soit s, chaîne de caractères, telle que …` ne constitue pas non plus une déclaration : l'article fait partie du type. L'écriture antérieure `soit prix: un entier = 150` reste également du texte. Ces lignes n'émettent aucun avertissement ; l'erreur n'apparaît que si l'on utilise ensuite un nom sans déclaration valide.
+**Le type est obligatoire : l'ensemble pour un nombre, l'article pour tout type dit en toutes lettres.** Toute variable déclare son type à sa naissance — valeurs, conteneurs, styles, résultats de saisie, indices de boucle, paramètres et types de retour. `soit prix = 150` ne déclare rien — aucun type n'est dit ; la forme correcte est `soit prix ∈ ℤ tel que prix = 150`. `soit s, chaîne de caractères, telle que …` ne constitue pas non plus une déclaration : l'article fait partie du type dit en toutes lettres (`soit s une chaîne de caractères telle que …`). L'écriture antérieure `soit prix: un entier = 150` reste également du texte. Ces lignes n'émettent aucun avertissement ; l'erreur n'apparaît que si l'on utilise ensuite un nom sans déclaration valide.
 
-**Aucune variable nommée n'échappe au typage**, y compris une table de données sur plusieurs lignes : celle-ci se déclare avec un type explicite. Les composants paramétrés comme `soit exo{n} = ...` sont des **gabarits textuels** historiques, et non des variables de valeur ; leur statut lexical spécifique ne justifie aucune déclaration de valeur non typée. Toute nouvelle forme de macro produisant une valeur devra elle aussi être typée. Voir le [contrat de typage](docs/TYPAGE_OBLIGATOIRE.md) pour les points du moteur restant à aligner.
+**Aucune variable nommée n'échappe au typage**, y compris un dictionnaire ou une liste de données déclarés sur plusieurs lignes : ils se déclarent avec un type explicite. Les composants paramétrés comme `soit exo{n} = ...` sont des **gabarits textuels** historiques, et non des variables de valeur ; leur statut lexical spécifique ne justifie aucune déclaration de valeur non typée. Toute nouvelle forme de macro produisant une valeur devra elle aussi être typée. Voir le [contrat de typage](docs/TYPAGE_OBLIGATOIRE.md) pour les points du moteur restant à aligner.
 
 **Une réaffectation ne redit ni `soit` ni le type** : ils ont été posés à la déclaration. Elle s'écrit avec la flèche d'affectation des manuels d'algorithmique : après `soit prix ∈ ℤ tel que prix = 150`, on écrit `prix ← 180`. Écrire une seconde déclaration `soit prix ∈ ℤ tel que prix = 180` serait incorrect. La flèche `←` s'insère d'un clic depuis le ruban Symboles ; la graphie ASCII `<-` n'existe pas, car `x <- 5` ne se distinguerait pas de la comparaison `x < -5`. Le signe `=` est réservé à la déclaration : hors d'elle, `prix = #prix` est une égalité du texte qui s'affiche. Dans le corps d'une fonction, écrire `prix = 180` à la place de `prix ← 180` rend le bloc non reconnu : il reste du texte, sans alerte et sans créer de fonction.
 
@@ -2083,6 +2077,8 @@ Le type n'est pas décoratif : il est vérifié à la déclaration, à chaque r�
 | `complexe` | un nombre de la forme `a + ib`, écrit en notation algébrique : `3 - 4i`, `2i`, `-i` |
 | `booléen` | vrai ou faux |
 | `chaîne de caractères` | du texte ; `chaîne` et `texte` sont synonymes |
+| `date` | un jour du calendrier : `14/07/2026`, `2026-07-14` ou `14 juillet 2026` ; affichée `14/07/2026` |
+| `table` | des colonnes nommées et typées, lues dans un fichier — voir [Tables de données](#%EF%B8%8F-tables-de-données) |
 
 L'inclusion ℕ ⊂ ℤ ⊂ 𝔻 ⊂ ℚ ⊂ ℝ ⊂ ℂ ne se remonte jamais, et **l'appartenance se décide sur la représentation exacte, jamais sur un flottant** : `-3` appartient à ℤ et non à ℕ, `1/3` à ℚ et non à 𝔻, `racine(2)` et `pi` à ℝ et non à ℚ. En sens inverse elle s'emploie librement : `soit z ∈ ℂ tel que z = 3` est accepté, puisque ℝ ⊂ ℂ. Le refus nomme les deux ensembles, le sens de l'inclusion et la sortie :
 
@@ -2145,7 +2141,7 @@ Les guillemets, droits ou français, délimitent sans appartenir à la valeur.
 soit m une chaîne de caractères telle que m = "Bonjour"
 ```
 
-`m[0]` rend une lettre — qui est une chaîne d'un seul caractère, docdg n'introduit pas de type distinct. `pour c ∈ m` la parcourt lettre à lettre. S'y ajoutent `majuscule`, `minuscule`, `sans accents`, `élaguer` (les espaces des deux bouts) et `compacter` (tous les espaces), `code("B")` et `caractère(97)` pour le va-et-vient avec le rang Unicode, et les conversions `texte(42)` et `nombre("1,5")`.
+`m[0]` rend une lettre — qui est une chaîne d'un seul caractère, docdg n'introduit pas de type distinct. `pour c ∈ m` la parcourt lettre à lettre. S'y ajoutent `majuscule`, `minuscule`, `sans accents`, `élaguer` (les espaces des deux bouts), `compacter` (tous les espaces) et `remplacer(m ; "o" ; "ou")`, `code("B")` et `caractère(97)` pour le va-et-vient avec le rang Unicode, et les conversions `texte(42)` et `nombre("1,5")`.
 
 **Les guillemets délimitent, ils n'appartiennent pas à la valeur** — droits ou français. C'est ce qui distingue le texte d'un document, qui s'écrit nu comme en LaTeX, de la chaîne de caractères qui relève de la programmation : elle se cite, y compris dans une liste et en clé de dictionnaire.
 
@@ -2177,7 +2173,7 @@ Une fonction dont le bloc d'instructions ne définit aucune valeur de retour res
 
 **Un paramètre peut être un conteneur ou une chaîne**, et la valeur rendue aussi. Le passage se fait **par copie** : une fonction reçoit une valeur, elle ne peut rien renvoyer dans la série de l'appelant. C'est ce qui rend saine l'acceptation d'une `liste d'entiers` là où une `liste de réels` est attendue.
 
-La récursivité est admise, bornée à deux cents appels imbriqués — au-delà, docdg s'arrête et le dit plutôt que d'épuiser la pile.
+Une fonction peut s’appeler elle-même. Par défaut, le moteur limite la profondeur de récursion à 500 appels imbriqués. Le réglage `récursion` du bloc `document` accepte un entier de 10 à 100 000. Lorsque la limite est atteinte, le moteur signale l’appel concerné.
 
 ### **🎁 Le p-uplet**
 
@@ -2194,7 +2190,7 @@ Les **deux valeurs sont introduites avec un type déclaré**. On peut extraire l
 
 ### **🎲 Le hasard, et le cours d'une boucle**
 
-`aléatoire(a ; b)` tire un entier entre les deux bornes, comprises. Deux compilations donnent deux tirages : c'est ce qu'une simulation attend — Monte-Carlo, marche aléatoire, étude de fréquences.
+`aléatoire(a ; b)` tire un entier entre les deux bornes, comprises. Deux compositions donnent deux tirages : c'est ce qu'une simulation attend — Monte-Carlo, marche aléatoire, étude de fréquences.
 
 `sortir` arrête une boucle entière ; `continuer` n'arrête que le tour en cours. Les deux valent dans un document comme dans un corps de fonction.
 
@@ -2332,11 +2328,20 @@ Chaque construction se pose en une phrase, sur une fonction ou une matrice déj�
 | `<Factoriser>x^2 - 5x + 6` | (x - 2)(x - 3) |
 | `<Simplifier>(x^2 - 1)/(x - 1)` | x + 1 |
 | `<Résoudre>l'équation x^2 = 2x + 1` | S = (1 - rac(2), 1 + rac(2)) |
+| `<Résoudre>l'inéquation |x - 2| ⩽ 3` | S = [-1 ; 5], en intervalles |
 | `<Calculer>le déterminant de M` | det(M) = 1 (exact) |
 | `<Calculer>l'inverse de M` | M^(-1), fractions exactes |
 
 
 Le développement limité s'écrit avec le petit o de l'usage français (`+ o(x^n)`), les solutions d'équations sortent en radicaux exacts, le déterminant et l'inverse en fractions. Une matrice non inversible ou une fonction non posée sont dites en français.
+
+Une inéquation à une inconnue se résout dans ℝ et rend ses solutions en intervalles : `<Résoudre>l'inéquation 2x - 4 > 0` donne $\mathscr{S} = \left]2\,;\,+\infty\right[$, et une double inégalité s'écrit d'un trait, `<Résoudre>l'inéquation -1 ⩽ 2x + 1 < 5`. Les signes `<=`, `>=`, `≤`, `≥`, `⩽` et `⩾` sont compris. Une inéquation périodique, comme `sin(x) > 1/2`, est refusée : ses solutions forment une infinité d'intervalles. `<Résoudre>l'équation 2x - 4 > 0` est refusé avec la forme attendue.
+
+Un décimal saisi est un nombre exact : `0,5` vaut 1/2 et le calcul reste formel. `<Résoudre>l'équation 2x + 1 = 7,5` donne $\mathscr{S} = \{3{,}25\}$, `<Développer>et réduire (x + 0,5)^2` donne $x^2 + x + 0{,}25$, et la dérivée de $0{,}5x^2 - 2x + 1{,}5$ s'écrit $x - 2$. Un résultat décimal reprend l'écriture décimale des données ; un résultat qui ne l'est pas garde sa forme exacte, $\frac{200}{49}$ ou $\frac{5}{2} - \frac{\sqrt{2}}{2}$. Le PGCD et la division euclidienne de deux nombres exigent des entiers.
+
+La puissance d'une matrice s'écrit en toutes lettres ou en exposant : `<Calculer>la puissance 3 de M`, `<Calculer>M^3`, `<Calculer>M^(-1)`.
+
+Une limite demandée sans côté se prend dans le domaine de la fonction : si les limites à gauche et à droite diffèrent, docdg écrit les deux et conclut que la limite n'existe pas. Un développement limité n'est écrit que s'il existe : celui de `|x|` en 0 à l'ordre 1 est refusé, parce que ses développements à gauche et à droite diffèrent.
 
 ### **Poser et résoudre un système**
 
@@ -2359,7 +2364,7 @@ Le système se pose par `<Soit>`, qui l'affiche et le mémorise, puis se résout
 | `<Résoudre>le système s` | Le pivot de Gauss déroulé étape par étape, jusqu'à (1, -2, 3). |
 
 
-> **Les deux moteurs de calcul.** docdg calcule à deux niveaux, sans option à régler : le **moteur interne** — arithmétique exacte et Gauss-Jordan embarqués en Rust pur, rien à installer, `<Résoudre>` et `#{...}` fonctionnent partout — et **SymPy**, sollicité automatiquement par les constructions de calcul formel (dérivées, zéros exacts, variations automatiques, [sympy.org](https://www.sympy.org)). SymPy et SciPy sont embarqués dans docdg avec leur propre Python : rien à installer, aucune option à activer, aucune ligne de commande à modifier. Chaque requête passe par un canal privé entre docdg et son moteur (jamais par la ligne de commande : pas d'injection), est mise en cache (l'expression répétée est gratuite), et remonte ses erreurs en français — rien n'est avalé.
+> **Les deux moteurs de calcul.** docdg calcule à deux niveaux, sans option à régler : le **moteur interne** — arithmétique exacte et méthode de Gauss-Jordan, intégrées à docdg, `<Résoudre>` et `#{...}` fonctionnent partout — et **SymPy**, sollicité automatiquement par les constructions de calcul formel (dérivées, zéros exacts, variations automatiques, [sympy.org](https://www.sympy.org)). SymPy et SciPy sont embarqués dans docdg avec leur propre Python : rien à installer, aucune option à activer, aucune ligne de commande à modifier. Chaque calcul est mémorisé — une expression répétée ne se recalcule pas — et ses erreurs sont dites en français : rien n'est passé sous silence.
 
 ### **Déterminer le domaine de définition d'une fonction**
 
@@ -2791,7 +2796,7 @@ $det(1 2 ; 3 4)$
 
 Parenthèses ou crochets s'écrivent une fois, à l'ouverture, et referment le bloc eux-mêmes — ce que l'on tape est ce que l'on voit au rendu. Le verbe seul, suivi de l'objet en toutes lettres (`<Afficher>la matrice(`, refermé par `)` seul — la même convention qui referme `<Tracer>le cercle...`), sépare nettement la consigne de l'objet qu'elle concerne.
 
-La même forme scindée s'applique aux objets **nommés**, gardés pour un calcul ultérieur — la matrice ou le système reçoit alors son nom avant l'ouverture, et les accolades neutres restent le délimiteur (les rangées contiennent déjà des parenthèses ou des crochets, dans une équation ou un coefficient) :
+La même forme scindée s'applique aux objets **nommés**, gardés pour un calcul ultérieur — la matrice ou le système reçoit alors son nom avant l'ouverture, et les accolades neutres restent le délimiteur (les lignes contiennent déjà des parenthèses ou des crochets, dans une équation ou un coefficient) :
 
 ```docdg
 <Soit>M une matrice définie par {
@@ -2843,7 +2848,7 @@ $PP(A)$
 $PP(A sachant B)$
 $EE(X)$ ou $espérance(X)$
 $variance(X)$
-$écart type(X)$
+$écart-type(X)$
 $covariance(X ; Y)$
 $normale(mu ; sigma)$
 $poisson(lambda)$
@@ -2864,7 +2869,7 @@ $densité(X ; x)$
 | `$PP(A sachant B)$` | ℙ(A∣B) Probabilité conditionnelle |
 | `$EE(X)$ ou $espérance(X)$` | 𝔼(X) Espérance |
 | `$variance(X)$` | Var(X) Variance |
-| `$écart type(X)$` | σ(X) Écart-type |
+| `$écart-type(X)$` | σ(X) Écart-type |
 | `$covariance(X ; Y)$` | Cov(X,Y) Covariance |
 | `$normale(mu ; sigma)$` | 𝒩(μ,σ²) Loi normale |
 | `$poisson(lambda)$` | 𝒫(λ) Loi de Poisson |
@@ -2877,7 +2882,7 @@ $densité(X ; x)$
 
 ## **📐 La géométrie**
 
-Toute la géométrie — plane, dans l'espace, avec ou sans repère — se trace avec l'action [**`<Tracer>`**](#-les-actions) : figures planes, cercle trigonométrique, solides en 3D, points/droites/segments/médiatrices, y compris posés dans un repère. L'analyse se représente graphiquement avec [**`<Représenter>graphiquement`**](#-les-actions) : courbes de fonctions, diagrammes en escalier, statistiques, et le mode analytique dès que son contenu relève de l'analyse. Voir le chapitre **Les actions** pour le détail de chaque cas.
+Toute la géométrie — plane, dans l'espace, avec ou sans repère — se trace avec l'action [**`<Tracer>`**](#%EF%B8%8F-les-actions) : figures planes, cercle trigonométrique, solides en 3D, points/droites/segments/médiatrices, y compris posés dans un repère. L'analyse se représente graphiquement avec [**`<Représenter>graphiquement`**](#%EF%B8%8F-les-actions) : courbes de fonctions, diagrammes en escalier, statistiques, et le mode analytique dès que son contenu relève de l'analyse. Voir le chapitre **Les actions** pour le détail de chaque cas.
 
 ---
 
@@ -2890,16 +2895,16 @@ Nouveauté de docdg 2.0, portée par un **moteur de projection cavalière** (fuy
 Sept solides en perspective cavalière, arêtes cachées en pointillés et cotes en centimètres :
 
 ```docdg
-<Tracer>le solide cube, d'arête 3 cm
-<Tracer>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
-<Tracer>le solide prisme, de base 3 cm et de longueur 5 cm
-<Tracer>le solide pyramide, de base 4 cm et de hauteur 3 cm
-<Tracer>le solide cylindre, de rayon 2 cm et de hauteur 5 cm
-<Tracer>le solide cône, de rayon 2 cm et de hauteur 4 cm
-<Tracer>le solide sphère, de rayon 3 cm
+<Tracer>le cube d'arête 3 cm
+<Tracer>le pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Tracer>le prisme de base 3 cm et de longueur 5 cm
+<Tracer>la pyramide à base carrée de côté 4 cm et de hauteur 3 cm
+<Tracer>le cylindre de rayon 2 cm et de hauteur 5 cm
+<Tracer>le cône de rayon 2 cm et de hauteur 4 cm
+<Tracer>la sphère de rayon 3 cm
 ```
 
-Les génératrices du cône sont les tangentes exactes à l'ellipse de base depuis le sommet. Chaque solide dépliable a son patron, prêt à découper — `<Tracer>le patron du cône de rayon 2 cm et de hauteur 4 cm` — pour le cube, le pavé, la pyramide (apothème coté), le cylindre (rectangle de largeur 2πr) et le cône (secteur d'angle 2πr/g).
+Les génératrices du cône sont les tangentes exactes à l'ellipse de base depuis le sommet. Chaque solide dépliable a son patron, prêt à découper — `<Tracer>le patron du cône de rayon 2 cm et de hauteur 4 cm` — pour le cube, le pavé, la pyramide (apothème coté), le cylindre (rectangle de largeur 2πr) et le cône (secteur d'angle 2πr/g). Un patron qui tient dans la page s'imprime en vraie grandeur, à l'impression sans mise à l'échelle, et le dit sous la figure ; un patron trop grand est réduit et porte son échelle. Une dimension se donne en centimètres, en millimètres (`30 mm`) ou en décimètres.
 
 ### Le repère de l'espace
 
@@ -2942,31 +2947,134 @@ Chaque cas conclut proprement : droites confondues, strictement parallèles, sé
 
 ## **📊 Les statistiques**
 
+### **🧮 Indicateurs d'une série**
+
+Une série se donne dans la phrase, ses valeurs séparées par un point-virgule, ou par le **nom d'une liste déclarée**. La réponse est rédigée : le calcul est posé, puis conclu.
+
+```docdg
+<Calculer>la moyenne de la série 12 ; 15 ; 9 ; 14
+<Calculer>la médiane de la série 9 ; 15 ; 12 ; 14
+<Calculer>l'étendue de la série 12 ; 15 ; 9 ; 14
+<Calculer>les quartiles de la série 2 ; 4 ; 5 ; 7 ; 8 ; 10 ; 12 ; 15
+<Calculer>la variance de la série 12 ; 15 ; 9 ; 14
+<Calculer>l'écart-type de la série 12 ; 15 ; 9 ; 14
+<Calculer>la covariance des séries 1 ; 2 ; 3 et 2 ; 4 ; 7
+```
+
+| **Phrase** | **Réponse** |
+| --- | --- |
+| `la moyenne de la série …` | le quotient posé, puis sa valeur |
+| `la médiane de la série …` | la série rangée, puis la valeur centrale si l'effectif est impair, la demi-somme des deux valeurs centrales s'il est pair |
+| `l'étendue de la série …` | l'écart entre la plus grande et la plus petite valeur |
+| `les quartiles de la série …` | la série rangée, puis Q₁ et Q₃ : les valeurs de rang ⌈n/4⌉ et ⌈3n/4⌉ |
+| `la variance de la série …` | V = (1/n) ∑ (xᵢ − x̄)², la moyenne étant rappelée |
+| `l'écart-type de la série …` | σ = √V |
+| `la covariance des séries … et …` | cov(x, y) = (1/n) ∑ (xᵢ − x̄)(yᵢ − ȳ), les deux séries ayant le même effectif |
+
+Une valeur arrondie à l'affichage est annoncée par ≈, une valeur exacte par = : la moyenne de `16 ; 0 ; 0` s'écrit `16/3 ≈ 5,3333`.
+
+**Une longue série s'abrège.** Au-delà de douze termes, la somme d'une moyenne s'écrit par ses trois premiers termes et le dernier : `4,3 + 3 + 1,5 + ⋯ + 9,8` ; au-delà de quarante valeurs, la série rangée d'une médiane ou des quartiles s'écrit de même. Le calcul, lui, porte sur toutes les valeurs. Dans une somme, un terme négatif se met entre parenthèses : `3 + (−2) + 5`.
+
+**Une série nommée.** Une liste déclarée se nomme à la place de ses valeurs, dans chaque indicateur. Le nom peut être une expression de liste — `trier(notes)`, `notes[0 à 2]` — et un dictionnaire donne ses valeurs.
+
+```docdg
+soit notes une liste de décimaux telle que notes = {12 ; 15,5 ; 9 ; 14}
+soit tailles une liste de décimaux telle que tailles = {1,52 ; 1,61 ; 1,58 ; 1,70}
+<Calculer>la moyenne de la série notes
+<Calculer>la médiane de la série notes
+<Calculer>l'écart-type de la série notes
+<Calculer>la moyenne de la série notes[0 à 2]
+<Calculer>la covariance des séries notes et tailles
+```
+
+**Une valeur calculée.** Chaque valeur d'une série écrite est une expression : une fraction, une racine, une variable déclarée. Les accolades sont admises autour de la série.
+
+```docdg
+soit a ∈ ℝ tel que a = 2,5
+<Calculer>la moyenne de la série 1/3 ; 2/3 ; racine(2)
+<Calculer>la moyenne de la série a ; 2*a ; 3
+<Calculer>la moyenne de la série {12 ; 15 ; 9}
+```
+
+**Une série pondérée** se dit par ses valeurs, puis ses effectifs — écrits ou nommés. Tous les indicateurs l'acceptent. La médiane et les quartiles se lisent sur les **effectifs cumulés croissants**, que la réponse pose ; ils demandent des effectifs entiers. Une valeur d'effectif nul ne compte pas.
+
+```docdg
+soit x une liste d'entiers telle que x = {8 ; 12 ; 15}
+soit n une liste d'entiers telle que n = {2 ; 5 ; 3}
+<Calculer>la moyenne de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calculer>la médiane de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calculer>les quartiles de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calculer>l'étendue de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+<Calculer>la variance de la série de valeurs x et d'effectifs n
+<Calculer>l'écart-type de la série de valeurs x et d'effectifs n
+```
+
+**Toute faute de série est dite**, à sa ligne, au lieu d'un résultat faux :
+
+| **Source** | **Message** |
+| --- | --- |
+| `la série 12, 15` | les valeurs se séparent par un point-virgule, la virgule est décimale — « 12 ; 15 » |
+| `la série inconnue` | « inconnue » n'est ni une suite de valeurs ni une liste déclarée |
+| `la série jours`, liste de textes | « jours » ne porte pas que des nombres |
+| `de valeurs 8 ; 12 et d'effectifs 2 ; 5 ; 3` | la série compte 2 valeurs pour 3 effectifs : il en faut autant |
+| `la médiane … d'effectifs 0,5 ; 1` | l'effectif 0,5 n'est pas entier |
+| `la covariance des séries 1 ; 2 ; 3 et 2 ; 4` | les deux séries n'ont pas le même effectif : 3 valeurs et 2 |
+
+```docdg refusé
+<Calculer>la moyenne de la série 12, 15
+```
+
+Les intervalles de confiance et les tests qui portent sur une série la lisent de la même façon, écrite ou nommée : voir la rubrique [Les intervalles de confiance et les tests statistiques](#les-intervalles-de-confiance-et-les-tests-statistiques).
+
 ### **📈 Diagrammes statistiques**
 
-**Syntaxe :** `<Représenter>graphiquement une statistique TYPE données:DONNÉES` — le type se met directement, sans préfixe `type:` (comme `<Dresser>une liste à puces` ou les figures de `<Tracer>`). `données:` reste en clé:valeur : ce sont de vraies données structurées, pas un réglage de style.
+**Syntaxe :** `<Représenter>graphiquement une statistique en TYPE avec les données DONNÉES` — le type se dit en prose, précédé de `en`, comme le reste de la phrase. Les données s'écrivent entre accolades ou se nomment ; une option se dit avant ou après elles.
 
+| **Type** | **Diagramme** | **Données** | **Exemple** |
+| --- | --- | --- | --- |
+| `en barres` | Diagramme en barres, ou en bâtons | un dictionnaire : des paires `clé: valeur` | `avec les données {1: 4 ; 2: 7 ; 3: 2}` |
+| `en camembert` | Diagramme circulaire, parts arrondies au dixième | le même dictionnaire, de valeurs positives | `avec les données {"Marche": 5 ; "Bus": 3 ; "Vélo": 2}` |
+| `en histogramme` | Histogramme à classes | les bornes des classes et leurs effectifs, dans l'ordre que l'on veut — une borne de plus que d'effectifs ; ou une série, que l'histogramme compte | `avec les bornes {0 ; 5 ; 10 ; 20} et les effectifs {3 ; 7 ; 2}`, `avec les données notes` |
+| `en boîte à moustaches` | Boîte à moustaches | une série d'au moins trois valeurs | `avec les données {12 ; 15 ; 9 ; 21}` |
+| `en nuage` | Nuage de points | des couples `(x ; y)` — écrits, ou nommés par une liste de couples ou une matrice à deux colonnes —, ou deux listes | `avec les données {(1 ; 2) ; (2 ; 3)}`, `avec les abscisses x et les ordonnées y` |
 
-| **Type**             | **Description**      | **Format données**          | **Exemple**                    |
-| -------------------- | -------------------- | --------------------------- | ------------------------------ |
-| `barres`             | Diagramme en bâtons  | \`clé:valeur                | clé:valeur\`                   |
-| `histogramme`        | Histogramme          | `bornes:{...} effectifs:{...}` | `bornes:{0;5;10} effectifs:{3;7}` |
-| `camembert`          | Diagramme circulaire | \`clé:valeur                | clé:valeur\`                   |
-| `boite a moustaches` | Boîte à moustaches   | `valeur1 ; valeur2 ; ...`     | `données:{12 ; 15 ; 9 ; 21}`            |
-| `nuage`              | Nuage de points      | `(x1;y1) (x2;y2) ...`       | `données:{(1;2) (2;3)}`           |
+Les données des barres et du camembert **sont un dictionnaire** : ses entrées se séparent par le point-virgule, comme partout, et une clé textuelle est une chaîne de caractères, toujours entre guillemets : `{"Marche à pied": 5 ; "Bus": 3}`. Une clé numérique reste un nombre, `{1: 4 ; 2: 7}`. La barre verticale `|` est refusée, avec la forme corrigée.
 
-
-**Option :** `avec ajustement` (trace la droite de régression pour les nuages)
+**Options :** `en disposition horizontale` couche les barres ; `avec ajustement` trace la droite d'ajustement d'un nuage, par régression linéaire, et l'écrit sous la figure avec le coefficient de corrélation : « Droite d'ajustement : y = x + 0,95 ; r = 0,995 (arrondis) ».
 
 **Exemples :**
 
 ```docdg
-<Représenter>graphiquement une statistique en barres avec les données {1: 4 | 2: 7 | 3: 2}
-<Représenter>graphiquement une statistique en camembert avec les données {Pommes: 5 | Poires: 3 | Bananes: 2}
+<Représenter>graphiquement une statistique en barres avec les données {1: 4 ; 2: 7 ; 3: 2}
+<Représenter>graphiquement une statistique en barres en disposition horizontale avec les données {1: 4 ; 2: 7 ; 3: 2}
+<Représenter>graphiquement une statistique en barres avec les données {1: 4 ; 2: 7 ; 3: 2} et en disposition horizontale
+<Représenter>graphiquement une statistique en camembert avec les données {"Pommes": 5 ; "Poires": 3 ; "Bananes": 2}
 <Représenter>graphiquement une statistique en histogramme avec les bornes {0 ; 5 ; 10 ; 20} et les effectifs {3 ; 7 ; 2}
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données {2 ; 3 ; 5 ; 7 ; 8 ; 11 ; 13}
+<Représenter>graphiquement une statistique en nuage avec ajustement et les données {(1 ; 2) ; (2 ; 2,8) ; (3 ; 4,1) ; (4 ; 4,9)}
+<Représenter>graphiquement une statistique en nuage avec les données {(1 ; 2) ; (2 ; 2,8) ; (3 ; 4,1) ; (4 ; 4,9)} et avec ajustement
 ```
 
-**Avec variables :**
+**Un histogramme sur une série.** Donnée par `avec les données`, une série est comptée classe par classe. Sans bornes, les classes sont de même amplitude — une amplitude ronde, leur nombre suivant la règle de Sturges, ⌈1 + log₂ n⌉. Avec `avec les bornes`, ce sont celles que l'on choisit ; une classe contient sa borne de gauche, la dernière ses deux bornes, et une valeur hors des bornes est refusée, avec l'étendue de la série. **Des classes d'amplitudes inégales se dessinent en densité**, comme le veut la statistique descriptive : la hauteur de chaque rectangle est l'effectif divisé par l'amplitude de la classe, si bien que l'aire, et non la hauteur, est proportionnelle à l'effectif ; l'axe vertical le dit (« densité : effectif par unité d'amplitude »). Des classes de même amplitude gardent l'effectif pour hauteur.
+
+```docdg
+soit notes une liste de décimaux telle que notes = {4 ; 7,5 ; 9 ; 11 ; 12 ; 12,5 ; 14 ; 16 ; 19}
+<Représenter>graphiquement une statistique en histogramme avec les données notes
+<Représenter>graphiquement une statistique en histogramme avec les bornes {0 ; 8 ; 12 ; 16 ; 20} et les données notes
+```
+
+**Les valeurs négatives.** Des barres debout portent une valeur négative sous la ligne de zéro ; des barres couchées la refusent. Un nuage dont des ordonnées sont négatives gradue son axe de part et d'autre de zéro.
+
+```docdg
+<Représenter>graphiquement une statistique en barres avec les données {1: -0,4 ; 2: 0,6 ; 3: 1,7 ; 4: -1,2}
+<Représenter>graphiquement une statistique en nuage avec les données {(1 ; -2) ; (2 ; 2,8) ; (3 ; -4,1) ; (4 ; 4,9)} et avec ajustement
+```
+
+**Un nuage de nombreux points.** Jusqu'à douze abscisses distinctes, chacune est écrite sous son point ; au-delà, l'axe est gradué régulièrement.
+
+**Les repères de la boîte.** Sous l'axe, la boîte à moustaches porte le minimum, les quartiles, la médiane et le maximum, chacun avec sa valeur. Deux repères confondus partagent une étiquette — « min = Q1 » pour une série dont le quart des valeurs vaut le minimum ; deux repères voisins s'écartent, reliés à leur graduation par un trait fin.
+
+**Des données nommées.** Un dictionnaire — pour les barres et le camembert —, une liste — pour la boîte à moustaches, l'histogramme et le nuage — se déclarent une fois, sur une ligne ou une entrée par ligne, puis se réutilisent par leur nom, dans les diagrammes comme dans les indicateurs.
 
 ```docdg
 soit notes un dictionnaire de chaînes de caractères et de décimaux tel que notes = {
@@ -2976,7 +3084,622 @@ soit notes un dictionnaire de chaînes de caractères et de décimaux tel que no
 }
 <Représenter>graphiquement une statistique en barres avec les données notes
 <Représenter>graphiquement une statistique en camembert avec les données notes
+<Représenter>graphiquement une statistique en barres avec les données notes et en disposition horizontale
+<Calculer>la moyenne de la série notes
+
+soit trajets un dictionnaire de chaînes de caractères et d'entiers tel que trajets = {"Marche": 5 ; "Bus": 3 ; "Vélo": 2}
+<Représenter>graphiquement une statistique en camembert avec les données trajets
+
+soit tailles une liste de décimaux telle que tailles = {
+	1,52 ;
+	1,61 ;
+	1,58 ;
+	1,70 ;
+	1,66
+}
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données tailles
+
+soit jours une liste d'entiers telle que jours = {1 ; 2 ; 3 ; 4}
+soit ventes une liste de décimaux telle que ventes = {2 ; 2,8 ; 4,1 ; 4,9}
+<Représenter>graphiquement une statistique en nuage avec ajustement et avec les abscisses jours et les ordonnées ventes
 ```
+
+**Toute faute de diagramme est dite** : un type inconnu est refusé, et le refus nomme les cinq types ; des données mal formées, absentes ou d'un autre genre que celui du diagramme sont nommées, comme un histogramme dont les bornes et les effectifs ne s'accordent pas, ou dont une valeur sort des bornes.
+
+```docdg refusé
+<Représenter>graphiquement une statistique en secteurs avec les données {"A": 1 ; "B": 2}
+```
+
+### **🗃️ Tables de données**
+
+Dans **Fichier → Tables**, cliquez sur **Aperçu** à côté du nom pour parcourir les lignes et les colonnes. Le nom de la table permet de l’exporter. [Guide de l’aperçu et des statistiques par lots](docs/DONNEES_ARROW_D3.md).
+
+Un fichier de données — l'export d'un tableur ou d'un logiciel de vie scolaire, un fichier écrit par Polars ou pandas, une base DuckDB — se charge dans une **table**. La table s'emploie ensuite par ses colonnes, dans les actions que l'on connaît déjà : `<Calculer>`, `<Représenter>`, `<Dresser>`.
+
+`exemples/donnees.txt` mène une analyse entière sur un an de relevés : lire un fichier et une base, décrire une série, choisir, regrouper et joindre par des requêtes, ajuster une droite, borner une période par des dates, estimer et tester.
+
+**Syntaxe :** `soit NOM une table telle que NOM = <Lire>le fichier "CHEMIN"` — `<Lire>` n'apparaît que là, dans la déclaration d'une table.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+<Dresser>un tableau avec les données classe
+<Calculer>la moyenne de la série classe["Note"]
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données classe["Note"]
+```
+
+**Le fichier se range à côté du document**, ou dans un de ses sous-dossiers, comme une image : le chemin est relatif au dossier du document, qui doit donc être enregistré. Le fichier est relu dès qu'il change.
+
+| **Extension** | **Format** | **Écrit par** |
+| --- | --- | --- |
+| `.csv`, `.tsv`, `.txt` | Texte à séparateurs | un tableur, un logiciel de gestion, `to_csv`, `write_csv` |
+| `.arrow`, `.feather`, `.ipc` | Apache Arrow | Polars (`write_ipc`), pandas (`to_feather`) |
+| `.parquet`, `.pq` | Apache Parquet | Polars (`write_parquet`), pandas (`to_parquet`) |
+
+**Le fichier CSV se lit tel qu'un tableur l'exporte, en France comme ailleurs.** Sa première ligne nomme les colonnes. Le séparateur — point-virgule, tabulation ou virgule — est reconnu ; avec le point-virgule ou la tabulation, la virgule est décimale ; avec la virgule, le point est décimal et la virgule peut séparer les milliers (`"1,234.5"`). L'encodage est reconnu lui aussi : UTF-8, Windows-1252, UTF-16. Le fichier garde sa convention, le document garde la sienne : la table s'écrit toujours à la française, `1 234,5` et `21/06/2025`.
+
+**Chaque colonne reçoit le type de ses cellules :**
+
+| **Cellules** | **Type de la colonne** |
+| --- | --- |
+| `12`, `-7`, `1 234` | liste d'entiers |
+| `12,5`, `1 234,5`, `1,5e3` — et `12.5` | liste de décimaux |
+| `14/07/2026`, `2026-07-14`, `14 juillet 2026` — et `07/14/2026` | liste de dates |
+| `vrai`, `faux`, `oui`, `non`, `true`, `false`, `yes`, `no`, en minuscules comme en majuscules | liste de booléens |
+| tout autre texte, et les codes comme `01000` | liste de chaînes de caractères |
+
+Une date à barres se lit jour, mois, année. Elle se lit mois, jour, année, à l'américaine, quand la colonne le prouve : une valeur au moins porte un deuxième nombre supérieur à 12, et aucune n'en porte au premier. Une colonne qui ne contient que `0` et `1` reste une colonne d'entiers : c'est l'usage des indicatrices, dont la somme est un effectif.
+
+Une cellule vide, ou qui porte `NA`, `N/A`, `NaN` ou `NULL`, est une **valeur manquante**. Une colonne qui mêle des nombres et autre chose reste une colonne de chaînes ; employée comme une série, elle dit la ligne du fichier qui l'empêche d'être numérique.
+
+**Un fichier sans entêtes les reçoit du document.** Sans précision, la première ligne d'un fichier CSV donne les entêtes de ses colonnes. Quand le fichier commence par une ligne de données, `avec les entêtes` les donne, et la première ligne reste une donnée. Un entête est un texte : il s'écrit entre guillemets, comme toute chaîne de caractères. Ce qui est lu ne dépend que de ce qui est écrit, jamais d'une estimation.
+
+| **Écriture** | **Première ligne du fichier** |
+| --- | --- |
+| `<Lire>le fichier "f.csv"` | elle donne les entêtes |
+| `<Lire>le fichier "f.csv" avec les entêtes "id", "nom" et "note"` | c'est une ligne de données |
+| `<Lire>le fichier "f.csv" avec les entêtes de la première ligne` | elle donne les entêtes, même s'ils ont l'air de valeurs : `école;2024;2025` |
+
+```docdg
+soit notes une table telle que notes = <Lire>le fichier "DONNEES/notes_brutes.csv" avec les entêtes "id", "nom" et "note"
+La table : #notes.
+<Dresser>un tableau avec les données notes
+```
+
+Un entête peut porter une espace, `"jour du relevé"`, et les guillemets français sont lus aussi : `avec les entêtes « id », « nom » et « note »`. Le nombre d'entêtes égale le nombre de champs. Les types ne servent qu'au diagnostic : une première ligne lue comme des entêtes alors qu'elle a le type des valeurs de ses colonnes, ou lue comme une donnée alors qu'elle ressemble à des entêtes, donne un avertissement en orange, et la table est lue telle que l'écriture le dit. Un fichier entièrement textuel ne permet aucune comparaison : c'est à l'auteur de dire qu'il n'a pas d'entêtes. Une base, un fichier Arrow ou Parquet nomment toujours leurs colonnes : elles se renomment par `<Renommer>`.
+
+**La table se lit par ses colonnes.** `classe["Note"]` est la colonne, une liste ; `classe["Élève" ; 2]` une cellule, par sa colonne puis son rang ; `longueur(classe)` le nombre de lignes ; `#classe` résume la table. Une colonne se déclare en liste comme toute autre valeur.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+La table : #classe. Elle compte #{longueur(classe)} lignes.
+
+soit absences une liste d'entiers telle que absences = classe["Absences"]
+Élève de rang 2 : #{classe["Élève" ; 2]}, note #{classe["Note" ; 2]}.
+
+pour i ∈ ⟦0 ; 4⟧ {
+	si classe["Externe" ; i] {
+		#{classe["Élève" ; i]} est externe.
+	}
+}
+```
+
+**Une colonne est une série.** Elle se nomme dans chaque indicateur, dans les intervalles de confiance et les tests, et dans les diagrammes : la boîte à moustaches, l'histogramme par `avec les données …`, le nuage par `avec les abscisses … et les ordonnées …`. Une table de deux colonnes donne ses paires aux barres et au camembert, ses points au nuage.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+<Calculer>la médiane de la série classe["Absences"]
+<Calculer>l'écart-type de la série classe["Note"]
+<Calculer>la covariance des séries classe["Absences"] et classe["Note"]
+<Représenter>graphiquement une statistique en nuage avec les abscisses classe["Absences"] et les ordonnées classe["Note"]
+```
+
+**Les valeurs manquantes sont écartées, et leur nombre est dit.** La réponse d'un calcul se termine par « Une valeur manquante est écartée : le calcul porte sur 4 valeurs. » ; un diagramme le note sous sa figure. Pour deux séries — covariance, nuage, test apparié —, une ligne est écartée dès qu'une de ses deux valeurs manque. Ce que DocDG ne peut pas dire, il le refuse : les primitives `somme`, `min` et `max`, une boucle, un calcul sur une cellule manquante.
+
+**Un tableau se dresse sur une table**, entière ou par son début ; il prend les options d'un tableau, se coupe d'une page à l'autre et répète son entête.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+<Dresser>un tableau avec une bordure bleu marine avec les données classe
+<Dresser>un tableau avec les 2 premières lignes de classe
+```
+
+**La date** se déclare, se compare et se trie comme un nombre ; elle s'affiche à la française.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit naissances une liste de dates telle que naissances = classe["Né le"]
+soit rentrée une date telle que rentrée = 01/09/2014
+soit fête une date telle que fête = 14 juillet 2014
+Du plus âgé au plus jeune : #{trier(naissances)}.
+
+si fête < rentrée {
+	La fête nationale précède la rentrée du #rentrée.
+}
+```
+
+**Un conteneur devient une table par `table(…)`**, une conversion comme `entier(x)` ou `date(x)`. La table obtenue est une table du document : elle s'interroge, se modifie et s'exporte. Le chemin inverse existe déjà : `carnet["notes"]` est une liste.
+
+| **Argument** | **Table obtenue** | **Entêtes** |
+| --- | --- | --- |
+| des listes de même longueur, `table(prénoms ; notes)` | une colonne par liste, dans l'ordre des arguments | le nom de chaque variable |
+| un dictionnaire de listes de même longueur | une colonne par clé, dans l'ordre d'écriture | les clés |
+| un dictionnaire de valeurs simples | une ligne par entrée ; les clés, puis les valeurs | `clé` et `valeur` |
+| une matrice | une ligne par ligne, une colonne par colonne | `avec les entêtes`, obligatoire |
+| une liste de p-uplets | une ligne par p-uplet, une colonne par composante | `avec les entêtes`, obligatoire |
+
+```docdg
+soit prénoms une liste de chaînes de caractères telle que prénoms = {"Léa" ; "Hugo" ; "Zoé" ; "Abel"}
+soit notes une liste de décimaux telle que notes = {14,5 ; 11 ; 16 ; 9,5}
+soit carnet une table telle que carnet = table(prénoms ; notes)
+soit reçus une table telle que reçus = <Interroger>carnet {
+	où notes ⩾ 10
+	trier par notes décroissantes
+}
+<Dresser>un tableau avec les données reçus
+
+soit trajets un dictionnaire de chaînes de caractères et d'entiers tel que trajets = {"Marche": 5 ; "Bus": 3 ; "Vélo": 2}
+soit modes une table telle que modes = table(trajets) avec les entêtes "mode" et "élèves"
+<Dresser>un tableau avec les données modes
+
+soit A une matrice 3×2 de décimaux telle que A = {{1 ; 2} ; {3 ; 4,5} ; {5 ; 6}}
+soit points une table telle que points = table(A) avec les entêtes "x" et "y"
+<Représenter>graphiquement une statistique en nuage avec les données points
+
+soit fiches une liste de p-uplets (chaîne de caractères ; entier ; décimal) telle que fiches = {("Léa" ; 8 ; 14,5) ; ("Hugo" ; 9 ; 11) ; ("Zoé" ; 8 ; 16)}
+soit groupe une table telle que groupe = table(fiches) avec les entêtes "prénom", "âge" et "note"
+La table : #groupe.
+```
+
+`avec les entêtes` remplace toujours les entêtes donnés par défaut ; il est obligatoire quand le conteneur n'en a pas à offrir — une matrice, une liste de p-uplets, une liste donnée par une expression comme `table(trier(notes))`. Les types viennent de la déclaration du conteneur : un entier reste un entier ; un décimal, un rationnel ou un réel donne un décimal, valeur approchée à 15 chiffres significatifs ; une chaîne de caractères, un booléen ou une date gardent leur type. Un conteneur vide donne une table vide, aux colonnes typées ; une valeur manquante reste manquante ; l'ordre est celui de l'écriture. Aucune forme n'est devinée : une liste de listes est refusée, et le message propose une matrice ou une liste de p-uplets ; un complexe, une pile, une file ou un objet sont refusés avec leur raison.
+
+**Polars et pandas écrivent, DocDG relit.** Un fichier Arrow ou Parquet garde ses types ; DocDG les ramène aux siens :
+
+| **Dans le fichier** | **Dans la table** |
+| --- | --- |
+| entiers de 8 à 64 bits | entiers |
+| décimaux en simple ou double précision, décimaux exacts | décimaux |
+| chaînes, catégories | chaînes de caractères |
+| dates ; horodatages tous à minuit, comme pandas range les dates | dates |
+| horodatages qui portent une heure, heures, durées | chaînes de caractères, au format ISO : `2026-03-01T08:30:00`, `08:30:00`, `PT5400S` |
+| valeur nulle, `NaN` | valeur manquante |
+| listes, structures, binaire | refusé : la colonne est nommée |
+
+**Une base DuckDB ou SQLite se lit par ses tables.** Enregistrez la base à côté du document ou dans un sous-dossier, puis nommez sa table ou sa vue. L’extension usuelle d’une base DuckDB est `.duckdb` ; un fichier DuckDB nommé `.db` convient aussi. Une base SQLite — le `.db` des travaux pratiques de NSI et de classes préparatoires — se lit et s’interroge de la même façon, sans conversion : à l’ouverture, DocDG verse ses tables et ses vues dans DuckDB, qui exécute les requêtes. Le fichier n’est jamais modifié. Une base SQLite est reprise jusqu’à 256 Mio. Une base tenue par un serveur — PostgreSQL, MySQL, SQL Server, Oracle — s’exporte d’abord vers un fichier `.duckdb` : [le guide des données](docs/DONNEES_DUCKDB_D2.md#apporter-une-base-dun-autre-système) donne les commandes.
+
+**Syntaxe :** `soit NOM une table telle que NOM = <Lire>la table "TABLE" de la base "CHEMIN"`
+
+```docdg
+soit clients une table telle que clients = <Lire>la table "clients" de la base "DONNEES/magasin.duckdb"
+La table : #clients.
+<Dresser>un tableau avec les données clients
+```
+
+Le nom de la table est, comme le chemin de la base, une chaîne de caractères : il s'écrit toujours entre guillemets, qu'il porte une espace ou non — `<Lire>la table "Élèves 2026" de la base "ecole.db"`.
+
+**Une requête remplit une table.** `<Interroger>` exécute une requête SQL et range son résultat dans une table, qui s'emploie comme toute autre : par ses colonnes, dans un tableau, dans un diagramme.
+
+**Syntaxe :** `soit NOM une table telle que NOM = <Interroger>la base "CHEMIN" { REQUÊTE }` — la requête s'écrit entre accolades, sur la ligne ou sur plusieurs ; `<Interroger>` n'apparaît que là, dans la déclaration d'une table.
+
+```docdg
+soit ventes une table telle que ventes = <Interroger>la base "DONNEES/magasin.duckdb" {
+	SELECT rayon, SUM(quantite * prix) AS total
+	FROM commandes
+	JOIN produits ON produits.id = commandes.produit
+	GROUP BY rayon
+	ORDER BY total DESC
+}
+<Dresser>un tableau avec les données ventes
+<Représenter>graphiquement une statistique en barres avec les données ventes
+Le premier rayon est « #{ventes["rayon" ; 0]} », pour #{ventes["total" ; 0]} €.
+```
+
+**La requête s’écrit en SQL DuckDB.** Les chaînes SQL se mettent entre apostrophes et les identifiants délimités entre guillemets doubles. On peut employer des jointures, des agrégations, des fenêtres, des expressions de table communes et des tableaux croisés à catégories explicites.
+
+**La requête lit les données.** DocDG ouvre la base du document en lecture seule. Le bloc accepte une seule interrogation. La limite d’exécution est de cinq secondes.
+
+**Une requête lit aussi les fichiers du dossier du document.** Un fichier CSV, Parquet ou JSON se nomme entre apostrophes, à la place d’une table : DuckDB le lit lui-même, sans passer par `<Lire>` et sans la borne de 32 Mio. Une même requête joint ainsi une table de la base, un fichier Parquet, un fichier CSV et une table du document. Sans base, on écrit `<Interroger>les fichiers { REQUÊTE }` — ou `<Interroger>les tables { … }`, les deux formes acceptent tables et fichiers.
+
+```docdg
+soit bilan une table telle que bilan = <Interroger>la base "DONNEES/magasin.duckdb" {
+	SELECT p.rayon, SUM(c.quantite * p.prix) AS total, MAX(r.remise) AS remise
+	FROM commandes AS c
+	JOIN produits AS p ON p.id = c.produit
+	JOIN read_csv('DONNEES/remises.csv') AS r USING (rayon)
+	GROUP BY p.rayon
+	ORDER BY total DESC
+}
+<Dresser>un tableau avec les données bilan
+```
+
+```docdg
+soit classes une table telle que classes = <Interroger>les fichiers {
+	SELECT Classe, COUNT(*) AS effectif, ROUND(AVG(Note), 2) AS moyenne
+	FROM read_csv('DONNEES/classe.csv', decimal_separator = ',')
+	GROUP BY Classe
+	ORDER BY Classe
+}
+<Dresser>un tableau avec les données classes
+```
+
+| **Dans la requête** | **Ce qui est lu** |
+| --- | --- |
+| `FROM 'ventes.parquet'`, `FROM 'ventes.csv'`, `FROM 'mesures.json'` | le fichier, reconnu à son extension |
+| `read_csv('notes.csv', decimal_separator = ',')` | un CSV à la française : point-virgule entre les champs, virgule décimale |
+| `read_parquet('ventes.parquet')`, `read_json('mesures.json')` | le lecteur DuckDB du format, avec ses options |
+| `read_csv('mois_*.csv')`, `read_parquet(['a.parquet', 'b.parquet'])` | plusieurs fichiers de même forme, lus comme une seule table |
+
+Le nom du fichier s’écrit en toutes lettres, relativement au dossier du document : la requête ne sort pas de ce dossier, et DuckDB lui-même n’a accès à rien d’autre. Quand le fichier change, la table est recalculée. Dans `read_csv`, DuckDB devine le séparateur et les dates, mais non la virgule décimale : on la lui dit par `decimal_separator = ','`. `<Lire>` reste la voie des fichiers à la française — virgule décimale, dates `jj/mm/aaaa`, `vrai` et `faux` — qu’il type sans option.
+
+**Une requête peut dépasser la mémoire.** DuckDB travaille dans 512 Mio ; au-delà, un tri, une jointure ou un regroupement débordent sur le disque, dans le dossier temporaire du système, jusqu’à 4 Gio. Le résultat, lui, reste une table du document : un million de lignes au plus.
+
+**Un paramètre reçoit une variable du document.** Dans la requête, `:seuil` prend la valeur de la variable `seuil` — un nombre, une chaîne, un booléen ou une date. La valeur est liée à la requête, jamais recopiée dans son texte : c'est la requête préparée, celle qu'on enseigne contre l'injection.
+
+```docdg
+soit seuil ∈ 𝔻 tel que seuil = 12,5
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit bons une table telle que bons = <Interroger>les tables {
+	SELECT "Élève", Note
+	FROM classe
+	WHERE Note >= :seuil
+	ORDER BY Note DESC
+}
+<Dresser>un tableau avec les données bons
+```
+
+Le paramètre porte le nom de la variable ; les formes sans nom (`?`, `?1`) et les autres préfixes (`@`) sont refusés, comme un paramètre que le document ne déclare pas.
+
+**Chaque colonne du résultat reçoit le type de ses valeurs :**
+
+| **Valeurs rendues par DuckDB** | **Type de la colonne** |
+| --- | --- |
+| des entiers | liste d'entiers |
+| des réels, ou des entiers et des réels | liste de décimaux |
+| des textes | liste de chaînes de caractères |
+| des dates SQL de type `DATE` | liste de dates |
+| des booléens SQL | liste de booléens |
+| `NULL` | valeur manquante |
+| des données binaires, une valeur infinie | refusé : la colonne est nommée |
+
+La comparaison `prix > 3 AS cher` produit un booléen, `year(jour)` un entier et `strftime(jour, '%Y')` du texte. Chaque colonne du résultat doit avoir un nom distinct. Employez `AS` pour distinguer deux colonnes homonymes.
+
+**Les tables du document s'interrogent aussi.** Une requête voit, sous leur nom, les tables déjà déclarées — celle d'un CSV, celle d'un fichier Parquet, le résultat d'une autre requête. Sans base, on écrit `<Interroger>les tables { REQUÊTE }`.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit bilan une table telle que bilan = <Interroger>les tables {
+	SELECT Classe, COUNT(*) AS effectif, COUNT(Note) AS notes, AVG(Note) AS moyenne,
+		MIN("Né le") AS aîné
+	FROM classe
+	WHERE Externe
+	GROUP BY Classe
+}
+<Dresser>un tableau avec les données bilan
+```
+
+Dans la requête, les dates et les booléens gardent leurs types DuckDB `DATE` et `BOOLEAN`. Un nom de colonne contenant une espace s’écrit entre guillemets doubles, par exemple `"Né le"`. Avec une base, les tables du document s'ajoutent aux siennes, et une jointure les réunit. Si un même nom désigne une table de la base et une autre table du document, la requête est refusée : on renomme la table du document.
+
+```docdg
+soit remises une table telle que remises = <Lire>le fichier "DONNEES/remises.csv"
+soit tarif une table telle que tarif = <Interroger>la base "DONNEES/magasin.duckdb" {
+	SELECT libelle, prix, remise, ROUND(prix * (1 - remise / 100.0), 2) AS net
+	FROM produits
+	JOIN remises ON remises.rayon = produits.rayon
+	ORDER BY libelle
+}
+<Dresser>un tableau avec les données tarif
+```
+
+**Une table du document s'interroge aussi en français.** Quand le sujet de `<Interroger>` est une table du document, la requête s'écrit avec le vocabulaire du cours de bases de données, dans l'ordre des clauses de SQL, et avec l'écriture de DocDG : virgule décimale, dates `jj/mm/aaaa`, variables du document par leur dièse. Une liste s'écrit comme une phrase, `nom, prénom et note` : la virgule sépare, « et » précède le dernier élément, et une condition qui contient « et » se met entre parenthèses ; le point-virgule reste celui des arguments d'une fonction, des ensembles et des intervalles. DocDG traduit la requête en SQL et la confie à DuckDB, avec les mêmes garanties : lecture seule, requête préparée, 5 secondes au plus.
+
+| **Clause, dans cet ordre** | **SQL** | **Terme du cours** |
+| --- | --- | --- |
+| `avec a, b et c = expression` ; sans `avec`, toutes les colonnes | `SELECT a, b, expression AS c`, `SELECT *` | projection |
+| `avec a, sans doublons`, `avec … et toutes les colonnes sauf d et e` | `SELECT DISTINCT a`, les autres colonnes | projection |
+| `<Interroger>p = t {` | `FROM t AS p` | renommage |
+| `joindre t2 sur condition`, `joindre t2 sur a et b` | `JOIN … ON …`, `JOIN … USING (a, b)` | jointure |
+| `joindre à gauche`, `joindre à droite`, `joindre complètement`, `joindre naturellement t2` | `LEFT`, `RIGHT`, `FULL OUTER`, `NATURAL JOIN` | jointure externe, naturelle |
+| `croiser m = t2` | `CROSS JOIN` | produit cartésien |
+| `où condition` | `WHERE` | sélection |
+| `regrouper par a et b` | `GROUP BY a, b` | agrégation |
+| `dont condition`, sur la ligne de `regrouper par` ou sur la suivante | `HAVING` | sélection des groupes |
+| `trier par a décroissant, puis par b` ; `…, les manquantes en premier` | `ORDER BY a DESC, b ASC`, `NULLS FIRST` | tri |
+| `limiter à 3 lignes`, `à 1 ligne`, `aux lignes 11 à 20` | `LIMIT`, `OFFSET` | — |
+
+```docdg
+soit seuil ∈ 𝔻 tel que seuil = 12,5
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit bons une table telle que bons = <Interroger>classe {
+	avec classe["Élève"], Note et pourcentage = Note ÷ 20 × 100
+	où Note ⩾ #seuil et classe["Né le"] ∈ [01/01/2014 ; 31/12/2014]
+	trier par Note décroissante, puis par Élève
+}
+<Dresser>un tableau avec les données bons
+
+soit bilan une table telle que bilan = <Interroger>classe {
+	avec Classe, élèves = effectif(), notés = effectif(Note),
+		médiane = médiane(Note) et externes = effectif(où Externe)
+	regrouper par Classe dont élèves ⩾ 2
+	trier par Classe
+}
+<Dresser>un tableau avec les données bilan
+```
+
+**Un nom, d'abord, puis son emploi.** `c = expression` nomme une colonne calculée ; le nom s'emploie dans la suite de la liste et dans toutes les clauses qui suivent, sans recopier l'expression : DocDG la recopie dans le SQL, comme l'exige la norme. Un nom n'existe qu'après sa définition, et il ne reprend pas celui d'une colonne, majuscules comprises. Une table se nomme de même : après `p = releves`, elle ne se désigne plus que par `p`, `p["Jour"]`. Un nom d'agrégat sélectionne des groupes, dans `dont`, jamais des lignes.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit admis une table telle que admis = <Interroger>classe {
+	avec Élève, Classe, Note et décision = si Note ⩾ 10 { "admis" } sinon { "ajourné" }
+	où décision = "admis"
+	trier par Note décroissante
+}
+<Dresser>un tableau avec les données admis
+```
+
+**Les conditions.** `=`, `≠`, `<`, `⩽`, `>`, `⩾` ; `et`, `ou`, `non` ; `x ∈ [a ; b]` (`BETWEEN`), `x ∈ {"6A" ; "6B"}` (`IN`), `x ∈ t["col"]` (`IN (SELECT …)`, sur les valeurs présentes de la colonne), et `∉` pour leur contraire ; `x est manquante`, `x n'est pas manquante` (`IS NULL`) ; `nom commence par "Ma"`, `finit par "on"`, `contient "ar"`, `correspond au modèle "M_r%"`, qui comparent les caractères exactement, majuscules et accents compris ; `il existe une ligne k de t où …`, `il n'existe aucune ligne k de t où …` (`EXISTS`) ; `x > toutes les valeurs de t["col"]`, `x > l'une des valeurs de t["col"]`. Une valeur manquante rend la comparaison inconnue, et la ligne n'est pas retenue : `x ∈ t["col"]` et `x ∉ t["col"]` sont tous deux inconnus pour un `x` manquant. Sur une colonne vide, « toutes » est vrai et « l'une » est faux, comme en mathématiques.
+
+**Les expressions.** `+`, `−`, `×`, `÷`, `%` ; `÷` rend toujours un décimal : `7 ÷ 2` vaut 3,5, et une division par zéro donne une valeur manquante. `+` met deux chaînes bout à bout, un nombre s'y écrivant avec sa virgule et une date en `jj/mm/aaaa` ; une date plus un entier avance d'autant de jours, et la différence de deux dates est un nombre de jours. `si condition { a } sinon { b }` choisit une valeur, avec les accolades de `si` partout dans DocDG ; `selon la valeur de x { [0 ; 10[ { "insuffisant" } [10 ; 14[ { "assez bien" } sinon { "bien" } }` range une valeur dans ses cas, comme partout dans DocDG, une valeur manquante ne choisissant aucun cas ; `note1 à défaut note2 à défaut 0` prend la première valeur présente (`COALESCE`).
+
+| **Fonctions** | **SQL** |
+| --- | --- |
+| `arrondi(x ; 1)`, `abs(x)`, `racine(x)`, `partie entière(x)` | `ROUND`, `ABS`, `SQRT`, `FLOOR` |
+| `longueur(s)`, `majuscule(s)`, `minuscule(s)`, `s[1 à 3]`, `remplacer(s ; "a" ; "b")`, `élaguer(s)`, `indice de("a" ; s)` | `LENGTH`, `UPPER`, `LOWER`, `SUBSTR`, `REPLACE`, `TRIM`, `INSTR` |
+| `année(d)`, `mois(d)`, `jour(d)`, `jour de la semaine(d)` — du lundi, 1, au dimanche, 7 | `strftime` |
+| `entier(x)`, `décimal(x)`, `chaîne(x)`, `date(x)` | `CAST` |
+| `effectif()`, `effectif(x)`, `effectif(où condition)`, `effectif(x sans doublons)` | `COUNT(*)`, `COUNT(x)`, `COUNT(*) FILTER (WHERE …)`, `COUNT(DISTINCT x)` |
+| `somme`, `moyenne`, `médiane`, `min`, `max`, `variance`, `écart-type` | `SUM`, `AVG`, …, au sens de `<Calculer>` pour la variance |
+| `énumération(nom ; ", ")` | `GROUP_CONCAT` |
+
+Les fonctions sont celles du langage du document, sous le même nom et avec les mêmes indices : `majuscule`, `élaguer`, `remplacer`, la tranche `s[1 à 3]`, bornes incluses, et `indice de("a" ; s)` comptent les caractères à partir de 0, comme `m[0]` ; une absence donne une valeur manquante. Un nom composé conserve sa graphie française : `écart-type(Note)`, `jour de la semaine(Jour)`, comme `<table des matières>`. L’ancienne écriture `écart type(Note)` reste comprise pour la lecture des documents existants ; toute nouvelle saisie emploie le trait d’union. Les agrégats écartent les valeurs manquantes. Un nom nu désigne une colonne, ou un nom donné dans `avec` ; une colonne dont le nom porte une espace, ou qui existe dans deux tables jointes, se qualifie : `classe["Né le"]`.
+
+**Les calculs par fenêtre.** Un agrégat suivi de `par` calcule sur le groupe de chaque ligne sans regrouper les lignes ; dans les parenthèses, un ordre écrit comme dans `trier par` en fait un rang, un cumul ou une moyenne mobile : `moyenne(Note) par Classe`, `rang(Note décroissante) par Classe`, `numéro(Jour)`, `cumul(Pluie ; Jour) par Station`, `précédente(x ; Jour)`, `suivante(x ; Jour)`, `moyenne mobile(x ; 7 ; Jour)` — sept observations, et non sept jours de calendrier. Plusieurs groupes s'écrivent `par (a et b)`. À ordre égal, `numéro`, `précédente` et `suivante` départagent par l'ordre de lecture, et `cumul` donne la même valeur aux lignes ex æquo. Un calcul par fenêtre nommé sert ensuite dans `où` : les conditions reliées par « et » qui n'en parlent pas sélectionnent les lignes avant le calcul, les autres après ; une condition qui mêle les deux par « ou » est refusée.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit au_dessus une table telle que au_dessus = <Interroger>classe {
+	avec Élève, Classe, Note, moyenne_classe = arrondi(moyenne(Note) par Classe ; 2)
+		et rang_dans_la_classe = rang(Note décroissante) par Classe
+	où Note > moyenne_classe
+	trier par Classe
+}
+<Dresser>un tableau avec les données au_dessus
+```
+
+**Les opérations sur des tables** s'écrivent comme en mathématiques, et chacune se lit comme au tableau : `a ∪ b` ou `a union b`, `a ∪ b avec les doublons`, `a ∩ b` ou `a inter b`, `a ∖ b` ou `a privée de b` portent sur deux tables de mêmes colonnes ; `a × b`, lu « a croix b », est le produit cartésien, dont les colonnes portent des noms distincts. Une opération sur des tables s'interroge comme une table : `<Interroger>u = (a ∪ b) { … }`. Dans une interrogation, `croiser m = t` écrit le produit cartésien, et `où` en fait une jointure : `joindre … sur …` en est la forme abrégée.
+
+```docdg
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+soit sixieme_a une table telle que sixieme_a = <Interroger>classe {
+	avec Élève et Classe
+	où Classe = "6A"
+}
+soit externes une table telle que externes = <Interroger>classe {
+	avec Élève et Classe
+	où Externe
+}
+soit les_deux une table telle que les_deux = sixieme_a ∩ externes
+<Dresser>un tableau avec les données les_deux
+```
+
+**Une table se définit par ses colonnes, et se modifie.** Une table définie par ses colonnes, chacune avec son type et ses contraintes, commence vide ; chaque écriture vérifie ses contraintes, et une commande fautive est annulée en entier : « modification annulée : … ». Les commandes d'écriture modifient la table du document à partir de leur ligne, comme `←` une variable ; le fichier et la base ne sont jamais écrits, et le résultat se garde par l'export. Une table déclarée avant une modification garde l'état qu'elle avait : c'est une valeur. Un tableau montre la table telle qu'elle est à la fin de son paragraphe : une ligne vide sépare l'avant de l'après.
+
+| **Contrainte** | **SQL** |
+| --- | --- |
+| `id un entier, clé primaire` ; sur plusieurs colonnes, une ligne `clé primaire station et mois` | `PRIMARY KEY` |
+| `obligatoire`, `unique` ; sur plusieurs colonnes, une ligne `unique a et b` | `NOT NULL`, `UNIQUE` |
+| `par défaut faux` | `DEFAULT` |
+| `à valeurs dans [0 ; 20]`, `à valeurs dans {"CP" ; "CE1"}` ; une ligne `contrainte début ⩽ fin` | `CHECK` |
+| `clé étrangère vers parents["id"]`, suivie de `supprimée avec lui` ou `mise à manquante avec lui` | `REFERENCES`, `ON DELETE CASCADE`, `ON DELETE SET NULL` |
+
+| **Commande** | **SQL** |
+| --- | --- |
+| `<Insérer>dans t avec a, b et c {`, puis une ligne de valeurs par ligne, `1 ; "Léa" ; 15`, une place vide pour une valeur manquante | `INSERT INTO t (a, b, c) VALUES …` |
+| `<Insérer>dans t { a = 1 ; b = "Léa" }`, chaque valeur nommée | `INSERT INTO … VALUES …` |
+| `<Insérer>dans t, en remplaçant les lignes de même clé { … }`, `…, en ignorant les lignes de même clé` | `INSERT OR REPLACE`, `INSERT OR IGNORE` |
+| `<Insérer>dans archive les lignes d'anciens` | `INSERT INTO … SELECT …` |
+| `<Mettre à jour>t où condition { colonne ← valeur }`, `<Mettre à jour>toutes les lignes de t { … }` | `UPDATE … SET … WHERE …` |
+| `<Supprimer>les lignes de t où condition`, `<Supprimer>toutes les lignes de t` | `DELETE FROM …` |
+| `<Renommer>t["a"] en "b"`, `<Renommer>t en u` | `ALTER TABLE … RENAME` |
+| `<Ajouter>à t c un décimal, par défaut 0`, `<Ajouter>à t c = expression` | `ALTER TABLE … ADD COLUMN`, puis `UPDATE` pour une colonne calculée |
+| `<Retirer>t["c"]`, `<Supprimer>la table t` | `DROP COLUMN`, `DROP TABLE` |
+
+Une mise à jour sans `où` est refusée : elle changerait toutes les lignes, ce qui s'écrit `toutes les lignes de t`. Une colonne ajoutée par une expression est calculée une fois, à sa ligne.
+
+```docdg
+soit parents une table définie par {
+	id un entier, clé primaire
+	nom une chaîne de caractères, obligatoire
+}
+soit enfants une table définie par {
+	id un entier, clé primaire
+	prénom une chaîne de caractères, obligatoire
+	note un décimal, à valeurs dans [0 ; 20]
+	redoublant un booléen, par défaut faux
+	parent un entier, clé étrangère vers parents["id"], supprimée avec lui
+}
+
+<Insérer>dans parents avec id et nom {
+	1 ; "Durand"
+	2 ; "Petit"
+}
+
+<Insérer>dans enfants avec id, prénom, note et parent {
+	10 ; "Léa" ; 15 ; 1
+	11 ; "Jean" ; 9,5 ; 2
+	12 ; "Zoé" ; ; 2
+}
+
+<Mettre à jour>enfants où note est manquante {
+	note ← 12
+	redoublant ← vrai
+}
+
+<Supprimer>les lignes de parents où id = 1
+
+<Dresser>un tableau avec les données enfants
+```
+
+**Une vue** est une interrogation que DocDG recalcule chaque fois que ses tables changent, quand une table déclarée par une requête est calculée une fois, à sa ligne : `soit admis une vue telle que admis = <Interroger>enfants { … }`. Une vue ne se modifie pas : on modifie ses tables.
+
+**Une table se définit par récurrence**, avec les mots des mathématiques : l'initialisation donne les premières lignes, l'hérédité s'applique à la table elle-même jusqu'à ce qu'elle n'ajoute plus de ligne (`WITH RECURSIVE … UNION`). Un calcul qui dépasse un million de lignes ou 5 secondes est interrompu, et aucune table partielle n'est gardée.
+
+```docdg
+soit personnes une table définie par {
+	id un entier, clé primaire
+	parent un entier
+}
+
+<Insérer>dans personnes avec id et parent {
+	1 ;
+	2 ; 1
+	3 ; 2
+}
+
+soit moi ∈ ℤ tel que moi = 3
+soit ascendants une table définie par récurrence {
+	initialisation : <Interroger>personnes {
+		avec id et parent
+		où id = #moi
+	}
+	hérédité : <Interroger>a = ascendants {
+		avec p["id"] et p["parent"]
+		joindre p = personnes sur p["id"] = a["parent"]
+	}
+}
+<Dresser>un tableau avec les données ascendants
+```
+
+**Ce qui est sans objet dans un document est refusé, avec sa raison** : les transactions (`BEGIN`, `COMMIT`, `ROLLBACK`), car un document s'exécute seul et n'écrit aucun fichier ; `GRANT` et `REVOKE`, car il n'a ni utilisateurs ni droits ; `CREATE INDEX`, car chaque interrogation travaille sur une copie en mémoire ; `PRAGMA`, `ATTACH`, `VACUUM`, réglages du moteur. Le SQL reste disponible pour le cours où il est l'objet d'étude : `<Interroger>les tables { … }` et `<Interroger>la base "…" { … }`, en lecture seule. Le tri suit l'ordre alphabétique français : « Émile » se range avant « Zoé ». `limiter` sans `trier par` est accepté, avec un avertissement en orange : les lignes retenues dépendraient de l'ordre de lecture.
+
+| **Source** | **Message** |
+| --- | --- |
+| `<Interroger>classes {`, sans table `classes` | « classes » n'est pas une table du document |
+| `<Lire>le fichier "notes_brutes.csv"`, sans entêtes | avertissement : la première ligne du fichier, « 1 ; Martin ; 12,5 », a le type des valeurs de ses colonnes, et elle est lue comme des entêtes : si le fichier n'a pas d'entêtes, écrivez « avec les entêtes "…" et "…" » ; si ce sont bien des entêtes, « avec les entêtes de la première ligne » |
+| `… avec les entêtes "id" et "nom"`, pour trois champs | le fichier compte 3 champs par ligne, et « avec les entêtes » donne 2 entêtes |
+| `… avec les entêtes id, nom et note` | les entêtes sont des textes, entre guillemets : écrivez « avec les entêtes "id", "nom" et "note" » |
+| `… avec les colonnes id, nom et note` | le nom d'une colonne est son entête, un texte entre guillemets : écrivez « avec les entêtes "id", "nom" et "note" » |
+| `table(prénoms ; notes)`, de 4 et 3 éléments | prénoms a 4 éléments et notes 3 : les colonnes d'une table ont le même nombre de lignes |
+| `table(A)`, `A` étant une matrice | une matrice n'a pas d'entêtes à offrir : donnez-les, « table(A) avec les entêtes … » |
+| `avec nom ; prénom` | les éléments d'une liste se séparent par des virgules, et « et » précède le dernier : « a, b et c » |
+| `avec Note × 2` | nommez la colonne calculée : « nom = Note × 2 » |
+| `avec Note × 2 renommée double` | écrivez « nom = expression » dans « avec » : « double = Note × 2 » |
+| `avec plus = double + 1 et double = Note × 2` | « double » est défini plus loin : déclarez cette colonne calculée avant de l'employer |
+| `avec note = Note + 1` | « note » reprend le nom de la colonne « Note » : choisissez-en un autre |
+| `<Interroger>c = classe {` puis `classe["Élève"]` | « classe » est nommée « c » dans cette requête : elle ne se désigne plus que par ce nom |
+| `où moyenne(Note) > 10` | moyenne(…) résume un groupe : cette condition porte sur des groupes ; écrivez-la dans « dont », après « regrouper par » |
+| `avec Élève et m = moyenne(Note)`, avec `regrouper par Classe` | « Élève » n'est ni une clé de regroupement ni un calcul agrégé |
+| `dont élèves ⩾ 2`, sans `regrouper par` | « dont » sélectionne des groupes : il suit « regrouper par » |
+| `où Note > moyenne_classe ou Classe = "6A"`, `moyenne_classe` étant calculée par fenêtre | … séparez la sélection des lignes et celle du calcul par fenêtre en deux interrogations |
+| `joindre clients`, sans `sur` | précisez « sur … », ou écrivez « croiser clients » pour un produit cartésien |
+| `Note > 12.5` | la virgule est décimale : écrivez 12,5 |
+| `Né le = 2014-05-03` | une date s'écrit jj/mm/aaaa : écrivez 03/05/2014 au lieu de 2014-05-03 |
+| `classe × classe` | « Élève » est une colonne des deux tables : le produit cartésien juxtapose des colonnes de noms distincts |
+| `<Insérer>dans parents { id = 1 ; nom = "Martin" }`, la clé 1 existant | modification annulée : « id » ne prend pas deux fois la même valeur dans parents : c'est sa clé primaire ou une colonne unique |
+| `note = 25`, la note étant à valeurs dans [0 ; 20] | modification annulée : la contrainte « note à valeurs dans [0 ; 20] » d'enfants n'est pas respectée |
+| `<Mettre à jour>enfants { note ← 0 }` | modification annulée : « <Mettre à jour>enfants { … } » changerait toutes ses lignes : précisez « où … », ou … « toutes les lignes d'enfants » |
+| `<Supprimer>la table parents`, que référence `enfants` | modification annulée : « parents » est référencée par enfants : supprimez d'abord cette table |
+| `<Interroger>les tables { BEGIN }` | […] BEGIN est refusé : un document s'exécute de haut en bas, seul, et n'écrit aucun fichier |
+
+**Le résultat suit ses sources.** La requête est rejouée dès que la base change, ou une table qu'elle nomme ; sinon son résultat est gardé, et le document ne l'attend pas. Une requête qui emploie `random()` ou la date du jour ne donne donc pas le même résultat d'une ouverture à l'autre.
+
+**Une table s'exporte.** Le ruban **Fichier** montre, sous **Tables**, les tables du document : une pastille par table, avec son nombre de lignes. Un clic ouvre l'enregistrement ; l'extension choisit le format, `.parquet` par défaut ou `.arrow`. La table écrite est celle du document tel qu'il est au moment du clic, résultat d'une requête compris.
+
+| **Type de la colonne** | **Dans le fichier** |
+| --- | --- |
+| liste d'entiers | entier sur 64 bits |
+| liste de décimaux | flottant sur 64 bits |
+| liste de chaînes de caractères | texte UTF-8 |
+| liste de booléens | booléen |
+| liste de dates | date, au jour près |
+| valeur manquante | valeur nulle |
+
+Le fichier Parquet est compressé (Snappy) ; le fichier Arrow est au format de fichier Arrow, celui que pandas nomme Feather. Polars et pandas les relisent tels quels, et `<Lire>` aussi : une table exportée puis relue est la même table.
+
+```python
+import polars
+ventes = polars.read_parquet("ventes.parquet")
+
+import pandas
+ventes = pandas.read_parquet("ventes.parquet")
+```
+
+**Toute faute est dite**, à la ligne de la déclaration ou de l'action :
+
+| **Source** | **Message** |
+| --- | --- |
+| `<Lire>le fichier "absent.csv"` | le fichier « absent.csv » est introuvable dans le dossier du document |
+| `<Lire>le fichier "notes.xlsx"` | `<Lire>` lit un fichier .csv, .arrow ou .parquet |
+| `<Lire>le fichier "../notes.csv"` | « ../notes.csv » sort du dossier du document |
+| `<Lire>le fichier notes.csv` | `<Lire>` nomme son fichier entre guillemets |
+| `<Lire>la table clients de la base "magasin.duckdb"` | le nom d'une table est une chaîne de caractères : il s'écrit entre guillemets — « <Lire>la table "clients" de la base "…" » |
+| `<Lire>` hors d'une déclaration de table | `<Lire>` remplit une table, dans sa déclaration |
+| une ligne du CSV plus courte que l'entête | ligne 7 du fichier : 4 champs pour 5 colonnes |
+| `la série classe["Age"]` | la table n'a pas de colonne « Age » ; ses colonnes : … |
+| `la série classe["Élève"]` | la colonne « Élève » est une colonne de chaînes de caractères |
+| une colonne où une cellule n'est pas un nombre | ligne 14 du fichier : « abs » n'est pas un nombre |
+| `classe["Note"][0]` | une cellule se lit par sa colonne puis son rang : `classe["Note" ; 0]` |
+| `<Lire>le fichier "magasin.duckdb"` | « magasin.duckdb » est une base : elle se lit par ses tables |
+| `<Lire>la table "clientz" de la base "magasin.duckdb"` | la base n'a pas de table « clientz » ; ses tables : « clients », « commandes »… |
+| `<Interroger>` hors d'une déclaration de table | `<Interroger>` remplit une table, dans sa déclaration |
+| `FORM produits` en deuxième ligne | DuckDB signale l’erreur de syntaxe et DocDG indique la ligne de la requête. |
+| `{ SELECT nom FROM clientz }` | DuckDB signale la table inconnue et DocDG énumère les tables disponibles. |
+| `{ DELETE FROM clients }` | une requête ne fait que lire : elle commence par SELECT, ou par WITH … SELECT — DELETE est refusé : les tables du document se modifient en français |
+| `WHERE ville = :ville`, sans variable `ville` | le paramètre « :ville » ne correspond à aucune variable du document : déclarez « ville » avant la requête |
+| `{ SELECT 1 AS un; SELECT 2 AS deux }` | une requête porte une seule instruction : retirez ce qui suit le point-virgule |
+| `{ SELECT a.id, b.id FROM … }` | deux colonnes portent le nom « id » […] distinguez-les par AS dans la requête |
+| l'accolade fermante d'une requête oubliée | ce bloc n'est pas fermé : il manque son accolade fermante |
+| une requête sans fin | la requête dépasse 5 secondes : elle est interrompue |
+| un journal DuckDB en attente | Fermez proprement le logiciel qui écrit la base, puis relisez-la dans DocDG. |
+
+```docdg refusé
+soit ventes une table telle que ventes = <Lire>le fichier "DONNEES/absent.csv"
+```
+
+```docdg refusé
+soit ventes une table telle que ventes = <Interroger>la base "DONNEES/magasin.duckdb" {
+	SELECT rayon, prix AS tarif
+	FORM produits
+}
+```
+
+```docdg refusé
+soit ventes une table telle que ventes = <Interroger>la base "DONNEES/magasin.duckdb" { DELETE FROM commandes }
+```
+
+**Les bornes.** Un fichier CSV, Arrow ou Parquet chargé par `<Lire>` est limité à 32 Mio ; lu depuis une requête, il n’a pas cette borne. Une base DuckDB peut être plus volumineuse ; une base SQLite est reprise jusqu’à 256 Mio. Une requête travaille dans 512 Mio de mémoire, puis déborde sur le disque jusqu’à 4 Gio. Une requête dispose de 5 secondes d’exécution et renvoie au plus un million de lignes. Un tableau composé présente jusqu’à 1 000 lignes.
+
+### **🎲 Probabilités conjointes et simulations**
+
+Référence syntaxique et scientifique : [lois conjointes et simulations](docs/STATISTIQUES_PROBABILITES_S1.md).
+
+Les statistiques et les probabilités disposent de deux recueils indépendants : `exemples/statistiques.txt` et `exemples/probabilites.txt`. Le recueil `statistiques-probabilites.txt`, plus ancien, reste disponible.
+
+Une **loi conjointe** définit les valeurs de deux variables et une matrice de probabilités, avec une ligne pour chaque valeur de la première et une colonne pour chaque valeur de la seconde. Les marges sont calculées automatiquement et les conditionnements sont obtenus en divisant une colonne ou une ligne par sa probabilité marginale, si celle-ci est positive. Le contrôle d'indépendance porte sur toutes les cellules, pas seulement sur la covariance.
+
+```docdg
+<Dresser>la loi conjointe de X et Y {
+    valeurs de X : [0 ; 1]
+    valeurs de Y : [0 ; 1]
+    probabilités : [0,1 ; 0,2 | 0,3 ; 0,4]
+}
+```
+
+Les probabilités sont des nombres décimaux à virgule ou des fractions (`1/4`). Chaque valeur doit appartenir à `[0 ; 1]` et leur somme doit valoir 1, avec une tolérance de `10⁻⁹` pour les écritures décimales. Les modalités doivent être distinctes. Une probabilité conditionnelle dont le dénominateur est nul est signalée comme non définie, et non remplacée par zéro.
+
+Une **simulation reproductible** s'écrit avec `<Étudier>`. La graine est explicitement indiquée pour que la recomposition du document donne exactement les mêmes résultats. Deux graphiques sont produits : fréquences observées et probabilités théoriques par classe ; moyenne cumulée et espérance théorique.
+
+```docdg
+<Étudier>la simulation de 10 000 tirages de la loi binomiale de paramètres 20 et 0,3 avec la graine 42
+<Étudier>la simulation de 4000 tirages de la loi normale d'espérance 0 et d'écart-type 1 avec la graine 42
+<Étudier>la simulation de 4000 tirages de la loi de Poisson de paramètre 3 avec la graine 99
+<Étudier>la simulation de 2000 tirages de la loi uniforme sur [0 ; 1] avec la graine 42
+<Étudier>la simulation de 2000 tirages de la loi exponentielle de paramètre 2 avec la graine 42
+<Étudier>l'estimation de π par Monte-Carlo avec 10 000 points et la graine 42
+```
+
+Le moteur calcule les échantillons en flux : les tirages ne sont pas conservés en mémoire. Il accepte de 2 à 100 000 réalisations par simulation, borne à cinq millions les épreuves binomiales élémentaires, limite la loi de Poisson à λ ≤ 30 pour ce générateur exact et conserve 24 classes graphiques et au plus 101 points de convergence. La comparaison graphique porte sur des **probabilités par classe**, pas sur des densités en ordonnée ; les tirages dépassant le domaine affiché restent comptés dans les moments et sont signalés. La variance observée est descriptive (divisée par le nombre de réalisations).
+
+Les résultats ne prouvent pas expérimentalement un théorème de convergence. Les lois, la normalisation et les domaines des paramètres restent des propriétés mathématiques distinctes des tirages.
 
 ### **🌳 Arbres de probabilités**
 
@@ -3191,8 +3914,8 @@ La première partie de `exemples/seyes.txt` montre les usages de classe — phra
 Le corpus couvre la physique et la chimie du CE2 à l'agrégation :
 751 énoncés et 215 démonstrations de physique-chimie, 234 grandeurs et 122 cadres
 d'hypothèses, répartis en 102 domaines — le catalogue complet, par matière et par
-niveau, est dans [Redaction.md](Redaction.md). Les relations y sont vérifiées en homogénéité
-au moment de la compilation. Depuis la 3.9, les sciences de l'ingénieur s'y
+niveau, est dans [Redaction.md](Redaction.md). Toutes ses relations sont vérifiées en
+homogénéité (dimensions physiques). Depuis la 3.9, les sciences de l'ingénieur s'y
 ajoutent, de la première au master 2.
 
 **`<Vérifier>`** soumet au même contrôle une relation écrite dans le document.
@@ -3344,11 +4067,11 @@ base que la vôtre — celle qu'un établissement ou un collègue a partagée :
 ```
 document {
     niveau: première;
-    corpus: college.docdgc;
+    corpus: "college.docdgc";
 }
 ```
 
-Le chemin se lit depuis le dossier du document, comme celui des images. Cette
+Le chemin s’écrit entre guillemets et se lit depuis le dossier du document, comme celui des images. La valeur `""` utilise le corpus habituel. Cette
 base **remplace** entièrement celle de docdg : elle n'est pas fusionnée à
 votre travail personnel, afin que le document rende exactement ce que son
 auteur voyait. Si le fichier manque ou n'est pas lisible, docdg le dit et
@@ -3359,8 +4082,9 @@ compose sur sa base à lui plutôt que de s'arrêter.
 ```
 Documents/
     docdg/
-        personnel.docdgp    votre travail
-        journal.docdgp      vos opérations, datées
+        corpus-d1/
+            personnel-d1.docdgp    votre travail
+            journal-d1.docdgp      vos opérations, datées
 ```
 
 Un dossier visible, deux fichiers ordinaires : pour les mettre à l'abri ou les
@@ -3368,34 +4092,46 @@ emporter sur un autre poste, copiez-les comme n'importe quel fichier. Ils sont
 scellés — docdg seul les relit, ce qui garantit qu'aucune manipulation
 extérieure ne les abîme à votre insu — et contrôlés au démarrage suivant.
 
+Si vous veniez de la 4.0, vos fichiers `personnel.docdgp` et `journal.docdgp`
+sont repris automatiquement au premier lancement, et laissés intacts à leur
+place ([détails](docs/CORPUS_DUCKDB_D1.md#reprendre-un-profil-de-la-40)).
+
 ---
 
 ## **🗂️ Les exemples, par niveau**
 
-Les recueils thématiques sont désormais **un fichier par domaine**, sans suffixe numérique. Chaque recueil commence par une **table des matières native et cliquable** (`<table des matières>`) : on accède aux chapitres depuis l’aperçu.
+Le dossier contient 26 documents, dont les deux parcours autonomes statistiques et probabilités. Les recueils pourvus d’une table des matières donnent accès à leurs chapitres depuis l’aperçu.
 
-| Recueils consolidés | Parcours |
+| Fichier | Parcours |
 |---|---|
-| `exemples/algebre.txt` | Collège, Lycée, Enseignement supérieur, Approfondissements |
-| `exemples/algo.txt` | Collège, Lycée, Enseignement supérieur |
-| `exemples/analyse.txt` | Collège, Lycée, Enseignement supérieur |
-| `exemples/basique.txt` | Bases : écriture et mise en forme, langage complet, **nuancier de 148 couleurs**, atelier interactif |
-| `exemples/calcul.txt` | Calcul élémentaire et nombres au collège |
-| `exemples/chimie.txt` | Collège, Lycée, Enseignement supérieur, Approfondissements |
-| `exemples/demonstration.txt` | Démonstrations rédigées par l'auteur, Démonstrations automatiques : lycée, Démonstrations automatiques : supérieur |
-| `exemples/geometrie.txt` | École élémentaire, Collège, Lycée, Enseignement supérieur |
-| `exemples/histoire.txt` | École élémentaire, Collège, Lycée, Enseignement supérieur |
-| `exemples/math.txt` | Pythagore (quatrième), exponentielle (terminale), complétude (licence 1), groupes finis (master 2) |
-| `exemples/mathlang.txt` | Mini-langage mathématique : **271 notations classées en 37 catégories** |
-| `exemples/physique-chimie.txt` | Lycée, Enseignement supérieur |
-| `exemples/physique.txt` | Collège, Lycée, Enseignement supérieur, Approfondissements |
-| `exemples/seyes.txt` | Écriture en réglure Seyès et compositions en colonnes |
-| `exemples/si.txt` | Lycée, Classes préparatoires et supérieur, Approfondissements en sciences de l’ingénieur |
-| `exemples/statistiques-probabilites.txt` | Collège, Lycée, Enseignement supérieur |
+| [algebre.txt](exemples/algebre.txt) | Collège, Lycée, Enseignement supérieur, Approfondissements |
+| [algo.txt](exemples/algo.txt) | Collège, Lycée, Enseignement supérieur |
+| [analyse.txt](exemples/analyse.txt) | Collège, Lycée, Enseignement supérieur |
+| [basique.txt](exemples/basique.txt) | Bases : écriture et mise en forme, langage complet, **nuancier de 148 couleurs**, atelier interactif |
+| [calcul.txt](exemples/calcul.txt) | Calcul élémentaire et nombres au collège |
+| [chimie.txt](exemples/chimie.txt) | Collège, Lycée, Enseignement supérieur, Approfondissements |
+| [demonstration.txt](exemples/demonstration.txt) | Démonstrations rédigées par l'auteur, Démonstrations automatiques : lycée, Démonstrations automatiques : supérieur |
+| [donnees.txt](exemples/donnees.txt) | Analyse de données : fichier CSV et base DuckDB, indicateurs, histogrammes, requêtes, jointures, ajustement, dates, intervalle de confiance et test |
+| [factorisation.txt](exemples/factorisation.txt) | Étude de fonctions au lycée, zéros, dérivées et tableaux de variations |
+| [geometrie.txt](exemples/geometrie.txt) | École élémentaire, Collège, Lycée, Enseignement supérieur |
+| [histoire.txt](exemples/histoire.txt) | École élémentaire, Collège, Lycée, Enseignement supérieur |
+| [math.txt](exemples/math.txt) | Pythagore (quatrième), exponentielle (terminale), complétude (licence 1), groupes finis (master 2) |
+| [mathlang.txt](exemples/mathlang.txt) | Mini-langage mathématique : **271 notations classées en 37 catégories** |
+| [physique-chimie.txt](exemples/physique-chimie.txt) | Lycée, Enseignement supérieur |
+| [physique.txt](exemples/physique.txt) | Collège, Lycée, Enseignement supérieur, Approfondissements |
+| [publication1.txt](exemples/publication1.txt) | De la mesure du pendule simple |
+| [publication2.txt](exemples/publication2.txt) | De la Bastille aux urnes |
+| [publication3.txt](exemples/publication3.txt) | De la composition du texte courant |
+| [publication4.txt](exemples/publication4.txt) | Points fixes attractifs et vitesse de convergence |
+| [publication5.txt](exemples/publication5.txt) | De la division des ouvrages |
+| [seyes.txt](exemples/seyes.txt) | Écriture en réglure Seyès et compositions en colonnes |
+| [si.txt](exemples/si.txt) | Lycée, Classes préparatoires et supérieur, Approfondissements en sciences de l’ingénieur |
+| [statistiques-probabilites.txt](exemples/statistiques-probabilites.txt) | Statistiques et probabilités du lycée au master, en un seul recueil (version antérieure aux deux suivants) |
+| [statistiques.txt](exemples/statistiques.txt) | Parcours autonome : description, données tabulaires, estimation et tests |
+| [probabilites.txt](exemples/probabilites.txt) | Parcours autonome : lois, lois conjointes, conditionnement et simulations reproductibles |
+| [vitrine.txt](exemples/vitrine.txt) | Réglure Seyès, notations, démonstrations scientifiques et typographiques |
 
-`exemples/vitrine.txt` commence par la réglure Seyès, puis présente sur sa deuxième page une sélection de notations de `mathlang.txt` avant les démonstrations scientifiques et typographiques.
-
-**Organisation des exemples :** les 23 fichiers publics regroupent les démonstrations thématiques du langage. Les réglages `document { … }` s'appliquent à chaque fichier entier ; les démonstrations nécessitant un niveau particulier utilisent une surcharge explicite.
+**Organisation des exemples :** les 26 fichiers publics regroupent les démonstrations thématiques du langage. Les réglages `document { … }` s'appliquent à chaque fichier entier ; les démonstrations nécessitant un niveau particulier utilisent une surcharge explicite.
 
 Les exemples numérotés des versions antérieures (`algebre2`, `algebre3`, `demonstration4`…) sont réunis dans ces fichiers, un par thème. Seule la série `publication1` à `publication5` reste séparée, pour garder ses mises en page ; leurs saisies interactives sont préremplies là où une question bloquerait la lecture des chapitres suivants.
 
@@ -3428,7 +4164,7 @@ soit indication un style défini par <italique bleu>
 		<titre>Fiche d'Exercices - Équations et Fonctions
 	}
 	logo : au centre {
-		<Insérer l'image IMAGES/logo.png avec une largeur de 40 mm>
+		<Insérer>l'image "IMAGES/logo.png" avec une largeur de 40 mm
 	}
 	info : à gauche {
 		Nom: _______________ Prénom: _______________
@@ -3469,9 +4205,8 @@ soit indication un style défini par <italique bleu>
 <Afficher>un cadre-ex{
   <Soit>f une fonction définie par f(x) = x² − 4x + 3
   
-  <Dresser le tableau de variations de f, x:{-infini | 2 | +infini},
-      dérivée:{- | +}, variations:{+infini \ -1 / +infini}>
-  <Représenter>graphiquement la fonction f pour x appartient à [-1 ; 5] et y à [-2 ; 4], en bleu, avec 200 échantillons
+  <Dresser>le tableau de variations de f
+  <Représenter>graphiquement la fonction f pour x ∈ [-1 ; 5] et y ∈ [-2 ; 4], en bleu, avec 200 échantillons
 }
 
 <exercice>Exercice 4 : Statistiques
@@ -3479,7 +4214,7 @@ soit indication un style défini par <italique bleu>
 <Afficher>un cadre-ex{
   Notes : 12 (3x), 14 (12x), 16 (5x)
   
-  <Représenter>graphiquement une statistique barres données:{12: 3 | 14: 12 | 16: 5}
+  <Représenter>graphiquement une statistique en barres avec les données {12: 3 ; 14: 12 ; 16: 5}
   
   Moyenne = #{ (12*3 + 14*12 + 16*5) / (3+12+5) }
 }
@@ -3507,14 +4242,15 @@ Ce chapitre rassemble les points de détail qui, une fois compris, évitent la p
 
 Une tentative d'instruction algorithmique mal formée reste de la prose, sans avertissement. Pour les erreurs d'utilisation, de calcul ou de balise, docdg donne un diagnostic **en français**, à l'emplacement concerné. Les erreurs les plus fréquentes :
 
-| **Ce que vous écrivez**              | **Message docdg**                                              |
-| ------------------------------------ | ----------------------------------------------------------------- |
-| `<Placer>le point A` sans avoir défini A | *Le point A n'a pas été défini. Déclarez-le d'abord avec `<Soit>A(...) un point`.* |
-| `<Représenter>graphiquement la fonction f` sans `<Soit>f : …` | *La fonction f n'a pas été déclarée.*                     |
-| `#n` sans déclaration valide de `n` | La variable n'a pas de déclaration valide avant cette utilisation : elle est absente ou sa déclaration ne respecte pas la syntaxe de DocDG. |
-| `<Afficher>un cadre{...` (accolade non refermée) | *Accolade ouverte à la ligne N jamais refermée.*                  |
-| `<Tracer>un carré ABCD, de côté 5` (unité manquante) | *Longueur sans unité : écrivez « de côté 5 cm » ou « de côté 50 mm ». L'unité est obligatoire hors d'un repère.* |
-| `données:{12, 15}` (virgule dans une liste numérique) | *Liste numérique : utilisez le point-virgule (`12 ; 15`).*  |
+| **Ce que vous écrivez** | **Message docdg** |
+| --- | --- |
+| `<Placer>le point A`, sans avoir posé A | le point A n'est pas déclaré — posez-le par `<Soit>A(x ; y) un point`, ou placez-le par `<Placer>un point A(x ; y)` |
+| `<Représenter>graphiquement la fonction f`, sans `<Soit>f une fonction…` | la fonction f n'est pas déclarée — posez-la par `<Soit>f une fonction définie par f(x) = …` |
+| `#n`, sans déclaration valide de `n` | La variable « n » n'a pas de déclaration valide avant cette utilisation. Elle est absente ou sa déclaration ne respecte pas la syntaxe de DocDG. |
+| `<Afficher>un cadre {`, accolade jamais refermée | ce bloc n'est pas fermé : il manque son accolade fermante |
+| `<Tracer>un carré ABCD, de côté 5`, unité manquante | longueur sans unité : écrivez « de côté 5 cm » ou « de côté 50 mm » — l'unité est obligatoire hors d'un repère |
+
+Chaque ligne de ce tableau est rejouée par les essais du moteur : le message imprimé ici est celui que rend DocDG.
 
 > **Pourquoi c'est important.** Des messages en français, qui nomment la cause et proposent la correction, sont ce qui distingue un outil pédagogique d'un compilateur. Tout message d'erreur qui ne serait pas en français est un cas non intercepté : signalez-le, il a vocation à être traduit.
 
@@ -3565,14 +4301,14 @@ Un calcul `#{...}` rend son résultat avec une **virgule décimale** (règle d'a
 **Attention à la collision avec les séparateurs.** Le résultat `2,5` contient une virgule *sans espace après* : le lexer la reconnaît comme décimale, jamais comme énumération (règle n°8). Vous pouvez donc écrire sans crainte `#{5/2}` dans une phrase. En revanche, si vous insérez un calcul **dans une liste numérique** (séparée par `;`), le résultat garde sa virgule décimale et le point-virgule reste le séparateur de liste — aucune ambiguïté :
 
 ```docdg
-données:{#{5/2} ; #{7/2} ; 4}
+<Calculer>la moyenne de la série #{5/2} ; #{7/2} ; 4
 ```
 
 **Repères sur les instructions de cet exemple** (ces indications sont hors du code docdg) :
 
 | Écriture ou rubrique | Explication |
 |---|---|
-| `données:{#{5/2} ; #{7/2} ; 4}` | → 2,5 ; 3,5 ; 4 |
+| `la série #{5/2} ; #{7/2} ; 4` | → la série 2,5 ; 3,5 ; 4, de moyenne 10/3 |
 
 
 ---
@@ -3581,10 +4317,9 @@ données:{#{5/2} ; #{7/2} ; 4}
 
 ### **🎨 Référence des couleurs (148 disponibles)**
 
-Une couleur, un nom. Deux noms français pour la même teinte seraient un
-doublet : la table n'en porte aucun, et un test le vérifie à chaque
-compilation. Cette liste est **engendrée depuis la table du moteur** — elle
-ne peut pas en diverger.
+Une couleur, un nom : deux noms français pour la même teinte seraient un
+doublet, et la liste n'en porte aucun. C'est la liste même du moteur : tout nom
+qui y figure est accepté, et aucun autre.
 
 #### L'accord des couleurs
 
@@ -3680,7 +4415,7 @@ marron, brun, brun clair, brun foncé, brun chocolat, terre de Sienne, terre cui
 
 ### **Options de classe**
 
-Toutes s'écrivent dans le bloc `document { }` en tête du fichier — voir [Le bloc document](#-le-bloc-document) pour les explications et les exemples.
+Toutes s'écrivent dans le bloc `document { }` en tête du fichier — voir [Le bloc document](#%EF%B8%8F-le-bloc-document) pour les explications et les exemples.
 
 | **Option**   | **Type**           | **Défaut**  | **Description**                |
 | ------------ | ------------------ | ----------- | ------------------------------ |
@@ -3738,7 +4473,7 @@ française, virgule décimale comprise.
 | `<Calculer>la dérivée de f` / `<Calculer>la dérivée seconde de f` | Dérivées (fonction posée par `<Soit>`) |
 | `<Calculer>une primitive de f` | Primitive |
 | `<Déterminer>les zéros de f` | Ensemble des zéros |
-| `<Calculer>la limite de f en a` (+ `à droite` / `à gauche`) | Limite |
+| `<Calculer>la limite de f en a` (+ `à droite` / `à gauche`) | Limite ; sans côté, elle existe seulement si les deux côtés s'accordent |
 | `<Calculer>le développement limité de f en a à l'ordre n` | DL avec reste de Landau |
 | `<Calculer>les racines n-ièmes de z` | Racines complexes, ordinal en toutes lettres (`carrées`... `douzièmes`), `l'unité` admis pour 1 |
 | `<Calculer>l'intégrale numérique de f entre a et b` | Valeur approchée |
@@ -3769,7 +4504,7 @@ Une matrice posée par `<Soit>M une matrice définie par {...}` accepte, outre
 `<Calculer>le déterminant de M` et `<Calculer>l'inverse de M` :
 
 ```
-<Calculer>les valeurs propres de M
+<Déterminer>les valeurs propres de M
 <Diagonaliser>M
 ```
 
@@ -3926,7 +4661,7 @@ calculent et tracent :
 
 | Phrase | Méthode |
 |---|---|
-| `<Tracer>l'enveloppe convexe des points {(0;0) (4;0) …}` | `ConvexHull` : sommets, aire, périmètre |
+| `<Tracer>l'enveloppe convexe des points {(0;0) ; (4;0) …}` | `ConvexHull` : sommets, aire, périmètre |
 | `<Tracer>la triangulation de Delaunay des points {…}` | `Delaunay` : \(2n - h - 2\) triangles |
 | `<Tracer>le diagramme de Voronoï des points {…}` | `Voronoi`, cellules du bord tronquées au cadre |
 | `<Calculer>les deux points les plus proches parmi les points {…}` | `pdist` sur les \(n(n-1)/2\) paires |
@@ -4030,14 +4765,23 @@ montre la zone de rejet et la valeur observée.
 <Effectuer>le test de Student de l'hypothèse μ = 12 sur la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7, au seuil de 5 %
 ```
 
+Une série s'écrit ou se nomme, comme dans les [indicateurs](#-indicateurs-dune-série) :
+
+```docdg
+soit mesures une liste de décimaux telle que mesures = {12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7}
+<Calculer>l'intervalle de confiance à 95 % de la moyenne de la série mesures
+<Effectuer>le test de normalité de Shapiro-Wilk de la série mesures
+```
+
 | Phrase | Méthode de `scipy.stats` |
 |---|---|
 | `l'intervalle de confiance à 95 % de la moyenne de la série …` | Loi de Student |
+| `l'intervalle de confiance à 95 % de la variance de la série …`, ou `de l'écart-type` | Loi du χ², pour des observations normales |
 | `l'intervalle de confiance à 95 % de la proportion pour 42 succès sur 100` | Approximation normale et intervalle exact de Clopper-Pearson |
 | `le test de Student de l'hypothèse μ = 12 sur la série …` | `ttest_1samp` |
 | `le test de Student d'égalité des moyennes des séries … et …` | `ttest_ind` (Welch, variances inégales) |
 | `… des séries appariées … et …` | `ttest_rel` |
-| `le test du khi-deux d'adéquation des effectifs … à la loi uniforme` | `chisquare` ; ou `aux effectifs théoriques …`, `aux probabilités …` |
+| `le test du khi-deux d'adéquation des effectifs … à la loi uniforme` | `chisquare` ; ou `aux effectifs théoriques …` (de même total que les effectifs observés), `aux probabilités …` (de somme 1) |
 | `le test du khi-deux d'indépendance du tableau {20 ; 30 \| 15 ; 25}` | `chi2_contingency` (Yates pour un tableau 2 × 2) |
 | `le test de normalité de Shapiro-Wilk de la série …` | `shapiro` |
 | `au seuil de 1 %`, `unilatéral à droite`, `à gauche` | Seuil et hypothèse alternative |
@@ -4050,7 +4794,7 @@ mesures, par `scipy.interpolate`, et la trace avec les points mesurés.
 le point d'inflexion : l'équivalence d'un titrage pH-métrique.
 
 ```docdg
-<Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une spline cubique, avec sa dérivée
+<Tracer>l'interpolation de pH en fonction de V des données {(0;3) ; (2;3,4) ; (4;3,8) ; (6;4,2) ; (8;4,7) ; (9;5,1) ; (9,5;5,5) ; (10;7) ; (10,5;10,4) ; (11;10,9) ; (12;11,3) ; (14;11,7) ; (16;11,9)} par une spline cubique, avec sa dérivée
 ```
 
 | Précision | Méthode de `scipy.interpolate` |
@@ -4108,7 +4852,7 @@ l'applique au signal échantillonné ; le signal d'origine et le signal filtré
 sont tracés ensemble.
 
 ```docdg
-<Tracer>le filtrage du signal s(t) = sin(2π·5t) + 0,3sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 20 Hz, avec un bruit d'écart type 0,2
+<Tracer>le filtrage du signal s(t) = sin(2π·5t) + 0,3sin(2π·120t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 20 Hz, avec un bruit d'écart-type 0,2
 ```
 
 | Précision | Effet |
@@ -4119,7 +4863,7 @@ sont tracés ensemble.
 | `d'ordre 4` | Ordre (obligatoire) |
 | par défaut | Filtrage aller-retour `sosfiltfilt`, sans déphasage — celui des TP |
 | `en temps réel` | Filtrage causal `sosfilt`, retardé comme un filtre physique |
-| `avec un bruit d'écart type 0,2` | Bruit gaussien ajouté, tiré d'une graine fixe : le document est reproductible |
+| `avec un bruit d'écart-type 0,2` | Bruit gaussien ajouté, tiré d'une graine fixe : le document est reproductible |
 
 ### Le calcul numérique (SymPy)
 
@@ -4128,8 +4872,8 @@ sont tracés ensemble.
 | `<Résoudre>numériquement l'équation EXPR = EXPR sur [a ; b]` | Racine numérique, cherchée à partir du milieu de l'intervalle — l'intervalle guide le point de départ |
 | `<Calculer>la probabilité que X <= a pour la loi normale(m ; s)` | Probabilité ; opérateurs `<=`, `>=`, `=`, `<`, `>` |
 | `<Calculer>le quantile d'ordre p de la loi ...` | Quantile |
-| `<Calculer>l'espérance de la loi ...` / `<Calculer>l'écart type de la loi ...` | Moments |
-| `<Ajuster>f(x) = a exp(b x) aux données {(0;1) (1;2,7) ...}` | Moindres carrés non linéaires par `scipy.optimize.curve_fit` : chaque paramètre avec son incertitude-type u, tirée de la matrice de covariance, et le coefficient de détermination R² — le tout dans la balise, les données comprises |
+| `<Calculer>l'espérance de la loi ...` / `<Calculer>l'écart-type de la loi ...` | Moments |
+| `<Ajuster>f(x) = a exp(b x) aux données {(0;1) ; (1;2,7) ...}` | Moindres carrés non linéaires par `scipy.optimize.curve_fit` : chaque paramètre avec son incertitude-type u, tirée de la matrice de covariance, et le coefficient de détermination R² — le tout dans la balise, les données comprises |
 
 Les lois reconnues : `normale(m ; s)`, `binomiale(n ; p)`,
 `poisson(l)`, `uniforme(a ; b)`, `exponentielle(l)` (paramètre λ, à la
@@ -4141,21 +4885,22 @@ française), `student(k)`, `khi-deux(k)`.
 
 ### Les verbes d'objets
 
-Chaque phrase peut commencer par un verbe : `<Afficher>...`,
-`<Dresser>...`, `<Construire>...` et `<Insérer>...` s'acceptent devant
-tout objet, article compris.
+Chaque objet a son verbe, et l'objet porte son article : on **dresse** un
+tableau, une liste ou un tableau de signes, on **affiche** un cadre, une
+grille ou une matrice, on **construit** un graphe, un arbre ou une frise, on
+**insère** une image.
 
 ```
-<Dresser>un tableau bordures entête{ ... }
-<Afficher>une liste à puces{ ... }
-<Insérer l'image IMAGES/photo.png avec une largeur de 30 mm>
+<Dresser>un tableau { ... }
+<Dresser>une liste à puces { ... }
+<Insérer>l'image "IMAGES/photo.png" avec une largeur de 30 mm
 <Dresser>le tableau de signes de f
 ```
 
-### Les verbes non encore illustrés
+### Six verbes à connaître
 
-Six verbes du moteur ne paraissaient nulle part dans ce manuel. Ils sont
-pourtant éprouvés par les tests et employés dans les exemples livrés :
+Six verbes complètent ceux des chapitres précédents ; les exemples livrés les
+emploient :
 
 | verbe | ce qu'il fait | forme |
 | --- | --- | --- |
@@ -4189,7 +4934,7 @@ point... » est refusée avec un rappel de la règle.
 
 `avec 200 échantillons`, `avec l'aire entre 0 et 1`,
 `avec l'aire jusqu'à g`, `de 4 colonnes`, `de 2 lignes`,
-`de bornes {0 ; 5 ; 10}`, `d'effectifs {3 ; 7}`.
+`avec les bornes {0 ; 5 ; 10} et les effectifs {3 ; 7}`.
 
 ### Le placement en langage naturel
 
@@ -4202,8 +4947,8 @@ paragraphe s'aligne par `<à gauche>`, `<au centre>`, `<à droite>`.
 ### Les zones de grille
 
 Le plan se dessine dans le corps de la grille : une ligne de largeurs
-au-dessus des colonnes, puis une ligne par rangée qui commence par sa
-hauteur et nomme ses zones. Chaque zone se décrit ensuite par
+au-dessus des colonnes, puis les lignes de la grille, dont chacune commence
+par sa hauteur et nomme ses zones. Chaque zone se décrit ensuite par
 `nom : placement, avec propriétés {contenu}`, les propriétés en toutes
 lettres :
 
@@ -4223,19 +4968,39 @@ zone peut surcharger. Une rangée de cadres côte à côte s'obtient par
 
 ### Les données nommées
 
-Une table de données se déclare et se réutilise par son nom, ses
-entrées en `clé: valeur` comme les données en ligne :
+Un dictionnaire se déclare une fois, sur une ligne ou une entrée
+`"clé": valeur` par ligne, et se réutilise par son nom dans un diagramme — voir
+[Les statistiques](#-les-statistiques) :
 
-```
+```docdg
 soit sondage un dictionnaire de chaînes de caractères et d'entiers tel que sondage = {
 	"Jeudi": 8 ;
 	"Lundi": 5 ;
 	"Mardi": 3
 }
 
-<Représenter>graphiquement une statistique en barres horizontal données:sondage
+<Représenter>graphiquement une statistique en barres avec les données sondage et en disposition horizontale
 ```
 
 ---
 
-Les retours d'usage (bugs, tournures manquantes, besoins non couverts) sont les bienvenus sur le dépôt du projet.
+## **🎓 Statistiques et probabilités du supérieur**
+
+Six guides détaillent les commandes, leurs hypothèses d'application et leurs
+limites. Leurs exemples figurent dans `exemples/statistiques.txt` et
+`exemples/probabilites.txt`, et leurs modèles dans le bandeau de mathématiques
+du supérieur.
+
+| Guide | Contenu |
+|---|---|
+| [Inférence statistique](docs/STATISTIQUES_INFERENCE_S2.md) | estimation, bootstrap, tests de proportions et de rangs |
+| [Statistiques multivariées](docs/STATISTIQUES_MULTIVARIEES_S3.md) | régression linéaire multiple et diagnostics des résidus et des points influents, ACP centrée-réduite, analyse de variance à un facteur |
+| [Markov, vraisemblance et séries chronologiques](docs/STATISTIQUES_PROBABILITES_S4.md) | chaînes de Markov finies, maximum de vraisemblance pour quatre lois, prévision de séries chronologiques |
+| [Lois et description des séries](docs/LOIS_ET_DESCRIPTION_S5.md) | dix lois supplémentaires, dont la géométrique, la gamma et la loi de Cauchy ; rangs, dispersion relative, forme et concentration d'une série |
+| [Tests et modèles](docs/TESTS_ET_MODELES_S6.md) | corrélation, comparaison de groupes, puissance, prévision avec intervalles |
+| [Couples, Markov et estimation](docs/PROBABILITES_ESTIMATION_S7.md) | couples discrets, chaînes de Markov, fonctions génératrices et caractéristiques, estimation |
+
+---
+
+Les retours d'usage (erreurs constatées, tournures manquantes, besoins non
+couverts) sont les bienvenus : docdg69@gmail.com.

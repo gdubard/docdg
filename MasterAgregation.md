@@ -81,7 +81,7 @@ L'ordre est libre : **un renvoi peut précéder son étiquette**. Un renvoi sans
 
 ### Le corpus
 
-Nouveauté de docdg 2.8, étendu à la physique et à la chimie en 2.9, porté au master en 3.0, à l'école élémentaire en 3.4 puis aux sciences de l'ingénieur en 3.9 : **1606 énoncés et 602 démonstrations**, du CP à l'agrégation, embarqués dans le binaire. `<Énoncer>` **sans accolades** y puise ; avec accolades, il garde son comportement de la 2.7 — l'auteur écrit son énoncé lui-même.
+Nouveauté de docdg 2.8, étendu à la physique et à la chimie en 2.9, porté au master en 3.0, à l'école élémentaire en 3.4 puis aux sciences de l'ingénieur en 3.9 : **1674 énoncés et 608 démonstrations**, du CP à l'agrégation, embarqués dans le binaire. `<Énoncer>` **sans accolades** y puise ; avec accolades, il garde son comportement de la 2.7 — l'auteur écrit son énoncé lui-même.
 
 ```docdg
 document { niveau: quatrième; }
@@ -198,3 +198,19 @@ La convention vaut en début de ligne, en milieu de paragraphe, et dans les styl
 ---
 
 <a id="les-exemples-par-niveau"></a>
+
+### Probabilités et statistiques avancées · S4
+
+Le [guide S4](docs/STATISTIQUES_PROBABILITES_S4.md) relie les classes fermées aux lois stationnaires extrémales, illustre les maxima à la frontière d’un modèle et détaille la convention retenue pour l’autocorrélation empirique.
+
+### Lois et description des séries · S5
+
+Le calcul des quantiles d’une loi de Cauchy illustre la différence entre estimation par rang et estimation par moyenne. Le calcul des moments de Fisher et de Student permet de discuter leurs domaines d’existence. La droite de Henry et les coefficients de forme complètent la lecture d’une série empirique. [Guide de syntaxe et de calcul S5](docs/LOIS_ET_DESCRIPTION_S5.md).
+
+### Inférence et prévision · S6
+
+Les commandes S6 permettent de confronter permutation et approximation asymptotique, de comparer Welch et les procédures post-hoc, puis d’examiner le levier et les hypothèses associées aux intervalles de prédiction. [Commandes, hypothèses et exemples S6](docs/TESTS_ET_MODELES_S6.md).
+
+### Couples, Markov et estimation · S7
+
+Comparer les risques des estimateurs d’une variance normale, puis vérifier les résultats par simulation. Les transformées fournissent aussi un exemple d’évaluation numérique et de domaine de convergence. [Commandes, conventions et exemples](docs/PROBABILITES_ESTIMATION_S7.md).

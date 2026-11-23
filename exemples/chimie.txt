@@ -139,12 +139,12 @@ Pour une réaction d'ordre 2, la concentration du réactif vérifie a' = -k a².
 On verse une solution de soude dans une solution d'acide et l'on relève le pH à chaque ajout. L'équivalence se lit au point d'inflexion de la courbe, là où le pH varie le plus vite : docdg interpole les mesures par une spline, la dérive et en repère le maximum.
 
 <h2>Repérer l'équivalence par la dérivée
-<Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une spline cubique, avec sa dérivée
+<Tracer>l'interpolation de pH en fonction de V des données {(0;3) ; (2;3,4) ; (4;3,8) ; (6;4,2) ; (8;4,7) ; (9;5,1) ; (9,5;5,5) ; (10;7) ; (10,5;10,4) ; (11;10,9) ; (12;11,3) ; (14;11,7) ; (16;11,9)} par une spline cubique, avec sa dérivée
 	<remarque>Le volume équivalent se lit au pic de la dérivée. Juste après le saut, la spline cubique oscille légèrement : elle impose une courbure continue, que les mesures ne justifient pas.
 
 <page suivante h2>Une interpolation sans dépassement
 L'interpolation monotone PCHIP ne crée aucune oscillation entre deux mesures : la courbe reste croissante là où les mesures le sont.
-<Tracer>l'interpolation de pH en fonction de V des données {(0;3) (2;3,4) (4;3,8) (6;4,2) (8;4,7) (9;5,1) (9,5;5,5) (10;7) (10,5;10,4) (11;10,9) (12;11,3) (14;11,7) (16;11,9)} par une interpolation monotone, avec sa dérivée
+<Tracer>l'interpolation de pH en fonction de V des données {(0;3) ; (2;3,4) ; (4;3,8) ; (6;4,2) ; (8;4,7) ; (9;5,1) ; (9,5;5,5) ; (10;7) ; (10,5;10,4) ; (11;10,9) ; (12;11,3) ; (14;11,7) ; (16;11,9)} par une interpolation monotone, avec sa dérivée
 	<remarque>Les deux méthodes s'accordent sur le volume équivalent à un vingtième de millilitre près, bien en deçà de la précision de la burette.
 
 <page suivante h0>Enseignement supérieur

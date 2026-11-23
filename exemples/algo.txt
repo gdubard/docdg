@@ -1,4 +1,6 @@
 document {
+	graine: 41;
+	récursion: 500;
 	orientation: portrait;
 	marges: 10;
 	espacements: 0;
@@ -53,7 +55,7 @@ Pour conserver la navigation libre entre les chapitres, cet exemple utilise un e
 Pour découvrir la saisie interactive bloquante, consulter exclusivement l’atelier placé à la fin de basique.txt.
 
 soit âge ∈ ℤ tel que âge = 16
-soit majorité une chaîne de caractères telle que majorité = si âge est inférieur à 18 { mineur(e) } sinon { majeur(e) }
+soit majorité une chaîne de caractères telle que majorité = si âge est inférieur à 18 { "mineur(e)" } sinon { "majeur(e)" }
 Tu es #majorité.
 
 
@@ -159,7 +161,7 @@ Un nombre premier n'a, par définition, aucun diviseur strictement compris entre
 « si ... sinon » peut aussi produire une valeur plutôt que du texte — affecté directement à une variable, comme un opérateur ternaire.
 
 soit n ∈ ℤ tel que n = 17
-soit parité une chaîne de caractères telle que parité = si n % 2 vaut 0 { pair } sinon { impair }
+soit parité une chaîne de caractères telle que parité = si n % 2 vaut 0 { "pair" } sinon { "impair" }
 #n est #parité.
 
 <h1algo>Conditions composées
@@ -314,7 +316,7 @@ pour t ∈ trajets {
 
 <page suivante h1algo>La matrice
 
-Une matrice porte ses dimensions dans son type. La forme littérale tient sur une ligne ; la forme bloc s'aligne à l'œil dans l'éditeur — tabulations entre colonnes, retours à la ligne entre rangées, aucun point-virgule :
+Une matrice porte ses dimensions dans son type. La forme littérale tient sur une ligne ; la forme bloc s'aligne à l'œil dans l'éditeur — tabulations entre les colonnes, retours à la ligne entre les lignes, aucun point-virgule :
 
 soit A une matrice 2×2 d'entiers telle que A = {{1 ; 2} ; {3 ; 4}}
 soit B une matrice 2×2 d'entiers telle que B = {
@@ -337,15 +339,15 @@ La table de multiplication : #T — et sa case centrale : #T[1 ; 1].
 
 <h1algo>Composer les conteneurs
 
-Un tableau à plusieurs dimensions dont la taille n'est pas connue d'avance est une liste de listes. La rangée se déclare dans la boucle — elle repart vide à chaque tour — pendant que le conteneur extérieur, déclaré avant, accumule :
+Un tableau à plusieurs dimensions dont la taille n'est pas connue d'avance est une liste de listes. La ligne se déclare dans la boucle — elle repart vide à chaque tour — pendant que le conteneur extérieur, déclaré avant, accumule :
 
 soit M une liste de listes d'entiers telle que M = {}
 pour i ∈ ⟦0 ; 2⟧ {
-	soit rangée une liste d'entiers telle que rangée = {}
+	soit ligne une liste d'entiers telle que ligne = {}
 	pour j ∈ ⟦0 ; 3⟧ {
-		rangée ← rangée + {i × j}
+		ligne ← ligne + {i × j}
 	}
-	M ← M + {rangée}
+	M ← M + {ligne}
 }
 
 Le résultat : #M.
@@ -445,6 +447,7 @@ Une chaîne écrite sur place se met entre guillemets. Sans eux, docdg refuse pl
 	[sans accents("élève")]	[#{sans accents("élève")}]
 	[élaguer("  bonjour  ")]	[[#{élaguer("  bonjour  ")}]]
 	[compacter("un code")]	[#{compacter("un code")}]
+	[remplacer("bonjour" ; "o" ; "ou")]	[#{remplacer("bonjour" ; "o" ; "ou")}]
 	[inverser(devise)]	[#{inverser("liberté")}]
 	[devise contient("égalité")]	[#{devise contient("égalité")}]
 	[code("B")]	[#{code("B")}]
@@ -516,7 +519,7 @@ Appel : #{identité(3)}.
 
 <h1algo>Fonctions et boucles
 
-Une fonction s'appelle partout où un calcul est admis — dans le texte, dans une rangée de tableau, dans la condition d'une boucle, dans un accumulateur.
+Une fonction s'appelle partout où un calcul est admis — dans le texte, dans une ligne de tableau, dans la condition d'une boucle, dans un accumulateur.
 soit carré : ℤ → ℤ, n ↦ n × n
 soit somme une liste d'entiers telle que somme = {}
 pour k ∈ ⟦1 ; 6⟧ {
@@ -576,7 +579,7 @@ soit série une liste d'entiers telle que série = {1 ; 2 ; 3}
 Copie modifiée : #{modifie(série)} — série d'origine : #série.
 <h2algo>Les chaînes de caractères
 soit joint : une chaîne de caractères × une chaîne de caractères → une chaîne de caractères, (a, b) ↦ a + b
-#{joint(bon ; jour)}
+#{joint("bon" ; "jour")}
 Les types restent vérifiés : passer un nombre seul à la place d'une liste serait refusé. Avec une véritable liste, la recherche de 3 renvoie #{recherche({1 ; 2 ; 3} ; 3)}.
 <h1algo>Les primitives dans un corps
 Les primitives de conteneur — longueur, trier, inverser, somme, min, max, quotient, contient, indice de, insérer, supprimer, ajouter — s'emploient partout, y compris dans un corps de fonction :
@@ -623,7 +626,7 @@ Les douze premiers termes, dressés par une boucle qui appelle la fonction à ch
 	}
 }
 
-La récursion est bornée : au-delà de deux cents appels imbriqués, docdg s'arrête et le dit, plutôt que d'épuiser la pile.
+Dans ce document, la profondeur de récursion est limitée à 500 appels imbriqués. Si la fonction atteint cette limite, le moteur le signale. Vérifiez alors que la condition d’arrêt est atteignable.
 
 <h1algo>Les algorithmes classiques
 
@@ -796,7 +799,7 @@ soit c (un entier ; une chaîne de caractères) tel que c = (3 ; "trois")
 
 <h1algo>Tirer au hasard
 
-aléatoire(a ; b) rend un entier entre les deux bornes, comprises. Deux compilations donnent deux tirages : c'est ce qu'une simulation attend.
+aléatoire(a ; b) rend un entier entre les deux bornes, comprises. La graine 41 fixée en tête du document reproduit la même suite de lancers à chaque compilation. Changez la graine pour comparer deux simulations.
 
 soit lancers : ℤ → ℤ, n ↦ {
 	soit six ∈ ℕ tel que six = 0
@@ -1030,14 +1033,14 @@ La primitive joindre évite l'accumulateur, qui laisse toujours un séparateur d
 Les algorithmes classiques de la géométrie algorithmique du plan : l'enveloppe convexe (le plus petit polygone convexe contenant les points, que l'on construit à la main par le parcours de Graham), la paire de points la plus proche, la triangulation de Delaunay et son dual, le diagramme de Voronoï.
 
 <h2algo>L'enveloppe convexe
-<Tracer>l'enveloppe convexe des points {(0;0) (4;0) (4;3) (0;3) (2;1) (1;2) (3;2) (5;1,5)}
+<Tracer>l'enveloppe convexe des points {(0;0) ; (4;0) ; (4;3) ; (0;3) ; (2;1) ; (1;2) ; (3;2) ; (5;1,5)}
 
 <h2algo>La paire la plus proche
 L'algorithme naïf compare toutes les paires, soit n(n − 1)/2 comparaisons ; la méthode « diviser pour régner » descend à n log n.
-<Calculer>les deux points les plus proches parmi les points {(0;0) (5;1) (2;4) (6;6) (2,5;4,5) (8;2)}
+<Calculer>les deux points les plus proches parmi les points {(0;0) ; (5;1) ; (2;4) ; (6;6) ; (2,5;4,5) ; (8;2)}
 
 <page suivante h2algo>Triangulation de Delaunay et diagramme de Voronoï
 Pour n points dont h forment l'enveloppe convexe, la triangulation de Delaunay compte exactement 2n − h − 2 triangles. Les sommets du diagramme de Voronoï sont les centres des cercles circonscrits de ses triangles.
-<Tracer>la triangulation de Delaunay des points {(0;0) (4;0) (4;3) (0;3) (2;1) (1;2) (3;2)}
-<Tracer>le diagramme de Voronoï des points {(0;0) (4;0) (4;3) (0;3) (2;1) (1;2) (3;2)}
+<Tracer>la triangulation de Delaunay des points {(0;0) ; (4;0) ; (4;3) ; (0;3) ; (2;1) ; (1;2) ; (3;2)}
+<Tracer>le diagramme de Voronoï des points {(0;0) ; (4;0) ; (4;3) ; (0;3) ; (2;1) ; (1;2) ; (3;2)}
 

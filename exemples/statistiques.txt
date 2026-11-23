@@ -1,0 +1,371 @@
+document {
+    orientation: portrait;
+    marges: 15;
+    taille: 11;
+    interligne: 1,3;
+}
+
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+
+<volume>Statistiques — des données à l'inférence
+
+<page suivante>
+<table des matières>{Sommaire}
+
+<page suivante h0>Décrire une série
+
+soit notes une liste de décimaux telle que notes = {12 ; 15,5 ; 9 ; 14 ; 18 ; 11}
+
+<Calculer>la moyenne de la série notes
+<Calculer>la médiane de la série notes
+<Calculer>les quartiles de la série notes
+<Calculer>la variance de la série notes
+<Calculer>l'écart-type de la série notes
+
+<h1>Répartition des valeurs
+
+<Représenter>graphiquement une statistique en histogramme avec les bornes {0 ; 8 ; 12 ; 16 ; 20} et les données notes
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données notes
+
+<page suivante h0>Données tabulaires
+
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+
+<Dresser>un tableau avec les données classe
+<Calculer>la moyenne de la série classe["Note"]
+<Calculer>la médiane de la série classe["Absences"]
+<Représenter>graphiquement une statistique en nuage avec les abscisses classe["Absences"] et les ordonnées classe["Note"]
+
+<page suivante h0>Estimer et tester
+
+<h1>Intervalle de confiance
+
+<Calculer>l'intervalle de confiance à 95 % de la moyenne de la série 12 ; 15 ; 9 ; 14
+<Calculer>l'intervalle de confiance à 95 % de la proportion pour 42 succès sur 100
+
+<h1>Hypothèses statistiques
+
+<Effectuer>le test de Student de l'hypothèse μ = 12 sur la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7, au seuil de 5 %
+<Effectuer>le test du khi-deux d'adéquation des effectifs 18 ; 22 ; 20 ; 25 ; 15 ; 20 à la loi uniforme, au seuil de 5 %
+
+La non-significativité d'un résultat ne démontre ni l'égalité des paramètres ni la vérité de l'hypothèse nulle.
+
+<page suivante h0>Les estimateurs
+
+La variance descriptive emploie le diviseur n, tandis que la variance corrigée utilise n−1. L’erreur-type estimée de la moyenne tient compte de la taille de l’échantillon.
+
+<Calculer>les estimateurs de la série 12 ; 15 ; 9 ; 14 ; 18 ; 11 ; 16 ; 13
+
+<h1>Intervalles de confiance pour une proportion
+
+L'intervalle de Wilson est plus stable que l'intervalle de Wald lorsque l'échantillon est petit ou lorsque la fréquence est proche de zéro ou de un. L'intervalle exact de Clopper-Pearson conserve une couverture au moins nominale dans le modèle binomial.
+
+<Calculer>l'intervalle de confiance à 95 % de la proportion pour 42 succès sur 100
+<Calculer>l'intervalle de confiance à 95 % de la proportion pour 1 succès sur 12
+
+<h1>Intervalle de confiance bootstrap pour la médiane
+
+Le rééchantillonnage avec remise fournit une approximation de la loi d'échantillonnage de la médiane, sous réserve d'un échantillon représentatif et d'observations indépendantes.
+
+<Calculer>l'intervalle de confiance bootstrap à 95 % de la médiane de la série 11 ; 13 ; 15 ; 17 ; 19 ; 21 ; 22 ; 23, avec la graine 42
+
+<page suivante h0>Tests sur une ou deux proportions
+
+<h1>Test binomial exact
+
+L'hypothèse nulle fixe une proportion théorique. La p-valeur est calculée avec la loi binomiale, et non par une approximation normale.
+
+<Effectuer>le test exact d'une proportion de l'hypothèse p = 0,5 pour 62 succès sur 100, au seuil de 5 %
+
+<h1>Comparer deux proportions indépendantes
+
+DocDG emploie le test asymptotique z groupé lorsque les quatre effectifs attendus sous l'hypothèse nulle sont suffisants ; sinon, il emploie le test exact de Fisher.
+
+<Effectuer>le test d'égalité de deux proportions pour 42 succès sur 100 et 34 succès sur 100, au seuil de 5 %
+<Effectuer>le test d'égalité de deux proportions pour 1 succès sur 8 et 6 succès sur 9, au seuil de 5 %
+
+<page suivante h0>Tests non paramétriques
+
+<h1>Deux échantillons indépendants
+
+Mann–Whitney compare les rangs de deux échantillons indépendants. L'hypothèse nulle porte sur l'égalité des distributions, et pas systématiquement sur les seules médianes.
+
+<Effectuer>le test de Mann-Whitney des séries 12 ; 15 ; 13 ; 11 ; 16 et 7 ; 10 ; 9 ; 8 ; 11, au seuil de 5 %
+
+<h1>Observations appariées
+
+Le test de Wilcoxon exploite les rangs des différences appariées non nulles ; l'interprétation classique suppose une distribution symétrique des différences autour de zéro sous l'hypothèse nulle.
+
+<Effectuer>le test de Wilcoxon des séries appariées 12 ; 15 ; 13 ; 8 ; 14 et 11 ; 12 ; 11 ; 7 ; 12, au seuil de 5 %
+
+L'absence de significativité ne démontre pas l'égalité. Il convient d'examiner l'effectif, l'ampleur de l'effet et l'intervalle de confiance lorsque celui-ci est disponible.
+
+<page suivante h0>Régression linéaire multiple et diagnostics
+
+Le modèle linéaire à plusieurs variables explique la variabilité d'une réponse par plusieurs facteurs, sous les hypothèses habituelles du modèle. La régression n'est pas une démonstration de causalité.
+
+soit heures une liste de décimaux telle que heures = {1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10}
+soit absences une liste de décimaux telle que absences = {0 ; 2 ; 1 ; 3 ; 0 ; 4 ; 1 ; 2 ; 5 ; 3}
+soit notesfinales une liste de décimaux telle que notesfinales = {11 ; 13,3 ; 11,7 ; 14,2 ; 14,1 ; 15,3 ; 16,3 ; 17,2 ; 16,9 ; 19,8}
+
+<Étudier>la régression multiple de la série notesfinales selon les séries heures et absences, au seuil de 5 %
+
+Le coefficient d'une variable s'interprète à valeur fixée des autres facteurs, dans les unités originales. Le graphique des résidus peut révéler une structure non prise en compte. La distance de Cook aide à repérer les points influents.
+
+<page suivante h0>Analyse en composantes principales
+
+L'ACP centrée-réduite recherche des axes orthogonaux expliquant progressivement la dispersion d'un tableau de variables numériques.
+
+soit temperatures une liste de décimaux telle que temperatures = {17 ; 18 ; 17 ; 19 ; 22 ; 23 ; 22 ; 24}
+soit humidites une liste de décimaux telle que humidites = {67 ; 65 ; 71 ; 64 ; 60 ; 59 ; 62 ; 56}
+soit vents une liste de décimaux telle que vents = {12 ; 17 ; 14 ; 13 ; 21 ; 18 ; 16 ; 24}
+
+<Effectuer>l'analyse en composantes principales des séries temperatures et humidites et vents
+
+Le pourcentage cumulé de variance mesure la part de l'inertie résumée par les premiers axes. Les corrélations variables-axes servent à leur interprétation.
+
+<page suivante h0>Analyse de variance à un facteur
+
+L'ANOVA confronte l'égalité des moyennes de plusieurs groupes indépendants, sous des hypothèses de normalité des résidus et d'homogénéité des variances.
+
+soit groupeA une liste de décimaux telle que groupeA = {11 ; 13 ; 12 ; 14 ; 15 ; 13}
+soit groupeB une liste de décimaux telle que groupeB = {16 ; 19 ; 17 ; 20 ; 18 ; 21}
+soit groupeC une liste de décimaux telle que groupeC = {12 ; 14 ; 16 ; 15 ; 13 ; 14}
+
+<Effectuer>l'analyse de variance des séries groupeA et groupeB et groupeC, au seuil de 5 %
+
+La taille d'effet eta² complète la p-valeur. Un résultat global significatif ne permet pas d'identifier directement les groupes qui diffèrent.
+
+<h1>Régression sur des colonnes de données
+
+soit suivi une table telle que suivi = <Lire>le fichier "DONNEES/regression_s3.csv"
+
+<Étudier>la régression multiple de la série suivi["Note"] selon les séries suivi["Temps"] et suivi["Absences"], au seuil de 5 %
+
+<page suivante h0>Estimer par maximum de vraisemblance
+
+<h1>Arrivées à un guichet
+
+On observe le nombre d’arrivées pendant quatre créneaux indépendants de même durée. Sous un modèle de Poisson de paramètre commun, le maximum de vraisemblance donne 1,5 arrivée par créneau.
+
+<Calculer>les estimations par maximum de vraisemblance pour la loi de Poisson sur la série {0 ; 1 ; 2 ; 3}
+
+<h1>Trois autres modèles
+
+Pour des essais de Bernoulli indépendants, la fréquence des succès estime leur probabilité commune. Ici, trois essais sur quatre aboutissent.
+
+<Calculer>les estimations par maximum de vraisemblance pour la loi de Bernoulli sur la série {1 ; 0 ; 1 ; 1}
+
+Pour des durées exponentielles exprimées en heures, on estime le taux en événements par heure. Une durée moyenne de 2 heures donne un taux de 0,5 par heure.
+
+<Calculer>les estimations par maximum de vraisemblance pour la loi exponentielle sur la série {1 ; 2 ; 3}
+
+Dans le modèle normal, les observations 2, 4 et 6 donnent une moyenne de 4 et une variance estimée de 8/3. Retrouver le résultat en divisant la somme des carrés des écarts à la moyenne par l’effectif.
+
+<Calculer>les estimations par maximum de vraisemblance pour la loi normale sur la série {2 ; 4 ; 6}
+
+<page suivante h1>Lire une log-vraisemblance
+
+Trois durées indépendantes de 1, 2 et 3 heures suivent une loi exponentielle de taux commun. Le paramètre en abscisse est ce taux, exprimé par heure. Pour un taux positif $x$, les trois densités donnent une vraisemblance $x^3 exp(-6x)$.
+
+<Soit>g une fonction définie par g(x) = 3×ln(x) − 6×x
+
+<Représenter>graphiquement la fonction g sur [0,1 ; 1,5] en abscisse et [-9 ; -4] en ordonnée, avec 200 échantillons
+
+Le sommet se lit à 0,5 par heure. On retrouve l’inverse de la durée moyenne de 2 heures. En effet, la dérivée $3/x - 6$ est positive avant 0,5 et négative après.
+
+<page suivante h0>Une activité trimestrielle
+
+Un service relève son activité pendant douze trimestres consécutifs. On ajuste une tendance linéaire avec un effet propre à chaque trimestre de l’année.
+
+<Étudier>la série chronologique {7 ; 13 ; 17 ; 15 ; 15 ; 21 ; 25 ; 23 ; 23 ; 29 ; 33 ; 31}, avec 3 retards, un horizon de 2 pas et une période de 4 pas
+
+La tendance croît de deux unités par trimestre. Les deux prévisions valent 31 puis 37. La première prévision reste au niveau du dernier trimestre observé, puis la seconde monte à 37.
+
+<h1>Lire les mêmes observations dans une table
+
+soit activite une table telle que activite = <Lire>le fichier "DONNEES/activite_trimestrielle.csv"
+<Étudier>la série chronologique activite["Activité"] aux instants activite["Trimestre"], avec 3 retards, un horizon de 2 pas et une période de 4 pas
+
+Pour évaluer la prévision sur des données ultérieures, garder les deux prochains trimestres à part pendant l’ajustement. Si les activités ensuite observées valent 32 et 36, les deux erreurs absolues sont égales à une unité.
+
+<page suivante h0>Rangs, dispersion relative et forme
+
+<h1>Lire des rangs
+
+Pour quatre durées de 1, 2, 3 et 4 minutes, le neuvième décile et le 90e centile valent tous deux 4 minutes. Les valeurs intermédiaires se lisent sur la série ordonnée.
+
+<Calculer>les déciles de la série {1 ; 2 ; 3 ; 4}
+<Calculer>le centile d'ordre 90 de la série {1 ; 2 ; 3 ; 4}
+
+Avec deux observations égales à 1 et trois observations égales à 4, le centile 50 occupe le troisième rang et vaut 4.
+
+<Calculer>le centile 50 de la série de valeurs {1 ; 4} et d'effectifs {2 ; 3}
+
+<h1>Comparer des dispersions et des formes
+
+La moyenne est de 2,5 minutes et l’écart-type descriptif vaut environ 1,118 minute. Le coefficient de variation est donc proche de 44,72 %. La série est symétrique et son excès d’aplatissement vaut −1,36.
+
+<Calculer>le coefficient de variation de la série {1 ; 2 ; 3 ; 4}
+<Calculer>le coefficient d'asymétrie de la série {1 ; 2 ; 3 ; 4}
+<Calculer>le coefficient d'aplatissement de la série {1 ; 2 ; 3 ; 4}
+
+<h1>Utiliser les observations d’une table
+
+soit suiviS5 une table telle que suiviS5 = <Lire>le fichier "DONNEES/activite_trimestrielle.csv"
+
+<Calculer>le centile 90 de la série suiviS5["Activité"]
+
+Dans les douze trimestres du fichier, le rang retenu est 11 et l’activité correspondante vaut 31.
+
+<page suivante h0>Trois lectures graphiques d’une série
+
+<h1>Répartition empirique et adéquation à une loi normale
+
+L’escalier donne la proportion des durées inférieures ou égales à chaque abscisse. À 2 minutes, cette proportion atteint 1/2. Sur le graphique de Henry, observer comment les quantiles empiriques se placent par rapport à la droite de référence.
+
+<Représenter>la fonction de répartition empirique de la série {1 ; 2 ; 3 ; 4}
+<Représenter>la droite de Henry de la série {1 ; 2 ; 3 ; 4}
+
+<h1>Part cumulée d’une ressource
+
+Les quatre personnes reçoivent respectivement 1, 2, 3 et 4 unités. Les deux premières représentent la moitié de la population et reçoivent ensemble 30 % du total. La courbe de Lorenz passe donc par le point (0,5 ; 0,3). L’indice de Gini vaut 0,25.
+
+<Représenter>la courbe de Lorenz de la série {1 ; 2 ; 3 ; 4}
+<Calculer>l'indice de Gini de la série {1 ; 2 ; 3 ; 4}
+
+<page suivante h0>Corrélations et comparaison de distributions
+
+<h1>Liaison linéaire et liaison monotone
+
+Chaque ligne associe deux mesures sur la même unité. Pearson évalue une liaison linéaire. Spearman utilise les rangs et conserve les valeurs ex æquo. Dans le second exemple, deux observations partagent la valeur 4.
+
+<Effectuer>le test de corrélation de Pearson des séries {1 ; 2 ; 3 ; 4 ; 5 ; 6} et {2 ; 4 ; 3 ; 6 ; 5 ; 8}, au seuil de 5 %
+<Effectuer>le test de corrélation de Spearman des séries {1 ; 2 ; 3 ; 4 ; 5 ; 6} et {2 ; 4 ; 4 ; 6 ; 5 ; 8}, au seuil de 5 %
+
+<h1>Comparer trois groupes par les rangs
+
+Les valeurs se chevauchent entre groupes. Le test de Kruskal-Wallis tient compte des ex æquo. Un rejet global laisse ouverte la question des groupes qui diffèrent.
+
+<Effectuer>le test de Kruskal-Wallis des séries {1 ; 2 ; 3 ; 4 ; 5} et {3 ; 4 ; 5 ; 6 ; 7} et {6 ; 7 ; 8 ; 9 ; 10}, au seuil de 5 %
+
+<h1>Comparer des fonctions de répartition
+
+Dans le premier exercice, la loi normale centrée réduite est fixée par hypothèse avant la mesure. Dans le second, deux séries indépendantes sont comparées directement.
+
+<Effectuer>le test de Kolmogorov-Smirnov de la série {-1,2 ; -0,4 ; 0,1 ; 0,8 ; 1,4} contre la loi normale(0 ; 1), au seuil de 5 %
+<Effectuer>le test de Kolmogorov-Smirnov des séries {1 ; 3 ; 5 ; 7 ; 9} et {2 ; 4 ; 6 ; 8 ; 10}, au seuil de 5 %
+
+<page suivante h0>Comparer des groupes indépendants
+
+<h1>Variances, moyennes et comparaisons multiples
+
+Le deuxième groupe du premier exercice est deux fois plus dispersé en écart-type. Le rapport de ses variances, dans l’ordre premier groupe sur second groupe, vaut un quart. Pour ce test de Fisher, on suppose normales les distributions dans les deux populations.
+
+<Effectuer>le test de Fisher d'égalité des variances des séries {1 ; 2 ; 3 ; 4 ; 5} et {2 ; 4 ; 6 ; 8 ; 10}, au seuil de 5 %
+
+Trois groupes ont pour moyennes observées 10, 15 et 21. Welch permet d’étudier l’égalité des moyennes avec des variances différentes. Pour examiner les paires, Tukey utilise une variance commune et Games-Howell utilise les variances de chaque paire.
+
+<Effectuer>l'analyse de variance de Welch des séries {8 ; 10 ; 12 ; 10} et {12 ; 15 ; 18 ; 15} et {18 ; 20 ; 22 ; 24}, au seuil de 5 %
+<Effectuer>les comparaisons de Tukey des séries {8 ; 10 ; 12 ; 10} et {12 ; 15 ; 18 ; 15} et {18 ; 20 ; 22 ; 24}, au seuil de 5 %
+<Effectuer>les comparaisons de Games-Howell des séries {8 ; 10 ; 12 ; 10} et {12 ; 15 ; 18 ; 15} et {18 ; 20 ; 22 ; 24}, au seuil de 5 %
+
+<h1>Écart de taux de réponse
+
+Deux campagnes indépendantes reçoivent 42 et 34 réponses pour 100 destinataires chacune. Le premier taux dépasse le second de 8 points. L’intervalle de confiance à 95 % inclut zéro.
+
+<Calculer>l'intervalle de confiance à 95 % de la différence de deux proportions pour 42 succès sur 100 et 34 succès sur 100
+
+<page suivante h0>Estimer une moyenne et prévoir une observation
+
+<h1>Régression simple puis multiple
+
+Dans le premier exemple, pour x égal à 4, la réponse ajustée vaut 7,2. Le document donne les intervalles sur les coefficients et distingue l’incertitude sur la réponse moyenne de la dispersion d’une nouvelle observation.
+
+<Étudier>la prévision par régression de la série {3 ; 5 ; 4 ; 8 ; 10 ; 9} selon la série {1 ; 2 ; 3 ; 4 ; 5 ; 6} au point {4}, au niveau de confiance de 95 %
+<Étudier>la prévision par régression de la série {8 ; 9 ; 12 ; 14 ; 15 ; 18} selon les séries {1 ; 2 ; 3 ; 4 ; 5 ; 6} et {0 ; 1 ; 0 ; 1 ; 0 ; 1} au point {4 ; 1}, au niveau de confiance de 95 %
+
+<h1>Deux prévisions trimestrielles
+
+La série comporte trois années. Le modèle ajuste une tendance commune et des effets saisonniers additifs. Vérifier le comportement des résidus avant d’utiliser les intervalles de prévision.
+
+<Étudier>la prévision chronologique de la série {7 ; 13 ; 17 ; 15 ; 16 ; 20 ; 26 ; 23 ; 22 ; 30 ; 32 ; 30}, avec 3 retards, un horizon de 2 pas et une période de 4 pas, au niveau de confiance de 95 %
+
+<page suivante h0>Étude économique sur douze magasins
+
+<h1>Prix, promotion et ventes
+
+Douze magasins fictifs vendent le même produit durant une semaine. Le prix est exprimé en euros et les ventes en unités. La colonne Promotion vaut 1 pour un magasin qui mène une opération promotionnelle et 0 sinon.
+
+soit magasins une table telle que magasins = <Lire>le fichier "DONNEES/ventes_points_de_vente_s6.csv"
+
+<Effectuer>le test de corrélation de Pearson des séries magasins["Prix"] et magasins["Ventes"], au seuil de 5 %
+<Étudier>la prévision par régression de la série magasins["Ventes"] selon les séries magasins["Prix"] et magasins["Promotion"] au point {12 ; 1}, au niveau de confiance de 95 %
+
+Dans cet échantillon, la corrélation prix-ventes vaut environ −0,767. À promotion fixée, une différence de prix de 1 euro est associée à une différence ajustée de −4,5 unités vendues. Les prix et les promotions ont été observés en magasin. Une interprétation causale demanderait un protocole permettant d’isoler l’effet du prix.
+
+Pour un prix de 12 euros avec promotion, le modèle prévoit 129,25 unités. L’intervalle à 95 % pour la moyenne va de 126,51 à 131,99. Celui d’un nouveau magasin va de 122,12 à 136,38. La seconde fourchette inclut aussi la variabilité propre à un point de vente.
+
+<page suivante h0>Estimer et comparer un risque
+
+Quatre montants fictifs de 2, 4, 6 et 8 euros sont modélisés par une loi uniforme de borne inférieure nulle. La méthode des moments estime la borne supérieure à 10 euros, le maximum de vraisemblance à 8 euros. Avec un échantillon aussi petit, le choix de l’estimateur influe visiblement sur le résultat.
+
+<Calculer>les estimations par la méthode des moments pour la loi uniforme de borne inférieure nulle sur la série {2 ; 4 ; 6 ; 8}
+
+<Calculer>les estimations par la méthode des moments pour la loi gamma sur la série {1 ; 2 ; 3 ; 4 ; 5}
+
+Dans un modèle où la borne réelle vaut 10, on peut répéter une étude de taille 10 et mesurer l’écart entre chaque estimation et la borne connue. Le risque quadratique est égal à la variance de l’estimateur augmentée du carré de son biais. Dans le modèle normal, une variance estimée sans biais peut ainsi avoir un risque quadratique supérieur à celui de l’estimateur au diviseur n.
+
+<Étudier>le biais et le risque quadratique des estimateurs de la borne d'une loi uniforme de borne inférieure nulle et de borne supérieure 10, avec un effectif de 10, sur 10 000 répétitions avec la graine 42
+
+<Étudier>le biais et le risque quadratique des estimateurs de la variance d'une loi normale de variance 4, avec un effectif de 10, sur 10 000 répétitions avec la graine 42
+
+<page suivante h0>Quatre intervalles par bootstrap
+
+Pour la moyenne et la proportion, on rééchantillonne les observations. Pour la différence de moyennes, on prélève séparément dans chaque groupe indépendant. Pour une pente, la réponse et le prédicteur d’une même observation sont toujours tirés ensemble.
+
+<Calculer>l'intervalle de confiance bootstrap à 95 % de la moyenne de la série {8 ; 9 ; 12 ; 15 ; 16 ; 18}, sur 2 000 rééchantillonnages avec la graine 42
+
+<Calculer>l'intervalle de confiance bootstrap à 95 % de la différence des moyennes des séries {12 ; 15 ; 14 ; 16 ; 18} et {8 ; 9 ; 12 ; 10 ; 11}, sur 2 000 rééchantillonnages avec la graine 42
+
+<Calculer>l'intervalle de confiance bootstrap à 95 % de la proportion de succès de la série {1 ; 0 ; 1 ; 1 ; 0 ; 1 ; 0 ; 1}, sur 2 000 rééchantillonnages avec la graine 42
+
+<Calculer>l'intervalle de confiance bootstrap à 95 % de la pente de régression de la série {10 ; 13 ; 13 ; 17 ; 19 ; 18} selon la série {1 ; 2 ; 3 ; 4 ; 5 ; 6}, sur 2 000 rééchantillonnages avec la graine 42
+
+<page suivante h0>Le cours, tiré du corpus
+
+Les déciles et les centiles servent à situer une observation dans une série ordonnée. Pour un échantillon, le choix du diviseur dans la variance dépend de la quantité que l’on souhaite estimer.
+
+<Énoncer>Quantiles, déciles et centiles
+
+<Énoncer>Variance corrigée d’un échantillon
+<Démontrer>Variance corrigée d’un échantillon, au niveau licence 2
+
+La droite des moindres carrés permet d’expliquer une variable par une autre. L’analyse en composantes principales permet de résumer plusieurs variables quantitatives.
+
+<Énoncer>Droite de régression par les moindres carrés
+<Démontrer>Droite de régression par les moindres carrés, au niveau terminale
+
+<Énoncer>Analyse en composantes principales
+
+<page suivante h1>Quels groupes diffèrent ?
+
+Les trois groupes étudiés plus haut ont des moyennes de 10, 15 et 21. Dans un modèle à variance commune, les intervalles simultanés de Tukey permettent d'examiner les trois différences de moyennes en maîtrisant le risque global à 5 %. Pour la différence « premier groupe moins deuxième groupe », l'intervalle à 95 % va de −9,46 à −0,54. Son signe indique le sens de l'écart.
+
+<Énoncer>Comparaisons multiples de Tukey
+
+<page suivante h1>Prévoir une moyenne et une observation
+
+Dans l'exemple de régression simple, la réponse ajustée au point 4 vaut 7,2. L'intervalle à 95 % pour la réponse moyenne va de 5,62 à 8,78. Pour une nouvelle observation indépendante au même point, il va de 3,15 à 11,25. Repérer dans la formule le terme qui traduit la variabilité d'une observation autour de la droite.
+
+<Énoncer>Intervalle de prévision en régression linéaire
+
+<page suivante h1>Que peut-on conclure avec un succès sur douze essais ?
+
+Sous le modèle binomial, l'intervalle de Wilson à 95 % va de 1,49 % à 35,39 %. Celui de Clopper-Pearson va de 0,21 % à 38,48 %. Avec un petit échantillon, la méthode choisie influe sensiblement sur la fourchette annoncée.
+
+<Énoncer>Intervalle de Wilson
+
+<Énoncer>Intervalle de Clopper-Pearson

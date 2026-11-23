@@ -50,7 +50,7 @@ Un capteur délivre une composante utile à 50 Hz et un parasite à 150 Hz. Éch
 <page suivante h2>Lisser des mesures
 <Énoncer>la sensibilité d'un capteur
 Relevés d'un capteur de température toutes les minutes, entachés de bruit : une spline de lissage en dégage la tendance.
-<Tracer>l'interpolation de T en fonction de t des données {(0;20,1) (1;24,8) (2;28,2) (3;32,9) (4;35,1) (5;39,3) (6;41,0) (7;44,6) (8;45,8) (9;48,9) (10;49,7)} par une spline de lissage, en t = 5,5
+<Tracer>l'interpolation de T en fonction de t des données {(0;20,1) ; (1;24,8) ; (2;28,2) ; (3;32,9) ; (4;35,1) ; (5;39,3) ; (6;41,0) ; (7;44,6) ; (8;45,8) ; (9;48,9) ; (10;49,7)} par une spline de lissage, en t = 5,5
 
 <page suivante h0>Classes préparatoires et supérieur
 
@@ -90,7 +90,7 @@ Une masse m suspendue à un ressort de raideur k, freinée par un amortisseur de
 <Résoudre>numériquement l'équation différentielle m x'' + c x' + k x = 0, avec m = 1, c = 0,8, k = 16, x(0) = 0,05 et x'(0) = 0, sur [0 ; 10], le portrait de phase
 
 <h2>Filtrer la mesure d'un capteur
-<Tracer>le filtrage du signal s(t) = sin(2π·2t) + 0,3sin(2π·60t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 10 Hz, avec un bruit d'écart type 0,1
+<Tracer>le filtrage du signal s(t) = sin(2π·2t) + 0,3sin(2π·60t), échantillonné à 1000 Hz sur [0 ; 1], par un passe-bas de Butterworth d'ordre 4 à 10 Hz, avec un bruit d'écart-type 0,1
 
 <page suivante h0>Approfondissements en sciences de l’ingénieur
 

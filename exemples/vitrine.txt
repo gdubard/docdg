@@ -62,7 +62,7 @@ La notation mathématique de docdg s'écrit entre deux signes dollar. Voici un a
 
 	Opérations ensemblistes : $A union B$ ; $A inter B$.
 	Probabilité : $PP(A)$ ; conditionnelle : $PP(A sachant B)$.
-	Statistiques : $EE(X)$, $variance(X)$ et $écart type(X)$.
+	Statistiques : $EE(X)$, $variance(X)$ et $écart-type(X)$.
 
 <page suivante h1>La grammaire vectorielle
 
@@ -174,7 +174,7 @@ La consigne est celle du cours de PTSI, écrite telle qu'on l'énonce au tableau
 }
 
 <h3>Le solide, en perspective
-<Tracer>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Tracer>le pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
 
 <page suivante h1>Algorithmique
 
@@ -222,7 +222,7 @@ tant que terme est inférieur à 200 {
 <page suivante h1>Nombres et calcul
 
 <h3>Le corpus parle, le document ne recopie rien
-	Chaque énoncé est tiré de la base embarquée : 1 606 énoncés et 602 démonstrations, du CP à l'agrégation. On le nomme, il s'écrit.
+	Chaque énoncé est tiré de la base embarquée : 1 674 énoncés et 608 démonstrations, du CP à l'agrégation. On le nomme, il s'écrit.
 
 <Énoncer>les priorités opératoires
 
@@ -257,18 +257,18 @@ tant que terme est inférieur à 200 {
 
 <Calculer>la probabilité que X >= 1 pour la loi exponentielle de paramètre 2
 
-<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart type 1
+<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart-type 1
 
 <Déterminer>le quantile d'ordre 0,975 de la loi de Student à 9 degrés de liberté
 
 <Étudier>la loi de densité f(x) = 3x^2 sur [0 ; 1]
 
 <h3>La densité, tracée
-<Tracer>la densité de la loi normale d'espérance 0 et d'écart type 1
+<Tracer>la densité de la loi normale d'espérance 0 et d'écart-type 1
 
 <h3>La loi des grands nombres, montrée par une boucle
 pour n ∈ {100 ; 400 ; 1600 ; 6400} {
-	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2×racine(n)) ; 4)}.
+	Pour #n lancers, l'écart-type de la fréquence vaut #{arrondi(1/(2×racine(n)) ; 4)}.
 }
 
 
@@ -427,4 +427,62 @@ pour n ∈ {100 ; 400 ; 1600 ; 6400} {
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 2 mm et un titre {Ce que vous venez de voir} {
 	Un seul fichier de prose, aucune balise de mise en forme dans le texte, et un rendu identique à l'écran, à l'impression et dans le PDF.
 	Le corpus embarqué a fourni les énoncés et les démonstrations ; le moteur a fait le reste.
+}
+
+<page suivante h1>Interroger une table en SQL et en français
+
+Deux stations, Cap et Port, mesurent la vitesse du vent à trois instants successifs. Les six relevés sont fictifs. Chaque ligne de la table vents contient le nom de la station et une vitesse en km/h.
+soit sites une liste de chaînes de caractères telle que sites = {"Cap" ; "Port" ; "Cap" ; "Port" ; "Cap" ; "Port"}
+soit vitesses une liste d'entiers telle que vitesses = {20 ; 12 ; 36 ; 18 ; 40 ; 30}
+soit vents une table telle que vents = table(sites ; vitesses) avec les entêtes "station" et "vitesse"
+
+<Dresser>un tableau {
+	<mg>	<md>	<md>	<md>
+	Station	Premier relevé	Deuxième relevé	Troisième relevé
+	[Cap]	[#{vents["vitesse" ; 0]}]	[#{vents["vitesse" ; 2]}]	[#{vents["vitesse" ; 4]}]
+	[Port]	[#{vents["vitesse" ; 1]}]	[#{vents["vitesse" ; 3]}]	[#{vents["vitesse" ; 5]}]
+}
+
+En SQL, <<Interroger>>les tables ouvre la requête et FROM désigne la table. En français, on nomme la table dès le début avec <<Interroger>>vents.
+
+<h3>Quelles vitesses a-t-on mesurées au Cap, de la plus forte à la plus faible ?
+soit cap_sql une table telle que cap_sql = <Interroger>les tables {
+	SELECT vitesse FROM vents
+	WHERE station = 'Cap'
+	ORDER BY vitesse DESC
+}
+soit cap_fr une table telle que cap_fr = <Interroger>vents {
+	avec vitesse
+	où station = "Cap"
+	trier par vitesse décroissante
+}
+<Dresser>un tableau {
+	<mg>	<mg>
+	SQL	Requête en français
+	[SELECT vitesse FROM vents]	[avec vitesse]
+	[WHERE station = 'Cap']	[où station = "Cap"]
+	[ORDER BY vitesse DESC]	[trier par vitesse décroissante]
+	[#{cap_sql["vitesse" ; 0]}, #{cap_sql["vitesse" ; 1]} et #{cap_sql["vitesse" ; 2]} km/h]	[#{cap_fr["vitesse" ; 0]}, #{cap_fr["vitesse" ; 1]} et #{cap_fr["vitesse" ; 2]} km/h]
+}
+
+<h3>Quelle est la vitesse moyenne du vent à chaque station ?
+Les six relevés forment deux groupes de trois. Chaque station occupe une seule ligne dans le résultat.
+soit bilan_sql une table telle que bilan_sql = <Interroger>les tables {
+	SELECT station, AVG(vitesse) AS moyenne
+	FROM vents GROUP BY station
+	ORDER BY moyenne DESC
+}
+soit bilan_fr une table telle que bilan_fr = <Interroger>vents {
+	avec station et moyenne = moyenne(vitesse)
+	regrouper par station
+	trier par moyenne décroissante
+}
+<Dresser>un tableau {
+	<mg>	<mg>
+	SQL	Requête en français
+	[SELECT station, AVG(vitesse) AS moyenne]	[avec station et moyenne = moyenne(vitesse)]
+	[FROM vents GROUP BY station]	[regrouper par station]
+	[ORDER BY moyenne DESC]	[trier par moyenne décroissante]
+	[#{bilan_sql["station" ; 0]} : #{bilan_sql["moyenne" ; 0]} km/h]	[#{bilan_fr["station" ; 0]} : #{bilan_fr["moyenne" ; 0]} km/h]
+	[#{bilan_sql["station" ; 1]} : #{bilan_sql["moyenne" ; 1]} km/h]	[#{bilan_fr["station" ; 1]} : #{bilan_fr["moyenne" ; 1]} km/h]
 }

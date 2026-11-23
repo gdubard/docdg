@@ -1,0 +1,301 @@
+document {
+    orientation: portrait;
+    marges: 15;
+    taille: 11;
+    interligne: 1,3;
+}
+
+soit volume un style défini par <bleu marine gras 19 pt au centre>
+soit h0 un style défini par <bleu marine gras chapitre num>
+soit h1 un style défini par <bleu marine gras section num>
+
+<volume>Probabilités — lois, dépendance et simulation
+
+<page suivante>
+<table des matières>{Sommaire}
+
+<page suivante h0>Lois et variables aléatoires
+
+<h1>Lois discrètes
+
+<Calculer>la probabilité que X = 2 pour la loi de Poisson de paramètre 1,5
+<Calculer>la probabilité que X >= 3 pour la loi binomiale de paramètres 10 et 0,5
+<Calculer>l'espérance de la loi binomiale de paramètres 20 et 0,05
+
+<h1>Lois à densité
+
+<Calculer>la probabilité que X <= 1,96 pour la loi normale d'espérance 0 et d'écart-type 1
+<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart-type 1
+<Calculer>la probabilité que X >= 1 pour la loi exponentielle de paramètre 2
+
+<page suivante h0>Lois conjointes et conditionnelles
+
+<h1>Une loi à deux variables
+
+Une loi conjointe attribue une masse à chaque couple de valeurs. La dernière colonne et la dernière ligne donnent les lois marginales. Les lois conditionnelles se calculent en divisant chaque colonne par sa marge, lorsque celle-ci est non nulle.
+
+<Dresser>la loi conjointe de X et Y {
+    valeurs de X : [0 ; 1]
+    valeurs de Y : [0 ; 1]
+    probabilités : [0,1 ; 0,2 | 0,3 ; 0,4]
+}
+
+On peut ici comparer les probabilités conjointes aux produits des probabilités marginales pour décider si X et Y sont indépendantes.
+
+<h1>Variables indépendantes
+
+<Dresser>la loi conjointe de A et B {
+    valeurs de A : [0 ; 1]
+    valeurs de B : [0 ; 1]
+    probabilités : [1/4 ; 1/4 | 1/4 ; 1/4]
+}
+
+<page suivante h0>Expériences reproductibles
+
+<h1>Simuler la loi binomiale
+
+Une simulation porte sur des réalisations indépendantes de la même loi. Les fréquences observées sont comparées aux probabilités théoriques, puis la moyenne cumulée à l'espérance.
+
+<Étudier>la simulation de 10 000 tirages de la loi binomiale de paramètres 20 et 0,3 avec la graine 42
+
+<h1>Simuler une loi normale
+
+<Étudier>la simulation de 4000 tirages de la loi normale d'espérance 0 et d'écart-type 1 avec la graine 42
+
+<h1>Simuler une loi de Poisson
+
+<Étudier>la simulation de 4000 tirages de la loi de Poisson de paramètre 3 avec la graine 99
+
+<h1>Simuler une loi uniforme
+
+<Étudier>la simulation de 2000 tirages de la loi uniforme sur [0 ; 1] avec la graine 42
+
+<h1>Simuler une loi exponentielle
+
+<Étudier>la simulation de 2000 tirages de la loi exponentielle de paramètre 2 avec la graine 42
+
+La même graine et les mêmes paramètres redonnent les mêmes réalisations. Ces simulations illustrent la loi des grands nombres ; la proximité observée ne constitue pas à elle seule une preuve du théorème.
+
+<page suivante h0>Estimer π par Monte-Carlo
+
+En tirant des points au hasard dans le carré unité, la proportion de ceux qui appartiennent au quart de disque unité approche π / 4. Le graphique présente les estimations successives de π et sa valeur théorique.
+
+<Étudier>l'estimation de π par Monte-Carlo avec 10 000 points et la graine 42
+
+Les valeurs affichées décrivent une réalisation aléatoire particulière. Un encadrement de l'erreur de simulation exigerait une étude probabiliste supplémentaire.
+
+<page suivante h0>Chaînes de Markov finies
+
+<h1>Du premier état à la loi stationnaire
+
+Une machine est disponible (état 1) ou en révision (état 2). Chaque ligne donne les probabilités du lendemain à partir de l’état du jour. La machine est disponible au départ.
+
+<Soit>P une matrice définie par {
+	0,75 ; 0,25
+	0,5 ; 0,5
+}
+<Étudier>la chaîne de Markov de matrice de transition P, au rang 3 depuis l'état 1
+
+Après trois transitions, la probabilité de disponibilité vaut 43/64. À long terme elle tend vers 2/3. La première quantité dépend de l’état de départ.
+
+<h1>Une loi stationnaire et une alternance
+
+<Soit>Q une matrice définie par {
+	0 ; 1
+	1 ; 0
+}
+<Étudier>la chaîne de Markov de matrice de transition Q, au rang 3 depuis l'état 1
+
+La loi uniforme reste fixe si on la choisit au départ. En partant de l’état 1, on est en revanche certain de se trouver dans l’état 2 aux rangs impairs et dans l’état 1 aux rangs pairs.
+
+<h1>Deux états absorbants
+
+<Soit>R une matrice définie par {
+	0 ; 1/4 ; 3/4
+	0 ; 1 ; 0
+	0 ; 0 ; 1
+}
+<Étudier>la chaîne de Markov de matrice de transition R
+
+Depuis le premier état, on rejoint en un pas l’une des deux classes fermées. Toute répartition de la masse entre les états 2 et 3 est stationnaire.
+
+<page suivante h0>Lois discrètes et plans de tirage
+
+<h1>Répéter des essais
+
+Une pièce donne un succès avec une probabilité de 0,3. Pour un seul essai, la variable de Bernoulli vaut 1 en cas de succès et 0 sinon.
+
+<Calculer>la probabilité que X = 1 pour la loi de Bernoulli(0,3)
+
+Avec une probabilité de succès de 0,25 à chaque essai indépendant, le premier succès arrive au deuxième essai avec une probabilité de 0,1875.
+
+<Calculer>la probabilité que X = 2 pour la loi géométrique(0,25)
+
+Une expérience différente s’arrête au troisième succès. Avec une pièce équilibrée, la probabilité de compter de un à quatre échecs inclus vaut 83/128.
+
+<Calculer>la probabilité que 1 ⩽ X ⩽ 4 pour la loi binomiale négative(3 ; 0,5)
+
+<h1>Prélever sans remise
+
+Un lot contient 20 pièces, dont 7 marquées. On en prélève 5 au hasard sans remise. La probabilité d’obtenir exactement 2 pièces marquées vaut environ 0,387384. Le diagramme en bâtons situe cet événement parmi les autres issues.
+
+<Calculer>la probabilité que X = 2 pour la loi hypergéométrique(20 ; 7 ; 5)
+<Tracer>les masses de la loi hypergéométrique(20 ; 7 ; 5)
+
+<page suivante h0>Lois continues pour le supérieur
+
+<h1>Seuils, densités et dispersion
+
+Pour une statistique de Fisher à 5 et 12 degrés de liberté, le quantile d’ordre 0,95 est voisin de 3,106.
+
+<Déterminer>le quantile d'ordre 0,95 de la loi de Fisher-Snedecor(5 ; 12)
+
+Une durée suit une loi gamma de forme 2 et d’échelle 3 heures. En 6 heures, sa densité vaut environ 0,090224 par heure. Pour une petite largeur autour de 6, l’aire sous la courbe donne la probabilité de l’intervalle correspondant.
+
+<Calculer>la densité en 6 pour la loi gamma(2 ; 3)
+
+La variable bêta ci-dessous prend ses valeurs dans [0 ; 1] et son espérance vaut 0,4. Pour la variable log-normale, les paramètres 0 et 1 décrivent le logarithme naturel de la mesure.
+
+<Calculer>l'espérance de la loi bêta(2 ; 3)
+<Calculer>la variance de la loi log-normale(0 ; 1)
+
+<h1>Durée de vie et valeurs extrêmes
+
+Avec une durée de vie de Weibull de forme 2 et d’échelle 3, la probabilité de dépasser 3 unités de temps vaut environ 0,367879.
+
+<Calculer>la probabilité que X > 3 pour la loi de Weibull(2 ; 3)
+<Tracer>la densité de la loi de Weibull(2 ; 3)
+
+La loi de Cauchy centrée d’échelle 1 a pour troisième quartile 1. Sa moyenne théorique est indéfinie. Reprendre la même graine permet de comparer exactement les mêmes tirages.
+
+<Déterminer>le quantile d'ordre 0,75 de la loi de Cauchy(0 ; 1)
+<Étudier>la simulation de 2 000 tirages de la loi de Cauchy(0 ; 1) avec la graine 42
+
+<page suivante h0>Préparer une étude de puissance
+
+<h1>Détecter un changement de marge
+
+On relève un changement de marge dans chacun de plusieurs magasins indépendants. Pour préparer l’étude, on suppose que l’effet moyen à détecter vaut un demi-écart-type des changements individuels. Le test bilatéral de Student porte sur une seule série de changements. Le seuil est fixé à 5 %.
+
+<Calculer>la puissance du test de Student à un échantillon pour un effet standardisé de 0,5 et un effectif de 30, au seuil de 5 %, avec une alternative bilatérale
+
+Avec 30 magasins, le modèle donne une probabilité de rejet voisine de 75,4 % lorsque l’effet supposé est présent. Le nombre nécessaire pour atteindre 80 % s’obtient directement.
+
+<Déterminer>l'effectif minimal du test de Student à un échantillon pour un effet standardisé de 0,5 et une puissance de 80 %, au seuil de 5 %, avec une alternative bilatérale
+
+Il faut 34 magasins. Refaire l’expérience par simulation avec un effectif de 30 permet d’observer l’incertitude de Monte-Carlo autour du résultat analytique.
+
+<Étudier>la puissance par simulation du test de Student à un échantillon pour un effet standardisé de 0,5 et un effectif de 30, au seuil de 5 %, avec une alternative bilatérale, sur 20 000 répétitions avec la graine 42
+
+<h1>Planifier deux campagnes de taille égale
+
+Une entreprise prépare un nouvel essai A/B avec attribution aléatoire des destinataires aux campagnes. Avant de recueillir les réponses, elle retient comme scénario un taux de 42 % pour la première campagne et de 34 % pour la seconde. Elle souhaite détecter cet écart de 8 points avec une puissance de 80 % et un seuil bilatéral de 5 %.
+
+<Déterminer>l'effectif minimal par groupe du test de deux proportions pour des proportions de 0,42 et 0,34 et une puissance de 80 %, au seuil de 5 %, avec une alternative bilatérale
+
+Le calcul approché donne 577 personnes dans chaque groupe, soit 1 154 au total. Avec seulement 200 personnes par groupe, comparer la puissance analytique à la fréquence de rejet de la simulation binomiale.
+
+<Calculer>la puissance du test de deux proportions pour des proportions de 0,42 et 0,34 et un effectif de 200 par groupe, au seuil de 5 %, avec une alternative bilatérale
+<Étudier>la puissance par simulation du test de deux proportions pour des proportions de 0,42 et 0,34 et un effectif de 200 par groupe, au seuil de 5 %, avec une alternative bilatérale, sur 20000 répétitions avec la graine 42
+
+<page suivante h0>Deux produits dans un panier
+
+Deux produits X et Y sont vendus à l’unité. Dans ce modèle fictif, chaque client choisit exactement un des deux produits. Trois clients sur quatre choisissent X. Un client qui n’achète pas Y achète donc X avec certitude.
+
+<Calculer>les espérances conditionnelles de X et Y {
+	valeurs de X : [0 ; 1]
+	valeurs de Y : [0 ; 1]
+	probabilités : [0 ; 1/4 | 3/4 ; 0]
+}
+
+<Dresser>la loi de la somme de X et Y {
+	valeurs de X : [0 ; 1]
+	valeurs de Y : [0 ; 1]
+	probabilités : [0 ; 1/4 | 3/4 ; 0]
+}
+
+Dans cette population, X + Y vaut toujours 1. Pour étudier deux achats indépendants ayant les mêmes taux marginaux, on change d’hypothèse. Les probabilités de vendre 0, 1 ou 2 unités deviennent alors 3/16, 5/8 et 3/16. Le nombre moyen d’unités vendues vaut 1 dans les deux modèles.
+
+<Dresser>la loi de la somme des variables indépendantes X et Y {
+	valeurs de X : [0 ; 1]
+	valeurs de Y : [0 ; 1]
+	probabilités de X : [1/4 ; 3/4]
+	probabilités de Y : [3/4 ; 1/4]
+}
+
+<page suivante h0>De la réflexion à l’achat
+
+À chaque visite, un client en réflexion reste dans cet état avec probabilité 1/2, achète avec probabilité 1/4 ou renonce avec probabilité 1/4. Les états 2 et 3 représentent respectivement l’achat et l’abandon. Une fois la décision prise, le parcours s’arrête.
+
+<Soit>T une matrice définie par {
+	1/2 ; 1/4 ; 1/4
+	0 ; 1 ; 0
+	0 ; 0 ; 1
+}
+
+<Étudier>l'atteinte des états 2 et 3 dans la chaîne de Markov de matrice de transition T
+
+<Étudier>l'absorption de la chaîne de Markov de matrice de transition T
+
+<Tracer>le graphe pondéré de la chaîne de Markov de matrice de transition T
+
+<Étudier>l'atteinte de l'état 2 dans la chaîne de Markov de matrice de transition T
+
+Au départ de l’état 1, une décision finit par être prise avec probabilité 1, au bout de deux visites en moyenne. L’achat final a une probabilité de 1/2. Si la seule cible est l’achat, le temps moyen inconditionnel est infini car certains clients renoncent définitivement.
+
+<page suivante h0>Fonctions génératrices et caractéristiques
+
+Une fonction génératrice des probabilités code les masses d’une variable à valeurs dans les entiers naturels. Pour un nombre de commandes de loi de Poisson de moyenne 3, elle vaut exp(3(z − 1)). Pour le rang du premier succès d’une loi géométrique de paramètre 1/2, sa valeur en z = 1/2 est 1/3.
+
+<Calculer>la fonction génératrice des probabilités de la loi de Poisson(3)
+
+<Calculer>la fonction génératrice des probabilités de la loi géométrique(0,5) en z = 0,5
+
+La fonction caractéristique se définit pour tout réel t. Sa valeur en 0 vaut 1. Pour une variation de stock discrète pouvant valoir −1, 0 ou 1 avec probabilités 1/4, 1/2 et 1/4, elle s’annule en π.
+
+<Calculer>la fonction caractéristique de la loi normale(2 ; 1) en t = 0,5
+
+<Calculer>la fonction caractéristique de la loi finie de valeurs [-1 ; 0 ; 1] et de probabilités [0,25 ; 0,5 ; 0,25] en t = π
+
+<page suivante h0>Le cours, tiré du corpus
+
+Lorsqu’un temps d’attente suit une loi exponentielle, le temps restant après une attente de durée donnée suit encore la même loi.
+
+<Énoncer>Loi exponentielle
+
+<Énoncer>Absence de mémoire de la loi exponentielle
+<Démontrer>Absence de mémoire de la loi exponentielle, au niveau terminale
+
+Pour deux variables de variances finies, la variance de leur somme fait intervenir leur covariance. Si deux comptages sont indépendants, la fonction génératrice de leur somme s’obtient en multipliant leurs fonctions génératrices.
+
+<Énoncer>Variance d’une somme de deux variables aléatoires
+<Démontrer>Variance d’une somme de deux variables aléatoires, au niveau licence 1
+
+<Énoncer>Fonction génératrice d’une somme de variables indépendantes
+<Démontrer>Fonction génératrice d’une somme de variables indépendantes, au niveau licence 2
+
+<page suivante h1>Compter des essais ou mesurer une durée
+
+Avec une probabilité de succès de 1/4 par essai indépendant, un premier succès au deuxième essai correspond à un échec suivi d'un succès. Sa probabilité vaut $(3/4) × (1/4) = 3/16$.
+
+<Énoncer>Loi géométrique
+
+Une durée de vie continue peut suivre une loi de Weibull. Pour la forme 2 et l'échelle 3 du chapitre sur les lois continues, la probabilité de dépasser 3 vaut $exp(-1)$.
+
+<Énoncer>Loi de Weibull
+
+<page suivante h1>Choisir une loi pour une proportion ou un montant
+
+Une loi bêta de paramètres 2 et 3 modélise une proportion entre 0 et 1. Son espérance vaut 2/5.
+
+<Énoncer>Loi bêta
+
+Pour modéliser un montant strictement positif dont le logarithme naturel suit une loi normale, on utilise une loi log-normale. Si ce logarithme a pour moyenne 0 et pour écart-type 1, la médiane du montant vaut 1 et son espérance vaut $exp(1/2)$.
+
+<Énoncer>Loi log-normale
+
+<page suivante h1>Une médiane sans espérance
+
+Une loi de Cauchy centrée et d'échelle 1 a pour médiane 0 et pour troisième quartile 1. Sa densité est symétrique, mais son espérance est indéfinie. Ces quantiles gardent donc un sens pour interpréter la simulation du chapitre sur les valeurs extrêmes.
+
+<Énoncer>Loi de Cauchy

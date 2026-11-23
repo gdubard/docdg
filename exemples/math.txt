@@ -4,6 +4,7 @@ document {
     taille: 11;
     interligne: 1,4;
     niveau: quatrième;
+    corpus: "";
 }
 
 soit volume un style défini par <bleu marine gras 19 pt au centre>

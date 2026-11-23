@@ -181,6 +181,8 @@ La valeur absolue s'écrit entre barres et la partie entière se note $E(x)$. At
 
 <Résoudre>l'équation |x - 2| = 3
 
+<Résoudre>l'inéquation |x - 2| ⩽ 3
+
 <Soit>pe une fonction définie par pe(x) = E(x)
 
 <Calculer>l'image de 2,7 par pe
@@ -356,11 +358,11 @@ Une chaîne suspendue par ses deux extrémités, à la même hauteur, prend une 
 Le polynôme de Lagrange passe exactement par n points donnés ; la spline cubique aussi, mais par morceaux. Sur des points équidistants de la fonction de Runge 1/(1 + 25x²), les deux se séparent spectaculairement.
 
 <h2>Le phénomène de Runge
-<Tracer>l'interpolation des données {(-1;0,0385) (-0,8;0,0588) (-0,6;0,1) (-0,4;0,2) (-0,2;0,5) (0;1) (0,2;0,5) (0,4;0,2) (0,6;0,1) (0,8;0,0588) (1;0,0385)} par le polynôme de Lagrange, en x = 0,95
+<Tracer>l'interpolation des données {(-1;0,0385) ; (-0,8;0,0588) ; (-0,6;0,1) ; (-0,4;0,2) ; (-0,2;0,5) ; (0;1) ; (0,2;0,5) ; (0,4;0,2) ; (0,6;0,1) ; (0,8;0,0588) ; (1;0,0385)} par le polynôme de Lagrange, en x = 0,95
 	<remarque>Près des bords, le polynôme de degré 10 oscille violemment : en x = 0,95, il vaut près de 2 quand la fonction vaut 0,04. Augmenter le nombre de points équidistants aggrave l'écart au lieu de le réduire.
 
 <h2>La spline cubique sur les mêmes points
-<Tracer>l'interpolation des données {(-1;0,0385) (-0,8;0,0588) (-0,6;0,1) (-0,4;0,2) (-0,2;0,5) (0;1) (0,2;0,5) (0,4;0,2) (0,6;0,1) (0,8;0,0588) (1;0,0385)} par une spline cubique, en x = 0,95
+<Tracer>l'interpolation des données {(-1;0,0385) ; (-0,8;0,0588) ; (-0,6;0,1) ; (-0,4;0,2) ; (-0,2;0,5) ; (0;1) ; (0,2;0,5) ; (0,4;0,2) ; (0,6;0,1) ; (0,8;0,0588) ; (1;0,0385)} par une spline cubique, en x = 0,95
 	<remarque>Formée de polynômes de degré 3 raccordés avec leurs deux premières dérivées, la spline reste proche de la fonction sur tout l'intervalle.
 
 <page suivante h1>Fonctions spéciales

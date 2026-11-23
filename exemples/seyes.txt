@@ -1,4 +1,6 @@
 document {
+    seyès: Marelle;
+    décalage: 100;
     orientation: portrait;
     marges: 10;
     espacements: 4;

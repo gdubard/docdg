@@ -21,7 +21,7 @@ La licence 1 à la licence 3, PCSI, PC, MPSI et MP : les outils du supérieur et
 <Déterminer>la nature de la série de terme général 1/n^2
 ```
 
-Intégrales en forme close, impropres avec nature et valeur, équivalents en un point ou en $\pm\infty$ (notation $\sim$), séries avec convergence prouvée et somme quand elle existe ($\pi^2/6$…).
+Intégrales en forme close, impropres avec nature et valeur, équivalents en un point ou en $\pm\infty$ (notation $\sim$), séries avec convergence prouvée et somme quand elle existe ($\pi^2/6$…). Sans somme ni primitive en forme close, docdg conclut par comparaison à une série ou à une intégrale de Riemann ; quand le calcul n'établit ni la convergence ni la divergence, il le dit au lieu de conclure.
 
 ```docdg
 <Soit>M une matrice définie par {
@@ -39,7 +39,7 @@ Intégrales en forme close, impropres avec nature et valeur, équivalents en un 
 <Calculer>le projeté orthogonal de a sur b
 ```
 
-$\mathrm{Ker}$ et $\mathrm{Im}$ en $\mathrm{Vect}(\dots)$, $\chi_M$ factorisé, $\pi_M$ vérifié par annulation, trigonalisation $M = PTP^{-1}$ (avec signalement quand $T$ est en fait diagonale), Gram-Schmidt exact en dimension quelconque.
+$\mathrm{Ker}$ et $\mathrm{Im}$ en $\mathrm{Vect}(\dots)$, $\chi_M$ factorisé, $\pi_M$ vérifié par annulation, trigonalisation $M = PTP^{-1}$ (avec signalement quand $T$ est en fait diagonale), Gram-Schmidt exact en dimension quelconque. Pour une matrice, `la norme de A` est la norme de Frobenius, calculée sur tous les coefficients ; les normes subordonnées 1 et ∞ sont définies dans [Notations du supérieur](docs/NOTATIONS_SUPERIEUR.md).
 
 ```docdg
 <Effectuer>la division euclidienne de X^3 + 2X - 1 par X^2 + 1
@@ -59,7 +59,7 @@ Les polynômes formels parlent la langue du chapitre : quotient et reste, PGCD u
 <Déterminer>les points critiques de psi
 ```
 
-Les fonctions de plusieurs variables se posent naturellement ; les points critiques viennent avec leur nature par la hessienne (minimum, maximum, point col).
+Les fonctions de plusieurs variables se posent naturellement ; les points critiques viennent avec leur nature par la hessienne (minimum, maximum, point col), en toute dimension ; une famille de points critiques est donnée avec son paramètre, et docdg dit quand la hessienne ne permet pas de conclure.
 
 ```docdg
 <Soit>f, g et F 3 fonctions définies par f(x) = x², g(x) = x et F(p) = 1/(p² + 1)
@@ -174,8 +174,8 @@ L'image d'un quadrillage montre la géométrie de la transformation — les deux
 ```docdg
 <Étudier>la loi de densité f(x) = 3*x^2 sur [0 ; 1]
 <Étudier>la loi de densité f(x) = exp(-x) sur [0 ; +infini]
-<Calculer>la probabilité d'être entre -1 et 1 pour la loi normale d'espérance 0 et d'écart type 1
-<Tracer>la densité de la loi normale d'espérance 0 et d'écart type 1
+<Calculer>la probabilité que −1 ⩽ X ⩽ 1 pour la loi normale d'espérance 0 et d'écart-type 1
+<Tracer>la densité de la loi normale d'espérance 0 et d'écart-type 1
 <Tracer>l'illustration du théorème central limite avec la somme de 8 dés
 ```
 
@@ -255,7 +255,7 @@ diagramme de Voronoï pour l'informatique des classes préparatoires
 dendrogramme pour l'analyse de données (`statistiques-probabilites.txt`).
 
 ```docdg
-<Tracer>le dendrogramme des points {(0;0) (1;0,2) (0,3;1) (5;5) (5,5;4,8) (4,9;5,6) (9;0) (9,5;0,4)} en 3 groupes
+<Tracer>le dendrogramme des points {(0;0) ; (1;0,2) ; (0,3;1) ; (5;5) ; (5,5;4,8) ; (4,9;5,6) ; (9;0) ; (9,5;0,4)} en 3 groupes
 ```
 
 ### Constantes physiques et fonctions spéciales
@@ -314,7 +314,7 @@ cours d'analyse numérique. Le phénomène de Runge se montre en une phrase, et
 la spline cubique sur les mêmes points en une autre (`analyse.txt`).
 
 ```docdg
-<Tracer>l'interpolation des données {(-1;0,0385) (-0,6;0,1) (-0,2;0,5) (0;1) (0,2;0,5) (0,6;0,1) (1;0,0385)} par le polynôme de Lagrange
+<Tracer>l'interpolation des données {(-1;0,0385) ; (-0,6;0,1) ; (-0,2;0,5) ; (0;1) ; (0,2;0,5) ; (0,6;0,1) ; (1;0,0385)} par le polynôme de Lagrange
 ```
 
 ### Sciences de l'ingénieur
@@ -355,3 +355,49 @@ l'électronique en classes préparatoires.
 
 La marge de phase de cette boucle ouverte, à peine plus d'un degré,
 annonce un système bouclé tout juste stable.
+
+
+## Lois conjointes et expériences aléatoires reproductibles (DocDG 4.1, S1)
+
+La loi d'un couple de variables aléatoires discrètes se décrit par une matrice de probabilités. Les sommes par lignes et colonnes donnent les lois marginales. La loi conditionnelle n'est définie que lorsque la probabilité de l'événement conditionnant est strictement positive.
+
+```docdg
+<Dresser>la loi conjointe de X et Y {
+    valeurs de X : [0 ; 1]
+    valeurs de Y : [0 ; 1]
+    probabilités : [0,1 ; 0,2 | 0,3 ; 0,4]
+}
+```
+
+Pour illustrer la loi des grands nombres, la commande suivante affiche l'évolution de la moyenne empirique et la comparaison des fréquences et de la loi théorique. La graine explicite garantit la répétabilité des figures.
+
+```docdg
+<Étudier>la simulation de 10 000 tirages de la loi binomiale de paramètres 20 et 0,3 avec la graine 42
+<Étudier>l'estimation de π par Monte-Carlo avec 10 000 points et la graine 42
+```
+
+La documentation détaillée, les cinq lois simulables et l’estimation de π figurent dans [`docs/STATISTIQUES_PROBABILITES_S1.md`](docs/STATISTIQUES_PROBABILITES_S1.md) et le recueil `exemples/probabilites.txt`. Une simulation est un outil d'exploration, non une démonstration de convergence.
+
+## Inférence statistique en DocDG 4.1 — S2
+
+Les estimateurs, l’intervalle de Wilson, le bootstrap percentile de la médiane, les tests exacts de proportion, de Fisher, de Mann–Whitney et de Wilcoxon se trouvent dans `exemples/statistiques.txt`. Les hypothèses et limites sont détaillées dans `docs/STATISTIQUES_INFERENCE_S2.md`.
+
+### Statistiques multivariées — DocDG 4.1, S3
+
+DocDG propose la régression linéaire multiple avec diagnostics des résidus et des points influents, l'ACP centrée-réduite par SVD et l'analyse de variance (ANOVA) à un facteur. Les commandes en français, les hypothèses d'application, les limites numériques et les exemples sont décrits dans [`docs/STATISTIQUES_MULTIVARIEES_S3.md`](docs/STATISTIQUES_MULTIVARIEES_S3.md). Les démonstrations correspondantes figurent dans `exemples/statistiques.txt`.
+
+### Probabilités et statistiques avancées · S4
+
+Le [guide S4](docs/STATISTIQUES_PROBABILITES_S4.md) propose de distinguer loi stationnaire et convergence, de comparer les estimateurs de variance et de prévoir deux trimestres après ajustement d’une tendance saisonnière.
+
+### Lois et description des séries · S5
+
+Pour un TD de L1–L2, faire comparer deux plans de tirage, avec et sans remise, dans `probabilites.txt`. Dans `statistiques.txt`, relier le 90e centile au rang d’une observation, puis reconstruire la courbe de Lorenz et son indice de Gini à partir de quatre montants. [Guide de syntaxe et de calcul S5](docs/LOIS_ET_DESCRIPTION_S5.md).
+
+### Inférence et prévision · S6
+
+Pour un TD, estimer les ventes à prix et promotion fixés, puis expliquer pourquoi prévoir un nouveau magasin donne une fourchette plus large qu’estimer une moyenne. Un second exercice porte sur le nombre de magasins à inclure dans une future étude de marge. [Commandes, hypothèses et exemples S6](docs/TESTS_ET_MODELES_S6.md).
+
+### Couples, Markov et estimation · S7
+
+Un TD met en regard la somme de deux achats dépendants et la convolution sous indépendance avec les mêmes lois marginales. [Commandes, conventions et exemples](docs/PROBABILITES_ESTIMATION_S7.md).

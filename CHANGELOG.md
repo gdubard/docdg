@@ -1,3 +1,914 @@
+## 4.1 — Fin de l’audit croisé : bandeau, nombres lus, décimaux exacts, inéquations
+
+Tout ce que l’audit croisé du 22 novembre laissait ouvert est corrigé, et l’application a été compilée et testée avec ces corrections. La recherche systématique qui a suivi a trouvé d’autres réponses fausses sans alerte, corrigées elles aussi.
+
+**Un nombre écrit avec ses milliers garde sa valeur.** `<Calculer>30 % de 4 000` rendait 1,2 : la lecture s’arrêtait à l’espace. Rejoué sur les modèles du bandeau, « 4 000 » était lu autrement que « 4000 » dans 136 essais sur 399. La lecture se fait désormais en un seul endroit, pour toutes les commandes, avec l’espace ordinaire, l’insécable ou la fine ; un titre, un texte entre guillemets et le corps d’un cadre ou d’un tableau ne sont pas touchés. Une condition de table et la largeur d’une image les lisent aussi : `où Absences > 4 000`, « avec une largeur de 1 200 mm » (lue 1 mm). Rejoué après correction, l’essai ne trouve plus aucun écart.
+
+**Deux nombres accolés ne se multiplient plus en silence.** `<Calculer>4000 000 - 458` rendait −458, `<Calculer>12 34 + 1` rendait 409 et `<Développer>(x + 4000 000)(x - 1)` rendait x² − x : deux nombres séparés par une espace, hors des tranches de trois chiffres, étaient lus comme un produit. La commande est refusée avec les deux écritures possibles : « le nombre s’écrit « 4 000 000 », le produit « 4000 × 000 » ». Un produit par juxtaposition d’un nombre et d’une lettre, `2 x`, se lit comme avant.
+
+**Géométrie et conversions.** `<Convertir>125 m en km` rendait 0,12 km et `<Convertir>3 g en kg` rendait 0 kg : une conversion est maintenant une égalité exacte (0,125 km, 0,003 kg, 0,000000001 m³). Une mesure reprend ses données sans les arrondir, et un résultat sans π s’écrit exactement : le pavé de 0,5 × 0,25 × 0,125 mesure 0,015625. Les longueurs décimales sont lues : « avec AB = 1,5 et BC = 2 » était lu AB = 1, et le triangle de côtés 1,5, 2 et 2,5 était déclaré non rectangle. Les nombres d’une mesure ou d’une conversion s’écrivent par tranches de trois chiffres.
+
+**Décimaux exacts.** Un décimal saisi est un nombre exact : le calcul reste formel, et un résultat décimal reprend l’écriture décimale des données. `<Résoudre>l'équation 2x + 1 = 7,5` donne 3,25, la dérivée de 0,5x² − 2x + 1,5 s’écrit x − 2 au lieu de x − 2,0, les zéros s’écrivent {1 ; 3} au lieu de {1,0 ; 3,0}. Un résultat qui n’est pas décimal garde sa forme exacte : dans `exemples/physique-chimie.txt`, la bille retombe à t = 200/49, au lieu de 4,08163265306122. Le PGCD et la division euclidienne de 7,5 et 60 sont refusés.
+
+**Inéquations.** `<Résoudre>l'inéquation 2x - 4 > 0` rendait l’ensemble vide. Une inéquation à une inconnue se résout dans ℝ et rend ses solutions en intervalles, doubles inégalités comprises ; une inéquation périodique est refusée. Le bandeau en propose deux modèles et compte 623 insertions. `x²` et `(x + 1)³` se lisent dans toutes les commandes.
+
+**Écritures du supérieur.** `<Calculer>M^3`, `M³` et `M^(-1)` valent « la puissance 3 de M » et l’inverse. Une suite se déclare aussi avec ses indices, `u_0 = 1 et u_(n+1) = 2u_n + 1`. Une loi qui reçoit trop ou trop peu de paramètres le dit (« la loi de Poisson attend un paramètre numérique : elle en reçoit 2 »). « si le reste de k par 2 vaut 0 » explique que l’opération s’écrit sans article. Les comptes d’une simulation s’écrivent « 10 000 tirages ».
+
+**La sauvegarde ne tronque plus jamais un document.** Quand le fichier provisoire ne pouvait être créé ou renommé, l’enregistrement se rabattait sur une écriture directe, qui pouvait tronquer l’original si elle s’interrompait. Ce repli est supprimé : en cas d’échec, le fichier garde sa version précédente, l’alerte le dit, et le texte reste dans l’éditeur pour un nouvel essai ou « Enregistrer sous ». L’export PDF passe par le même remplacement atomique.
+
+**Le banc des trajets d’aperçu mesure vraiment.** Lancé par `cargo test --release -p docdg mesure_trajet -- --ignored --nocapture`, il prenait l’option `--ignored` pour un filtre de nom d’exemple, n’en mesurait aucun et se déclarait réussi. Le filtre ne se lit plus qu’après `docdg --mesure` (ou dans `DOCDG_MESURE`), et un banc qui ne mesure aucun exemple échoue en nommant le filtre.
+
+**Bandeau et application.** Une couleur choisie par la recherche entoure la sélection au lieu de la remplacer. « sans numéro » attend un niveau de titre. Un préalable n’est plus omis quand la déclaration se trouve dans un bloc refermé. La palette porte ⊄. Le filtre Type du Corpus propose les genres que le Corpus contient, et les catégories de démonstrations pour les démonstrations. Quand un titre est aussi la clé d’une autre fiche, le titre exact l’emporte. Les ressources d’aperçu qu’un document n’emploie plus sont retirées du cache. L’enregistrement automatique part 150 ms après la dernière frappe, au lieu de 900 ms, et l’historique d’annulation est borné à 64 Mio de texte.
+
+**Corpus, libellés, données.** L’énoncé « Loi des grands nombres » porte ses hypothèses. « Non-existence », « pyramide à base carrée de côté 4 cm », l’indépendance et la formule de Bayes avec leurs hypothèses. Une colonne SQLite qui mêle texte et binaire garde toutes ses valeurs.
+
+**Démarrage du calcul et CSV.** Une demande seule n’appelle plus qu’un processus de calcul, au lieu d’un par cœur jusqu’à quatre. Les sous-modules de SciPy se chargent quand aucune demande n’attend : sur la machine de mesure (Linux, 2 cœurs), le calcul formel est prêt en 1,5 s au lieu de 2,1 s, et le premier calcul statistique arrive au même moment qu’avant. La lecture d’un CSV n’alloue plus par ligne ni par décimal : le découpage d’un million de lignes passe de 770 ms à 235 ms, la lecture de deux millions de décimaux de 280 ms à 150 ms.
+
+Les 26 PDF de `references-pdf/` sont réexportés, `probabilites.pdf` et `statistiques.pdf` compris. 2 177 tests réussissent, dont les 344 de l’application et 23 tests d’exactitude à valeur affirmée. [Rectificatif de l’audit](docs/AUDIT_RC1_4_1.md#rectificatif-du-23-novembre-2026)
+
+## 4.1 — Après l’audit croisé de la RC1 : exactitude des résultats, patrons, sauvegarde
+
+Ces corrections répondent à l’audit de prépublication du 22 novembre 2026, dont chaque constat repris ici a été reproduit par le moteur complet avant d’être corrigé. Toutes portaient sur des réponses fausses composées sans alerte.
+
+**Analyse.** Une limite demandée sans côté se prend dans le domaine de la fonction et n’est donnée que si les deux côtés s’accordent : pour 1/x en 0, docdg écrit les deux limites et conclut que la limite n’existe pas. Un équivalent garde le terme dominant dans la variable locale (x − 1 en 1, x¹² en 0) et il est vérifié par la limite du quotient. Un développement limité n’est écrit que s’il existe. La nature d’une série ou d’une intégrale impropre distingue la convergence établie, la divergence établie et le calcul non concluant : l’absence de somme ou de primitive en forme close ne fait plus conclure à la divergence. Les points critiques gardent leurs familles de solutions et se classent par le signe des valeurs propres de la hessienne, en toute dimension ; « cas douteux » devient « la hessienne ne permet pas de conclure ».
+
+**Probabilités et statistique.** Une probabilité de loi normale n’est plus jamais négative : des bornes dans le désordre donnent un événement impossible, de probabilité 0, un écart-type négatif ou nul est refusé, et « 1 000 » se lit mille. L’intervalle de confiance porte sur la grandeur demandée : la variance et l’écart-type ont leur intervalle par la loi du χ², la médiane renvoie au rééchantillonnage. Le khi-deux d’adéquation refuse un effectif négatif ou fractionnaire, des probabilités qui ne somment pas à 1 et des effectifs théoriques d’un autre total. Une série constante reçoit un refus en français au lieu de « réponse illisible du moteur SciPy ». La phrase de décision écrit « 12,4 » et « 1 000 000 » au lieu de `12{,}4` et d’une puissance de dix en LaTeX. Une loi nommée en prose avec « écart-type » est comprise des transformées.
+
+**Géométrie.** Un patron qui tient dans la page s’imprime en vraie grandeur et le dit ; un patron trop grand est réduit et porte son échelle. Le carré du patron d’un cube de 3 cm mesure 30 mm, au lieu de 24. Une dimension en millimètres ou en décimètres est convertie, au lieu d’être lue comme des centimètres. L’équateur de la sphère reste dans sa silhouette.
+
+**Sauvegarde.** Nouveau et Ouvrir ne quittent plus un document dont l’écriture échoue : le texte reste à l’écran avec l’alerte, et « Enregistrer sous » le met à l’abri. Le résultat tardif d’une écriture ne touche que son document.
+
+Treize tests d’intégration (`tests/exactitude.rs`), six tests unitaires du moteur et deux de l’application affirment désormais ces valeurs. [Rectificatif de l’audit](docs/AUDIT_RC1_4_1.md#rectificatif-du-23-novembre-2026)
+
+## 4.1 — Audit de la RC1 : loi normale, frappe longue, langue du supérieur
+
+Une loi normale dont l’espérance ou l’écart-type est décimal, négatif ou fractionnaire est désormais lue en entier : « la loi normale d’espérance 0,5 et d’écart-type 1,5 » était calculée comme 𝒩(0 ; 1²), sans alerte. Le résultat reste exact (`erf`) avec des paramètres décimaux, et « la probabilité que −1 ⩽ X ⩽ 1 pour la loi normale d’espérance 0 et d’écart-type 1 » donne la même rédaction que « la probabilité d’être entre −1 et 1 ».
+
+La préparation d’un document ne croît plus avec le carré de sa longueur : un texte de 1,7 Mo se prépare en 1,6 s au lieu de 13,6 s sur la machine de mesure. Le cache de segments est borné à 128 Mio et élague les entrées les moins récemment lues : 1 600 frappes dans un tableau de 400 lignes occupent 164 Mio au lieu de 2,9 Gio. L’empreinte de l’environnement est calculée une fois par état partagé.
+
+Le moteur comprend « le cube d’arête 3 cm », « la sphère de rayon 3 cm » et les autres solides nommés, « le centile d’ordre 90 », « le coefficient d’asymétrie », « le coefficient d’aplatissement », les milliers groupés (« 10 000 tirages »), `<Étudier>les variations de f` et `<Effectuer>l’analyse en composantes principales`. `<Insérer>dans t { … }` n’est plus pris pour une image. Une demande adressée au mauvais verbe reçoit la forme corrigée (« cette demande s’écrit « <Déterminer>… » »), et aucune erreur de bibliothèque ne paraît plus en anglais.
+
+Le manuel, les guides, les exemples et le bandeau emploient ces formes ; quatre blocs du manuel qui s’imprimaient tels quels sont corrigés. Le bandeau comptait alors 621 modèles, tous exécutés sans alerte (623 depuis l’entrée précédente). [Rapport d’audit](docs/AUDIT_RC1_4_1.md)
+
+## 4.1 — Fiches personnelles du Corpus sans moteur de base de données
+
+Les fiches personnelles et leur historique ne passent plus par une instance DuckDB : DocDG les garde en mémoire telles qu’il les compose et les scelle directement dans `personnel-d1.docdgp` et `journal-d1.docdgp`. Sur la machine de mesure, enregistrer une fiche puis relire le Corpus passe de 192 ms à 25 ms, masquer une fiche de 165 ms à 13 ms. La liste du panneau Corpus, qui ouvrait une base par ligne affichée, passe de 9,5 s à 2 ms pour 400 fiches. Un profil écrit par une version antérieure se lit tel quel et se réécrit au format courant à la première édition ; l’historique est conservé. `corpus/corpus.duckdb` reste la base de travail du projet. [Guide du Corpus](docs/CORPUS_DUCKDB_D1.md#fichiers-et-contrôles).
+
+## 4.1 — Exporter une base d’un autre système vers DuckDB
+
+Le guide des données explique comment apporter à DocDG une base tenue par PostgreSQL, MySQL, MariaDB, SQL Server, Oracle ou Access : copie directe par le client DuckDB quand une extension existe, un CSV par table sinon, sans jamais écrire de mot de passe dans le document ni dans son dossier. DocDG reste sans connexion : il lit le fichier `.duckdb` obtenu. [Apporter une base d’un autre système](docs/DONNEES_DUCKDB_D2.md#apporter-une-base-dun-autre-système).
+
+## 4.1 — Connexions DuckDB reprises d’une requête à l’autre, atelier préparé au lancement
+
+Chaque dossier de document garde ses connexions DuckDB ouvertes et les reprend d’une requête à l’autre, y compris pour les modifications de tables (`<Insérer>`, `<Mettre à jour>`, `<Supprimer>`) : les fonctions françaises n’y sont installées qu’une fois, la vue qui présente une table du document à SQL reste en place tant que cette table ne change pas, l’instruction qui analyse les requêtes est préparée une fois. Lancé avec un document, DocDG prépare l’atelier DuckDB pendant que l’interface démarre. Sur `exemples/donnees.txt`, le premier rendu passe de 250 ms à 190 ms sur la machine de mesure (Linux, 2 cœurs), et à 155 ms quand l’atelier a été préparé au lancement.
+
+Trois apports viennent de la révision D4 R4. Les statistiques et les graphiques parcourent les colonnes numériques Arrow lot par lot, sans rechercher le type de la colonne à chaque valeur. Un document qui tire au sort sans graine n’est plus repris du cache à la réouverture : ses tirages sont refaits. Le banc `mesurer_apercu_donnees` mesure le premier rendu, la répétition, l’édition d’un texte et le rendu sans cache de segments. [Guide des données](docs/DONNEES_DUCKDB_D2.md) · [Bancs](docs/MIGRATION_ET_RECETTE_D4.md#reproduire-les-contrôles-des-sources).
+
+## 4.1 — DuckDB à plein régime : un atelier par dossier, fichiers lus depuis SQL, bases SQLite, corpus sans moteur
+
+Une seule instance DuckDB sert désormais toutes les requêtes d’un dossier de document, au lieu d’une instance neuve par `<Interroger>` : les tables du document y sont versées une fois, l’analyse de chaque requête est gardée en mémoire, les modifications de tables (`<Insérer>`, `<Mettre à jour>`, `<Supprimer>`) ne sont rejouées que si leurs données changent. Sur `exemples/donnees.txt`, le premier rendu passe de 880 ms à 240 ms et les suivants de 210 ms à 11 ms sur la machine de mesure (Linux, 2 cœurs). L’application prépare l’atelier dès l’ouverture du document.
+
+Une requête lit elle-même les fichiers CSV, Parquet et JSON du dossier du document (`FROM 'ventes.parquet'`, `read_csv('notes.csv', decimal_separator = ',')`, `read_csv('mois_*.csv')`) et les joint aux tables de la base et du document ; la forme `<Interroger>les fichiers { … }` s’ajoute à `<Interroger>les tables { … }`. L’accès est verrouillé dans DuckDB même : le moteur ne lit que ce dossier. Au-delà de 512 Mio de mémoire, tris, jointures et regroupements débordent sur le disque, jusqu’à 4 Gio.
+
+Les bases SQLite (`.db`, `.sqlite`) se lisent et s’interrogent directement, sans convertisseur : leurs tables sont versées dans DuckDB à la première requête. Les personnalisations du Corpus écrites avec la 4.0 sont reprises au premier lancement, sans outil Python. Le Corpus publié s’ouvre par un index binaire scellé fabriqué à la compilation : 9 ms au lieu de 341 ms, sans lancer de moteur de base de données.
+
+« La loi exponentielle de moyenne 2 » et « la loi normale d’espérance 0 et de variance 4 » se lisent selon le nom de leurs paramètres et non selon leur rang. [Guide des données](docs/DONNEES_DUCKDB_D2.md) · [Guide du Corpus](docs/CORPUS_DUCKDB_D1.md).
+
+## 4.1 — Correctif D4 R3 pour Metal et les statistiques
+
+Le rendu Metal d’Iced utilise désormais `block2` pour les rappels du GPU. Les deux adaptations de `metal` et `wgpu-hal` sont livrées avec DocDG. Le bandeau, les exemples et les manuels emploient « écart-type » et « écarts-types ». Les commandes déjà rédigées avec « écart type » restent lisibles. [Vérifications et essai sur Mac](RAPPORT_DOCDG_4_1_D4_R3.md).
+
+## 4.1 — Correctif D4 R1 pour la compilation sur Mac
+
+La fabrication du Python scientifique reconnaît l’éditeur de liens de la chaîne Rust active et peut récupérer une copie privée vérifiée sur Mac. Les tests signalent immédiatement une fabrication incomplète. Le contrôle pédagogique du pendule indique désormais quelle expression manque et affiche le diagnostic de calcul associé. [Reprendre l’essai sur Mac](docs/MIGRATION_ET_RECETTE_D4.md#essayer-la-version-41-sur-mac).
+
+## 4.1 — Migration des données et qualification sur trois systèmes
+
+Les bases DuckDB de plus de 32 Mio peuvent être interrogées directement. Le convertisseur des anciennes données de cours fonctionne en dehors de DocDG. Les bancs du Corpus et des données analytiques enregistrent les latences et la mémoire utilisée. La recette du paquet extrait contrôle le Corpus, le calcul scientifique privé et le premier PDF. [Guide D4](docs/MIGRATION_ET_RECETTE_D4.md).
+
+## 4.1 — Lecture et statistiques par lots Arrow
+
+Dans le ruban Fichier, chaque table dispose d’un aperçu paginé. Le moteur lit les plages de lignes demandées, calcule les principaux indicateurs descriptifs par lots et écrit progressivement les fichiers Arrow et Parquet. [Guide D3](docs/DONNEES_ARROW_D3.md).
+
+## 4.1 — Requêtes de données avec DuckDB
+
+DuckDB exécute les interrogations en SQL et en français. Les tables du document conservent leurs dates, leurs booléens et leurs valeurs manquantes. Le bandeau et les exemples emploient des bases natives `.duckdb`. La page bilingue de la vitrine compare les résultats des deux syntaxes sur les mêmes mesures. [Guide D2](docs/DONNEES_DUCKDB_D2.md).
+
+## 4.1 — Première étape de la migration vers DuckDB
+
+Le chantier D1 porte sur le Corpus publié, l’édition des fiches, les personnalisations et leur journal. L’atelier se trouve dans `corpus/corpus.duckdb`. [Essai et migration des personnalisations](docs/CORPUS_DUCKDB_D1.md).
+
+## 4.1 — Corpus hybride de statistiques et probabilités
+
+Le corpus réunit 1 674 énoncés et 608 démonstrations. Les comparaisons de Tukey et l’intervalle de prévision en régression rejoignent les fiches de cours. Sept fiches explicitent les lois géométrique, bêta, de Weibull, log-normale et de Cauchy ainsi que les intervalles de Wilson et de Clopper-Pearson. Les recueils relient ces définitions aux calculs de DocDG. [Titres et niveaux](Redaction.md) · [Note de travail commune](docs/NOTE_HYBRIDE_DOCDG27.md).
+
+## 4.1 — Corpus de statistiques et probabilités après S7 R3
+
+Le corpus embarqué s’enrichit de 59 énoncés et de 6 démonstrations. Les deux recueils spécialisés se terminent par un chapitre de cours qui appelle les fiches par leur titre. Les énoncés précisent notamment les conventions des lois, la droite de Henry, l’ACP, l’indice de Gini et les conditions d’emploi du bootstrap. [Exemples d’appels](docs/PROBABILITES_ESTIMATION_S7.md#appeler-le-cours-depuis-un-document).
+
+## 4.1 — Correctif S7 R1
+
+Le bandeau réunit les objets des groupes qui partagent le même verbe dans une catégorie après filtrage par matière et par niveau. Les sélections de plus de 17 objets se parcourent par pages. Les contrôles documentaires de l’estimation et des transformées vérifient la typographie affichée. [Bilan du correctif](RAPPORT_CORRECTIF_S7_R1_DOCDG_4_1.md).
+
+## 4.1 — Chantier S7
+
+Couples discrets, atteinte et absorption des chaînes finies, graphe pondéré, fonctions génératrices et caractéristiques, méthode des moments, risque quadratique et quatre intervalles bootstrap. Dix-huit insertions accompagnent les deux recueils. La queue normale et le diagnostic de qualification S5 ont également été revus. [Guide S7](docs/PROBABILITES_ESTIMATION_S7.md).
+
+## 4.1 — Chantier S6
+
+Tests de corrélation et de distribution, Fisher pour les variances, Welch et comparaisons multiples, différence de proportions, puissance et calcul d’effectif, régression et prévision chronologique avec intervalles. Dix-sept insertions du bandeau et un TD de prévision des ventes accompagnent ces commandes. [Guide S6](docs/TESTS_ET_MODELES_S6.md).
+
+## 4.1 — Chantier S5
+
+Dix lois de probabilité et neuf modèles de statistique descriptive rejoignent le bandeau. Les deux recueils présentent les 22 nouvelles insertions. Le contrôle du catalogue intègre les groupes ajoutés depuis S3. La commande d’intervalle bootstrap de la médiane respecte désormais le niveau écrit après « confiance bootstrap à ». [Commandes et conventions](docs/LOIS_ET_DESCRIPTION_S5.md).
+
+## 4.1 — Chantier S4
+
+- Chaînes de Markov finies, classes, périodes, lois stationnaires et loi à un rang choisi. L’ancienne commande d’état stable tient compte des classes fermées multiples.
+- Estimation par maximum de vraisemblance sous quatre lois, avec traitement des maxima à la frontière.
+- Tendance, effets saisonniers additifs, corrélogramme et prévisions sur une série régulièrement espacée.
+- Trois modèles du bandeau pour le supérieur, deux recueils enrichis et un exemple de calendrier trimestriel sur fichier.
+
+## 4.1 — Chantier S2 (inférence)
+
+- Estimateurs de moyenne et dispersion, variance corrigée et erreur-type.
+- Intervalle de Wilson, intervalle bootstrap percentile de la médiane.
+- Test binomial exact, comparaison de deux proportions (z ou Fisher selon les effectifs).
+- Tests de Mann–Whitney et Wilcoxon avec diagnostics et rappel des hypothèses.
+- Moteur SciPy existant, six modèles supplémentaires du bandeau, exemples et guide.
+
+## 4.1.0 — Audit avant publication : une chaîne se cite, une notion s'écrit d'une seule façon (20 novembre 2026)
+
+Audit détaillé de la 4.1, croisé avec l'audit indépendant d'un relecteur. Le
+compte rendu complet est dans `docs/AUDIT_PUBLICATION_4_1.md`.
+
+**Une chaîne de caractères s'écrit entre guillemets, la prose ne s'écrit pas.**
+Toute valeur de programmation qui est un texte se cite ; le texte qui s'affiche,
+comme dans un traitement de texte, reste nu, `#variable` comprise.
+
+```text
+soit nom une chaîne de caractères telle que nom = "Durand"
+Le nom de cet élève est #nom.
+soit statut une chaîne de caractères telle que statut = si marié { "marié" } sinon { "célibataire" }
+soit d un dictionnaire de chaînes de caractères et d'entiers tel que d = {"CE1": 24 ; "CE2": 25}
+<Représenter>graphiquement une statistique en camembert avec les données {"Marche": 5 ; "Bus": 3}
+<Insérer>l'image "IMAGES/chat.png" avec une largeur de 30 mm
+soit clients une table telle que clients = <Lire>la table "clients" de la base "magasin.db"
+<Renommer>classe["Note"] en "Moyenne"
+```
+
+- Un mot nu là où une chaîne est attendue (déclaration, réaffectation, élément
+  d'une liste, d'une pile, d'une file ou d'un p-uplet, branche d'un `si`) est
+  refusé avec la forme corrigée ; il était jusqu'ici pris pour du texte.
+- Une clé de dictionnaire, une clé textuelle des données d'un diagramme, le
+  chemin d'une image (balise et frise), le nom d'une table lue dans une base et
+  le nouvel entête de `<Renommer>` se citent. Une clé numérique reste un nombre.
+- `d[clé]` lit par une variable textuelle déclarée, `d["clé"]` par un littéral ;
+  un nom inconnu est refusé au lieu d'être pris pour une clé.
+- La barre `|` ne sépare plus les paires d'un diagramme : le point-virgule, comme
+  dans tout dictionnaire.
+
+**Une notion, une écriture, dans le document comme dans les requêtes.**
+
+- La valeur choisie par une condition s'écrit `si … { a } sinon { b }` dans une
+  requête comme dans le langage : la forme `si … alors … sinon …` est refusée.
+- Les fonctions des requêtes prennent les noms du langage : `majuscule`,
+  `minuscule`, `élaguer`, `remplacer`, la tranche `s[a à b]` et
+  `indice de(x ; s)`, comptés à partir de 0 comme `m[0]` ; les noms composés
+  gardent leurs espaces : `écart type`, `moyenne mobile`, `partie entière`,
+  `jour de la semaine`. Les anciens noms (`majuscules`, `rogné`, `extrait`,
+  `position`, `écart_type`…) sont refusés avec le bon.
+- `remplacer(texte ; motif ; remplaçant)` rejoint les primitives du langage.
+- `l'écart type de v` est compris dans la grammaire vectorielle, comme dans
+  `<Calculer>`.
+- `soit h1 un style tel que h1 = <…>` ne déclare plus de style : seule la forme
+  `soit h1 un style défini par <…>` subsiste, tests compris.
+- Une liste de couples se sépare par le point-virgule :
+  `{(1 ; 2) ; (3 ; 4,5)}`, dans les exemples, le manuel et le bandeau.
+- `d'une largeur de` est la seule tournure de la largeur d'un filet dans le
+  manuel, les exemples et le bandeau.
+
+**Exactitude.** Un histogramme à classes d'amplitudes inégales se dessine en
+densité : l'aire, non la hauteur, est proportionnelle à l'effectif, et l'axe le
+dit.
+
+**Le bandeau.** Il propose désormais tout ce que le langage sait faire sur les
+listes et les chaînes : `insérer`, `supprimer`, `majuscule`, `minuscule`,
+`sans accents`, `élaguer`, `compacter`, `remplacer`, la lettre et la tranche,
+`joindre`, `découper`, `code`, `caractère`, `texte`, `nombre`, `quotient`,
+`reste`, `aléatoire`. La zone Instructions se range en cinq catégories : listes,
+chaînes, valeurs, tables, requêtes. Le modèle « ajouter » emploie `ajouter`, le
+modèle « caractère » en double des déclarations disparaît (il reste dans
+Saisies), les espaces de tête des modèles de calcul et la barre `|` des barres
+sont retirées.
+
+**Performances et mémoire.**
+
+- Un fichier de données lu est partagé, et non plus recopié, entre la lecture et
+  le suivi des dépendances ; un Parquet n'est plus copié avant son décodage. Le
+  pic d'un fichier de 32 Mo passe de trois tampons à un seul.
+- L'empreinte d'un fichier est calculée une fois par lecture. Le fichier reste
+  relu à chaque composition : ses octets, non sa taille ni sa date, disent s'il a
+  changé, comme pour les images.
+- Les vues se recalculent dans l'ordre de leurs dépendances.
+
+**Diagnostics.** Le refus d'une déclaration ou d'une image cite la ligne telle
+qu'elle a été écrite, et non sa forme interne. Un message d'alerte ne subit plus
+la césure : une citation comme « Durand » ne se coupe pas.
+
+## 4.1.0 — Des entêtes pour un fichier, une table pour un conteneur (20 novembre 2026)
+
+Deux façons nouvelles d'obtenir une table, décrites par la section H de
+`docs/SQL_FRANCAIS.md` (exemples 32 à 40, tests Q20 à Q25) et rejouées par
+`tests/sql_francais.rs`.
+
+```text
+soit notes une table telle que notes = <Lire>le fichier "notes_brutes.csv" avec les entêtes "id", "nom" et "note"
+soit carnet une table telle que carnet = table(prénoms ; notes)
+soit modes une table telle que modes = table(trajets) avec les entêtes "mode" et "élèves"
+```
+
+- **`avec les entêtes "a", "b" et "c"`** donne ses entêtes à un fichier CSV qui
+  n'en a pas : la première ligne reste une ligne de données. Auparavant, elle
+  était toujours prise pour des noms, et un fichier sans entêtes perdait sa
+  première ligne sans rien dire. Un entête est un texte, entre guillemets,
+  droits ou français.
+- **`avec les entêtes de la première ligne`** dit que des entêtes qui ont l'air
+  de valeurs, comme `école;2024;2025`, sont bien des entêtes.
+- **La lecture obéit à l'écriture, jamais à une estimation.** Les types ne
+  servent qu'au diagnostic : une première ligne lue comme des entêtes alors
+  qu'elle a le type des valeurs de ses colonnes, ou l'inverse, donne un
+  avertissement en orange, et la table est lue telle que l'écriture le dit.
+- **`table(…)`** convertit un conteneur en table du document : des listes de
+  même longueur (une colonne par liste, nommée comme sa variable), un
+  dictionnaire de listes (une colonne par clé), un dictionnaire de valeurs
+  (colonnes `clé` et `valeur`), une matrice ou une liste de p-uplets (entêtes
+  obligatoires).
+- **Le contrat de conversion** : les types viennent de la déclaration ; un
+  conteneur vide donne une table vide et typée ; une valeur manquante reste
+  manquante ; l'ordre est celui de l'écriture ; aucune forme n'est devinée —
+  une liste de listes est refusée, avec les deux déclarations possibles.
+- `avec les colonnes …` et des entêtes sans guillemets sont refusés, avec la
+  forme attendue, réécrite à partir de ce qui a été saisi.
+- Le manuel et trois modèles du classeur (fichier sans entêtes, table de
+  listes, table d'un dictionnaire) suivent.
+
+## 4.1.0 — La grammaire française, gelée (19 novembre 2026)
+
+Le SQL en français suit désormais une grammaire figée, une notion par mot, que
+décrit le document de référence `docs/SQL_FRANCAIS.md` : 31 exemples,
+leurs données, leur SQL et leurs résultats, une variante fautive par exemple,
+et des tests complémentaires. Tous sont rejoués par `tests/sql_francais.rs`.
+
+```text
+soit bilan une table telle que bilan = <Interroger>classe {
+	avec Classe, élèves = effectif() et médiane = médiane(Note)
+	où Externe
+	regrouper par Classe dont élèves ⩾ 2
+	trier par Classe
+}
+```
+
+- **Les mots gelés** : `avec`, `où`, `regrouper par`, `dont`, `joindre … sur`,
+  `croiser`, `trier par`, `limiter à`, `sans doublons` et `nom = expression`.
+  Sans `avec`, toutes les colonnes sont gardées ; `toutes les colonnes sauf a
+  et b` ferme la liste.
+- **Un nom s'écrit d'abord** : `moyenne = (note1 + note2) ÷ 2`, `<Interroger>p
+  = releves {`, `joindre b = releves sur …`. Un nom s'emploie dans la suite de
+  la liste, y compris dans un agrégat ou un calcul par fenêtre, et dans toutes
+  les clauses qui suivent ; DocDG recopie l'expression dans le SQL, qui reste
+  standard. Un nom défini plus loin, ou qui reprend une colonne, est refusé.
+- **Les jointures** : `joindre t sur condition`, `joindre t sur a et b`
+  (`USING`), `joindre naturellement t`, `croiser m = t` (`CROSS JOIN`). Une
+  jointure sans `sur` est refusée, avec renvoi à `croiser`.
+- **Le tri** : `trier par Note décroissante, puis par nom, les manquantes en
+  premier` ; **la limite** : `limiter à 3 lignes`, `à 1 ligne`, `aux lignes
+  11 à 20`. `limiter` sans tri est averti en orange.
+- **Les calculs par fenêtre** : `moyenne(Note) par Classe`, `par (a et b)`,
+  `rang(Note décroissante)`, `numéro(Jour)`, `cumul(Pluie ; Jour)`,
+  `moyenne_mobile(x ; 7 ; Jour)`. À ordre égal, `numéro`, `précédente` et
+  `suivante` départagent par l'ordre de lecture ; `cumul` donne la même valeur
+  aux ex æquo.
+- **`où` se partage autour d'un calcul par fenêtre** : les conditions reliées
+  par « et » qui n'en parlent pas sélectionnent les lignes avant le calcul, les
+  autres après. Une condition qui mêle les deux par « ou » est refusée.
+  Auparavant, tout le `où` s'appliquait après le calcul.
+- **La logique à trois valeurs** : `x ∈ t["col"]` porte sur les valeurs
+  présentes de la colonne, et un `x` manquant rend `∈` comme `∉` inconnus ;
+  `toutes les valeurs de` et `l'une des valeurs de` ignorent les valeurs
+  manquantes, et valent vrai et faux sur une colonne vide. Une colonne calculée
+  par une condition est une colonne de booléens.
+- **Les tests de texte sont exacts** : `commence par`, `finit par`, `contient`
+  et `correspond au modèle` distinguent majuscules et accents.
+- **`il existe une ligne k de t où …`** nomme la ligne, comme « il existe un
+  élément x de E tel que … ».
+- **Les commandes** : `<Insérer>dans t avec a, b et c {`, une ligne de valeurs
+  par ligne, une place vide pour une valeur manquante ; `<Mettre à jour>t où …
+  { … }`, une mise à jour sans `où` étant refusée ; `<Renommer>t["a"] en b`,
+  `<Renommer>t en u` ; `<Ajouter>à t c un décimal, par défaut 0`, `<Ajouter>à t
+  c = expression` ; `<Retirer>t["c"]`. Une commande fautive est annulée en
+  entier : « modification annulée : … ».
+- **La récurrence** s'interrompt au-delà d'un million de lignes ou de 5
+  secondes, sans garder de table partielle.
+- **Les anciennes formes** — `renommée`, `sélectionner les lignes où`,
+  `sélectionner les groupes où`, `ordre décroissant de`, `limiter aux 3
+  premières lignes`, `joindre … selon` — sont refusées avec la forme nouvelle.
+- `exemples/donnees.txt`, le manuel et les modèles du classeur sont écrits dans
+  la grammaire gelée.
+
+## 4.1.0 — Interroger en français (19 novembre 2026)
+
+Une table du document s'interroge en français, avec le vocabulaire du cours de
+bases de données et l'ordre des clauses de SQL :
+
+```text
+soit bilan une table telle que bilan = <Interroger>classe {
+	avec Classe, effectif() renommée élèves et médiane(Note) renommée médiane
+	sélectionner les lignes où Externe
+	regrouper par Classe
+	sélectionner les groupes où élèves ⩾ 2
+	trier par ordre croissant de Classe
+}
+```
+
+- **Une liste de colonnes s'écrit comme une phrase** : `avec nom, prénom et
+  (note1 + note2) ÷ 2 renommée moyenne`, `regrouper par Classe et Sexe`,
+  `clé primaire station et mois`. La virgule sépare, « et » précède la
+  dernière ; une condition qui contient « et » se met entre parenthèses. Le
+  point-virgule reste celui des arguments, des ensembles et des intervalles.
+- **Les clauses** : `avec` ou `avec les colonnes` (et `…, sans doublons`,
+  `toutes les colonnes`, `toutes les colonnes de p`), `joindre`, `joindre à gauche`, `à droite`,
+  `complètement`, `naturellement`, `… selon condition` ou `… selon les colonnes
+  communes a et b`, `sélectionner les lignes où`, `regrouper par`, `sélectionner
+  les groupes où`, `trier par ordre croissant de` / `décroissant de`, `les
+  valeurs manquantes en premier`, `limiter aux n premières lignes`.
+- **Le renommage se dit `renommée`**, le mot du cours (ρ), pour une colonne
+  comme pour une table : `expression renommée moyenne`, `<Interroger>releves
+  renommée p {`. « sous le nom » est refusé, avec la forme nouvelle.
+- **Les noms donnés s'emploient comme en SQL** : une table renommée ne se
+  désigne plus que par son nouveau nom ; une colonne renommée se désigne par
+  son nom dans toutes les clauses qui suivent la projection, comme dans
+  SQLite, et un calcul par fenêtre renommé sert même à sélectionner les
+  lignes. Un nom d'agrégat ne sélectionne pas de lignes ; un nouveau nom ne
+  reprend pas celui d'une colonne, majuscules comprises.
+- **L'écriture de DocDG** : virgule décimale, dates `jj/mm/aaaa`, `≠ ⩽ ⩾`,
+  `∈ [a ; b]`, `∈ {a ; b}`, `∈ t["col"]`, `est manquante`, variables `#seuil`.
+- **Les conditions** : `commence par`, `finit par`, `contient`, `correspond au
+  modèle` (`LIKE`), `il existe une ligne de t où …`, `il n'existe aucune ligne
+  de t où …` (`EXISTS`), `toutes les valeurs de` et `l'une des valeurs de`
+  (`ALL`, `ANY`).
+- **Les expressions** : `si … alors … sinon`, `selon la valeur de x { … }`
+  (`CASE`, une valeur manquante restant manquante), `a à défaut b`
+  (`COALESCE`), `+` qui met des chaînes bout à bout, une date plus des jours,
+  la différence de deux dates ; `entier`, `décimal`, `chaîne`, `date`
+  (`CAST`) ; `racine`, `partie_entière`, `majuscules`, `minuscules`,
+  `extrait`, `remplacé`, `rogné`, `position`, `jour_de_la_semaine`.
+- **Les agrégats** `effectif`, `somme`, `moyenne`, `médiane`, `min`, `max`,
+  `variance`, `écart_type`, `énumération`, `effectif(où condition)`,
+  `effectif(x sans doublons)` ; `médiane`, `variance` et `écart_type` sont
+  ceux de `<Calculer>`.
+- **Les calculs par fenêtre** : un agrégat suivi de `par` (`PARTITION BY`),
+  `numéro`, `rang`, `cumul`, `précédente`, `suivante`, `moyenne_mobile`, avec
+  un `ordre croissant de …`.
+- **Les opérations sur des tables** : `∪` (`union`), `∪ … avec les doublons`,
+  `∩` (`inter`), `∖` (`privée de`), et le produit cartésien `×`, lu « croix »
+  ; une opération sur des tables s'interroge comme une table.
+- **Les règles de SQL**, dites en français à la ligne de la déclaration : ordre
+  des clauses, nom de projection absent de sa propre projection, agrégat
+  interdit dans une sélection de lignes, colonne projetée ni regroupée ni
+  agrégée, colonne ambiguë à qualifier, table renommée désignée par son seul
+  nouveau nom.
+- **Le tri** suit l'ordre alphabétique français, accents compris.
+- **Une table se définit par ses colonnes** : `soit élèves une table définie par
+  { id un entier, clé primaire … }`, avec `obligatoire`, `unique`, `par
+  défaut`, `à valeurs dans [0 ; 20]`, `contrainte …`, `clé étrangère vers
+  parents["id"]`, `supprimée avec lui`, `mise à manquante avec lui`.
+- **Les tables du document se modifient** : `<Insérer>dans t { … }` (et `en
+  remplaçant` ou `en ignorant les lignes de même clé`, `<Insérer>dans t les
+  lignes de u`), `<Mettre à jour>les lignes de t où … { colonne ← valeur }`,
+  `<Supprimer>les lignes de t où …`, `<Supprimer>la table t`, `<Renommer>la
+  colonne a de t en b`, `<Renommer>la table t en u`, `<Ajouter>à t la colonne
+  c, un décimal, par défaut 0`, `<Retirer>la colonne c de t`. Chaque écriture
+  vérifie les contraintes et dit laquelle est violée ; une suppression suit les
+  clés étrangères en cascade. Le fichier et la base ne sont jamais écrits.
+- **Une vue** (`soit v une vue telle que v = <Interroger>t { … }`) se recalcule
+  chaque fois que ses tables changent ; **une table définie par récurrence**
+  (`initialisation : …`, `hérédité : …`) traduit `WITH RECURSIVE`.
+- **Le SQL sans objet dans un document** — transactions, `GRANT`, `REVOKE`,
+  `CREATE INDEX`, `PRAGMA`, `ATTACH`, `VACUUM` — est refusé avec sa raison ;
+  une écriture en SQL renvoie à la commande française.
+- **La traduction** produit une requête SQLite, exécutée comme les autres : en
+  lecture seule, préparée, interrompue après 5 secondes.
+- `exemples/donnees.txt` interroge ses tables en français, calcule par
+  fenêtres et par cas, combine des sélections, définit et modifie une table, et
+  garde une vue ; une requête SQL sur la base y montre que les deux formes
+  coexistent. Les tableaux et les figures
+  de l'exemple sont identiques à ceux de la version SQL.
+- Une apostrophe d'élision (« d'altitude », « n'est pas ») n'ouvre plus de
+  chaîne dans un bloc de requête.
+- Une cellule décimale s'écrit avec 15 chiffres significatifs au plus, comme
+  dans un tableur : une somme vaut « 19833,92 », et non « 19833,920000000002 ».
+- Le vrai signe moins des figures vaut aussi devant π, une lettre grecque, √ et
+  ∞ : « −π/6 » sur les graduations trigonométriques, et non « -π/6 ».
+
+## 4.1.0 — Les fichiers anglophones (19 novembre 2026)
+
+Un CSV exporté par un tableur anglophone se lit sans option, comme un CSV
+français ; la table s'écrit toujours à la française.
+
+- **Booléens** : `oui`, `non`, `yes` et `no` rejoignent `vrai`, `faux`,
+  `true` et `false`, en minuscules comme en majuscules. Les lettres seules
+  (`Y`, `N`, `T`, `F`) restent du texte : elles sont aussi des codes.
+- **Dates à l'américaine** : `07/14/2026` se lit 14 juillet 2026 quand la
+  colonne le prouve — un deuxième nombre supérieur à 12 au moins une fois,
+  jamais au premier. Sinon la lecture reste jour, mois, année. Une colonne
+  qui mêle les deux ordres reste du texte. Les dates `2026-07-14` étaient déjà
+  lues.
+- **Milliers à virgule** : dans un fichier dont la virgule sépare les champs,
+  `"1,234.5"` se lit 1 234,5.
+- **Indicatrices** : une colonne de `0` et de `1` reste une colonne d'entiers,
+  dont la somme est un effectif ; elle n'est pas convertie en booléens.
+
+## 4.1.0 — L'écriture des nombres dans les résultats (19 novembre 2026)
+
+L'audit de `exemples/donnees.txt` et de son PDF a relevé quatre écarts dans la
+façon d'écrire un nombre juste. Ils sont corrigés pour tout document.
+
+**« = » ou « ≈ » : la valeur décide.** L'intervalle de confiance et les tests
+de Student écrivaient « x̄ = 26,74 » pour une moyenne arrondie, alors que la
+moyenne d'une série écrit « x̄ ≈ 11,2118 ». La moyenne et la fréquence
+observée prennent « = » quand leur écriture est exacte, « ≈ » quand elle est
+arrondie. Sous un nuage ajusté, l'équation et le coefficient de corrélation
+gardent le signe « = » et la légende dit qu'ils sont arrondis : « y = x + 0,95 ;
+r = 0,995 (arrondis) », mais « y = −x ; r = −1 ». Le signe « ≈ » n'est pas
+employé dans une figure : la police Gelasio embarquée ne le porte pas, et
+toute la légende passait alors dans une police de repli.
+
+**Le signe moins d'une figure est celui du texte.** Les graduations et les
+légendes d'une figure calculée portaient un trait d'union (« -10,3 ») là où le
+texte et les tableaux portent le signe moins (« −10,3 »). Toute figure calculée
+passe par le même point avant d'entrer dans le document, et y prend le vrai
+signe.
+
+**Une colonne décimale s'aligne.** Un tableau dressé sur une table écrivait
+« 12,45 ; 10,9 ; 8,75 » : il écrit « 12,45 ; 10,90 ; 8,75 », chaque colonne de
+décimaux prenant le plus grand nombre de décimales de ses lignes dressées. Une
+colonne d'entiers, une cellule vide et une colonne non arrondie (plus de six
+décimales) restent telles quelles.
+
+**Un rang s'écrit en exposant.** « 1085ᵉ » employait un caractère absent de la
+police du texte, composé dans une police de repli ; le rang se compose en
+exposant véritable, et le premier s'écrit « 1ʳᵉ valeur ».
+
+**Un texte de figure ne passe plus dans la police cursive.** La police Gelasio
+embarquée ne porte ni les indices (« P₁ », « u₀ », « J₀ »), ni les lettres
+grecques, ni « ≈ » ou « ∩ ». Dans une figure, un texte qui en contenait était
+composé tout entier dans la police de repli que Typst choisissait : Marelle, la
+cursive, pour les indices — dans `algo`, `analyse`, `si` et
+`statistiques-probabilites`. Un tel texte passe désormais entier dans
+Libertinus Serif ; un texte que sa police couvre ne change pas.
+
+`cargo run -p xtask` compile désormais avec `--locked`, comme le workflow
+`paquets`.
+
+## 4.1.0 — Un exemple d'analyse de données (18 novembre 2026)
+
+**`exemples/donnees.txt`, vingt-quatrième exemple.** Six stations, un an de
+relevés quotidiens : le document lit un fichier CSV de 2 190 lignes et une base
+SQLite, décrit une série, choisit, regroupe et joint par des requêtes, ajuste
+une droite, borne une période par des dates, puis estime et teste. Ses données
+— `exemples/DONNEES/releves.csv` et `meteo.db` — sont fictives ;
+`outils/ecrire_donnees_exemple.py` les écrit, toujours les mêmes.
+
+Écrire cet exemple sur un vrai fichier a montré cinq défauts du moteur. Ils
+sont corrigés pour toute série, non pour celle-là.
+
+**Une longue série s'abrège.** La moyenne d'une colonne de 2 170 valeurs
+écrivait ses 2 170 termes dans une fraction, la médiane ses 2 170 valeurs
+rangées. Au-delà de douze termes, une somme s'écrit par ses trois premiers
+termes et le dernier ; au-delà de quarante valeurs, une série rangée de même.
+Le calcul porte toujours sur toutes les valeurs.
+
+**Un terme négatif se met entre parenthèses.** La moyenne de `3 ; -2 ; 5`
+s'écrivait `3 + -2 + 5` ; elle s'écrit `3 + (−2) + 5`. Le premier terme reste
+nu.
+
+**L'histogramme compte une série.** Il ne lisait que des bornes et des
+effectifs déjà comptés. `avec les données notes` compte la série par classes
+de même amplitude, leur nombre suivant la règle de Sturges ; `avec les bornes
+{…} et les données notes` la compte dans les classes choisies. Une valeur hors
+des bornes est refusée, avec l'étendue de la série.
+
+**Le nuage tient les grands fichiers et les valeurs négatives.** Une ordonnée
+négative sortait du cadre : l'axe se gradue désormais de part et d'autre de
+zéro. Chaque point écrivait son abscisse sous l'axe, illisible au-delà d'une
+douzaine : l'axe est alors gradué régulièrement. La droite d'ajustement ne
+dépasse plus le cadre, et s'écrit sous la figure avec le coefficient de
+corrélation : « Droite d'ajustement : y = x + 0,95 ; r = 0,995 ».
+
+**Les barres portent les valeurs négatives.** Une barre négative n'était pas
+tracée, sans un mot. Debout, elle descend sous la ligne de zéro ; couchée, elle
+est refusée, et le refus dit de retirer `en disposition horizontale`.
+
+Une figure sans valeur négative, de douze abscisses au plus et sans
+ajustement sort trait pour trait comme avant. Le nuage ajusté gagne une
+ligne : `statistiques-probabilites.pdf` est refait, et `donnees.pdf` le
+rejoint dans `references-pdf/`, tous deux exportés par l'essai qui compose
+les exemples.
+
+**Compte des exemples.** Les essais, le manuel, le guide de démarrage, le
+guide de compilation et le catalogue disent 24 exemples ; la graine est
+régénérée.
+
+## 4.1.0 — Chantier 6 : clôture (18 novembre 2026)
+
+Dernier des six chantiers. La 4.1 fait entrer des données dans la source : un
+type `table`, `<Lire>` pour un fichier CSV, Arrow ou Parquet et pour une table
+de base SQLite, `<Interroger>` pour une requête, un type `date`, des valeurs
+manquantes écartées et décomptées, l'export d'une table en Parquet ou en Arrow.
+Les entrées des chantiers 1 à 5, plus bas, en donnent le détail.
+
+**Le bandeau propose ce que la 4.1 apporte.** Le ruban Programmation reçoit
+huit modèles : sous Déclarations, types simples, la `date` ; sous Instructions,
+une catégorie **tables** — table d'un fichier, table d'une base, colonne,
+cellule — et une catégorie **requêtes** — sur une base, sur les tables du
+document, à paramètre. Le ruban Actions reçoit, sous `<Dresser>`, « un tableau
+sur une table », qui pose la lecture de la table si le document ne l'a pas.
+Les chemins `DOSSIER/fichier.csv` et `DOSSIER/base.db` sont à remplacer, comme
+`DOSSIER/fichier.png` pour une image. Les essais du bandeau composent ces
+modèles sur les données de `exemples/DONNEES/` et n'admettent toujours aucune
+alerte.
+
+**La première question d'un document reçoit le curseur.** À l'ouverture, le
+focus rendu à la source avec un léger retard pouvait reprendre celui que la
+première question venait de recevoir : il fallait cliquer dans la zone de
+saisie. Ce renfort s'abstient désormais quand une question vient d'être
+servie.
+
+**La boîte à moustaches ne superpose plus ses repères.** Quand deux repères
+sont confondus — un minimum égal au premier quartile —, ils partagent une
+étiquette : « min = Q1 ». Quand ils sont voisins sans être égaux, leurs
+étiquettes s'écartent et un trait fin les relie à leur graduation. Une boîte
+dont les repères sont espacés sort trait pour trait comme avant.
+
+**La graine des calculs couvre les documents qui lisent un fichier.** L'outil
+qui l'écrit ne posait pas le dossier du document : l'exemple de statistiques et
+les blocs du manuel qui lisent un fichier ou une base étaient rendus par le
+repli du moteur et restaient hors de la graine. Elle est régénérée : 366 paires,
+aucun repli.
+
+**Deux compilations simultanées ne cassent plus la fabrication du Python
+privé.** Une compilation `release` dans le terminal pendant que l'éditeur
+vérifiait le projet échouait par « No such file or directory :
+runtime.tar.gz.partiel » : les deux fabrications écrivaient le même fichier
+provisoire, et la première à finir l'emportait sous la seconde. Un verrou par
+cible les met désormais à la suite ; la seconde attend, puis constate que le
+runtime est à jour. Chaque fichier a son nom provisoire propre et se met en
+place d'un seul geste, la recette en dernier : une fabrication interrompue ne
+passe jamais pour terminée, et le runtime précédent reste valide jusqu'à ce que
+le nouveau soit prêt. Le script ayant changé, chaque machine refabrique son
+runtime une fois.
+
+**Version.** Les cinq caisses, le paquet macOS, le workflow `paquets` et les
+noms de fichiers du guide de compilation passent à 4.1.0 ; le manuel, le guide
+de démarrage et le guide de l'interface disent 4.1.
+
+**PDF de référence.** `basique`, `algo`, `algebre`, `publication3` et
+`statistiques-probabilites` sont ceux de la 4.1. Ce dernier est à réexporter
+une fois : la boîte à moustaches de sa page 8 a changé.
+
+## 4.1.0 — Chantier 5 : l'export des tables, et trois points tranchés (18 novembre 2026)
+
+Cinquième des six chantiers de la 4.1. Une table du document sort en Parquet ou
+en Arrow par le ruban Fichier. Les trois points laissés à décider au chantier 4
+sont tranchés et mis en œuvre.
+
+**Une table s'exporte.** Le ruban **Fichier** reçoit un groupe **Tables** : une
+pastille par table du document, avec son nombre de lignes. Un clic rejoue le
+document, puis ouvre l'enregistrement de cette table ; l'extension choisit le
+format, `.parquet` par défaut ou `.arrow`. Le chemin du dernier fichier écrit
+s'affiche sous les pastilles, une erreur en rouge. Les cinq types d'une table
+sortent tels quels — entier et flottant sur 64 bits, texte UTF-8, booléen, date
+au jour près — et une valeur manquante sort nulle. Le Parquet est compressé en
+Snappy ; l'Arrow est au format de fichier Arrow (Feather), sans compression.
+
+**Une table exportée puis relue est la même table.** Cinq tables — CSV aux cinq
+types, colonne mêlée, table d'une base, résultat de requête, résultat sans
+ligne — sont écrites dans les deux formats, relues par `<Lire>` et comparées :
+même résumé, mêmes cellules. Polars 2.1 et pandas 3.1 relisent les dix fichiers
+avec les types attendus et les mêmes valeurs (`outils/relire_tables_exportees.py`).
+
+**Un paramètre reçoit une variable du document.** Dans une requête, `:seuil`
+prend la valeur de la variable `seuil` — nombre, chaîne, booléen ou date. La
+valeur est liée à la requête préparée, jamais recopiée dans son texte ; elle
+entre dans la clé du cache. Un paramètre sans variable, une liste pour valeur,
+les formes `?`, `?1` et `@nom` sont refusés, chacun avec son message.
+
+**Le tableau des messages d'erreur du manuel dit vrai.** Une ligne sur cinq
+rendait le message annoncé. Le moteur est relevé là où il se taisait ou
+répondait « commande non prise en charge », et le manuel imprime désormais les
+messages du moteur :
+
+- `<Placer>le point A`, A non posé : « le point A n'est pas déclaré — posez-le
+  par `<Soit>A(x ; y) un point`, ou placez-le par `<Placer>un point A(x ; y)` » ;
+- `<Représenter>graphiquement la fonction g`, g non posée : « la fonction g
+  n'est pas déclarée — posez-la par `<Soit>g une fonction définie par g(x) = …` » ;
+- une longueur sans unité hors d'un repère — `de côté 5`, `de rayon 3`,
+  `AB = 5`, `d'arête 3` — est refusée : « longueur sans unité : écrivez
+  « de côté 5 cm » ou « de côté 50 mm » — l'unité est obligatoire hors d'un
+  repère ». Le manuel l'exigeait à quatre endroits ; le moteur traçait la
+  figure en centimètres sans rien dire ;
+- un bloc jamais refermé est dit de même par la voie de référence.
+
+Un essai relit le tableau dans le manuel et rejoue chaque ligne par les deux
+voies : le manuel et le moteur ne peuvent plus diverger sans qu'il échoue.
+
+**« Ligne » partout où l'on comptait des « rangées ».** Pour la ligne d'un
+tableau, d'une grille et d'une matrice, le manuel, quatre exemples, le guide et
+onze messages du moteur disent « ligne », comme le fait l'enseignement
+supérieur pour une matrice et la typographie pour un tableau. Le mot-clé
+`<Afficher>une rangée` — des cadres côte à côte — est inchangé : les documents
+publiés l'emploient.
+
+**Un essai de l'application rétabli.** La suite entière de l'application, qui
+n'avait pas été rejouée aux chantiers 2 à 4, échouait sur un cas depuis le
+chantier 2 : la variance d'une série d'effectif total nul, que la 4.0 imprimait
+« NaN » et que la 4.1 refuse. Le cas quitte la liste des sources acceptées et
+reçoit son propre essai de refus.
+
+**Le Python privé se fabrique aussi là où Python n'a pas ses autorités de
+certification.** Sur macOS, le Python de python.org n'en a aucune tant que son
+« Install Certificates.command » n'a pas été lancé : le téléchargement du
+Python autonome échouait (`CERTIFICATE_VERIFY_FAILED`), la compilation de
+publication s'arrêtait, et les essais qui calculent avec NumPy échouaient sur
+« No module named 'numpy' ». `outils/fabriquer_runtime.py` reprend désormais le
+téléchargement avec les autorités du système (`/etc/ssl/cert.pem` sur macOS),
+puis celles de `certifi` s'il est installé. La vérification TLS n'est jamais
+désactivée ; `DOCDG_CA_BUNDLE` et `SSL_CERT_FILE` gardent la priorité. Le script
+ayant changé, chaque machine refabrique son runtime une fois.
+
+**Fichiers.** Nouveaux : `transpiler/src/donnees/ecriture.rs`,
+`transpiler/tests/export_tables.rs`, `transpiler/tests/messages_du_manuel.rs`,
+`outils/relire_tables_exportees.py`. Modifiés : `outils/fabriquer_runtime.py`,
+`transpiler/src/lib.rs`,
+`natif.rs`, `natif_figures.rs`, `document.rs`, `donnees/{mod,base,lecture}.rs`,
+`langage/{conteneurs,superieur}.rs`, `layout/{rendu,structures}.rs`,
+`maths/{geometrie,trace}.rs`, `transpiler/tests/requetes.rs`,
+`app/src/{main,moteur,fichier,vues,qualification_pedagogie_08}.rs`,
+`README.md`, `GUIDE_UTILISATEUR.md`, `docs/INTERFACE.md`, `docs/AUDIT_4_1.md`,
+`exemples/{basique,algo,algebre,publication3}.txt`.
+
+## 4.1.0 — Chantier 4 : `<Interroger>` et les bases SQLite (18 novembre 2026)
+
+Quatrième des six chantiers de la 4.1. Une base SQLite entre dans le document :
+`<Lire>` en charge une table, `<Interroger>` range dans une table le résultat
+d'une requête. La requête garde la syntaxe de SQL ; elle ne fait que lire.
+
+**`<Lire>` charge une table d'une base.** `soit clients une table telle que
+clients = <Lire>la table clients de la base "magasin.db"` : la base (`.db`,
+`.sqlite`, `.sqlite3`) se range à côté du document, comme un CSV. Une vue se lit
+comme une table ; un nom qui porte une espace s'écrit entre guillemets. Une
+table absente est refusée avec la liste des tables de la base ; `<Lire>le
+fichier "magasin.db"` est refusé avec la forme attendue.
+
+**`<Interroger>` remplit une table par une requête.** `soit ventes une table
+telle que ventes = <Interroger>la base "magasin.db" { SELECT … }`, sur une ligne
+ou sur plusieurs. La requête est confiée telle quelle à SQLite 3.54 : mots-clés
+de SQL, point décimal, chaînes entre apostrophes, commentaires. Le résultat
+s'emploie comme toute table : colonnes, cellules, tableau dressé, diagrammes,
+indicateurs, intervalles et tests.
+
+**Les tables du document s'interrogent.** Une requête voit sous leur nom les
+tables déjà déclarées — CSV, Arrow, Parquet, résultat d'une autre requête — et
+les joint à celles de la base. Sans base : `<Interroger>les tables { SELECT … }`.
+Les booléens et les dates d'une table font l'aller et le retour. Un nom qui
+désigne à la fois une table de la base et une autre table du document est
+refusé ; la table lue dans cette même base ne l'est pas.
+
+**La requête ne fait que lire.** La base est chargée en mémoire à partir de ses
+octets, en lecture seule : son fichier n'est jamais ouvert en écriture, aucun
+journal n'est créé à côté de lui. Un autorisateur n'admet que la lecture :
+`INSERT`, `UPDATE`, `DELETE`, `CREATE`, `DROP`, `ATTACH`, `PRAGMA`, `VACUUM`
+sont refusés. Une requête porte une seule instruction, sans paramètre. Elle est
+interrompue après 5 secondes ; son résultat tient en un million de lignes.
+
+**Chaque colonne du résultat reçoit le type de ses valeurs** : entiers,
+décimaux, chaînes ; dates quand tous les textes sont de la forme `2026-07-14` ;
+booléens pour les 0 et 1 d'une colonne déclarée `BOOLEAN` ; `NULL` devient une
+valeur manquante. Les données binaires et les valeurs infinies sont refusées,
+la colonne nommée ; deux colonnes de même nom aussi, avec le remède (`AS`).
+
+**Toute faute est dite.** Une faute de SQL rend le message de SQLite, puis sa
+ligne dans la requête et le texte de cette ligne ; une table inconnue, la liste
+des tables à lire ; une accolade oubliée, un texte après l'accolade, une requête
+vide, `<Interroger>` hors d'une déclaration de table ou vers un autre type : un
+message chacun. Le document continue après la faute.
+
+**Le résultat suit ses sources.** Il est gardé sous l'empreinte de la base, de
+la requête et des tables qu'elle nomme : la requête n'est rejouée que si l'une
+d'elles change. Un refus est gardé de même — une requête interrompue ne fige
+pas l'aperçu à chaque frappe.
+
+**Une base en journal d'écriture (WAL) se lit.** Fermée, elle est chargée ;
+ouverte par un autre logiciel, journal non vide, elle est refusée avec la
+marche à suivre, plutôt que lue sans ses dernières écritures.
+
+**« Ligne » remplace « rangée »** dans tout ce que le chantier 3 a livré :
+`avec les 20 premières lignes de classe`, « table de 5 lignes », les messages,
+le manuel. « Rangée » ne disait pas s'il s'agissait de lignes ou de colonnes.
+
+**`rusqlite` passe de 0.31 à 0.43** pour tout l'espace de travail (SQLite 3.54.1
+embarqué). Le corpus y gagne la désérialisation sûre : le seul bloc `unsafe` de
+`corpus/src/scellement.rs` disparaît. La base embarquée du corpus, descellée,
+est identique octet pour octet à celle de la 4.0.
+
+**Vérification.** 75 bancs, 1 490 essais, aucun échec. `tests/requetes.rs` : neuf
+essais par les deux voies, dont un banc de conformité de 32 requêtes — toutes
+les instructions du lycée et du premier cycle — comparées cellule à cellule aux
+résultats du SQLite de Python. 186 blocs du manuel rendus ;
+`exemples/statistiques-probabilites.txt` gagne une section lue dans
+`exemples/DONNEES/magasin.db`.
+
+**Fichiers.** Nouveaux : `transpiler/src/donnees/base.rs`,
+`transpiler/tests/requetes.rs`, `transpiler/tests/donnees/magasin.db`,
+`banc_requetes.txt` et `remises.csv`, `exemples/DONNEES/magasin.db` et
+`remises.csv`, `outils/ecrire_base_essai.py`, `outils/ecrire_banc_requetes.py`.
+Modifiés : `transpiler/src/donnees/{mod,lecture,colonnes,date}.rs`,
+`transpiler/src/langage/{conteneurs,superieur,commandes}.rs`,
+`corpus/src/{scellement,edition,journal,lib}.rs`, `corpus/build.rs`, les deux
+`Cargo.toml`, `README.md`, `CLUF.md`, `docs/AUDIT_4_1.md`.
+
+## 4.1.0 — Chantier 3 : la table et `<Lire>` (18 novembre 2026)
+
+Troisième des six chantiers de la 4.1. Un fichier de données entre dans le
+document : `<Lire>` le charge dans une **table**, stockée au format Apache
+Arrow, dont les colonnes s'emploient dans les actions existantes.
+
+**`<Lire>` charge un fichier dans une table.** `soit classe une table telle que
+classe = <Lire>le fichier "classe.csv"` : un CSV, un fichier Arrow (`.arrow`,
+`.feather`, `.ipc`) ou Parquet (`.parquet`). Le fichier se range à côté du
+document ou dans un de ses sous-dossiers, comme une image, et il est relu dès
+qu'il change. `<Lire>` n'apparaît que dans la déclaration d'une table ; employé
+seul, il est refusé avec la forme attendue.
+
+**Le CSV se lit tel qu'un tableur français l'exporte.** Séparateur reconnu
+— point-virgule, tabulation ou virgule —, virgule décimale, milliers séparés
+par une espace, encodage UTF-8, Windows-1252 ou UTF-16. Chaque colonne reçoit
+le type de ses cellules : entiers, décimaux, dates, booléens, chaînes. Un code
+à zéro initial, `01000`, reste une chaîne.
+
+**Polars et pandas écrivent, DocDG relit.** Les fichiers Arrow et Parquet de
+Polars (`write_ipc`, `write_parquet`) et de pandas (`to_feather`, `to_parquet`)
+sont relus avec leurs types, quelle que soit leur compression : zstd, snappy,
+lz4, gzip, brotli. Entiers de toute largeur, décimaux simples ou doubles,
+catégories, dates et horodatages à minuit sont ramenés aux types de DocDG ; une
+colonne de listes est refusée, et nommée.
+
+**Une colonne est une série.** `classe["Note"]` se nomme dans les sept
+indicateurs, les intervalles de confiance, les tests et les diagrammes. Une
+table de deux colonnes donne ses paires aux barres et au camembert, ses points
+au nuage. `classe["Élève" ; 2]` lit une cellule, par sa colonne puis son rang ;
+`longueur(classe)` compte les lignes ; `#classe` résume la table.
+
+**Les valeurs manquantes sont écartées, et leur nombre est dit.** Une cellule
+vide, `NA`, `NaN`, une valeur nulle d'Arrow : la réponse d'un calcul se termine
+par « Une valeur manquante est écartée : le calcul porte sur 4 valeurs. », un
+diagramme le note sous sa figure. Pour deux séries, la ligne est écartée dès
+qu'une de ses valeurs manque. Ce qui ne peut pas le dire le refuse : `somme`,
+`min`, `max`, une boucle, un calcul sur une cellule manquante.
+
+**Un tableau se dresse sur une table** : `<Dresser>un tableau avec les données
+classe`, ou `avec les 20 premières lignes de classe`. Le tableau se coupe
+d'une page à l'autre et répète son entête ; le texte d'une cellule reste du
+texte, quoi qu'il contienne.
+
+**Le type `date`** se déclare — `14/07/2026`, `2026-07-14`, `14 juillet 2026` —,
+se compare dans une condition, se trie, se parcourt, et s'affiche à la
+française.
+
+**Toute faute est dite, à sa ligne** : fichier introuvable, extension inconnue,
+chemin qui sort du dossier du document, ligne plus courte que l'entête,
+colonne absente — avec la liste des colonnes —, colonne de chaînes employée
+comme série. Une colonne où une cellule n'est pas un nombre dit la ligne du
+fichier : « ligne 14 du fichier : « abs » n'est pas un nombre ».
+
+**Reporté au chantier 4 : la table d'une base.** `<Lire>la table clients de la
+base "magasin.db"` demande de charger la base en mémoire à partir de ses
+octets ; `rusqlite` ne le permet sans code `unsafe` que dans sa version
+courante, dont la montée ouvre le chantier 4. La lecture d'une table de base y
+sera livrée avec `<Interroger>`.
+
+**Dépendances.** Le transpileur prend `arrow-array`, `arrow-schema`,
+`arrow-cast`, `arrow-select`, `arrow-ipc`, `parquet` — sans ses fonctions par
+défaut — et `bytes` : 33 caisses de plus au verrou, sous licences Apache 2.0,
+MIT ou BSD. Le CLUF les nomme.
+
+**Corrigé au passage.** `cargo test -p docdg-transpiler`, sans la fonction
+`reference-historique`, ne compilait pas : le banc `langue_du_superieur`
+n'était pas déclaré avec sa fonction requise, et celui du chantier 2,
+`series_statistiques`, ne l'était pas non plus. Les deux le sont.
+
+Le manuel compte 180 blocs vérifiés, contre 174. Deux bancs portent le
+chantier : `tests/donnees.rs`, douze essais joués par les deux voies de rendu,
+et les essais unitaires du module `donnees`.
+
+## 4.1.0 — Chantier 2 : les séries nommées (18 novembre 2026)
+
+Deuxième des six chantiers de la 4.1. Toute action statistique lit désormais sa
+série par un lecteur unique, en valeurs typées : c'est par lui qu'une colonne de
+table entrera au chantier 3. Les onze défauts relevés au chantier 1 sont
+corrigés, et quatre autres trouvés en chemin.
+
+**Une liste déclarée se nomme à la place de ses valeurs.** `<Calculer>la moyenne
+de la série notes`, et de même la médiane, l'étendue, les quartiles, la
+variance, l'écart type, la covariance, les intervalles de confiance et les
+tests. Le nom peut être une expression de liste — `trier(notes)`,
+`notes[0 à 2]` —, un dictionnaire donne ses valeurs, et une série pondérée
+nomme ses valeurs comme ses effectifs.
+
+**Chaque valeur d'une série est une expression.** `la série 1/3 ; 2/3` était lue
+comme quatre nombres, 1 ; 3 ; 2 ; 3 : elle vaut désormais ses deux fractions.
+Une racine, une variable déclarée, un calcul y sont admis.
+
+**La médiane, les quartiles et l'étendue d'une série pondérée sont justes.** Les
+valeurs et les effectifs étaient lus comme une seule série de six nombres : la
+médiane de `8 ; 12 ; 15` d'effectifs `2 ; 5 ; 3` rendait 6,5 au lieu de 12, les
+quartiles 3 et 12 au lieu de 12 et 15, l'étendue 13 au lieu de 7. La réponse
+pose les effectifs cumulés croissants ; la médiane et les quartiles demandent
+des effectifs entiers.
+
+**Une valeur arrondie n'est plus annoncée par un signe égal.** La moyenne de
+`16 ; 0 ; 0` s'écrit `16/3 ≈ 5,3333`, et non `= 5,3333` ; la variance et la
+covariance suivent la même règle.
+
+**Les données d'un diagramme sont un dictionnaire.** `{Marche: 5 ; Bus: 3}`
+traçait une seule barre de hauteur 53 ; le point-virgule sépare désormais les
+entrées, comme partout, et la barre `|` reste lue. Un dictionnaire déclaré sur
+une ligne, ou portant deux entrées sur une ligne, est lu : le diagramme prend
+ses données dans le conteneur typé, et non plus dans le texte de la déclaration.
+
+**Un nuage se trace sur deux listes** : `avec les abscisses jours et les
+ordonnées ventes`. La boîte à moustaches et l'histogramme lisent aussi des
+listes déclarées ; les bornes et les effectifs d'un histogramme se donnent dans
+l'ordre que l'on veut.
+
+**Une option se dit avant ou après les données** : `… avec les données {…} et
+en disposition horizontale`, `… et avec ajustement`, étaient refusés.
+
+**Toute faute est dite, à sa ligne.** `la série 12, 15` était lue comme deux
+valeurs sans rien dire : le message demande le point-virgule et écrit la forme
+attendue. Un type de diagramme inconnu traçait des barres : il est refusé, et le
+refus nomme les cinq types. Une série inconnue, une liste de textes, des
+effectifs en nombre différent des valeurs, des séries de covariance inégales,
+un histogramme dont bornes et effectifs ne s'accordent pas, un camembert de
+total nul : chacun a son message, là où le moteur répondait « commande non prise
+en charge » ou traçait une figure fausse.
+
+**La légende d'un camembert arrondit ses parts au dixième** : « 37,3 % », et non
+« 37,3494 % ».
+
+**Ce qui change pour un document existant.** Une série suivie d'un texte que le
+moteur ignorait — `la série 12 ; 15 ; 9 arrondie au dixième` — est maintenant
+refusée, avec son message.
+
+**Les valeurs manquantes sont reportées au chantier 3.** Une liste docdg ne peut
+pas en contenir : elles n'ont de source qu'avec `<Lire>`. Leur décompte sera
+livré avec la table, plutôt qu'un code sans emploi dès ce chantier.
+
+Le manuel compte 174 blocs vérifiés, contre 169. Un banc neuf,
+`tests/series_statistiques.rs`, joue douze essais par les deux voies de rendu.
+
+## 4.1.0 — Chantier 1 : le manuel des statistiques (17 novembre 2026)
+
+Premier des six chantiers de la 4.1, dont l'objet est de faire entrer des
+données — fichiers, bases — dans un document. Le plan, les décisions et les
+mesures sont dans [docs/AUDIT_4_1.md](docs/AUDIT_4_1.md). Ce chantier ne touche
+pas au moteur : il remet le manuel en accord avec lui.
+
+**Le chapitre des statistiques dit ce que le moteur lit.** Il décrivait une
+syntaxe abandonnée, `TYPE données:DONNÉES`, que ni les exemples ni le bandeau
+n'employaient ; la forme nommée `données:sondage` et le mot `horizontal`
+n'étaient pas lus. La syntaxe est celle de la prose : `<Représenter>graphiquement
+une statistique en barres avec les données {…}`, le type précédé de `en`, les
+données fermant la phrase, les options `en disposition horizontale` et `avec
+ajustement` placées avant elles. Un tableau donne les cinq types et la forme de
+leurs données.
+
+**Les indicateurs d'une série entrent au manuel.** Moyenne, médiane, étendue,
+quartiles, variance, écart type et covariance étaient calculés par le moteur et
+employés par les exemples sans y être décrits. Leurs exemples sont rendus par
+`tests/readme.rs`, comme tout bloc du manuel : le manuel compte 169 blocs
+vérifiés, contre 166.
+
+**« Table de données » ne désigne plus un dictionnaire.** Le mot `table` est
+réservé au conteneur que la 4.1 introduit ; le manuel dit « dictionnaire » ou
+« liste » là où il s'agit d'eux.
+
+**Un message d'erreur qui n'existait pas est retiré du manuel**, celui de la
+virgule dans une liste numérique. Le moteur lit `12, 15` comme deux valeurs et
+`12,15` comme une seule, sans rien dire : ce défaut et dix autres, relevés en
+essayant chaque forme, sont consignés dans l'audit et ouvrent le chantier 2.
+
 ## 4.0.0 — Confirmation de fermeture et cache unique (16 novembre 2026)
 
 **Fermer la fenêtre demande de nouveau confirmation.** La question s'était
@@ -8050,3 +8961,7 @@ imperative, la rédaction pas à pas par défaut, et l'export PDF modifiable.
 - Profilage détaillé, sans changement du moteur de pagination, des étapes KaTeX, polices, préparation et pagination ; séparation du temps de calcul approximatif et des attentes de trame.
 - Historique borné aux 40 derniers rendus et copie JSON par clic sur la durée affichée dans l'interface.
 - Renforcement du contrôle de pagination pour valider les indicateurs instrumentés.
+
+## Chantier S3 — 20 novembre 2026
+
+Régression multiple, ACP, ANOVA, diagnostics et graphiques associés ; trois modèles de bandeau, documentation et tests de qualification.

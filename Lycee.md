@@ -120,7 +120,7 @@ une spline, la dérive et repère le volume équivalent au pic de la dérivée
 (`chimie.txt`, dernier chapitre) :
 
 ```docdg
-<Tracer>l'interpolation de pH en fonction de V des données {(0;3) (4;3,8) (8;4,7) (9,5;5,5) (10;7) (10,5;10,4) (12;11,3) (16;11,9)} par une spline cubique, avec sa dérivée
+<Tracer>l'interpolation de pH en fonction de V des données {(0;3) ; (4;3,8) ; (8;4,7) ; (9,5;5,5) ; (10;7) ; (10,5;10,4) ; (12;11,3) ; (16;11,9)} par une spline cubique, avec sa dérivée
 ```
 
 L'intervalle de confiance d'une proportion s'obtient en une phrase, avec

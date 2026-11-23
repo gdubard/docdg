@@ -73,7 +73,7 @@ soit maison un style défini par <italique au centre>
 
 <h2>Un tableau qui traverse les pages
 
-	Un tableau de données long ne peut pas davantage rester d'un seul bloc — la pratique académique impose au contraire qu'il se poursuive, et que sa rangée d'entête se répète en tête de chaque fragment afin que le lecteur n'ait jamais à revenir en arrière pour savoir ce que désigne chaque colonne.
+	Un tableau de données long ne peut pas davantage rester d'un seul bloc — la pratique académique impose au contraire qu'il se poursuive, et que sa ligne d'entête se répète en tête de chaque fragment afin que le lecteur n'ait jamais à revenir en arrière pour savoir ce que désigne chaque colonne.
 
 <Dresser>un tableau sécable avec une bordure bleu marine et des entêtes en blanc sur fond bleu marine {
 	<mc>	<md>	<md>	<md>
@@ -101,7 +101,7 @@ soit maison un style défini par <italique au centre>
 	[20]	[2097151]	[1048576]	[2,000]
 }
 
-	Le rapport de deux termes consécutifs converge vers 2, ce que la démonstration par récurrence laissait attendre. La rangée d'entête reparaît au sommet de chaque fragment du tableau, sans que rien n'ait été écrit pour l'exiger.
+	Le rapport de deux termes consécutifs converge vers 2, ce que la démonstration par récurrence laissait attendre. La ligne d'entête reparaît au sommet de chaque fragment du tableau, sans que rien n'ait été écrit pour l'exiger.
 
 <page suivante h2>Un passage en colonnes
 

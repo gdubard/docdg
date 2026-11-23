@@ -19,7 +19,7 @@ soit ouvrage un style défini par <gras 18 pt au centre>
 soit complement un style défini par <16 pt au centre>
 soit mention un style défini par <14 pt au centre>
 
-<au centre>{<Insérer l'image IMAGES/institut.svg avec une largeur de 30 mm>}
+<au centre>{<Insérer l'image "IMAGES/institut.svg" avec une largeur de 30 mm>}
 
 <nature>{Thèse de doctorat}
 

@@ -47,7 +47,7 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <page suivante h2>Quadrilatères
 <Tracer>le carré ABCD, de côté 4 cm, avec les marques
-<Tracer>le losange ABCD, de côté 3 cm et d'angle 60
+<Tracer>le losange ABCD, de côté 3 cm et d'angle 60°
 
 <h2>Cercles
 	Le rayon se donne en centimètres. Le disque est le cercle et son intérieur :
@@ -112,21 +112,21 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <h2>Les polyèdres
 	Les arêtes cachées sont dessinées en pointillés, comme dans le cahier.
-<Tracer>le solide cube, d'arête 3 cm
-<Tracer>le solide pavé droit, de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
-<Tracer>le solide prisme, de base 3 cm et de longueur 5 cm
-<Tracer>le solide pyramide, de base 4 cm et de hauteur 3 cm
+<Tracer>le cube d'arête 3 cm
+<Tracer>le pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
+<Tracer>le prisme de base 3 cm et de longueur 5 cm
+<Tracer>la pyramide à base carrée de côté 4 cm et de hauteur 3 cm
 
 <h2>Les solides de révolution
-<Tracer>le solide cylindre, de rayon 2 cm et de hauteur 5 cm
-<Tracer>le solide cône, de rayon 2 cm et de hauteur 4 cm
-<Tracer>le solide sphère, de rayon 3 cm
+<Tracer>le cylindre de rayon 2 cm et de hauteur 5 cm
+<Tracer>le cône de rayon 2 cm et de hauteur 4 cm
+<Tracer>la sphère de rayon 3 cm
 
 <h1>Les patrons
 	Un patron est le solide déplié, prêt à découper et à plier.
 <Tracer>le patron du cube d'arête 3 cm
 <Tracer>le patron du pavé droit de longueur 4 cm, de largeur 2 cm et de hauteur 3 cm
-<Tracer>le patron de la pyramide de base 4 cm et de hauteur 3 cm
+<Tracer>le patron de la pyramide à base carrée de côté 4 cm et de hauteur 3 cm
 
 <Tracer>le patron du cylindre de rayon 2 cm et de hauteur 5 cm
 <Tracer>le patron du cône de rayon 2 cm et de hauteur 4 cm
@@ -140,7 +140,7 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 	Le document se construit avec le lecteur : la dimension saisie dessine le solide.
 soit a ∈ ℤ tel que a = 5
 Pour a = #a cm, voici le solide et son volume :
-<Tracer>le solide cube, d'arête 5 cm
+<Tracer>le cube d'arête 5 cm
 <Calculer>le volume du pavé de longueur 5 cm, de largeur 5 cm et de hauteur 5 cm
 
 <page suivante h0>Lycée
@@ -239,8 +239,8 @@ Pour a = #a cm, voici le solide et son volume :
 }
 
 <h1>Géométrie dans l'espace
-<Tracer>le solide cube, d'arête 3 cm
-<Tracer>le solide pyramide, de base 4 cm et de hauteur 3 cm
+<Tracer>le cube d'arête 3 cm
+<Tracer>la pyramide à base carrée de côté 4 cm et de hauteur 3 cm
 
 <page suivante h2>Vecteurs : produits
 	Un vecteur est $vecteur(u)$, sa norme $norme(vecteur(u))$. Le produit scalaire s'écrit en infixe, $vecteur(u) . vecteur(v)$, le produit vectoriel de même, $vecteur(u) ^ vecteur(v)$. Seul un vecteur des deux côtés les déclenche : $vecteur(u)^2$ reste un carré.

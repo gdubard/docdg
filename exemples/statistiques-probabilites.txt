@@ -36,6 +36,20 @@ Chaque chapitre correspond à un niveau ou à une étape. Choisissez son titre d
 
 <Calculer>les quartiles de la série 2 ; 4 ; 5 ; 7 ; 8 ; 10 ; 12 ; 15
 
+Sur une série pondérée, la médiane et les quartiles se lisent sur les effectifs cumulés croissants :
+
+<Calculer>la médiane de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+
+<Calculer>les quartiles de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
+
+Une liste déclarée se nomme à la place de ses valeurs :
+
+soit releve une liste de décimaux telle que releve = {12 ; 15,5 ; 9 ; 14}
+
+<Calculer>la moyenne de la série releve
+
+<Calculer>la médiane de la série releve
+
 <h1>Proportionnalité
 
 <Calculer>la quatrième proportionnelle de 3, 5 et 12
@@ -114,8 +128,8 @@ Un nœud à branche unique reçoit son complément automatiquement, le produit d
 }
 
 <h1>Diagrammes statistiques
-<Représenter>graphiquement une statistique en barres avec les données {1: 4 | 2: 7 | 3: 2 | 4: 5}
-<Représenter>graphiquement une statistique en camembert avec les données {Marche: 5 | Bus: 3 | Vélo: 2}
+<Représenter>graphiquement une statistique en barres avec les données {1: 4 ; 2: 7 ; 3: 2 ; 4: 5}
+<Représenter>graphiquement une statistique en camembert avec les données {"Marche": 5 ; "Bus": 3 ; "Vélo": 2}
 Les mêmes données, déclarées une fois et réutilisées par leur nom :
 soit sondage un dictionnaire de chaînes de caractères et d'entiers tel que sondage = {
 	"Jeudi": 8 ;
@@ -131,15 +145,65 @@ Un histogramme à classes, de bornes et d'effectifs déclarés en toutes lettres
 
 Un nuage de points avec sa droite d'ajustement :
 
-<Représenter>graphiquement une statistique en nuage avec ajustement et les données {(1;2) (2;2,8) (3;4,1) (4;4,9)}
+<Représenter>graphiquement une statistique en nuage avec ajustement et les données {(1;2) ; (2;2,8) ; (3;4,1) ; (4;4,9)}
+
+Le même nuage, de deux listes déclarées :
+soit jours une liste d'entiers telle que jours = {1 ; 2 ; 3 ; 4}
+soit recettes une liste de décimaux telle que recettes = {2 ; 2,8 ; 4,1 ; 4,9}
+<Représenter>graphiquement une statistique en nuage avec ajustement et avec les abscisses jours et les ordonnées recettes
+
+<h1>Des données lues dans un fichier
+Le fichier « classe.csv », exporté d'un tableur, se charge dans une table :
+soit classe une table telle que classe = <Lire>le fichier "DONNEES/classe.csv"
+<Dresser>un tableau avec les données classe
+
+Une colonne est une série. La note qui manque est écartée, et la réponse le dit :
+
+<Calculer>la moyenne de la série classe["Note"]
+
+<Calculer>la médiane de la série classe["Absences"]
+
+<Représenter>graphiquement une statistique en boîte à moustaches avec les données classe["Note"]
+
+<Représenter>graphiquement une statistique en nuage avec les abscisses classe["Absences"] et les ordonnées classe["Note"]
+
+Les dates se trient :
+soit naissances une liste de dates telle que naissances = classe["Né le"]
+Du plus âgé au plus jeune : #{trier(naissances)}.
+
+<h1>Des données lues dans une base
+La base « magasin.duckdb » range les clients, les produits et les commandes d'une papeterie. Une requête en tire le chiffre d'affaires de chaque rayon :
+soit ventes une table telle que ventes = <Interroger>la base "DONNEES/magasin.duckdb" {
+	SELECT rayon, SUM(quantite * prix) AS total
+	FROM commandes
+	JOIN produits ON produits.id = commandes.produit
+	GROUP BY rayon
+	ORDER BY total DESC
+}
+<Dresser>un tableau avec les données ventes
+
+<Représenter>graphiquement une statistique en barres avec les données ventes
+
+Une table de la base se lit aussi telle quelle ; ses colonnes sont des séries :
+soit commandes une table telle que commandes = <Lire>la table "commandes" de la base "DONNEES/magasin.duckdb"
+
+<Calculer>la moyenne de la série commandes["quantite"]
+
+Les tables du document s'interrogent à leur tour — ici celle du fichier « classe.csv » :
+soit bilan une table telle que bilan = <Interroger>les tables {
+	SELECT Classe, COUNT(*) AS effectif, AVG(Note) AS moyenne
+	FROM classe
+	GROUP BY Classe
+}
+<Dresser>un tableau avec les données bilan
 
 <h1>Lois du lycée, calculées
-<Calculer>la probabilité que X <= 1,96 pour la loi normale d'espérance 0 et d'écart type 1
+<Calculer>la probabilité que X <= 1,96 pour la loi normale d'espérance 0 et d'écart-type 1
 <Calculer>la probabilité que X >= 3 pour la loi binomiale de paramètres 10 et 0,5
 <Calculer>la probabilité que X = 2 pour la loi de Poisson de paramètre 1,5
-<Déterminer>le quantile d'ordre 0,95 de la loi normale d'espérance 0 et d'écart type 1
+<Déterminer>le quantile d'ordre 0,95 de la loi normale d'espérance 0 et d'écart-type 1
 <Calculer>l'espérance de la loi binomiale de paramètres 20 et 0,05
-<Calculer>l'écart type de la loi de Poisson de paramètre 4
+<Calculer>l'écart-type de la loi de Poisson de paramètre 4
 
 <h1>Loi de probabilité
 Les valeurs et les probabilités se donnent en deux lignes ; le tableau se dresse tout seul et la somme des probabilités est vérifiée — une loi qui ne totalise pas 1 est refusée avec le total fautif.
@@ -149,15 +213,15 @@ Les valeurs et les probabilités se donnent en deux lignes ; le tableau se dress
 }
 <Calculer>l'espérance de X
 <Calculer>la variance de X
-<Calculer>l'écart type de X
+<Calculer>l'écart-type de X
 
-<h1>Variance, écart type, covariance
-$variance(X)$ est la variance, $écart type(X)$ l'écart type,
+<h1>Variance, écart-type, covariance
+$variance(X)$ est la variance, $écart-type(X)$ l'écart-type,
 $covariance(X; Y)$ la covariance ; l'identité de König-Huygens :
 $variance(X) = EE(X^2) - EE(X)^2$
 Et sur les séries statistiques, les trois se calculent :
 <Calculer>la variance de la série 12 ; 15 ; 9 ; 14
-<Calculer>l'écart type de la série 12 ; 15 ; 9 ; 14
+<Calculer>l'écart-type de la série 12 ; 15 ; 9 ; 14
 <Calculer>la variance de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
 <Calculer>la covariance des séries 1 ; 2 ; 3 et 2 ; 4 ; 7
 
@@ -170,7 +234,7 @@ $S$ suit $binomiale(n; p)$ avec $EE(S) = n p$.
 $répartition de(X; x) = PP(X <= x)$ et, pour une loi continue,
 $répartition de(X; x) = intégrale(t=-infini;x) densité de(X; t)$.
 
-<h1>Espérances et écarts types, en tableau
+<h1>Espérances et écarts-types, en tableau
 <Dresser>un tableau avec une bordure bleu marine {
 	<mc>	<mc>	<mc>
 	Loi	Espérance	Écart-type
@@ -205,22 +269,22 @@ Sur 100 personnes interrogées, 42 déclarent utiliser les transports en commun.
 <Déterminer>le quantile d'ordre 0,975 de la loi de Student à 9 degrés de liberté
 
 <h1>La loi des grands nombres, illustrée par une boucle
-La fréquence théorique de pile vaut $0,5$ ; l'écart type de la fréquence observée sur $n$ lancers vaut $1/(2 racine(n))$ — il fond quand $n$ grandit :
+La fréquence théorique de pile vaut $0,5$ ; l'écart-type de la fréquence observée sur $n$ lancers vaut $1/(2 racine(n))$ — il fond quand $n$ grandit :
 pour n ∈ {100 ; 400 ; 1600 ; 6400} {
-	Pour #n lancers, l'écart type de la fréquence vaut #{arrondi(1/(2×racine(n)) ; 4)}.
+	Pour #n lancers, l'écart-type de la fréquence vaut #{arrondi(1/(2×racine(n)) ; 4)}.
 }
 
 <h1>Le théorème central limite, en un cadre
 <Afficher>un cadre avec une bordure bleu marine, un fond bleu Alice, des coins arrondis de 3 mm et un titre {Théorème central limite} {
 	Si $X_1, ..., X_n$ sont indépendantes, de même loi, d'espérance
-	$mu$ et d'écart type $sigma$, alors la moyenne centrée réduite
+	$mu$ et d'écart-type $sigma$, alors la moyenne centrée réduite
 	converge en loi vers $normale(0; 1)$ : c'est ce qui fait de la loi
 	normale la loi des erreurs de mesure.
 }
 
 Le quantile gaussien et son cousin de Student se rejoignent quand le nombre de mesures grandit :
 
-<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart type 1
+<Déterminer>le quantile d'ordre 0,975 de la loi normale d'espérance 0 et d'écart-type 1
 
 <Déterminer>le quantile d'ordre 0,975 de la loi de Student à 100 degrés de liberté
 
@@ -231,12 +295,12 @@ Le quantile gaussien et son cousin de Student se rejoignent quand le nombre de m
 
 <h1>L'ajustement par moindres carrés
 	Une décroissance mesurée s'ajuste à un modèle exponentiel — les paramètres sortent avec leur écart :
-<Ajuster>N(t) = a*exp(b*t) aux données {(0 ; 100) (1 ; 61) (2 ; 37) (3 ; 22) (4 ; 14)}
+<Ajuster>N(t) = a*exp(b*t) aux données {(0 ; 100) ; (1 ; 61) ; (2 ; 37) ; (3 ; 22) ; (4 ; 14)}
 
 <h1>La loi normale
-<Tracer>la densité de la loi normale d'espérance 0 et d'écart type 1
-<Calculer>la probabilité d'être entre -1 et 1 pour la loi normale d'espérance 0 et d'écart type 1
-<Calculer>la probabilité d'être entre -2 et 2 pour la loi normale d'espérance 0 et d'écart type 1
+<Tracer>la densité de la loi normale d'espérance 0 et d'écart-type 1
+<Calculer>la probabilité que −1 ⩽ X ⩽ 1 pour la loi normale d'espérance 0 et d'écart-type 1
+<Calculer>la probabilité d'être entre -2 et 2 pour la loi normale d'espérance 0 et d'écart-type 1
 
 <page suivante h1>Le théorème central limite
 	La somme de $n$ dés, recentrée, s'approche de la loi normale — la densité limite se superpose à la loi exacte :
@@ -248,7 +312,7 @@ Le quantile gaussien et son cousin de Student se rejoignent quand le nombre de m
 Estimer un paramètre, trancher entre deux hypothèses : docdg énonce les hypothèses, donne la statistique, les degrés de liberté et la p-valeur, puis la décision au seuil choisi. La densité de la loi du test montre la zone de rejet et la valeur observée.
 
 <h2>Estimer une moyenne
-Quatre mesures d'une même grandeur ; l'écart type de la population est inconnu, d'où la loi de Student.
+Quatre mesures d'une même grandeur ; l'écart-type de la population est inconnu, d'où la loi de Student.
 <Calculer>l'intervalle de confiance à 95 % de la moyenne de la série 12 ; 15 ; 9 ; 14
 
 <h2>Tester une valeur de référence
@@ -268,7 +332,7 @@ Choix d'une option selon la filière, en effectifs :
 <Effectuer>le test du khi-deux d'indépendance du tableau {20 ; 30 ; 25 | 15 ; 25 ; 35}
 
 <page suivante h2>Les données sont-elles normales ?
-Le test de Student suppose des données issues d'une loi normale ; le test de Shapiro-Wilk le vérifie.
+Le test de Student suppose des données issues d'une loi normale ; le test de Shapiro-Wilk recherche un écart à cette hypothèse.
 <Effectuer>le test de normalité de Shapiro-Wilk de la série 12,3 ; 11,9 ; 12,6 ; 12,1 ; 12,8 ; 12,4 ; 12,2 ; 12,7
 	<remarque>Ne pas rejeter la normalité n'est pas la démontrer : sur huit valeurs, le test a peu de puissance.
 
@@ -278,11 +342,11 @@ Regrouper des individus semblables sans classes connues d'avance : c'est la clas
 
 <h2>Les k-moyennes
 On fixe le nombre de groupes ; l'algorithme alterne l'affectation de chaque point au centre le plus proche et le recalcul des centres, jusqu'à stabilité.
-<Tracer>la classification en 3 groupes des points {(0;0) (1;0,2) (0,3;1) (5;5) (5,5;4,8) (4,9;5,6) (9;0) (9,5;0,4)}
+<Tracer>la classification en 3 groupes des points {(0;0) ; (1;0,2) ; (0,3;1) ; (5;5) ; (5,5;4,8) ; (4,9;5,6) ; (9;0) ; (9,5;0,4)}
 
 <page suivante h2>La classification ascendante hiérarchique
 On part d'autant de groupes que de points, et l'on fusionne à chaque étape les deux groupes dont l'union augmente le moins l'inertie (critère de Ward). Le dendrogramme garde la trace des fusions ; le couper à une hauteur donne une partition.
-<Tracer>le dendrogramme des points {(0;0) (1;0,2) (0,3;1) (5;5) (5,5;4,8) (4,9;5,6) (9;0) (9,5;0,4)} en 3 groupes
+<Tracer>le dendrogramme des points {(0;0) ; (1;0,2) ; (0,3;1) ; (5;5) ; (5,5;4,8) ; (4,9;5,6) ; (9;0) ; (9,5;0,4)} en 3 groupes
 	<remarque>Les deux méthodes retrouvent ici les mêmes groupes ; la grande hauteur de la dernière fusion signale une partition bien marquée.
 
 <h1>Autant de dés que l'on veut

@@ -112,14 +112,14 @@ numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres 
 }
 
 <h1>Un tableau simple
-	Une rangée de données s'écrit entre crochets, les cellules séparées par un point-virgule. Les colonnes se déclarent dans la balise, un code par colonne : la première lettre est verticale (h/m/b), la seconde horizontale (g/c/d) — et le langage naturel fait aussi bien : en haut, à gauche vaut hg.
+	Une ligne de données s'écrit entre crochets, les cellules séparées par un point-virgule. Les colonnes se déclarent dans la balise, un code par colonne : la première lettre est verticale (h/m/b), la seconde horizontale (g/c/d) — et le langage naturel fait aussi bien : en haut, à gauche vaut hg.
 <Dresser>un tableau {
 	<mg>	<mc>	<md>
     [Pomme]	[Poire]	[Prune]
     [Chat]	[Chien]	[Cheval]
 }
 	Rien ici hors des crochets : le tableau n'a donc aucune entête, ce n'est qu'un jeu de colonnes alignées.
-	bordures trace les filets. Tout ce qui s'écrit hors des crochets est une entête : la rangée du haut le devient sans qu'on ait à le dire.
+	bordures trace les filets. Tout ce qui s'écrit hors des crochets est une entête : la ligne du haut le devient sans qu'on ait à le dire.
 <Dresser>un tableau {
 	<mc>	<mg>	<md>
     Figure	Formule	Valeur
@@ -134,18 +134,18 @@ numérotées : numérotée, alphabétique, alphabétique majuscule, en chiffres 
 }
 
 <h1>Insérer une image
-	Une image s'insère par <<Insérer>>l'image ... ; le chemin s'écrit en entier dans la balise, relatif au fichier source, et les dimensions se disent en prose comme tout attribut — ici une largeur, ailleurs un côté ou une légende. Un nom comportant des espaces s'accolade : <<l'image {mon chat.png}>>.
-<Insérer>l'image IMAGES/chat.png avec une largeur de 30 mm
+	Une image s'insère par <<Insérer>>l'image ... ; le chemin s'écrit en entier dans la balise, relatif au fichier source, et les dimensions se disent en prose comme tout attribut — ici une largeur, ailleurs un côté ou une légende. Le chemin entier se place entre guillemets, même s’il contient des espaces, comme dans <<l'image "mon chat.png">>.
+<Insérer>l'image "IMAGES/chat.png" avec une largeur de 30 mm
 
 	Une légende s'ajoute avec <<et la légende {...}>>, sous l'image :
-<Insérer>l'image IMAGES/pommes.png avec une largeur de 30 mm et la légende {Cinq pommes}
+<Insérer>l'image "IMAGES/pommes.png" avec une largeur de 30 mm et la légende {Cinq pommes}
 
 <h1>Une image dans un cadre
 	Un cadre accueille une image comme n'importe quel autre contenu ;
 <<au centre>> la place au milieu de la largeur disponible.
 
 <Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine et un titre {Combien de billes ?} {
-    <au centre>{<Insérer l'image IMAGES/billes.png avec une largeur de 60 mm>}
+    <au centre>{<Insérer l'image "IMAGES/billes.png" avec une largeur de 60 mm>}
 
     Compte les billes de la photo : il y en a #n.
 }
@@ -292,20 +292,20 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	}
 }
 
-<Afficher une liste à cocher>{
+<Dresser>une liste à cocher {
 	Apporter une règle
 	Coller la feuille dans le cahier
 	Écrire son nom et la date
 }
 
-<Afficher une liste en chiffres romains>{
+<Dresser>une liste en chiffres romains {
 	Premier acte
 	Deuxième acte
 }
 
 <h1>Tableaux avancés
 <h2>Fusions déduites de la forme
-	Aucune fusion ne se déclare. Une rangée plus courte que le tableau étend sa dernière cellule jusqu'au bord droit : le titre, seul sur sa rangée, couvre les quatre colonnes. Une entête suivie de plusieurs rangées de données descend sur autant de lignes : Lundi porte deux crochets, il couvre deux rangées.
+	Aucune fusion ne se déclare. Une ligne plus courte que le tableau étend sa dernière cellule jusqu'au bord droit : le titre, seul sur sa ligne, couvre les quatre colonnes. Une entête suivie de plusieurs lignes de données descend sur autant de lignes : Lundi porte deux crochets, il couvre deux lignes.
 
 <Dresser>un tableau {
 	<mc>	<mg>	<mc>	<mc>
@@ -351,12 +351,12 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 <Dresser>un tableau {
 	<mc>	<hg>	<bd>
 	Animal	Formule	Valeur
-	[<Insérer l'image IMAGES/chat.png avec une largeur de 18 mm>]	[$1/2 + 1/3$]	[$5/6$]
-	[<Insérer l'image IMAGES/chien.png avec une largeur de 18 mm>]	[$racine(2)$]	[$1,41$]
+	[<Insérer l'image "IMAGES/chat.png" avec une largeur de 18 mm>]	[$1/2 + 1/3$]	[$5/6$]
+	[<Insérer l'image "IMAGES/chien.png" avec une largeur de 18 mm>]	[$racine(2)$]	[$1,41$]
 }
 
 <h2>Couleurs du tableau
-	fond colore le corps, la bordure prend sa couleur, l'entête les siennes — sans cadre autour. Les couleurs d'entête habillent toutes les cellules d'entête, la rangée du haut comme la colonne de gauche.
+	fond colore le corps, la bordure prend sa couleur, l'entête les siennes — sans cadre autour. Les couleurs d'entête habillent toutes les cellules d'entête, la ligne du haut comme la colonne de gauche.
 <Dresser>un tableau avec un écart de 3 mm, un fond bleu Alice, une bordure bleu marine et une entête en blanc sur fond bleu {
 	<mc>	<mg>	<mc>
 	Jour	Matière	Note
@@ -364,8 +364,8 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	Mardi :	[Français]	[12]
 }
 
-<h2>Rangées dynamiques
-	Le nombre de colonnes est vérifié à chaque rangée, donc boucles et interpolation vivent dans un tableau.
+<h2>Lignes dynamiques
+	Le nombre de colonnes est vérifié à chaque ligne, donc boucles et interpolation vivent dans un tableau.
 <Dresser>un tableau {
 	<mc>	<mg>	<mc>
 	Table des carrés
@@ -389,7 +389,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 <h2>Énoncé et solution
 	Une ligne ne portant que --- coupe le cadre en deux parties.
 <Afficher>un cadre de largeur 15 cm au centre avec un fond blanc fumé, une bordure gris anthracite, des coins arrondis de 2 mm et un titre {Problème} {
-	<au centre>{<Insérer l'image FIGURES/figure1.jpg avec une largeur de 40 mm>}
+	<au centre>{<Insérer l'image "FIGURES/figure1.jpg" avec une largeur de 40 mm>}
 
 	Mesure la hauteur du triangle sur ta figure, à l'échelle 1:10.
 	---
@@ -409,7 +409,7 @@ un <cle>{mot ou groupe de mots français en minuscules} est un style ou un align
 	}
 	<Afficher>un cadre avec un fond bleu Alice, une bordure bleu marine, des coins arrondis de 2 mm et un titre {Résultat} {
 		Hypoténuse : $racine(3^2 + 4^2) = 5$, d'où le périmètre $12$.
-		<au centre>{<Insérer l'image FIGURES/figure1.jpg avec une largeur de 25 mm>}
+		<au centre>{<Insérer l'image "FIGURES/figure1.jpg" avec une largeur de 25 mm>}
 	}
 }
 
@@ -440,7 +440,7 @@ pour n ∈ ⟦1 ; 2⟧ {
 		Calculatrice autorisée.
 	}
 	logo : au milieu, au centre {
-		<Insérer>l'image IMAGES/oiseau.png avec une largeur de 20 mm
+		<Insérer>l'image "IMAGES/oiseau.png" avec une largeur de 20 mm
 	}
 	corps : en mc {
 		Résoudre $x^2 - 5x + 6 = 0$ et vérifier les deux solutions.
@@ -624,7 +624,7 @@ soit âge ∈ ℤ tel que âge = <Saisir>{Quel est son âge ?}
 soit taille ∈ 𝔻 tel que taille = <Saisir>{Quelle est sa taille, en mètres ?}
 soit marié ∈ 𝔹 tel que marié = <Saisir>{Est-il marié ?}
 soit initiale un caractère tel que initiale = <Saisir>{Quelle est sa lettre préférée ?}
-soit statut une chaîne de caractères telle que statut = si marié { marié } sinon { célibataire }
+soit statut une chaîne de caractères telle que statut = si marié { "marié" } sinon { "célibataire" }
 soit tarif ∈ ℤ tel que tarif = si âge est inférieur à 18 { 5 } sinon { 9 }
 
 <h1>Le portrait, composé à partir des réponses

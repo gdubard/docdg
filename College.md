@@ -31,7 +31,7 @@ La rédaction produite est la rédaction canonique : théorème énoncé, carré
 ```docdg
 <Calculer>la moyenne de la série 12 ; 15 ; 9 ; 14
 <Calculer>la variance de la série 12 ; 15 ; 9 ; 14
-<Calculer>l'écart type de la série 12 ; 15 ; 9 ; 14
+<Calculer>l'écart-type de la série 12 ; 15 ; 9 ; 14
 <Calculer>la covariance des séries 1 ; 2 ; 3 et 2 ; 4 ; 7
 <Calculer>la moyenne de la série de valeurs 8 ; 12 ; 15 et d'effectifs 2 ; 5 ; 3
 <Calculer>la médiane de la série 9 ; 15 ; 12 ; 14
@@ -76,7 +76,7 @@ Produit en croix rédigé, coefficient multiplicateur pour les évolutions, dur�
 <Convertir>3 L en cm^3
 ```
 
-Dix figures (du carré à la boule), formule affichée, $\pi$ gardé exact ($36\pi \approx 113{,}1$). Les conversions se font par décalage décimal exact et commenté, sur les longueurs, masses, contenances, aires (avec are et hectare) et volumes (le litre dialogue avec le décimètre cube).
+Dix figures (du carré à la boule), formule affichée, $\pi$ gardé exact ($36\pi \approx 113{,}1$). Un nombre s'écrit avec ou sans espace entre ses milliers : `<Convertir>1 250 g en kg`, `<Calculer>30 % de 4 000`, `<Calculer>le périmètre du cercle de rayon 1 250` ; une mesure et une conversion écrivent leurs nombres par tranches de trois chiffres. Deux nombres qui se suivent sans former de telles tranches ne se multiplient pas : `<Calculer>4000 000 - 458` est refusé, avec les deux écritures possibles, « 4 000 000 » et « 4000 × 000 ». Une donnée décimale est reprise telle quelle, et la liste des côtés d'un triangle accepte les décimaux : `<Calculer>le périmètre du triangle de côtés 1,5, 2 et 2,5`. Les conversions se font par décalage décimal exact et commenté : $125\,\mathrm{m} = 0{,}125\,\mathrm{km}$, $3\,\mathrm{g} = 0{,}003\,\mathrm{kg}$, sur les longueurs, masses, contenances, aires (avec are et hectare) et volumes (le litre dialogue avec le décimètre cube).
 
 ### **Nombres et programmes de calcul**
 

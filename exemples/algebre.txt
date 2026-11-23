@@ -1,4 +1,5 @@
 document {
+    graine: 41;
     orientation: portrait;
     marges: 5;
     espacements: 2;
@@ -78,7 +79,7 @@ La solution de l'équation 2(x - 1) = x + 4 est : <Résoudre>l'équation 2(x - 1
 <page suivante h0>Lycée
 
 <h1>Blocs matrices
-	Une matrice est un bloc : une ligne par rangée, le point-virgule sépare les coefficients. Chaque cellule passe par le mini-langage, donc $2x + 1$ ou $1/2$ y vivent. Parenthèses ou crochets servent eux-mêmes de délimiteur — ce que l'on voit à l'écriture est ce que l'on voit au rendu :
+	Une matrice est un bloc : chacune de ses lignes s'écrit sur une ligne, le point-virgule sépare les coefficients. Chaque cellule passe par le mini-langage, donc $2x + 1$ ou $1/2$ y vivent. Parenthèses ou crochets servent eux-mêmes de délimiteur — ce que l'on voit à l'écriture est ce que l'on voit au rendu :
 <Afficher>la matrice(
 	1 ; 2 ; 3
 	4 ; 5 ; 6
@@ -88,7 +89,7 @@ La solution de l'équation 2(x - 1) = x + 4 est : <Résoudre>l'équation 2(x - 1
 	0 ; 1/2
 ]
 <h1>Matrice augmentée
-	Une barre | dans une rangée trace la barre d'augmentation à cette colonne sur toutes les rangées — la mise en place d'un pivot de Gauss :
+	Une barre | dans une ligne trace la barre d'augmentation à cette colonne sur toutes les lignes — la mise en place d'un pivot de Gauss :
 <Afficher>la matrice[
 	2 ; 1 | 7
 	1 ; -1 | 1
@@ -137,7 +138,7 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 <h2>Suites arithmétiques et géométriques
 <Étudier>la suite arithmétique de premier terme 3 et de raison 2
 
-<Étudier>la suite u géométrique de premier terme 5 et de raison 1/2
+<Étudier>la suite géométrique u de premier terme 5 et de raison 1/2
 
 <page suivante h1>Congruences
 <Étudier>la congruence 3x ≡ 4 [7]
@@ -165,9 +166,9 @@ Un discriminant qui n'est pas un carré parfait garde le radical et donne une va
 <Dresser>la table de Cayley du groupe (Z/8Z)*
 
 <h1>Dénombrement
-<Dénombrer>les combinaisons de 3 parmi 10
-<Dénombrer>les arrangements de 3 parmi 10
-<Dénombrer>les permutations de 5
+<Dénombrer>les combinaisons de 3 éléments parmi 10
+<Dénombrer>les arrangements de 3 éléments parmi 10
+<Dénombrer>les permutations de 5 éléments
 <Dresser>le triangle de Pascal jusqu'à la ligne 5
 
 <h1>Arithmétique
@@ -486,5 +487,5 @@ soit Six ∈ ℚ tel que Six = la proportion des éléments de De supérieurs ou
 
 La moyenne des vingt lancers vaut #{Moy}, et la fréquence des six #{Six}.
 
-<remarque>La clé graine du bloc document fixe le tirage : le même document rend le même résultat, ce qui permet de composer un énoncé et son corrigé sans qu'ils divergent. Le compte se dit une seule fois, devant le mot tirages : le type se contente alors de nommer l'ensemble.
+<remarque>La graine 41 du bloc document fixe le tirage : le même document rend le même résultat, ce qui permet de composer un énoncé et son corrigé sans qu'ils divergent. Le compte se dit une seule fois, devant le mot tirages : le type se contente alors de nommer l'ensemble.
 

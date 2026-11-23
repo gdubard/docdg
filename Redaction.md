@@ -4,7 +4,7 @@ Le catalogue du corpus : chaque énoncé, la phrase qui l'appelle, les niveaux
 où il est exigible, et l'état de sa démonstration.
 
 > Ce document est **engendré** et ne se modifie pas à la main :
-> `cargo app recensement --redaction` le réécrit depuis `corpus/corpus.db`
+> `cargo app recensement --redaction` le réécrit depuis `corpus/corpus.duckdb`
 > et `transpiler/src/maths/demonstrations.json`.
 
 ---
@@ -13,11 +13,11 @@ où il est exigible, et l'état de sa démonstration.
 
 | | Énoncés | Démonstrations rédigées |
 |---|---:|---:|
-| Mathématiques | 652 | 356 |
+| Mathématiques | 720 | 362 |
 | Physique | 438 | 148 |
 | Chimie | 313 | 67 |
 | Sciences de l'ingénieur | 203 | 31 |
-| **Total** | **1606** | **602** |
+| **Total** | **1674** | **608** |
 
 S'y ajoutent **234 grandeurs physiques** et **122 cadres d'hypothèses**, et une
 **bibliothèque de démonstrations classiques** servie par `<Montrer>`, décrite
@@ -36,15 +36,15 @@ en fin de document.
 | cinquième | collège | 65 | 46 | 9 | 10 | 0 |
 | quatrième | collège | 54 | 28 | 15 | 11 | 0 |
 | troisième | collège | 52 | 33 | 10 | 9 | 0 |
-| seconde | lycée | 89 | 48 | 18 | 23 | 0 |
-| première | lycée | 156 | 41 | 43 | 40 | 32 |
-| terminale | lycée | 187 | 64 | 48 | 34 | 41 |
-| licence 1 | supérieur | 206 | 110 | 37 | 29 | 30 |
-| licence 2 | supérieur | 220 | 63 | 60 | 62 | 35 |
-| licence 3 | supérieur | 250 | 101 | 87 | 40 | 22 |
-| master 1 | supérieur | 205 | 67 | 69 | 49 | 20 |
+| seconde | lycée | 91 | 50 | 18 | 23 | 0 |
+| première | lycée | 157 | 42 | 43 | 40 | 32 |
+| terminale | lycée | 197 | 74 | 48 | 34 | 41 |
+| licence 1 | supérieur | 221 | 125 | 37 | 29 | 30 |
+| licence 2 | supérieur | 234 | 77 | 60 | 62 | 35 |
+| licence 3 | supérieur | 269 | 120 | 87 | 40 | 22 |
+| master 1 | supérieur | 212 | 74 | 69 | 49 | 20 |
 | master 2 | supérieur | 143 | 75 | 39 | 6 | 23 |
-| **Total** | | **1722** | | | | |
+| **Total** | | **1790** | | | | |
 
 ---
 
@@ -490,7 +490,11 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| proposition | `Carré d’un entier impair` | seconde | ✅ seconde |
+| contre-exemple | `Carré positif sans nombre positif` | seconde | · |
+| exemple | `Exemple de décomposition d’un entier pair` | seconde | · |
 | propriété | `Il n’existe pas de plus grand entier naturel` | seconde | ✅ seconde |
+| proposition | `Somme de deux entiers pairs` | seconde | ✅ seconde |
 
 #### fonctions
 
@@ -499,17 +503,17 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | définition | `Ensemble de définition` | seconde | · |
 | définition | `Sens de variation d’une fonction` | seconde | · |
 | théorème | `Signe d’une fonction affine` | seconde | ✅ seconde |
-| propriété | `Variations d’une fonction affine` | seconde | ✅ seconde |
 | propriété | `Variations de la fonction carré` | seconde | ✅ seconde |
 | propriété | `Variations de la fonction inverse` | seconde | ✅ seconde |
 | propriété | `Variations de la fonction racine carrée` | seconde | ✅ seconde |
+| propriété | `Variations d’une fonction affine` | seconde | ✅ seconde |
 
 #### géométrie
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Coordonnées d’un vecteur` | seconde | · |
 | théorème | `Coordonnées du milieu d’un segment` | seconde | ✅ seconde |
+| propriété | `Coordonnées d’un vecteur` | seconde | · |
 | théorème | `Critère de colinéarité par le déterminant` | seconde | ✅ seconde |
 | théorème | `Distance entre deux points dans un repère orthonormé` | seconde | ✅ seconde |
 | théorème | `Parallélisme et vecteurs directeurs` | seconde | ✅ seconde |
@@ -520,10 +524,17 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | définition | `Vecteurs colinéaires` | seconde | · |
 | théorème | `Équation cartésienne d’une droite` | seconde | ✅ seconde |
 
+#### logique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| remarque | `Un exemple ne prouve pas une affirmation universelle` | seconde | · |
+
 #### probabilités
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| exemple | `Exemple de probabilité sur un dé équilibré` | seconde | · |
 | théorème | `Probabilité d’une réunion` | seconde | ✅ seconde |
 | définition | `Événements incompatibles` | seconde | · |
 
@@ -531,7 +542,9 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| définition | `Mode et classe modale` | seconde | · |
 | définition | `Quartiles` | seconde | · |
+| définition | `Série groupée en classes` | seconde | · |
 | définition | `Variance et écart-type d’une série statistique` | seconde | · |
 
 #### trigonométrie
@@ -564,18 +577,21 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | théorème | `Dérivée d’un quotient` | première | ✅ première |
+| proposition | `Dérivée d’une fonction constante` | première | · |
 | théorème | `Dérivée d’une somme et d’un produit` | première | ✅ première |
 | théorème | `Dérivées des fonctions usuelles` | première | ✅ première |
+| exemple | `Exemple de suite géométrique convergente` | première | · |
 | théorème | `Existence et unicité de la fonction exponentielle` | première | · |
 | théorème | `Extremum local et dérivée` | première | ✅ première |
+| théorème | `Lien entre signe de la dérivée et variations` | première · licence 1 | ✅ licence 1 |
 | théorème | `L’exponentielle ne s’annule jamais` | première | ✅ première |
 | théorème | `L’exponentielle ne s’annule pas et reste strictement positive` | première | ✅ première |
-| théorème | `Lien entre signe de la dérivée et variations` | première · licence 1 | ✅ licence 1 |
 | définition | `Nombre dérivé` | première | · |
 | théorème | `Relation fonctionnelle de l’exponentielle` | première | ✅ première |
 | théorème | `Somme des termes d’une suite arithmétique` | première | ✅ première |
 | théorème | `Somme des termes d’une suite géométrique` | première | ✅ première |
 | définition | `Suite arithmétique` | première | · |
+| contre-exemple | `Suite bornée qui ne converge pas` | première | · |
 | définition | `Suite géométrique` | première | · |
 | définition | `Suite numérique` | première | · |
 | théorème | `Terme général d’une suite arithmétique` | première | ✅ première |
@@ -593,6 +609,12 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Théorème d’Al-Kashi` | première | ✅ première |
 | théorème | `Équation cartésienne d’un cercle` | première | ✅ première |
 
+#### logique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| remarque | `Condition nécessaire et condition suffisante` | première | · |
+
 #### probabilités
 
 | Type | Appel | Ancrages | Démonstration |
@@ -604,6 +626,12 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Linéarité de l’espérance` | première | ✅ première |
 | définition | `Probabilité conditionnelle` | première | · |
 | définition | `Variable aléatoire et loi de probabilité` | première | · |
+
+#### statistiques
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| définition | `Quantiles, déciles et centiles` | première | · |
 
 ### Terminale
 
@@ -623,8 +651,9 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | corollaire | `Corollaire du théorème des valeurs intermédiaires` | terminale | ✅ terminale |
 | théorème | `Croissances comparées` | terminale | ✅ terminale |
 | théorème | `Deux primitives diffèrent d’une constante` | terminale | ✅ terminale |
-| théorème | `Dérivée d’une fonction composée` | terminale · licence 1 | ✅ licence 1 |
 | théorème | `Dérivée du logarithme` | terminale | ✅ terminale |
+| théorème | `Dérivée d’une fonction composée` | terminale · licence 1 | ✅ licence 1 |
+| contre-exemple | `Fonction continue non dérivable en zéro` | terminale | · |
 | définition | `Fonction logarithme népérien` | terminale | · |
 | définition | `Intégrale d’une fonction continue` | terminale | · |
 | théorème | `Inégalité de Bernoulli` | terminale | ✅ terminale |
@@ -638,13 +667,14 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | propriété | `Relation de Chasles pour l’intégrale` | terminale | ✅ terminale |
 | théorème | `Relation fonctionnelle du logarithme` | terminale | ✅ terminale |
 | théorème | `Solutions de l’équation différentielle y' = ay + b` | terminale | ✅ terminale |
-| théorème | `Théorème d’encadrement` | terminale · licence 1 | ✅ licence 1 |
 | théorème | `Théorème de comparaison` | terminale | ✅ terminale |
 | théorème | `Théorème de la convergence monotone` | terminale · licence 1 | ✅ licence 1 |
 | théorème | `Théorème des valeurs intermédiaires` | terminale · licence 1 | ✅ licence 1 |
+| théorème | `Théorème d’encadrement` | terminale · licence 1 | ✅ licence 1 |
 | théorème | `Toute fonction dérivable est continue` | terminale · licence 1 | ✅ licence 1 |
 | théorème | `Une suite croissante non majorée tend vers l’infini` | terminale | ✅ terminale |
 | théorème | `Unicité de la limite` | terminale | ✅ terminale |
+| remarque | `Valeur au point et limite` | terminale | · |
 | définition | `Valeur moyenne d’une fonction` | terminale | · |
 
 #### arithmétique
@@ -653,6 +683,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 |---|---|---|---|
 | théorème | `Compatibilité des congruences avec les opérations` | terminale (mathématiques expertes) | ✅ terminale |
 | définition | `Congruence modulo n` | terminale (mathématiques expertes) | · |
+| conjecture | `Conjecture de Syracuse` | terminale | · |
 | théorème | `Petit théorème de Fermat` | terminale (mathématiques expertes) · master 2 (agrégation externe) | ✅ terminale · master 2 |
 | théorème | `Théorème de Bézout` | terminale (mathématiques expertes) · master 2 (agrégation externe) | ✅ terminale · master 2 |
 | théorème | `Théorème de Gauss` | terminale (mathématiques expertes) | ✅ terminale |
@@ -688,17 +719,38 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| théorème | `Absence de mémoire de la loi exponentielle` | terminale | ✅ terminale |
 | définition | `Coefficient binomial` | terminale | · |
 | théorème | `Espérance et variance de la loi binomiale` | terminale · licence 1 | ✅ licence 1 |
+| définition | `Fonction de répartition d’une variable aléatoire` | terminale | · |
 | théorème | `Formule de Bayes` | terminale | ✅ terminale |
+| définition | `Graphe probabiliste et matrice de transition` | terminale (mathématiques expertes) | · |
 | théorème | `Inégalité de Bienaymé-Tchebychev` | terminale | ✅ terminale |
 | corollaire | `Inégalité de concentration` | terminale | ✅ terminale |
 | définition | `Loi binomiale` | terminale | · |
 | théorème | `Loi des grands nombres` | terminale | ✅ terminale |
+| définition | `Loi exponentielle` | terminale | · |
+| définition | `Loi normale` | terminale | · |
+| définition | `Loi uniforme sur un intervalle` | terminale | · |
 | théorème | `Probabilités d’une loi binomiale` | terminale | ✅ terminale |
 | théorème | `Relation de Pascal` | terminale | ✅ terminale |
+| définition | `Variable aléatoire à densité` | terminale | · |
+
+#### statistiques
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| définition | `Coefficient de corrélation linéaire` | terminale | · |
+| définition | `Covariance de deux séries statistiques` | terminale | · |
+| théorème | `Droite de régression par les moindres carrés` | terminale | ✅ terminale |
 
 ### Licence 1
+
+#### algorithmique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| problème | `Problème du plus court chemin dans un graphe` | licence 1 | · |
 
 #### algèbre
 
@@ -726,14 +778,19 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Caractérisation d’un sous-espace vectoriel` | licence 1 | ✅ licence 1 |
 | définition | `Espace vectoriel` | licence 1 | · |
 | théorème | `Espaces de même dimension` | licence 1 | ✅ licence 1 |
+| exemple | `Exemple de matrice nilpotente non nulle` | licence 1 | · |
+| exemple | `Exemple de sous-espace de dimension un` | licence 1 | · |
 | définition | `Famille libre, génératrice, base` | licence 1 | · |
 | théorème | `Formule de Grassmann` | licence 1 | ✅ licence 1 |
 | théorème | `Injectivité et noyau` | licence 1 | ✅ licence 1 |
 | propriété | `Intersection de sous-espaces vectoriels` | licence 1 | ✅ licence 1 |
 | théorème | `Le noyau et l’image sont des sous-espaces` | licence 1 | ✅ licence 1 |
-| théorème | `Lemme d’échange de Steinitz` | licence 1 | · |
+| lemme | `Lemme d’échange de Steinitz` | licence 1 | · |
 | définition | `Matrice d’une application linéaire` | licence 1 | · |
+| contre-exemple | `Matrices non nulles de produit nul` | licence 1 | · |
+| remarque | `Produit nul et matrices` | licence 1 | · |
 | théorème | `Rang d’une matrice` | licence 1 | · |
+| proposition | `Somme de deux sous-espaces` | licence 1 | · |
 | théorème | `Théorème de la base incomplète` | licence 1 | · |
 | théorème | `Théorème du rang` | licence 1 · master 2 (agrégation externe) | ✅ licence 1 · master 2 |
 
@@ -757,11 +814,11 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Intégration par parties` | licence 1 | ✅ licence 1 |
 | propriété | `Inégalité de la moyenne` | licence 1 | ✅ licence 1 |
 | corollaire | `Inégalité des accroissements finis` | licence 1 | ✅ licence 1 |
-| théorème | `Lemme de Cesàro` | licence 1 | ✅ licence 1 |
+| lemme | `Lemme de Cesàro` | licence 1 | ✅ licence 1 |
 | définition | `Limite d’une fonction, définition quantifiée` | licence 1 | · |
 | propriété | `Produit d’une suite bornée par une suite de limite nulle` | licence 1 | ✅ licence 1 |
-| théorème | `Propriété d’Archimède` | licence 1 | ✅ licence 1 |
 | axiome | `Propriété de la borne supérieure` | licence 1 | · |
+| théorème | `Propriété d’Archimède` | licence 1 | ✅ licence 1 |
 | définition | `Suite de Cauchy` | licence 1 | · |
 | théorème | `Suites adjacentes` | licence 1 | ✅ licence 1 |
 | théorème | `Théorème de Bolzano-Weierstrass` | licence 1 · master 2 (agrégation externe) | ✅ licence 1 · master 2 |
@@ -786,7 +843,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Infinité des nombres premiers` | licence 1 · master 2 (agrégation externe) | ✅ licence 1 · master 2 |
 | théorème | `Irrationalité de la racine d’un entier non carré` | licence 1 | ✅ licence 1 |
 | théorème | `Le plus petit diviseur d’un entier est premier` | licence 1 | ✅ licence 1 |
-| théorème | `Lemme d’Euclide` | licence 1 | ✅ licence 1 |
+| lemme | `Lemme d’Euclide` | licence 1 | ✅ licence 1 |
 
 #### dénombrement
 
@@ -800,15 +857,18 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | définition | `Cardinal d’un ensemble fini` | licence 1 | · |
-| théorème | `Composée d’injections et de surjections` | licence 1 | ✅ licence 1 |
 | théorème | `Composée de bijections` | licence 1 | ✅ licence 1 |
+| théorème | `Composée d’injections et de surjections` | licence 1 | ✅ licence 1 |
+| remarque | `Deux inclusions pour une égalité d’ensembles` | licence 1 | · |
 | propriété | `Distributivité de la réunion et de l’intersection` | licence 1 | ✅ licence 1 |
 | définition | `Ensemble dénombrable` | licence 1 | · |
+| contre-exemple | `Image d’une intersection sans égalité` | licence 1 | · |
+| proposition | `Image d’une réunion par une application` | licence 1 | · |
 | définition | `Injection, surjection, bijection` | licence 1 | · |
 | théorème | `Injectivité, surjectivité et ensembles finis` | licence 1 | ✅ licence 1 |
+| théorème | `Les classes d’équivalence forment une partition` | licence 1 | ✅ licence 1 |
 | théorème | `L’ensemble des rationnels est dénombrable` | licence 1 | · |
 | théorème | `L’ensemble des réels n’est pas dénombrable` | licence 1 | ✅ licence 1 |
-| théorème | `Les classes d’équivalence forment une partition` | licence 1 | ✅ licence 1 |
 | définition | `Relation d’ordre` | licence 1 | · |
 | définition | `Relation d’équivalence` | licence 1 | · |
 | théorème | `Théorème de Cantor-Bernstein` | licence 1 | · |
@@ -828,7 +888,38 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | propriété | `Négation des propositions quantifiées` | licence 1 | ✅ licence 1 |
 | théorème | `Récurrence forte` | licence 1 | ✅ licence 1 |
 
+#### probabilités
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| définition | `Covariance et corrélation de deux variables aléatoires` | licence 1 | · |
+| définition | `Indépendance de deux variables aléatoires` | licence 1 | · |
+| définition | `Loi conditionnelle` | licence 1 | · |
+| définition | `Loi conjointe et lois marginales` | licence 1 | · |
+| définition | `Loi géométrique` | licence 1 | · |
+| théorème | `Théorème de transfert` | licence 1 | · |
+| théorème | `Variance d’une somme de deux variables aléatoires` | licence 1 | ✅ licence 1 |
+
+#### statistiques
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| propriété | `Coefficient de détermination` | licence 1 | · |
+| définition | `Coefficient de variation` | licence 1 | · |
+| définition | `Courbe de Lorenz et indice de Gini` | licence 1 | · |
+| définition | `Décomposition d’une série chronologique` | licence 1 | · |
+| définition | `Fonction de répartition empirique` | licence 1 | · |
+| propriété | `Moyennes géométrique, harmonique et quadratique` | licence 1 | · |
+| définition | `Moyennes mobiles` | licence 1 | · |
+| définition | `Écart absolu moyen et écart absolu médian` | licence 1 | · |
+
 ### Licence 2
+
+#### algorithmique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| problème | `Problème du voyageur de commerce` | licence 2 | · |
 
 #### algèbre
 
@@ -850,7 +941,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | définition | `Forme linéaire, espace dual` | licence 2 | · |
 | théorème | `Inégalité de Cauchy-Schwarz` | licence 2 · master 2 (agrégation externe) | ✅ licence 2 · master 2 |
 | corollaire | `Inégalité de Minkowski` | licence 2 | ✅ licence 2 |
-| théorème | `Lemme des noyaux` | licence 2 · master 2 (agrégation externe) | ✅ licence 2 · master 2 |
+| lemme | `Lemme des noyaux` | licence 2 · master 2 (agrégation externe) | ✅ licence 2 · master 2 |
 | théorème | `Méthode du pivot de Gauss` | licence 2 | ✅ licence 2 |
 | théorème | `Polynôme caractéristique` | licence 2 | ✅ licence 2 |
 | théorème | `Procédé d’orthonormalisation de Gram-Schmidt` | licence 2 · master 2 (agrégation externe) | ✅ licence 2 · master 2 |
@@ -883,7 +974,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Formule de Stirling` | licence 2 | · |
 | théorème | `Interversion limite-intégrale (cas uniforme)` | licence 2 | · |
 | théorème | `La convergence uniforme entraîne la convergence simple` | licence 2 | ✅ licence 2 |
-| théorème | `Lemme d’Abel` | licence 2 | ✅ licence 2 |
+| lemme | `Lemme d’Abel` | licence 2 | ✅ licence 2 |
 | théorème | `Multiplicateurs de Lagrange` | licence 2 | · |
 | théorème | `Points critiques et extrema` | licence 2 | ✅ licence 2 |
 | théorème | `Règle de d’Alembert` | licence 2 | ✅ licence 2 |
@@ -896,12 +987,44 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Unicité des coefficients d’une série entière` | licence 2 | ✅ licence 2 |
 | théorème | `Équations différentielles linéaires du second ordre à coefficients constants` | licence 2 | ✅ licence 2 |
 
+#### arithmétique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| conjecture | `Conjecture des nombres premiers jumeaux` | licence 2 | · |
+| conjecture | `Conjecture forte de Goldbach` | licence 2 | · |
+
+#### géométrie
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| problème | `Problème classique de la quadrature du cercle` | licence 2 | · |
+
 #### probabilités
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| théorème | `Espérance et variance par la fonction génératrice` | licence 2 | ✅ licence 2 |
+| théorème | `Fonction génératrice d’une somme de variables indépendantes` | licence 2 | ✅ licence 2 |
+| définition | `Fonction génératrice d’une variable aléatoire` | licence 2 | · |
+| définition | `Loi bêta` | licence 2 | · |
+| définition | `Loi de Cauchy` | licence 2 | · |
+| définition | `Loi de Weibull` | licence 2 | · |
+| définition | `Loi log-normale` | licence 2 | · |
 | définition | `Lois discrètes usuelles` | licence 2 | · |
+| définition | `Lois hypergéométrique, de Pascal et binomiale négative` | licence 2 | · |
+| théorème | `Stabilité des lois usuelles par somme` | licence 2 | · |
 | théorème | `Variance d’une somme de variables indépendantes` | licence 2 | ✅ licence 2 |
+
+#### statistiques
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| propriété | `Droite de Henry` | licence 2 | · |
+| définition | `Intervalle de confiance` | licence 2 | · |
+| définition | `Lissage exponentiel simple` | licence 2 | · |
+| définition | `Moments, asymétrie et aplatissement d’une série` | licence 2 | · |
+| théorème | `Variance corrigée d’un échantillon` | licence 2 | ✅ licence 2 |
 
 #### topologie
 
@@ -963,15 +1086,15 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | théorème | `Inégalité de Jensen` | licence 3 | ✅ licence 3 |
-| théorème | `Lemme de Grönwall` | licence 3 | ✅ licence 3 |
-| théorème | `Méthode d’Euler explicite` | licence 3 | ✅ licence 3 |
+| lemme | `Lemme de Grönwall` | licence 3 | ✅ licence 3 |
 | théorème | `Méthode de dichotomie` | licence 3 | ✅ licence 3 |
+| théorème | `Méthode d’Euler explicite` | licence 3 | ✅ licence 3 |
 | théorème | `Méthodes des rectangles et des trapèzes` | licence 3 | ✅ licence 3 |
 | théorème | `Séries de Fourier` | licence 3 · master 2 (agrégation externe) | ✅ master 2 |
-| théorème | `Théorème d’inversion locale` | licence 3 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Théorème de Cauchy-Lipschitz` | licence 3 · master 2 (agrégation externe) | ✅ licence 3 · master 2 |
 | théorème | `Théorème de Dini` | licence 3 | ✅ licence 3 |
 | théorème | `Théorème des fonctions implicites` | licence 3 | · |
+| théorème | `Théorème d’inversion locale` | licence 3 · master 2 (agrégation externe) | ✅ master 2 |
 
 #### analyse complexe
 
@@ -1000,6 +1123,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| problème | `Existence d’un nombre parfait impair` | licence 3 | · |
 | théorème | `Indicatrice d’Euler et théorème d’Euler` | licence 3 | · |
 | théorème | `Théorème de Wilson` | licence 3 | · |
 
@@ -1030,8 +1154,8 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | définition | `Espaces L^p` | licence 3 | · |
 | définition | `Intégrale de Lebesgue` | licence 3 | · |
 | théorème | `Inégalité de Hölder` | licence 3 · master 2 (agrégation externe) | ✅ licence 3 · master 2 |
-| théorème | `Lemme de Fatou` | licence 3 | ✅ licence 3 |
-| théorème | `Lemme de Riemann-Lebesgue` | licence 3 | ✅ licence 3 |
+| lemme | `Lemme de Fatou` | licence 3 | ✅ licence 3 |
+| lemme | `Lemme de Riemann-Lebesgue` | licence 3 | ✅ licence 3 |
 | définition | `Mesure` | licence 3 | · |
 | théorème | `Mesure de Lebesgue` | licence 3 | · |
 | théorème | `Théorème de convergence dominée` | licence 3 · master 2 (agrégation externe) | ✅ licence 3 · master 2 |
@@ -1046,13 +1170,37 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 |---|---|---|---|
 | définition | `Espace probabilisé` | licence 3 | · |
 | définition | `Fonction caractéristique` | licence 3 | · |
+| définition | `Fonction génératrice des moments` | licence 3 | · |
 | théorème | `Hiérarchie des modes de convergence` | licence 3 | ✅ licence 3 |
 | théorème | `Inégalité de Markov` | licence 3 | ✅ licence 3 |
+| définition | `Loi de Student et loi de Fisher` | licence 3 | · |
 | théorème | `Loi forte des grands nombres` | licence 3 · master 2 (agrégation externe) | ✅ master 2 |
+| définition | `Loi gamma et loi du khi-deux` | licence 3 | · |
 | définition | `Modes de convergence` | licence 3 | · |
 | théorème | `Méthode de Monte-Carlo` | licence 3 | · |
 | théorème | `Théorème central limite` | licence 3 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Théorème de de Moivre-Laplace` | licence 3 | · |
+
+#### statistiques
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| théorème | `Analyse en composantes principales` | licence 3 | · |
+| définition | `Autocorrélation d’une série chronologique` | licence 3 | · |
+| définition | `Coefficient de corrélation de Spearman` | licence 3 | · |
+| définition | `Estimateur du maximum de vraisemblance` | licence 3 | · |
+| définition | `Estimateur, biais et risque quadratique` | licence 3 | · |
+| propriété | `Inertie expliquée et qualité de représentation` | licence 3 | · |
+| propriété | `Intervalle de Clopper-Pearson` | licence 3 | · |
+| théorème | `Intervalle de confiance d’une moyenne` | licence 3 | · |
+| théorème | `Intervalle de confiance d’une proportion` | licence 3 | · |
+| théorème | `Intervalle de prévision en régression linéaire` | licence 3 | · |
+| propriété | `Intervalle de Wilson` | licence 3 | · |
+| définition | `Matrice des covariances et matrice des corrélations` | licence 3 | · |
+| définition | `Méthode des moments` | licence 3 | · |
+| théorème | `Test de Student` | licence 3 | · |
+| théorème | `Test du khi-deux d’adéquation` | licence 3 | · |
+| définition | `Test d’hypothèse` | licence 3 | · |
 
 #### topologie
 
@@ -1066,6 +1214,12 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 
 ### Master 1
 
+#### algorithmique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| problème | `Problème P contre NP` | master 1 | · |
+
 #### algèbre
 
 | Type | Appel | Ancrages | Démonstration |
@@ -1073,7 +1227,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Correspondance de Galois` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 | définition | `Extension galoisienne et groupe de Galois` | master 1 | · |
 | définition | `Forme quadratique et forme polaire` | master 1 | · |
-| théorème | `Lemme de Nakayama` | master 1 | · |
+| lemme | `Lemme de Nakayama` | master 1 | · |
 | théorème | `Loi d’inertie de Sylvester` | master 1 · master 2 (agrégation externe) | ✅ master 1 · master 2 |
 | théorème | `Modules de type fini sur un anneau principal` | master 1 | · |
 | théorème | `Orthogonalité des caractères` | master 1 | · |
@@ -1088,6 +1242,7 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| conjecture | `Conjecture des matrices de Hadamard` | master 1 | · |
 | théorème | `Décomposition polaire` | master 1 · master 2 (agrégation externe) | ✅ master 1 · master 2 |
 | théorème | `Théorème de Perron-Frobenius` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 
@@ -1097,13 +1252,14 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 |---|---|---|---|
 | théorème | `Convergence de la méthode de Newton` | master 1 · master 2 (agrégation externe) | ✅ master 1 · master 2 |
 | théorème | `Formules de Green-Riemann et d’Ostrogradski` | master 1 | · |
+| conjecture | `Hypothèse de Riemann` | master 1 | · |
 | théorème | `Interpolation de Lagrange` | master 1 | ✅ master 1 |
-| théorème | `Lemme de Morse` | master 1 | · |
+| lemme | `Lemme de Morse` | master 1 | · |
 | théorème | `Méthode de Laplace` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Principe du maximum pour les fonctions harmoniques` | master 1 | · |
-| théorème | `Théorème d’Abel angulaire` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Théorème de comparaison de Sturm` | master 1 | · |
 | théorème | `Théorème de Fejér` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
+| théorème | `Théorème d’Abel angulaire` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 
 #### analyse complexe
 
@@ -1119,14 +1275,14 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | théorème | `Alternative de Fredholm` | master 1 | · |
 | définition | `Opérateur compact` | master 1 | · |
 | théorème | `Théorie de Riesz-Schauder` | master 1 | · |
-| théorème | `Théorème d’Ascoli` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Théorème de Banach-Steinhaus` | master 1 · master 2 (agrégation externe) | ✅ master 1 · master 2 |
 | théorème | `Théorème de Hahn-Banach` | master 1 | · |
 | théorème | `Théorème de Korovkine` | master 1 | · |
-| théorème | `Théorème de l’application ouverte` | master 1 | · |
 | théorème | `Théorème de Lax-Milgram` | master 1 | ✅ master 1 |
+| théorème | `Théorème de l’application ouverte` | master 1 | · |
 | théorème | `Théorème de Stone-Weierstrass` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Théorème du graphe fermé` | master 1 | ✅ master 1 |
+| théorème | `Théorème d’Ascoli` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 | théorème | `Théorème spectral pour les opérateurs compacts autoadjoints` | master 1 · master 2 (agrégation externe) | ✅ master 2 |
 
 #### arithmétique
@@ -1167,15 +1323,27 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | définition | `Chaîne de Markov` | master 1 | · |
+| théorème | `Distribution invariante d’une chaîne de Markov` | master 1 | · |
 | théorème | `Espérance conditionnelle` | master 1 | ✅ master 1 |
 | théorème | `Inégalité de Cramér-Rao` | master 1 | · |
-| théorème | `Lemme de Slutsky` | master 1 | · |
-| théorème | `Lemmes de Borel-Cantelli` | master 1 | ✅ master 1 |
+| lemme | `Lemme de Slutsky` | master 1 | · |
+| lemme | `Lemmes de Borel-Cantelli` | master 1 | ✅ master 1 |
 | théorème | `Loi du zéro-un de Kolmogorov` | master 1 | · |
 | définition | `Martingale` | master 1 | · |
-| théorème | `Théorème d’arrêt de Doob` | master 1 | · |
+| théorème | `Temps moyens d’atteinte et probabilités d’absorption` | master 1 | · |
 | théorème | `Théorème de convergence des martingales` | master 1 | · |
+| théorème | `Théorème d’arrêt de Doob` | master 1 | · |
 | théorème | `Théorème ergodique pour les chaînes de Markov` | master 1 | · |
+| définition | `États récurrents, transitoires et absorbants` | master 1 | · |
+
+#### statistiques
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| théorème | `Analyse de la variance à un facteur` | master 1 | · |
+| théorème | `Comparaisons multiples de Tukey` | master 1 | · |
+| définition | `Information de Fisher` | master 1 | · |
+| définition | `Rééchantillonnage par bootstrap` | master 1 | · |
 
 #### topologie
 
@@ -1244,46 +1412,6 @@ plus proche de celui du document — et **le dit** quand elle vient d'un autre.
 |---|---|---|---|
 | définition | `Homologie singulière` | master 2 | · |
 | théorème | `Théorie des revêtements` | master 2 | · |
-
-
-<!-- CHANTIER_2_AJOUTS_DEBUT -->
-### Compléments du chantier 2 (entrées nouvelles)
-
-Ces 30 entrées ont été ajoutées après la première génération du catalogue. Le générateur canonique les répartira dans leurs domaines lors du prochain `cargo app recensement --redaction`.
-
-| Genre | Appel | Premier niveau | Démonstration |
-|---|---|---|---|
-| contre-exemple | `Carré positif sans nombre positif` | seconde | · |
-| exemple | `Exemple de décomposition d’un entier pair` | seconde | · |
-| exemple | `Exemple de probabilité sur un dé équilibré` | seconde | · |
-| proposition | `Carré d’un entier impair` | seconde | ✅ 1 preuve(s) |
-| proposition | `Somme de deux entiers pairs` | seconde | ✅ 1 preuve(s) |
-| remarque | `Un exemple ne prouve pas une affirmation universelle` | seconde | · |
-| contre-exemple | `Suite bornée qui ne converge pas` | première | · |
-| exemple | `Exemple de suite géométrique convergente` | première | · |
-| proposition | `Dérivée d’une fonction constante` | première | · |
-| remarque | `Condition nécessaire et condition suffisante` | première | · |
-| conjecture | `Conjecture de Syracuse` | terminale | · |
-| contre-exemple | `Fonction continue non dérivable en zéro` | terminale | · |
-| remarque | `Valeur au point et limite` | terminale | · |
-| contre-exemple | `Image d’une intersection sans égalité` | licence 1 | · |
-| contre-exemple | `Matrices non nulles de produit nul` | licence 1 | · |
-| exemple | `Exemple de matrice nilpotente non nulle` | licence 1 | · |
-| exemple | `Exemple de sous-espace de dimension un` | licence 1 | · |
-| problème | `Problème du plus court chemin dans un graphe` | licence 1 | · |
-| proposition | `Image d’une réunion par une application` | licence 1 | · |
-| proposition | `Somme de deux sous-espaces` | licence 1 | · |
-| remarque | `Deux inclusions pour une égalité d’ensembles` | licence 1 | · |
-| remarque | `Produit nul et matrices` | licence 1 | · |
-| conjecture | `Conjecture des nombres premiers jumeaux` | licence 2 | · |
-| conjecture | `Conjecture forte de Goldbach` | licence 2 | · |
-| problème | `Problème classique de la quadrature du cercle` | licence 2 | · |
-| problème | `Problème du voyageur de commerce` | licence 2 | · |
-| problème | `Existence d’un nombre parfait impair` | licence 3 | · |
-| conjecture | `Conjecture des matrices de Hadamard` | master 1 | · |
-| conjecture | `Hypothèse de Riemann` | master 1 | · |
-| problème | `Problème P contre NP` | master 1 | · |
-<!-- CHANTIER_2_AJOUTS_FIN -->
 
 ## **Physique**
 
@@ -1504,8 +1632,8 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Champ d’une grandeur physique` | première | · |
 | loi | `Champ de gravitation` | première | ✅ première |
+| définition | `Champ d’une grandeur physique` | première | · |
 | propriété | `Champ entre deux plaques parallèles` | première | · |
 | définition | `Champ magnétique` | première | · |
 | définition | `Champ électrostatique` | première | · |
@@ -1579,9 +1707,9 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | théorème | `Conservation de l’énergie mécanique` | première | ✅ première |
 | propriété | `Dissipation en présence de frottements` | première | · |
 | théorème | `Théorème de l’énergie cinétique` | première | · |
+| propriété | `Travail du poids` | première | ✅ première |
 | définition | `Travail d’une force constante` | première | · |
 | propriété | `Travail d’une force de frottement` | première | · |
-| propriété | `Travail du poids` | première | ✅ première |
 | définition | `Énergie cinétique d’un point matériel` | première | · |
 | définition | `Énergie mécanique` | première | · |
 | définition | `Énergie potentielle de pesanteur` | première | · |
@@ -1692,12 +1820,12 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | définition | `Force conservative et énergie potentielle` | licence 1 | · |
 | modèle | `Forces usuelles` | licence 1 | · |
 | définition | `Moment cinétique d’un point matériel` | licence 1 | · |
-| modèle | `Oscillateur harmonique amorti` | licence 1 · licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
+| modèle | `Oscillateur harmonique amorti` | licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
 | relation | `Pulsation propre d’un oscillateur` | licence 1 | ✅ licence 1 |
 | définition | `Quantité de mouvement` | licence 1 | · |
-| définition | `Systèmes de coordonnées et bases mobiles` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| définition | `Systèmes de coordonnées et bases mobiles` | licence 1 (classe préparatoire PCSI) | · |
 | théorème | `Théorème du centre de masse` | licence 1 | ✅ licence 1 |
-| théorème | `Théorème du moment cinétique` | licence 1 · licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
+| théorème | `Théorème du moment cinétique` | licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
 | relation | `Vitesse et accélération en coordonnées polaires` | licence 1 | ✅ licence 1 |
 
 #### ondes
@@ -1705,7 +1833,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | modèle | `Analogie entre oscillateur mécanique et circuit électrique` | licence 1 | · |
-| modèle | `Oscillations forcées en régime sinusoïdal` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| modèle | `Oscillations forcées en régime sinusoïdal` | licence 1 (classe préparatoire PCSI) | · |
 | propriété | `Résonance d’amplitude` | licence 1 | ✅ licence 1 |
 
 #### optique
@@ -1725,7 +1853,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | principe | `Premier principe de la thermodynamique en licence` | licence 1 | · |
 | relation | `Travail des forces de pression` | licence 1 | ✅ licence 1 |
 | définition | `Variables d’état et équilibre thermodynamique` | licence 1 | · |
-| loi | `Équation d’état du gaz parfait` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| loi | `Équation d’état du gaz parfait` | licence 1 (classe préparatoire PCSI) | · |
 
 #### électromagnétisme
 
@@ -1733,14 +1861,14 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | règle | `Calcul d’un champ par le théorème de Gauss` | licence 1 | · |
 | théorème | `Caractère conservatif du champ électrostatique` | licence 1 | ✅ licence 1 |
-| loi | `Champ créé par une charge ponctuelle` | licence 1 · licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
+| loi | `Champ créé par une charge ponctuelle` | licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
 | propriété | `Conducteur en équilibre électrostatique` | licence 1 | ✅ licence 1 |
 | définition | `Distributions continues de charge` | licence 1 | · |
 | loi | `Force de Laplace` | licence 1 | ✅ licence 1 |
-| loi | `Force de Lorentz` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| loi | `Force de Lorentz` | licence 1 (classe préparatoire PCSI) | · |
 | théorème | `Potentiel électrostatique` | licence 1 | ✅ licence 1 |
 | principe | `Superposition des champs électrostatiques` | licence 1 | · |
-| théorème | `Théorème de Gauss pour le champ électrostatique` | licence 1 · licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
+| théorème | `Théorème de Gauss pour le champ électrostatique` | licence 1 (classe préparatoire PCSI) | ✅ licence 1 |
 | définition | `Énergie potentielle électrostatique` | licence 1 | · |
 
 ### Licence 2
@@ -1761,7 +1889,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | règle | `Chocs élastiques et inélastiques` | licence 2 | · |
 | loi | `Composition des vitesses et des accélérations` | licence 2 | · |
-| modèle | `Forces d’inertie` | licence 2 · licence 2 (classe préparatoire PC) | ✅ licence 2 |
+| modèle | `Forces d’inertie` | licence 2 (classe préparatoire PC) | ✅ licence 2 |
 | définition | `Moment d’inertie` | licence 2 | · |
 | théorème | `Mouvement à force centrale newtonienne` | licence 2 | ✅ licence 2 |
 | propriété | `Pesanteur apparente et effets terrestres` | licence 2 | · |
@@ -1794,7 +1922,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| théorème | `Formule de Fresnel des interférences à deux ondes` | licence 2 · licence 2 (classe préparatoire PC) | ✅ licence 2 |
+| théorème | `Formule de Fresnel des interférences à deux ondes` | licence 2 (classe préparatoire PC) | ✅ licence 2 |
 | propriété | `L’optique géométrique comme limite des courtes longueurs d’onde` | licence 2 | · |
 | théorème | `Trous d’Young et interfrange` | licence 2 | ✅ licence 2 |
 | définition | `Éclairement` | licence 2 | · |
@@ -1803,7 +1931,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| loi | `Effet photoélectrique` | licence 2 · licence 2 (classe préparatoire PC) | · |
+| loi | `Effet photoélectrique` | licence 2 (classe préparatoire PC) | · |
 | loi | `Formule de Rydberg` | licence 2 | · |
 | loi | `Relation de de Broglie` | licence 2 | · |
 
@@ -1816,7 +1944,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | modèle | `Gaz réels et équation de Van der Waals` | licence 2 | · |
 | relation | `Identités thermodynamiques` | licence 2 | ✅ licence 2 |
 | loi | `Loi de Fourier` | licence 2 | · |
-| principe | `Second principe de la thermodynamique` | licence 2 · licence 2 (classe préparatoire PC) | · |
+| principe | `Second principe de la thermodynamique` | licence 2 (classe préparatoire PC) | · |
 | théorème | `Théorème de Carnot` | licence 2 | ✅ licence 2 |
 | définition | `Énergie libre et enthalpie libre` | licence 2 | · |
 
@@ -1834,9 +1962,9 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | modèle | `Dipôle électrostatique` | licence 2 | ✅ licence 2 |
 | définition | `Inductance propre` | licence 2 | · |
 | loi | `Loi de Biot et Savart` | licence 2 | · |
-| loi | `Loi de Faraday` | licence 2 · licence 2 (classe préparatoire PC) | · |
+| loi | `Loi de Faraday` | licence 2 (classe préparatoire PC) | · |
 | règle | `Loi de Lenz` | licence 2 | · |
-| théorème | `Théorème d’Ampère` | licence 2 · licence 2 (classe préparatoire PC) | · |
+| théorème | `Théorème d’Ampère` | licence 2 (classe préparatoire PC) | · |
 | relation | `Énergie magnétique d’une bobine` | licence 2 | ✅ licence 2 |
 | loi | `Équations de Poisson et de Laplace` | licence 2 | ✅ licence 2 |
 
@@ -1980,110 +2108,110 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| modèle | `Conductivité de Drude et temps de relaxation` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Domaines de Weiss et cycle d’hystérésis` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Effet Hall et signe des porteurs` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Effet Meissner et diamagnétisme parfait` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| loi | `Ferromagnétisme et loi de Curie-Weiss` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Jonction p-n et redressement` | master 1 · master 1 (agrégation externe) | · |
-| loi | `Loi d’action de masse dans un semi-conducteur` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Masse effective et dynamique des porteurs` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Modèle de Debye de la capacité thermique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Modèle des liaisons fortes` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| loi | `Paramagnétisme et loi de Curie` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Phonons et relation de dispersion du réseau` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Réseau réciproque et zones de Brillouin` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Structure de bandes et ouverture d’une bande interdite` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Surface de Fermi et caractère métallique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Théorème de Bloch pour un potentiel périodique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Conductivité de Drude et temps de relaxation` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Domaines de Weiss et cycle d’hystérésis` | master 1 (agrégation externe) | · |
+| propriété | `Effet Hall et signe des porteurs` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Effet Meissner et diamagnétisme parfait` | master 1 (agrégation externe) | ✅ master 1 |
+| loi | `Ferromagnétisme et loi de Curie-Weiss` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Jonction p-n et redressement` | master 1 (agrégation externe) | · |
+| loi | `Loi d’action de masse dans un semi-conducteur` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Masse effective et dynamique des porteurs` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Modèle de Debye de la capacité thermique` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Modèle des liaisons fortes` | master 1 (agrégation externe) | ✅ master 1 |
+| loi | `Paramagnétisme et loi de Curie` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Phonons et relation de dispersion du réseau` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Réseau réciproque et zones de Brillouin` | master 1 (agrégation externe) | · |
+| propriété | `Structure de bandes et ouverture d’une bande interdite` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Surface de Fermi et caractère métallique` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Théorème de Bloch pour un potentiel périodique` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### mécanique analytique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| théorème | `Théorème de Noether` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Théorème de Noether` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### noyau
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Désintégration bêta et interaction faible` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Fission induite et réaction en chaîne contrôlée` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Fusion thermonucléaire et critère de Lawson` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Interaction forte résiduelle et saturation nucléaire` | master 1 · master 1 (agrégation externe) | · |
-| modèle | `Modèle de la goutte liquide et formule de Bethe-Weizsäcker` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Modèle en couches et nombres magiques` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Radioactivité alpha et loi de Geiger-Nuttall` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Sections efficaces de réaction nucléaire` | master 1 · master 1 (agrégation externe) | · |
+| propriété | `Désintégration bêta et interaction faible` | master 1 (agrégation externe) | · |
+| propriété | `Fission induite et réaction en chaîne contrôlée` | master 1 (agrégation externe) | · |
+| propriété | `Fusion thermonucléaire et critère de Lawson` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Interaction forte résiduelle et saturation nucléaire` | master 1 (agrégation externe) | · |
+| modèle | `Modèle de la goutte liquide et formule de Bethe-Weizsäcker` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Modèle en couches et nombres magiques` | master 1 (agrégation externe) | · |
+| propriété | `Radioactivité alpha et loi de Geiger-Nuttall` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Sections efficaces de réaction nucléaire` | master 1 (agrégation externe) | · |
 
 #### optique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Cavité laser et modes longitudinaux` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Coefficients d’Einstein et inversion de population` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Cavité laser et modes longitudinaux` | master 1 (agrégation externe) | · |
+| propriété | `Coefficients d’Einstein et inversion de population` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### physique statistique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Classification des transitions de phase` | master 1 · master 1 (agrégation externe) | · |
-| théorème | `Condensation de Bose-Einstein` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Densité d’états et dénombrement dans l’espace des phases` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Distribution de Bose-Einstein` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Distribution de Fermi-Dirac` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Ensemble grand canonique et potentiel chimique` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Gaz de photons et pression de radiation` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Modèle d’Ising traité en champ moyen` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Relation d’Einstein entre diffusion et mobilité` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Équation de Langevin et mouvement brownien` | master 1 · master 1 (agrégation externe) | · |
-| modèle | `Équation maîtresse et bilan détaillé` | master 1 · master 1 (agrégation externe) | · |
-| théorème | `Équivalence des ensembles statistiques` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Classification des transitions de phase` | master 1 (agrégation externe) | · |
+| théorème | `Condensation de Bose-Einstein` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Densité d’états et dénombrement dans l’espace des phases` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Distribution de Bose-Einstein` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Distribution de Fermi-Dirac` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Ensemble grand canonique et potentiel chimique` | master 1 (agrégation externe) | · |
+| propriété | `Gaz de photons et pression de radiation` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Modèle d’Ising traité en champ moyen` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Relation d’Einstein entre diffusion et mobilité` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Équation de Langevin et mouvement brownien` | master 1 (agrégation externe) | · |
+| modèle | `Équation maîtresse et bilan détaillé` | master 1 (agrégation externe) | · |
+| théorème | `Équivalence des ensembles statistiques` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### quantique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| théorème | `Algèbre du moment cinétique et spectre commun` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Composition de deux moments cinétiques` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Couplage spin-orbite et structure fine` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Déterminant de Slater` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Effet Zeeman` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Formalisme de Dirac et notation des kets` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Intégrale d’échange et règle de Hund` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Largeur naturelle d’une raie et temps de vie` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Méthode variationnelle` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Opérateur densité et mélange statistique` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Opérateurs de création et d’annihilation de l’oscillateur` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Perturbations stationnaires d’un niveau dégénéré` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Perturbations stationnaires d’un niveau non dégénéré` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Points de vue de Schrödinger et de Heisenberg` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| postulat | `Postulat de symétrisation` | master 1 · master 1 (agrégation externe) | · |
+| théorème | `Algèbre du moment cinétique et spectre commun` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Composition de deux moments cinétiques` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Couplage spin-orbite et structure fine` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Déterminant de Slater` | master 1 (agrégation externe) | · |
+| propriété | `Effet Zeeman` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Formalisme de Dirac et notation des kets` | master 1 (agrégation externe) | · |
+| propriété | `Intégrale d’échange et règle de Hund` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Largeur naturelle d’une raie et temps de vie` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Méthode variationnelle` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Opérateur densité et mélange statistique` | master 1 (agrégation externe) | · |
+| propriété | `Opérateurs de création et d’annihilation de l’oscillateur` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Perturbations stationnaires d’un niveau dégénéré` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Perturbations stationnaires d’un niveau non dégénéré` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Points de vue de Schrödinger et de Heisenberg` | master 1 (agrégation externe) | ✅ master 1 |
+| postulat | `Postulat de symétrisation` | master 1 (agrégation externe) | · |
 | propriété | `Relation de fermeture et changement de représentation` | master 1 | ✅ master 1 |
-| théorème | `Règle d’or de Fermi` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Règles de sélection dipolaires électriques` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Symétries continues et générateurs en mécanique quantique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Théorème d’Ehrenfest` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Trou de Fermi et énergie d’échange` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Évolution unitaire et opérateur d’évolution` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Règle d’or de Fermi` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Règles de sélection dipolaires électriques` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Symétries continues et générateurs en mécanique quantique` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Théorème d’Ehrenfest` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Trou de Fermi et énergie d’échange` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Évolution unitaire et opérateur d’évolution` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### relativité
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Quadrivecteurs et invariants relativistes` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Quadrivecteurs et invariants relativistes` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### électromagnétisme
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Diffusion Thomson et diffusion Rayleigh` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| loi | `Formule de Larmor` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Jauge de Lorenz et équations des potentiels` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| théorème | `Potentiels retardés` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Rayonnement dipolaire électrique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Tenseur du champ électromagnétique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Transformation des champs par changement de référentiel` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Diffusion Thomson et diffusion Rayleigh` | master 1 (agrégation externe) | ✅ master 1 |
+| loi | `Formule de Larmor` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Jauge de Lorenz et équations des potentiels` | master 1 (agrégation externe) | ✅ master 1 |
+| théorème | `Potentiels retardés` | master 1 (agrégation externe) | · |
+| propriété | `Rayonnement dipolaire électrique` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Tenseur du champ électromagnétique` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Transformation des champs par changement de référentiel` | master 1 (agrégation externe) | ✅ master 1 |
 
 ### Master 2
 
@@ -2091,80 +2219,80 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Limite de Chandrasekhar` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
+| propriété | `Limite de Chandrasekhar` | master 2 (agrégation externe) | ✅ master 2 |
 
 #### cosmologie
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Fond diffus cosmologique et découplage` | master 2 · master 2 (agrégation externe) | · |
-| loi | `Loi de Hubble-Lemaître` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| modèle | `Métrique de Robertson-Walker et facteur d’échelle` | master 2 · master 2 (agrégation externe) | · |
-| loi | `Équations de Friedmann` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
+| propriété | `Fond diffus cosmologique et découplage` | master 2 (agrégation externe) | · |
+| loi | `Loi de Hubble-Lemaître` | master 2 (agrégation externe) | ✅ master 2 |
+| modèle | `Métrique de Robertson-Walker et facteur d’échelle` | master 2 (agrégation externe) | · |
+| loi | `Équations de Friedmann` | master 2 (agrégation externe) | ✅ master 2 |
 
 #### matière condensée
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Effet Josephson` | master 2 · master 2 (agrégation externe) | · |
-| modèle | `Paires de Cooper et théorie BCS` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Effet Josephson` | master 2 (agrégation externe) | · |
+| modèle | `Paires de Cooper et théorie BCS` | master 2 (agrégation externe) | · |
 
 #### particules
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Brisure spontanée de symétrie et acquisition de masse` | master 2 · master 2 (agrégation externe) | · |
-| définition | `Classification des particules élémentaires` | master 2 · master 2 (agrégation externe) | · |
-| règle | `Diagrammes de Feynman et calcul des amplitudes` | master 2 · master 2 (agrégation externe) | · |
-| principe | `Invariance de jauge et origine des interactions` | master 2 · master 2 (agrégation externe) | · |
-| propriété | `Symétries discrètes et leur violation` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Brisure spontanée de symétrie et acquisition de masse` | master 2 (agrégation externe) | · |
+| définition | `Classification des particules élémentaires` | master 2 (agrégation externe) | · |
+| règle | `Diagrammes de Feynman et calcul des amplitudes` | master 2 (agrégation externe) | · |
+| principe | `Invariance de jauge et origine des interactions` | master 2 (agrégation externe) | · |
+| propriété | `Symétries discrètes et leur violation` | master 2 (agrégation externe) | · |
 
 #### physique statistique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Entropie de von Neumann` | master 2 · master 2 (agrégation externe) | · |
-| propriété | `Exposants critiques et universalité` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Groupe de renormalisation et invariance d’échelle` | master 2 · master 2 (agrégation externe) | · |
-| règle | `Simulation de Monte-Carlo et algorithme de Metropolis` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| théorème | `Théorème de fluctuation-dissipation` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| théorème | `Théorème H de Boltzmann` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| modèle | `Équation de Boltzmann et coefficients de transport` | master 2 · master 2 (agrégation externe) | · |
-| modèle | `Équation de Fokker-Planck` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
+| définition | `Entropie de von Neumann` | master 2 (agrégation externe) | · |
+| propriété | `Exposants critiques et universalité` | master 2 (agrégation externe) | · |
+| théorème | `Groupe de renormalisation et invariance d’échelle` | master 2 (agrégation externe) | · |
+| règle | `Simulation de Monte-Carlo et algorithme de Metropolis` | master 2 (agrégation externe) | ✅ master 2 |
+| théorème | `Théorème de fluctuation-dissipation` | master 2 (agrégation externe) | ✅ master 2 |
+| théorème | `Théorème H de Boltzmann` | master 2 (agrégation externe) | ✅ master 2 |
+| modèle | `Équation de Boltzmann et coefficients de transport` | master 2 (agrégation externe) | · |
+| modèle | `Équation de Fokker-Planck` | master 2 (agrégation externe) | ✅ master 2 |
 
 #### quantique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Amplitude de diffusion et section efficace` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Approximation de Born` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| théorème | `Approximation semi-classique et quantification de Bohr-Sommerfeld` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| propriété | `Décohérence par couplage à l’environnement` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Développement en ondes partielles et déphasages` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| définition | `Intrication quantique` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Inégalités de Bell` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| définition | `Seconde quantification et opérateurs de création` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Théorème optique` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
+| définition | `Amplitude de diffusion et section efficace` | master 2 (agrégation externe) | · |
+| théorème | `Approximation de Born` | master 2 (agrégation externe) | ✅ master 2 |
+| théorème | `Approximation semi-classique et quantification de Bohr-Sommerfeld` | master 2 (agrégation externe) | ✅ master 2 |
+| propriété | `Décohérence par couplage à l’environnement` | master 2 (agrégation externe) | · |
+| théorème | `Développement en ondes partielles et déphasages` | master 2 (agrégation externe) | ✅ master 2 |
+| définition | `Intrication quantique` | master 2 (agrégation externe) | · |
+| théorème | `Inégalités de Bell` | master 2 (agrégation externe) | ✅ master 2 |
+| définition | `Seconde quantification et opérateurs de création` | master 2 (agrégation externe) | · |
+| théorème | `Théorème optique` | master 2 (agrégation externe) | ✅ master 2 |
 
 #### relativité
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Décalage gravitationnel vers le rouge` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| définition | `Espace-temps courbe et tenseur métrique` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Géodésiques et mouvement en chute libre` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| propriété | `Limite newtonienne de la gravitation relativiste` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
-| propriété | `Métrique de Schwarzschild et rayon gravitationnel` | master 2 · master 2 (agrégation externe) | · |
-| propriété | `Ondes gravitationnelles` | master 2 · master 2 (agrégation externe) | · |
-| principe | `Principe d’équivalence` | master 2 · master 2 (agrégation externe) | · |
-| propriété | `Tests classiques de la relativité générale` | master 2 · master 2 (agrégation externe) | · |
-| loi | `Équations du champ d’Einstein` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Décalage gravitationnel vers le rouge` | master 2 (agrégation externe) | ✅ master 2 |
+| définition | `Espace-temps courbe et tenseur métrique` | master 2 (agrégation externe) | · |
+| théorème | `Géodésiques et mouvement en chute libre` | master 2 (agrégation externe) | ✅ master 2 |
+| propriété | `Limite newtonienne de la gravitation relativiste` | master 2 (agrégation externe) | ✅ master 2 |
+| propriété | `Métrique de Schwarzschild et rayon gravitationnel` | master 2 (agrégation externe) | · |
+| propriété | `Ondes gravitationnelles` | master 2 (agrégation externe) | · |
+| principe | `Principe d’équivalence` | master 2 (agrégation externe) | · |
+| propriété | `Tests classiques de la relativité générale` | master 2 (agrégation externe) | · |
+| loi | `Équations du champ d’Einstein` | master 2 (agrégation externe) | · |
 
 #### électromagnétisme
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Rayonnement synchrotron` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Rayonnement synchrotron` | master 2 (agrégation externe) | · |
 
 ## **Chimie**
 
@@ -2511,7 +2639,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | propriété | `Allure des courbes de titrage acido-basique` | licence 1 | ✅ licence 1 |
 | règle | `Calcul du pH d’une solution d’acide` | licence 1 | ✅ licence 1 |
-| propriété | `Force d’un acide et nivellement par le solvant` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| propriété | `Force d’un acide et nivellement par le solvant` | licence 1 (classe préparatoire PCSI) | · |
 | relation | `Relation de Henderson-Hasselbalch` | licence 1 | ✅ licence 1 |
 | propriété | `Solution tampon` | licence 1 | ✅ licence 1 |
 
@@ -2520,7 +2648,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | propriété | `Forme des orbitales s, p et d` | licence 1 | · |
-| définition | `Orbitales atomiques et nombres quantiques` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| définition | `Orbitales atomiques et nombres quantiques` | licence 1 (classe préparatoire PCSI) | · |
 | règle | `Règles de remplissage des orbitales` | licence 1 | · |
 | définition | `Échelles d’électronégativité` | licence 1 | · |
 | propriété | `Énergie d’ionisation` | licence 1 | · |
@@ -2530,7 +2658,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Chiralité et carbone asymétrique` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| définition | `Chiralité et carbone asymétrique` | licence 1 (classe préparatoire PCSI) | · |
 | règle | `Configuration absolue et règles de priorité` | licence 1 | · |
 | modèle | `Effets inductif et mésomère` | licence 1 | · |
 | définition | `Nucléophiles et électrophiles` | licence 1 | · |
@@ -2544,7 +2672,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | règle | `Dégénérescence de l’ordre` | licence 1 | · |
 | théorème | `Intégration des lois de vitesse simples` | licence 1 | ✅ licence 1 |
 | loi | `Loi d’Arrhenius` | licence 1 | · |
-| définition | `Ordre d’une réaction` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| définition | `Ordre d’une réaction` | licence 1 (classe préparatoire PCSI) | · |
 | propriété | `Temps de demi-réaction selon l’ordre` | licence 1 | ✅ licence 1 |
 
 #### cristaux
@@ -2553,7 +2681,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | propriété | `Coordinence et sites interstitiels` | licence 1 | ✅ licence 1 |
 | propriété | `Empilements compacts de sphères` | licence 1 | ✅ licence 1 |
-| définition | `Réseaux de Bravais et systèmes cristallins` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| définition | `Réseaux de Bravais et systèmes cristallins` | licence 1 (classe préparatoire PCSI) | · |
 
 #### liaison chimique
 
@@ -2572,7 +2700,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Potentiel d’électrode et électrode standard à hydrogène` | licence 1 · licence 1 (classe préparatoire PCSI) | · |
+| définition | `Potentiel d’électrode et électrode standard à hydrogène` | licence 1 (classe préparatoire PCSI) | · |
 
 ### Licence 2
 
@@ -2688,7 +2816,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | définition | `Potentiel chimique` | licence 2 · licence 3 | · |
 | propriété | `Propriétés colligatives` | licence 2 | ✅ licence 2 |
 | loi | `Relation entre enthalpie libre standard et constante d’équilibre` | licence 2 | · |
-| théorème | `Règle des phases de Gibbs` | licence 2 · licence 2 (classe préparatoire PC) | ✅ licence 2 |
+| théorème | `Règle des phases de Gibbs` | licence 2 (classe préparatoire PC) | ✅ licence 2 |
 | théorème | `Théorème des moments chimiques` | licence 2 | ✅ licence 2 |
 | règle | `Équilibres hétérogènes` | licence 2 | · |
 
@@ -2701,7 +2829,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | relation | `Lien entre enthalpie libre standard et potentiel standard` | licence 2 | ✅ licence 2 |
 | loi | `Lois de Faraday de l’électrolyse` | licence 2 | ✅ licence 2 |
 | règle | `Prévision des réactions d’oxydoréduction` | licence 2 | · |
-| loi | `Relation de Nernst` | licence 2 · licence 2 (classe préparatoire PC) | ✅ licence 2 |
+| loi | `Relation de Nernst` | licence 2 (classe préparatoire PC) | ✅ licence 2 |
 
 ### Licence 3
 
@@ -2799,95 +2927,95 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Désactivation et sélectivité d’un catalyseur` | master 1 · master 1 (agrégation externe) | · |
-| loi | `Isotherme de Langmuir` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Mécanisme de Langmuir-Hinshelwood` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Performance d’un catalyseur et grandeurs de rotation` | master 1 · master 1 (agrégation externe) | · |
+| propriété | `Désactivation et sélectivité d’un catalyseur` | master 1 (agrégation externe) | · |
+| loi | `Isotherme de Langmuir` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Mécanisme de Langmuir-Hinshelwood` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Performance d’un catalyseur et grandeurs de rotation` | master 1 (agrégation externe) | · |
 
 #### chimie organométallique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Addition oxydante et élimination réductrice` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Catalyse asymétrique et induction chirale` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Couplages croisés pallado-catalysés` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Insertion migratoire et bêta-élimination` | master 1 · master 1 (agrégation externe) | · |
+| propriété | `Addition oxydante et élimination réductrice` | master 1 (agrégation externe) | · |
+| propriété | `Catalyse asymétrique et induction chirale` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Couplages croisés pallado-catalysés` | master 1 (agrégation externe) | · |
+| propriété | `Insertion migratoire et bêta-élimination` | master 1 (agrégation externe) | · |
 
 #### chimie quantique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Approximation de Born-Oppenheimer` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| règle | `Méthode de Hartree-Fock et champ autocohérent` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| règle | `Méthode de Hückel` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| règle | `Orbitales frontières et réactivité` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Polarisabilité et forces de dispersion` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| règle | `Règles de Woodward-Hoffmann` | master 1 · master 1 (agrégation externe) | · |
-| théorème | `Théorème de Jahn-Teller` | master 1 · master 1 (agrégation externe) | · |
-| théorème | `Théorème de Koopmans` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| définition | `Énergie de corrélation électronique` | master 1 · master 1 (agrégation externe) | · |
+| propriété | `Approximation de Born-Oppenheimer` | master 1 (agrégation externe) | ✅ master 1 |
+| règle | `Méthode de Hartree-Fock et champ autocohérent` | master 1 (agrégation externe) | ✅ master 1 |
+| règle | `Méthode de Hückel` | master 1 (agrégation externe) | ✅ master 1 |
+| règle | `Orbitales frontières et réactivité` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Polarisabilité et forces de dispersion` | master 1 (agrégation externe) | ✅ master 1 |
+| règle | `Règles de Woodward-Hoffmann` | master 1 (agrégation externe) | · |
+| théorème | `Théorème de Jahn-Teller` | master 1 (agrégation externe) | · |
+| théorème | `Théorème de Koopmans` | master 1 (agrégation externe) | ✅ master 1 |
+| définition | `Énergie de corrélation électronique` | master 1 (agrégation externe) | · |
 
 #### cinétique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Effet isotopique cinétique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Grandeurs d’activation et molécularité` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| postulat | `Postulat de Hammond` | master 1 · master 1 (agrégation externe) | · |
-| loi | `Relation de Hammett` | master 1 · master 1 (agrégation externe) | · |
-| théorème | `Théorie de l’état de transition et équation d’Eyring` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Effet isotopique cinétique` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Grandeurs d’activation et molécularité` | master 1 (agrégation externe) | ✅ master 1 |
+| postulat | `Postulat de Hammond` | master 1 (agrégation externe) | · |
+| loi | `Relation de Hammett` | master 1 (agrégation externe) | · |
+| théorème | `Théorie de l’état de transition et équation d’Eyring` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### coordination
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| règle | `Règle des dix-huit électrons` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Rétrodonation et ligands pi-accepteurs` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| règle | `Règle des dix-huit électrons` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Rétrodonation et ligands pi-accepteurs` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### photochimie
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| modèle | `Diagramme de Perrin-Jablonski` | master 1 · master 1 (agrégation externe) | · |
-| loi | `Relation de Stern-Volmer` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Rendement quantique photochimique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Diagramme de Perrin-Jablonski` | master 1 (agrégation externe) | · |
+| loi | `Relation de Stern-Volmer` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Rendement quantique photochimique` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### polymères
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| modèle | `Chaîne gaussienne et rayon de giration` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Chromatographie d’exclusion stérique` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Masses molaires moyennes et indice de polymolécularité` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| modèle | `Polymérisation en chaîne radicalaire` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| loi | `Polymérisation par étapes et équation de Carothers` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Polymérisation vivante et contrôle des masses` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Stéréorégularité et catalyse de coordination` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Transition vitreuse et états physiques d’un polymère` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Élasticité caoutchoutique d’origine entropique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Chaîne gaussienne et rayon de giration` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Chromatographie d’exclusion stérique` | master 1 (agrégation externe) | · |
+| propriété | `Masses molaires moyennes et indice de polymolécularité` | master 1 (agrégation externe) | ✅ master 1 |
+| modèle | `Polymérisation en chaîne radicalaire` | master 1 (agrégation externe) | ✅ master 1 |
+| loi | `Polymérisation par étapes et équation de Carothers` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Polymérisation vivante et contrôle des masses` | master 1 (agrégation externe) | · |
+| propriété | `Stéréorégularité et catalyse de coordination` | master 1 (agrégation externe) | · |
+| propriété | `Transition vitreuse et états physiques d’un polymère` | master 1 (agrégation externe) | · |
+| propriété | `Élasticité caoutchoutique d’origine entropique` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### spectroscopie
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Condition de résonance magnétique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Couplage scalaire et multiplicité des signaux` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Déplacement chimique et blindage électronique` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| règle | `Fragmentation et reconstitution de structure` | master 1 · master 1 (agrégation externe) | · |
-| principe | `Principe de Franck-Condon` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Relaxation et acquisition par transformée de Fourier` | master 1 · master 1 (agrégation externe) | · |
-| règle | `Règles de sélection en infrarouge et en Raman` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Résonance paramagnétique électronique` | master 1 · master 1 (agrégation externe) | · |
-| propriété | `Spectrométrie de masse à haute résolution` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Spectroscopie de rotation et constante rotationnelle` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Spectroscopie de vibration et anharmonicité` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Condition de résonance magnétique` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Couplage scalaire et multiplicité des signaux` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Déplacement chimique et blindage électronique` | master 1 (agrégation externe) | ✅ master 1 |
+| règle | `Fragmentation et reconstitution de structure` | master 1 (agrégation externe) | · |
+| principe | `Principe de Franck-Condon` | master 1 (agrégation externe) | · |
+| propriété | `Relaxation et acquisition par transformée de Fourier` | master 1 (agrégation externe) | · |
+| règle | `Règles de sélection en infrarouge et en Raman` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Résonance paramagnétique électronique` | master 1 (agrégation externe) | · |
+| propriété | `Spectrométrie de masse à haute résolution` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Spectroscopie de rotation et constante rotationnelle` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Spectroscopie de vibration et anharmonicité` | master 1 (agrégation externe) | ✅ master 1 |
 
 #### électrochimie
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| loi | `Relation de Butler-Volmer` | master 1 · master 1 (agrégation externe) | ✅ master 1 |
-| propriété | `Voltampérométrie cyclique` | master 1 · master 1 (agrégation externe) | · |
+| loi | `Relation de Butler-Volmer` | master 1 (agrégation externe) | ✅ master 1 |
+| propriété | `Voltampérométrie cyclique` | master 1 (agrégation externe) | · |
 
 ### Master 2
 
@@ -2895,32 +3023,32 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Métathèse des oléfines` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Métathèse des oléfines` | master 2 (agrégation externe) | · |
 
 #### chimie quantique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Effets relativistes en chimie des éléments lourds` | master 2 · master 2 (agrégation externe) | · |
-| théorème | `Théorie de la fonctionnelle de la densité` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Effets relativistes en chimie des éléments lourds` | master 2 (agrégation externe) | · |
+| théorème | `Théorie de la fonctionnelle de la densité` | master 2 (agrégation externe) | · |
 
 #### cinétique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| théorème | `Théorie de Marcus du transfert d’électron` | master 2 · master 2 (agrégation externe) | · |
+| théorème | `Théorie de Marcus du transfert d’électron` | master 2 (agrégation externe) | · |
 
 #### photochimie
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Photocatalyse et conversion de l’énergie lumineuse` | master 2 · master 2 (agrégation externe) | · |
+| propriété | `Photocatalyse et conversion de l’énergie lumineuse` | master 2 (agrégation externe) | · |
 
 #### polymères
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| modèle | `Théorie de Flory-Huggins des solutions de polymères` | master 2 · master 2 (agrégation externe) | ✅ master 2 |
+| modèle | `Théorie de Flory-Huggins des solutions de polymères` | master 2 (agrégation externe) | ✅ master 2 |
 
 ## **Sciences de l'ingénieur**
 
@@ -2938,13 +3066,13 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Besoin, fonction d'usage et fonction technique` | première (spécialité SI — voie générale) | · |
+| définition | `Besoin, fonction d’usage et fonction technique` | première (spécialité SI — voie générale) | · |
 | définition | `Chaînes fonctionnelles énergie-information` | première (spécialité SI — voie générale) | · |
-| définition | `Critère et niveau d'acceptation` | première (spécialité SI — voie générale) | · |
-| définition | `Diagramme de contexte d'un produit` | première (spécialité SI — voie générale) | · |
+| définition | `Critère et niveau d’acceptation` | première (spécialité SI — voie générale) | · |
+| définition | `Diagramme de contexte d’un produit` | première (spécialité SI — voie générale) | · |
 | définition | `Diagramme des exigences` | première (spécialité SI — voie générale) | · |
 | définition | `Décomposition fonctionnelle et structurelle` | première (spécialité SI — voie générale) | · |
-| définition | `Exigence vérifiable d'un produit` | première (spécialité SI — voie générale) | · |
+| définition | `Exigence vérifiable d’un produit` | première (spécialité SI — voie générale) | · |
 
 #### instrumentation
 
@@ -2952,8 +3080,8 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | définition | `Chaîne de mesure et acquisition` | première (spécialité SI — voie générale) | · |
 | règle | `Comparer performances mesurées et simulées` | première (spécialité SI — voie générale) | · |
-| définition | `Résolution et précision d'une mesure` | première (spécialité SI — voie générale) | · |
-| définition | `Sensibilité et étalonnage d'un capteur` | première (spécialité SI — voie générale) | · |
+| définition | `Résolution et précision d’une mesure` | première (spécialité SI — voie générale) | · |
+| définition | `Sensibilité et étalonnage d’un capteur` | première (spécialité SI — voie générale) | · |
 
 #### modélisation
 
@@ -2966,7 +3094,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Degré de liberté d'une liaison` | première (spécialité SI — voie générale) | · |
+| définition | `Degré de liberté d’une liaison` | première (spécialité SI — voie générale) | · |
 | définition | `Liaisons pivot et glissière` | première (spécialité SI — voie générale) | · |
 | relation | `Rotation et vitesse angulaire` | première (spécialité SI — voie générale) | · |
 | définition | `Schéma cinématique minimal` | première (spécialité SI — voie générale) | · |
@@ -2985,7 +3113,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| relation | `Loi d'Ohm d'un conducteur` | première (spécialité SI — voie générale) | · |
+| relation | `Loi d’Ohm d’un conducteur` | première (spécialité SI — voie générale) | · |
 | relation | `Puissance électrique instantanée` | première (spécialité SI — voie générale) | · |
 
 #### énergétique
@@ -2995,7 +3123,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | relation | `Bilan élémentaire des puissances` | première (spécialité SI — voie générale) | · |
 | relation | `Puissance mécanique en rotation` | première (spécialité SI — voie générale) | · |
 | relation | `Puissance mécanique en translation` | première (spécialité SI — voie générale) | · |
-| définition | `Rendement énergétique d'un convertisseur de puissance` | première (spécialité SI — voie générale) | · |
+| définition | `Rendement énergétique d’un convertisseur de puissance` | première (spécialité SI — voie générale) | · |
 | relation | `Énergie transférée et puissance moyenne` | première (spécialité SI — voie générale) | · |
 
 ### Terminale
@@ -3016,7 +3144,7 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | relation | `Modèle différentiel du premier ordre` | terminale (spécialité SI — voie générale) | · |
 | relation | `Réponse indicielle du premier ordre` | terminale (spécialité SI — voie générale) | · |
 | définition | `Réponse à un échelon et régime transitoire` | terminale (spécialité SI — voie générale) | · |
-| définition | `Écart statique d'un asservissement` | terminale (spécialité SI — voie générale) | · |
+| définition | `Écart statique d’un asservissement` | terminale (spécialité SI — voie générale) | · |
 
 #### chaîne d’énergie
 
@@ -3032,24 +3160,24 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Acquisition synchrone et temps d'échantillonnage` | terminale (spécialité SI — voie générale) | · |
-| relation | `Loi proportionnelle d'une commande` | terminale (spécialité SI — voie générale) | · |
+| définition | `Acquisition synchrone et temps d’échantillonnage` | terminale (spécialité SI — voie générale) | · |
+| relation | `Loi proportionnelle d’une commande` | terminale (spécialité SI — voie générale) | · |
 | définition | `Machine à états de commande` | terminale (spécialité SI — voie générale) | · |
 
 #### ingénierie système
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| définition | `Architecture multiphysique d'un produit` | terminale (spécialité SI — voie générale) | · |
-| relation | `Réversibilité d'une chaîne de puissance` | terminale (spécialité SI — voie générale) | · |
+| définition | `Architecture multiphysique d’un produit` | terminale (spécialité SI — voie générale) | · |
+| relation | `Réversibilité d’une chaîne de puissance` | terminale (spécialité SI — voie générale) | · |
 
 #### instrumentation
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | définition | `Capteur et grandeur mesurée` | terminale | · |
-| règle | `Fréquence d'échantillonnage et repliement` | terminale (spécialité SI — voie générale) | · |
-| relation | `Quantification idéale d'un convertisseur analogique-numérique` | terminale (spécialité SI — voie générale) | · |
+| règle | `Fréquence d’échantillonnage et repliement` | terminale (spécialité SI — voie générale) | · |
+| relation | `Quantification idéale d’un convertisseur analogique-numérique` | terminale (spécialité SI — voie générale) | · |
 | définition | `Sensibilité d’un capteur` | terminale | · |
 | relation | `Signal de mesure et bruit` | terminale (spécialité SI — voie générale) | · |
 | définition | `Étendue de mesure et linéarité` | terminale | · |
@@ -3060,9 +3188,9 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | définition | `Contrainte et déformation uniaxiales` | terminale (spécialité SI — voie générale) | · |
 | relation | `Deuxième loi de Newton en translation` | terminale (spécialité SI — voie générale) | · |
-| relation | `Principe de l'équilibre d'un solide` | terminale (spécialité SI — voie générale) | · |
-| relation | `Raideur d'un ressort linéaire` | terminale (spécialité SI — voie générale) | · |
-| relation | `Relation vitesse d'un solide en rotation` | terminale (spécialité SI — voie générale) | · |
+| relation | `Principe de l’équilibre d’un solide` | terminale (spécialité SI — voie générale) | · |
+| relation | `Raideur d’un ressort linéaire` | terminale (spécialité SI — voie générale) | · |
+| relation | `Relation vitesse d’un solide en rotation` | terminale (spécialité SI — voie générale) | · |
 | définition | `Réducteur et rapport de transmission` | terminale (spécialité SI — voie générale) | · |
 | relation | `Transmission par engrenages extérieurs` | terminale (spécialité SI — voie générale) | · |
 | relation | `Transmission par poulies et courroie` | terminale (spécialité SI — voie générale) | · |
@@ -3072,15 +3200,15 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
 | règle | `Argumentation scientifique et choix de solution` | terminale (spécialité SI — voie générale) | · |
-| règle | `Protocole d'essai et reproductibilité` | terminale (spécialité SI — voie générale) | · |
+| règle | `Protocole d’essai et reproductibilité` | terminale (spécialité SI — voie générale) | · |
 | règle | `Validation par mesure et simulation` | terminale (spécialité SI — voie générale) | · |
 
 #### électricité
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| relation | `Couple électromagnétique d'un MCC` | terminale (spécialité SI — voie générale) | · |
-| relation | `Équation électrique d'un moteur à courant continu` | terminale (spécialité SI — voie générale) | · |
+| relation | `Couple électromagnétique d’un MCC` | terminale (spécialité SI — voie générale) | · |
+| relation | `Équation électrique d’un moteur à courant continu` | terminale (spécialité SI — voie générale) | · |
 
 #### énergétique
 
@@ -3097,14 +3225,19 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| propriété | `Classe et erreur statique d’un asservissement` | licence 1 (PTSI / L1) | · |
+| théorème | `Condition de stabilité par les pôles` | licence 1 (PTSI / L1) | ✅ licence 1 |
 | définition | `Constante de temps` | licence 1 | · |
+| propriété | `Diagramme de Bode du premier ordre` | licence 1 (PTSI / L1) | · |
 | définition | `Fonction de transfert` | licence 1 | · |
 | théorème | `Fonction de transfert en boucle fermée` | licence 1 | · |
 | définition | `Gain statique` | licence 1 | · |
 | propriété | `Les trois régimes du second ordre` | licence 1 | · |
 | propriété | `Premier dépassement d’un second ordre` | licence 1 | ✅ licence 1 |
+| propriété | `Propriétés fondamentales de la transformée de Laplace` | licence 1 (PTSI / L1) | · |
 | relation | `Pseudo-pulsation d’un second ordre amorti` | licence 1 | · |
 | règle | `Réduction d’un schéma-bloc` | licence 1 | · |
+| propriété | `Réponse indicielle du premier ordre et repères temporels` | licence 1 (PTSI / L1) | ✅ licence 1 |
 | définition | `Schéma-bloc` | licence 1 | · |
 | modèle | `Système du premier ordre` | licence 1 | · |
 | modèle | `Système du second ordre` | licence 1 | · |
@@ -3112,22 +3245,17 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | définition | `Temps de réponse à cinq pour cent` | licence 1 | · |
 | théorème | `Théorème de la valeur finale` | licence 1 | · |
 | théorème | `Théorème de la valeur initiale` | licence 1 | · |
+| théorème | `Théorèmes des valeurs initiale et finale` | licence 1 (PTSI / L1) | · |
 
-#### automatique et mécanique
+#### mécanique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Champ des vitesses d'un solide indéformable` | licence 1 (PTSI / L1) | · |
-| propriété | `Classe et erreur statique d'un asservissement` | licence 1 (PTSI / L1) | · |
+| propriété | `Champ des vitesses d’un solide indéformable` | licence 1 (PTSI / L1) | · |
 | propriété | `Composition des mouvements relatifs` | licence 1 (PTSI / L1) | ✅ licence 1 |
-| propriété | `Condition de stabilité par les pôles` | licence 1 (PTSI / L1) | ✅ licence 1 |
-| propriété | `Diagramme de Bode du premier ordre` | licence 1 (PTSI / L1) | · |
-| propriété | `Mobilité et hyperstatisme d'un mécanisme` | licence 1 (PTSI / L1) | · |
-| propriété | `Propriétés fondamentales de la transformée de Laplace` | licence 1 (PTSI / L1) | · |
-| propriété | `Réponse indicielle du premier ordre et repères temporels` | licence 1 (PTSI / L1) | ✅ licence 1 |
-| propriété | `Théorèmes des valeurs initiale et finale` | licence 1 (PTSI / L1) | · |
+| relation | `Mobilité et hyperstatisme d’un mécanisme` | licence 1 (PTSI / L1) | · |
 | propriété | `Torseurs des liaisons usuelles` | licence 1 (PTSI / L1) | · |
-| propriété | `Équilibre d’un solide : torseur des actions mécaniques extérieures` | licence 1 (PTSI / L1) | · |
+| principe | `Équilibre d’un solide : torseur des actions mécaniques extérieures` | licence 1 (PTSI / L1) | · |
 
 #### mécanique des structures
 
@@ -3150,28 +3278,16 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | théorème | `Critère de Routh-Hurwitz` | licence 2 | · |
 | règle | `Critère du revers` | licence 2 | · |
 | définition | `Diagramme de Bode` | licence 2 | · |
-| définition | `Marge de phase et marge de gain` | licence 2 | · |
-| propriété | `Précision d’un asservissement` | licence 2 | · |
-| théorème | `Stabilité d’un système linéaire` | licence 2 | ✅ licence 2 |
-
-#### asservissements et mécanique
-
-| Type | Appel | Ancrages | Démonstration |
-|---|---|---|---|
-| propriété | `Dynamique du solide : égalité des torseurs dynamique et extérieur` | licence 2 (PT / L2) | · |
 | propriété | `Formes canoniques du deuxième ordre` | licence 2 (PT / L2) | · |
+| définition | `Marge de phase et marge de gain` | licence 2 | · |
 | propriété | `Marges de gain et de phase` | licence 2 (PT / L2) | · |
-| propriété | `Moments quadratiques de sections` | licence 2 (PT / L2) | · |
 | propriété | `Premier dépassement de la réponse indicielle` | licence 2 (PT / L2) | · |
 | propriété | `Précision de position et de traînage` | licence 2 (PT / L2) | · |
+| propriété | `Précision d’un asservissement` | licence 2 | · |
 | propriété | `Pseudo-pulsation et instants des extrema` | licence 2 (PT / L2) | ✅ licence 2 |
-| propriété | `Résistance des matériaux en sollicitation simple` | licence 2 (PT / L2) | ✅ licence 2 |
-| propriété | `Résonance d'un second ordre amorti` | licence 2 (PT / L2) | · |
-| propriété | `Temps de réponse d'un second ordre` | licence 2 (PT / L2) | · |
-| propriété | `Théorème de l'énergie cinétique pour un solide indéformable` | licence 2 (PT / L2) | ✅ licence 2 |
-| propriété | `Torseurs cinétique et dynamique` | licence 2 (PT / L2) | · |
-| propriété | `Énergie cinétique et théorème de König` | licence 2 (PT / L2) | · |
-| propriété | `Équation des poutres d'Euler–Bernoulli` | licence 2 (PT / L2) | · |
+| propriété | `Résonance d’un second ordre amorti` | licence 2 (PT / L2) | · |
+| théorème | `Stabilité d’un système linéaire` | licence 2 | ✅ licence 2 |
+| propriété | `Temps de réponse d’un second ordre` | licence 2 (PT / L2) | · |
 
 #### instrumentation
 
@@ -3179,6 +3295,15 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | règle | `Filtrage d’une mesure bruitée` | licence 2 | · |
 | définition | `Quantification et résolution d’un convertisseur` | licence 2 | · |
+
+#### mécanique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| principe | `Dynamique du solide : égalité des torseurs dynamique et extérieur` | licence 2 (PT / L2) | · |
+| théorème | `Théorème de l’énergie cinétique pour un solide indéformable` | licence 2 (PT / L2) | ✅ licence 2 |
+| définition | `Torseurs cinétique et dynamique` | licence 2 (PT / L2) | · |
+| théorème | `Énergie cinétique et théorème de König` | licence 2 (PT / L2) | · |
 
 #### mécanique des structures
 
@@ -3189,6 +3314,9 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | modèle | `Flexion simple d’une poutre` | licence 2 | · |
 | propriété | `Flèche d’une poutre en console` | licence 2 | ✅ licence 2 |
 | définition | `Moment quadratique d’une section` | licence 2 | · |
+| relation | `Moments quadratiques de sections` | licence 2 (PT / L2) | · |
+| relation | `Résistance des matériaux en sollicitation simple` | licence 2 (PT / L2) | · |
+| propriété | `Équation des poutres d’Euler–Bernoulli` | licence 2 (PT / L2) | ✅ licence 2 |
 
 #### signaux
 
@@ -3209,27 +3337,13 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 | théorème | `Commandabilité et observabilité` | licence 3 | · |
 | propriété | `Correcteur à avance de phase` | licence 3 | · |
 | théorème | `Critère de Nyquist` | licence 3 | · |
+| théorème | `Critères de commandabilité et d’observabilité` | licence 3 (L3) | ✅ licence 3 |
 | définition | `Lieu des racines` | licence 3 | · |
+| théorème | `Placement des pôles d’un système commandable par retour d’état` | licence 3 (L3) | · |
+| théorème | `Principe de séparation observateur–commande` | licence 3 (L3) | · |
 | définition | `Représentation d’état` | licence 3 | · |
-
-#### automatique, signaux et milieux continus
-
-| Type | Appel | Ancrages | Démonstration |
-|---|---|---|---|
-| propriété | `Conduction et équation de la chaleur` | licence 3 (L3) | · |
-| propriété | `Critères de commandabilité et d'observabilité` | licence 3 (L3) | · |
-| propriété | `Distributions et peigne de Dirac` | licence 3 (L3) | ✅ licence 3 |
-| propriété | `Placement des pôles d'un système commandable par retour d'état` | licence 3 (L3) | · |
-| propriété | `Principe de séparation observateur–commande` | licence 3 (L3) | · |
-| propriété | `Propriétés de la transformée de Fourier` | licence 3 (L3) | · |
-| propriété | `Solution de Duhamel d'un système d'état` | licence 3 (L3) | · |
-| propriété | `Tenseur des contraintes de Cauchy` | licence 3 (L3) | · |
-| propriété | `Tenseur des petites déformations` | licence 3 (L3) | · |
-| propriété | `Théorème de Cayley–Hamilton appliqué aux systèmes d'état` | licence 3 (L3) | ✅ licence 3 |
-| propriété | `Théorème de Nyquist–Shannon` | licence 3 (L3) | · |
-| propriété | `Transformée de Fourier discrète` | licence 3 (L3) | · |
-| propriété | `Élasticité isotrope et coefficients de Lamé` | licence 3 (L3) | · |
-| propriété | `Équilibre local d'un milieu continu` | licence 3 (L3) | ✅ licence 3 |
+| propriété | `Solution de Duhamel d’un système d’état` | licence 3 (L3) | · |
+| propriété | `Théorème de Cayley–Hamilton appliqué aux systèmes d’état` | licence 3 (L3) | · |
 
 #### mécanique des structures
 
@@ -3237,12 +3351,26 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | modèle | `Amortissement de Rayleigh` | licence 3 | · |
 | propriété | `Flambement d’Euler` | licence 3 | ✅ licence 3 |
+| théorème | `Tenseur des contraintes de Cauchy` | licence 3 (L3) | · |
+| définition | `Tenseur des petites déformations` | licence 3 (L3) | · |
+| loi | `Élasticité isotrope et coefficients de Lamé` | licence 3 (L3) | · |
+| propriété | `Équilibre local d’un milieu continu` | licence 3 (L3) | ✅ licence 3 |
 
 #### signaux
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| propriété | `Distributions et peigne de Dirac` | licence 3 (L3) | · |
 | modèle | `Modulation d’amplitude` | licence 3 | · |
+| propriété | `Propriétés de la transformée de Fourier` | licence 3 (L3) | · |
+| théorème | `Théorème de Nyquist–Shannon` | licence 3 (L3) | ✅ licence 3 |
+| définition | `Transformée de Fourier discrète` | licence 3 (L3) | · |
+
+#### énergétique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| loi | `Conduction et équation de la chaleur` | licence 3 (L3) | · |
 
 ### Master 1
 
@@ -3252,74 +3380,104 @@ Ces 30 entrées ont été ajoutées après la première génération du catalogu
 |---|---|---|---|
 | modèle | `Observateur de Luenberger` | master 1 | · |
 | théorème | `Placement de pôles par retour d’état` | master 1 | ✅ master 1 |
+| modèle | `Retour d’état et observateur de Luenberger` | master 1 (M1) | · |
+| théorème | `Stabilité au sens de Lyapunov` | master 1 (M1) | · |
+| propriété | `Transformée en z et stabilité discrète` | master 1 (M1) | · |
+| théorème | `Équation matricielle de Lyapunov` | master 1 (M1) | ✅ master 1 |
 
-#### modélisation avancée
+#### mécanique
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Erreur d'approximation et lemme de Céa` | master 1 (M1) | ✅ master 1 |
-| propriété | `Espaces fonctionnels et Lax–Milgram` | master 1 (M1) | · |
-| propriété | `Formulation faible du problème d’élasticité` | master 1 (M1) | ✅ master 1 |
-| propriété | `Modes propres du problème généralisé` | master 1 (M1) | ✅ master 1 |
-| propriété | `Principe variationnel de Hamilton` | master 1 (M1) | ✅ master 1 |
-| propriété | `Quotient de Rayleigh et fréquence fondamentale` | master 1 (M1) | · |
-| propriété | `Raideur d'un élément fini de barre` | master 1 (M1) | · |
-| propriété | `Retour d'état et observateur de Luenberger` | master 1 (M1) | · |
-| propriété | `Réponse forcée et amortissement modal` | master 1 (M1) | ✅ master 1 |
-| propriété | `Stabilité au sens de Lyapunov` | master 1 (M1) | · |
-| propriété | `Transformée discrète et algorithme FFT` | master 1 (M1) | ✅ master 1 |
-| propriété | `Transformée en z et stabilité discrète` | master 1 (M1) | ✅ master 1 |
-| propriété | `Équation matricielle de Lyapunov` | master 1 (M1) | ✅ master 1 |
-| propriété | `Équations de Lagrange généralisées` | master 1 (M1) | · |
+| principe | `Principe variationnel de Hamilton` | master 1 (M1) | · |
+| théorème | `Équations de Lagrange généralisées` | master 1 (M1) | ✅ master 1 |
 
 #### mécanique des structures
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| théorème | `Erreur d’approximation et lemme de Céa` | master 1 (M1) | ✅ master 1 |
+| théorème | `Espaces fonctionnels et Lax–Milgram` | master 1 (M1) | · |
+| propriété | `Formulation faible du problème d’élasticité` | master 1 (M1) | ✅ master 1 |
+| théorème | `Modes propres du problème généralisé` | master 1 (M1) | ✅ master 1 |
 | théorème | `Modes propres d’un système à plusieurs degrés de liberté` | master 1 | · |
 | modèle | `Méthode des éléments finis` | master 1 | · |
+| propriété | `Quotient de Rayleigh et fréquence fondamentale` | master 1 (M1) | · |
+| propriété | `Raideur d’un élément fini de barre` | master 1 (M1) | · |
+| propriété | `Réponse forcée et amortissement modal` | master 1 (M1) | ✅ master 1 |
 | propriété | `Vibrations transversales d’une poutre` | master 1 | · |
 
 #### signaux
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
+| propriété | `Transformée discrète et algorithme FFT` | master 1 (M1) | ✅ master 1 |
 | définition | `Transformée en z` | master 1 | · |
 
 ### Master 2
 
-#### mécanique des milieux continus et commande
+#### asservissements
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Commande optimale linéaire quadratique LQR` | master 2 (M2) | ✅ master 2 |
-| propriété | `Conservation de la masse et dérivée matérielle` | master 2 (M2) | · |
-| propriété | `Consistance et stabilité d'un schéma numérique` | master 2 (M2) | ✅ master 2 |
+| propriété | `Annulation de l’erreur statique avec un PI` | master 2 (agrégation SII) | · |
+| modèle | `Asservissement d’un moteur à courant continu` | master 2 (agrégation SII) | ✅ master 2 |
+| théorème | `Commande optimale linéaire quadratique LQR` | master 2 (M2) | ✅ master 2 |
+| propriété | `Discrétisation bilinéaire de Tustin` | master 2 (agrégation SII) | ✅ master 2 |
+| théorème | `Riccati, détectabilité et commande LQG` | master 2 (M2) | · |
+
+#### informatique embarquée
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| théorème | `Ordonnancement à échéance et priorité fixes` | master 2 (agrégation SII) | · |
+
+#### modélisation
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| théorème | `Consistance et stabilité d’un schéma numérique` | master 2 (M2) | ✅ master 2 |
+
+#### mécanique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| relation | `Relation de Willis d’un train épicycloïdal` | master 2 (agrégation SII) | ✅ master 2 |
+
+#### mécanique des fluides
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| loi | `Conservation de la masse et dérivée matérielle` | master 2 (M2) | · |
 | propriété | `Couche limite laminaire de Blasius` | master 2 (M2) | · |
-| propriété | `Critères de plasticité de Tresca et von Mises` | master 2 (M2) | · |
-| propriété | `Décomposition et contraintes de Reynolds` | master 2 (M2) | · |
-| propriété | `Flambement d'Euler et longueur efficace` | master 2 (M2) | ✅ master 2 |
-| propriété | `Intégration de Newmark` | master 2 (M2) | · |
-| propriété | `Riccati, détectabilité et commande LQG` | master 2 (M2) | · |
-| propriété | `Théorème de Bernoulli dans un écoulement` | master 2 (M2) | ✅ master 2 |
+| modèle | `Décomposition et contraintes de Reynolds` | master 2 (M2) | · |
+| théorème | `Théorème de Bernoulli dans un écoulement` | master 2 (M2) | ✅ master 2 |
 | propriété | `Transition laminaire–turbulent en conduite` | master 2 (M2) | · |
 | propriété | `Écoulement de Poiseuille dans un tube` | master 2 (M2) | · |
-| propriété | `Équations de Navier–Stokes incompressibles` | master 2 (M2) | ✅ master 2 |
+| loi | `Équations de Navier–Stokes incompressibles` | master 2 (M2) | ✅ master 2 |
 
-#### préparation à l’agrégation SII
+#### mécanique des structures
 
 | Type | Appel | Ancrages | Démonstration |
 |---|---|---|---|
-| propriété | `Annulation de l'erreur statique avec un PI` | master 2 (agrégation SII) | · |
-| propriété | `Asservissement d'un moteur à courant continu` | master 2 (agrégation SII) | ✅ master 2 |
-| propriété | `Contrainte maximale et module de flexion` | master 2 (agrégation SII) | · |
-| propriété | `Discrétisation bilinéaire de Tustin` | master 2 (agrégation SII) | · |
+| relation | `Contrainte maximale et module de flexion` | master 2 (agrégation SII) | · |
+| propriété | `Critères de plasticité de Tresca et von Mises` | master 2 (M2) | · |
+| propriété | `Flambement d’Euler et longueur efficace` | master 2 (M2) | ✅ master 2 |
 | propriété | `Flèches usuelles des poutres classiques` | master 2 (agrégation SII) | ✅ master 2 |
-| propriété | `Ordonnancement à échéance et priorité fixes` | master 2 (agrégation SII) | · |
-| propriété | `Puissances active et réactive triphasées` | master 2 (agrégation SII) | ✅ master 2 |
-| propriété | `Relation de Willis d'un train épicycloïdal` | master 2 (agrégation SII) | ✅ master 2 |
-| propriété | `Résistance thermique et déperdition surfacique` | master 2 (agrégation SII) | · |
-| propriété | `Transformation de Park abc–dq` | master 2 (agrégation SII) | · |
+| propriété | `Intégration de Newmark` | master 2 (M2) | · |
+
+#### électricité
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| relation | `Puissances active et réactive triphasées` | master 2 (agrégation SII) | ✅ master 2 |
+| définition | `Transformation de Park abc–dq` | master 2 (agrégation SII) | · |
+
+#### énergétique
+
+| Type | Appel | Ancrages | Démonstration |
+|---|---|---|---|
+| relation | `Résistance thermique et déperdition surfacique` | master 2 (agrégation SII) | · |
 
 ---
 
@@ -3460,4 +3618,4 @@ rédigé par le moteur, sans passer par ici.
 
 ---
 
-*Engendré depuis `corpus/corpus.db` et `transpiler/src/maths/demonstrations.json` par `cargo app recensement --redaction`.*
+*Engendré depuis `corpus/corpus.duckdb` et `transpiler/src/maths/demonstrations.json` par `cargo app recensement --redaction`.*

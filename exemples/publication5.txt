@@ -1,4 +1,5 @@
 document {
+	numérotation: composée;
 	marges: 15;
 	script: Georgia;
 	taille: 11;
