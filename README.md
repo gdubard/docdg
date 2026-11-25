@@ -370,7 +370,7 @@ passent à la ligne au lieu de défiler. Les volets Source et Aperçu gardent le
 place.
 
 L'enregistrement est automatique dès que le document a un fichier : il est
-réécrit une seconde après la dernière frappe. Il n'y a donc ni bouton
+réécrit 150 ms après la dernière frappe. Il n'y a donc ni bouton
 « Enregistrer » ni raccourci d'enregistrement ; un nouveau document reçoit son
 fichier par **Enregistrer sous**. **Ouvrir** remplace le texte affiché au lieu
 de l'ajouter à la suite.
