@@ -64,12 +64,12 @@ Les ouvertures suivantes se font normalement. Depuis macOS 15, le clic droit sui
 
 **Les témoins du moteur.** En haut à droite de la fenêtre, une pastille
 **Document** puis une pastille par bibliothèque — SymPy, mpmath, NumPy et
-SciPy — portent chacune leur voyant. Celui du document est rouge pendant le
+SciPy — portent chacune leur voyant. Celui du document est orange pendant le
 chargement ou une recomposition, vert dès que l'aperçu est à jour, et le temps
-global de chargement s'affiche à côté. Ceux des bibliothèques sont rouges
+global de chargement s'affiche à côté. Ceux des bibliothèques sont orange
 pendant leur chargement, qui se fait en arrière-plan dès l'ouverture, verts
-dès qu'elles sont disponibles — une à deux secondes d'ordinaire, davantage au
-tout premier lancement. On peut écrire pendant le chargement : les calculs qui
+dès qu'elles sont disponibles — quelques secondes d'ordinaire, davantage au
+tout premier lancement — et rouges si l'une d'elles manque. On peut écrire pendant le chargement : les calculs qui
 en dépendent s'affichent dès que le moteur est prêt.
 
 ## **📚 Sommaire détaillé**
@@ -128,8 +128,6 @@ Chaque bloc de code de ces manuels, comme chaque exemple du dossier `exemples/`,
 30. [Les tournures et le placement](#%EF%B8%8F-les-tournures-et-le-placement) — synonymes, bornes naturelles, placement en langage naturel
 31. [Statistiques et probabilités du supérieur](#-statistiques-et-probabilités-du-supérieur) — les six guides : inférence, multivarié, Markov, lois, tests et modèles, estimation
 
-*Annexes, index alphabétique et index thématique : pas encore rédigés dans cette version, à venir.*
-
 ---
 
 ## **📖 Qu'est-ce que docdg ?**
@@ -154,7 +152,7 @@ Ce manuel suit une **progression logique** :
 
 1. Les premiers chapitres posent les fondations (le premier document, la syntaxe, les quatre familles de commandes).
 2. Les chapitres suivants explorent chaque domaine (styles, tableaux, images, dessins, mathématiques, géométrie, statistiques).
-3. Les derniers chapitres forment un **appareil de référence** : la liste complète des commandes, des annexes de tableaux, un index alphabétique et un index thématique.
+3. Les derniers chapitres forment un **appareil de référence** : les couleurs, les options de classe et les bonnes pratiques.
 
 **Chaque construction est présentée de la même façon :**
 
@@ -462,7 +460,7 @@ déclaration précède toujours ce qui l'emploie.
 directement dans la source sans rien ouvrir — mais tant qu'aucun fichier n'est
 désigné, docdg n'a nulle part où écrire, et le ruban Fichier vous le signale.
 Dès le premier **Ouvrir** ou le premier **Enregistrer sous**, l'enregistrement
-automatique s'active : le document est réécrit tout seul une seconde après
+automatique s'active : le document est réécrit tout seul une fraction de seconde après
 votre dernière frappe. C'est le seul geste d'administration à retenir, et il ne
 se fait qu'une fois par document.
 

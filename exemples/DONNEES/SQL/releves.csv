@@ -1,0 +1,10 @@
+Station;Jour;Minimale;Maximale;Pluie;Neige
+ALP;30/12/2024;-6;1;4,2;vrai
+ALP;02/01/2025;-4;2;;vrai
+ALP;03/01/2025;-1;5;0;faux
+ALP;14/07/2025;9;21;1,5;faux
+ALP;15/07/2025;10;;0;faux
+PLA;14/07/2025;16;31;0;faux
+PLA;15/07/2025;17;33;2;faux
+BOC;14/07/2025;14;28;1;faux
+BOC;15/07/2025;15;29,5;0;faux

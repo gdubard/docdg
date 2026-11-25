@@ -3,9 +3,8 @@
 Le catalogue du corpus : chaque énoncé, la phrase qui l'appelle, les niveaux
 où il est exigible, et l'état de sa démonstration.
 
-> Ce document est **engendré** et ne se modifie pas à la main :
-> `cargo app recensement --redaction` le réécrit depuis `corpus/corpus.duckdb`
-> et `transpiler/src/maths/demonstrations.json`.
+> Ce catalogue est établi à partir du corpus livré avec docdg : il est à jour
+> pour cette version.
 
 ---
 

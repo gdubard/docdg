@@ -1,3 +1,17 @@
+## 4.1 — Audit de la RC10 : refus des objets inconnus, statistiques du supérieur, requêtes
+
+**Un objet inconnu après `<Afficher>` ou `<Dresser>` est refusé.** `<Afficher>un cadr { … }` et le modèle « une page de titre » du bandeau étaient acceptés sans avertissement, et leur contenu composé comme un simple groupe : la page de titre n’existait pas. Le moteur répond maintenant par un diagnostic nommant l’objet ; la page de titre renvoie à sa composition (styles, image, saut de page). Le modèle fautif est retiré du bandeau (622 modèles).
+
+**Une simulation d’un seul tirage.** `<Étudier>la simulation de 1 tirage de la loi de Cauchy(0 ; 1) avec la graine 42` était refusée alors que la borne documentée est 1 ; « 1 tirage » est lu et l’accord du pluriel est respecté dans le résumé.
+
+**Variance et écart-type corrigés dans les requêtes.** `variance corrigée(x)` et `écart-type corrigé(x)` (diviseur n−1) rejoignent `variance(x)` et `écart-type(x)` (diviseur n) dans `<Interroger>`, avec les mêmes mots que les estimateurs de `<Calculer>` ; ils sont manquants avec moins de deux valeurs.
+
+**Un seul mot par notion.** « Variance empirique » remplace « variance descriptive », qui ne se dit pas dans le supérieur ; « erreur-type » est écrit partout avec son trait d’union.
+
+**Vérificateurs de catalogue.** Le compteur d’objets Actions du vérificateur S7 suit le bandeau (356), et le vérificateur des lois de S5 contrôle « 1 tirage » : accepté, au singulier ; zéro tirage : refusé. Le guide S1 ne justifie plus par une impossibilité mathématique le minimum de deux tirages, qui est un choix de conception.
+
+**Documentation.** Le délai de l’enregistrement automatique n’est plus donné pour une seconde (il est de 150 ms), la promesse d’annexes et d’index « à venir » est retirée du sommaire, un doublon et une phrase égarée de `SQL_FRANCAIS.md` sont supprimés, la conséquence de la double précision sur l’égalité de décimaux dans une requête est dite avec sa parade, et les rapports de chantier de la racine sont rangés dans `docs/historique/`.
+
 ## 4.1 — Fin de l’audit croisé : bandeau, nombres lus, décimaux exacts, inéquations
 
 Tout ce que l’audit croisé du 22 novembre laissait ouvert est corrigé, et l’application a été compilée et testée avec ces corrections. La recherche systématique qui a suivi a trouvé d’autres réponses fausses sans alerte, corrigées elles aussi.
@@ -23,6 +37,18 @@ Tout ce que l’audit croisé du 22 novembre laissait ouvert est corrigé, et l�
 **Corpus, libellés, données.** L’énoncé « Loi des grands nombres » porte ses hypothèses. « Non-existence », « pyramide à base carrée de côté 4 cm », l’indépendance et la formule de Bayes avec leurs hypothèses. Une colonne SQLite qui mêle texte et binaire garde toutes ses valeurs.
 
 **Démarrage du calcul et CSV.** Une demande seule n’appelle plus qu’un processus de calcul, au lieu d’un par cœur jusqu’à quatre. Les sous-modules de SciPy se chargent quand aucune demande n’attend : sur la machine de mesure (Linux, 2 cœurs), le calcul formel est prêt en 1,5 s au lieu de 2,1 s, et le premier calcul statistique arrive au même moment qu’avant. La lecture d’un CSV n’alloue plus par ligne ni par décimal : le découpage d’un million de lignes passe de 770 ms à 235 ms, la lecture de deux millions de décimaux de 280 ms à 150 ms.
+
+**Les voyants des bibliothèques s’allument dès que le calcul est prêt, sur tous les systèmes.** Ils attendaient jusqu’ici l’annonce spontanée que l’ouvrier Python n’émet qu’après le préchargement des sous-modules de SciPy ; sous Windows, où ce préchargement est long (fichiers analysés à la première ouverture, priorité abaissée), ils restaient rouges alors que les calculs fonctionnaient. Le moteur demande désormais leurs versions à chaque ouvrier qui démarre (`{"op": "versions"}`, réponse immédiate) ; l’annonce de fin de préchargement ne sert plus qu’à corriger l’état si un sous-module manque. Test : `les_voyants_s_allument_des_que_le_premier_ouvrier_repond`.
+
+**Compilation sans avertissement, sous Windows comme ailleurs.** Le test des liens symboliques de l’export de tables est réservé aux systèmes Unix, et un test portable vérifie que l’export remplace un fichier existant sur toutes les plateformes ; la variable `reglages` n’est plus mutable que là où elle doit l’être ; dans la copie de `wgpu-hal`, l’incrément sans effet du registre CBV (DirectX 12) est retiré et la durée de vie de `get_without_egl_lock` (OpenGL, Linux) est écrite. Le bilan du corpus n’est plus affiché comme un avertissement de Cargo : il ne paraît que s’il reste des démonstrations à rédiger.
+
+**Voyants : orange pendant le chargement, rouge pour une bibliothèque absente.** Le rouge signalait jusqu’ici une attente ordinaire et le gris une vraie absence ; l’orange marque désormais l’attente (document en composition, bibliothèque en chargement), le vert la disponibilité et le rouge le seul vrai défaut.
+
+**Graine du calcul signée à nouveau.** La signature de `graine.jsonl` suit le texte de `cas.py` ; elle est recalculée (`docdg-cas-8c6df28adc3e2da1`) et les 445 paires sont inchangées.
+
+**Le logo de docdg dans la barre de titre et la barre des tâches.** La fenêtre porte désormais l’icône de docdg (`app/icones/docdg_fenetre.png`, 256 px), au lieu de l’icône générique du système, sous Linux et Windows ; l’AppImage reprend la même image.
+
+**Documentation publique.** Le manuel, le guide de démarrage et les guides de `docs/` s’adressent aux enseignants et aux chercheurs : plus de commandes de compilation ni de tests, plus de codes de chantier, plus de liens vers des documents internes. `NOUVEAUTES.md` présente la 4.1 aux utilisateurs ; le manuel montre l’emplacement réel des fichiers du corpus (`Documents/docdg/corpus-d1`) ; les données des exemples du SQL en français sont livrées dans `exemples/DONNEES/SQL`.
 
 Les 26 PDF de `references-pdf/` sont réexportés, `probabilites.pdf` et `statistiques.pdf` compris. 2 177 tests réussissent, dont les 344 de l’application et 23 tests d’exactitude à valeur affirmée. [Rectificatif de l’audit](docs/AUDIT_RC1_4_1.md#rectificatif-du-23-novembre-2026)
 
@@ -76,7 +102,7 @@ Les bases SQLite (`.db`, `.sqlite`) se lisent et s’interrogent directement, sa
 
 ## 4.1 — Correctif D4 R3 pour Metal et les statistiques
 
-Le rendu Metal d’Iced utilise désormais `block2` pour les rappels du GPU. Les deux adaptations de `metal` et `wgpu-hal` sont livrées avec DocDG. Le bandeau, les exemples et les manuels emploient « écart-type » et « écarts-types ». Les commandes déjà rédigées avec « écart type » restent lisibles. [Vérifications et essai sur Mac](RAPPORT_DOCDG_4_1_D4_R3.md).
+Le rendu Metal d’Iced utilise désormais `block2` pour les rappels du GPU. Les deux adaptations de `metal` et `wgpu-hal` sont livrées avec DocDG. Le bandeau, les exemples et les manuels emploient « écart-type » et « écarts-types ». Les commandes déjà rédigées avec « écart type » restent lisibles. [Vérifications et essai sur Mac](docs/historique/RAPPORT_DOCDG_4_1_D4_R3.md).
 
 ## 4.1 — Correctif D4 R1 pour la compilation sur Mac
 
@@ -108,7 +134,7 @@ Le corpus embarqué s’enrichit de 59 énoncés et de 6 démonstrations. Les de
 
 ## 4.1 — Correctif S7 R1
 
-Le bandeau réunit les objets des groupes qui partagent le même verbe dans une catégorie après filtrage par matière et par niveau. Les sélections de plus de 17 objets se parcourent par pages. Les contrôles documentaires de l’estimation et des transformées vérifient la typographie affichée. [Bilan du correctif](RAPPORT_CORRECTIF_S7_R1_DOCDG_4_1.md).
+Le bandeau réunit les objets des groupes qui partagent le même verbe dans une catégorie après filtrage par matière et par niveau. Les sélections de plus de 17 objets se parcourent par pages. Les contrôles documentaires de l’estimation et des transformées vérifient la typographie affichée. [Bilan du correctif](docs/historique/RAPPORT_CORRECTIF_S7_R1_DOCDG_4_1.md).
 
 ## 4.1 — Chantier S7
 
@@ -1186,7 +1212,7 @@ images, lois en prose : « la loi de Poisson de paramètre 1,5 ») ; plus aucun
 accent grave de Markdown ; `<page suivante h2>` rétabli dans `geometrie.txt` ;
 écritures informatiques retirées (`[-2, 3)`, `[100, 400, …]`, `0.25`, `1e-6`,
 `sqrt`, produits à astérisque) ; textes périmés corrigés ; sous-sections de la
-vitrine sans numéro. Aucun nombre de lignes ne change. `pdf/` porte
+vitrine sans numéro. Aucun nombre de lignes ne change. `references-pdf/` porte
 leurs PDF du 13 novembre.
 
 **Le bandeau et l'application.** Huit modèles de `classeur.json` perdent leur
@@ -1244,7 +1270,7 @@ ses constats sont repris.
   des chapitres assemblés.
 - *Manuel et corpus.* Quatre formulations reprises ; hypothèses complétées
   dans trois fiches (Bayes, convergence dominée, inégalité de la moyenne).
-- *Livraison.* La graine est régénérée ; `pdf/LISEZ-MOI.md` nomme
+- *Livraison.* La graine est régénérée ; `references-pdf/LISEZ-MOI.md` nomme
   les deux PDF antérieurs aux corrections.
 
 **Le suivi de `docdg2.zip`.** Dernières réserves reprises : le diagnostic
@@ -1256,7 +1282,7 @@ avec leur niveau, sont tous rendus sans admission ; deux exemples du manuel
 passent à la forme canonique.
 
 **L'avis de publication.** Le dernier audit extérieur est favorable.
-`pdf/` porte les 23 PDF d'un même export final, graine de calcul
+`references-pdf/` porte les 23 PDF d'un même export final, graine de calcul
 régénérée sur la machine de l'auteur. Une coquille est corrigée dans
 `exemples/seyes.txt` (« XXI<sup>e</sup> siècle ») et `seyes.pdf` est
 réexporté.
@@ -1410,7 +1436,7 @@ nouveau, n'attend plus les 110 ms réservés à la frappe.
 
 **Les exemples sont remis en page.** Seize exemples reçoivent une nouvelle
 mise en page de l'auteur (sauts de page, marges, interligne), et
-`pdf/` porte leurs PDF du 12 novembre. Une masse molaire suit de
+`references-pdf/` porte leurs PDF du 12 novembre. Une masse molaire suit de
 nouveau le réglage `précision` du document (`précision: 2` donne
 `2 × 1,01 + 16,00 ≈ 18,02`).
 
@@ -2737,7 +2763,7 @@ dont l'empreinte change est différée après la 4.0 : gain mesuré marginal
     reste obtenu par la composition.
   - **Références PDF.** Les 23 PDF de référence sont désormais ceux de la
     4.0, composés par Typst ; chacun a le nombre de pages de son homologue
-    3.9. Les originaux de la 3.9 sont conservés dans `pdf/3.9/`.
+    3.9. Les originaux de la 3.9 sont conservés dans `references-pdf/3.9/`.
   - **Documentation.** Nouvelle notice de l'interface (`docs/INTERFACE.md`) :
     bandeau et pastilles, rubans, volets, saisies, cahier, export, ligne de
     commande. README (titre, version, compilation, témoins du moteur,
@@ -2988,7 +3014,7 @@ dont l'empreinte change est différée après la 4.0 : gain mesuré marginal
 - Les 23 exemples publics sont remplacés **à l'identique** par les textes
   retouchés par l'auteur, afin de respecter ses choix de pagination et le rendu
   de ses PDF (15 fichiers différents de la précédente référence).
-- Les 23 PDF fournis sont conservés *sans modification* sous `pdf/`
+- Les 23 PDF fournis sont conservés *sans modification* sous `references-pdf/`
   pour faciliter la validation visuelle ; ils ne sont pas régénérés par les tests.
 - Empreintes SHA-256 et assertions de tests anciennes relatives à trois sauts
   de la vitrine mises en conformité avec ces sources de référence. La décision

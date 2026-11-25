@@ -1,0 +1,7 @@
+id;nom;prénom;classe;naissance;note1;note2;note3;redoublant
+1;Martin;Zoé;CE1;14/07/2018;12,5;14;15,5;non
+2;Bernard;Abel;CE2;03/02/2017;9;NA;11;oui
+3;Émery;Inès;CE1;21/11/2018;16;13,5;;non
+4;Petit;Lucas;CE2;09/05/2017;14;12;13;non
+5;Durand;Léa;CP;30/01/2019;8;9,5;7;oui
+6;Roux;Hugo;CE1;02/03/2018;11;10;12;non

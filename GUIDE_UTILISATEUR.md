@@ -1,9 +1,10 @@
 # Guide de démarrage de DocDG 4.1
 
 Ce guide accompagne l'application distribuée. La documentation détaillée se trouve dans
-`README.md` et dans les manuels **École**, **Collège**, **Lycée**, **Licence** et **Master et agrégation** fournis
-avec le projet source ; l'interface est décrite dans `docs/INTERFACE.md`. La
-licence de l'application figure dans `CLUF.md`.
+le [manuel](README.md) et dans les manuels [École](Ecole.md), [Collège](College.md),
+[Lycée](Lycee.md), [Licence](Licence.md) et [Master et agrégation](MasterAgregation.md) ;
+l'interface est décrite dans [L'interface](docs/INTERFACE.md). La
+licence de l'application figure dans le [contrat de licence](CLUF.md).
 
 ## Ouvrir un exemple
 
@@ -23,17 +24,12 @@ rangées dans `exemples/IMAGES/`, `exemples/FIGURES/`, `exemples/DONNEES/` et
 
 Gardez ces dossiers avec leurs fichiers `.txt` lorsque vous déplacez un exemple. Dans `histoire.txt`, le nom de la vignette est une chaîne entre guillemets et les mots qui suivent la balise sont du texte libre. Dans `donnees.txt`, le nuage des températures de l’Alpage compte un point par jour où la minimale et la maximale ont toutes deux été mesurées.
 
-Les archives numérotées des exemples historiques ne sont **pas** livrées avec
-la distribution utilisateur : elles sont conservées dans le dépôt de développement
-sous `tests/fixtures/exemples-historiques/` pour les tests de non-régression.
-
 ## Réouvrir et corriger un document
 
-Après sauvegarde et composition valide, docdg garde le Typst du document dans
-son cache privé, dans votre dossier de données. À la réouverture, il le
-réutilise si la source, le moteur et les ressources correspondent encore. Rien
-n'est écrit à côté du `.txt`, qui reste votre document de travail ; un `.typ`
-personnel placé là n'est ni lu ni modifié.
+La réouverture d'un document déjà enregistré et composé est immédiate : docdg
+garde sa mise en page dans votre dossier de données et la reprend tant que le
+document n'a pas changé. Rien n'est écrit à côté du `.txt`, qui reste votre
+document de travail.
 
 Fermer la fenêtre par la croix demande confirmation : « Quitter » ou Entrée
 ferme, « Annuler » ou Échap revient au document. Si le document n'a jamais été
@@ -49,8 +45,8 @@ signalées à leur place : une déclaration complète terminée par un point
 dont l'accolade fermante manque, à sa ligne d'ouverture ; le contenu de ce bloc
 reste lisible comme source pour permettre sa correction. Aucun
 bandeau rouge d'erreurs documentaires n'est ajouté au-dessus des pages. Les
-aperçus contenant des diagnostics restent provisoires et ne remplacent pas le
-cache valide. Un PDF exporté reproduit l'aperçu, diagnostics compris.
+aperçus contenant des diagnostics restent provisoires : la réouverture reprend
+la dernière mise en page sans erreur. Un PDF exporté reproduit l'aperçu, diagnostics compris.
 
 ## Le typage est obligatoire
 
@@ -146,43 +142,42 @@ source demeure un texte ordinaire ; les calculs avancés peuvent requérir le
 moteur Python embarqué et son initialisation. Les fichiers du dossier
 `exemples/` constituent les références pratiques les plus complètes.
 
-## Limites de cette livraison
+## Ce qui est garanti
 
-Les conventions de notation et de typage sont fixées par
-`docs/NOTATIONS_SUPERIEUR.md` et `docs/TYPAGE_OBLIGATOIRE.md`. Les tournures
-garanties sont celles que composent les exemples de `exemples/`, les blocs de
-code des manuels et les choix du bandeau : chacun est exécuté par la suite de
-tests. Les réserves typographiques connues sont listées dans
-`docs/RESERVES_POUR_4_1.md`.
+Les conventions de notation et de typage sont fixées par les
+[contrats de notation](docs/NOTATIONS_SUPERIEUR.md) et le
+[typage obligatoire](docs/TYPAGE_OBLIGATOIRE.md). Les tournures garanties sont
+celles des exemples du dossier `exemples/`, des blocs de code des manuels et des
+choix du bandeau : chacune se compose telle quelle et donne le résultat décrit.
 
 Pour signaler un défaut, joindre la version de docdg, le système d'exploitation,
 le fichier `.txt` minimal qui reproduit l'erreur et, si nécessaire, le PDF produit.
 
 ## Statistiques et probabilités, deux parcours
 
-Les fichiers `exemples/statistiques.txt` et `exemples/probabilites.txt` peuvent être ouverts séparément. Le premier réunit les indicateurs, les graphiques et l’inférence ; le second présente les lois conjointes, le conditionnement et les simulations à graine explicite. `statistiques-probabilites.txt` reste disponible comme archive pédagogique et référence comparative de la version 4.1.
+Les fichiers `exemples/statistiques.txt` et `exemples/probabilites.txt` peuvent être ouverts séparément. Le premier réunit les indicateurs, les graphiques et l’inférence ; le second présente les lois conjointes, le conditionnement et les simulations à graine explicite. Le recueil plus ancien `statistiques-probabilites.txt` reste disponible.
 
-## Estimation et tests statistiques (S2)
+## Estimation et tests statistiques
 
-La rubrique Probabilités et statistique du bandeau propose désormais six modèles d’estimation et d’inférence pour le supérieur. Ouvrez `exemples/statistiques.txt` pour comparer les résultats ; le texte rédigé est libre, les valeurs littérales dans le code restent entre guillemets. Référence : `docs/STATISTIQUES_INFERENCE_S2.md`.
+La rubrique Probabilités et statistique du bandeau propose désormais six modèles d’estimation et d’inférence pour le supérieur. Ouvrez `exemples/statistiques.txt` pour comparer les résultats ; le texte rédigé est libre, les valeurs littérales dans le code restent entre guillemets. Référence : [inférence statistique](docs/STATISTIQUES_INFERENCE_S2.md).
 
-### Statistiques multivariées — DocDG 4.1, S3
+### Statistiques multivariées
 
-DocDG propose la régression linéaire multiple avec diagnostics des résidus et des points influents, l'ACP centrée-réduite par SVD et l'analyse de variance (ANOVA) à un facteur. Les commandes en français, les hypothèses d'application, les limites numériques et les exemples sont décrits dans [`docs/STATISTIQUES_MULTIVARIEES_S3.md`](docs/STATISTIQUES_MULTIVARIEES_S3.md). Les démonstrations correspondantes figurent dans `exemples/statistiques.txt`.
+DocDG propose la régression linéaire multiple avec diagnostics des résidus et des points influents, l'ACP centrée-réduite par SVD et l'analyse de variance (ANOVA) à un facteur. Les commandes en français, les hypothèses d'application, les limites numériques et les exemples sont décrits dans le guide [régression, ACP, ANOVA](docs/STATISTIQUES_MULTIVARIEES_S3.md). Les démonstrations correspondantes figurent dans `exemples/statistiques.txt`.
 
-### Probabilités et statistiques avancées · S4
+### Probabilités et statistiques avancées
 
-Ouvrir `exemples/probabilites.txt` pour les classes et les lois stationnaires d’une chaîne de Markov. Dans `exemples/statistiques.txt`, deux chapitres traitent de l’estimation par maximum de vraisemblance et d’une activité trimestrielle. Les modèles se trouvent sous **Étudier** et **Calculer**. Voir le [guide S4](docs/STATISTIQUES_PROBABILITES_S4.md).
+Ouvrir `exemples/probabilites.txt` pour les classes et les lois stationnaires d’une chaîne de Markov. Dans `exemples/statistiques.txt`, deux chapitres traitent de l’estimation par maximum de vraisemblance et d’une activité trimestrielle. Les modèles se trouvent sous **Étudier** et **Calculer**. Voir le guide [chaînes de Markov, vraisemblance et séries chronologiques](docs/STATISTIQUES_PROBABILITES_S4.md).
 
-### Lois et description des séries · S5
+### Lois et description des séries
 
-Dans le bandeau **Mathématiques** du niveau **Supérieur**, ouvrir le domaine **Probabilités et statistique**. Les verbes **Calculer**, **Déterminer**, **Tracer**, **Étudier** et **Représenter** donnent accès aux modèles S5. Les pages « Lois discrètes et plans de tirage » et « Rangs, dispersion relative et forme » dans les deux recueils en montrent l’usage. [Guide de syntaxe et de calcul S5](docs/LOIS_ET_DESCRIPTION_S5.md).
+Dans le bandeau **Mathématiques** du niveau **Supérieur**, ouvrir le domaine **Probabilités et statistique**. Les verbes **Calculer**, **Déterminer**, **Tracer**, **Étudier** et **Représenter** donnent accès à ces modèles. Les pages « Lois discrètes et plans de tirage » et « Rangs, dispersion relative et forme » dans les deux recueils en montrent l’usage. [Guide de syntaxe et de calcul](docs/LOIS_ET_DESCRIPTION_S5.md).
 
-### Inférence et prévision · S6
+### Inférence et prévision
 
-Dans Mathématiques au niveau Supérieur, les verbes Effectuer, Calculer, Déterminer et Étudier donnent accès aux modèles S6. Le chapitre « Étude économique sur douze magasins » reprend le cycle complet, depuis la lecture du CSV jusqu’à la prévision des ventes. [Commandes, hypothèses et exemples S6](docs/TESTS_ET_MODELES_S6.md).
+Dans Mathématiques au niveau Supérieur, les verbes Effectuer, Calculer, Déterminer et Étudier donnent accès aux tests et aux modèles de prévision. Le chapitre « Étude économique sur douze magasins » reprend le cycle complet, depuis la lecture du CSV jusqu’à la prévision des ventes. [Commandes, hypothèses et exemples](docs/TESTS_ET_MODELES_S6.md).
 
-### Couples, Markov et estimation · S7
+### Couples, Markov et estimation
 
 Les cas « Deux produits dans un panier » et « De la réflexion à l’achat » se trouvent dans le recueil de probabilités. Les calculs d’estimation et de risque se trouvent dans le recueil de statistiques. [Commandes, conventions et exemples](docs/PROBABILITES_ESTIMATION_S7.md).
 

@@ -205,7 +205,7 @@ potentiel-pH ; chimie organique, stéréochimie et mécanismes ; chimie du solid
 et théorie des bandes ; thermodynamique chimique et diagrammes binaires ;
 chimie de coordination ; chimie analytique instrumentale.
 
-**L'analyse dimensionnelle** vérifie 233 relations à la compilation, opérateurs
+**L'analyse dimensionnelle** vérifie l'homogénéité de 233 relations, opérateurs
 différentiels compris : `div(E) = rho / epsilon_0`,
 `lap(E) - d2_dt2(E) / c^2 = 0`, `hbar * d_dt(psi) = hbar^2 * lap(psi) / m + V * psi`.
 

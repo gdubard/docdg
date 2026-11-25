@@ -54,7 +54,7 @@ La non-significativité d'un résultat ne démontre ni l'égalité des paramètr
 
 <page suivante h0>Les estimateurs
 
-La variance descriptive emploie le diviseur n, tandis que la variance corrigée utilise n−1. L’erreur-type estimée de la moyenne tient compte de la taille de l’échantillon.
+La variance empirique emploie le diviseur n, tandis que la variance corrigée utilise n−1. L’erreur-type estimée de la moyenne tient compte de la taille de l’échantillon.
 
 <Calculer>les estimateurs de la série 12 ; 15 ; 9 ; 14 ; 18 ; 11 ; 16 ; 13
 
